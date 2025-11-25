@@ -1,0 +1,351 @@
+﻿@* <link href="~/css/pages/reservation.css" rel="stylesheet" /> *@
+<div class="mt-3">
+    <div class="row">
+        <!-- Menu trái -->
+        <div class="col-md-2 mb-2">
+            <div class="menu-left">
+                <button class="toggle-btn"><i class="fas fa-bars"></i></button>               
+                <a class="menu-item " asp-controller="Administration" asp-action="MemberList">MEMBER LIST</a>
+                <a class="menu-item active"> MEMBER CATEGORY</a>
+                <a class="menu-item" asp-controller="Administration" asp-action="MemberTypeSearch">MEMBER TYPE SEARCH</a>
+            </div>
+        </div>
+
+        <!-- Nội dung bên phải -->
+        <div class="col-md-10">
+            <div class="content-right">
+                <div class="header">
+                    <h3 id="content-title">
+                        Member Category
+
+                    </h3>
+                </div>
+
+
+                <div class="sticky-header bg-white p-2 shadow-sm z-3">
+                    <div class="d-flex align-items-center gap-3 p-2" style="border: 1px solid #ccc; border-radius: 6px; padding: 8px;">
+
+                        <div class="d-flex align-items-center">
+                            <label for="code" class="me-2 mb-0">Code</label>
+                            <input type="text" id="code" class="form-control form-control-sm" style="width: 100px;" />
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <label for="name" class="me-2 mb-0">Name</label>
+                            <input type="text" id="name" class="form-control form-control-sm" style="width: 100px;" />
+                        </div>
+                        <div class="d-flex align-items-center me-3">
+                            <input type="checkbox" id="chkshowInactive" class="form-check-input mt-0" />
+                            <label class="me-2 mb-0"> Show Inactive</label>
+
+                        </div>
+                    </div>
+                    <div class=" mt-1">
+                        <button style="border-radius: 4px;  margin-right: 6px;background-color: #6c757d;" id="btnView" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> View</button>
+                        <button style="border-radius: 4px;  margin-right: 6px;background-color: #28a745;" id="btnNew" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> New</button>
+                        <button style="border-radius: 4px;  margin-right: 6px;background-color: #007bff;" id="btnEdit" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Edit</button>
+                        <button style="border-radius: 4px;  margin-right: 6px;background-color: #dc3545;" id="btnDelete" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Delete</button>
+                        <button style="border-radius: 4px;  margin-right: 6px;background-color: green;" id="btnExportExcel" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Excel</button>
+
+                    </div>
+                </div>
+
+                <div class="mui-card">
+                    <div id="gridContainerRateCode" class="mt-2 gridContainer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal Popup for New Item -->
+<div class="modal fade" id="itemModal" tabindex="-1" aria-labelledby="itemModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="itemModalLabel">New Item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <form id="itemForm">
+                    <div class="container-fluid" style="border: 1px solid #ccc; border-radius: 6px; padding: 8px;">
+
+                        <!-- Code + Inactive -->
+                        <div class="row mb-1 align-items-center">
+                            <div class="col-auto">
+                                <label for="txtcode" class="form-label mb-0">Code</label>
+                                <input type="text" id="txtcode" name="txtcode" class="form-control form-control-sm" />
+                            </div>
+                            <div class="col-auto d-flex align-items-center">
+                                <input type="checkbox" id="inactive" name="inactive" class="form-check-input me-2" />
+                                <label for="inactive" class="form-check-label text-danger mb-0">Inactive</label>
+                            </div>
+                        </div>
+
+                        <!-- Name -->
+                        <div class="row mb-1">
+                            <div class="col">
+                                <label for="txtname" class="form-label">Name</label>
+                                <input type="text" id="txtname" name="txtname" class="form-control" />
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="row mb-1">
+                            <div class="col">
+                                <label for="txtdescription" class="form-label">Description</label>
+                                <textarea id="txtdescription" name="txtdescription" class="form-control" rows="4" style="background-color:#ffffe6"></textarea>
+                            </div>
+                        </div>
+                        <input type="hidden" id="id" name="id" value="0" />
+                    </div>
+                </form>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="btnSaveItem" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="loadingSpinnerRateCode" style="display: none; text-align: center; padding: 20px;">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+
+<script>
+    DevExpress.localization.locale("vi");
+       let selectedRowData = null;
+
+         $(document).ready(function () {
+
+         reloadGrid();
+         });
+
+
+        $("#btnView").on("click", function() {
+        reloadGrid();
+        });
+
+         $("#btnNew").click(function () {
+         $("#itemForm")[0].reset();
+         $("#itemModal").modal("show");
+    });
+
+                $("#btnSaveItem").click(function () {
+        const formData = $("#itemForm").serialize();
+
+        let url = "/Administration/InsertMemberCategory";
+        if ($("#id").val() && $("#id").val() !== "0") {
+            url = "/Administration/UpdateMemberCategory"; // nếu có id thì update
+        }
+
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: formData,
+            success: function (res) {
+                if (res.success) {
+                    showToast("Success", (url.includes("Update") ? "Update success" : "Insert success"), true);
+                    $("#itemModal").modal("hide");
+                    reloadGrid();
+                } else {
+                    showToast("Failed", res.message || "Action Failed!", false);
+                }
+            },
+            error: function (xhr) {
+                showToast("Error", "Request error!", false);
+            }
+        });
+    });
+        function editMember(data) {
+        $("#id").val(data.id);                   // hidden field
+        $("#txtcode").val(data.code);            // ánh xạ Code
+        $("#txtname").val(data.name);            // ánh xạ Name
+        $("#inactive").prop("checked", data.inactive); // checkbox
+        $("#txtdescription").val("");
+
+        // Hiển thị modal
+        $("#itemModal").modal("show");
+    }
+        
+
+
+
+           $("#btnEdit").on("click", function () {
+        if (!selectedRowData) {
+            DevExpress.ui.notify("Please select a row first!", "warning", 2000);
+            return;
+        }
+
+        // Gọi hàm ánh xạ dữ liệu vào form
+        editMember(selectedRowData);
+    });
+
+
+
+    function loadGrid(data) {
+        $("#gridContainerRateCode").dxDataGrid({
+            dataSource: data,
+            height: 500,
+            width: "100%",
+            columnAutoWidth: true,
+            allowColumnResizing: true,
+            columnResizingMode: "widget",
+            selection: { mode: "single" },
+             columns: [
+                        { dataField: "code", caption: "Code" },
+                        { dataField: "name", caption: "Name" },
+                        { dataField: "inactiveText", caption: "Description" },
+                        { dataField: "inactive", caption: "Status" },
+                        { dataField: "createdBy", caption: "Created By" },
+                        { dataField: "createdDate", caption: "Created Date", dataType: "date" },
+                        { dataField: "updatedBy", caption: "Updated By" },
+                        { dataField: "updatedDate", caption: "Updated Date", dataType: "date" },
+                    ],
+            filterRow: { visible:true, applyFilter:"auto" },
+            paging: { pageSize:20 },
+            pager: {
+                visible:true,
+                allowedPageSizes:[20,50,'all'],
+                showPageSizeSelector:true,
+                showInfo:true,
+                showNavigationButtons:true
+            },
+            scrolling: { mode:"standard", showScrollbar:"always", scrollByContent:true },
+            onSelectionChanged: function(e){
+                selectedRowData = e.selectedRowsData.length > 0 ? e.selectedRowsData[0] : null;
+                console.log("Selected Row:", selectedRowData);
+            }
+        });
+    }
+
+    // Reload grid với filter từ form
+    function reloadGrid() {
+        $("#loadingSpinnerRateCode").show();
+
+        $.ajax({
+            url: "/Administration/GetMemberCategory",
+            type: 'GET',
+            data: {
+                code: $("#code").val(),
+                name: $("#name").val(),
+                inactive: $("#chkshowInactive").prop("checked") ? 1 : 0
+            },
+            success: function(data){
+                console.log(data);
+                loadGrid(data);
+                $("#loadingSpinnerRateCode").hide();
+            },
+            error: function(xhr, status, error){
+                alert("Không thể tải dữ liệu");
+                $("#loadingSpinnerRateCode").hide();
+            }
+        });
+    }
+
+
+     $("#btnDelete").on("click", function () {
+         if (!selectedRowData) {
+            DevExpress.ui.notify("Please select a row first!", "warning", 2000);
+            return;
+        }
+
+                Swal.fire({
+            title: 'Are you sure?',
+            text: "This action cannot be undone.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel',
+            customClass: {
+                popup: 'swal-small'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                deleteSelectedItem();
+            }
+        });
+
+    });
+
+            function deleteSelectedItem() {
+        $.ajax({
+            url: "/Administration/DeleteMemberCategory",
+            type: "POST",
+            data: { id: selectedRowData.id }, // gửi dạng form-data
+            success: function (res) {
+                if (res.code === 0) {
+                    showToast("Success", "Deleted successfully!", true);
+                    reloadGrid();
+                    selectedRowData = null;
+                } else {
+                    showToast("Error", res.msg || "Delete failed!", false);
+                }
+            },
+            error: function (xhr) {
+                console.error("Delete error:", xhr.responseText);
+                showToast("Error", "Delete error!", false);
+            }
+        });
+    }
+    $("#btnExportExcel").click(function () {
+        const grid = $("#gridContainerRateCode").dxDataGrid("instance");   // 🔥 khai báo grid
+
+        const workbook = new ExcelJS.Workbook();
+        const companyName = localStorage.getItem("CompanyName") || "Tên công ty chưa xác định";
+        const worksheet = workbook.addWorksheet("Sheet 1");
+
+        // === Dòng 1: Tên công ty (merge theo 4 cột) ===
+        worksheet.addRow([companyName]);
+        worksheet.mergeCells('A1:D1');
+        worksheet.getRow(1).font = { bold: true };
+        worksheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'left' };
+
+        // === Dòng 2: Ngày giờ xuất (bên phải) ===
+        const now = new Date();
+        const exportDate = now.toLocaleString("vi-VN");
+        worksheet.addRow(['', '', '', exportDate]);
+        worksheet.mergeCells('D2:D2');  // cột D thôi
+        worksheet.getRow(2).alignment = { vertical: 'middle', horizontal: 'right' };
+
+        // === Dòng 3–4: trống
+        worksheet.addRow([]);
+        worksheet.addRow([]);
+
+        // === Dòng 5: Tiêu đề báo cáo (ở giữa) ===
+        const reportRow = worksheet.addRow(['Member Category']);
+        worksheet.mergeCells('A5:D5');
+        reportRow.font = { bold: true, size: 14 };
+        reportRow.alignment = { vertical: 'middle', horizontal: 'center' };
+
+        // === Dòng 6: trống
+        worksheet.addRow([]);
+
+        // === Xuất dữ liệu grid bắt đầu từ dòng 7 ===
+        DevExpress.excelExporter.exportDataGrid({
+            component: grid,
+            worksheet: worksheet,
+            autoFilterEnabled: true,
+            topLeftCell: { row: 7, column: 1 }
+        }).then(function () {
+            // Footer (sau cùng)
+            const lastRow = worksheet.lastRow.number + 2;
+            worksheet.mergeCells(`A${lastRow}:D${lastRow}`);
+            worksheet.getCell(`A${lastRow}`).alignment = { horizontal: 'center' };
+            worksheet.getCell(`A${lastRow}`).font = { italic: true };
+
+            // Ghi file
+            let fileName = "Member Category.xlsx";
+            workbook.xlsx.writeBuffer().then(function (buffer) {
+                saveAs(new Blob([buffer], { type: "application/octet-stream" }), fileName);
+            });
+        });
+    });
+
+</script>

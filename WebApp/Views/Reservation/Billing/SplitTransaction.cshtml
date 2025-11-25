@@ -1,0 +1,123 @@
+﻿<div class="modal fade modal" id="modalSplitTransaction" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Split Transaction</h5>
+                <button type="button" class="btn-close" onclick="closeModalSplitTransaction()"></button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <button class="mui-button mui-button-search" onclick="SplitTransaction();"> Split</button>
+                    <button class="mui-button mui-button-clear" onclick="closeModalSplitTransaction();">Close</button>
+                </div>
+                <div class=" row mt-2">
+                    <label class="col-md-3" >Transaction.Infor:</label>
+
+                    <span class="col-md-9" id="transactionInfoSplit" ></span>
+
+                </div>
+                <div class=" row mt-2">
+                    <label class="col-md-3" style="width:auto">Amount:</label>
+
+                    <span class="col-md-9" id="amountTtoalSplit"></span>
+
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="typeDiscountSplit"  value="0" checked>
+                    <label class="form-check-label" >
+                        Amount
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="typeDiscountSplit" value="1">
+                    <label class="form-check-label" >
+                        Percentage
+                    </label>
+                </div>
+
+                <div class="row mt-2">
+                    <label class="col-md-2">Value</label>
+                    <input id="valueSplitTransaction" class="col-md-10" style="text-align:right"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openModalSplitTransaction(){
+        $('#modalSplitTransaction').modal('show');
+    }
+    function closeModalSplitTransaction(){
+        $('#modalSplitTransaction').modal('hide');
+    }
+
+    function SplitTransaction(){
+
+        const selectedValue = $('input[name="typeDiscountSplit"]:checked').val();
+        var discountAmount = 0;
+        var discountPercent = 0;
+        if(selectedValue == 0){
+            discountAmount = $('#valueSplitTransaction').val().replace(/,/g, '');
+            discountPercent = 0;
+        }
+        else{
+            discountPercent = $('#valueSplitTransaction').val().replace(/,/g, '');
+            discountAmount = 0;
+        }
+
+
+        if( $('#valueSplitTransaction').val().replace(/,/g, '') == 0){
+            showToast('Error', 'Input value less then zero, please enter a value greater than zero', false);
+            return;
+        }
+        if(selectedValue == 0 && $('#valueSplitTransaction').val().replace(/,/g, '') >= $('#amountTtoalSplit').text().replace(/,/g, '')){
+            showToast('Error', 'Input value less then amount transaction', false);
+            return;
+        }
+        if(selectedValue == 1 && $('#valueSplitTransaction').val().replace(/,/g, '') > 100){
+            showToast('Error', 'Please enter a value less than zero 100', false);
+            return;
+        }
+        const userName = JSON.parse(localStorage.getItem("Loginname"));
+        const userID = JSON.parse(localStorage.getItem("userID"));
+        $.ajax({
+            url: '/Billing/SplitTransaction',
+            type: 'post',
+            dataType: 'json',
+            data: {
+                folioDetailID: folioDetailID,
+                discountAmount: discountAmount,
+                discountPercent: discountPercent,
+                amount:$('#amountTtoalSplit').text().replace(/,/g, ''),
+                userName: userName,
+                userID: userID
+            },
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                closeModalSplitTransaction();
+                getFolioNo();
+                showToast('Success', result.msg, true);
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                } else {
+                }
+            }
+        });
+
+    }
+
+    $('input[name="typeDiscountSplit"]').on('click', function() {
+        const selectedValue = $(this).val();
+        if(selectedValue == 1){
+            $('#valueSplitTransaction').val(0);
+        }
+        else{
+            $('#valueSplitTransaction').val($('#amountTtoalSplit').text());
+
+        }
+    });
+</script>

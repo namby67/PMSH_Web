@@ -1,0 +1,15 @@
+/**
+ * DevExtreme (esm/renovation/ui/scheduler/workspaces/base/group_panel/group_panel_props.js)
+ * Version: 22.2.3
+ * Build date: Mon Dec 05 2022
+ *
+ * Copyright (c) 2012 - 2022 Developer Express Inc. ALL RIGHTS RESERVED
+ * Read about DevExtreme licensing here: https://js.devexpress.com/Licensing/
+ */
+export var GroupPanelBaseProps = {
+    groupPanelData: Object.freeze({
+        groupPanelItems: [],
+        baseColSpan: 1
+    }),
+    groupByDate: false
+};

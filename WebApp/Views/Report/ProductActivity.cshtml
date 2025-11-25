@@ -1,0 +1,513 @@
+﻿@using DevExpress.XtraReports.UI
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewBag.Title = ViewBag.ReportHeader;
+    var zoneList = ViewBag.ZoneList;
+    var rtList = ViewBag.RoomTypeList;
+}
+
+
+<style>
+    .filter_wrapper {
+        /*     background-color: #ececec; */
+        /*   margin: 0px 8px 14px 8px; */
+        padding: 18px 0px 0px 14px;
+        border-radius: 8px;
+    }
+
+    .gridContainer {
+        margin: 0px 8px;
+    }
+
+    .button_wrapper {
+        display: flex;
+        column-gap: 12px;
+        margin: 0px 8px;
+    }
+
+        .button_wrapper .fa-solid {
+            margin-right: 5px;
+        }
+
+    .selected {
+        background-color: #4CAF50; /* Màu xanh */
+        color: white;
+    }
+
+    #gridContainer .dx-datagrid-rowsview .dx-selection {
+        background-color: #01579b !important; /* màu xanh ngọc */
+        color: white !important; /* chữ trắng */
+    }
+
+        #gridContainer .dx-datagrid-rowsview .dx-selection * {
+            color: white !important;
+        }
+
+    .sticky-header label,
+    .sticky-header .form-control-sm {
+        font-size: 0.75rem;
+        line-height: 1.2;
+    }
+
+
+    .sticky-header .form-control-sm {
+        padding: .1rem .35rem;
+        height: calc(1.1em + .2rem + 2px);
+    }
+
+    .sticky-header label[class*="me-"] {
+        margin-right: .5rem !important;
+    }
+
+    #gridContainer .dx-datagrid-headers .dx-header-row > td {
+       
+        padding: 5px !important;
+   
+        height: 24px !important;
+    
+        font-size: 12px !important;
+        line-height: 1.1 !important;
+    }
+
+    #gridContainer .dx-datagrid-rowsview .dx-row > td, 
+    #gridContainer .dx-datagrid .dx-summary-row > td, 
+    #gridContainer .dx-datagrid .dx-total-footer td, 
+    #gridContainer .dx-datagrid .dx-footer-row td {
+        font-size: 11px !important;
+    }
+
+</style>
+<div class="text-center" id="reportTitle" style="font-size: 20px">Product Activity</div>
+<div class="sticky-header bg-white p-2 shadow-sm z-3">
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-1" style="border: 1px solid #ced4da; border-radius: 6px; padding: 8px;">
+        <!-- From Date -->
+        <div class="d-flex flex-column ">
+
+            <div class="d-flex align-items-center">
+                <label class="fw-bold me-3">Departure Date Range:</label>
+                    <div class="d-flex align-items-center me-3">
+                        <label class="me-2 mb-0">From Date:</label>
+                        <input type="date" id="fromDate" name="fromDate" class="form-control form-control-sm w-auto" />
+                    </div>
+
+                    <div class="d-flex align-items-center me-3">
+                        <label class="me-2 mb-0">To Date:</label>
+                        <input type="date" id="toDate" name="toDate" class="form-control form-control-sm w-auto" />
+                    </div>
+            </div>
+        </div>
+        <div class="d-flex flex-column">
+
+            <div class="d-flex align-items-center me-3">
+                <label class="me-2 mb-0 fw-bold">Profile Type:</label>
+                <div class="form-check me-3">
+                    <input class="form-check-input include-option" type="checkbox" id="travel" name="includeOptions" value="1,101" checked>
+                    <label class="form-check-label" for="travel">Travel Agents</label>
+                </div>
+                <div class="form-check me-3">
+                    <input class="form-check-input include-option" type="checkbox" id="company" name="includeOptions" value="2,102">
+                    <label class="form-check-label" for="company">Company</label>
+                </div>
+                <div class="form-check me-3">
+                    <input class="form-check-input include-option" type="checkbox" id="profile" name="includeOptions" value="0,100">
+                    <label class="form-check-label" for="profile">Profile Ind</label>
+                </div>
+                <div class="form-check me-3">
+                    <input class="form-check-input include-option" type="checkbox" id="individuals" name="includeOptions" value="3,103">
+                    <label class="form-check-label" for="individuals">Individuals</label>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex flex-column">
+
+            <div class="d-flex align-items-center me-3">
+                <label class="me-2 mb-0 fw-bold">By:</label>
+                    <div class="form-check me-3">
+                    <input class="form-check-input include-option" type="checkbox" id="confirmation" name="masterllio" value="0" checked>
+                    <label class="form-check-label" for="confirmation">By Confirmation No</label>
+                    </div>
+                    <div class="form-check me-3">
+                    <input class="form-check-input include-option" type="checkbox" id="masterllio" name="masterllio" value="3">
+                    <label class="form-check-label" for="masterllio">By Master Folio</label>
+                    </div>
+            </div>
+        </div>
+
+        <div style="display:none!important" class="d-flex align-items-center me-3">
+            <label class="me-2 mb-0">View By:</label>
+            <select id="viewBy" name="viewBy" class="form-control form-control-sm w-auto">
+
+                <option value="VND">VND</option>
+                <option value="USD">USD</option>
+            </select>
+        </div>
+
+        <div class="d-flex align-items-center me-3">
+            <label class="me-2 mb-0 fw-bold">Sorting:</label>
+            <div class="form-check me-3">
+                <input class="form-check-input include-option" type="checkbox" id="ascending" name="ascending" value="0">
+                <label class="form-check-label" for="ascending">Ascending</label>
+            </div>
+            <div class="form-check me-3">
+                <input class="form-check-input" type="checkbox" id="descending" name="descending" checked>
+                <label class="form-check-label" for="descending">Descending</label>
+            </div>
+            <select id="sortOrder" name="sortOrder" class="form-control form-control-sm w-auto">
+                <option value="0">Account Name</option>
+                <option value="1">Total Turnover</option>
+                <option value="2">Room Sales</option>
+                <option value="3">F&B Turnover</option>
+                <option value="4">Even Turnover</option>
+                <option value="5">Micell.Turnover</option>
+                <option value="6">Room Night</option>
+                <option value="7">Bed Night</option>
+            </select>
+        </div>
+        <div class="d-flex align-items-center me-3">
+            <label class="me-2 mb-0 fw-bold">Room Night ≥</label>
+            <input style="width: 40px;" type="text" id="roomNight" name="roomNight" class="form-control form-control-sm w-auto" />
+        </div>
+    </div>
+    <div class="">
+        <button style="border-radius: 4px;  margin-right: 6px;background-color: #3b9ac6;" id="btnPrint" class="mui-button mui-button-new"><i class="fa-solid fa-eye"></i>View</button>
+        <button style="border-radius: 4px;  margin-right: 6px;background-color: green;" id="btnExportExcel" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Excel</button>
+        <button style="border-radius: 4px;  margin-right: 6px;background-color: darkorange;" id="btnExportPdf" class="mui-button mui-button-new" type="button"><i class="fas fa-eraser"></i> PDF</button>
+    </div>
+</div>
+
+<div class="mui-card">
+    @* <div style="font-size: 20px;" class="mt-1" id="reportTitle"></div> *@
+    <div id="gridWrapper" class="mt-2" style="max-height: 500px;">
+        <div class="gridContainer mt-2" id="gridContainer"></div>
+    </div>
+</div>
+<div id="loadingSpinner" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
+    <i class="fa-solid fa-spinner fa-spin"></i>
+</div>
+<script>
+    function formatDate(date) {
+        let year = date.getFullYear();
+        let month = (date.getMonth() + 1).toString().padStart(2, '0'); // Đảm bảo có 2 chữ số
+        let day = date.getDate().toString().padStart(2, '0'); // Đảm bảo có 2 chữ số
+        return `${year}-${month}-${day}`;
+    }
+        $("#ascending").on("change", function () {
+        if (this.checked) {
+            $("#descending").prop("checked", false);
+        }
+    });
+
+    $("#descending").on("change", function () {
+        if (this.checked) {
+            $("#ascending").prop("checked", false);
+        }
+    });
+
+        $("#confirmation").on("change", function () {
+        if (this.checked) {
+            $("#masterllio").prop("checked", false);
+        }
+    });
+
+    $("#masterllio").on("change", function () {
+        if (this.checked) {
+            $("#confirmation").prop("checked", false);
+        }
+    });
+
+    $(document).ready(function () {
+         document.getElementById("reportTitle").innerText = '@ViewBag.ReportTitle';
+        const today = new Date();
+
+        const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+        // Lấy ngày cuối cùng của tháng
+        const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+        // Định dạng theo local time
+        const formattedFirstDay = formatDate(firstDayOfMonth);
+        const formattedLastDay = formatDate(lastDayOfMonth);
+
+        console.log(formattedFirstDay); // Kiểm tra giá trị đúng chưa
+        console.log(formattedLastDay); // Kiểm tra giá trị đúng chưa
+        // Gán giá trị cho input date
+        document.getElementById('fromDate').value = formattedFirstDay;
+        document.getElementById('toDate').value = formattedLastDay;
+
+
+
+    });
+
+    $(document).off("click", "#btnPrint").on("click", "#btnPrint", function () {
+               const sortFieldIndex = parseInt($("#sortOrder").val());
+            const isDescending = $("#descending").is(":checked");
+            const isAscending = $("#ascending").is(":checked");
+        const sortDirection = isDescending ? "desc" : (isAscending ? "asc" : null);
+
+             const masterllio = $("#masterllio").is(":checked");
+
+    var statusValues = $("input[name='includeOptions']:checked")
+        .map(function () {
+            const val = $(this).val();         // ví dụ: "1,101"
+            const parts = val.split(',');      // ["1", "101"]
+
+            if (masterllio) {
+                // Lấy phần có 3 chữ số
+                return parts.find(p => p.length === 3);
+            } else {
+                // Lấy phần có 1 chữ số
+                return parts.find(p => p.length === 1);
+            }
+        })
+        .get()
+        .join(',');
+
+        
+        $("#loadingSpinner").show();
+        $.ajax({
+            url: '/Report/ProductActivityData',
+            type: 'GET',
+            data: {
+                fromDate: $("#fromDate").val(),
+                toDate: $("#toDate").val(),
+                   type: statusValues,
+                   currency: $("#viewBy").val(),
+            },
+            traditional: true,
+              crossDomain: false,
+                headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                // $("#reportViewerContainer").html(result);
+                // $("#loadingSpinner").hide();
+
+                const sortFields = [
+        "guestName",          // 0
+        "totalTurnover",      // 1
+        "roomSales",          // 2
+        "fbTurnover",         // 3
+        "eventTurnover",      // 4
+        "micelliousTurnover", // 5
+        "roomNight",          // 6
+        "bedNightAll"         // 7
+    ];
+
+    const sortField = sortFields[sortFieldIndex];
+
+    // ✅ Lọc Room Night >= input
+    const roomNightFilter = parseInt($("#roomNight").val());
+    if (!isNaN(roomNightFilter)) {
+        result = result.filter(item => {
+            const rn = parseInt(item.roomNight);
+            return !isNaN(rn) && rn >= roomNightFilter;
+        });
+    }
+
+    // ✅ Sắp xếp nếu có
+    if (sortField && sortDirection) {
+        result.sort(function (a, b) {
+            let valA = a[sortField];
+            let valB = b[sortField];
+
+            if (!isNaN(valA)) valA = parseFloat(valA);
+            if (!isNaN(valB)) valB = parseFloat(valB);
+
+            if (typeof valA === "string" && typeof valB === "string") {
+                return sortDirection === "asc"
+                    ? valA.localeCompare(valB)
+                    : valB.localeCompare(valA);
+            }
+
+            return sortDirection === "asc"
+                ? (valA ?? 0) - (valB ?? 0)
+                : (valB ?? 0) - (valA ?? 0);
+        });
+    }
+
+                   
+       initializProductActivityGrid(result);
+                    $("#loadingSpinner").hide();
+            },
+            error: function () {
+                alert("Không thể tải báo cáo.");
+                $("#loadingSpinner").hide();
+            }
+        });
+    });
+
+    function initializProductActivityGrid(data) {
+        const columnWidth = 180;
+
+        $("#gridContainer").dxDataGrid({
+    dataSource: data,         height: 500, allowColumnResizing: true,
+            columns: [
+               { dataField: "guestNo", caption: "Acc.No", width: columnWidth-50 },
+            { dataField: "guestName", caption: "Account", width: columnWidth },
+            { dataField: "city", caption: "City", width: columnWidth-70},
+            { dataField: "totalTurnover", caption: "Total Turnover", width: columnWidth-70, dataType: "number", format: "#,##0" },
+            { dataField: "roomPackage", caption: "Room Package", width: columnWidth-70 , dataType: "number", format: "#,##0"},
+            { dataField: "roomSales", caption: "Room Sales", width: columnWidth-70, dataType: "number", format: "#,##0" },
+               { dataField: "fbTurnover", caption: "F&B Turnover", width:columnWidth-70, dataType: "number", format: "#,##0" },
+            { dataField: "eventTurnover", caption: "E.Turnover", width: columnWidth-70 , dataType: "number", format: "#,##0" },
+            { dataField: "micelliousTurnover", caption: "M.Turnover", width: columnWidth-70, dataType: "number", format: "#,##0" },
+              { dataField: "taxService", caption: "Tax & SC", width: columnWidth-70, dataType: "number", format: "#,##0" },
+
+               { dataField: "totalAdult", caption: "A", width: columnWidth-100, dataType: "number", format: "#,##0" },
+               { dataField: "totalChild", caption: "C", width:columnWidth-100, dataType: "number", format: "#,##0" },
+            { dataField: "totalChild1", caption: "C1", width: columnWidth-100 , dataType: "number", format: "#,##0" },
+            { dataField: "totalChild2", caption: "C2", width: columnWidth-100, dataType: "number", format: "#,##0" },
+              { dataField: "bedNightAC", caption: "BN1", width: columnWidth-100, dataType: "number", format: "#,##0" },
+
+              { dataField: "bedNightAll", caption: "BN2", width:columnWidth-100, dataType: "number", format: "#,##0" },
+            { dataField: "roomNight", caption: "RN", width: columnWidth-100 , dataType: "number", format: "#,##0" },
+            { dataField: "amountAvg", caption: "Avg", width: columnWidth-80, dataType: "number", format: "#,##0" },
+        
+            ],
+            paging: { pageSize: 25 },
+      scrolling:  {
+         
+        useNative: true,
+       showScrollbar: "always"
+    },
+            pager: {
+                visible: true,
+                allowedPageSizes: [25, 50, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true,
+            },       summary: {
+            totalItems: [
+                {
+                    column: "guestNo",
+                    summaryType: "custom",
+                    displayFormat: "Total"
+                },
+                { column: "totalAdult", summaryType: "sum", displayFormat: "{0}", valueFormat: "#,##0" },
+                { column: "totalChild", summaryType: "sum", displayFormat: "{0}", valueFormat: "#,##0" },
+                { column: "totalChild1", summaryType: "sum", displayFormat: "{0}", valueFormat: "#,##0" },
+                { column: "totalChild2", summaryType: "sum", displayFormat: "{0}", valueFormat: "#,##0" },
+                { column: "bedNightAC", summaryType: "sum", displayFormat: "{0}", valueFormat: "#,##0" },
+                { column: "bedNightAll", summaryType: "sum", displayFormat: "{0}", valueFormat: "#,##0" },
+                { column: "roomNight", summaryType: "sum", displayFormat: "{0}", valueFormat: "#,##0" },
+                { column: "amountAvg", summaryType: "sum", displayFormat: "{0}", valueFormat: "#,##0" },
+            ]
+        },
+            selection: { mode: "multiple", showCheckBoxesMode: "none" },
+                filterRow: {
+         visible: true,
+        applyFilter: "auto"
+    },
+    headerFilter: {
+        visible: true
+    },
+            showBorders: true
+        });
+    }
+
+
+
+
+    $("#btnExportExcel").click(function () {
+               const grid = $("#gridContainer").dxDataGrid("instance"); var selectedReport2 = '@ViewBag.ReportTitle';
+        var selectedReport = '@ViewBag.ReportTitle';
+        if (!selectedReport) {
+            alert("Vui lòng chọn báo cáo trước khi xuất Excel.");
+            return;
+        }
+
+                     const workbook = new ExcelJS.Workbook();const companyName = localStorage.getItem("CompanyName") || "Tên công ty chưa xác định";
+        const worksheet = workbook.addWorksheet("Sheet 1");
+
+        // === Tạo header công ty (dòng 1) ===
+       worksheet.addRow([companyName]);
+        worksheet.mergeCells('A1:E1');
+        worksheet.getRow(1).font = { bold: true };
+        worksheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'left' };
+
+        // === Dòng 2: Thời gian xuất (phải) ===
+        const now = new Date();
+        const exportDate = now.toLocaleString("vi-VN");
+        worksheet.addRow(['', '', '', '', ' ' + exportDate]);
+        worksheet.mergeCells('E2:H2');
+        worksheet.getRow(2).alignment = { vertical: 'middle', horizontal: 'right' };
+
+        // === Dòng 3–4: Trống
+        worksheet.addRow([]);
+        worksheet.addRow([]);
+
+        // === Dòng 5: Tên báo cáo ở giữa ===
+        const reportRow = worksheet.addRow(['', '', selectedReport]);
+        worksheet.mergeCells('C5:F5');
+        reportRow.font = { bold: true, size: 14 };
+        reportRow.alignment = { vertical: 'middle', horizontal: 'center' };
+
+        // === Dòng 6: Trống trước khi xuất dữ liệu
+        worksheet.addRow([]);
+
+        // === Export dữ liệu từ DevExtreme (bắt đầu từ dòng 7)
+        DevExpress.excelExporter.exportDataGrid({
+            component: grid,
+            worksheet: worksheet,
+            autoFilterEnabled: true,
+            topLeftCell: { row: 7, column: 1 } // dữ liệu bắt đầu từ dòng 7
+        }).then(function () {
+            // Footer
+            const lastRow = worksheet.lastRow.number + 2;
+     
+            worksheet.mergeCells(`A${lastRow}:F${lastRow}`);
+            worksheet.getCell(`A${lastRow}`).alignment = { horizontal: 'center' };
+            worksheet.getCell(`A${lastRow}`).font = { italic: true };
+
+            // Ghi file
+            let fileName = selectedReport + ".xlsx";
+            workbook.xlsx.writeBuffer().then(function (buffer) {
+                saveAs(new Blob([buffer], { type: "application/octet-stream" }), fileName);
+            });
+        });
+    });
+
+
+    // Nút xuất PDF
+             $("#btnExportPdf").click(function () {
+        const grid = $("#gridContainer").dxDataGrid("instance");
+
+        // Lấy đối tượng jsPDF từ window
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({ orientation: "landscape", unit: "pt", format: "A4" });
+
+        const selectedReport = '@ViewBag.ReportTitle';
+        const companyName = localStorage.getItem("CompanyName") || "Tên công ty chưa xác định";
+
+        grid.getDataSource().load().then(data => {
+            const columns = grid.getVisibleColumns();
+
+            const head = [columns.map(col => col.caption)];
+            const body = data.map(row =>
+                columns.map(col =>
+                    col.calculateCellValue ? col.calculateCellValue(row) : row[col.dataField]
+                )
+            );
+
+            doc.setFontSize(14);
+            doc.setFont("Helvetica", "bold");
+            doc.text(companyName, doc.internal.pageSize.getWidth() / 2, 40, { align: "center" });
+
+            doc.setFontSize(12);
+            doc.setFont("Helvetica", "normal");
+            doc.text(selectedReport, doc.internal.pageSize.getWidth() / 2, 60, { align: "center" });
+
+            // AutoTable
+            doc.autoTable({
+                startY: 80,
+                head: head,
+                body: body,
+                 styles: { fontSize: 9, cellPadding: 4 , lineWidth: 0.5, lineColor: [0, 0, 0]    },
+                headStyles: { fillColor: [41, 128, 185], textColor: 255, fontStyle: 'bold' },
+                alternateRowStyles: { fillColor: [240, 240, 240] },
+                margin: { left: 20, right: 20 }
+            });
+
+            doc.save(selectedReport + ".pdf");
+        });
+    });
+</script>

@@ -1,0 +1,255 @@
+﻿<link href="~/css/pages/edit-posting.css" rel="stylesheet" />
+
+<div class="modal fade" id="modalEditPosting" tabindex="-1" aria-labelledby="transactionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="border: 1px solid #bcbcbc">
+            <div class="modal-header">
+                <h5 class="modal-title" id="transactionModalLabel">Edit Posting</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="button-group">
+                <button type="button" class="submit-button-clear-reservation" onclick="EditPosting();">Save</button>
+                <button type="button" class="submit-button-clear-reservation" data-bs-dismiss="modal">Close</button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-2">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="room" class="form-label">Room</label>
+                            <input type="text" id="roomEditPosting" readonly>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text"  id="nameEditPosting" readonly>
+                        </div>
+                    </div>
+                </div>
+                <hr class="hr">
+                <div class="form-group">
+                    <label for="code" class="form-label">Code</label>
+                    <input type="text"  id="codeEditPosting" readonly>
+                    <span class="input-span" id="nameTransactionEditPosting"></span>
+                </div>
+                <hr class="hr">
+                <div class="row mb-2">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Price</label>
+                            <input type="text" id="priceEditPosting" style="text-align:right">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label >Quantity</label>
+                            <input type="number" id="quantityEditPosting" style="text-align:right">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label >Amount</label>
+                            <input type="text"  id="amountEditPosing" readonly style="text-align:right">
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label >Currency</label>
+                            <input type="text" id="currency" value="VND">
+                        </div>
+                    </div>
+                </div>
+                <hr class="hr">
+                <div class="row mb-2">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="crashier" class="form-label">Crashier</label>
+                            <input type="text"  id="crashierEditPosting" readonly>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="winNo" class="form-label">Win.No</label>
+                            <input type="text"  id="winNoEditPosting" value="1" readonly>
+                        </div>
+                    </div>
+                </div>
+                <hr class="hr">
+                <div class="row mb-2">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="postingDate" class="form-label">Posting Date</label>
+                            <input type="date"  id="postingDate" value="2023-08-01" readonly>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+@*                             <label for="additionalDate" class="form-label">Add. Date</label>
+                            <input type="date" class="form-control medium-input" id="additionalDate" readonly> *@
+                        </div>
+                    </div>
+                </div>
+                <hr class="hr">
+                <div class="form-group">
+                    <label for="articleCode" class="form-label">Article Code</label>
+                    <input type="text"  id="articleCodeEditPosting" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="supplement" class="form-label">Supplement</label>
+                    <input type="text"  id="supplementEditPosting">
+                </div>
+                <div class="form-group">
+                    <label for="reference" class="form-label">Reference</label>
+                    <input type="text"  id="referenceEditPosting">
+                </div>
+                <div class="form-group">
+                    <label for="checkNo" class="form-label">Check No</label>
+                    <input type="text"  id="checkNoEditPosting" readonly>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function openModalEditPosting(){
+        
+        getFolioDetailMaster();
+            $('#modalEditPosting').modal('show');
+    }
+    function closeModalEditPosting(){
+        $('#modalEditPosting').modal('hide');
+    }
+
+    function getFolioDetailMaster() {
+        var grid = $("#gridContainerBilling").dxDataGrid("instance");
+        var selectedRows = grid.getSelectedRowsData();
+        var selectedIds = selectedRows.map(row => row.transactionNo);
+        transactionNoPost = selectedIds[0];
+        if(transactionNoPost == 0){
+            showToast('Error', 'Please choose service', false);
+            return;
+        }
+        $.ajax({
+            url: '/Billing/GetFolioDetailMaster',
+            type: 'get',
+            dataType: 'json',
+            data: {
+                transactionNo: transactionNoPost,
+            },
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                $("#roomEditPosting").val(roomNo);
+                $("#nameEditPosting").val(lastname);
+                $("#codeEditPosting").val(result.transactionCode);
+                $("#nameTransactionEditPosting").text(result.description);
+                $("#priceEditPosting").val(result.price.toLocaleString('en-US'));
+                $("#quantityEditPosting").val(result.quantity);
+                $("#amountEditPosing").val(result.amountMasterGross.toLocaleString('en-US'));
+                $("#currency").val("VND");
+                $("#crashierEditPosting").val(result.crashierNo);
+                // $("#winNo").val("30,000.00");
+                $("#postingDate").val(result.transactionDate.split('T')[0]);
+                $("#additionalDate").val(result.transactionDate.split('T')[0]);
+                $("#articleCodeEditPosting").val(result.articleCode);
+                $("#supplementEditPosting").val("");
+                $("#referenceEditPosting").val(result.reference);
+                $("#checkNoEditPosting").val(result.checkNo);
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                }
+            }
+        });
+    }
+    function calculateNetPostEdit(transactionCode, price) {
+        $.ajax({
+            url: '/Billing/CalculateNet',
+            type: 'get',
+            dataType: 'json',
+            data: {
+                transactionCode: transactionCode,
+                price: price
+            },
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                $('#priceEditPosting').val(price.toLocaleString('en-US'));
+                $('#amountEditPosing').val((price * $('#quantityPostBilling').val()).toLocaleString('en-US'));
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                }
+            }
+        });
+    }
+
+    function calculatePostEdit(transactionCode, price) {
+        $.ajax({
+            url: '/Billing/CalculatePrice',
+            type: 'get',
+            dataType: 'json',
+            data: {
+                transactionCode: transactionCode,
+                price: price
+            },
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                $('#priceEditPosting').val(result.toLocaleString('en-US'));
+                $('#amountEditPosing').val((result * $('#quantityPostBilling').val()).toLocaleString('en-US'));
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                }
+            }
+        });
+    }
+    $("#priceEditPosting").blur(function() {
+        var price = parseFloat($('#priceEditPosting').val().replace(/,/g, ''));
+        calculateNetPostEdit($('#codeEditPosting').val(), price);
+    });
+
+    $("#amountEditPosing").blur(function() {
+        var price = parseFloat($('#amountEditPosing').val().replace(/,/g, ''));
+        calculateNetPostEdit($('#codeEditPosting').val(), price / $('#quantityEditPosting').val());
+    });
+
+    $("#quantityPostBilling").blur(function() {
+        var price = parseFloat($('#amountEditPosing').val().replace(/,/g, ''));
+        $('#amountEditPosing').val((price * $("#quantityEditPosting").val()).toLocaleString('en-US'));
+    });
+
+    function EditPosting() {
+        const userName = JSON.parse(localStorage.getItem("Loginname"));
+        const userID = JSON.parse(localStorage.getItem("userID"));
+        var formData = new FormData();
+        formData.append('userName', userName);
+        formData.append('transactionNo', transactionNoPost);
+        formData.append('userID', userID);
+        formData.append('quantity', $('#quantityEditPosting').val());
+        formData.append('price',  $('#priceEditPosting').val());
+        formData.append('amount',  $('#amountEditPosing').val());
+        $.ajax({
+            url: '/Billing/EditPosting',
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            data: formData,
+            success: function (data) {
+                if (data.code == 0) {
+                    closeModalEditPosting();
+                    searchFolioDetail(0);
+                    showToast('Success', data.msg, true);
+                } else {
+                    showToast('Error', data.msg, false);
+                }
+            },
+            error: function (xhr, statusText, err) {}
+        });
+    }
+</script>

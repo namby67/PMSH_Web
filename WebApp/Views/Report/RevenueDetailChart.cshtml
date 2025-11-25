@@ -1,0 +1,164 @@
+﻿@{
+    ViewBag.Title = ViewBag.ReportHeader;
+    var report = ViewBag.ReportName as DevExpress.XtraReports.UI.XtraReport;
+}
+
+<style>
+    .filter_wrapper {
+        padding: 18px 0px 0px 14px;
+        border-radius: 8px;
+    }
+
+    .button_wrapper {
+        display: flex;
+        column-gap: 12px;
+        margin: 0px 8px;
+    }
+
+    .chart-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        padding: 20px;
+    }
+
+    .chart-fixed-size {
+        width: 700px;
+        height: 520px;
+    }
+
+    .sticky-header label,
+    .sticky-header .form-control-sm {
+        font-size: 0.75rem;
+        line-height: 1.2;
+    }
+
+
+    .sticky-header .form-control-sm {
+        padding: .1rem .35rem;
+        height: calc(1.1em + .2rem + 2px);
+    }
+
+    .sticky-header label[class*="me-"] {
+        margin-right: .5rem !important;
+    }
+
+    #gridContainer .dx-datagrid-headers .dx-header-row > td {
+        padding: 5px !important;
+        height: 24px !important;
+        font-size: 12px !important;
+        line-height: 1.1 !important;
+    }
+</style>
+
+<div class="text-center" id="reportTitle" style="font-size: 20px"></div>
+<div class="sticky-header bg-white p-2 shadow-sm z-3">
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-1" style="border: 1px solid #ced4da; border-radius: 6px; padding: 8px;">
+        <div class="d-flex align-items-center me-3">
+            <label class="me-2 mb-0">Month:</label>
+            <input type="month" id="monthPicker" class="form-control form-control-sm w-auto" />
+        </div>
+    </div>
+    <div class="">
+        <button id="btnView" class="mui-button mui-button-new" style="border-radius: 4px; background-color: #3b9ac6;">
+            <i class="fa-solid fa-eye"></i> View
+        </button>
+    </div>
+</div>
+
+<div class="mui-card chart-container">
+    <div id="highchartPie" class="chart-fixed-size"></div>
+</div>
+
+<div id="loadingSpinner" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
+    <i class="fa-solid fa-spinner fa-spin"></i>
+</div>
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script>
+    function formatDate(date) {
+        let year = date.getFullYear();
+        let month = (date.getMonth() + 1).toString().padStart(2, '0');
+        return `${year}-${month}`;
+    }
+
+    $(document).ready(function () {
+        document.getElementById("reportTitle").innerText = '@ViewBag.ReportTitle';
+        const today = new Date();
+        $("#monthPicker").val(formatDate(today));
+    });
+
+    $("#btnView").on("click", function () {
+        $("#loadingSpinner").show();
+        const selectedMonth = $("#monthPicker").val(); // yyyy-MM
+        const fromDate = `${selectedMonth}-01`;
+        const [year, month] = selectedMonth.split("-");
+        const lastDay = new Date(year, month, 0).getDate();
+        const toDate = `${selectedMonth}-${lastDay.toString().padStart(2, '0')}`;
+
+        $.ajax({
+            url: '/Report/RevenueDetailData',
+            type: 'GET',
+            data: {
+                fromDate: fromDate,
+                toDate: toDate
+            },
+            headers: {
+                "X-CSRF-TOKEN-HEADERNAME": $("input[name='__RequestVerificationToken']").val()
+            },
+            success: function (data) {
+                const grouped = {};
+                data.forEach(item => {
+                    const group = item.groupCode;
+                    const amount = parseFloat(item.amount) || 0;
+                    if (!grouped[group]) grouped[group] = 0;
+                    grouped[group] += amount;
+                });
+
+                const grandTotal = Object.values(grouped).reduce((acc, val) => acc + val, 0);
+                const pieData = Object.entries(grouped).map(([group, amount]) => {
+                    const percent = grandTotal > 0 ? ((amount / grandTotal) * 100).toFixed(1) : 0;
+                    return {
+                        name: `${group} (${percent}%)`,
+                        y: amount
+                    };
+                });
+
+                renderHighchartPie(pieData);
+                $("#loadingSpinner").hide();
+            },
+            error: function () {
+                alert("Không thể tải dữ liệu.");
+                $("#loadingSpinner").hide();
+            }
+        });
+    });
+
+    function renderHighchartPie(data) {
+        Highcharts.chart('highchartPie', {
+            chart: { type: 'pie' },
+            title: { text: 'Revenue Summary by Group (Pie)' },
+            tooltip: { pointFormat: 'Amount: <b>{point.y:,.0f}</b>' },
+            legend: {
+                enabled: true,
+                align: 'center',
+                verticalAlign: 'bottom'
+            },
+            plotOptions: {
+                pie: {
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.name}: {point.y:,.0f}'
+                    },
+                    showInLegend: true
+                }
+            },
+            series: [{
+                name: 'Amount',
+                colorByPoint: true,
+                data: data
+            }]
+        });
+    }
+</script>

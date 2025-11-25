@@ -1,0 +1,436 @@
+﻿@* <link href="~/css/pages/reservation.css" rel="stylesheet" asp-append-version="true" /> *@
+
+<div class="header mt-2" style="border-bottom:none;justify-content:center">
+    <h3 id="content-title">
+        Overbooking Search
+    </h3>
+</div>
+<div>
+    <div style="display:flex;column-gap:12px">
+        <button class="submit-button-clear-reservation" onclick="searchReservation()">Search</button>
+
+        <button class="submit-button-clear-reservation" onclick="openModalNew()">New</button>
+        <button class="submit-button-clear-reservation" onclick="getActivityLog()">Activity Log</button>
+
+    </div>
+</div>
+<div id="partial-content">
+    <div class="row">
+        <div class="form-group-new-reservation col-md-2">
+            <label>Date</label>
+            <div class="row" style="margin-left:1px;margin-right:2px">
+                <input type="date" id="fromDate">
+
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+
+    <div id="loadingSpinnerForm" style="display: none; text-align: center; padding: 20px;">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <!-- DevExtreme DataGrid -->
+    <div id="gridContainer" class="gridContainer mt-2"></div>
+</div>
+ 
+<!-- Modal cancel-->
+<div class="modal fade modal" id="modalNewOverBooking" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" >Overbooking Setup</h5>
+                <button type="button" class="btn-close" onclick="closeModalNew()"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mt-2">
+                    <button class="submit-button-clear-reservation" onclick="SaveOverBooking();">OK</button>
+                    <button class="submit-button-clear-reservation" onclick="closeModalNew()">Close</button>
+                </div>
+                <div class="mt-2 row">
+                    <div class="form-group-new-reservation col-md-6">
+                        <label>
+                            From Date
+                        </label>
+                        <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                            <input type="date" id="fromDateNew" class="col-md-12">
+                        </div>
+                    </div>
+                    <div class="form-group-new-reservation col-md-6">
+                        <label>
+                            To Date
+                        </label>
+                        <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                            <input type="date" id="toDateNew" class="col-md-12">
+                        </div>
+                    </div>
+                    <div class="row col-md-12 mt-2">
+                        <div class="form-check col-md-1">
+                            <input type="checkbox" name="dayName" checked id="sun">
+                            <label style="padding-top:4px">Sun</label>
+                        </div>
+                        <div class="form-check col-md-1">
+                            <input type="checkbox" name="dayName" checked id="mon">
+                            <label style="padding-top:4px">Mon</label>
+                        </div>
+                        <div class="form-check col-md-1">
+                            <input type="checkbox" name="dayName" checked id="tue">
+                            <label  style="padding-top:4px">Tue</label>
+                        </div>
+                        <div class="form-check col-md-1">
+                            <input type="checkbox" name="dayName" checked id="wed">
+                            <label  style="padding-top:4px">Wed</label>
+                        </div>
+                        <div class="form-check col-md-1">
+                            <input type="checkbox" name="dayName" checked id="thu">
+                            <label  style="padding-top:4px">Thu</label>
+                        </div>
+                        <div class="form-check col-md-1">
+                            <input type="checkbox" name="dayName" checked id="fri">
+                            <label  style="padding-top:4px">Fri</label>
+                        </div>
+                        <div class="form-check col-md-1">
+                            <input type="checkbox" name="dayName" checked id="sat">
+                            <label style="padding-top:4px">Sat</label>
+                        </div>
+                    </div>
+                    <div class="form-group-new-reservation col-md-12">
+                        <label>
+                            Room Type
+                        </label>
+                        <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                            <select id="roomType" class="col-md-12" asp-items="ViewBag.cboRoomType"></select>
+                        </div>
+                    </div>
+                    <div class="form-group-new-reservation col-md-6">
+                        <label>
+                            Overbooking Level
+                        </label>
+                        <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                            <input type="number" id="obLevel" class="col-md-12" />
+                        </div>
+                    </div>
+                    <div class="form-group-new-reservation col-md-6">
+                        <label>
+                            No to sell
+                        </label>
+                        <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                            <input type="number" id="noToSell" class="col-md-12" />
+                        </div>
+                    </div>
+                    <div class="row col-md-3 mt-2">
+                        <div class="form-check col-md-1">
+                            <input type="radio" name="type" checked>
+                            <label style="padding-top:4px">Number</label>
+                        </div>
+                        
+                    </div>
+                    <div class="row col-md-3 mt-2">
+                        <div class="form-check col-md-1">
+                            <input type="radio" name="type">
+                            <label style="padding-top:4px">Percentage</label>
+                        </div>
+
+                    </div>
+                    <div class="row col-md-12 mt-2">
+                        <label id="quantityRoom">
+                            ...
+                        </label>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal activity log-->
+<div class="modal fade modal" id="modalActivityLog" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Activity Log Overbooking</h5>
+                <button type="button" class="btn-close" onclick="closeActivityLog();"></button>
+            </div>
+            <div class="modal-body">
+                <div id="gridContainerActivityLog" class="gridContainer mt-2"></div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(async function () {
+        getBusinessDate().then(function () {
+            searchReservation();
+        });
+        
+
+    });
+    function openModalNew(){
+        $('#modalNewOverBooking').modal('show');
+    }
+    function closeModalNew(){
+        $('#modalNewOverBooking').modal('hide');
+    }
+
+    function getBusinessDate() {
+        return $.ajax({
+            url: '/Reservation/GetBusinessDate',
+            type: 'get',
+            dataType: 'json',
+
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+
+                $('#fromDate').val(result.split('T')[0]);
+                $('#fromDateNew').val(result.split('T')[0]);
+                $('#toDateNew').val(result.split('T')[0]);
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                }
+            }
+        });
+    }
+    function searchReservation() {
+
+        $("#loadingSpinnerForm").show();
+
+        $.ajax({
+            url: '/Reservation/SearchOverBooking',
+            type: 'get',
+            dataType: 'json',
+            data:{
+                date: $('#fromDate').val()
+            },
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+     
+                listData = result;
+                initializeDataGridSearch(result);
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                }
+            },
+            complete: function () {
+                $("#loadingSpinnerForm").hide();
+            }
+        });
+
+    }
+    function initializeDataGridSearch(data) {
+        // Kiểm tra dữ liệu đầu vào
+
+        // Nếu cần giới hạn tổng số bản ghi, ví dụ 100 bản ghi
+        const limitedData = data.slice(0, 100);
+
+        $("#gridContainer").dxDataGrid({
+            dataSource: limitedData, // Sử dụng dữ liệu đã giới hạn
+            allowColumnResizing: true,
+            columnAutoWidth: true,
+            columnMinWidth: 90,
+            paging: {
+                enabled: true, // Bật phân trang
+                pageSize: 15 // Mỗi trang 15 bản ghi
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [15, 20, 30], // Chỉ các kích thước trang cố định
+                showPageSizeSelector: true,
+                showInfo: true, // Hiển thị thông tin phân trang
+                showNavigationButtons: true
+            },
+            scrolling: {
+                mode: 'standard', // Thay 'virtual' bằng 'standard' để kiểm tra
+                showScrollbar: 'always',
+                useNative: false
+            },
+            filterRow: {
+                visible: true,
+                applyFilter: "auto"
+            },
+            selection: {
+                mode: "single"
+            },
+            onRowClick: function(e) {
+                waitListID = e.data.WaitListID;
+                $('#companyWaitList').val(e.data.Company);
+                $('#sourceWaitList').val(e.data.Source);
+                $('#phoneWaitList').val(e.data.Phone);
+                $('#agentWaitList').val(e.data.Agent);
+                $('#groupWaitList').val(e.data.Group);
+                $('#vipWaitList').val("");
+
+            },
+
+        });
+    }
+
+    $('#roomType').on('change', function() {
+        // Get the selected value
+        var selectedValue = $(this).val();
+        if(selectedValue != 0){
+            getNumberOfRoom(selectedValue);
+        }
+        // Your logic here
+    });
+    function getNumberOfRoom(id) {
+        return $.ajax({
+            url: '/Reservation/GetCNumberOfRoom',
+            type: 'get',
+            dataType: 'json',
+            crossDomain: false,
+            data:{roomTypeID : id},
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                $('#quantityRoom').text(result);
+
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                }
+            }
+        });
+    }
+    function SaveOverBooking() {
+        const fromDate = $('#fromDateNew').val();
+        const toDate = $('#toDateNew').val();
+
+        // Chuyển days thành mảng các ngày được chọn
+        const days = [];
+        if ($('#sun').is(':checked')) days.push('sun');
+        if ($('#mon').is(':checked')) days.push('mon');
+        if ($('#tue').is(':checked')) days.push('tue');
+        if ($('#wed').is(':checked')) days.push('wed');
+        if ($('#thu').is(':checked')) days.push('thu');
+        if ($('#fri').is(':checked')) days.push('fri');
+        if ($('#sat').is(':checked')) days.push('sat');
+
+        const roomType = $('#roomType').val();
+        const obLevel = $('#obLevel').val();
+        const noToSell = $('#noToSell').val();
+        const type = $('input[name="type"]:checked').next('label').text().trim();
+        const userName = JSON.parse(localStorage.getItem("Loginname"));
+        const userID = JSON.parse(localStorage.getItem("userID"));
+
+        var formData = new FormData();
+        formData.append('fromDate', fromDate);
+        formData.append('toDate', toDate);
+        // Gửi days dưới dạng JSON string của mảng
+        formData.append('days', JSON.stringify(days));
+        formData.append('quantity', $('#quantityRoom').text());
+        formData.append('roomType', roomType);
+        formData.append('obLevel', obLevel);
+        formData.append('noToSell', noToSell);
+        formData.append('type', type);
+        formData.append('userName', userName);
+        formData.append('userID', userID);
+
+        $.ajax({
+            url: '/Reservation/SaveOverBooking',
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            data: formData,
+            success: function (data) {
+                if (data.code == 0) {
+                    clearForm();
+                    closeModalNew();
+                    searchReservation();
+                    showToast('Success', data.msg, true);
+                } else {
+                    showToast('Error', data.msg, false);
+                }
+            },
+            error: function (xhr, statusText, err) {
+                // Xử lý lỗi
+            }
+        });
+    }
+    function clearForm(){
+        $('#roomType').val(0);
+        $('#obLevel').val('');
+       $('#noToSell').val('');
+       getBusinessDate();
+    }
+
+    function getActivityLog() {
+
+        $.ajax({
+            url: '/Reservation/GetActivityLogOverBooking',
+            type: 'get',
+            dataType: 'json',
+
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                initializeDataGridActivityLog(result);
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                }
+            },
+            complete: function () {
+                $("#loadingSpinnerForm").hide();
+            }
+        });
+        $('#modalActivityLog').modal('show');
+    }
+    function initializeDataGridActivityLog(data) {
+        // Kiểm tra dữ liệu đầu vào
+
+        // Nếu cần giới hạn tổng số bản ghi, ví dụ 100 bản ghi
+        const limitedData = data.slice(0, 100);
+
+        $("#gridContainerActivityLog").dxDataGrid({
+            dataSource: limitedData, // Sử dụng dữ liệu đã giới hạn
+            allowColumnResizing: true,
+            columnAutoWidth: true,
+            columnMinWidth: 90,
+            paging: {
+                enabled: true, // Bật phân trang
+                pageSize: 15 // Mỗi trang 15 bản ghi
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [15, 20, 30], // Chỉ các kích thước trang cố định
+                showPageSizeSelector: true,
+                showInfo: true, // Hiển thị thông tin phân trang
+                showNavigationButtons: true
+            },
+            scrolling: {
+                mode: 'standard', // Thay 'virtual' bằng 'standard' để kiểm tra
+                showScrollbar: 'always',
+                useNative: false
+            },
+            filterRow: {
+                visible: true,
+                applyFilter: "auto"
+            },
+            selection: {
+                mode: "single"
+            },
+
+
+        });
+    }
+    function closeActivityLog(){
+                $('#modalActivityLog').modal('hide');
+
+    }
+</script>

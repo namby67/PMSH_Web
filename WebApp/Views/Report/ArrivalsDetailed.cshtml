@@ -1,0 +1,763 @@
+﻿@using DevExpress.XtraReports.UI
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewBag.Title = ViewBag.ReportHeader;
+    var roomclassList = ViewBag.RoomClassList;
+    var rtList = ViewBag.RoomTypeList;
+    var listsrc = ViewBag.SourceList;
+    var vipList = ViewBag.VIPList;
+    var listrc = ViewBag.RateCodeList;
+    var listmk = ViewBag.MarketList;
+}
+
+
+<style>
+    .filter_wrapper {
+        /*     background-color: #ececec; */
+        /*   margin: 0px 8px 14px 8px; */
+        padding: 18px 0px 0px 14px;
+        border-radius: 8px;
+    }
+
+    .gridContainer {
+        margin: 0px 8px;
+    }
+
+    .button_wrapper {
+        display: flex;
+        column-gap: 12px;
+        margin: 0px 8px;
+    }
+
+        .button_wrapper .fa-solid {
+            margin-right: 5px;
+        }
+
+    .selected {
+        background-color: #4CAF50; /* Màu xanh */
+        color: white;
+    }
+
+    #gridContainer .dx-datagrid-rowsview .dx-selection {
+        background-color: #01579b !important; /* màu xanh ngọc */
+        color: white !important; /* chữ trắng */
+    }
+
+        #gridContainer .dx-datagrid-rowsview .dx-selection * {
+            color: white !important;
+        }
+
+    .sticky-header label,
+    .sticky-header .form-control-sm {
+        font-size: 0.75rem;
+        line-height: 1.2;
+    }
+
+
+    .sticky-header .form-control-sm {
+        padding: .1rem .35rem;
+        height: calc(1.1em + .2rem + 2px);
+    }
+
+    .sticky-header label[class*="me-"] {
+        margin-right: .5rem !important;
+    }
+
+    #gridContainer .dx-datagrid-headers .dx-header-row > td {
+        padding: 5px !important;
+        height: 24px !important;
+        font-size: 12px !important;
+        line-height: 1.1 !important;
+    }
+
+    #gridContainer .dx-datagrid-rowsview .dx-row > td,
+    #gridContainer .dx-datagrid .dx-summary-row > td,
+    #gridContainer .dx-datagrid .dx-total-footer td,
+    #gridContainer .dx-datagrid .dx-footer-row td {
+        font-size: 11px !important;
+    }
+
+    .report-bar {
+        position: relative;
+        margin-bottom: 1rem; /* = mb-3 của bạn */
+    }
+
+        /* Tiêu đề ở giữa, full width để text-center hoạt động */
+        .report-bar #reportTitle {
+            font-size: 20px;
+            margin: 0; /* bỏ margin dưới h4/h5 mặc định */
+            text-align: center;
+        }
+
+        /* Nhóm nút cố định góc phải, canh theo chiều dọc */
+        .report-bar .action-buttons {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+    .tomselect-custom {
+        width: 300px;
+        min-height: 30px; /* hoặc tùy theo chiều cao bạn muốn */
+        font-size: 0.65rem;
+    }
+
+</style>
+<link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+<div class="text-center" id="reportTitle" style="font-size: 20px"></div>
+<div class="sticky-header bg-white p-2 shadow-sm z-3">
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-1" style="border: 1px solid #ced4da; border-radius: 6px; padding: 8px;">
+        <!-- From Date -->
+        <div class="d-flex flex-column ">
+
+            <div class="d-flex align-items-center">
+                <label class="fw-bold me-2">Date Range:</label>
+                <div class="d-flex align-items-center me-3">
+                    <label class="me-2 mb-0">From Date:</label>
+                    <input type="date" id="fromDate" name="fromDate" class="form-control form-control-sm w-auto" />
+                </div>
+
+                <div class="d-flex align-items-center me-3">
+                    <label class="me-2 mb-0">To Date:</label>
+                    <input type="date" id="toDate" name="toDate" class="form-control form-control-sm w-auto" />
+                </div>
+                <div class="d-flex flex-column me-3">
+
+                    <div class="d-flex align-items-center flex-wrap gap-2">
+                        <label class="mb-1">Check Date:</label>
+                        <div class="form-check me-3">
+                            <input class="form-check-input" type="checkbox" id="arrvialDates" name="checkdate" value="0">
+                            <label class="form-check-label" for="arrvialDates">Arrival Dates</label>
+                        </div>
+                        <div class="form-check me-3">
+                            <input class="form-check-input" type="checkbox" id="stayDates" name="checkdate" value="1" checked>
+                            <label class="form-check-label" for="stayDates">Stay Dates</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex flex-column ">
+
+            <div class="d-flex align-items-center">
+                <label class="fw-bold me-2">Search Criteria:</label>
+                    <div class="d-flex align-items-center me-3">
+                        <label class="me-2 mb-0">Reservation:</label>
+                        <select id="reservation" name="reservation" class="form-control form-control-sm w-auto">
+                            <option value="0">All Reservation</option>
+                            <option value="1">Reservation with Company</option>
+                            <option value="2">Reservation with Travel Agent</option>
+                            <option value="3">Reservation with Source Profile</option>
+                            <option value="4">Reservation with Group Profile</option>
+                            <option value="5">Reservation with Block Code</option>
+                        </select>
+                    </div>
+            </div>
+        </div>
+
+        <div class="d-flex flex-column">
+            <!-- ✅ HÀNG 1: Room Class đến Rate Code -->
+            <div class="d-flex align-items-center flex-wrap mb-2">
+                    <label class="me-2 mb-0 fw-bold">Filter: </label>
+
+                <div class="d-flex align-items-center me-3">
+                    <label class="me-2 mb-0">Room Class:</label>
+                    <select id="roomClass" name="roomClass" class="tomselect-custom" style="width: 170px;" multiple>
+                        @foreach (var item in roomclassList)
+                        {
+                            <option value="@item.Code">@item.Code-@item.Description</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="d-flex align-items-center me-3">
+                    <label class="me-2 mb-0">Room Type:</label>
+                    <select id="roomtype" name="roomtype" class="tomselect-custom" style="width: 150px;" multiple>
+                        @foreach (var item in rtList)
+                        {
+                            <option value="@item.Code">@item.Code-@item.Description</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="d-flex align-items-center me-3">
+                    <label class="me-2 mb-0">Market:</label>
+                    <select id="market" name="market" class="tomselect-custom" style="width: 170px;" multiple>
+                        @foreach (var item in listmk)
+                        {
+                            <option value="@item.Code">@item.Code-@item.Description</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="d-flex align-items-center me-3">
+                    <label class="me-2 mb-0">Rate Code:</label>
+                    <select id="rateCode" name="rateCode" class="tomselect-custom" style="width: 170px;" multiple>
+                        @foreach (var item in listrc)
+                        {
+                            <option value="@item.RateCode">@item.RateCode-@item.Descripton</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+       
+            <div class="d-flex align-items-center flex-wrap">
+                <div class="d-flex align-items-center me-3">
+                        <label class="me-2 mb-0 fw-bold">Source:</label>
+                    <select id="source" name="source" class="tomselect-custom" style="width: 170px;" multiple>
+                        @foreach (var item in listsrc)
+                        {
+                            <option value="@item.Code">@item.Code-@item.Description</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="d-flex align-items-center me-3" id="vipContainer">
+                        <div class="form-check me-2 mb-0">
+                            <input class="form-check-input include-option" type="checkbox" id="viponlycheck" name="viponlycheck">
+                        <label class="form-check-label" for="viponlycheck">Vip Only</label>
+                    </div>
+                    <select id="vip" name="vip" class="form-control form-control-sm" style="width: 150px; display: none;">
+                        @foreach (var item in vipList)
+                        {
+                            <option value="@item.Code">@item.Description</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="form-check">
+                        <input class="form-check-input include-option" type="checkbox" id="noPost" name="noPost">
+                    <label class="form-check-label" for="noPost">No Post</label>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="d-flex flex-column me-3">
+
+            <div class="d-flex flex-wrap gap-2">
+                <label class="mb-1 fw-bold">Include :</label>
+                <!-- Row 1 -->
+                <div class="form-check me-3">
+                    <input class="form-check-input " type="checkbox" id="pseudo" name="includeOptions" value="1">
+                        <label class="form-check-label" for="pseudo">Pseudo Rooms</label>
+                </div>
+                <div class="form-check me-3">
+                    <input class="form-check-input" type="checkbox" id="checkedInToday" name="includeOptions" value="1">
+                    <label id="dateInfoText" class="form-check-label" for="checkedInToday">Departure</label>
+                </div>
+                <div class="form-check me-3">
+                    <input class="form-check-input" type="checkbox" id="cancellations" name="includeOptions" value="1">
+                    <label class="form-check-label" for="cancellations">Cancellations</label>
+                </div>
+                <div class="form-check me-3">
+                    <input class="form-check-input" type="checkbox" id="zeroRateOnly" name="includeOptions" value="1">
+                    <label class="form-check-label" for="zeroRateOnly">Zero Rates Only</label>
+                </div>
+                <div class="form-check me-3">
+                    <input class="form-check-input" type="checkbox" id="disRoomSharer" name="includeOptions" value="1" checked>
+                    <label class="form-check-label" for="disRoomSharer">Display Room Sharer </label>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="d-flex flex-column me-3">
+
+            <div class="d-flex flex-wrap gap-2">
+                <label class="mb-1 fw-bold">Display :</label>
+                <!-- Row 1 -->
+                <div class="form-check me-3">
+                    <input class="form-check-input" type="checkbox" id="printRate" name="displayOptions" >
+                    <label class="form-check-label" for="printRate">Print Rate</label>
+                </div>
+                <div class="form-check me-3">
+                    <input class="form-check-input" type="checkbox" id="fixCharges" name="displayOptions" >
+                    <label class="form-check-label" for="fixCharges">Fix Charges</label>
+                </div>
+                <div class="form-check me-3">
+                    <input class="form-check-input" type="checkbox" id="packages" name="displayOptions" >
+                    <label class="form-check-label" for="packages">Packages</label>
+                </div>
+                <div class="form-check me-3">
+                    <input class="form-check-input" type="checkbox" id="paymentMethod" name="displayOptions" >
+                    <label class="form-check-label" for="paymentMethod">Payment Methods</label>
+                </div>
+                <div class="form-check me-3">
+                    <input class="form-check-input" type="checkbox" id="routingInstruction" name="displayOptions">
+                    <label class="form-check-label" for="routingInstruction">Routing Instruction</label>
+                </div>
+                <div class="form-check me-3">
+                    <input class="form-check-input" type="checkbox" id="sharesNames" name="displayOptions">
+                    <label class="form-check-label" for="sharesNames">Shares names</label>
+                </div>
+                <div class="form-check me-3">
+                    <input class="form-check-input" type="checkbox" id="accompanying" name="displayOptions">
+                    <label class="form-check-label" for="accompanying">Accompanying Names</label>
+                </div>
+                <div class="form-check me-3">
+                    <input class="form-check-input" type="checkbox" id="itemsInventorys" name="displayOptions">
+                    <label class="form-check-label" for="itemsInventorys">Items  Inventorys</label>
+                </div>
+                <div class="form-check me-3">
+                    <input class="form-check-input" type="checkbox" id="specials" name="displayOptions">
+                    <label class="form-check-label" for="specials">Specials</label>
+                </div>
+                <div class="form-check me-3">
+                    <input class="form-check-input" type="checkbox" id="commnets" name="displayOptions">
+                        <label class="form-check-label" for="commnets">Comments</label>
+                </div>
+                <div class="form-check me-3">
+                    <input class="form-check-input" type="checkbox" id="profileNote" name="displayOptions">
+                    <label class="form-check-label" for="profileNote">Profile Note</label>
+                </div>
+            </div>
+      
+
+
+        <div class="d-flex align-items-center me-3">
+            <label class="me-2 mb-0 fw-bold">Sort Order :</label>
+            <select id="viewBy" name="viewBy" class="form-control form-control-sm w-auto">
+
+                <option value="0">Alphabetical</option>
+                <option value="1">Market</option>
+                <option value="2">Reservation Type</option>
+                <option value="3">Room No</option>
+                <option value="4">Source</option>
+                <option value="5">VIP</option>
+            </select>
+        </div>
+        </div>
+    </div>
+
+    <div class="">
+        <button style="border-radius: 4px;  margin-right: 6px;background-color: #3b9ac6;" id="btnPrint" class="mui-button mui-button-new"><i class="fa-solid fa-eye"></i>View</button>
+        <button style="border-radius: 4px;  margin-right: 6px;background-color: green;" id="btnExportExcel" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Excel</button>
+        <button style="border-radius: 4px;  margin-right: 6px;background-color: darkorange;" id="btnExportPdf" class="mui-button mui-button-new" type="button"><i class="fas fa-eraser"></i> PDF</button>
+    </div>
+</div>
+<div class="mui-card">
+    @*     <div style="font-size: 20px;" class="mt-1" id="reportTitle"></div> *@
+    <div id="gridWrapper" class="mt-2" style="max-height: 500px;">
+        <div  class="gridContainer mt-2" id="gridContainer"></div>
+    </div>
+</div>
+<div id="loadingSpinner" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
+    <i class="fa-solid fa-spinner fa-spin"></i>
+</div>
+<script>
+    function formatDate(date) {
+        let year = date.getFullYear();
+        let month = (date.getMonth() + 1).toString().padStart(2, '0'); // Đảm bảo có 2 chữ số
+        let day = date.getDate().toString().padStart(2, '0'); // Đảm bảo có 2 chữ số
+        return `${year}-${month}-${day}`;
+    }
+
+    $(document).ready(function () {
+        function updateDateText() {
+            if ($('#arrvialDates').is(':checked')) {
+                $('#stayDates').prop('checked', false);
+                $('#dateInfoText').text('Checked-In Today');
+            } else if ($('#stayDates').is(':checked')) {
+                $('#arrvialDates').prop('checked', false);
+                $('#dateInfoText').text('Departure');
+            } else {
+                $('#dateInfoText').text('');
+            }
+        }
+
+        // Đảm bảo mỗi lần click sẽ thực hiện kiểm tra lại
+        $('#arrvialDates').on('change', function () {
+            $('#stayDates').prop('checked', false);
+            updateDateText();
+        });
+
+        $('#stayDates').on('change', function () {
+            $('#arrvialDates').prop('checked', false);
+            updateDateText();
+        });
+
+         $('#viponlycheck').on('change', function () {
+            if ($(this).is(':checked')) {
+                $('#vip').show();
+            } else {
+                $('#vip').hide();
+                $('#vip').val(''); 
+            }
+        });
+
+         document.getElementById("reportTitle").innerText = '@ViewBag.ReportTitle';
+        const today = new Date();
+
+        const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+        // Lấy ngày cuối cùng của tháng
+        const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+        // Định dạng theo local time
+        const formattedFirstDay = formatDate(firstDayOfMonth);
+        const formattedLastDay = formatDate(lastDayOfMonth);
+
+        console.log(formattedFirstDay); // Kiểm tra giá trị đúng chưa
+        console.log(formattedLastDay); // Kiểm tra giá trị đúng chưa
+        // Gán giá trị cho input date
+        document.getElementById('fromDate').value = formattedFirstDay;
+        document.getElementById('toDate').value = formattedLastDay;
+         initializeTomSelects();
+
+
+    });
+    function initializeTomSelects() {
+        const selectors = ["#roomClass", "#roomtype","#market","#rateCode","#source"];
+
+        for (const id of selectors) {
+            const el = document.querySelector(id);
+            if (!el) continue;
+
+            // Nếu đã khởi tạo rồi thì destroy
+            if (el.tomselect) el.tomselect.destroy();
+
+            const ts = new TomSelect(el, {
+                plugins: ['remove_button'],
+                create: false,
+                maxItems: null,
+                allowEmptyOption: true,
+                placeholder: '',
+                persist: false,
+                render: {
+                    option: function (data, escape) {
+                        return `<div>${escape(data.text)}</div>`;
+                    }
+                }
+            });
+
+        }
+    }
+    $(document).off("click", "#btnPrint").on("click", "#btnPrint", function () {
+        $("#loadingSpinner").show();
+        $.ajax({
+            url: '/Report/ArrivalsDetailedData',
+            type: 'GET',
+            data: {
+                    fromDate: $("#fromDate").val(),
+                    toDate: $("#toDate").val(),
+                    roomClass: $("#roomClass").val().map(r => r.replace( "''")).join("','") + "",
+                    roomtype: $("#roomtype").val().map(r => r.replace( "''")).join("','") + "",
+                    market: $("#market").val().map(r => r.replace( "''")).join("','") + "",
+                    rateCode: $("#rateCode").val().map(r => r.replace( "''")).join("','") + "",
+                    source: $("#source").val().map(r => r.replace( "''")).join("','") + "",                 
+                    vip: $("#vip").val(),
+                    sortOrder: $("#viewBy").val(),
+                    viponlycheck: $("#viponlycheck").is(":checked") ? "1" : "",
+                    noPost: $("#noPost").is(":checked") ? "1" : "",
+                    pseudo: $("#pseudo").is(":checked") ? "1" : "",
+                    checkedInToday: $("#checkedInToday").is(":checked") ? "1" : "",
+                    cancellations: $("#cancellations").is(":checked") ? "3" : "",
+                    zeroRateOnly: $("#zeroRateOnly").is(":checked") ? "111" : "",
+                    disRoomSharer: $("#disRoomSharer").is(":checked") ? "1" : "",
+                    searchCriteria: $("#reservation").val(),
+                    ckhArrivalDate: $("input[name='checkdate']:checked").val(),
+
+
+            },
+            traditional: true,
+              crossDomain: false,
+                headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                // $("#reportViewerContainer").html(result);
+                // $("#loadingSpinner").hide();
+                     console.log(result);
+              const processed = prepareArrivalsGroupedData(result);
+    initializArrivalsDetailedGrid(processed);
+                    $("#loadingSpinner").hide();
+            },
+            error: function () {
+                alert("Không thể tải báo cáo.");
+                $("#loadingSpinner").hide();
+            }
+        });
+    });
+        function prepareArrivalsGroupedData(data) {
+        const groupedData = {};
+        const finalData = [];
+
+        // Gom nhóm theo arrivalDate
+        data.forEach(item => {
+            const key = item.arrivalDate || "";
+            if (!groupedData[key]) groupedData[key] = [];
+            groupedData[key].push(item);
+        });
+
+        // Sắp xếp key theo thứ tự ngày tăng dần
+        const sortedKeys = Object.keys(groupedData).sort((a, b) => {
+            // Chuyển string về Date để so sánh
+            const dateA = new Date(a);
+            const dateB = new Date(b);
+            return dateA - dateB;
+        });
+
+        // Duyệt theo key đã sắp xếp
+        sortedKeys.forEach(arrivalDate => {
+            const records = groupedData[arrivalDate];
+            const formattedDate = new Date(arrivalDate).toLocaleDateString('vi-VN');
+            // Thêm dòng tiêu đề nhóm
+             finalData.push({
+                roomNo: `Arrival Date`, 
+                 confirmationNo: formattedDate,                 
+                isTitle: true,
+                cssClass: "custom"
+            });
+            // Thêm các dòng chi tiết
+            finalData.push(...records);
+        });
+
+        return finalData;
+    }
+
+
+
+    function initializArrivalsDetailedGrid(data) {
+        const columnWidth = 180;
+        $("#gridContainer").dxDataGrid({
+    dataSource: data,         height: 500, allowColumnResizing: true,
+            columns: [
+               { dataField: "roomNo", caption: "Room No", width: columnWidth-50},
+            { dataField: "name", caption: "Name", width: columnWidth},
+             { dataField: "confirmationNo", caption: "Conf.No", width: columnWidth  },
+               {
+      caption: "Stay No",
+      width: columnWidth + 50,
+      cssClass: "wrap-cell",
+      cellTemplate: function (container, options) {
+        const data = options.data;
+          if (data.isTitle) {
+            container.html(""); // hoặc container.empty();
+            return;
+        }
+        // Kiểm tra các checkbox
+        const showPrintRate = $("#printRate").is(":checked");
+        const showFixedCharge = $("#fixCharges").is(":checked");
+        const showPackages = $("#packages").is(":checked");
+        const showPaymentMethod = $("#paymentMethod").is(":checked");
+        const showRouting = $("#routingInstruction").is(":checked");
+        const showShareName = $("#sharesNames").is(":checked");
+        const showAccompany = $("#accompanying").is(":checked");
+        const showItemInventory = $("#itemsInventorys").is(":checked");
+        const showSpecials = $("#specials").is(":checked");
+        const showComments = $("#commnets").is(":checked");
+        const showProfileNote = $("#profileNote").is(":checked");
+
+        let htmlParts = [];
+
+        if (showItemInventory && data.itemInventory)
+          htmlParts.push(`<div class="wrap-line"><b>ItemInventory:</b> ${data.itemInventory}</div>`);
+
+        if (showSpecials && data.specials)
+          htmlParts.push(`<div class="wrap-line"><b>Specials:</b> ${data.specials}</div>`);
+
+             htmlParts.push(`<div class="wrap-line"><b></b> ${data.prevStays}</div>`);
+
+        if (showPrintRate && data.printRate)
+          htmlParts.push(`<div class="wrap-line"><b>Print Rate:</b> ${data.printRate}</div>`);
+
+        if (showFixedCharge && data.fixedCharge)
+          htmlParts.push(`<div class="wrap-line"><b>Fixed Charge:</b> ${data.fixedCharge}</div>`);
+
+        if (showPackages && data.packages)
+          htmlParts.push(`<div class="wrap-line"><b>Packages:</b> ${data.packages}</div>`);
+
+        if (showPaymentMethod && data.paymentMethod)
+          htmlParts.push(`<div class="wrap-line"><b>Payment Method:</b> ${data.paymentMethod}</div>`);
+
+        if (showRouting && data.routingTransaction)
+          htmlParts.push(`<div class="wrap-line"><b>Routing:</b> ${data.routingTransaction}</div>`);
+
+        if (showShareName && data.shareRoomName)
+          htmlParts.push(`<div class="wrap-line"><b>Share Name:</b> ${data.shareRoomName}</div>`);
+
+        if (showAccompany && data.accompanyName)
+          htmlParts.push(`<div class="wrap-line"><b>Accompanying:</b> ${data.accompanyName}</div>`);
+
+        if (showComments && data.comment)
+          htmlParts.push(`<div class="wrap-line"><b>Res. Comments:</b> ${data.comment}</div>`);
+
+        if (showProfileNote && data.party)
+          htmlParts.push(`<div class="wrap-line"><b>Profile Note:</b> ${data.party}</div>`);
+
+        container.html(htmlParts.join(""));
+      }
+    },
+
+
+            { dataField: "roomClassID", caption: "Rns", width: columnWidth-70},
+            { dataField: "vIP", caption: "VIP", width: columnWidth-80 },
+            { dataField: "lastRoom", caption: "LastRoom", width: columnWidth-80 },
+            { dataField: "agent", caption: "Reservation Holder", width: columnWidth},
+            { dataField: "businessBlockCode", caption: "BlockCode", width: columnWidth-70 },
+            { dataField: "arrivalDate", caption: "Arr.Date", width: columnWidth-60,  dataType: "date", format: "dd/MM/yyyy"},
+            { dataField: "eta", caption: "ETA", width: columnWidth-70 },
+            { dataField: "departureDate", caption: "Dep.Date",width: columnWidth-60,  dataType: "date", format: "dd/MM/yyyy"},
+            { dataField: "etd", caption: "ETD", width: columnWidth-70 },
+            { dataField: "roomType", caption: "Ro.Type", width:columnWidth-70 },
+            { dataField: "pickupTransportType", caption: "Trans.Type", width:columnWidth-70 },
+            { dataField: "noOfAdult", caption: "A.",width: columnWidth-80 ,dataType: "number", format: "#,##0" },
+            { dataField: "noOfChild", caption: "C.", width: columnWidth-80 ,dataType: "number", format: "#,##0" },
+            { dataField: "noOfChild1", caption: "C1.", width: columnWidth-80 ,dataType: "number", format: "#,##0" },
+            { dataField: "noOfChild2", caption: "C2.", width:columnWidth-80  ,dataType: "number", format: "#,##0" },
+            { dataField: "noOfRoom", caption: "Rms", width:columnWidth-80 ,dataType: "number", format: "#,##0" },
+            { caption: "Mkt.Code", dataField: "MarketCode", width: columnWidth-70},
+            { dataField: "packages", caption: "Packages", width: columnWidth-70},
+            { dataField: "sourceCode", caption: "Source Code", width: columnWidth-70},
+            { dataField: "status", caption: "Status", width: columnWidth-70},
+            { dataField: "paymentMethod", caption: "Pay mth", width: columnWidth-70},
+            { dataField: "creditCardNo", caption: "Credit Card No.", width: columnWidth-30},
+            { dataField: "rateCode", caption: "Rate Code", width:columnWidth-70 },
+            { dataField: "rate", caption: "Rate Amount",  width:columnWidth-70,dataType: "number", format: "#,##0" },
+            { dataField: "currencyID", caption: "Curr.",  width:columnWidth-70 },
+            { dataField: "expirationDate", caption: "Exp.Date",width: columnWidth-60,  dataType: "date", format: "dd/MM/yyyy"},
+            { dataField: "", caption: "Deposit Received",  width:columnWidth-70 },
+
+            ],
+            paging: { pageSize: 25 },
+      scrolling:  {
+         
+        useNative: true,
+       showScrollbar: "always"
+    },
+            pager: {
+                visible: true,
+                allowedPageSizes: [25, 50, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true,
+            },
+            selection: { mode: "multiple", showCheckBoxesMode: "none" },
+             
+                filterRow: {
+         visible: true,
+        applyFilter: "auto"
+    },
+    headerFilter: {
+        visible: true
+    },
+            showBorders: true,
+                            onRowPrepared: function (e) {
+        if (e.rowType === "data" && e.data?.cssClass) {
+            e.rowElement.addClass(e.data.cssClass);
+        }
+    }
+
+        });
+    }
+
+
+
+       $("#btnExportExcel").click(function () {
+               const grid = $("#gridContainer").dxDataGrid("instance"); var selectedReport2 = '@ViewBag.ReportTitle';
+        var selectedReport = '@ViewBag.ReportTitle';
+        if (!selectedReport) {
+            alert("Vui lòng chọn báo cáo trước khi xuất Excel.");
+            return;
+        }
+
+                     const workbook = new ExcelJS.Workbook();const companyName = localStorage.getItem("CompanyName") || "Tên công ty chưa xác định";
+        const worksheet = workbook.addWorksheet("Sheet 1");
+
+        // === Tạo header công ty (dòng 1) ===
+       worksheet.addRow([companyName]);
+        worksheet.mergeCells('A1:E1');
+        worksheet.getRow(1).font = { bold: true };
+        worksheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'left' };
+
+        // === Dòng 2: Thời gian xuất (phải) ===
+        const now = new Date();
+        const exportDate = now.toLocaleString("vi-VN");
+        worksheet.addRow(['', '', '', '', ' ' + exportDate]);
+        worksheet.mergeCells('E2:H2');
+        worksheet.getRow(2).alignment = { vertical: 'middle', horizontal: 'right' };
+
+        // === Dòng 3–4: Trống
+        worksheet.addRow([]);
+        worksheet.addRow([]);
+
+        // === Dòng 5: Tên báo cáo ở giữa ===
+        const reportRow = worksheet.addRow(['', '', selectedReport]);
+        worksheet.mergeCells('C5:F5');
+        reportRow.font = { bold: true, size: 14 };
+        reportRow.alignment = { vertical: 'middle', horizontal: 'center' };
+
+        // === Dòng 6: Trống trước khi xuất dữ liệu
+        worksheet.addRow([]);
+
+        // === Export dữ liệu từ DevExtreme (bắt đầu từ dòng 7)
+        DevExpress.excelExporter.exportDataGrid({
+            component: grid,
+            worksheet: worksheet,
+            autoFilterEnabled: true,
+            topLeftCell: { row: 7, column: 1 } // dữ liệu bắt đầu từ dòng 7
+        }).then(function () {
+            // Footer
+            const lastRow = worksheet.lastRow.number + 2;
+            worksheet.mergeCells(`A${lastRow}:F${lastRow}`);
+            worksheet.getCell(`A${lastRow}`).alignment = { horizontal: 'center' };
+            worksheet.getCell(`A${lastRow}`).font = { italic: true };
+
+            // Ghi file
+            let fileName = selectedReport + ".xlsx";
+            workbook.xlsx.writeBuffer().then(function (buffer) {
+                saveAs(new Blob([buffer], { type: "application/octet-stream" }), fileName);
+            });
+        });
+    });
+
+
+
+    // Nút xuất PDF
+         $("#btnExportPdf").click(function () {
+         const grid = $("#gridContainer").dxDataGrid("instance");
+
+         // Lấy đối tượng jsPDF từ window
+         const { jsPDF } = window.jspdf;
+         const doc = new jsPDF({ orientation: "landscape", unit: "pt", format: "A4" });
+
+         const selectedReport = '@ViewBag.ReportTitle';
+         const companyName = localStorage.getItem("CompanyName") || "Tên công ty chưa xác định";
+
+         grid.getDataSource().load().then(data => {
+             const columns = grid.getVisibleColumns();
+
+             const head = [columns.map(col => col.caption)];
+             const body = data.map(row =>
+                 columns.map(col =>
+                     col.calculateCellValue ? col.calculateCellValue(row) : row[col.dataField]
+                 )
+             );
+
+             doc.setFontSize(14);
+             doc.setFont("Helvetica", "bold");
+             doc.text(companyName, doc.internal.pageSize.getWidth() / 2, 40, { align: "center" });
+
+             doc.setFontSize(12);
+             doc.setFont("Helvetica", "normal");
+             doc.text(selectedReport, doc.internal.pageSize.getWidth() / 2, 60, { align: "center" });
+
+             // AutoTable
+             doc.autoTable({
+                 startY: 80,
+                 head: head,
+                 body: body,
+                  styles: { fontSize: 9, cellPadding: 4 , lineWidth: 0.5, lineColor: [0, 0, 0]    },
+                 headStyles: { fillColor: [41, 128, 185], textColor: 255, fontStyle: 'bold' },
+                 alternateRowStyles: { fillColor: [240, 240, 240] },
+                 margin: { left: 20, right: 20 }
+             });
+
+             doc.save(selectedReport + ".pdf");
+         });
+     });
+</script>

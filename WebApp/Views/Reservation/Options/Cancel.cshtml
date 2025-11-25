@@ -1,0 +1,85 @@
+﻿<!-- Modal cancel-->
+<div class="modal fade modal" id="modalCancel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Cancel</h5>
+                <button type="button" class="btn-close" onclick="closeModalCancel()"></button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <button class="mui-button mui-button-search" onclick="CancelReservation();"><i class="fa-solid fa-magnifying-glass"></i> OK</button>
+                    <button class="mui-button mui-button-clear"><i class="fa-solid fa-file"></i>Close</button>
+                </div>
+                <div class="row mt-2">
+                    <label class="col-md-2">Reason</label>
+                    <select id="reasonCancel" class="col-md-10" asp-items="ViewBag.cboReason"></select>
+                </div>
+                <div class="mt-2">
+                    <textarea class="form-control" id="descriptionCancel" rows="3"></textarea>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function openModalCancel(){
+        if(idReservation == 0){
+            showToast('Error', 'Please choose booking', false);
+            return;
+        }
+        if(reservationStatus != 5 && reservationStatus!= 0 ){
+            showToast('Error', 'Cannot cancel because booking is not in Reservation status', false);
+            return;
+        }
+        $('#modalCancel').modal('show');
+    }
+    function closeModalCancel(){
+        clearCancel();
+        $('#modalCancel').modal('hide');
+    }
+
+    $('#reasonCancel').on('change', function() {
+        $('#descriptionCancel').text($(this).find('option:selected').text().split('-')[1]);
+    });
+    function clearCancel(){
+        $('#reasonCancel').val('');
+        $('#descriptionCancel').val('');
+    }
+    function CancelReservation() {
+
+        const userName = JSON.parse(localStorage.getItem("Loginname"));
+        const userID = JSON.parse(localStorage.getItem("userID"));
+        var formData = new FormData();
+        formData.append('rsvID', idReservation);
+        formData.append('reasonCancellation',$('#reasonCancel').find('option:selected').text().split('-')[0]);
+        formData.append('description', $('#reasonCancel').find('option:selected').text().split('-')[1]);
+        formData.append('userID', userID);
+            formData.append('userName', userName);
+        $.ajax({
+            url: '/Reservation/CancelReservation',
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            // headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            data: formData,
+            success: function (data) {
+                if (data.code == 0) {
+                    closeModalCancel();
+                    showToast('Success', data.msg, true);
+                    searchReservation();
+                } else {
+                    showToast('Error', data.msg, false);
+                }
+
+            },
+            error: function (xhr, statusText, err) {
+
+            }
+        });
+
+    }
+
+</script>

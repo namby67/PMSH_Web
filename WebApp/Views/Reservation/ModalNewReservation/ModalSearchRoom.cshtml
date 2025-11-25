@@ -1,0 +1,227 @@
+﻿<!-- Modal search room-->
+<div class="modal fade modal-xl" id="modalRoom" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Available Room Search</h5>
+                <button type="button" class="btn-close" onclick="closeModalSearchRoom()"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-2" style="margin-top:0px">
+                    <button class="submit-button-clear-reservation" onclick="getAllRooms();"><i class="fas fa-search"></i> Search</button>
+                    <button class="submit-button-new-reservation" onclick="clearModelSearchRoom();"><i class="fas fa-eraser"></i> Clear</button>
+                </div>
+
+                <div class="mb-2 mui-card">
+                    <div class="row">
+                        <div class="col-md-2 mb-2">
+                            <label for="input1" >RoomType</label>
+                            <select type="text" id="roomTypeSearch" asp-items="ViewBag.cboRoomType">
+                            </select>
+                        </div>
+                        <div class="col-md-2 mb-2">
+                            <label for="input2" >Smoking</label>
+                            <select type="text"  id="smokingSearch">
+                                <option value="2">---Select all ---</option>
+                                <option value="1">Smoking</option>
+                                <option value="0">No Smoking</option>
+
+                            </select>
+                        </div>
+                        <div class="col-md-2 mb-2">
+                            <label for="input3" >RoomNo</label>
+                            <input type="text" id="roomNoSearch" />
+                        </div>
+                        <div class="col-md-2 mb-2">
+                            <label for="input4" >Floor</label>
+                            <input type="text"  id="floorSearch">
+                        </div>
+                        <div class="col-md-2 mb-2">
+                            <label for="input5" >From</label>
+                            <input type="date"  id="fromSearch">
+                        </div>
+                        <div class="col-md-2 mb-2">
+                            <label for="input5">To</label>
+                            <input type="date" id="toSearch">
+                        </div>
+
+                    </div>
+                    <div style="display:flex;">
+                        <label style="margin-right:20px;padding-top:4px">FO Status</label>
+                        <div style="display:flex;column-gap:12px">
+                            <div class="form-check">
+                                <input  type="radio" name="foStatus" checked value="0">
+                                <label  for="foActive" style="padding-top:4px">Vacant</label>
+                            </div>
+                            <div class="form-check">
+                                <input  type="radio" name="foStatus" value="1">
+                                <label  for="foInactive" style="padding-top:4px">Occupied</label>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="separator"></div>
+                    <div style="display:flex">
+                        <label style="margin-right:20px;padding-top:4px">HK Status</label>
+                        <div style="display:flex;column-gap:12px">
+                            <div class="form-check">
+                                <input type="checkbox" name="hkStatus" value="1">
+                                <label  for="hkClean" style="padding-top:4px">Clean Non-checked Rooms</label>
+                            </div>
+                            <div class="form-check">
+                                <input  type="checkbox" name="hkStatus" value="2">
+                                <label  for="hkDirty" style="padding-top:4px">Dirty Rooms</label>
+                            </div>
+                            <div class="form-check">
+                                <input  type="checkbox" name="hkStatus" value="4">
+                                <label  for="hkInProgress" style="padding-top:4px">Clean Rooms</label>
+                            </div>
+                            <div class="form-check">
+                                <input  type="checkbox" name="hkStatus" value="5">
+                                <label  for="hkOutOfService" style="padding-top:4px">OOC Rooms</label>
+                            </div>
+                            <div class="form-check">
+                                <input  type="checkbox" name="hkStatus" value="6">
+                                <label  for="hkInspected" style="padding-top:4px">OOS Rooms</label>
+                            </div>
+                            <div class="form-check">
+                                <input  type="checkbox" name="hkDummy">
+                                <label  for="hkOccupied" style="padding-top:4px">Pseudo (Dummy) Rooms</label>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div id="loadingSpinnerRoom" style="display: none; text-align: center; padding: 20px;">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+                <div class="mui-card">
+                    <div id="gridContainerSearchRoom" class="mt-2 gridContainer"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    function getAllRooms() {
+        $("#loadingSpinnerRoom").show();
+        const selectedHKStatus = getSelectedCheckboxes('hkStatus');
+        const selectedFOStatus = getSelectedRadio('foStatus');
+        var check =  $('#hkDummy').is(':checked') ? 1 : 0;
+        $.ajax({
+            url: '/Reservation/GetAllRooms',
+            type: 'get',
+            dataType: 'json',
+            data:{
+                fromDate : $('#fromSearch').val(),
+                toDate: $('#toSearch').val(),
+                floor: $('#floorSearch').val(),
+                roomTypeID: $('#roomTypeSearch').val(),
+                smoking: $('#smokingSearch').val(),
+                foStatus:selectedFOStatus,
+                hkStatus: selectedHKStatus,
+                isDummy:check,
+                roomNo:$('#roomNoSearch').val()
+            },
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                initializeDataGridSearchRoom(result);
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                } else {
+                    informBox(TOAST_STATUS.DANGER, "Lỗi tải chi tiết danh sách danh mục dịch vụ hoặc bạn không có quyền tải");
+                }
+            },
+            complete: function () {
+                $("#loadingSpinnerRoom").hide();
+            }
+        });
+    }
+
+    function initializeDataGridSearchRoom(data) {
+        var columnWidth = 150;
+
+        $("#gridContainerSearchRoom").dxDataGrid({
+
+        dataSource: data, allowColumnResizing: true,
+            columns: [
+
+
+                { dataField: "roomID", caption: "Room ID", width: columnWidth - 80, visible: false},
+                { dataField: "roomNo", caption: "Ro.No", width: columnWidth - 80 },
+                { dataField: "roomType", caption: "Room Type", width: columnWidth * 2 },
+                { dataField: "hkStatus", caption: "HK Status", width: columnWidth },
+                { dataField: "fo", caption: "FO", width: columnWidth },
+                { dataField: "floor", caption: "Floor", width: columnWidth },
+                { dataField: "guestCheckOut", caption: "Back-to-Back", width: columnWidth },
+                { dataField: "connecting", caption: "Connecting", width: columnWidth },
+                { dataField: "balcony", caption: "Balcony", width: columnWidth },
+
+            ],
+            paging: { pageSize: 15 },
+            scrolling: {
+                rowRenderingMode: 'virtual',
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [15, 20, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true,
+            },
+            filterRow: {
+                    visible: true,
+                    applyFilter: "auto"
+            },
+            selection: {
+                mode: "single" // Allows only one row to be selected at a time
+            },
+            onRowDblClick: function(e) {
+                // getInfoByProfileID(e.data.id);
+                    $('#roomID').val(e.data.roomID);
+                $('#roomSelect').val(e.data.roomNo);
+                $('#txtRoomType').val(e.data.roomTypeID);
+                $('#txtRTC').val(e.data.roomTypeID);
+                $('#roomNoSearch').val(e.data.roomNo);
+                $('#floorSearch').val(e.data.floor);
+                $('#txtRTC').val(e.data.roomTypeID);
+                $('#modalRoom').modal('hide');
+                $('#clearRoomNo').show();
+            }
+        });
+    }
+    function clearRoomNo(){
+        $('#roomID').val('');
+        $('#roomSelect').val('');
+        $('#txtRoomType').val(0);
+        $('#txtRTC').val(0);
+        $('#roomNoSearch').val('');
+        $('#floorSearch').val('');
+        $('#txtRTC').val(0);
+        $('#clearRoomNo').hide();
+    }
+    function openModalSearchRoom(){
+        $('#roomTypeSearch').val($('#txtRoomType').val());
+        $('#fromSearch').val($('#arrival').val());
+        $('#toSearch').val($('#departure').val());
+        getAllRooms();
+        $('#modalRoom').modal('show');
+    }
+    function closeModalSearchRoom(){
+        $('#modalRoom').modal('hide');
+    }
+
+    function clearModelSearchRoom(){
+        $('#roomTypeSearch').val('');
+        $('#roomNoSearch').val('');
+        $('#floorSearch').val('');
+        $('#smokingSearch').val('');
+    }
+</script>

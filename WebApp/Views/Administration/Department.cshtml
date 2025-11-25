@@ -1,0 +1,502 @@
+﻿@using DevExpress.XtraReports.UI
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    // Kiểm tra xem có biến `media` nào được dùng không
+    // Ví dụ: var media = Model.Media; // Đảm bảo Model có thuộc tính Media nếu cần
+}
+
+<!-- Comment reservation.css để tránh xung đột, nhưng có thể thêm lại sau khi fix -->
+@* <link href="~/css/pages/reservation.css" rel="stylesheet" /> *@
+<style>
+    :root {
+        --main-color: #2b6cb0; /* Màu chính (xanh dương) */
+        --secondary-color: #f5f5f5; /* Màu nền thứ cấp (xám nhạt) */
+        --highlight-color: #d65a00; /* Màu nổi bật (cam) */
+        --text-color: #2d3748; /* Màu chữ (xám đậm) */
+        --accent-color: #ffffff; /* Màu bổ sung (trắng) */
+    }
+
+    .menu-group-title {
+        font-weight: bold;
+        padding: 8px;
+        cursor: pointer;
+        background: var(--secondary-color);
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .menu-left .submenu {
+        display: none;
+        margin-top: 2px;
+        padding-left: 10px;
+        background: var(--accent-color);
+        border: 1px solid #d1d5db;
+        border-radius: 0.5rem;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        min-width: 120px;
+        position: relative;
+        z-index: 20;
+    }
+
+        .menu-left .submenu.active {
+            display: block !important;
+        }
+
+    /* Đảm bảo các style khác sử dụng biến CSS */
+    .menu-item {
+        display: block;
+        padding: 12px 16px;
+        color: var(--text-color);
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 500;
+        border-bottom: 1px solid #bcbcbc;
+        transition: all 0.3s ease;
+        border-left: 4px solid transparent;
+    }
+
+        .menu-item:hover,
+        .menu-item.active {
+            color: var(--text-color);
+            background-color: var(--secondary-color);
+            border-left: 4px solid var(--highlight-color);
+        }
+
+    .menu-group > .menu-left {
+        display: none; /* ẩn mặc định */
+        margin-top: 2px;
+        background: var(--accent-color);
+        border: 1px solid #d1d5db;
+        border-radius: 0.5rem;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    }
+</style>
+<div class="mt-3">
+    <div class="row">
+        <!-- Menu trái -->
+        <div class="col-md-2 mb-2">
+            <div class="menu-left">
+                <button class="toggle-btn"><i class="fas fa-bars"></i></button>
+
+                <!-- Group 1 -->
+                <div class="menu-group">
+                    <div class="menu-group-title">
+                        Profile <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="menu-left">
+                        <a class="menu-item" asp-controller="Administration" asp-action="City">CITY</a>
+                        <a class="menu-item" asp-controller="Administration" asp-action="Country">COUNTRY</a>
+                        <a class="menu-item" asp-controller="Administration" asp-action="Language">LANGUAGE</a>
+                        <a class="menu-item" asp-controller="Administration" asp-action="Nationality">NATITONALITY</a>
+                        <a class="menu-item" asp-controller="Administration" asp-action="Title">TITLE</a>
+                        <a class="menu-item" asp-controller="Administration" asp-action="Territory">TERRITORY</a>
+                        <a class="menu-item" asp-controller="Administration" asp-action="State">STATE</a>
+                        <a class="menu-item" asp-controller="Administration" asp-action="VIP">VIP</a>
+
+
+                    </div>
+                </div>
+
+                <!-- Group 2 -->
+                <div class="menu-group">
+                    <div class="menu-group-title">
+                        Reservation <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="menu-left">
+                        <a class="menu-item" asp-controller="Administration" asp-action="Market">MARKET</a>
+                        <a class="menu-item" asp-controller="Administration" asp-action="MarketType">MARKET TYPE</a>
+                        <a class="menu-item" asp-controller="Administration" asp-action="PickupDropPlace">PICKUP DROP PLACE</a>
+                        <a class="menu-item" asp-controller="Administration" asp-action="TransportType">TRANSPORT TYPE</a>
+                        <a class="menu-item" asp-controller="Administration" asp-action="ReservationType">RESERVATION TYPE</a>
+                        <a class="menu-item" asp-controller="Administration" asp-action="Reason">REASON</a>
+                        <a class="menu-item" asp-controller="Administration" asp-action="Origin">ORIGIN</a>
+                        <a class="menu-item" asp-controller="Administration" asp-action="Source">SOURCE</a>
+                    </div>
+                </div>
+                <div class="menu-group">
+                    <div class="menu-group-title">
+                        Other <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="menu-left">
+                        <a class="menu-item" asp-controller="Administration" asp-action="AlertsSetup">ALERTS SETUP</a>
+                        <a class="menu-item" asp-controller="Administration" asp-action="Comment">COMMENTS</a>
+                        <a class="menu-item" asp-controller="Administration" asp-action="CommentType">COMMENT TYPE</a>
+                        <a class="menu-item" asp-controller="Administration" asp-action="Season">SEASON</a>
+                        <a class="menu-item" asp-controller="Administration" asp-action="Zone">ZONE</a>
+                        <a class="menu-item active"> DEPARTMENT</a>
+                    </div>
+                </div>
+                <div class="menu-group">
+                    <div class="menu-group-title">
+                        Owner <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="menu-left">
+                        <a class="menu-item" asp-controller="Administration" asp-action="Owner"> OWNER</a>
+
+                    </div>
+                </div>
+                <div class="menu-group">
+                    <div class="menu-group-title">
+                        Property Type<i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="menu-left">
+                        <a class="menu-item" asp-controller="Administration" asp-action="PropertyType"> PROPERTY TYPE</a>
+                        <a class="menu-item" asp-controller="Administration" asp-action="Property"> PROPERTY</a>
+                        <a class="menu-item" asp-controller="Administration" asp-action="PropertyPermission"> PROPERTY PERMISSION</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Nội dung bên phải -->
+        <div class="col-md-10">
+            <div class="content-right">
+                <div class="header">
+                    <h3 id="content-title">
+                        Department
+
+                    </h3>
+                </div>
+
+                <div class="sticky-header bg-white p-2 shadow-sm z-3">
+                    <div class="d-flex align-items-center gap-3 p-2" style="border: 1px solid #ccc; border-radius: 6px; padding: 8px;">
+
+                        <div class="d-flex align-items-center">
+                            <label for="code" class="me-2 mb-0">Code</label>
+                            <input type="text" id="code" class="form-control form-control-sm" style="width: 100px;" />
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <label for="name" class="me-2 mb-0">Name</label>
+                            <input type="text" id="name" class="form-control form-control-sm" style="width: 100px;" />
+                        </div>
+                        <div class="d-flex align-items-center me-3">
+                            <input type="checkbox" id="chkshowInactive" class="form-check-input mt-0" />
+                            <label class="me-2 mb-0"> Show Inactive</label>
+
+                        </div>
+                    </div>
+                    <div class=" mt-1">
+                        <button style="border-radius: 4px;  margin-right: 6px;background-color: #6c757d;" id="btnView" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> View</button>
+                        <button style="border-radius: 4px;  margin-right: 6px;background-color: #28a745;" id="btnNew" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> New</button>
+                        <button style="border-radius: 4px;  margin-right: 6px;background-color: #007bff;" id="btnEdit" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Edit</button>
+                        <button style="border-radius: 4px;  margin-right: 6px;background-color: #dc3545;" id="btnDelete" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Delete</button>
+                        <button style="border-radius: 4px;  margin-right: 6px;background-color: green;" id="btnExportExcel" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Excel</button>
+
+                    </div>
+                </div>
+
+                <div class="mui-card">
+                    <div id="gridContainerRateCode" class="mt-2 gridContainer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal Popup for New Item -->
+<div class="modal fade" id="itemModal" tabindex="-1" aria-labelledby="itemModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="itemModalLabel">New Item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <form id="itemForm">
+                    <div class="container-fluid" style="border: 1px solid #ccc; border-radius: 6px; padding: 8px;">
+
+                        <!-- Code + Inactive -->
+                        <div class="row mb-1 align-items-center">
+                            <div class="col-auto">
+                                <label for="txtcode" class="form-label mb-0">Code</label>
+                                <input type="text" id="txtcode" name="txtcode" class="form-control form-control-sm" />
+                            </div>
+                            <div class="col-auto d-flex align-items-center">
+                                <input type="checkbox" id="inactive" name="inactive" class="form-check-input me-2" />
+                                <label for="inactive" class="form-check-label text-danger mb-0">Inactive</label>
+                            </div>
+                        </div>
+
+                        <!-- Name -->
+                        <div class="row mb-1">
+                            <div class="col">
+                                <label for="txtname" class="form-label" style="display:none;">Name</label>
+                                <input type="text" id="txtname" name="txtname" class="form-control" style="display:none;" />
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="row mb-1">
+                            <div class="col">
+                                <label for="txtdescription" class="form-label">Description</label>
+                                <textarea id="txtdescription" name="txtdescription" class="form-control" rows="4" style="background-color:#ffffe6"></textarea>
+                            </div>
+                        </div>
+                        <input type="hidden" id="id" name="id" value="0" />
+                    </div>
+                </form>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="btnSaveItem" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="loadingSpinnerRateCode" style="display: none; text-align: center; padding: 20px;">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+
+<script>
+    DevExpress.localization.locale("vi");
+       let selectedRowData = null;
+
+        $(document).ready(function () {
+        $(".menu-group-title").on("click", function (event) {
+                const submenu = $(this).next(".menu-left"); // lấy thằng menu-left con
+           const icon = $(this).find("i");
+
+           // toggle submenu
+           submenu.slideToggle(200);
+
+           // đổi icon
+           icon.toggleClass("fa-chevron-down fa-chevron-up");
+           });
+
+
+         reloadGrid();
+     });
+
+        $("#btnView").on("click", function() {
+        reloadGrid();
+        });
+
+        $("#btnNew").click(function () {
+        $("#itemForm")[0].reset();
+        $("#id").val("0");   // 🔥 reset về 0 để phân biệt Insert
+        $("#itemModal").modal("show");
+    });
+
+
+                $("#btnSaveItem").click(function () {
+        const formData = $("#itemForm").serialize();
+         console.log("FormData:", formData);
+        let url = "/Administration/InsertDepartment";
+        if ($("#id").val() && $("#id").val() !== "0") {
+            url = "/Administration/UpdateDepartment"; // nếu có id thì update
+        }
+
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: formData,
+            success: function (res) {
+                if (res.success) {
+                    showToast("Success", (url.includes("Update") ? "Update success" : "Insert success"), true);
+                    $("#itemModal").modal("hide");
+                    reloadGrid();
+                } else {
+                    showToast("Failed", res.message || "Action Failed!", false);
+                }
+            },
+            error: function (xhr) {
+                showToast("Error", "Request error!", false);
+            }
+        });
+    });
+
+        function editMember(data) {
+        $("#id").val(data.id);                   // hidden field
+        $("#txtcode").val(data.code);            // ánh xạ Code
+        $("#txtname").val(data.name);            // ánh xạ Name
+        $("#txtdescription").val(data.description);
+        $("#inactive").prop("checked", data.inactive); // checkbox
+        $("#itemModal").modal("show");
+    }
+
+
+           $("#btnEdit").on("click", function () {
+        if (!selectedRowData) {
+            DevExpress.ui.notify("Please select a row first!", "warning", 2000);
+            return;
+        }
+
+        // Gọi hàm ánh xạ dữ liệu vào form
+        editMember(selectedRowData);
+    });
+
+
+
+    function loadGrid(data) {
+        $("#gridContainerRateCode").dxDataGrid({
+            dataSource: data,
+            height: 500,
+            width: "100%",
+            columnAutoWidth: true,
+            allowColumnResizing: true,
+            columnResizingMode: "widget",
+            selection: { mode: "single" },
+             columns: [
+                        { dataField: "code", caption: "Code" },
+                        { dataField: "name", caption: "Name" },
+                        { dataField: "description", caption: "Description" },
+                        { dataField: "inactive", caption: "Inactive" },
+                        { dataField: "createdBy", caption: "Created By" },
+                        { dataField: "createdDate", caption: "Created Date", dataType: "date" },
+                        { dataField: "updatedBy", caption: "Updated By" },
+                        { dataField: "updatedDate", caption: "Updated Date", dataType: "date" },
+                    ],
+            filterRow: { visible:true, applyFilter:"auto" },
+            paging: { pageSize:20 },
+            pager: {
+                visible:true,
+                allowedPageSizes:[20,50,'all'],
+                showPageSizeSelector:true,
+                showInfo:true,
+                showNavigationButtons:true
+            },
+            scrolling: { mode:"standard", showScrollbar:"always", scrollByContent:true },
+            onSelectionChanged: function(e){
+                selectedRowData = e.selectedRowsData.length > 0 ? e.selectedRowsData[0] : null;
+                console.log("Selected Row:", selectedRowData);
+            }
+        });
+    }
+
+    // Reload grid với filter từ form
+    function reloadGrid() {
+        $("#loadingSpinnerRateCode").show();
+
+        $.ajax({
+            url: "/Administration/GetDepartment",
+            type: 'GET',
+            data: {
+                code: $("#code").val(),
+                name: $("#name").val(),
+                inactive: $("#chkshowInactive").prop("checked") ? 1 : 0
+            },
+            success: function(data){
+                console.log(data);
+                loadGrid(data);
+                $("#loadingSpinnerRateCode").hide();
+            },
+            error: function(xhr, status, error){
+                alert("Không thể tải dữ liệu");
+                $("#loadingSpinnerRateCode").hide();
+            }
+        });
+    }
+
+
+     $("#btnDelete").on("click", function () {
+         if (!selectedRowData) {
+            DevExpress.ui.notify("Please select a row first!", "warning", 2000);
+            return;
+        }
+
+                Swal.fire({
+            title: 'Are you sure?',
+            text: "This action cannot be undone.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel',
+            customClass: {
+                popup: 'swal-small'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                deleteSelectedItem();
+            }
+        });
+
+    });
+
+            function deleteSelectedItem() {
+        $.ajax({
+            url: "/Administration/DeleteDepartment",
+            type: "POST",
+            data: { id: selectedRowData.id }, // gửi dạng form-data
+            success: function (res) {
+                if (res.code === 0) {
+                    showToast("Success", "Deleted successfully!", true);
+                    reloadGrid();
+                    selectedRowData = null;
+                } else {
+                    showToast("Error", res.msg || "Delete failed!", false);
+                }
+            },
+            error: function (xhr) {
+                console.error("Delete error:", xhr.responseText);
+                showToast("Error", "Delete error!", false);
+            }
+        });
+    }
+    $("#btnExportExcel").click(function () {
+        const grid = $("#gridContainerRateCode").dxDataGrid("instance");   // 🔥 khai báo grid
+
+        const workbook = new ExcelJS.Workbook();
+        const companyName = localStorage.getItem("CompanyName") || "Tên công ty chưa xác định";
+        const worksheet = workbook.addWorksheet("Sheet 1");
+
+        // === Dòng 1: Tên công ty (merge theo 4 cột) ===
+        worksheet.addRow([companyName]);
+        worksheet.mergeCells('A1:D1');
+        worksheet.getRow(1).font = { bold: true };
+        worksheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'left' };
+
+        // === Dòng 2: Ngày giờ xuất (bên phải) ===
+        const now = new Date();
+        const exportDate = now.toLocaleString("vi-VN");
+        worksheet.addRow(['', '', '', exportDate]);
+        worksheet.mergeCells('D2:D2');  // cột D thôi
+        worksheet.getRow(2).alignment = { vertical: 'middle', horizontal: 'right' };
+
+        // === Dòng 3–4: trống
+        worksheet.addRow([]);
+        worksheet.addRow([]);
+
+        // === Dòng 5: Tiêu đề báo cáo (ở giữa) ===
+        const reportRow = worksheet.addRow(['Department']);
+        worksheet.mergeCells('A5:D5');
+        reportRow.font = { bold: true, size: 14 };
+        reportRow.alignment = { vertical: 'middle', horizontal: 'center' };
+
+        // === Dòng 6: trống
+        worksheet.addRow([]);
+
+        // === Xuất dữ liệu grid bắt đầu từ dòng 7 ===
+        DevExpress.excelExporter.exportDataGrid({
+            component: grid,
+            worksheet: worksheet,
+            autoFilterEnabled: true,
+            topLeftCell: { row: 7, column: 1 }
+        }).then(function () {
+            // Footer (sau cùng)
+            const lastRow = worksheet.lastRow.number + 2;
+            worksheet.mergeCells(`A${lastRow}:D${lastRow}`);
+            worksheet.getCell(`A${lastRow}`).alignment = { horizontal: 'center' };
+            worksheet.getCell(`A${lastRow}`).font = { italic: true };
+
+            // Ghi file
+            let fileName = "Department.xlsx";
+            workbook.xlsx.writeBuffer().then(function (buffer) {
+                saveAs(new Blob([buffer], { type: "application/octet-stream" }), fileName);
+            });
+        });
+    });
+
+</script>

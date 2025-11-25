@@ -1,0 +1,465 @@
+﻿@using DevExpress.XtraReports.UI
+
+
+@{
+    var selectedReport = @ViewBag.ReportHeader;
+    var listSection = ViewBag.hkpSection;
+
+}
+<style>
+
+
+    .dx-datagrid-headers .dx-header-row td {
+        white-space: pre-line !important;
+        text-align: center;
+        font-size: 11px;
+    }
+
+
+    .dx-datagrid .dx-editor-with-menu .dx-menu-item-content .dx-icon.dx-icon-filter-operation-default, .dx-datagrid-container .dx-editor-with-menu .dx-menu-item-content .dx-icon.dx-icon-filter-operation-default {
+        display: none;
+    }
+
+
+    .filter_wrapper {
+        /*     background-color: #ececec; */
+        /*   margin: 0px 8px 14px 8px; */
+        padding: 18px 0px 0px 14px;
+        border-radius: 8px;
+    }
+
+    .gridContainer {
+        margin: 0px 8px;
+    }
+
+    .button_wrapper {
+        display: flex;
+        column-gap: 12px;
+        margin: 0px 8px;
+    }
+
+        .button_wrapper .fa-solid {
+            margin-right: 5px;
+        }
+
+    .selected {
+        background-color: #4CAF50; /* Màu xanh */
+        color: white;
+    }
+
+
+
+    .sticky-header .form-control-sm {
+        padding: .1rem .35rem;
+        height: calc(1.1em + .2rem + 2px);
+    }
+
+    .sticky-header label[class*="me-"] {
+        margin-right: .5rem !important;
+    }
+
+
+    .sticky-header input[type="date"].form-control-sm {
+        font-size: 12px !important; /* dúng 12?px */
+        height: calc(1.1em + .2rem + 2px); /* gi? cùng chi?u cao */
+    }
+
+    .sticky-header label {
+        font-size: 12px !important;
+        line-height: 1.2;
+    }
+
+    .tomselect-custom {
+        width: 250px;
+        min-height: 30px; /* ho?c tùy theo chi?u cao b?n mu?n */
+        font-size: 0.65rem;
+    }
+
+    .sort-select {
+        max-width: 130px; /* ho?c 100px n?u mu?n nh? hon */
+        font-size: 12px;
+        padding: 0.15rem 0.5rem;
+    }
+
+    .sort-select {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background-image: none !important;
+        padding-right: 10px !important;
+    }
+
+</style>
+
+<link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+<div class="text-center" id="reportTitle" style="font-size: 20px">Lost And Found Zone</div>
+<div class="sticky-header bg-white p-2 shadow-sm z-3">
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-1 filter-panel">
+        <!-- From Date -->
+
+       
+
+
+
+
+    </div>
+    <div class="">
+        <button id="btnPrint" class="mui-button button-report-view"><i class="fa-solid fa-eye"></i> View</button>
+        <button id="btnNew" class="mui-button mui-button-new"><i class="fa-solid fa-plus"></i> New</button>
+        <button id="btnUpdate" class="mui-button mui-button-edit"> <i class="fa-solid fa-pen"></i> Edit</button>
+        <button id="btnDelete" class="mui-button button-report-delete"> <i class="fa-solid fa-trash-can"></i> Delete</button>
+        <button id="btnExportExcel" class="mui-button mui-button-export" type="button"> <i class="fa-solid fa-file-excel"></i> Excel</button>
+
+    </div>
+
+</div>
+<div class="mui-card">
+    @*     <div style="font-size: 20px;" class="mt-1" id="reportTitle"></div> *@
+    <div id="gridContainer" class="gridContainer mt-2"></div>
+</div>
+<div id="overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 999;"></div>
+<div id="popupNewLostAndFoundZone" style="display: none; position: fixed; top: 50%; left: 50%;
+    transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 10px;
+    z-index: 1050; box-shadow: 0 0 10px rgba(0,0,0,0.3); min-width: 400px; max-height: 600px; overflow-y: auto;">
+
+    <div class="d-flex justify-content-between mb-2">
+        <h5 class="mb-0">Lost And Found Zone Screen</h5>
+
+    </div>
+    <div class="d-flex justify-content-start mb-3 gap-2">
+
+        <button style="border-radius: 4px;  margin-right: 6px;" id="btnOkAuto" class="mui-button mui-button-advance" type="button"><i class="fa-solid fa-floppy-disk"></i> Ok</button>
+
+        <button onclick="$('#popupNewLostAndFoundZone').hide()" id="btnClosePopup" class="btn btn-sm mui-button-close" style=" border-radius: 4px;">
+            <i class="fa-solid fa-xmark me-1"></i> Close
+        </button>
+    </div>
+    <div class="sticky-header bg-white p-2 shadow-sm z-3">
+        <div class="d-flex flex-wrap align-items-center gap-2 mb-1 filter-panel">
+            <div class="d-flex align-items-center flex-wrap mb-2">
+                <div class="d-flex align-items-start mb-3">
+                    <!-- Trace Time -->
+                    <input type="text" id="idzone" name="idzone" style="display:none !important" class="form-control form-control-sm w-auto" />
+                    <div class="d-flex align-items-center me-4">
+                        <label for="tracetime" class="me-2 mb-0">Code:</label>
+                        <input type="text" id="codenew" name="codenew"
+                               class="form-control form-control-sm w-auto" />
+                    </div>
+                    <div class="form-check me-3">
+                        <span class="status-color-box color-clean-uncheck"></span>
+                        <input class="form-check-input" type="checkbox" id="isActivenew" name="includeOptions" value="1" checked>
+                        <label class="form-check-label" for="cleanUncheck"> Inactive</label>
+                    </div>
+                    <div class="d-flex align-items-start">
+                        <label for="tracetext" class="me-2 mt-1">Name:</label>
+                        <input type="text" id="descriptionnew" name="descriptionnew"
+                               class="form-control form-control-sm w-auto" />
+                    </div>
+                </div>
+
+
+            </div>
+
+
+
+
+        </div>
+    </div>
+
+</div>
+
+
+
+<div id="loadingSpinner" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
+    <i class="fa-solid fa-spinner fa-spin"></i>
+</div>
+
+<script>
+
+       $(document).ready(function () {
+
+        $("#btnPrint").trigger("click");
+
+    });
+
+
+
+     $(document).off("click", "#btnPrint").on("click", "#btnPrint", function () {
+     
+            $("#loadingSpinner").show();
+            $.ajax({
+                url: '/HouseKeepingAdmin/LostAndFoundZoneData',
+                type: 'GET',
+                data: {
+                          
+                },
+                traditional: true,
+                  crossDomain: false,
+                    headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+                success: function (result) {
+
+                console.log(result);
+            initializeLostAndFoundZoneGrid(result);
+                        $("#loadingSpinner").hide();
+                },
+                error: function () {
+                    alert("Không th? t?i báo cáo.");
+                    $("#loadingSpinner").hide();
+                }
+            });
+        });
+        var selectedRowData=null;
+     function initializeLostAndFoundZoneGrid(data) {
+        $("#gridContainer").dxDataGrid({
+            dataSource: data,
+            showBorders: true,
+            selection: { mode: "single" },
+            paging: { pageSize: 20 },
+            height:500,
+            pager: {
+                showPageSizeSelector: true,
+                allowedPageSizes: [20, 50, 100],
+                showInfo: true
+            },
+            filterRow: { visible: true },
+            columns: [
+                { dataField: "id", caption: "ID", width: 80, visible: false },
+                { dataField: "code", caption: "Code", width: 200 },
+                { dataField: "name", caption: "Name", width: 120 },
+
+
+              
+                { dataField: "updatedBy", caption: "Updated By", width: 120 },
+                { dataField: "updatedDate", caption: "Updated Date", dataType: "date", format: "dd/MM/yyyy HH:mm", width: 160 },
+                { dataField: "createdBy", caption: "Updated By", width: 120 },
+                { dataField: "createdDate", caption: "Created Date", dataType: "date", format: "dd/MM/yyyy HH:mm", width: 160 },
+            ],
+            scrolling: {
+                    mode: "standard", // Không dùng virtual để footer hiển thị đúng
+                    showScrollbar: "always",
+                    scrollByContent: true
+                },
+                paging: {
+                    pageSize: 50
+                },
+                pager: {
+                    visible: true,
+                    allowedPageSizes: [50, 100, 'all'],
+                    showPageSizeSelector: true,
+                    showInfo: true,
+                    showNavigationButtons: true
+                },
+                    filterRow: {
+                visible: true,
+                applyFilter: "auto"
+            },
+            // 🔥 Quan trọng: gán selectedRowData khi click chọn
+             onRowClick: function (e) {
+                selectedRowData = e.data; // 🔥 lấy data của row vừa click
+                console.log("Selected Row (RowClick):", selectedRowData);
+
+            }
+        });
+     }
+    $("#btnNew").on("click", function () {
+
+       clearSection();
+            $('#overlay').fadeIn(200);
+            $('#popupNewLostAndFoundZone').fadeIn(200);
+
+    });
+
+         $("#btnOkAuto").on("click", function () {
+
+            let isActive  = $("#isActivenew").is(":checked") ? 1 : 0;
+
+
+            // Lấy giá trị các input
+            let codeNew = $("#codenew").val().trim();
+            let descriptionNew = $("#descriptionnew").val().trim();
+
+            // ✅ Kiểm tra rỗng
+            if (codeNew === "") {
+                showToast('Error', "Code cannot be blank.", false);
+                $("#codenew").focus();
+                return;
+            }
+            if (descriptionNew === "") {
+                showToast('Error', "Description cannot be blank.", false);
+                $("#descriptionnew").focus();
+                return;
+            }
+          $("#loadingSpinner").show();
+            $.ajax({
+                url: '/HouseKeepingAdmin/LostAndFoundZoneSave',
+                type: 'POST',
+                 data: {
+                      id: $("#idzone").val(),
+                    codenew: $("#codenew").val(),
+
+                    descriptionnew: $("#descriptionnew").val(),
+                    user: localStorage.getItem("Loginname"),
+                    isActive: isActive
+                },
+                traditional: true,
+                  crossDomain: false,
+                    headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+                success: function (result) {
+                        if (result.success) {
+                                showToast('Success', result.message, true);
+                                $('#popupNewLostAndFoundZone').fadeOut(200);
+                                 $('#overlay').fadeOut(200);
+                                   $("#btnPrint").trigger("click");
+                                    clearSection();
+                       } else {
+                                showToast('Error', 'Please select before saving.', false);
+                       }
+                console.log(result);
+
+                        $("#loadingSpinner").hide();
+                },
+                error: function () {
+                    alert("Không th? t?i báo cáo.");
+                    $("#loadingSpinner").hide();
+                }
+            });
+     });
+
+
+    $("#btnUpdate").on("click", function () {
+      
+            if (selectedRowData.length === 0) {
+                    showToast('Error', "Please select !", false);
+                return;
+            }
+            // Tìm trong listFacilityCode theo ID
+       
+            console.log(selectedRowData);
+            $("#idzone").val(selectedRowData.id);
+              $("#codenew").val(selectedRowData.code || "");
+              $("#descriptionnew").val(selectedRowData.name || "");
+
+              // Checkbox Inactive
+              if (selectedRowData.inactive === "True") {
+                  $("#isActivenew").prop("checked", true);
+              } else {
+                  $("#isActivenew").prop("checked", false);
+              }
+                  $("#popupNewLostAndFoundZone").fadeIn(200);
+                     $('#overlay').fadeIn(200);
+    });
+
+
+
+    $('#btnClosePopup, #overlay').click(function () {
+            $('#popupNewLostAndFoundZone').fadeOut(200);
+                         $("#btnOkAuto").show();
+            $('#overlay').fadeOut(200);
+    });
+        function clearSection() {
+              $("#codenew").val("");
+            $("#descriptionnew").val("");
+            $("#idzone").val("");
+
+            // Bỏ check checkbox Inactive (hoặc thiết lập lại trạng thái mặc định nếu cần)
+            $("#isActivenew").prop("checked", false);
+
+        }
+
+
+
+
+         $(document).off("click", "#btnDelete").on("click", "#btnDelete", function () {
+            if (!selectedRowData) {
+                    showToast('Error', 'Please select 1 row to delete.', false);
+                return;
+            }
+            if (!confirm("Are you sure you want to delete item?")) {
+                return; // Nếu chọn Cancel thì dừng
+            }
+            $.ajax({
+                url: '/HouseKeepingAdmin/LostAndFoundZoneDelete',
+                type: 'POST',
+                data: {
+                       id:selectedRowData.id
+
+
+                },
+                traditional: true,
+                  crossDomain: false,
+                    headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+                success: function (result) {
+                     if (result.success) {
+
+                              $("#btnPrint").trigger("click");
+                     } else {
+                              showToast('Error', result.message, false);
+                     }
+
+                },
+                error: function () {
+                    alert("Không th? t?i báo cáo.");
+                    $("#loadingSpinner").hide();
+                }
+            });
+
+
+        });
+
+
+
+       $("#btnExportExcel").click(function () {
+        const grid = $("#gridContainer").dxDataGrid("instance");   // 🔥 khai báo grid
+
+        const workbook = new ExcelJS.Workbook();
+        const companyName = localStorage.getItem("CompanyName") || "Tên công ty chưa xác định";
+        const worksheet = workbook.addWorksheet("Sheet 1");
+
+        // === Dòng 1: Tên công ty (merge theo 4 cột) ===
+        worksheet.addRow([companyName]);
+        worksheet.mergeCells('A1:D1');
+        worksheet.getRow(1).font = { bold: true };
+        worksheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'left' };
+
+        // === Dòng 2: Ngày giờ xuất (bên phải) ===
+        const now = new Date();
+        const exportDate = now.toLocaleString("vi-VN");
+        worksheet.addRow(['', '', '', exportDate]);
+        worksheet.mergeCells('D2:D2');  // cột D thôi
+        worksheet.getRow(2).alignment = { vertical: 'middle', horizontal: 'right' };
+
+        // === Dòng 3–4: trống
+        worksheet.addRow([]);
+        worksheet.addRow([]);
+
+        // === Dòng 5: Tiêu đề báo cáo (ở giữa) ===
+        const reportRow = worksheet.addRow(['Lost And Found Zone']);
+        worksheet.mergeCells('A5:D5');
+        reportRow.font = { bold: true, size: 14 };
+        reportRow.alignment = { vertical: 'middle', horizontal: 'center' };
+
+        // === Dòng 6: trống
+        worksheet.addRow([]);
+
+        // === Xuất dữ liệu grid bắt đầu từ dòng 7 ===
+        DevExpress.excelExporter.exportDataGrid({
+            component: grid,
+            worksheet: worksheet,
+            autoFilterEnabled: true,
+            topLeftCell: { row: 7, column: 1 }
+        }).then(function () {
+            // Footer (sau cùng)
+            const lastRow = worksheet.lastRow.number + 2;
+            worksheet.mergeCells(`A${lastRow}:D${lastRow}`);
+            worksheet.getCell(`A${lastRow}`).alignment = { horizontal: 'center' };
+            worksheet.getCell(`A${lastRow}`).font = { italic: true };
+
+            // Ghi file
+            let fileName = "LostAndFoundZone.xlsx";
+            workbook.xlsx.writeBuffer().then(function (buffer) {
+                saveAs(new Blob([buffer], { type: "application/octet-stream" }), fileName);
+            });
+        });
+    });
+</script>

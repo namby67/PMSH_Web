@@ -1,0 +1,56 @@
+# =====================
+# Visual Studio
+# =====================
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# =====================
+# Build results
+# =====================
+bin/
+obj/
+Debug/
+Release/
+x64/
+x86/
+
+# =====================
+# Logs
+# =====================
+*.log
+*.tlog
+*.tmp
+*.cache
+
+# =====================
+# Rider / JetBrains
+# =====================
+.idea/
+*.iml
+
+# =====================
+# NuGet
+# =====================
+*.nupkg
+packages/
+# NuGet v3
+*.nuget.props
+*.nuget.targets
+
+# =====================
+# Web
+# =====================
+node_modules/
+wwwroot/lib/
+*.publishsettings
+*.pubxml
+*.publishproj
+
+# =====================
+# Others
+# =====================
+*.DS_Store
+*.userprefs

@@ -1,0 +1,610 @@
+﻿@using DevExpress.XtraReports.UI
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{   
+    
+    var businessDate = DateTime.Today;
+    var sessionBusinessDate = Context.Session.GetString("BusinessDate");
+    if (!string.IsNullOrEmpty(sessionBusinessDate))
+    {
+        businessDate = DateTime.Parse(sessionBusinessDate);
+    }
+
+    var nextDate = businessDate.AddDays(1);
+}
+
+<style>
+    #gridContainer .dx-datagrid-rowsview .dx-selection {
+        background-color: #005f87 !important; /* màu xanh ng?c */
+        color: white !important; /* ch? tr?ng */
+    }
+
+        #gridContainer .dx-datagrid-rowsview .dx-selection * {
+            color: white !important;
+        }
+
+    .dx-datagrid-headers .dx-header-row td {
+        white-space: pre-line !important;
+        text-align: center;
+        font-size: 11px;
+    }
+
+
+    .dx-datagrid .dx-editor-with-menu .dx-menu-item-content .dx-icon.dx-icon-filter-operation-default, .dx-datagrid-container .dx-editor-with-menu .dx-menu-item-content .dx-icon.dx-icon-filter-operation-default {
+        display: none;
+    }
+
+    #gridContainer .dx-datagrid-rowsview .dx-row > td {
+        padding-top: 2px !important;
+        padding-bottom: 2px !important;
+        font-size: 12px !important;
+        line-height: 24px !important;
+    }
+
+    #gridContainer .dx-datagrid-headers {
+        background-color: #3b9ac6 !important; /* Màu xanh duong */
+        color: white !important; /* Ch? tr?ng cho d? d?c */
+    }
+
+        #gridContainer .dx-datagrid-headers .dx-header-row > td {
+            padding-top: 12px !important;
+            padding-bottom: 12px !important;
+            font-size: 12px !important;
+        }
+
+        #gridContainer .dx-datagrid-headers .dx-header-row > td {
+            background-color: #3b9ac6 !important;
+            color: white !important;
+            font-weight: bold;
+            border-right: 1px solid #ddd !important;
+            text-align: center !important;
+        }
+
+        #gridContainer .dx-datagrid-rowsview td,
+        #gridContainer .dx-datagrid-headers td {
+            border-right: 1px solid #ddd !important;
+        }
+
+        /* Lo?i b? vi?n ph?i ? c?t cu?i cùng (tùy ch?n) */
+        #gridContainer .dx-datagrid-rowsview tr td:last-child,
+        #gridContainer .dx-datagrid-headers tr td:last-child {
+            border-right: none !important;
+        }
+
+    #gridContainer .dx-datagrid-rowsview .dx-selection {
+        background-color: #01579b !important;
+        color: white !important;
+    }
+
+        #gridContainer .dx-datagrid-rowsview .dx-selection * {
+            color: white !important;
+        }
+
+    #gridContainer .dx-datagrid-filter-row td .dx-datebox {
+        height: 24px !important;
+        min-height: 24px !important;
+    }
+
+        #gridContainer .dx-datagrid-filter-row td .dx-datebox input {
+            font-size: 12px !important;
+            height: 24px !important;
+        }
+
+    #gridContainer .dx-datagrid-filter-row td .dx-editor-with-menu,
+    #gridContainer .dx-datagrid-filter-row td .dx-texteditor input {
+        height: 24px !important;
+        line-height: 24px !important;
+        padding: 2px 6px !important;
+        font-size: 12px !important;
+        box-sizing: border-box;
+    }
+
+    #gridContainer .dx-datagrid-filter-row td .dx-datebox,
+    #gridContainer .dx-datagrid-filter-row td .dx-dropdowneditor {
+        height: 26px !important;
+        min-height: 26px !important;
+        font-size: 12px !important;
+    }
+
+    #logGridContainer .dx-datagrid-rowsview .dx-selection {
+        background-color: #005f87 !important; /* màu xanh ng?c */
+        color: white !important; /* ch? tr?ng */
+    }
+
+        #logGridContainer .dx-datagrid-rowsview .dx-selection * {
+            color: white !important;
+        }
+
+    #logGridContainer .dx-datagrid-rowsview .dx-row > td {
+        padding-top: 2px !important;
+        padding-bottom: 2px !important;
+        font-size: 12px !important;
+        line-height: 24px !important;
+    }
+
+    #logGridContainer .dx-datagrid-headers {
+        background-color: #3b9ac6 !important; /* Màu xanh duong */
+        color: white !important; /* Ch? tr?ng cho d? d?c */
+    }
+
+        #logGridContainer .dx-datagrid-headers .dx-header-row > td {
+            padding-top: 12px !important;
+            padding-bottom: 12px !important;
+            font-size: 12px !important;
+            background-color: #3b9ac6 !important;
+            color: white !important;
+            font-weight: bold;
+            border-right: 1px solid #ddd !important;
+            text-align: center !important;
+        }
+
+        #logGridContainer .dx-datagrid-rowsview td,
+        #logGridContainer .dx-datagrid-headers td {
+            border-right: 1px solid #ddd !important;
+        }
+
+        /* Lo?i b? vi?n ph?i ? c?t cu?i cùng (tùy ch?n) */
+        #logGridContainer .dx-datagrid-rowsview tr td:last-child,
+        #logGridContainer .dx-datagrid-headers tr td:last-child {
+            border-right: none !important;
+        }
+
+    #logGridContainer .dx-datagrid-rowsview .dx-selection {
+        background-color: #01579b !important;
+        color: white !important;
+    }
+
+        #logGridContainer .dx-datagrid-rowsview .dx-selection * {
+            color: white !important;
+        }
+
+    #logGridContainer .dx-datagrid-filter-row td .dx-datebox {
+        height: 24px !important;
+        min-height: 24px !important;
+    }
+
+        #logGridContainer .dx-datagrid-filter-row td .dx-datebox input {
+            font-size: 12px !important;
+            height: 24px !important;
+        }
+
+    #logGridContainer .dx-datagrid-filter-row td .dx-editor-with-menu,
+    #logGridContainer .dx-datagrid-filter-row td .dx-texteditor input {
+        height: 24px !important;
+        line-height: 24px !important;
+        padding: 2px 6px !important;
+        font-size: 12px !important;
+        box-sizing: border-box;
+    }
+
+    #logGridContainer .dx-datagrid-filter-row td .dx-datebox,
+    #logGridContainer .dx-datagrid-filter-row td .dx-dropdowneditor {
+        height: 26px !important;
+        min-height: 26px !important;
+        font-size: 12px !important;
+    }
+
+    .filter_wrapper {
+        /*     background-color: #ececec; */
+        /*   margin: 0px 8px 14px 8px; */
+        padding: 18px 0px 0px 14px;
+        border-radius: 8px;
+    }
+
+    .gridContainer {
+        margin: 0px 8px;
+    }
+
+    .button_wrapper {
+        display: flex;
+        column-gap: 12px;
+        margin: 0px 8px;
+    }
+
+        .button_wrapper .fa-solid {
+            margin-right: 5px;
+        }
+
+    .selected {
+        background-color: #4CAF50; /* Màu xanh */
+        color: white;
+    }
+
+    #gridContainer .dx-datagrid-rowsview .dx-selection {
+        background-color: #01579b !important; /* màu xanh ng?c */
+        color: white !important; /* ch? tr?ng */
+    }
+
+        #gridContainer .dx-datagrid-rowsview .dx-selection * {
+            color: white !important;
+        }
+
+    .sticky-header .form-control-sm {
+        padding: .1rem .35rem;
+        height: calc(1.1em + .2rem + 2px);
+    }
+
+    .sticky-header label[class*="me-"] {
+        margin-right: .5rem !important;
+    }
+
+    #gridContainer .dx-datagrid-headers .dx-header-row > td {
+        padding: 5px !important;
+        height: 24px !important;
+        font-size: 12px !important;
+        line-height: 1.1 !important;
+    }
+
+    .sticky-header input[type="date"].form-control-sm {
+        font-size: 12px !important; /* dúng 12?px */
+        height: calc(1.1em + .2rem + 2px); /* gi? cùng chi?u cao */
+    }
+
+    .sticky-header label {
+        font-size: 12px !important;
+        line-height: 1.2;
+    }
+
+
+    .sort-select {
+        max-width: 130px; /* ho?c 100px n?u mu?n nh? hon */
+        font-size: 12px;
+        padding: 0.15rem 0.5rem;
+    }
+
+    .sort-select {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background-image: none !important;
+        padding-right: 10px !important;
+    }
+
+    button:disabled {
+        pointer-events: none; /* Không cho hover/click */
+        opacity: 0.6; /* Cho nó mờ đi */
+        cursor: not-allowed; /* Hiện con trỏ cấm */
+        background-color: #ccc !important; /* tuỳ chỉnh màu khi disable */
+    }
+
+    .tomselect-custom {
+        width: 100px;
+        min-height: 30px; /* hoặc tùy theo chiều cao bạn muốn */
+        font-size: 12px !important;
+    }
+
+        .tomselect-custom .ts-control {
+            padding-left: 8px !important; /* hoặc bất kỳ giá trị nào bạn muốn */
+        }
+
+    #groupCode.form-control-sm,
+    #subGroupCode.form-control-sm {
+        height: 26px !important; /* chiều cao nhỏ */
+        font-size: 12px !important; /* chữ nhỏ */
+        padding: 2px 6px !important; /* padding nhỏ */
+        line-height: 1.2 !important; /* căn giữa chữ */
+        max-width: 180px; /* chiều rộng vừa phải */
+    }
+
+    .hide-band .dx-datagrid-bands > tr:first-child {
+        display: none !important;
+    }
+
+    .btn-mini {
+        padding: 4px 10px; /* cao hơn btn-sm */
+        font-size: 14px; /* chữ lớn hơn một chút */
+        line-height: 1.2;
+    }
+
+</style>
+<link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+<div class="text-center" id="reportTitle" style="font-size: 20px">Item Daily Inventory</div>
+<div class="sticky-header bg-white p-2 shadow-sm z-3">
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-1" style="border: 1px solid #ced4da; border-radius: 6px; padding: 8px;">
+        <!-- From Date -->
+        <div class="d-flex flex-column ">
+
+            <div class="d-flex align-items-center">
+                <div class="d-flex align-items-center me-3">
+                    <label class="me-2 mb-0">Date:</label>
+                    <input type="date" id="firstDate" name="firstDate" class="form-control form-control-sm w-auto" />
+                </div>             
+            </div>
+        </div>
+        <div class="d-flex align-items-center me-3">
+            <label class="me-2 mb-0">Item Group:</label>
+            <select id="groupId" name="groupId" class="form-control form-control-sm w-auto">
+                <option value="0">--All--</option>
+                <option value="1">Recreational</option>
+                <option value="2">Audiovisual</option>
+                <option value="3">Cocktail</option>
+                <option value="4">Decoration</option>
+                <option value="5">Room</option>
+            </select>
+        </div>
+        <div style="display:flex; gap:5px;">
+            <button id="btnMinus15" type="button" class="btn btn-outline-secondary btn-mini">- 15 days</button>
+            <button id="btnPlus15" type="button" class="btn btn-outline-secondary btn-mini">+ 15 days</button>
+        </div>
+
+    </div>
+    <div class="">
+        <button style="border-radius: 4px;  margin-right: 6px;background-color: #3b9ac6;" id="btnPrint" class="mui-button mui-button-new"><i class="fa-solid fa-eye"></i>View</button>
+        <button style="border-radius: 4px;  margin-right: 6px;background-color: green;" id="btnLoad" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Load</button>
+        
+    </div>
+</div>
+
+<div class="mui-card">
+
+    <div id="gridWrapper" class="mt-2" style="max-height: 500px;">
+        <div id="gridContainer"></div>
+    </div>
+</div>
+<div id="loadingSpinner" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
+    <i class="fa-solid fa-spinner fa-spin"></i>
+</div>
+<div class="modal fade" id="loadPopupModal" tabindex="-1" aria-labelledby="loadPopupLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loadPopupLabel">Load Item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="popupForm">
+                    <div class="mb-2">
+                        <label for="popupGroup" class="form-label">Group</label>
+                        <select class="form-select" id="popupGroup">
+                            <option value="5">Room</option>
+                            <option value="1">Recreational</option>
+                            <option value="2">Audiovisual</option>
+                            <option value="3">Cocktail</option>
+                            <option value="4">Decoration</option>
+                        </select>
+                    </div>
+                    <div class="mb-2">
+                        <label for="popupItem" class="form-label">Item</label>
+                        <select class="form-select" id="popupItem">
+                            <option value="22">Baby Cot</option>
+                            <option value="23">EB</option>
+                            <!-- thêm tùy chọn nếu cần -->
+                        </select>
+                    </div>
+                    <div class="mb-2">
+                        <label for="popupBeginDate" class="form-label">Begin Date</label>
+                        <input type="date" class="form-control" id="popupBeginDate" value="@businessDate.ToString("yyyy-MM-dd")" />
+                    </div>
+                    <div class="mb-2">
+                        <label for="popupEndDate" class="form-label">End Date</label>
+                        <input type="date" class="form-control" id="popupEndDate" value="@nextDate.ToString("yyyy-MM-dd")" />
+                    </div>
+
+                    <div class="mb-2">
+                        <label for="popupQuantity" class="form-label">Quantity</label>
+                        <input type="number" class="form-control" id="popupQuantity" min="0" />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnPopupOK" class="btn btn-success">OK</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function formatDate(date) {
+        let year = date.getFullYear();
+        let month = (date.getMonth() + 1).toString().padStart(2, '0'); // Đảm bảo có 2 chữ số
+        let day = date.getDate().toString().padStart(2, '0'); // Đảm bảo có 2 chữ số
+        return `${year}-${month}-${day}`;
+    }
+    const businessDate = new Date("@businessDate.ToString("yyyy-MM-dd")");
+    const endDate = new Date(businessDate);
+    endDate.setDate(endDate.getDate() + 1);
+
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("popupBeginDate").value = businessDate.toISOString().split('T')[0];
+        document.getElementById("popupEndDate").value = endDate.toISOString().split('T')[0];
+    });
+    $(document).ready(function () {
+
+            const today = new Date();
+            const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+           // Định dạng theo local time
+            const formattedFirstDay = formatDate(firstDayOfMonth);
+            console.log(formattedFirstDay); // Kiểm tra giá trị đúng chưa
+            document.getElementById('firstDate').value = formattedFirstDay;
+
+
+
+    });
+        document.getElementById("btnMinus15").addEventListener("click", function () {
+        let dateInput = document.getElementById("firstDate");
+        let date = new Date(dateInput.value);
+        date.setDate(date.getDate() - 15);
+        dateInput.value = date.toISOString().split('T')[0];
+        $("#btnPrint").trigger("click"); // Tự động load lại grid
+    });
+
+    document.getElementById("btnPlus15").addEventListener("click", function () {
+        let dateInput = document.getElementById("firstDate");
+        let date = new Date(dateInput.value);
+        date.setDate(date.getDate() + 15);
+        dateInput.value = date.toISOString().split('T')[0];
+        $("#btnPrint").trigger("click"); // Tự động load lại grid
+    });
+        $(document).on("click", "#btnLoad", function () {
+        const popup = new bootstrap.Modal(document.getElementById('loadPopupModal'));
+        popup.show();
+    });
+
+        $(document).on('click', '#btnPopupOK', function () {
+
+        var data = {
+            ItemID: parseInt($('#popupItem').val()), // nếu popupItem là text, bạn có thể cần thay đổi
+            Date: $('#popupBeginDate').val(),
+            MatchDate: $('#popupBeginDate').val(),
+            Quantity: parseInt($('#popupQuantity').val()),
+          
+        };
+
+        $.ajax({
+            url: '/RoomManagement/UpdateItemInventory',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),               
+            success: function (res) {
+                if (res.success) {
+                    alert("Cập nhật thành công!");
+                    $('#loadPopupModal').modal('hide');
+                    $("#btnPrint").trigger("click"); // load lại grid nếu cần
+                } else {
+                    alert("Cập nhật thất bại: " + res.message);
+                }
+            },
+                error: function (xhr, status, error) {
+        console.error("Status: " + status);
+        console.error("Error: " + error);
+        console.error("Response Text: " + xhr.responseText);
+        alert("Lỗi hệ thống: " + error);
+    }
+        });
+    });
+
+
+        $(document).off("click", "#btnPrint").on("click", "#btnPrint", function () {
+        $("#loadingSpinner").show();
+
+        let groupId = $("#groupId").val();
+        let firstDateVal = $("#firstDate").val();
+        let firstDate = new Date(firstDateVal);
+
+        // Hàm format yyyy-MM-dd HH:mm:ss
+        function formatDateTime(date) {
+            let y = date.getFullYear();
+            let m = String(date.getMonth() + 1).padStart(2, '0');
+            let d = String(date.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d} 00:00:00`;
+        }
+
+        // Tạo object params đầy đủ 15 ngày
+        let params = {
+            GroupID: groupId
+        };
+
+        let paramNames = [
+            "FirstDate", "SecondDate", "ThirthDate", "FourthDate", "FifthDate",
+            "SixthDate", "SeventhDate", "EighthDate", "NinthDate", "TenthDate",
+            "EleventhDate", "TwelvethDate", "ThirtheenDate", "FourtheenDate", "FiftheenDate"
+        ];
+
+        paramNames.forEach((name, index) => {
+            let newDate = new Date(firstDate);
+            newDate.setDate(firstDate.getDate() + index);
+            params[name] = formatDateTime(newDate);
+        });
+
+        $.ajax({
+            url: '/RoomManagement/GetItemDailyInventory',
+            type: 'GET',
+            data: params,
+            success: function (data) {
+                console.log(data);
+                console.log("Field names:", Array.isArray(data) && data.length > 0 ? Object.keys(data[0]) : "No data");
+                loadTelephoneGrid(data);
+                $("#loadingSpinner").hide();
+            },
+            error: function (xhr, status, error) {
+                console.error("AJAX Error", status, error);
+                console.error("Response Text:", xhr.responseText);
+                alert("Không thể tải dữ liệu");
+                $("#loadingSpinner").hide();
+            }
+        });
+    });
+            function generateDynamicCaptions(firstDateVal) {
+        const captions = [];
+        const firstDate = new Date(firstDateVal);
+
+        for (let i = 0; i < 15; i++) {
+            const newDate = new Date(firstDate);
+            newDate.setDate(firstDate.getDate() + i);
+
+            // Định dạng ngày (dd-MMM)
+            const day = newDate.getDate().toString().padStart(2, '0');
+            const month = newDate.toLocaleString('en-US', { month: 'short' });
+            const dayOfWeek = newDate.toLocaleString('en-US', { weekday: 'short' }); // Ví dụ: Thu, Fri
+
+            // Tính số tuần (Calendar Week)
+            const yearStart = new Date(newDate.getFullYear(), 0, 1);
+            const days = Math.floor((newDate - yearStart) / (24 * 60 * 60 * 1000));
+            const weekNumber = Math.ceil((days + yearStart.getDay() + 1) / 7); // Tính tuần ISO
+
+            // Tạo caption với định dạng: "dd-MMM (day) CW week"
+            captions.push(`${day}-${month}\n(${dayOfWeek})\nCW ${weekNumber}`);
+        }
+
+        return captions;
+    }
+
+            function loadTelephoneGrid(data) {
+                let firstDateVal = $("#firstDate").val(); // Lấy giá trị ngày đầu tiên
+                const dynamicCaptions = generateDynamicCaptions(firstDateVal);
+            $("#gridContainer").dxDataGrid({
+                    dataSource: data,
+                    height: 400,
+                    allowColumnResizing: true,
+                    selection: { mode: "single" },
+                    columns: [
+                            { dataField: "itemName", caption: "Item Name" },
+                            { dataField: "firstDate", caption: dynamicCaptions[0],wordWrapEnabled: true },
+                            { dataField: "secondDate", caption: dynamicCaptions[1],wordWrapEnabled: true },
+                            { dataField: "thirthDate", caption: dynamicCaptions[2] ,wordWrapEnabled: true},
+                            { dataField: "fourthDate", caption: dynamicCaptions[3] ,wordWrapEnabled: true},
+                            { dataField: "fifthDate", caption: dynamicCaptions[4] ,wordWrapEnabled: true},
+                            { dataField: "sixthDate", caption: dynamicCaptions[5] ,wordWrapEnabled: true},
+                            { dataField: "seventhDate", caption: dynamicCaptions[6] ,wordWrapEnabled: true},
+                            { dataField: "eighthDate", caption: dynamicCaptions[7] ,wordWrapEnabled: true},
+                            { dataField: "ninthDate", caption: dynamicCaptions[8] ,wordWrapEnabled: true},
+                            { dataField: "tenthDate", caption: dynamicCaptions[9] ,wordWrapEnabled: true},
+                            { dataField: "eleventhDate", caption: dynamicCaptions[10] ,wordWrapEnabled: true},
+                            { dataField: "twelvethDate", caption: dynamicCaptions[11] ,wordWrapEnabled: true},
+                            { dataField: "thirtheenDate", caption: dynamicCaptions[12] ,wordWrapEnabled: true},
+                            { dataField: "fourtheenDate", caption: dynamicCaptions[13] ,wordWrapEnabled: true},
+                            { dataField: "fiftheenDate", caption: dynamicCaptions[14] ,wordWrapEnabled: true},
+                        ],
+                scrolling: {
+                mode: "standard", // Không dùng virtual để footer hiển thị đúng
+                showScrollbar: "always",
+                scrollByContent: true
+            },
+            paging: {
+                pageSize: 20
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [20, 40, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true
+            },
+                filterRow: {
+            visible: true,
+            applyFilter: "auto"
+        },
+            showBorders: true,
+            wordWrapEnabled: true
+        });
+        }
+
+
+
+
+
+
+
+</script>

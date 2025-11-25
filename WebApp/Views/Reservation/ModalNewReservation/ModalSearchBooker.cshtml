@@ -1,0 +1,212 @@
+﻿<!-- Modal search booker-->
+<div class="modal fade modal-xl" id="modalBooker" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Search Profile</h5>
+                <button type="button" class="btn-close" onclick="closeModalSearchBooker()"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row mui-card mb-2">
+                    <div class="col-md-2 mb-2">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="nameBookerSearch" placeholder="Enter name" oninput="filterBookerModal()">
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <label class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="firstNameBookerSearch" placeholder="Enter first name" oninput="filterBookerModal()">
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <label class="form-label">View By</label>
+                        <select type="text" class="form-control" id="viewByBookerSearch" disabled style="line-height:1.28">
+                            <option selected value="5">Contact</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <label class="form-label">City</label>
+                        <select type="text" class="form-control" id="cityBookerSearch" placeholder="Enter value" asp-items="ViewBag.cboCity" style="line-height:1.28"></select>
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <label class="form-label">Key word</label>
+                        <input type="text" class="form-control" id="keywordBookerSearch" placeholder="Enter value" oninput="filterBookerModal()">
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <label class="form-label">Code</label>
+                        <input type="text" class="form-control" id="codeBookerSearch" placeholder="Enter value" oninput="filterBookerModal()">
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <label class="form-label">Property</label>
+                        <select type="text" class="form-control" id="propertyBookerSearch" disabled style="line-height:1.28">
+                            <option selected>PMSh TheArena</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <label>Sale in charge</label>
+                        <div>
+                            <input type="checkbox" id="saleBooker" name="myCheckbox">
+                        </div>
+                    </div>
+                </div>
+                <div id="loadingSpinnerBooker" style="display: none; text-align: center; padding: 20px;">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+                <div class="mui-card">
+                    <div id="gridContainerSearchBooker" class="mt-2 gridContainer"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    function openModalSearchBooker(){
+        getAllBookers(5);
+        $('#modalBooker').modal('show');
+    }
+    function closeModalSearchBooker(){
+        $('#nameBookerSearch').val('');
+        $('#firstNameBookerSearch').val('');
+        $('#cityBookerSearch').val(0);
+        $('#modalBooker').modal('hide');
+
+    }
+    var listBookers = [];
+    function getAllBookers(type) {
+        $("#loadingSpinnerBooker").show();
+        $('#viewByBookerSearch').val(type);
+        $.ajax({
+            url: '/Profile/GetAllProfiles',
+            type: 'get',
+            dataType: 'json',
+            data:{
+                code: $('#codeBookerSearch').val(),
+                account: $('#nameBookerSearch').val(),
+                firstName: $('#firstNameBookerSearch').val(),
+                keyWord: $('#keywordBookerSearch').val(),
+                city: $('#cityBookerSearch').val(),
+                type: $('#viewByBookerSearch').val(),
+                showSaleInCharge: $("#saleBooker").is(":checked"),
+            },
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                listBookers = result;
+                initializeDataGridSearchBooker(result);
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                } else {
+                    informBox(TOAST_STATUS.DANGER, "Lỗi tải chi tiết danh sách danh mục dịch vụ hoặc bạn không có quyền tải");
+                }
+            },
+            complete: function () {
+                $("#loadingSpinnerBooker").hide(); // 👉 Hide spinner sau khi hoàn tất
+            }
+        });
+    }
+
+    function filterBookerModal() {
+        const codeSearchTerm = $('#codeBookerSearch').val().toLowerCase();
+        const firstNameSearchTerm = $('#firstNameBookerSearch').val().toLowerCase();
+        const accountSearchTerm = $('#nameBookerSearch').val().toLowerCase();
+        const citySearchTerm = $('#cityBookerSearch').val();
+        const keywordkSearchTerm = $('#keywordBookerSearch').val();
+        const filteredProfiles = listProfiles.filter(profile =>
+            profile.code.toLowerCase().includes(codeSearchTerm) &&
+            profile.account.toLowerCase().includes(firstNameSearchTerm) &&
+            profile.city == citySearchTerm &&
+            profile.keyword.toLowerCase().includes(keywordkSearchTerm) &&
+            profile.account.toLowerCase().includes(accountSearchTerm)
+        );
+        initializeDataGridSearchBooker(filteredProfiles);
+    }
+    function initializeDataGridSearchBooker(data) {
+        var columnWidth = 150;
+
+        $("#gridContainerSearchBooker").dxDataGrid({
+
+        dataSource: data,  allowColumnResizing: true,
+            columns: [
+
+
+                { dataField: "id", caption: "ID", width: columnWidth - 80, visible: false},
+                { dataField: "code", caption: "Code", width: columnWidth - 80 },
+                { dataField: "account", caption: "Account", width: columnWidth * 2 },
+                { dataField: "taxCode", caption: "Tax Code", width: columnWidth },
+                { dataField: "city", caption: "City", width: columnWidth },
+                { dataField: "nationality", caption: "Nat", width: columnWidth },
+                { dataField: "address", caption: "Address", width: columnWidth },
+                { dataField: "homeAddres", caption: "Business Address", width: columnWidth },
+                { dataField: "company", caption: "Company", width: columnWidth },
+                { dataField: "handPhone", caption: "HandPhone", width: columnWidth },
+                { dataField: "telephone", caption: "Telephone", width: columnWidth },
+                { dataField: "email", caption: "Email", width: columnWidth },
+                { dataField: "website", caption: "Website", width: columnWidth },
+                { dataField: "aRNo", caption: "ARNo", width: columnWidth },
+                { dataField: "postalCode", caption: "Postal Code", width: columnWidth },
+                { dataField: "keyword", caption: "Keyword", width: columnWidth },
+                { dataField: "description", caption: "Description", width: columnWidth },
+                { dataField: "personInChargeID", caption: "Sale In Charge", width: columnWidth },
+            ],
+            paging: { pageSize: 15 },
+            scrolling: {
+                rowRenderingMode: 'virtual',
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [15, 20, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true,
+            },
+            filterRow: {
+                    visible: true,
+                    applyFilter: "auto"
+            },
+            selection: {
+                mode: "single" // Allows only one row to be selected at a time
+            },
+            onRowDblClick: function(e) {
+                getInfoByBookerID(e.data.id);
+                $('#txtBookerID').val(e.data.id);
+                $('#txtBooker').val(e.data.account);
+                $('#modalBooker').modal('hide');
+                $('#clearBooker').show();
+
+            }
+        });
+    }
+    function clearBooker(){
+        $('#txtBookerID').val('');
+        $('#txtBooker').val('');
+        $('#clearBooker').hide();
+    }
+    function getInfoByBookerID(id){
+        $.ajax({
+            url: '/Reservation/GetInfoProfile',
+            type: 'get',
+            dataType: 'json',
+            data:{
+                profileID: id
+            },
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                $('#txtBooker').val(result.account);
+                $('#nameBookerSearch').val(result.account);
+                $('#firstNameBookerSearch').val(result.firstname);
+                $('#cityBookerSearch').val(result.city);
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                } else {
+                }
+            }
+        });
+    }
+</script>

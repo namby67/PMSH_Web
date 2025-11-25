@@ -1,0 +1,200 @@
+﻿<!-- Modal search profile-->
+<div class="modal fade modal-xl" id="modalSearchContact" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" >Search Profile Contact</h5>
+                <button type="button" class="btn-close" onclick="closeModalSearchContact()"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-2" style="margin-top:0px">
+                    <button class="submit-button-clear-reservation" onclick="getAllProfilesContact(5);"><i class="fas fa-search"></i> Search</button>
+                </div>
+                <div class="row mui-card mb-2">
+                    <div class="col-md-2 mb-2">
+                        <label for="input1" class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="nameProfileContact" placeholder="Enter name">
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <label for="input2" class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="firstNameProfileContact" placeholder="Enter first name">
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <label for="input3" class="form-label">View By</label>
+                        <select type="text" class="form-control" id="viewByProfileContact" disabled style="line-height:1.28">
+                            <option selected value="5">Contact</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <label for="input4" class="form-label">City</label>
+                        <select type="text" class="form-control" id="cityProfileContact" placeholder="Enter value" asp-items="ViewBag.cboCity" style="line-height:1.28"></select>
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <label for="input5" class="form-label">Key word</label>
+                        <input type="text" class="form-control" id="keywordProfileContact" placeholder="Enter value">
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <label for="input6" class="form-label">Code</label>
+                        <input type="text" class="form-control" id="codeProfileContact" placeholder="Enter value">
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <label for="input4" class="form-label">Property</label>
+                        <select type="text" class="form-control" id="propertyProfileContact" disabled style="line-height:1.28">
+                            <option selected>PMSh TheArena</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <label>Sale in charge</label>
+                        <div>
+                            <input type="checkbox" id="saleContact" name="myCheckbox">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mui-card">
+                    <div id="gridContainerSearchContact" class="mt-2 gridContainer"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+
+    function openModalSearchContact(){
+        getAllProfilesContact(5);
+        $('#modalSearchContact').modal('show');
+    }
+    function closeModalSearchContact(){
+        $('#nameProfileContact').val('');
+        $('#firstNameProfileContact').val('');
+        $('#cityProfileContact').val(0);
+
+        $('#modalSearchContact').modal('hide');
+
+    }
+    function getAllProfilesContact(type) {
+        $('#viewByProfileCompany').val(type || 5); // Đặt giá trị mặc định nếu không có type
+        initializeDataGridSearchContact();
+    }
+
+    function initializeDataGridSearchContact() {
+        $("#gridContainerSearchContact").dxDataGrid({
+            dataSource: {
+                load: function (loadOptions) {
+                    var d = $.Deferred();
+                    var params = {
+                        code: $('#codeProfileContact').val(),
+                        account: $('#nameProfileContact').val(),
+                        firstName: $('#firstNameProfileContact').val(),
+                        keyWord: $('#keywordProfileContact').val(),
+                        city: $('#cityProfileContact').val(),
+                        type: $('#viewByProfileContact').val(),
+                        showSaleInCharge: $("#saleContact").is(":checked"),
+                        page: loadOptions.skip / loadOptions.take + 1, // Tính số trang
+                        pageSize: loadOptions.take // Kích thước trang
+                    };
+
+                    $.ajax({
+                        url: '/Profile/GetAllProfiles2',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: params,
+                        headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+                        success: function (result) {
+                            d.resolve(result.data, {
+                                totalCount: result.totalCount // Tổng số bản ghi
+                            });
+                        },
+                        error: function (xhr, statusText, err) {
+                            if (xhr.status == 401) {
+                                sessionTimeout();
+                            } else {
+                                informBox(TOAST_STATUS.DANGER, "Lỗi tải chi tiết danh sách danh mục dịch vụ hoặc bạn không có quyền tải");
+                                d.reject();
+                            }
+                        },
+                        complete: function () {
+                        }
+                    });
+                    return d.promise();
+                }
+            },
+            remoteOperations: {
+                paging: true,
+                filtering: true
+            },
+            columns: [
+                { dataField: "id", caption: "ID", width: 70, visible: false },
+                { dataField: "code", caption: "Code", width: 70 },
+                { dataField: "account", caption: "Account", width: 300 },
+                { dataField: "taxCode", caption: "Tax Code", width: 150 },
+                { dataField: "city", caption: "City", width: 150 },
+                { dataField: "nationality", caption: "Nat", width: 150 },
+                { dataField: "address", caption: "Address", width: 150 },
+                { dataField: "homeAddress", caption: "Business Address", width: 150 },
+                { dataField: "company", caption: "Company", width: 150 },
+                { dataField: "handPhone", caption: "HandPhone", width: 150 },
+                { dataField: "telephone", caption: "Telephone", width: 150 },
+                { dataField: "email", caption: "Email", width: 150 },
+                { dataField: "website", caption: "Website", width: 150 },
+                { dataField: "aRNo", caption: "ARNo", width: 150 },
+                { dataField: "postalCode", caption: "Postal Code", width: 150 },
+                { dataField: "keyword", caption: "Keyword", width: 150 },
+                { dataField: "description", caption: "Description", width: 150 },
+                { dataField: "personInChargeID", caption: "Sale In Charge", width: 150 },
+            ],
+            paging: { pageSize: 15 },
+            pager: {
+                visible: true,
+                allowedPageSizes: [15, 20, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true,
+            },
+            filterRow: {
+                visible: true,
+                applyFilter: "auto"
+            },
+            selection: {
+                mode: "single"
+            },
+            onRowDblClick: function (e) {
+                getInfoByContactID(e.data.id);
+                closeModalSearchContact();
+                $('#clearContact').show();
+            }
+        });
+    }
+    function getInfoByContactID(id){
+        $.ajax({
+            url: '/Reservation/GetInfoProfile',
+            type: 'get',
+            dataType: 'json',
+            data:{
+                profileID: id
+            },
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                $('#txtContactID').val(result.id);
+                $('#txtContact').val(result.account);
+
+
+          },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                } else {
+                }
+            }
+        });
+    }
+    function clearContact(){
+        $('#txtContactID').val('');
+        $('#txtContact').val('');
+        $('#clearContact').hide();
+
+    }
+</script>

@@ -1,0 +1,392 @@
+﻿<style>
+    .container-fluid {
+        margin: 0 auto;
+    }
+
+    .header-title {
+        font-size: 3.2rem;
+        font-weight: 700;
+        color: #0055b8; /* Neon cyan */
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        margin-bottom: 10px;
+        animation: neonGlow 1.5s ease-in-out infinite alternate;
+    }
+
+    .control-card {
+        background: #ffffff;
+        padding: 20px;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        margin-bottom: 24px;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+        .control-card.collapsed {
+            transform: scale(0.95);
+            opacity: 0;
+            height: 0;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+        }
+
+    .btn-toggle {
+        background: linear-gradient(45deg, #1e3a8a, #3b82f6);
+        color: #ffffff;
+        font-size: 0.9rem;
+        padding: 10px 20px;
+        border-radius: 10px;
+        border: none;
+        margin-bottom: 15px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+        .btn-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+    .btn-custom {
+        padding: 10px 20px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        border: none;
+        background: #ffffff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+        .btn-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+    .btn-primary {
+        background: linear-gradient(45deg, #1e3a8a, #3b82f6);
+        color: #ffffff;
+    }
+
+    .btn-success {
+        background: linear-gradient(45deg, #047857, #10b981);
+        color: #ffffff;
+    }
+
+    .btn-danger {
+        background: linear-gradient(45deg, #b91c1c, #ef4444);
+        color: #ffffff;
+    }
+
+    .filter-section {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 0;
+    }
+
+        .filter-section .form-control {
+            background: #f9fafb;
+            border: none;
+            color: #1f2a44;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            padding: 10px;
+            max-width: 180px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: box-shadow 0.2s ease;
+        }
+
+            .filter-section .form-control:focus {
+                box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+            }
+
+        .filter-section .form-check-label {
+            font-size: 0.85rem;
+            color: #1f2a44;
+            font-weight: 500;
+        }
+
+    .form-check-input {
+        background: #f9fafb;
+        border: 1px solid #d1d5db;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+        .form-check-input:checked {
+            background-color: #1e3a8a;
+            border-color: #1e3a8a;
+        }
+
+    .comment-input {
+        max-width: 220px;
+        background: #f9fafb;
+        border: none;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .table-container {
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        padding: 20px;
+    }
+
+    .table {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 0.9rem;
+    }
+
+        .table thead th {
+            background: #f3f4f6;
+            color: #1f2a44;
+            padding: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.05em;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+            .table thead th:hover {
+                background: #e5e7eb;
+            }
+
+            .table thead th:first-child {
+                border-top-left-radius: 10px;
+            }
+
+            .table thead th:last-child {
+                border-top-right-radius: 10px;
+            }
+
+        .table tbody tr {
+            background: #ffffff;
+            transition: all 0.2s ease;
+        }
+
+            .table tbody tr:hover {
+                background: #f9fafb;
+                transform: translateY(-1px);
+            }
+
+            .table tbody tr.selected {
+                background: #dbeafe;
+            }
+
+        .table tbody td {
+            padding: 12px;
+            border-bottom: 1px solid #e5e7eb;
+            color: #1f2a44;
+        }
+
+    .status-due-in {
+        color: #ffffff;
+        font-weight: 600;
+        background: linear-gradient(45deg, #b91c1c, #ef4444);
+        padding: 4px 10px;
+        border-radius: 6px;
+        display: inline-block;
+    }
+
+    .status-resved {
+        color: #ffffff;
+        font-weight: 600;
+        background: linear-gradient(45deg, #047857, #10b981);
+        padding: 4px 10px;
+        border-radius: 6px;
+        display: inline-block;
+    }
+
+    .modal-content {
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .modal-header, .modal-body {
+        background: #ffffff;
+        color: #1f2a44;
+    }
+
+    .modal-header {
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 20px;
+    }
+
+        .pagination button {
+            background: #ffffff;
+            color: #1f2a44;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            margin-left: 10px;
+            font-size: 0.85rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+        }
+
+            .pagination button:hover {
+                background: #f3f4f6;
+                transform: translateY(-1px);
+            }
+
+   
+    .header-title, .control-card, .table-container {
+        animation: fadeIn 0.6s ease-out;
+    }
+
+</style>
+<div >
+    <div class="row">
+        <div class="col-12">
+            <h1 class="header-title">Night Audit Room Rate</h1>
+            <div class="control-card" id="controlCard">
+                <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
+                    <div>
+                        <button class="btn btn-custom btn-primary">Search</button>
+                        <button class="btn btn-custom btn-success">Excel</button>
+                        <button class="btn btn-custom btn-danger">Close</button>
+                    </div>
+                </div>
+                <div class="filter-section">
+                    <input type="text" class="form-control" value="26.08.2025 05:03 PM +07" readonly>
+                    <label class="ms-2">Date & Time</label>
+                    <div class="form-check form-switch ms-3">
+                        <input class="form-check-input" type="checkbox" id="warning">
+                        <label class="form-check-label" for="warning">Warning</label>
+                    </div>
+                    <div class="form-check form-switch ms-2">
+                        <input class="form-check-input" type="checkbox" id="reservation">
+                        <label class="form-check-label" for="reservation">Reservation</label>
+                    </div>
+                    <div class="form-check form-switch ms-2">
+                        <input class="form-check-input" type="checkbox" id="checkIn">
+                        <label class="form-check-label" for="checkIn">Check In</label>
+                    </div>
+                    <div class="form-check form-switch ms-2">
+                        <input class="form-check-input" type="checkbox" id="checkOut">
+                        <label class="form-check-label" for="checkOut">Check Out</label>
+                    </div>
+                    <div class="form-check form-switch ms-2">
+                        <input class="form-check-input" type="checkbox" id="dueIn">
+                        <label class="form-check-label" for="dueIn">Due In</label>
+                    </div>
+                    <div class="form-check form-switch ms-2">
+                        <input class="form-check-input" type="checkbox" id="dueOut">
+                        <label class="form-check-label" for="dueOut">Due Out</label>
+                    </div>
+                    <div class="form-check form-switch ms-2">
+                        <input class="form-check-input" type="checkbox" id="cancel">
+                        <label class="form-check-label" for="cancel">Cancel</label>
+                    </div>
+                    <input type="text" class="form-control comment-input" placeholder="Comment">
+                </div>
+            </div>
+            <div class="table-container">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable('RoomNo')">Room No</th>
+                            <th onclick="sortTable('GuestName')">Guest Name</th>
+                            <th onclick="sortTable('Arr')">Arr.</th>
+                            <th onclick="sortTable('Dep')">Dep.</th>
+                            <th onclick="sortTable('TransCode')">TransCode</th>
+                            <th onclick="sortTable('Description')">Description</th>
+                            <th onclick="sortTable('AmountUSD')">Amount USD</th>
+                            <th onclick="sortTable('AmountNetUSD')">Amount Net USD</th>
+                            <th onclick="sortTable('AmountVND')">Amount VND</th>
+                            <th onclick="sortTable('AmountNetVND')">Amount Net VND</th>
+                            <th onclick="sortTable('Curr')">Curr</th>
+                            <th onclick="sortTable('Package')">Package</th>
+                            <th onclick="sortTable('Status')">Status</th>
+                            <th onclick="sortTable('ConfirmationNo')">Confirmation No</th>
+                            <th onclick="sortTable('Pkg')">Pkg</th>
+                            <th onclick="sortTable('RsvHolder')">Rsv.Holder</th>
+                            <th onclick="sortTable('Mark')">Mark</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-bs-toggle="modal" data-bs-target="#rowModal">
+                            <td>02208</td>
+                            <td>TUYEN, Ms.</td>
+                            <td>03.08.2025</td>
+                            <td>07.08.2025</td>
+                            <td>1001</td>
+                            <td>Tien phong / Room</td>
+                            <td>.00</td>
+                            <td>.00</td>
+                            <td>100,000</td>
+                            <td>113,400 VND</td>
+                            <td></td>
+                            <td></td>
+                            <td class="status-due-in">DUE IN</td>
+                            <td>53514</td>
+                            <td>SITEMINDER</td>
+                            <td>TA</td>
+                            <td></td>
+                        </tr>
+                        <tr data-bs-toggle="modal" data-bs-target="#rowModal">
+                            <td>03029</td>
+                            <td>Huynh Thi Thanh, Tien</td>
+                            <td>03.08.2025</td>
+                            <td>07.08.2025</td>
+                            <td>1001</td>
+                            <td>Tien phong / Room</td>
+                            <td>.00</td>
+                            <td>.00</td>
+                            <td>100,000</td>
+                            <td>113,400 VND</td>
+                            <td></td>
+                            <td></td>
+                            <td class="status-resved">RESVED</td>
+                            <td>53511</td>
+                            <td>SITEMINDER</td>
+                            <td>TA</td>
+                            <td></td>
+                        </tr>
+                        <tr data-bs-toggle="modal" data-bs-target="#rowModal">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>.00</td>
+                            <td>.00</td>
+                            <td>200,000</td>
+                            <td>226,800</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="pagination">
+                    <button onclick="changePage('prev')">Previous</button>
+                    <button onclick="changePage('next')">Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

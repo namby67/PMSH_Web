@@ -1,0 +1,746 @@
+﻿@using DevExpress.XtraReports.UI
+
+
+@{
+    var selectedReport = @ViewBag.ReportHeader;
+    var floorList = ViewBag.FloorList;
+    var hkpSectionlist = ViewBag.hkpSectionList;
+}
+<style>
+
+
+    .dx-datagrid-headers .dx-header-row td {
+        white-space: pre-line !important;
+        text-align: center;
+        font-size: 11px;
+    }
+
+
+    .dx-datagrid .dx-editor-with-menu .dx-menu-item-content .dx-icon.dx-icon-filter-operation-default, .dx-datagrid-container .dx-editor-with-menu .dx-menu-item-content .dx-icon.dx-icon-filter-operation-default {
+        display: none;
+    }
+
+
+    .filter_wrapper {
+        /*     background-color: #ececec; */
+        /*   margin: 0px 8px 14px 8px; */
+        padding: 18px 0px 0px 14px;
+        border-radius: 8px;
+    }
+
+    .gridContainer {
+        margin: 0px 8px;
+    }
+
+    .button_wrapper {
+        display: flex;
+        column-gap: 12px;
+        margin: 0px 8px;
+    }
+
+        .button_wrapper .fa-solid {
+            margin-right: 5px;
+        }
+
+    .selected {
+        background-color: #4CAF50; /* Màu xanh */
+        color: white;
+    }
+
+
+
+    .sticky-header .form-control-sm {
+        padding: .1rem .35rem;
+        height: calc(1.1em + .2rem + 2px);
+    }
+
+    .sticky-header label[class*="me-"] {
+        margin-right: .5rem !important;
+    }
+
+
+    .sticky-header input[type="date"].form-control-sm {
+        font-size: 12px !important; /* dúng 12?px */
+        height: calc(1.1em + .2rem + 2px); /* gi? cùng chi?u cao */
+    }
+
+    .sticky-header label {
+        font-size: 12px !important;
+        line-height: 1.2;
+    }
+
+    .tomselect-custom {
+        width: 250px;
+        min-height: 30px; /* ho?c tùy theo chi?u cao b?n mu?n */
+        font-size: 0.65rem;
+    }
+
+    .sort-select {
+        max-width: 130px; /* ho?c 100px n?u mu?n nh? hon */
+        font-size: 12px;
+        padding: 0.15rem 0.5rem;
+    }
+
+    .sort-select {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background-image: none !important;
+        padding-right: 10px !important;
+    }
+
+</style>
+
+<link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+<div class="text-center" id="reportTitle" style="font-size: 20px">Attendants</div>
+<div class="sticky-header bg-white p-2 shadow-sm z-3">
+    <div class="">
+        <button id="btnPrint" class="mui-button button-report-view"><i class="fa-solid fa-eye"></i> View</button>
+        <button id="btnNew" class="mui-button mui-button-new"><i class="fa-solid fa-plus"></i> New</button>
+        <button id="btnUpdate" class="mui-button mui-button-edit"> <i class="fa-solid fa-pen"></i> Edit</button>
+        <button id="btnDelete" class="mui-button button-report-delete"> <i class="fa-solid fa-trash-can"></i> Delete</button>
+        <button id="btnExportExcel" class="mui-button mui-button-export" type="button"> <i class="fa-solid fa-file-excel"></i> Excel</button>
+
+    </div>
+</div>
+<div class="mui-card">
+    @*     <div style="font-size: 20px;" class="mt-1" id="reportTitle"></div> *@
+    <div id="gridContainer" class="gridContainer mt-2"></div>
+</div>
+<div id="overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 999;"></div>
+<div id="popupNewAttendants" style="display: none; position: fixed; top: 50%; left: 50%;
+    transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 10px;
+    z-index: 1050; box-shadow: 0 0 10px rgba(0,0,0,0.3); min-width: 400px; max-height: 600px; overflow-y: auto;">
+
+    <div class="d-flex justify-content-between mb-2">
+        <h5 class="mb-0">New Attendants</h5>
+
+    </div>
+    <div class="d-flex justify-content-start mb-3 gap-2">
+       
+        <button style="border-radius: 4px;  margin-right: 6px;" id="btnOkAuto" class="mui-button mui-button-advance" type="button"><i class="fa-solid fa-floppy-disk"></i> Ok</button>
+        <button style="border-radius: 4px;  margin-right: 6px;" id="btnSaveAuto" class="mui-button mui-button-new" type="button"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+        <button onclick="$('#popupNewAttendants').hide()" id="btnClosePopup" class="btn btn-sm mui-button-close" style=" border-radius: 4px;">
+            <i class="fa-solid fa-xmark me-1"></i> Close
+        </button>
+    </div>
+    <div class="sticky-header bg-white p-2 shadow-sm z-3">
+        <div class="d-flex flex-wrap align-items-center gap-2 mb-1 filter-panel">
+            <div class="d-flex align-items-center flex-wrap mb-2">
+                <div class="d-flex align-items-start mb-3">
+                    <!-- Trace Time -->
+                    <input type="text" id="idattendant" name="idattendant" style="display:none !important" class="form-control form-control-sm w-auto" />
+                        <div class="d-flex align-items-center me-4">
+                            <label for="tracetime" class="me-2 mb-0">Name:</label>
+                            <input type="text" id="tracetime" name="tracetime"
+                                   class="form-control form-control-sm w-auto" />
+                        </div>
+                        <div class="d-flex align-items-center me-4">
+                            <label for="tracetime" class="me-2 mb-0">Mobile No.:</label>
+                            <input type="text" id="tracetime" name="tracetime"
+                                   class="form-control form-control-sm w-auto" />
+                        </div>
+                        <div class="d-flex align-items-center me-3">
+                            <label class="me-2 mb-0">Floor:</label>
+                            <select id="floor" name="floor" class="form-control form-control-sm w-auto">
+                                <option value="">-ALL--</option>
+                                @foreach (var item in floorList)
+                                {
+                                    <option value="@item.ID">@item.Name</option>
+                                }
+                            </select>
+
+                        </div>
+                        <div class="d-flex align-items-center me-3">
+                            <label class="me-2 mb-0">Section:</label>
+                            <select id="sectionAd" name="sectionAd" class="form-control form-control-sm w-auto">
+                                <option value=""></option>
+                                @foreach (var item in hkpSectionlist)
+                                {
+                                    <option value="@item.ID">@item.Code</option>
+                                }
+                            </select>
+                        </div>
+                </div>
+               <div class="d-flex align-items-start mb-3">
+                        <div class="d-flex align-items-center me-4">
+                            <label for="tracetime" class="me-2 mb-0">Job Code:</label>
+                            <input type="text" id="tracetime" name="tracetime" class="form-control form-control-sm w-auto" />
+                        </div>
+                        <div class="d-flex align-items-center me-3">
+                      
+
+                            <!-- Clean Uncheck -->
+                            <div class="form-check me-3">
+                                <span class="status-color-box color-clean-uncheck"></span>
+                                <input class="form-check-input" type="checkbox" id="isActive" name="includeOptions" value="1" checked>
+                                <label class="form-check-label" for="cleanUncheck">Is Active</label>
+                            </div>
+
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <div class="form-check me-2">
+                                <input class="form-check-input" type="checkbox" id="chkSun" name="days" value="Sun" checked>
+                                <label class="form-check-label" for="chkSun">Sun</label>
+                            </div>
+                            <div class="form-check me-2">
+                                <input class="form-check-input" type="checkbox" id="chkMon" name="days" value="Mon" checked>
+                                <label class="form-check-label" for="chkMon">Mon</label>
+                            </div>
+                            <div class="form-check me-2">
+                                <input class="form-check-input" type="checkbox" id="chkTue" name="days" value="Tue" checked>
+                                <label class="form-check-label" for="chkTue">Tue</label>
+                            </div>
+                            <div class="form-check me-2">
+                                <input class="form-check-input" type="checkbox" id="chkWed" name="days" value="Wed" checked>
+                                <label class="form-check-label" for="chkWed">Wed</label>
+                            </div>
+                            <div class="form-check me-2">
+                                <input class="form-check-input" type="checkbox" id="chkThu" name="days" value="Thu" checked>
+                                <label class="form-check-label" for="chkThu">Thu</label>
+                            </div>
+                            <div class="form-check me-2">
+                                <input class="form-check-input" type="checkbox" id="chkFri" name="days" value="Fri" checked>
+                                <label class="form-check-label" for="chkFri">Fri</label>
+                            </div>
+                            <div class="form-check me-2">
+                                <input class="form-check-input" type="checkbox" id="chkSat" name="days" value="Sat" checked>
+                                <label class="form-check-label" for="chkSat">Sat</label>
+                            </div>
+                        </div>
+
+                </div>
+            </div>
+
+
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+<div id="loadingSpinner" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
+    <i class="fa-solid fa-spinner fa-spin"></i>
+</div>
+
+<script>
+
+       $(document).ready(function () {
+            
+        $("#btnPrint").trigger("click");
+
+    });
+
+
+
+     $(document).off("click", "#btnPrint").on("click", "#btnPrint", function () {
+            $("#loadingSpinner").show();
+            $.ajax({
+                url: '/HouseKeepingAdmin/AttendantsData',
+                type: 'GET',
+                data: {
+
+                },
+                traditional: true,
+                  crossDomain: false,
+                    headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+                success: function (result) {
+
+                console.log(result);
+            initializeAttendantsGrid(result);
+                        $("#loadingSpinner").hide();
+                },
+                error: function () {
+                    alert("Không th? t?i báo cáo.");
+                    $("#loadingSpinner").hide();
+                }
+            });
+        });
+        var selectedRowData=null;
+     function initializeAttendantsGrid(data) {
+        $("#gridContainer").dxDataGrid({
+            dataSource: data,
+            showBorders: true,
+            selection: { mode: "single" },
+            paging: { pageSize: 20 },
+            pager: {
+                showPageSizeSelector: true,
+                allowedPageSizes: [20, 50, 100],
+                showInfo: true
+            },
+            filterRow: { visible: true },
+            columns: [
+                { dataField: "id", caption: "ID", width: 80, visible: false },
+                { dataField: "name", caption: "Name", width: 200 },
+                { dataField: "mobileNo", caption: "Mobile No", width: 120 },
+                { dataField: "section", caption: "Section", width: 120 },
+                { dataField: "floor", caption: "Floor", width: 120 },
+                { dataField: "jobCode", caption: "Job", width: 120 },
+                   // Chủ nhật
+                { dataField: "sunday", caption: "Sun", width: 80,
+                    cellTemplate: function(container, options) {
+                       let checked = (options.value === true || options.value === "True");
+                        $("<div>")
+                            .dxCheckBox({
+                                value: checked,
+                                readOnly: true
+                            })
+                            .css("transform", "scale(0.8)")
+                            .appendTo(container);
+                    }
+                },
+
+                // Thứ 2
+                { dataField: "monday", caption: "Mon", width: 80,
+                    cellTemplate: function(container, options) {
+            let checked = (options.value === true || options.value === "True");
+                        $("<div>")
+                            .dxCheckBox({
+                                value: checked,
+                                readOnly: true
+                            })
+                            .css("transform", "scale(0.8)")
+                            .appendTo(container);
+                    }
+                },
+
+                // Thứ 3
+                { dataField: "tuesday", caption: "Tue", width: 80,
+                    cellTemplate: function(container, options) {
+                       let checked = (options.value === true || options.value === "True");
+                        $("<div>")
+                            .dxCheckBox({
+                                value: checked,
+                                readOnly: true
+                            })
+                            .css("transform", "scale(0.8)")
+                            .appendTo(container);
+                    }
+                },
+
+                // Thứ 4
+                { dataField: "wednesday", caption: "Wed", width: 80,
+                    cellTemplate: function(container, options) {
+                      let checked = (options.value === true || options.value === "True");
+                        $("<div>")
+                            .dxCheckBox({
+                                value: checked,
+                                readOnly: true
+                            })
+                            .css("transform", "scale(0.8)")
+                            .appendTo(container);
+                    }
+                },
+
+                // Thứ 5
+                { dataField: "thursday", caption: "Thu", width: 80,
+                    cellTemplate: function(container, options) {
+                  let checked = (options.value === true || options.value === "True");
+                        $("<div>")
+                            .dxCheckBox({
+                                value: checked,
+                                readOnly: true
+                            })
+                            .css("transform", "scale(0.8)")
+                            .appendTo(container);
+                    }
+                },
+
+                // Thứ 6
+                { dataField: "friday", caption: "Fri", width: 80,
+                    cellTemplate: function(container, options) {
+                let checked = (options.value === true || options.value === "True");
+                        $("<div>")
+                            .dxCheckBox({
+                                value: checked,
+                                readOnly: true
+                            })
+                            .css("transform", "scale(0.8)")
+                            .appendTo(container);
+                    }
+                },
+
+                // Thứ 7
+                { dataField: "saturday", caption: "Sat", width: 80,
+                    cellTemplate: function(container, options) {
+                  let checked = (options.value === true || options.value === "True");
+                        $("<div>")
+                            .dxCheckBox({
+                                value: checked,
+                                readOnly: true
+                            })
+                            .css("transform", "scale(0.8)")
+                            .appendTo(container);
+                    }
+                },
+                  { dataField: "isActive", caption: "Active", width: 80,
+                    cellTemplate: function(container, options) {
+                         let checked = (options.value === true || options.value === "True");
+                        $("<div>")
+                            .dxCheckBox({
+                                value: checked,
+                                readOnly: true
+                            })
+                            .css("transform", "scale(0.8)")
+                            .appendTo(container);
+                    }
+                },
+                { dataField: "updatedBy", caption: "Updated By", width: 120 },
+                { dataField: "updatedDate", caption: "Updated Date", dataType: "date", format: "dd/MM/yyyy HH:mm", width: 160 },
+                { dataField: "createdBy", caption: "Updated By", width: 120 },
+                { dataField: "createdDate", caption: "Created Date", dataType: "date", format: "dd/MM/yyyy HH:mm", width: 160 },
+            ],
+            scrolling: {
+                    mode: "standard", // Không dùng virtual để footer hiển thị đúng
+                    showScrollbar: "always",
+                    scrollByContent: true
+                },
+                paging: {
+                    pageSize: 50
+                },
+                pager: {
+                    visible: true,
+                    allowedPageSizes: [50, 100, 'all'],
+                    showPageSizeSelector: true,
+                    showInfo: true,
+                    showNavigationButtons: true
+                },
+                    filterRow: {
+                visible: true,
+                applyFilter: "auto"
+            },
+            // 🔥 Quan trọng: gán selectedRowData khi click chọn
+             onRowClick: function (e) {
+                selectedRowData = e.data; // 🔥 lấy data của row vừa click
+                console.log("Selected Row (RowClick):", selectedRowData);
+               
+            }
+        });
+     }
+    $("#btnNew").on("click", function () {
+    
+       clearAttendants();
+            $('#overlay').fadeIn(200);
+            $('#popupNewAttendants').fadeIn(200);
+        
+    });
+
+    $("#btnUpdate").on("click", function () {
+    
+            if (selectedRowData.length === 0) {
+                    showToast('Error', "Please select !", false);
+                return;
+            }
+
+              $("#btnOkAuto").hide();
+            $('#overlay').fadeIn(200);
+            $('#popupNewAttendants').fadeIn(200);
+            
+            $('#popupNewAttendants input[name="tracetime"]').eq(0).val(selectedRowData.name || '');
+            $('#popupNewAttendants input[name="tracetime"]').eq(1).val(selectedRowData.mobileNo || '');
+            $('#popupNewAttendants select[name="floor"]').val(selectedRowData.floorID || '');
+            $('#popupNewAttendants select[name="sectionAd"]').val(selectedRowData.sectionID || '');
+            $('#popupNewAttendants input[name="tracetime"]').eq(2).val(selectedRowData.jobCode || '');
+                  $('#popupNewAttendants input[name="idattendant"]').val(selectedRowData.id || '');
+            // Checkbox IsActive
+            $('#isActive').prop('checked', (selectedRowData.isActive === true || selectedRowData.isActive === "True"));
+
+            // Checkbox ngày trong tuần
+            $('#chkSun').prop('checked', (selectedRowData.sunday === true || selectedRowData.sunday === "True"));
+            $('#chkMon').prop('checked', (selectedRowData.monday === true || selectedRowData.monday === "True"));
+            $('#chkTue').prop('checked', (selectedRowData.tuesday === true || selectedRowData.tuesday === "True"));
+            $('#chkWed').prop('checked', (selectedRowData.wednesday === true || selectedRowData.wednesday === "True"));
+            $('#chkThu').prop('checked', (selectedRowData.thursday === true || selectedRowData.thursday === "True"));
+            $('#chkFri').prop('checked', (selectedRowData.friday === true || selectedRowData.friday === "True"));
+            $('#chkSat').prop('checked', (selectedRowData.saturday === true || selectedRowData.saturday === "True"));
+        
+    });
+
+     $("#btnOkAuto").on("click", function () {
+
+           if (selectedRowData.length === 0) {
+                    showToast('Error', "Please select at least one account!", false);
+                return;
+            }
+                   // Lấy dữ liệu từ các input / select / checkbox
+      let name = $("input[name='tracetime']").eq(0).val().trim();    // ô Name
+    let mobileNo = $("input[name='tracetime']").eq(1).val().trim(); // ô Mobile No
+    let jobCode = $("input[name='tracetime']").eq(2).val().trim();  // ô Job Code
+
+        if (name === "") {
+            showToast('Error', "You must insert a name.", false);
+            $("input[name='tracetime']").eq(0).focus();
+            return;
+        }
+        let floorID = $("#floor").val();
+        if (floorID === "" || floorID === null) {
+            showToast('Error', "Please select a floor.", false);
+            $("#floor").focus();
+            return;
+        }
+
+        let sectionID = $("#sectionAd").val();
+        if (sectionID === "" || sectionID === null) {
+            showToast('Error', "Please select a section.", false);
+            $("#sectionAd").focus();
+            return;
+        }
+
+    let isActive = $("#isActive").is(":checked") ? 1 : 0;
+
+    // Các checkbox ngày trong tuần
+    let sunday    = $("#chkSun").is(":checked") ? 1 : 0;
+    let monday    = $("#chkMon").is(":checked") ? 1 : 0;
+    let tuesday   = $("#chkTue").is(":checked") ? 1 : 0;
+    let wednesday = $("#chkWed").is(":checked") ? 1 : 0;
+    let thursday  = $("#chkThu").is(":checked") ? 1 : 0;
+    let friday    = $("#chkFri").is(":checked") ? 1 : 0;
+    let saturday  = $("#chkSat").is(":checked") ? 1 : 0;
+
+
+          $("#loadingSpinner").show();
+            $.ajax({
+                url: '/HouseKeepingAdmin/AttendantsSave',
+                type: 'POST',
+                 data: {
+                    id: $("#idattendant").val(),
+                    name: name,
+                    mobileNo: mobileNo,
+                    jobCode: jobCode,
+                    floorID: floorID,
+                    sectionID: sectionID,
+                    isActive: isActive,
+
+                    // Ngày trong tuần
+                    sunday: sunday,
+                    monday: monday,
+                    tuesday: tuesday,
+                    wednesday: wednesday,
+                    thursday: thursday,
+                    friday: friday,
+                    saturday: saturday,
+                    user: localStorage.getItem("Loginname")
+
+                },
+                traditional: true,
+                  crossDomain: false,
+                    headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+                success: function (result) {
+                        if (result.success) {
+                                showToast('Success', result.message, true);
+                                $('#popupNewAttendants').fadeOut(200);
+                                 $('#overlay').fadeOut(200);
+                                   $("#btnPrint").trigger("click");
+                                clearAttendants();
+                       } else {
+                                showToast('Error', 'Please select before saving.', false);
+                       }
+                console.log(result);
+
+                        $("#loadingSpinner").hide();
+                },
+                error: function () {
+                    alert("Không th? t?i báo cáo.");
+                    $("#loadingSpinner").hide();
+                }
+            });
+     });
+     $("#btnSaveAuto").on("click", function () {
+
+
+    let name = $("input[name='tracetime']").eq(0).val().trim();    // ô Name
+     let mobileNo = $("input[name='tracetime']").eq(1).val().trim(); // ô Mobile No
+     let jobCode = $("input[name='tracetime']").eq(2).val().trim();  // ô Job Code
+
+     if (name === "") {
+         showToast('Error', "You must insert a name.", false);
+         $("input[name='tracetime']").eq(0).focus();
+         return;
+     }
+         let floorID = $("#floor").val();
+        if (floorID === "" || floorID === null) {
+            showToast('Error', "Please select a floor.", false);
+            $("#floor").focus();
+            return;
+        }
+
+        let sectionID = $("#sectionAd").val();
+        if (sectionID === "" || sectionID === null) {
+            showToast('Error', "Please select a section.", false);
+            $("#sectionAd").focus();
+            return;
+        }
+   
+     let isActive = $("#isActive").is(":checked") ? 1 : 0;
+
+     // Các checkbox ngày trong tuần
+     let sunday    = $("#chkSun").is(":checked") ? 1 : 0;
+     let monday    = $("#chkMon").is(":checked") ? 1 : 0;
+     let tuesday   = $("#chkTue").is(":checked") ? 1 : 0;
+     let wednesday = $("#chkWed").is(":checked") ? 1 : 0;
+     let thursday  = $("#chkThu").is(":checked") ? 1 : 0;
+     let friday    = $("#chkFri").is(":checked") ? 1 : 0;
+     let saturday  = $("#chkSat").is(":checked") ? 1 : 0;
+
+
+          $("#loadingSpinner").show();
+            $.ajax({
+                url: '/HouseKeepingAdmin/AttendantsSave',
+                type: 'POST',         
+                 data: {
+                    id: $("#idattendant").val(),
+                    name: name,
+                    mobileNo: mobileNo,
+                    jobCode: jobCode,
+                    floorID: floorID,
+                    sectionID: sectionID,
+                    isActive: isActive,
+
+                    // Ngày trong tuần
+                    sunday: sunday,
+                    monday: monday,
+                    tuesday: tuesday,
+                    wednesday: wednesday,
+                    thursday: thursday,
+                    friday: friday,
+                    saturday: saturday,
+                    user: localStorage.getItem("Loginname")
+
+                },
+                traditional: true,
+                  crossDomain: false,
+                    headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+                success: function (result) {
+                        if (result.success) {
+                                showToast('Success', result.message, true);
+                          clearAttendants();
+                                         $("#btnPrint").trigger("click");
+                       } else {
+                                showToast('Error', 'Please select.', false);
+                       }
+                console.log(result);
+
+                        $("#loadingSpinner").hide();
+                },
+                error: function () {
+                    alert("Không th? t?i báo cáo.");
+                    $("#loadingSpinner").hide();
+                }
+            });
+     });
+
+    $('#btnClosePopup, #overlay').click(function () {
+            $('#popupNewAttendants').fadeOut(200);
+                         $("#btnOkAuto").show();
+            $('#overlay').fadeOut(200);
+    });
+        function clearAttendants() {
+        // Xóa toàn bộ text input
+        $('#popupNewAttendants input[type="text"]').val('');
+
+        // Đặt lại select về giá trị rỗng
+        $('#popupNewAttendants select').val('');
+
+    }
+
+
+
+
+         $(document).off("click", "#btnDelete").on("click", "#btnDelete", function () {
+            if (!selectedRowData) {
+                    showToast('Error', 'Please select 1 row to delete.', false);
+                return;
+            }
+            if (!confirm("Are you sure you want to delete this record?")) {
+                return; // Nếu chọn Cancel thì dừng
+            }
+            $.ajax({
+                url: '/HouseKeepingAdmin/AttendantsDelete',
+                type: 'POST',
+                data: {
+                       id:selectedRowData.id
+
+
+                },
+                traditional: true,
+                  crossDomain: false,
+                    headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+                success: function (result) {
+                     if (result.success) {
+
+                              $("#btnPrint").trigger("click");
+                     } else {
+                              showToast('Error', result.message, false);
+                     }
+
+                },
+                error: function () {
+                    alert("Không th? t?i báo cáo.");
+                    $("#loadingSpinner").hide();
+                }
+            });
+
+
+        });
+
+
+
+       $("#btnExportExcel").click(function () {
+        const grid = $("#gridContainer").dxDataGrid("instance");   // 🔥 khai báo grid
+
+        const workbook = new ExcelJS.Workbook();
+        const companyName = localStorage.getItem("CompanyName") || "Tên công ty chưa xác định";
+        const worksheet = workbook.addWorksheet("Sheet 1");
+
+        // === Dòng 1: Tên công ty (merge theo 4 cột) ===
+        worksheet.addRow([companyName]);
+        worksheet.mergeCells('A1:D1');
+        worksheet.getRow(1).font = { bold: true };
+        worksheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'left' };
+
+        // === Dòng 2: Ngày giờ xuất (bên phải) ===
+        const now = new Date();
+        const exportDate = now.toLocaleString("vi-VN");
+        worksheet.addRow(['', '', '', exportDate]);
+        worksheet.mergeCells('D2:D2');  // cột D thôi
+        worksheet.getRow(2).alignment = { vertical: 'middle', horizontal: 'right' };
+
+        // === Dòng 3–4: trống
+        worksheet.addRow([]);
+        worksheet.addRow([]);
+
+        // === Dòng 5: Tiêu đề báo cáo (ở giữa) ===
+        const reportRow = worksheet.addRow(['Attendants']);
+        worksheet.mergeCells('A5:D5');
+        reportRow.font = { bold: true, size: 14 };
+        reportRow.alignment = { vertical: 'middle', horizontal: 'center' };
+
+        // === Dòng 6: trống
+        worksheet.addRow([]);
+
+        // === Xuất dữ liệu grid bắt đầu từ dòng 7 ===
+        DevExpress.excelExporter.exportDataGrid({
+            component: grid,
+            worksheet: worksheet,
+            autoFilterEnabled: true,
+            topLeftCell: { row: 7, column: 1 }
+        }).then(function () {
+            // Footer (sau cùng)
+            const lastRow = worksheet.lastRow.number + 2;
+            worksheet.mergeCells(`A${lastRow}:D${lastRow}`);
+            worksheet.getCell(`A${lastRow}`).alignment = { horizontal: 'center' };
+            worksheet.getCell(`A${lastRow}`).font = { italic: true };
+
+            // Ghi file
+            let fileName = "Attendants.xlsx";
+            workbook.xlsx.writeBuffer().then(function (buffer) {
+                saveAs(new Blob([buffer], { type: "application/octet-stream" }), fileName);
+            });
+        });
+    });
+</script>

@@ -1,0 +1,430 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<div class="layout-wrapper">
+  
+
+    <!-- Mục 1: Trên cùng -->
+    <div class="section-top">
+        <div class="card-box" onclick="window.location.href='/HouseKeeping/RoomAvailability'">
+            <div class="card-icon"><i class="fa-solid fa-list"></i></div>
+            <div class="card-content">
+                <div class="card-title">Room Availability</div>
+                <div class="card-value" ></div>
+            </div>
+        </div>
+        <div class="card-box">
+            <div class="card-icon"><i class="fas fa-door-closed"></i></div>
+            <div class="card-content">
+                <div class="card-title">Due in & Checked in</div>
+                <div class="card-value" id="dueInCheckedInCount">0</div>
+            </div>
+        </div>
+
+    
+        <div class="card-box">
+            <div class="card-icon"><i class="fas fa-users"></i></div>
+            <div class="card-content">
+                <div class="card-title">Guest in House</div>
+                <div class="card-value" id="guestInHouseCount">0</div>
+            </div>
+        </div>
+        <div class="card-box">
+            <div class="card-icon"><i class="fas fa-sign-out-alt"></i></div>
+            <div class="card-content">
+                <div class="card-title">Due out</div>
+                <div class="card-value" id="dueoutCount">0</div>
+            </div>
+        </div>
+        <div class="card-box">
+            <div class="card-icon"><i class="fas fa-door-open"></i></div>
+            <div class="card-content">
+                <div class="card-title">Checked out</div>
+                <div class="card-value" id="checkedOutCount">0</div>
+            </div>
+        </div>
+
+       
+
+    </div>
+
+    <!-- Mục 2 & 3: Chia đôi bên dưới -->
+    <div class="section-bottom">
+        <div class="section-left mui-card">
+            <div class="info-box">
+                <div class="info-icon"><i class="fas fa-chart-pie"></i></div>
+                <div class="info-content">
+                    <div class="info-title">% Occupancy</div>
+                    <div class="info-value" id="occupancyPercent">0%</div>
+                </div>
+            </div>
+            <div class="info-box">
+                <div class="info-icon"><i class="fas fa-male"></i></div>
+                <div class="info-content">
+                    <div class="info-title">Adults</div>
+                    <div class="info-value" id="totalA">0</div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <div class="info-icon"><i class="fas fa-child"></i></div>
+                <div class="info-content">
+                    <div class="info-title">Children</div>
+                    <div class="info-value" id="totalC">0</div>
+                </div>
+            </div>
+            <div class="info-box">
+                <div class="info-icon"><i class="fas fa-calendar-check"></i></div>
+                <div class="info-content">
+                    <div class="info-title">Assigned</div>
+                    <div class="info-value" id="rsvCount">0</div>
+                </div>
+            </div>
+        </div>
+
+  
+            <div class="section-right mui-card">
+                <div class="form-group" id="checkchart" style="display:flex">
+                    <label style="margin-left: 15px;">
+                        <input type="radio" name="chartType" value="pie" checked> Pie Chart
+                    </label>
+                    <label>
+                        <input type="radio" name="chartType" value="bar" > Bar Chart
+                    </label>
+               
+                </div>
+                <div id="highchartBar" class="chart-fixed-sizehigh" style="display:none;"></div>
+                <div id="highchartPie" class="chart-fixed-sizehigh"></div>
+            </div>   
+     
+    </div>
+</div>
+<div id="loadingSpinner" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
+    <i class="fa-solid fa-spinner fa-spin"></i>
+</div>
+
+
+<style>
+    .layout-wrapper {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        padding: 24px;
+        gap: 24px;
+        background-color: #f5f7fa;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* --- TOP SECTION --- */
+    .section-top {
+        display: flex;
+        gap: 24px;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+    }
+
+    .card-box {
+        flex: 1;
+        min-width: 220px;
+        background: linear-gradient(145deg, #ffffff, #f0f0f0);
+        box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+        padding: 20px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        transition: 0.3s ease;
+    }
+
+        .card-box:hover {
+            transform: translateY(-6px);
+            box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+        }
+
+    .card-icon {
+        font-size: 36px;
+        margin-right: 18px;
+        color: #4A90E2;
+    }
+
+    .card-title {
+        font-size: 14px;
+        color: #888;
+        margin-bottom: 4px;
+        font-weight: 500;
+    }
+
+    .card-value {
+        font-size: 26px;
+        font-weight: 700;
+        color: #222;
+    }
+
+    /* --- BOTTOM SECTION --- */
+    .section-bottom {
+        display: flex;
+        justify-content: space-between;
+        gap: 24px;
+    }
+
+    .section-left,
+    .section-right {
+        background-color: #fff;
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+
+    }
+
+    .section-left {
+        width: 30%;
+        height: 450px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .section-right {
+        width: 70%;
+        height: 450px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* --- INFO BOX --- */
+    .info-box {
+        display: flex;
+        align-items: center;
+        background-color: #f9f9f9;
+        border-radius: 12px;
+        padding: 18px;
+        margin-bottom: 16px;
+        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.03);
+    }
+
+    .info-icon {
+        font-size: 32px;
+        color: #17a2b8;
+        margin-right: 16px;
+    }
+
+    .info-title {
+        font-size: 14px;
+        color: #666;
+        font-weight: 500;
+    }
+
+    .info-value {
+        font-size: 22px;
+        font-weight: bold;
+        color: #222;
+    }
+
+    /* --- CHART SECTION --- */
+    .form-group {
+        margin-bottom: 12px;
+        padding-left: 12px;
+    }
+
+        .form-group label {
+            margin-right: 20px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+    .chart-fixed-sizehigh {
+        flex: 1;
+        width: 100%;
+        min-height: 380px;
+    }
+
+
+</style>
+
+@* <script src="https://code.highcharts.com/highcharts.js"></script> *@
+<script>
+        function formatDate(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+               
+    $(document).ready(function () {
+        var parsedBusinessDate = JSON.parse(localStorage.getItem("businessDate")); // "29/08/2024 00:00:00"
+
+        var dateOnly = parsedBusinessDate.split(' ')[0]; // "29/08/2024"
+        var dateParts = dateOnly.split('/'); // ["29", "08", "2024"]
+
+        var businessDate =  new Date(dateParts[2], dateParts[0] - 1, dateParts[1]);// new Date(2024, 7, 29)
+   
+         var parsedBusinessDate =  formatDate(businessDate);
+             $("#loadingSpinner").show();
+         $.ajax({
+            url: '/Report/DashBoard',
+            type: 'GET',
+            data: {
+                businessDate: parsedBusinessDate,
+            },
+            headers: {
+                "X-CSRF-TOKEN-HEADERNAME": $("input[name='__RequestVerificationToken']").val()
+            },
+            success: function (data) {
+              
+               console.log(data);
+                   $("#dueInCheckedInCount").text(data.totalDueinCheckedint);
+                    $("#checkedOutCount").text(data.totaCheckedoutint);
+                    $("#dueoutCount").text(data.totalDueoutint);
+                    $("#guestInHouseCount").text(data.guestInHouseCount);
+                    $("#rsvCount").text(data.rsvCount);
+                    $("#totalA").text(data.totalA);
+                    $("#totalC").text(data.totalC);
+                    $("#occupancyPercent").text(data.occupancyPercent + "%");
+
+                                renderHighchartBar(data.chartStatus);
+                                renderHighchartPie(data.chartStatus);
+                       
+
+                $("#loadingSpinner").hide(); 
+            },
+            error: function () {
+                alert("Không thể tải dữ liệu.");
+            $("#loadingSpinner").hide();
+            }
+        });
+
+    
+    });
+      function renderHighchartBar(data) {
+    const filteredData = data.filter(x => x.label !== 'Total' && x.label !== 'OOO');
+
+    const categories = filteredData.map(x => x.label);
+    const values = filteredData.map(x => parseInt(x.value));
+
+    Highcharts.chart('highchartBar', {
+        chart: {
+            type: 'column'
+        },
+        title: { text: '' },
+        xAxis: {
+            categories: categories,
+            title: { text: 'Room summary' }
+        },
+        yAxis: {
+            min: 0,
+            title: { text: 'Number of room' }
+        },
+        tooltip: {
+            pointFormat: 'Total: <b>{point.y}</b>'
+        },
+        series: [{
+            name: '',
+            data: values,
+            color: '#7cb5ec'
+        }],
+        credits: { enabled: false }
+    });
+}
+
+
+     // Hàm hiển thị biểu đồ tròn (Pie Chart) bằng Highcharts
+    function renderHighchartPie(data) {
+        const totalObj = data.find(x => x.label === 'Total');
+        const total = totalObj ? parseInt(totalObj.value) : 0;
+
+        // Tính phần trăm thực tế chưa làm tròn
+        let items = data
+            .filter(x => x.label !== 'Total')
+            .map(x => {
+                const y = parseInt(x.value);
+                const rawPercent = total > 0 ? (y / total) * 100 : 0;
+                return {
+                    label: x.label,
+                    y: y,
+                    rawPercent: rawPercent
+                };
+            });
+
+        // Làm tròn phần trăm
+        let roundedPercents = items.map(x => Math.round(x.rawPercent * 10) / 10);
+        let sumPercent = roundedPercents.reduce((a, b) => a + b, 0);
+
+        // Tính chênh lệch do làm tròn
+        let diff = +(100.0 - sumPercent).toFixed(1);
+
+        // Nếu có chênh lệch thì điều chỉnh mục có giá trị lớn nhất
+        if (Math.abs(diff) > 0.0) {
+            let maxIndex = items.reduce((maxIdx, item, idx, arr) => {
+                return arr[idx].y > arr[maxIdx].y ? idx : maxIdx;
+            }, 0);
+
+            roundedPercents[maxIndex] = +(roundedPercents[maxIndex] + diff).toFixed(1);
+        }
+
+        // Tạo dữ liệu cho Highcharts
+        const chartData = items.map((x, i) => {
+            return {
+                name: `${x.label} (${roundedPercents[i]}%)`,
+                y: x.y
+            };
+        });
+
+        Highcharts.chart('highchartPie', {
+            chart: {
+                type: 'pie'
+            },
+            title: {
+                text: ''
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.y}</b>'
+            },
+            accessibility: {
+                point: {
+                    valueSuffix: '%'
+                }
+            },
+            legend: {
+                enabled: true,
+                align: 'center',
+                verticalAlign: 'bottom',
+                layout: 'horizontal'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.name}: {point.y}'
+                    },
+                    showInLegend: true
+                }
+            },
+            series: [{
+                name: 'Total',
+                colorByPoint: true,
+                data: chartData
+            }],
+            credits: {
+                enabled: false
+            }
+        });
+    }
+
+
+
+
+    // Chart toggle logic
+    $('input[name="chartType"]').on('change', function () {
+        const selected = $(this).val();
+        if (selected === 'bar') {
+            $('#highchartBar').show();
+            $('#highchartPie').hide();
+        } else {
+            $('#highchartBar').hide();
+            $('#highchartPie').show();
+        }
+    });
+
+</script>

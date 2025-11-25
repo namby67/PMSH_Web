@@ -1,0 +1,291 @@
+﻿@* <link href="~/css/reservation.css" rel="stylesheet" /> *@
+
+<div class="text-center" id="reportTitle" style="font-size: 20px">Card Management</div>
+<div class="sticky-header bg-white p-2 shadow-sm z-3">
+    <div class="d-flex align-items-center gap-3 p-2" style="border: 1px solid #ccc; border-radius: 6px; padding: 8px;">
+
+        <div class="d-flex align-items-center">
+            <label for="cardID" class="me-2 mb-0">CardID</label>
+            <input type="text" id="cardID" class="form-control form-control-sm" style="width: 100px;" />
+        </div>
+        <div class="d-flex align-items-center me-3">
+            <label class="me-2 mb-0">Card Type:</label>
+            <select id="cardType" name="cardType" class="form-control form-control-sm w-auto">
+                <option value="0">Card Hotel</option>       
+            </select>
+        </div>
+        <div class="d-flex align-items-center me-3">
+            <label class="me-2 mb-0">Status:</label>
+            <select id="status" name="status" class="form-control form-control-sm w-auto">
+                <option value="1">Active</option>
+                <option value="0">Inactive</option>                
+                <option value="2">Other</option>
+            </select>
+        </div>
+    </div>
+    <div class=" mt-1">
+       
+        <button style="border-radius: 4px;  margin-right: 6px;background-color: #28a745;" id="btnNew" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-plus"></i> New</button>
+        <button class="mui-button mui-button-edit" id="btnEdit" ctype="button"><i class="fa-solid fa-pen"></i> Edit</button>
+        <button class="mui-button button-report-delete" id="btnDelete"  type="button"> <i class="fa-solid fa-trash-can"></i> Delete</button>
+        <button class="mui-button mui-button-advance" id="btnSave" type="button"> <i class="fa-solid fa-floppy-disk"></i> Save</button>
+    </div>
+</div>
+
+<div class="mui-card">
+    <div id="gridContainerRateCode" class="mt-2 gridContainer"></div>
+</div>
+<div id="loadingSpinnerRateCode" style="display: none; text-align: center; padding: 20px;">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+
+<script>
+    DevExpress.localization.locale("vi");
+       var selectedRow;
+         function formatDate(date) {
+               let year = date.getFullYear();
+               let month = (date.getMonth() + 1).toString().padStart(2, '0'); // Đảm bảo có 2 chữ số
+               let day = date.getDate().toString().padStart(2, '0'); // Đảm bảo có 2 chữ số
+               return `${year}-${month}-${day}`;
+           }
+         $(document).ready(function () {
+                 const connection = new signalR.HubConnectionBuilder()
+                .withUrl("/tagScanHub")
+                .build();
+
+            // Khi server gửi code RFID về
+                    connection.on("ReceiveCode", function (code) {
+                        console.log("Mã quét được:", code);
+
+                        // Gán giá trị vào ô input
+                        $("#cardID")
+                        .val(code)
+                        .trigger("change") // 🔥 Thêm dòng này để on("change") hoạt động
+                        .addClass("border-success")
+                        .fadeOut(100)
+                .fadeIn(100);
+
+
+                    });
+
+            // Bắt đầu kết nối
+                 connection.start()
+                .then(function () {
+                    console.log("✅ Kết nối SignalR thành công!");
+                })
+                .catch(function (err) {
+                    console.error("❌ Lỗi kết nối SignalR:", err);
+                });
+
+
+                $("#cardID").on("change", function () {
+                    let value = $(this).val();
+
+                    // Kiểm tra nếu đủ 8 số và toàn là số
+                    if (value.length === 8 && /^\d+$/.test(value)) {
+                        insertCard(value);
+                    }
+                });
+
+
+
+           reloadGrid();
+           });
+
+                  function insertCard(cardId) {
+        let cardTypeId = $("#cardType").val();
+        let status = $("#status").val();
+
+        $.ajax({
+            url: "/Miscellaneous/InsertCard",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+                ID: cardId,
+                CardTypeID: parseInt(cardTypeId),
+                Status: parseInt(status),
+                CanSell: false // mặc định
+            }),
+            success: function (res) {
+                
+                if (res.success) {
+                    showToast("Success", "Insert success", 2000);
+                    $("#gridContainerRateCode").dxDataGrid("instance").refresh();
+                    $("#cardID").val("");
+                } else {
+                    // Khi server trả về success = false (nhưng vẫn status 200)
+                    showToast("Error", res.message, false);
+                }
+            },
+            error: function (xhr) {
+               showToast("Error", "Insert error!", false);
+            }
+        });
+    }
+        $("#btnEdit").on("click", function () {
+        if (!selectedRow) {
+            DevExpress.ui.notify("Please select a row first!", "warning", 2000);
+            return;
+        }
+
+        // Đẩy dữ liệu lên các ô input
+        $("#cardID").val(selectedRow.id);
+        $("#cardType").val(selectedRow.cardTypeID);
+        $("#status").val(selectedRow.status);
+    });
+     $("#btnDelete").on("click", function () {
+         if (!selectedRow) {
+            DevExpress.ui.notify("Please select a row first!", "warning", 2000);
+            return;
+        }
+
+                Swal.fire({
+            title: 'Are you sure?',
+            text: "This action cannot be undone.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel',
+            customClass: {
+                popup: 'swal-small'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                deleteSelectedItem();
+            }
+        });
+  
+    });
+        $("#btnSave").on("click", function() {
+        if (!selectedRow) {
+            alert("Please select a row  để lưu");
+            return;
+        }
+
+        let cardId = $("#cardID").val();
+        let cardTypeId = $("#cardType").val();
+        let status = $("#status").val();
+
+        $.ajax({
+            url: "/Miscellaneous/UpdateCard", // Controller nhận update
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+                ID: cardId,
+                CardTypeID: parseInt(cardTypeId),
+                Status: parseInt(status)
+            }),
+               success: function(res) {
+                console.log(res); // kiểm tra server trả về gì
+                // hỗ trợ nhiều kiểu response
+                if ((res.updated && res.updated > 0) || res.success) {
+                    showToast("Success", "Updated successfully!", true);
+                    reloadGrid();
+                    selectedRow = null;
+                    $("#cardID").val("");
+                } else {
+                    showToast("Error", res.message , false);
+                }
+            },
+
+            error: function(xhr) {
+                showToast("Error", "Update error!", false);
+            }
+        });
+    });
+
+       function reloadGrid() {
+        $("#loadingSpinnerRateCode").show();
+     
+        $.ajax({
+            url: "/Miscellaneous/GetCardManagement",
+            type: "GET",
+            success: function (data) {
+
+                    $("#gridContainerRateCode").dxDataGrid({
+                    dataSource: {
+                        load: function () {
+                            return $.getJSON("/Miscellaneous/GetCardManagement");
+                        }
+                    },
+                    keyExpr: "id", // phải dùng keyExpr thay cho key
+                    remoteOperations: false,
+                    height: 500,
+                    width: "100%",
+                    showBorders: true,
+                    columnAutoWidth: true,
+                    allowColumnResizing: true,
+                    columnResizingMode: "widget",
+                    selection: { mode: "single" },
+                    columns: [
+                        { dataField: "id", caption: "ID" },
+                        { dataField: "cardType", caption: "Card Type" },
+                        { dataField: "statusText", caption: "Status" },
+                        { dataField: "createdBy", caption: "Created By" },
+                        { dataField: "createdDate", caption: "Created Date", dataType: "date" },
+                        { dataField: "updatedBy", caption: "Updated By" },
+                        { dataField: "updatedDate", caption: "Updated Date", dataType: "date" },
+                    ],
+                    scrolling: {
+                    mode: "standard", // Không dùng virtual để footer hiển thị đúng
+                    showScrollbar: "always",
+                    scrollByContent: true
+                },
+                paging: {
+                    pageSize: 20
+                },
+                pager: {
+                    visible: true,
+                    allowedPageSizes: [20, 50, 'all'],
+                    showPageSizeSelector: true,
+                    showInfo: true,
+                    showNavigationButtons: true
+                },
+                columnAutoWidth: true,
+                filterRow: { visible:true, applyFilter:"auto" },
+
+                    onSelectionChanged: function (e) {
+                    selectedRow = e.selectedRowsData[0]; // lấy dòng đã chọn
+                }
+                });
+
+                console.log(data);
+                $("#loadingSpinnerRateCode").hide();
+            },
+            error: function () {
+                alert("Không thể tải dữ liệu");
+                $("#loadingSpinnerRateCode").hide();
+            }
+        });
+    }
+   
+
+
+        function deleteSelectedItem() {
+        $.ajax({
+            url: "/Miscellaneous/DeleteCard",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({ ID: selectedRow.id }), // phải đúng property tên ID
+            success: function (res) {
+                if (res.deleted > 0 || res.success) {
+                  showToast("Success", "Deleted successfully!", true);
+                    reloadGrid();
+                    selectedRow = null;
+                } else {
+                    showToast("Error", "Delete failed!", false);
+                }
+            },
+            error: function (xhr) {
+                console.error("Delete error:", xhr.responseText);
+                    showToast("Error", "Delete error!", false);
+            }
+        });
+    }
+
+
+</script>

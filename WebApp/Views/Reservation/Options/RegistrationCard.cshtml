@@ -1,0 +1,128 @@
+﻿<!-- Modal cancel-->
+<div class="modal fade modal" id="modalRegistrationCard" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Registration Card</h5>
+                <button type="button" class="btn-close" onclick="closeModalRegistrationCard()"></button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <button class="mui-button mui-button-search" onclick="PrinRegistrationCard();"><i class="fa-solid fa-print"></i> Print</button>
+                    <button class="mui-button mui-button-clear" onclick="closeModalRegistrationCard();"><i class="fa-solid fa-xmark"></i> Close</button>
+                </div>
+                <div class="mui-card mt-2">
+                    <div id="gridContainerRegistrationCard" class="mt-2 gridContainer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    function closeModalRegistrationCard(){
+        $('#modalRegistrationCard').modal('hide');
+    }
+    function openModalRegistrationCard(){
+        if (idReservation === 0) {
+            showToast('Error', 'Please choose booking', false);
+            return;
+        }
+        getRegistrationCard();
+        $('#modalRegistrationCard').modal('show');
+    }
+    function getRegistrationCard(){
+        $.ajax({
+            url: '/Reservation/GetRegistrationCard',
+            type: 'get',
+            dataType: 'json',
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                initializeDataGridRegistrationCard(result);
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                } else {
+                }
+            }
+        });
+    }
+    function initializeDataGridRegistrationCard(data) {
+
+        $("#gridContainerRegistrationCard").dxDataGrid({
+
+        dataSource: data,  allowColumnResizing: true,
+            columns: [
+                { dataField: "id", caption: "ID", visible: false},
+                { dataField: "name", caption: "Name" },
+                { dataField: "description", caption: "Description"},
+            ],
+            paging: { pageSize: 15 },
+            scrolling: {
+                rowRenderingMode: 'virtual',
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [15, 20, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true,
+            },
+            filterRow: {
+                    visible: true,
+                    applyFilter: "auto"
+            },
+            selection: {
+                mode: "single" 
+            },
+            onRowClick: function(e) {
+                console.log(e.data);
+            }
+        });
+    }
+    function PrinRegistrationCard() {
+        $.ajax({
+            url: '/Reservation/PrintRegistrationCard',
+            type: 'POST',
+            data:{
+                id: idReservation
+            },
+            success: function (data) {
+                try {
+                    // Nếu data có prefix, tách ra phần base64
+                    let base64String = data;
+
+                    // Nếu có tiền tố "data:application/pdf;base64," thì tách ra
+                    if (base64String.startsWith('data:')) {
+                        base64String = base64String.split(',')[1];
+                    }
+
+                    // Giải mã base64
+                    const byteCharacters = atob(base64String);
+                    const byteNumbers = new Array(byteCharacters.length);
+                    for (let i = 0; i < byteCharacters.length; i++) {
+                        byteNumbers[i] = byteCharacters.charCodeAt(i);
+                    }
+                    const byteArray = new Uint8Array(byteNumbers);
+                    const blob = new Blob([byteArray], { type: 'application/pdf' });
+
+                    // Tạo URL và mở trong cửa sổ mới
+                    const blobUrl = URL.createObjectURL(blob);
+                    window.open(blobUrl);
+                } catch (e) {
+                    console.error("Base64 decode error:", e);
+                }
+            },
+            error: function (xhr, statusText, err) {
+                console.error("AJAX error:", err);
+            }
+        });
+    }
+
+
+</script>

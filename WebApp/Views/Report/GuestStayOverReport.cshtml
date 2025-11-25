@@ -1,0 +1,298 @@
+﻿@using DevExpress.XtraReports.UI
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewBag.Title = ViewBag.ReportHeader;
+    var report = ViewBag.ReportName as XtraReport;
+}
+
+<style>
+    .filter_wrapper {
+        background-color: #ececec;
+        margin: 0px 8px 14px 8px;
+        padding: 18px 0px 0px 14px;
+        border-radius: 8px;
+    }
+
+    .gridContainer {
+        margin: 0px 8px;
+    }
+
+    .button_wrapper {
+        display: flex;
+        column-gap: 12px;
+        margin: 0px 8px;
+    }
+
+        .button_wrapper .fa-solid {
+            margin-right: 5px;
+        }
+
+    .selected {
+        background-color: #4CAF50; /* Màu xanh */
+        color: white;
+    }
+
+    #gridContainer .dx-datagrid-rowsview .dx-selection {
+        background-color: #01579b !important; /* màu xanh ngọc */
+        color: white !important; /* chữ trắng */
+    }
+
+        #gridContainer .dx-datagrid-rowsview .dx-selection * {
+            color: white !important;
+        }
+
+</style>
+<div id="loadingSpinner" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
+    <i class="fa-solid fa-spinner fa-spin"></i>
+</div>
+<div style="display:flex;margin: 12px;text-align:center">
+    <i class="fa-solid fa-arrow-left" style="padding-top:5px;margin-right:4px" onclick="window.location.href='@Url.Action("Index", "Home")'"></i>
+    <div style="font-size:18px"><b>Report/Guest Stay Over Report</b></div>
+</div>
+<div class="button_wrapper row">
+    <button id="btnPrint" type="button" class="btn btn-primary col-lg-1 mb-4 col-col-6"><i class="fa-solid fa-eye"></i>View</button>
+    <button id="btnExportExcel" type="button" class="btn btn-primary col-lg-1 mb-4 col-col-6">
+        <i class="fa-solid fa-file-excel"></i>  Excel
+    </button>
+    <button id="btnExportPdf" type="button" class="btn btn-primary col-lg-1 mb-4 col-col-6">
+        <i class="fa-solid fa-file-pdf"></i>  PDF
+    </button>
+</div>
+<div class="filter_wrapper row">
+
+    <div class="form-group row col-md-3  mb-3">
+        <label class="col-md-5 col-form-label text-right">From Date</label>
+        <div class="col-md-7">
+            <input class="form-control" type="date" id="fromDate" name="fromDate" style="width: 100%;" />
+        </div>
+    </div>
+    <div class="form-group row col-md-3  mb-3">
+        <label class="col-md-5 col-form-label text-right">To Date</label>
+
+        <div class="col-md-7">
+            <input class="form-control" style="width: 100%;" id="toDate" name="toDate" type="date" />
+        </div>
+    </div>
+
+
+</div>
+<div id="loadingSpinner" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
+    <i class="fa-solid fa-spinner fa-spin"></i>
+</div>
+@* <div id="reportViewerContainer" class="mt-3">
+    <!-- Report viewer will be injected here -->
+</div> *@
+<div id="gridContainer" class="gridContainer mt-2"></div>
+<script>
+    function formatDate(date) {
+        let year = date.getFullYear();
+        let month = (date.getMonth() + 1).toString().padStart(2, '0'); // Đảm bảo có 2 chữ số
+        let day = date.getDate().toString().padStart(2, '0'); // Đảm bảo có 2 chữ số
+        return `${year}-${month}-${day}`;
+    }
+
+    $(document).ready(function () {
+        const today = new Date();
+
+        const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+        // Lấy ngày cuối cùng của tháng
+        const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+        // Định dạng theo local time
+        const formattedFirstDay = formatDate(firstDayOfMonth);
+        const formattedLastDay = formatDate(lastDayOfMonth);
+
+        console.log(formattedFirstDay); // Kiểm tra giá trị đúng chưa
+        console.log(formattedLastDay); // Kiểm tra giá trị đúng chưa
+        // Gán giá trị cho input date
+        document.getElementById('fromDate').value = formattedFirstDay;
+        document.getElementById('toDate').value = formattedLastDay;
+
+
+
+    });
+         $(document).off("click", "#btnPrint").on("click", "#btnPrint", function () {
+            $("#loadingSpinner").show();
+            $.ajax({
+                 url: '/Report/GuestStayOver',
+                type: 'GET',
+                crossDomain: false,
+                headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+                data: {
+                  fromDate: $("#fromDate").val(),
+                   toDate: $("#toDate").val(),
+                },
+                success: function (result) {
+                    // $("#reportViewerContainer").html(result);
+                    // $("#loadingSpinner").hide();
+                     console.log(result);
+                initializeDataGrid(result);
+                    $("#loadingSpinner").hide();
+                },
+                error: function () {
+                    alert("Không thể tải báo cáo.");
+                    $("#loadingSpinner").hide();
+                }
+            });
+        });
+            function initializeDataGrid(data) {
+        var columnWidth = 120; // Độ rộng muốn đặt cho tất cả các cột
+
+        $("#gridContainer").dxDataGrid({
+    dataSource: data,         height: 500, allowColumnResizing: true,  // Dữ liệu từ server
+            columns: [
+                { dataField: "confirmationNo", caption: "Conf.No", width: columnWidth },
+                { dataField: "lastname", caption: "Guest", width: columnWidth },
+                { dataField: "title", caption: "Title", width: columnWidth },
+                { dataField: "country", caption: "Country", width: columnWidth },
+                { dataField: "arrivalDate", caption: "Arr.Date", width: columnWidth  ,dataType: "date",format: "dd/MM/yyyy"},
+                { dataField: "departureDate", caption: "Dep.Date", width: columnWidth  ,dataType: "date",format: "dd/MM/yyyy"},
+                { dataField: "noOfAdult", caption: "A", width: columnWidth },
+                { dataField: "noOfChild", caption: "C", width: columnWidth },
+                { dataField: "noOfChild1", caption: "C1", width: columnWidth },
+                { dataField: "noOfChild2", caption: "C2", width: columnWidth },
+                { dataField: "noOfRoom", caption: "Rms", width: columnWidth },
+                { dataField: "roomType", caption: "R.Type", width: columnWidth },
+                { dataField: "roomNo", caption: "R.NO", width: columnWidth },
+                { dataField: "roomNight", caption: "RN", width: columnWidth },
+                { dataField: "code", caption: "Code", width: columnWidth },
+                { dataField: "reservationHolder", caption: "Resv.Holder", width: columnWidth },
+            ],
+            paging: { pageSize: 10 },
+           scrolling:  {
+                  
+                 useNative: true,
+                showScrollbar: "always"
+             },
+            pager: {
+                visible: true,
+                allowedPageSizes: [5, 10, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true,
+            },
+            selection: {
+                mode: "multiple",
+                showCheckBoxesMode: "none"
+            },
+            filterRow: {
+                 visible: true,
+                applyFilter: "auto"
+            },
+            headerFilter: {
+                visible: true
+            },
+            showBorders: true,
+            onRowClick: function(e) {
+                console.log("ID được click:", e.data.id);
+            }
+
+        });
+    }
+
+    $("#btnExportExcel").click(function () {
+               const grid = $("#gridContainer").dxDataGrid("instance"); var selectedReport2 = '@ViewBag.ReportTitle';
+        var selectedReport = '@ViewBag.ReportTitle';
+        if (!selectedReport) {
+            alert("Vui lòng chọn báo cáo trước khi xuất Excel.");
+            return;
+        }
+
+                     const workbook = new ExcelJS.Workbook();const companyName = localStorage.getItem("CompanyName") || "Tên công ty chưa xác định";
+        const worksheet = workbook.addWorksheet("Sheet 1");
+
+        // === Tạo header công ty (dòng 1) ===
+       worksheet.addRow([companyName]);
+        worksheet.mergeCells('A1:E1');
+        worksheet.getRow(1).font = { bold: true };
+        worksheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'left' };
+
+        // === Dòng 2: Thời gian xuất (phải) ===
+        const now = new Date();
+        const exportDate = now.toLocaleString("vi-VN");
+        worksheet.addRow(['', '', '', '', ' ' + exportDate]);
+        worksheet.mergeCells('E2:H2');
+        worksheet.getRow(2).alignment = { vertical: 'middle', horizontal: 'right' };
+
+        // === Dòng 3–4: Trống
+        worksheet.addRow([]);
+        worksheet.addRow([]);
+
+        // === Dòng 5: Tên báo cáo ở giữa ===
+        const reportRow = worksheet.addRow(['', '', selectedReport]);
+        worksheet.mergeCells('C5:F5');
+        reportRow.font = { bold: true, size: 14 };
+        reportRow.alignment = { vertical: 'middle', horizontal: 'center' };
+
+        // === Dòng 6: Trống trước khi xuất dữ liệu
+        worksheet.addRow([]);
+
+        // === Export dữ liệu từ DevExtreme (bắt đầu từ dòng 7)
+        DevExpress.excelExporter.exportDataGrid({
+            component: grid,
+            worksheet: worksheet,
+            autoFilterEnabled: true,
+            topLeftCell: { row: 7, column: 1 } // dữ liệu bắt đầu từ dòng 7
+        }).then(function () {
+            // Footer
+            const lastRow = worksheet.lastRow.number + 2;
+
+            worksheet.mergeCells(`A${lastRow}:F${lastRow}`);
+            worksheet.getCell(`A${lastRow}`).alignment = { horizontal: 'center' };
+            worksheet.getCell(`A${lastRow}`).font = { italic: true };
+
+            // Ghi file
+            let fileName = selectedReport + ".xlsx";
+            workbook.xlsx.writeBuffer().then(function (buffer) {
+                saveAs(new Blob([buffer], { type: "application/octet-stream" }), fileName);
+            });
+        });
+    });
+
+    // Nút xuất PDF
+        $("#btnExportPdf").click(function () {
+        const grid = $("#gridContainer").dxDataGrid("instance");
+
+        // Lấy đối tượng jsPDF từ window
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({ orientation: "landscape", unit: "pt", format: "A4" });
+
+        const selectedReport = '@ViewBag.ReportTitle';
+        const companyName = localStorage.getItem("CompanyName") || "Tên công ty chưa xác định";
+
+        grid.getDataSource().load().then(data => {
+            const columns = grid.getVisibleColumns();
+
+            const head = [columns.map(col => col.caption)];
+            const body = data.map(row =>
+                columns.map(col =>
+                    col.calculateCellValue ? col.calculateCellValue(row) : row[col.dataField]
+                )
+            );
+
+            doc.setFontSize(14);
+            doc.setFont("Helvetica", "bold");
+            doc.text(companyName, doc.internal.pageSize.getWidth() / 2, 40, { align: "center" });
+
+            doc.setFontSize(12);
+            doc.setFont("Helvetica", "normal");
+            doc.text(selectedReport, doc.internal.pageSize.getWidth() / 2, 60, { align: "center" });
+
+            // AutoTable
+            doc.autoTable({
+                startY: 80,
+                head: head,
+                body: body,
+                 styles: { fontSize: 9, cellPadding: 4 , lineWidth: 0.5, lineColor: [0, 0, 0]    },
+                headStyles: { fillColor: [41, 128, 185], textColor: 255, fontStyle: 'bold' },
+                alternateRowStyles: { fillColor: [240, 240, 240] },
+                margin: { left: 20, right: 20 }
+            });
+
+            doc.save(selectedReport + ".pdf");
+        });
+    });
+
+</script>

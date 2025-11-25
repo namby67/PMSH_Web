@@ -1,0 +1,224 @@
+﻿<link href="~/css/pages/setup-email.css" rel="stylesheet" asp-append-version="true" />
+<div>
+    <div class="header mt-2" style="border-bottom:none;justify-content:center">
+        <h3 id="content-title">
+            Send Email Birthday
+        </h3>
+    </div>
+    <div class="mb-2">
+        <button class="mui-button mui-button-search" onclick="searchProfile();"> Search</button>
+        <button class="mui-button mui-button-clear" onclick="openModalChooseTemplate();"> Send</button>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <label>From Date</label>
+            <input type="date" id="fromDate">
+        </div>
+        <div class="col-md-2">
+            <label>To Date</label>
+            <input type="date" id="toDate">
+        </div>
+
+    </div>
+    <div class="mui-card mt-2">
+        <div id="gridContainer" class="gridContainer mt-2"></div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalTemplateEmail" tabindex="-1" aria-labelledby="transactionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="border: 1px solid #bcbcbc">
+            <div class="modal-header">
+                <h5 class="modal-title" id="transactionModalLabel">Choose Template</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="button-group">
+                <button type="button" class="mui-button mui-button-search" onclick="SendEmailGuest();">Post</button>
+                <button type="button" class="mui-button mui-button-clear" data-bs-dismiss="modal">Close</button>
+            </div>
+            <div class="modal-body">
+                <div id="gridContainerContact" class="gridContainer mt-2"></div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function openModalChooseTemplate(){
+        var grid = $("#gridContainer").dxDataGrid("instance");
+        var selectedRows = grid.getSelectedRowsData();
+        var selectedIds = selectedRows.map(row => row.ID);
+        if(selectedIds.length < 1){
+            showToast('Error',"Please choose at least 1 email",false);
+            return;
+        }
+        getAllContactEmail();
+        $('#modalTemplateEmail').modal('show');
+    }
+    function getAllContactEmail() {
+        $.ajax({
+            url: '/Email/GetAllTemplateEmail',
+            type: 'get',
+            dataType: 'json',
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                initializeDataGrid(result);
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                }
+            }
+        });
+    }
+    var templateID = 0;
+    function initializeDataGrid(data) {
+        $("#gridContainerContact").dxDataGrid({
+            dataSource: data,
+            keyExpr: "id",
+            allowColumnResizing: true,
+            columns: [
+                { dataField: "id", caption: "ID", visible: false },
+                { dataField: "name", caption: "Subject" },
+                { dataField: "content", caption: "Content" },
+            ],
+            paging: { pageSize: 15 },
+            scrolling: { rowRenderingMode: 'virtual' },
+            pager: {
+                visible: true,
+                allowedPageSizes: [15, 20, 'all'],
+                showInfo: true,
+                showNavigationButtons: true
+            },
+            filterRow: {
+                visible: true,
+                applyFilter: "auto"
+            },
+            onRowClick: function(e) {
+                const grid = $("#gridContainerContact").dxDataGrid("instance");
+                grid.selectRows([e.key], false);
+                templateID = e.data.id;
+            },
+        });
+    }
+    function searchProfile() {
+
+        $.ajax({
+            url: '/Email/GetAllProfiles',
+            type: 'get',
+            dataType: 'json',
+            data: {
+                fromDate: $('#fromDate').val(),
+                toDate: $('#toDate').val()
+            },
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                initializeDataGridSearch(result);
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                }
+            },
+
+        });
+
+    }
+    function initializeDataGridSearch(data) {
+        const limitedData = data.slice(0, 100);
+
+        $("#gridContainer").dxDataGrid({
+            dataSource: limitedData,
+            allowColumnResizing: true,
+            columnMinWidth: 90,
+            paging: {
+                enabled: true, // Enable paging
+                pageSize: 15 // 15 records per page
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [15, 20, 30], // Fixed page sizes
+                showPageSizeSelector: true,
+                showInfo: true, // Show paging info
+                showNavigationButtons: true
+            },
+            scrolling: {
+                mode: 'standard', // Standard scrolling mode
+                showScrollbar: 'always',
+                useNative: false
+            },
+            filterRow: {
+                visible: true,
+                applyFilter: "auto"
+            },
+            selection: {
+                mode: "multiple", // Enable multiple row selection
+                showCheckBoxesMode: "always" // Always show checkboxes
+            },
+            columns: [
+                { dataField: "id", caption: "ID",visible: false },
+
+                { dataField: "code", caption: "Code" },
+                { dataField: "account", caption: "Account" },
+                { dataField: "fullCount", caption: "Full Count" },
+                { dataField: "lastName", caption: "Last Name" },
+                { dataField: "firstName", caption: "First Name" },
+                { dataField: "middle", caption: "Middle" },
+                { dataField: "telephone", caption: "Telephone" },
+                { dataField: "email", caption: "Email" },
+                { dataField: "dateOfBirth", caption: "Date of Birth", dataType: "date" }
+            ],
+            onRowClick: function(e) {
+                const grid = $("#gridContainerContact").dxDataGrid("instance");
+                grid.selectRows([e.key], false);
+                templateID = e.data.id;
+            },
+        });
+    }
+    $(document).ready(function() {
+        let today = new Date().toISOString().split('T')[0];
+
+        // Set default value for both date inputs
+        $('#fromDate').val(today);
+        $('#toDate').val(today);
+        searchProfile();
+    });
+    function SendEmailGuest() {
+        var grid = $("#gridContainer").dxDataGrid("instance");
+        var selectedRows = grid.getSelectedRowsData();
+        var selectedIds = selectedRows.map(row => row.id);
+
+
+        $.ajax({
+            url: '/Email/SendEmailGuestBirthday',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                templateID:templateID,
+                profileIDs: selectedIds,
+
+            },
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                if(result.code == 0){
+                    $('#modalTemplateEmail').modal('hide');
+                    showToast('Succes',result.msg,true);
+                }
+                else{
+                    showToast('Error',result.msg,false);
+
+                }
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                }
+            },
+
+        });
+
+    }
+</script>

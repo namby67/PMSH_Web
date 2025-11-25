@@ -1,0 +1,149 @@
+﻿@* <link href="~/css/pages/reservation.css" rel="stylesheet" asp-append-version="true" /> *@
+
+<div class="header" style="justify-content:space-between;border-bottom:none">
+    <div class="header2">
+        <h3 id="content-title">
+            VAT Search
+
+        </h3>
+        <i class="fas fa-info-circle info-icon" title="How to use?"></i>
+    </div>
+
+    <div class="header2">
+        <button class="submit-button-clear-reservation" onclick="searchReservation()">Search</button>
+
+        <button class="submit-button-new-reservation" onclick="resetForm()">Clear</button>
+    </div>
+</div>
+<div class="mb-2">
+    <div class="mui-card">
+        <div class="header" style="justify-content:space-between">
+            <div class="header2">
+                <i class="fa-solid fa-sliders" style="background-color:#2b6cb0;color:white;padding:4px"></i>
+
+                <h3 id="content-title">
+                    Filter
+
+                </h3>
+                <i class="fa-solid fa-caret-down" id="caretDownFilter" onclick="clickCaretDownFilter();" title="Click to show filter"></i>
+                <i class="fa-solid fa-caret-up" id="caretUpFilter" onclick="clickCaretUpFilter();" title="Click to hide ffilter"></i>
+            </div>
+
+            <div class="header2">
+                <i class="fa-solid fa-magnifying-glass" onclick="searchReservation();"></i>
+
+            </div>
+        </div>
+
+        <div id="filter" class="tab-pane ">
+            <div class="row">
+                <div class="form-group-new-reservation col-md-1">
+                    <label>From Date</label>
+                    <input type="date" id="fromDate">
+                </div>
+                <div class="form-group-new-reservation col-md-1">
+                    <label>To Date</label>
+                    <input type="date" id="toDate">
+                </div>
+                
+                <div class="form-group-new-reservation col-md-1">
+                    <label>UserName</label>
+                    <input type="text" id="userName">
+                </div>
+                <div class="form-group-new-reservation col-md-1">
+                    <label>Invoice No</label>
+                    <input type="text" id="invoiceNo">
+                </div>
+                <div class="form-group-new-reservation col-md-1">
+                    <label>FolioNo</label>
+                    <input type="text" id="folioBo">
+                </div>
+
+                <div class="form-group-new-reservation col-md-2">
+                    <label>Printer</label>
+                    <select id="printer" >
+                        <option value="0">All</option>
+                    </select>
+                </div>
+                <div class="form-group-new-reservation col-md-2">
+                    <label>Zone</label>
+                    <select id="zone" asp-items="ViewBag.cboZone">
+                    </select>
+                </div>
+
+                <div class="col-md-10">
+                    <label>Search Type</label>
+                    <div style="display:flex;column-gap:4px">
+                        <div class="form-group-new-reservation">
+                            <input type="checkbox" name="searchType" checked value="0" style="height:auto">
+                            <label>PMS</label>
+                        </div>
+                        <div class="form-group-new-reservation">
+                            <input type="checkbox" name="searchType" checked value="1" style="height:auto">
+                            <label>POS</label>
+                        </div>
+                        <div class="form-group-new-reservation">
+                            <input type="checkbox" name="searchType" checked value="3" style="height:auto">
+                            <label>Disposed</label>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="gridContainer" class="gridContainer mt-2"></div>
+<script>
+    $(document).ready( function () {
+        const today = new Date().toISOString().split('T')[0];
+
+        // Set default values for From Date and To Date
+        $('#fromDate').val(today);
+        $('#toDate').val(today);
+    });
+
+    function getSelectedRadio(name) {
+        const radio = document.querySelector(`input[type="radio"][name="${name}"]:checked`);
+        return radio ? radio.value : null;
+    }
+    function searchReservation() {
+                const selectedHKStatus = getSelectedCheckboxes('searchType');
+
+        $.ajax({
+            url: '/Cashiering/GuestInHouse',
+            type: 'get',
+            dataType: 'json',
+            data: {
+                room : $('#room').val(),
+                name:$('#name').val(),
+                block: $('#block').val(),
+                group:$('#group').val(),
+                company:$('#company').val(),
+                confirmationNo:$('#confirmationNo').val(),
+                arrivalDate:$('#arrivalForm').val(),
+                arrivalTo:$('#arrivalTo').val(),
+                departure:$('#departure').val(),
+                crsNo:$('#crsNo').val(),
+                package:$('#package').val(),
+                guestName:$('#guestType').val(),
+                zone:$('#zone').val(),
+                typeSearch:$('input[name="searchType"]:checked').val()
+            },
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                initializeDataGridBilling(result);
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                }
+            },
+
+        });
+
+    }
+
+</script>

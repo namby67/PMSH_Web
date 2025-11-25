@@ -1,0 +1,211 @@
+﻿@{
+    ViewData["Title"] = "Profile Export";
+}
+
+@* <link href="~/css/pages/reservation.css" rel="stylesheet" asp-append-version="true" /> *@
+
+<div id="loadingSpinner" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
+    <i class="fa-solid fa-spinner fa-spin"></i>
+</div>
+
+<div class="mt-1">
+    <div class="header" style="justify-content:center;border:none">
+        <h3 id="content-title">Search Profile</h3>
+    </div>
+    <div class="functions-pane mb-2 row" style="background-color: var(--accent-color);border-radius: 8px; border: 1px solid #e5e7eb;box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);padding:0px">
+        <div class="function-menu col-md-10">
+            <a href="#" onclick="getAllProfilesSearch();">Search</a>
+            <a href="#" onclick="exportExcel();">Excel</a>
+            <a href="#" onclick="getAllProfiles();">XML</a>
+            <a href="#" onclick="openModalEditPosting();" onclick="window.location.href='@Url.Action("Index", "Home")'">Close</a>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="form-group-new-reservation col-md-1">
+            <label >From Date</label>
+            <div class="row" style="margin-left:1px;margin-right:2px">
+                <input type="date" id="fromDate">
+            </div>
+        </div>
+        <div class="form-group-new-reservation col-md-1">
+            <label>To Date</label>
+            <div class="row" style="margin-left:1px;margin-right:2px">
+                <input type="date" id="toDate">
+            </div>
+        </div>
+    </div>
+    <div class="mui-card mt-2">
+        <div id="gridContainer" class="gridContainer"></div>
+
+    </div>
+</div>
+
+
+
+
+
+<script>
+    $(document).ready(async function () {
+        getBusinessDate().then(function () {
+            getAllProfilesSearch();
+        });
+
+    });
+
+    function getBusinessDate() {
+         return $.ajax({
+             url: '/Reservation/GetBusinessDate',
+             type: 'get',
+             dataType: 'json',
+             crossDomain: false,
+             headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+             success: function (result) {
+                 const businessDate = new Date(result);
+                 const formattedBusinessDate = result.split('T')[0];
+                 $('#fromDate').val(formattedBusinessDate);
+
+                 const departureDate = new Date(businessDate);
+                 departureDate.setDate(businessDate.getDate() + 2);
+                 const formattedDepartureDate = departureDate.toISOString().split('T')[0];
+                 $('#toDate').val(formattedDepartureDate);
+
+             },
+             error: function (xhr, statusText, err) {
+                 if (xhr.status == 401) {
+                     sessionTimeout();
+                 }
+             }
+         });
+     }
+    function getAllProfilesSearch() {
+        $("#loadingSpinner").show(); // 👉 Show spinner
+        $.ajax({
+            url: '/Profile/SearchProfileExport',
+            type: 'get',
+            dataType: 'json',
+            data:{
+                fromDate: $('#fromDate').val(),
+                toDate: $('#toDate').val(),
+
+            },
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                initializeDataGrid(result);
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                } else {
+                    informBox(TOAST_STATUS.DANGER, "Lỗi tải chi tiết danh sách danh mục dịch vụ hoặc bạn không có quyền tải");
+                }
+            },
+            complete: function () {
+                $("#loadingSpinner").hide(); // 👉 Hide spinner sau khi hoàn tất
+            }
+        });
+    }
+
+    function initializeDataGrid(data) {
+
+        $("#gridContainer").dxDataGrid({
+
+        dataSource: data,     allowColumnResizing: true,  // Dữ liệu từ server
+            columns: [
+
+    
+                { dataField: "Indexs", caption: "TT" },
+                { dataField: "AccountName", caption: "Name" },
+                { dataField: "ArrivalDate", caption: "Arrival" },
+                { dataField: "DepartureDate", caption: "Deparure" },
+                { dataField: "Nationality", caption: "Nationality" },
+                { dataField: "DateOfBirth", caption: "Date Of Birth" },
+                { dataField: "Address", caption: "Address" },
+                { dataField: "HandPhone", caption: "HandPhone" },
+
+                { dataField: "Telephone", caption: "Telephone"},
+
+            ],
+            paging: { pageSize: 15 },
+            scrolling: {
+                rowRenderingMode: 'virtual',
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [15, 20, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true,
+            },
+
+            selection: {
+                mode: "multiple",
+                showCheckBoxesMode: "none"
+            },
+
+            showBorders: false,
+            onRowClick: function(e) {
+                console.log("ID được click:", e.data.id);
+            }
+
+        });
+    }
+
+    function exportExcel() {
+        const grid = $("#gridContainer").dxDataGrid("instance");
+
+
+          const workbook = new ExcelJS.Workbook();
+          const companyName = localStorage.getItem("CompanyName") || "Tên công ty chưa xác định";
+          const worksheet = workbook.addWorksheet("Sheet 1");
+
+          // === Tạo header công ty (dòng 1) ===
+          worksheet.addRow([companyName]);
+          worksheet.mergeCells('A1:E1');
+          worksheet.getRow(1).font = { bold: true };
+          worksheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'left' };
+
+          // === Dòng 2: Thời gian xuất (phải) ===
+          const now = new Date();
+          const exportDate = now.toLocaleString("vi-VN");
+          worksheet.addRow(['', '', '', '', ' ' + exportDate]);
+          worksheet.mergeCells('E2:H2');
+          worksheet.getRow(2).alignment = { vertical: 'middle', horizontal: 'right' };
+
+          // === Dòng 3–4: Trống
+          worksheet.addRow([]);
+          worksheet.addRow([]);
+
+          // === Dòng 5: Tên báo cáo ở giữa ===
+          const reportRow = worksheet.addRow(['', '', 'Profile Export']);
+          worksheet.mergeCells('C5:F5');
+          reportRow.font = { bold: true, size: 14 };
+          reportRow.alignment = { vertical: 'middle', horizontal: 'center' };
+
+          // === Dòng 6: Trống trước khi xuất dữ liệu
+          worksheet.addRow([]);
+
+          // === Export dữ liệu từ DevExtreme (bắt đầu từ dòng 7)
+          DevExpress.excelExporter.exportDataGrid({
+              component: grid,
+              worksheet: worksheet,
+              autoFilterEnabled: true,
+              topLeftCell: { row: 7, column: 1 } // dữ liệu bắt đầu từ dòng 7
+          }).then(function () {
+              // Footer
+              const lastRow = worksheet.lastRow.number + 2;
+              worksheet.mergeCells(`A${lastRow}:F${lastRow}`);
+              worksheet.getCell(`A${lastRow}`).alignment = { horizontal: 'center' };
+              worksheet.getCell(`A${lastRow}`).font = { italic: true };
+
+              // Ghi file
+              let fileName = "ProfilExport" + ".xlsx";
+              workbook.xlsx.writeBuffer().then(function (buffer) {
+                  saveAs(new Blob([buffer], { type: "application/octet-stream" }), fileName);
+              });
+          });
+    }
+
+ 
+</script>

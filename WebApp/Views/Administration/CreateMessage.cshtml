@@ -1,0 +1,168 @@
+﻿@using DevExpress.XtraReports.UI
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    // Kiểm tra xem có biến `media` nào được dùng không
+    // Ví dụ: var media = Model.Media; // Đảm bảo Model có thuộc tính Media nếu cần
+}
+
+<!-- Comment reservation.css để tránh xung đột, nhưng có thể thêm lại sau khi fix -->
+@* <link href="~/css/pages/reservation.css" rel="stylesheet" /> *@
+<style>
+    :root {
+        --main-color: #2b6cb0; /* Màu chính (xanh dương) */
+        --secondary-color: #f5f5f5; /* Màu nền thứ cấp (xám nhạt) */
+        --highlight-color: #d65a00; /* Màu nổi bật (cam) */
+        --text-color: #2d3748; /* Màu chữ (xám đậm) */
+        --accent-color: #ffffff; /* Màu bổ sung (trắng) */
+    }
+
+    .menu-group-title {
+        font-weight: bold;
+        padding: 8px;
+        cursor: pointer;
+        background: var(--secondary-color);
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .menu-left .submenu {
+        display: none;
+        margin-top: 2px;
+        padding-left: 10px;
+        background: var(--accent-color);
+        border: 1px solid #d1d5db;
+        border-radius: 0.5rem;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        min-width: 120px;
+        position: relative;
+        z-index: 20;
+    }
+
+        .menu-left .submenu.active {
+            display: block !important;
+        }
+
+    /* Đảm bảo các style khác sử dụng biến CSS */
+    .menu-item {
+        display: block;
+        padding: 12px 16px;
+        color: var(--text-color);
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 500;
+        border-bottom: 1px solid #bcbcbc;
+        transition: all 0.3s ease;
+        border-left: 4px solid transparent;
+    }
+
+        .menu-item:hover,
+        .menu-item.active {
+            color: var(--text-color);
+            background-color: var(--secondary-color);
+            border-left: 4px solid var(--highlight-color);
+        }
+
+    .menu-group > .menu-left {
+        display: none; /* ẩn mặc định */
+        margin-top: 2px;
+        background: var(--accent-color);
+        border: 1px solid #d1d5db;
+        border-radius: 0.5rem;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    textarea.form-control {
+        height: 500px !important; /* cao hơn */
+        width: 500px !important;
+        font-size: 16px; /* chữ to hơn */
+    }
+</style>
+<div class="mt-3">
+    <div class="row">
+
+        <div class="content-right">
+            <div class="header">
+                <h3 id="content-title">
+                      Message
+
+                </h3>
+            </div>
+
+            <div class="sticky-header bg-white p-2 shadow-sm z-3">
+                <div class="d-flex align-items-center gap-3 p-2" style="border: 1px solid #ccc; border-radius: 6px; padding: 8px;">
+                    <form id="itemForm">
+                        <div class="form-group">
+                            @model BaseBusiness.Model.ConfigSystemModel
+
+
+                            <div class="form-group">
+                                @Html.TextAreaFor(m => m.Desciption, new { @class = "form-control", rows = 5 })
+                            </div>
+                                                                                                                                                                               
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+            <div class="ms-3">
+                <button style="border-radius: 4px; margin-right: 6px;background-color: #007bff;" id="btnSaveItem" class="mui-button mui-button-edit"><i class="fa-solid fa-pen"></i> Save</button>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<div id="loadingSpinnerRateCode" style="display: none; text-align: center; padding: 20px;">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+
+<script>
+    DevExpress.localization.locale("vi");
+
+      $("#btnSaveItem").click(function () {
+        const desc = $("#Desciption").val();
+
+        $.ajax({
+            url: "/Administration/UpdateMessage",
+            type: "POST",
+            data: { desc: desc },
+            success: function (res) {
+                if (res.success) {
+                    showToast("Success", "Update success!", true);
+                } else {
+                    showToast("Failed", res.message || "Action Failed!", false);
+                }
+            },
+                    error: function (xhr, status, error) {
+                    console.error("Ajax error:", {
+                        status: status,
+                        error: error,
+                        responseText: xhr.responseText
+                    });
+
+                    let message = "Request error!";
+
+                    if (xhr.status) {
+                        message += " Status: " + xhr.status;
+                    }
+                    if (error) {
+                        message += " Error: " + error;
+                    }
+                    if (xhr.responseText) {
+                        message += " Response: " + xhr.responseText;
+                    }
+
+                    showToast("Error", "Request error!", false);
+                }
+
+        });
+    });
+</script>

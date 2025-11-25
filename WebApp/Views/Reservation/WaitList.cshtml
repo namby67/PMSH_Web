@@ -1,0 +1,502 @@
+﻿@* <link href="~/css/pages/reservation.css" rel="stylesheet" asp-append-version="true" /> *@
+
+
+<div class="header mt-2" style="border-bottom:none;justify-content:center">
+    <h3 id="content-title">
+        Wait List
+    </h3>
+</div>
+<div>
+    <div style="display:flex;column-gap:12px">
+        <button class="submit-button-clear-reservation" onclick="searchReservation()">Search</button>
+
+        <button class="submit-button-clear-reservation" onclick="openModalWaitList()">Details</button>
+        <button class="submit-button-clear-reservation" onclick="AcceptRes()">Accept.Res</button>
+
+    </div>
+</div>
+
+    <div class="row">
+        <div class="form-group-new-reservation col-md-2">
+            <label>
+            Name
+            </label>
+            <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                <input type="text" id="nameWaitList" class="col-md-12">
+            </div>
+        </div>
+        <div class="form-group-new-reservation col-md-2">
+            <label>
+                Rate Code
+            </label>
+            <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                <input type="text" id="nameWaitList" class="col-md-12">
+            </div>
+        </div>
+        <div class="form-group-new-reservation col-md-2">
+            <label>
+                Room Type
+            </label>
+            <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                <select type="text" id="rateCodeWaitList" class="col-md-12"></select>
+            </div>
+        </div>
+        <div class="form-group-new-reservation col-md-2">
+            <label>
+                Reason
+            </label>
+            <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                <select type="text" id="reasonWaitList" class="col-md-12"></select>
+            </div>
+        </div>
+        <div class="form-group-new-reservation col-md-2">
+            <label>
+                Priority
+            </label>
+            <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                <select  id="priorityWaitList">
+                </select>
+            </div>
+        </div>
+        <div class="form-group-new-reservation col-md-2">
+            <label>
+                Market
+            </label>
+            <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                <select  id="marketWaitList">
+                </select>
+            </div>
+        </div>
+        <div class="form-group-new-reservation col-md-2">
+            <label>
+                Telephine No.
+            </label>
+            <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                <input type="text"  id="telephoneWaitList">
+
+            </div>
+        </div>
+        <div class="form-group-new-reservation col-md-2">
+            <label>
+                Date
+            </label>
+            <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                <input type="date"  id="dateWaitList">
+
+            </div>
+        </div>
+        <div class="form-group-new-reservation col-md-2">
+            <label>
+            Company
+            </label>
+            <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                <input type="text"  id="companyWaitList">
+
+            </div>
+        </div>
+        <div class="form-group-new-reservation col-md-2">
+            <label>
+                Source
+            </label>
+            <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                <input type="text"  id="sourceWaitList">
+
+            </div>
+        </div>
+        <div class="form-group-new-reservation col-md-2">
+            <label>
+                Phone
+            </label>
+            <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                <input type="text"  id="phoneWaitList">
+
+            </div>
+        </div>
+        <div class="form-group-new-reservation col-md-2">
+            <label>
+                Agent
+            </label>
+            <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                <input type="text"  id="agentWaitList">
+
+            </div>
+        </div>
+        <div class="form-group-new-reservation col-md-2">
+            <label>
+                Group
+            </label>
+            <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                <input type="text"  id="groupWaitList">
+
+            </div>
+        </div>
+        <div class="form-group-new-reservation col-md-2">
+            <label>
+                VIP
+            </label>
+            <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                <input type="text" id="vipWaitList">
+
+            </div>
+        </div>
+
+
+
+    </div>
+
+    <div id="loadingSpinnerForm" style="display: none; text-align: center; padding: 20px;">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <!-- DevExtreme DataGrid -->
+    <div id="gridContainer" class="gridContainer mt-2"></div>
+
+
+<!-- Modal wait list-->
+<div class="modal fade modal" id="modalWaitList" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">WaitList Screen</h5>
+                <button type="button" class="btn-close" onclick="closeModalWaitList()"></button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <button class="mui-button mui-button-search" onclick="SaveWaitList();"> OK</button>
+                    <button class="mui-button mui-button-clear">Close</button>
+                </div>
+                <div class="row mt-2">
+                    <label class="col-md-2">Reason</label>
+                    <select id="reasonWaitListScreen" class="col-md-10"></select>
+                </div>
+                <div class="row mt-2">
+                    <label class="col-md-2">Piority</label>
+                    <select id="priorityWaitListScreen" class="col-md-10" ></select>
+                </div>
+                <div class="row mt-2">
+                    <label class="col-md-2">Telephone No.</label>
+                    <input id="telephoneWaitListScreen" class="col-md-10" />
+                </div>
+                <div class="mt-2">
+                    <label>Description</label>
+                    <textarea class="form-control" rows="3" id="desWaitListScreen"></textarea>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        // Sử dụng $.when để chờ tất cả bốn lệnh gọi AJAX hoàn tất
+        $.when(
+            getReasonWaitList(),
+            getPriority(),
+            getRoomType(),
+            getMarket(),
+                        getBusinessDate()
+
+        ).done(function () {
+            // Tất cả bốn lệnh gọi AJAX đã hoàn tất, bây giờ gọi getBusinessDate
+            searchReservation();
+        });
+    });
+    function getReasonWaitList(){
+        $.ajax({
+            url: '/Reservation/GetReasonWaitList',
+            type: 'get',
+            dataType: 'json',
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                var html = `<option value=''></option>`;
+                                var html2 = `<option value=''></option>`;
+
+                $('#reasonWaitList').empty();
+                $('#reasonWaitListScreen').empty();
+
+                if(result.length > 0){
+                    for(var i = 0;i< result.length;i++){
+                        html+= `<option value='${result[i].name}'>${result[i].description}</option>`;
+                                                html2+= `<option value='${result[i].id}'>${result[i].description}</option>`;
+
+                    }
+                }
+                $('#reasonWaitList').append(html);
+                $('#reasonWaitListScreen').append(html2);
+
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                } else {
+                    showToast('Error', 'Error', false);
+                }
+            }
+
+        });
+    }
+
+    function getPriority(){
+        $.ajax({
+            url: '/Reservation/GetPriority',
+            type: 'get',
+            dataType: 'json',
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                var html = `<option value=''></option>`;
+                                var html2 = `<option value=''></option>`;
+
+                $('#priorityWaitList').empty();
+                $('#priorityWaitListScreen').empty();
+                if(result.length > 0){
+                    for(var i = 0;i< result.length;i++){
+                        html+= `<option value='${result[i].name}'>${result[i].name}</option>`;
+                                                html2+= `<option value='${result[i].id}'>${result[i].name}</option>`;
+
+                    }
+                }
+                $('#priorityWaitList').append(html);
+                $('#priorityWaitListScreen').append(html2);
+
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                } else {
+                    showToast('Error', 'Error', false);
+                }
+            }
+
+        });
+    }
+    
+    function getRoomType(){
+        $.ajax({
+            url: '/Reservation/GetRoomType',
+            type: 'get',
+            dataType: 'json',
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                var html = `<option value=''></option>`;
+                $('#roomTypeWaitList').empty();
+                if(result.length > 0){
+                    for(var i = 0;i< result.length;i++){
+                        html+= `<option value='${result[i].code}'>${result[i].name}</option>`;
+                    }
+                }
+                $('#roomTypeWaitList').append(html);
+
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                } else {
+                    showToast('Error', 'Error', false);
+                }
+            }
+
+        });
+    }
+
+    function getMarket(){
+        $.ajax({
+            url: '/Reservation/GetMarket',
+            type: 'get',
+            dataType: 'json',
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                var html = `<option value=''></option>`;
+                $('#marketWaitList').empty();
+                if(result.length > 0){
+                    for(var i = 0;i< result.length;i++){
+                        html+= `<option value='${result[i].code}'>${result[i].name}</option>`;
+                    }
+                }
+                $('#marketWaitList').append(html);
+
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                } else {
+                    showToast('Error', 'Error', false);
+                }
+            }
+
+        });
+    }
+    function getBusinessDate() {
+        return $.ajax({
+            url: '/Reservation/GetBusinessDate',
+            type: 'get',
+            dataType: 'json',
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+
+                // Lấy ngày từ result (giả sử result có định dạng ISO như 'YYYY-MM-DDTHH:mm:ss')
+                const businessDate = new Date(result);
+                $('#dateWaitList').val(result.split('T')[0]);
+
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                }
+            }
+        });
+    }
+    function searchReservation() {
+        $("#loadingSpinnerForm").show();
+
+        $.ajax({
+            url: '/Reservation/SearchWaitList',
+            type: 'get',
+            dataType: 'json',
+            data: {
+                name: $('#nameWaitList').val(),
+                priority: $('#priorityWaitList').val(),
+                market: $('#marketWaitList').val(),
+                roomType: $('#roomTypeWaitList').val(),
+                reason: $('#reasonWaitList').val(),
+                rateCode: $('#rateCodeWaitList').val(),
+                phone: $('#telephoneWaitList').val(),
+                date: $('#dateWaitList').val(),
+
+            },
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                listData = result;
+                initializeDataGridSearch(result);
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                }
+            },
+            complete: function () {
+                $("#loadingSpinnerForm").hide();
+            }
+        });
+
+    }
+    var waitListID = 0;
+    function initializeDataGridSearch(data) {
+        // Kiểm tra dữ liệu đầu vào
+
+        // Nếu cần giới hạn tổng số bản ghi, ví dụ 100 bản ghi
+        const limitedData = data.slice(0, 100);
+
+        $("#gridContainer").dxDataGrid({
+            dataSource: limitedData, // Sử dụng dữ liệu đã giới hạn
+            allowColumnResizing: true,
+            columnAutoWidth: true,
+            columnMinWidth: 90,
+            paging: {
+                enabled: true, // Bật phân trang
+                pageSize: 15 // Mỗi trang 15 bản ghi
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [15, 20, 30], // Chỉ các kích thước trang cố định
+                showPageSizeSelector: true,
+                showInfo: true, // Hiển thị thông tin phân trang
+                showNavigationButtons: true
+            },
+            scrolling: {
+                mode: 'standard', // Thay 'virtual' bằng 'standard' để kiểm tra
+                showScrollbar: 'always',
+                useNative: false
+            },
+            filterRow: {
+                visible: true,
+                applyFilter: "auto"
+            },
+            selection: {
+                mode: "single"
+            },
+            onRowClick: function(e) {
+                waitListID = e.data.WaitListID;
+                $('#companyWaitList').val(e.data.Company);
+                $('#sourceWaitList').val(e.data.Source);
+                $('#phoneWaitList').val(e.data.Phone);
+                $('#agentWaitList').val(e.data.Agent);
+                $('#groupWaitList').val(e.data.Group);
+                $('#vipWaitList').val("");
+
+            },
+
+        });
+    }
+    function openModalWaitList(){
+        if(waitListID == 0){
+            showToast('Error', 'Please choose booking', false);
+        }
+        $.ajax({
+            url: '/Reservation/GetWaitListByID',
+            type: 'get',
+            dataType: 'json',
+            data: {
+                waitListID: waitListID,
+
+
+            },
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                console.log(result);
+                $('#reasonWaitListScreen').val(result.reasonID);
+               $('#priorityWaitListScreen').val(result.priorityID);
+                $('#telephoneWaitListScreen').val(result.telephoneNumber);
+                $('#desWaitListScreen').val(result.description);
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                }
+            },
+            complete: function () {
+                $("#loadingSpinnerForm").hide();
+            }
+        });
+        $('#modalWaitList').modal('show');
+    }
+    function closeModalWaitList(){
+        $('#modalWaitList').modal('hide');
+
+    }
+
+    function AcceptRes() {
+
+        var formData = new FormData();
+        formData.append('waitListID', waitListID);
+
+        $.ajax({
+            url: '/Reservation/WaitListAcceptRes',
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            data: formData,
+            success: function (data) {
+                if (data.code == 0) {
+                    searchReservation();
+                    showToast('Success', data.msg, true);
+                } else {
+                        showToast('Error', data.msg, false);
+                }
+
+            },
+            error: function (xhr, statusText, err) {
+
+            }
+        });
+
+    }
+</script>

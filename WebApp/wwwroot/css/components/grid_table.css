@@ -1,0 +1,144 @@
+﻿.gridContainer .dx-datagrid-rowsview .dx-selection {
+    background-color: #bcbcbc !important;
+    color: white !important;
+}
+
+    .gridContainer .dx-datagrid-rowsview .dx-selection * {
+        color: #000000 !important;
+    }
+
+.gridContainer .dx-datagrid-rowsview .dx-row > td {
+    padding: 2px !important;
+    font-size: 12px !important;
+    line-height: 22px !important;
+    border-bottom: 1px solid #ddd !important;
+    border-right: 1px solid #ddd !important;
+}
+
+.gridContainer .dx-datagrid-rowsview tr td:last-child {
+    border-right: none !important;
+}
+
+.gridContainer .dx-datagrid-headers {
+    background-color: #bcbcbc !important;
+    color: white !important;
+}
+
+    .gridContainer .dx-datagrid-headers .dx-header-row > td {
+        padding: 10px !important;
+        font-size: 12px !important;
+        font-weight: 600 !important;
+        background-color: #f5f5f5 !important;
+        color: #000000 !important;
+        border-right: 1px solid #aaaaaa !important;
+        border-bottom: 1px solid #aaaaaa !important;
+        text-align: center !important;
+    }
+
+        .gridContainer .dx-datagrid-headers .dx-header-row > td:last-child {
+            border-right: none !important;
+        }
+
+.gridContainer .dx-datagrid-filter-row td .dx-datebox,
+.gridContainer .dx-datagrid-filter-row td .dx-dropdowneditor {
+    height: 26px !important;
+    min-height: 26px !important;
+    font-size: 12px !important;
+}
+
+.gridContainer .dx-datagrid-filter-row td .dx-editor-with-menu,
+.gridContainer .dx-datagrid-filter-row td .dx-texteditor input {
+    height: 26px !important;
+    line-height: 26px !important;
+    padding: 4px 8px !important;
+    font-size: 12px !important;
+}
+
+.gridContainer .dx-datagrid-pager {
+    background-color: #f8f9fa !important;
+    border-top: 1px solid #e5e7eb !important;
+    padding: 10px !important;
+    border-radius: 0 0 8px 8px !important;
+}
+
+.gridContainer .dx-datagrid-headers .dx-header-row > td {
+    padding: 5px !important;
+    height: 24px !important;
+    font-size: 12px !important;
+    line-height: 1.1 !important;
+}
+
+.gridContainer .dx-datagrid-pager .dx-page {
+    margin: 0 4px !important;
+    padding: 6px 12px !important;
+    border-radius: 4px !important;
+    background-color: #ffffff !important;
+    border: 1px solid #d1d5db !important;
+    color: var(--text-color) !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    transition: all 0.3s ease !important;
+}
+
+    .gridContainer .dx-datagrid-pager .dx-page:hover {
+        background-color: var(--main-color) !important;
+        color: white !important;
+        border-color: var(--main-color) !important;
+    }
+
+    .gridContainer .dx-datagrid-pager .dx-page.dx-selection {
+        background-color: var(--main-color) !important;
+        color: white !important;
+        border-color: var(--main-color) !important;
+        font-weight: 600 !important;
+    }
+
+.gridContainer .dx-datagrid-pager .dx-navigate-button {
+    padding: 6px 12px !important;
+    border-radius: 4px !important;
+    background-color: #ffffff !important;
+    border: 1px solid #d1d5db !important;
+    color: var(--text-color) !important;
+    font-size: 12px !important;
+    transition: all 0.3s ease !important;
+}
+
+    .gridContainer .dx-datagrid-pager .dx-navigate-button:hover {
+        background-color: var(--main-color) !important;
+        color: white !important;
+        border-color: var(--main-color) !important;
+    }
+
+.gridContainer .dx-datagrid-pager .dx-pages .dx-info {
+    font-size: 12px !important;
+    color: var(--text-color) !important;
+    font-weight: 500 !important;
+}
+
+.gridContainer .dx-datagrid-pager .dx-page-sizes .dx-page-size {
+    padding: 6px 12px !important;
+    border-radius: 4px !important;
+    background-color: #ffffff !important;
+    border: 1px solid #d1d5db !important;
+    color: var(--text-color) !important;
+    font-size: 12px !important;
+    margin-right: 8px !important;
+    transition: all 0.3s ease !important;
+}
+
+    .gridContainer .dx-datagrid-pager .dx-page-sizes .dx-page-size:hover {
+        background-color: var(--main-color) !important;
+        color: white !important;
+        border-color: var(--main-color) !important;
+    }
+
+.gridContainer .dx-datagrid-pager .dx-page-sizes .dx-selection {
+    background-color: var(--main-color) !important;
+    color: white !important;
+    border-color: var(--main-color) !important;
+    font-weight: 600 !important;
+}
+
+.dx-datagrid .dx-editor-with-menu .dx-menu-item-content .dx-icon.dx-icon-filter-operation-default, .dx-datagrid-container .dx-editor-with-menu .dx-menu-item-content .dx-icon.dx-icon-filter-operation-default {
+    display: none;
+}

@@ -1,0 +1,566 @@
+﻿<div class="modal fade modal-xl" id="modalDeposit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Deposit Information</h5>
+                <button type="button" class="btn-close" onclick="closeModalDeposit()"></button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <button class="submit-button-clear-reservation" onclick="openModalDepositRequest();">Request</button>
+                    <button class="submit-button-clear-reservation"> Edit</button>
+                    <button class="submit-button-clear-reservation"> Delete</button>
+                    <button class="submit-button-clear-reservation" onclick="openModalDepositPayment();"> Payment</button>
+                    <button class="submit-button-clear-reservation">Apply</button>
+                    <button class="submit-button-clear-reservation" onclick="PrinReceipt();"> Receipct</button>
+                    <button class="submit-button-clear-reservation"> Close</button>
+                </div>
+                <div class="mui-divider"></div>
+
+                <div class="mui-card mt-2">
+                    <div id="gridContainerDepositRequest" class="mt-2 gridContainer"></div>
+                </div>
+                <div class="mui-card mt-2">
+                    <div id="gridContainerDepositPayment" class="mt-2 gridContainer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal request-->
+<div class="modal fade modal" id="modalDepositRequest" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Deposit Request</h5>
+                <button type="button" class="btn-close" onclick="closeDepositRequest()"></button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <button class="submit-button-clear-reservation" onclick="SaveDepositRequest();"> OK</button>
+                    <button class="submit-button-clear-reservation" onclick="closeDepositRequest();">Close</button>
+                </div>
+
+                <div class="mt-2 row">
+                    <div class="col-md-6 form-group-new-reservation row">
+                        <label >Type</label>
+                        <select id="typeDepositRequest">
+                            <option value="0">Room</option>
+                            <option value="1">Package</option>
+                            <option value="2" selected>All</option>
+
+                        </select>
+                    </div>
+                    <div class="col-md-6 form-group-new-reservation row">
+                        <label >Deposit Rule</label>
+                        <select  id="ruleDepositRequest">
+
+                        </select>
+                    </div>
+                    <div class="col-md-6 form-group-new-reservation row">
+                        
+                        <label >Description</label>
+                        <input type="text" id="descriptionDepositRequest">
+                    </div>
+                    <div class="col-md-6 form-group-new-reservation row">
+                        <label >Percentage</label>
+                        <input type="text" id="percentageDepositRequest" value="0">
+                    </div>
+                    <div class="col-md-6 form-group-new-reservation row">
+                        <label >Deposit Amount</label>
+                        <input type="text"  id="amountDepositRequest">
+                    </div>
+                    <div class="col-md-6 form-group-new-reservation row">
+                        <label >Due Date</label>
+                        <input type="date" id="dueDateDepositRequest">
+                    </div>
+                    <div class="col-md-6 form-group-new-reservation row">
+                        <label >Currency</label>
+                        <select  id="currencyDepositRequest">
+                            <option value="VND">VND</option>
+
+                        </select>
+                    </div>
+                    <div class="col-md-6 form-group-new-reservation row">
+                        <label >Comment</label>
+                        <input type="text" id="commentDepositRequest">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal payment-->
+<div class="modal fade modal" id="modalDepositPayment" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Deposit Payment</h5>
+                <button type="button" class="btn-close" onclick="closeModalDepositPayment()"></button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <button class="submit-button-clear-reservation" onclick="SaveDepositPayment();"> OK</button>
+                    <button class="submit-button-clear-reservation" onclick="closeModalDepositPayment();">Close</button>
+                </div>
+
+                <div class="mt-2 row"  style="justify-content:space-between">
+                    <div class="col-md-5 form-group-new-reservation row">
+                        <label  >Trans Type</label>
+                        <select id="transactionDepositPayment">
+
+                        </select>
+                    </div>
+                    <div class="col-md-5 form-group-new-reservation row">
+                        <label   >Currency</label>
+                        <select   id="currencyDepositPayment">
+                            <option value="VND">VND</option>
+                        </select>
+                    </div>
+                    <div class="col-md-5 form-group-new-reservation row">
+                        <label >Amount</label>
+                        <input  id="amountDepositPayment">
+                    </div>
+                    <div class="col-md-5 form-group-new-reservation row">
+                        <label >Reference</label>
+                        <input  id="referenceDepositPayment">
+                    </div>
+                    <div class="col-md-5 form-group-new-reservation row">
+                        <label >Supplement</label>
+                        <input  id="supplementDepositPayment">
+                    </div>
+                    <div class="col-md-5 form-group-new-reservation row">
+                        <label >Credit Card No</label>
+                        <input  id="creditCardNoDepositPayment">
+                    </div>
+                    <div class="col-md-5 form-group-new-reservation row">
+                        <label >Exp Date</label>
+                        <input type="date"  id="dateDepositPayment">
+                    </div>
+                    <div class="col-md-5 form-group-new-reservation row">
+                        <label >Reservation Type</label>
+                        <select  id="reservationTypeDepositPayment" asp-items="ViewBag.cboReservationType">
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function openModalDeposit(){
+        if (idReservation === 0) {
+            showToast('Error', 'Please choose booking', false);
+            return;
+        }
+        GetDepositRequestByReservationID(idReservation);
+        $('#modalDeposit').modal('show');
+    }
+    function closeModalDeposit(){
+        clearDepositRequest(); 
+        $('#modalDeposit').modal('hide');
+    }
+    function GetDepositRequestByReservationID(id) {
+        $.ajax({
+            url: '/Reservation/GetDepositRequestByReservationID',
+            type: 'get',
+            dataType: 'json',
+            data: {
+                reservationID: id
+            },
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                initializeDataGridDepositRequest(result.request);
+                initializeDataGridDepositPayment(result.payment);
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                }
+            }
+        });
+    }
+    function initializeDataGridDepositRequest(data) {
+        var columnWidth = 150;
+        $("#gridContainerDepositRequest").dxDataGrid({
+
+        dataSource: data, allowColumnResizing: true,
+            columns: [
+                { dataField: "rsqID", caption: "ID",  visible: false},
+                { dataField: "type", caption: "Type"},
+                { dataField: "request", caption: "Request"},
+                { dataField: "dueDate", caption: "Due Date"},
+                { dataField: "paidAmount", caption: "Paid"},
+                { dataField: "dueAmount", caption: "Due"},
+                { dataField: "currency", caption: "Currency"},
+                { dataField: "comment", caption: "Description"},
+                { dataField: "ruleCode", caption: "Rule Code"},
+
+            ],
+            paging: { pageSize: 5 },
+            scrolling: {
+                rowRenderingMode: 'virtual',
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [5, 10, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true,
+            },
+            filterRow: {
+                    visible: true,
+                    applyFilter: "auto"
+            },
+            selection: {
+                mode: "single"
+            },
+            onRowClick: function(e) {
+            }
+        });
+    }
+    var depoistPaymentID = 0;
+    function initializeDataGridDepositPayment(data) {
+        var columnWidth = 150;
+        $("#gridContainerDepositPayment").dxDataGrid({
+
+        dataSource: data, allowColumnResizing: true,
+            columns: [
+                { dataField: "paymentID", caption: "ID",  visible: false},
+                { dataField: "transactionDate", caption: "Date"},
+                { dataField: "description", caption: "Payment Method"},
+                { dataField: "amount", caption: "Amount"},
+                { dataField: "reference", caption: "Reference"},
+                { dataField: "receiptNo", caption: "Receipt.No"},
+                { dataField: "createBy", caption: "Created By"},
+                { dataField: "createDate", caption: "Created Date"},
+
+            ],
+            paging: { pageSize: 5 },
+            scrolling: {
+                rowRenderingMode: 'virtual',
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [5, 10, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true,
+            },
+            filterRow: {
+                    visible: true,
+                    applyFilter: "auto"
+            },
+            selection: {
+                mode: "single"
+            },
+            onRowClick: function(e) {
+                depoistPaymentID = e.data.paymentID;
+            }
+        });
+    }
+    function openModalDepositRequest(){
+        $('#typeDepositRequest').prop('disabled', false);
+        $('#ruleDepositRequest').prop('disabled', false);
+        $('#descriptionDepositRequest').prop('disabled', true);
+        $('#percentageDepositRequest').prop('disabled', true);
+        $('#amountDepositRequest').prop('disabled', false);
+        $('#dueDateDepositRequest').prop('disabled', false);
+        $('#currencyDepositRequest').prop('disabled', false);
+        $('#commentDepositRequest').prop('disabled', false);
+
+        getDepositRule();
+        let formattedDate = arivalDate.split(" ")[0].split("/").reverse().join("-"); // Chuyển thành 2024-08-30
+        $('#dueDateDepositRequest').val(formattedDate);
+        if(reservationStatus == 0){
+            $('#modalDepositRequest').modal('show');
+
+        }
+    }
+    function closeDepositRequest(){
+        clearDepositRequest(); 
+        $('#modalDepositRequest').modal('hide');
+    }
+    function clearDepositRequest(){
+        $('#typeDepositRequest').val(2);
+        $('#ruleDepositRequest').val(0);
+        $('#descriptionDepositRequest').val('');
+        $('#percentageDepositRequest').val('0');
+        $('#amountDepositRequest').val('0');
+        let formattedDate = arivalDate.split(" ")[0].split("/").reverse().join("-"); // Chuyển thành 2024-08-30
+        $('#dueDateDepositRequest').val(formattedDate);
+        $('#currencyDepositRequest').val('VND');
+        $('#commentDepositRequest').val('');
+        $('#typeDepositRequest').prop('disabled', false);
+        $('#ruleDepositRequest').prop('disabled', false);
+        $('#descriptionDepositRequest').prop('disabled', true);
+        $('#percentageDepositRequest').prop('disabled', true);
+        $('#amountDepositRequest').prop('disabled', false);
+        $('#dueDateDepositRequest').prop('disabled', false);
+        $('#currencyDepositRequest').prop('disabled', false);
+        $('#commentDepositRequest').prop('disabled', false);
+    }
+    function getDepositRule() {
+        $.ajax({
+            url: '/Reservation/GetDepositRule',
+            type: 'get',
+            dataType: 'json',
+
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                $('#ruleDepositRequest').empty();
+                var html = `<option value='0'></option>`;
+                if(result.length > 0){
+                    for(var i=0;i<result.length;i++){
+                        html += `<option value='${result[i].id}'>${result[i].code}</option>`
+                    }
+                }
+                $('#ruleDepositRequest').append(html);
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                }
+            }
+        });
+    }
+    function getDepositRuleByID(id) {
+        $.ajax({
+            url: '/Reservation/GetDepositRuleByID',
+            type: 'get',
+            dataType: 'json',
+            data:{id:id},
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                $('#descriptionDepositRequest').val(result.description);
+                if(result.type == 0){
+                    $('#dueDateDepositRequest').prop('disabled', true);
+                    $('#descriptionDepositRequest').prop('disabled', true);
+                    $('#percentageDepositRequest').prop('disabled', true);
+                    $('#amountDepositRequest').val(result.amount);
+                    let dueDate = new Date($('#dueDateDepositRequest').val()); // Lấy giá trị ngày từ input hoặc biến
+                    if (result.daysBeforeArrival) {
+                        dueDate.setDate(dueDate.getDate() - result.daysBeforeArrival); // Giảm số ngày
+                    }
+                    if (result.daysAfterBooking) {
+                        dueDate.setDate(dueDate.getDate() + result.daysAfterBooking); // Tăng số ngày
+                    }
+                    $('#dueDateDepositRequest').val(dueDate.toISOString().split('T')[0]); // Cập
+                    $('#amountDepositRequest').val(result.amountValue);
+                }
+                else if(result.type == 1){
+                    $('#percentageDepositRequest').prop('disabled', true);
+                    $('#amountDepositRequest').prop('disabled', true);
+                    var rate = parseFloat(rateAmount) * parseFloat(result.amountValue)/100;
+                    $('#amountDepositRequest').val(rate);
+                    $('#dueDateDepositRequest').prop('disabled', true);
+                    $('#descriptionDepositRequest').prop('disabled', true);
+                }
+                else{
+                    $('#percentageDepositRequest').prop('disabled', true);
+                    $('#amountDepositRequest').prop('disabled', true);
+                    var rate = parseFloat(rateAmount) * parseFloat(result.amountValue);
+                    $('#amountDepositRequest').val(rate);
+                    $('#dueDateDepositRequest').prop('disabled', true);
+                    $('#descriptionDepositRequest').prop('disabled', true);
+                }
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                }
+            }
+        });
+    }
+    $('#ruleDepositRequest').on('change', function() {
+        if(parseFloat($(this).val()) > 0){
+            getDepositRuleByID($(this).val());
+
+        }
+        else{
+            $('#descriptionDepositRequest').val('0');
+            $('#descriptionDepositRequest').prop('disabled', true);
+            $('#amountDepositRequest').prop('disabled', false); 
+            $('#dueDateDepositRequest').prop('disabled', false); 
+
+        }
+    });
+
+    function SaveDepositRequest() {
+        const userID = JSON.parse(localStorage.getItem("userID"));
+        var formData = new FormData();
+
+        formData.append('rsvID', idReservation);
+        formData.append('description',  $('#descriptionDepositRequest').val());
+        formData.append('chargeType', $('#typeDepositRequest').val());
+        formData.append('depositeRuleID', $('#ruleDepositRequest').val());
+        formData.append('dueDate',  $('#dueDateDepositRequest').val());
+        formData.append('amount', $('#amountDepositRequest').val());
+        formData.append('curencyID', $('#currencyDepositRequest').val());
+        formData.append('requestType', 1);
+
+        formData.append('userID',userID);
+
+        $.ajax({
+            url: '/Reservation/SaveDepositRequest',
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            // headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            data: formData,
+            success: function (data) {
+                if (data.code == 0) {
+                    GetDepositRequestByReservationID(idReservation);
+                    showToast('Success', data.msg, true);
+                } else {
+                    showToast('Error', data.msg, false);
+                }
+
+            },
+            error: function (xhr, statusText, err) {
+
+            }
+        });
+
+    }
+    function openModalDepositPayment(){
+        $('#referenceDepositPayment').val(`DEPOSIT - Conf.No: ${confirmationNo}`);
+        getTransactionPayment();
+        let formattedDate = arivalDate.split(" ")[0].split("/").reverse().join("-"); // Chuyển thành 2024-08-30
+        $('#dateDepositPayment').val(formattedDate);
+        if(reservationStatus == 0){
+            $('#modalDepositPayment').modal('show');
+
+        }
+
+    }
+    function closeModalDepositPayment(){
+        let formattedDate = arivalDate.split(" ")[0].split("/").reverse().join("-"); // Chuyển thành 2024-08-30
+        $('#dateDepositPayment').val(formattedDate);
+        $('#modalDepositPayment').modal('hide');
+        clearDepositPayment();
+
+    }
+    function clearDepositPayment(){
+        $('#transactionDepositPayment').val(0);
+        $('#amountDepositPayment').val('');
+        $('#referenceDepositPayment').val('');
+        $('#supplementDepositPayment').val('');
+        $('#creditCardNoDepositPayment').val('');
+        $('#reservationTypeDepositPayment').val(0);
+
+    }
+    function getTransactionPayment(){
+        $.ajax({
+            url: '/Reservation/GetTransactionPayment',
+            type: 'get',
+            dataType: 'json',
+
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                $('#transactionDepositPayment').empty();
+                var html = `<option value='0'></option>`;
+                if(result.length > 0){
+                    for(var i=0;i<result.length;i++){
+                        html += `<option value='${result[i].id}'>${result[i].description}</option>`
+                    }
+                }
+                $('#transactionDepositPayment').append(html);
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                }
+            }
+        });
+    }
+
+
+    function SaveDepositPayment() {
+        const userID = JSON.parse(localStorage.getItem("userID"));
+                const userName = JSON.parse(localStorage.getItem("userName"));
+
+        var formData = new FormData();
+
+        formData.append('rsvID', idReservation);
+        formData.append('dueDate',  $('#dateDepositPayment').val());
+        formData.append('transCode',  $('#transactionDepositPayment').val());
+        formData.append('reference', $('#referenceDepositPayment').val());
+        formData.append('supplement', $('#supplementDepositPayment').val());
+        formData.append('creditCard', $('#creditCardNoDepositPayment').val());
+        formData.append('amount', $('#amountDepositPayment').val());
+        formData.append('curencyID', $('#currencyDepositPayment').val());
+        formData.append('reservationType',  $('#reservationTypeDepositPayment').val());
+        formData.append('userName',userName);
+        formData.append('userID',userID);
+
+        $.ajax({
+            url: '/Reservation/SaveDepositPayment',
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            // headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            data: formData,
+            success: function (data) {
+                if (data.code == 0) {
+                    clearDepositRequest();
+                    closeModalDepositPayment();
+                    GetDepositRequestByReservationID(idReservation);
+                    showToast('Success', data.msg, true);
+                } else {
+                    showToast('Error', data.msg, false);
+                }
+
+            },
+            error: function (xhr, statusText, err) {
+
+            }
+        });
+
+    }
+    function PrinReceipt() {
+        $.ajax({
+            url: '/Reservation/PrintReceipt',
+            type: 'POST',
+            data:{
+                id: depoistPaymentID
+            },
+            success: function (data) {
+                try {
+                    // Nếu data có prefix, tách ra phần base64
+                    let base64String = data;
+
+                    // Nếu có tiền tố "data:application/pdf;base64," thì tách ra
+                    if (base64String.startsWith('data:')) {
+                        base64String = base64String.split(',')[1];
+                    }
+
+                    // Giải mã base64
+                    const byteCharacters = atob(base64String);
+                    const byteNumbers = new Array(byteCharacters.length);
+                    for (let i = 0; i < byteCharacters.length; i++) {
+                        byteNumbers[i] = byteCharacters.charCodeAt(i);
+                    }
+                    const byteArray = new Uint8Array(byteNumbers);
+                    const blob = new Blob([byteArray], { type: 'application/pdf' });
+                    console.log(blob);
+                    // Tạo URL và mở trong cửa sổ mới
+                    const blobUrl = URL.createObjectURL(blob);
+                    window.open(blobUrl);
+                } catch (e) {
+                    console.error("Base64 decode error:", e);
+                }
+            },
+            error: function (xhr, statusText, err) {
+                console.error("AJAX error:", err);
+            }
+        });
+    }
+</script>

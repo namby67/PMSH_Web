@@ -1,0 +1,512 @@
+﻿@using DevExpress.XtraReports.UI
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    var listz = ViewBag.ZoneList;
+    var selectedReport = @ViewBag.ReportHeader;
+}
+
+
+<style>
+    #gridContainer .dx-datagrid-rowsview .dx-selection {
+        background-color: #005f87 !important; /* màu xanh ng?c */
+        color: white !important; /* ch? tr?ng */
+    }
+
+        #gridContainer .dx-datagrid-rowsview .dx-selection * {
+            color: white !important;
+        }
+
+    .dx-datagrid-headers .dx-header-row td {
+        white-space: pre-line !important;
+        text-align: center;
+        font-size: 11px;
+    }
+
+
+    .dx-datagrid .dx-editor-with-menu .dx-menu-item-content .dx-icon.dx-icon-filter-operation-default, .dx-datagrid-container .dx-editor-with-menu .dx-menu-item-content .dx-icon.dx-icon-filter-operation-default {
+        display: none;
+    }
+
+    #gridContainer .dx-datagrid-rowsview .dx-row > td {
+        padding-top: 2px !important;
+        padding-bottom: 2px !important;
+        font-size: 12px !important;
+        line-height: 24px !important;
+    }
+
+    #gridContainer .dx-datagrid-headers {
+        background-color: #3b9ac6 !important; /* Màu xanh duong */
+        color: white !important; /* Ch? tr?ng cho d? d?c */
+    }
+
+        #gridContainer .dx-datagrid-headers .dx-header-row > td {
+            padding-top: 12px !important;
+            padding-bottom: 12px !important;
+            font-size: 12px !important;
+        }
+
+        #gridContainer .dx-datagrid-headers .dx-header-row > td {
+            background-color: #3b9ac6 !important;
+            color: white !important;
+            font-weight: bold;
+            border-right: 1px solid #ddd !important;
+            text-align: center !important;
+        }
+
+        #gridContainer .dx-datagrid-rowsview td,
+        #gridContainer .dx-datagrid-headers td {
+            border-right: 1px solid #ddd !important;
+        }
+
+        /* Lo?i b? vi?n ph?i ? c?t cu?i cùng (tùy ch?n) */
+        #gridContainer .dx-datagrid-rowsview tr td:last-child,
+        #gridContainer .dx-datagrid-headers tr td:last-child {
+            border-right: none !important;
+        }
+
+    #gridContainer .dx-datagrid-rowsview .dx-selection {
+        background-color: #01579b !important;
+        color: white !important;
+    }
+
+        #gridContainer .dx-datagrid-rowsview .dx-selection * {
+            color: white !important;
+        }
+
+    #gridContainer .dx-datagrid-filter-row td .dx-datebox {
+        height: 24px !important;
+        min-height: 24px !important;
+    }
+
+        #gridContainer .dx-datagrid-filter-row td .dx-datebox input {
+            font-size: 12px !important;
+            height: 24px !important;
+        }
+
+    #gridContainer .dx-datagrid-filter-row td .dx-editor-with-menu,
+    #gridContainer .dx-datagrid-filter-row td .dx-texteditor input {
+        height: 24px !important;
+        line-height: 24px !important;
+        padding: 2px 6px !important;
+        font-size: 12px !important;
+        box-sizing: border-box;
+    }
+
+    #gridContainer .dx-datagrid-filter-row td .dx-datebox,
+    #gridContainer .dx-datagrid-filter-row td .dx-dropdowneditor {
+        height: 26px !important;
+        min-height: 26px !important;
+        font-size: 12px !important;
+    }
+
+    #logGridContainer .dx-datagrid-rowsview .dx-selection {
+        background-color: #005f87 !important; /* màu xanh ng?c */
+        color: white !important; /* ch? tr?ng */
+    }
+
+        #logGridContainer .dx-datagrid-rowsview .dx-selection * {
+            color: white !important;
+        }
+
+    #logGridContainer .dx-datagrid-rowsview .dx-row > td {
+        padding-top: 2px !important;
+        padding-bottom: 2px !important;
+        font-size: 12px !important;
+        line-height: 24px !important;
+    }
+
+    #logGridContainer .dx-datagrid-headers {
+        background-color: #3b9ac6 !important; /* Màu xanh duong */
+        color: white !important; /* Ch? tr?ng cho d? d?c */
+    }
+
+        #logGridContainer .dx-datagrid-headers .dx-header-row > td {
+            padding-top: 12px !important;
+            padding-bottom: 12px !important;
+            font-size: 12px !important;
+            background-color: #3b9ac6 !important;
+            color: white !important;
+            font-weight: bold;
+            border-right: 1px solid #ddd !important;
+            text-align: center !important;
+        }
+
+        #logGridContainer .dx-datagrid-rowsview td,
+        #logGridContainer .dx-datagrid-headers td {
+            border-right: 1px solid #ddd !important;
+        }
+
+        /* Lo?i b? vi?n ph?i ? c?t cu?i cùng (tùy ch?n) */
+        #logGridContainer .dx-datagrid-rowsview tr td:last-child,
+        #logGridContainer .dx-datagrid-headers tr td:last-child {
+            border-right: none !important;
+        }
+
+    #logGridContainer .dx-datagrid-rowsview .dx-selection {
+        background-color: #01579b !important;
+        color: white !important;
+    }
+
+        #logGridContainer .dx-datagrid-rowsview .dx-selection * {
+            color: white !important;
+        }
+
+    #logGridContainer .dx-datagrid-filter-row td .dx-datebox {
+        height: 24px !important;
+        min-height: 24px !important;
+    }
+
+        #logGridContainer .dx-datagrid-filter-row td .dx-datebox input {
+            font-size: 12px !important;
+            height: 24px !important;
+        }
+
+    #logGridContainer .dx-datagrid-filter-row td .dx-editor-with-menu,
+    #logGridContainer .dx-datagrid-filter-row td .dx-texteditor input {
+        height: 24px !important;
+        line-height: 24px !important;
+        padding: 2px 6px !important;
+        font-size: 12px !important;
+        box-sizing: border-box;
+    }
+
+    #logGridContainer .dx-datagrid-filter-row td .dx-datebox,
+    #logGridContainer .dx-datagrid-filter-row td .dx-dropdowneditor {
+        height: 26px !important;
+        min-height: 26px !important;
+        font-size: 12px !important;
+    }
+
+    .filter_wrapper {
+        /*     background-color: #ececec; */
+        /*   margin: 0px 8px 14px 8px; */
+        padding: 18px 0px 0px 14px;
+        border-radius: 8px;
+    }
+
+    .gridContainer {
+        margin: 0px 8px;
+    }
+
+    .button_wrapper {
+        display: flex;
+        column-gap: 12px;
+        margin: 0px 8px;
+    }
+
+        .button_wrapper .fa-solid {
+            margin-right: 5px;
+        }
+
+    .selected {
+        background-color: #4CAF50; /* Màu xanh */
+        color: white;
+    }
+
+    #gridContainer .dx-datagrid-rowsview .dx-selection {
+        background-color: #01579b !important; /* màu xanh ng?c */
+        color: white !important; /* ch? tr?ng */
+    }
+
+        #gridContainer .dx-datagrid-rowsview .dx-selection * {
+            color: white !important;
+        }
+
+    .sticky-header .form-control-sm {
+        padding: .1rem .35rem;
+        height: calc(1.1em + .2rem + 2px);
+    }
+
+    .sticky-header label[class*="me-"] {
+        margin-right: .5rem !important;
+    }
+
+    #gridContainer .dx-datagrid-headers .dx-header-row > td {
+        padding: 5px !important;
+        height: 24px !important;
+        font-size: 12px !important;
+        line-height: 1.1 !important;
+    }
+
+    .sticky-header input[type="date"].form-control-sm {
+        font-size: 12px !important; /* dúng 12?px */
+        height: calc(1.1em + .2rem + 2px); /* gi? cùng chi?u cao */
+    }
+
+    .sticky-header label {
+        font-size: 12px !important;
+        line-height: 1.2;
+    }
+
+    .tomselect-custom {
+        width: 100px;
+        min-height: 30px; /* ho?c tùy theo chi?u cao b?n mu?n */
+        font-size: 0.65rem;
+    }
+
+    .sort-select {
+        max-width: 130px; /* ho?c 100px n?u mu?n nh? hon */
+        font-size: 12px;
+        padding: 0.15rem 0.5rem;
+    }
+
+    .sort-select {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background-image: none !important;
+        padding-right: 10px !important;
+    }
+
+    button:disabled {
+        pointer-events: none; /* Không cho hover/click */
+        opacity: 0.6; /* Cho nó mờ đi */
+        cursor: not-allowed; /* Hiện con trỏ cấm */
+        background-color: #ccc !important; /* tuỳ chỉnh màu khi disable */
+    }
+
+</style>
+<link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+
+<div class="text-center" id="reportTitle" style="font-size: 20px">Dialing Information</div>
+<div class="sticky-header bg-white p-2 shadow-sm z-3">
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-1" style="border: 1px solid #ced4da; border-radius: 6px; padding: 8px;">
+        <!-- From Date -->
+        <div class="d-flex flex-column ">
+
+            <div class="d-flex align-items-center">        
+                <div class="d-flex align-items-center me-3">
+                    <label class="me-2 mb-0">From Date:</label>
+                    <input type="date" id="fromDate" name="fromDate" class="form-control form-control-sm w-auto" />
+                </div>
+
+                <div class="d-flex align-items-center me-3">
+                    <label class="me-2 mb-0">To Date:</label>
+                    <input type="date" id="toDate" name="toDate" class="form-control form-control-sm w-auto" />
+                </div>
+            </div>
+        </div>
+        <div class="d-flex align-items-center me-3">
+            <label class="me-2 mb-0">Phone No</label>
+            <input style="width: 40px;" type="text" id="phoneNo" name="phoneNo" class="form-control form-control-sm w-auto" />
+        </div>
+
+        <div class="d-flex align-items-center me-3">
+            <label class="me-2 mb-0">View By:</label>
+            <select id="viewBy" name="viewBy" class="form-control form-control-sm w-auto">
+                <option value="0">--All--</option>
+                <option value="1">--Room--</option>
+                <option value="2">--Ext--</option>
+            </select>
+        </div>
+        <div class="d-flex align-items-center me-2">
+            <label class="me-2 mb-0">Zone:</label>
+            <select id="zone" class="tomselect-custom" multiple>
+                @foreach (var sg in ViewBag.ZoneList)
+                {
+                    <option value="@sg.Code">@sg.Code</option>
+                }
+            </select>
+        </div>
+        
+    </div>
+    <div class="">
+        <button style="border-radius: 4px;  margin-right: 6px;background-color: #3b9ac6;" id="btnPrint" class="mui-button mui-button-new"><i class="fa-solid fa-eye"></i>View</button>
+        <button style="border-radius: 4px;  margin-right: 6px;background-color: green;" id="btnExportExcel" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Excel</button>
+
+    </div>
+</div>
+
+<div class="mui-card">
+  
+    <div id="gridWrapper" class="mt-2" style="max-height: 500px;">
+        <div id="gridContainer"></div>
+    </div>
+</div>
+<div id="loadingSpinner" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
+    <i class="fa-solid fa-spinner fa-spin"></i>
+</div>
+
+<script>
+    function formatDate(date) {
+        let year = date.getFullYear();
+        let month = (date.getMonth() + 1).toString().padStart(2, '0'); // Đảm bảo có 2 chữ số
+        let day = date.getDate().toString().padStart(2, '0'); // Đảm bảo có 2 chữ số
+        return `${year}-${month}-${day}`;
+    }
+    $(document).ready(function () {
+           
+            const today = new Date();
+
+            const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+            // Lấy ngày cuối cùng của tháng
+            const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+            // Định dạng theo local time
+            const formattedFirstDay = formatDate(firstDayOfMonth);
+            const formattedLastDay = formatDate(lastDayOfMonth);
+
+            console.log(formattedFirstDay); // Kiểm tra giá trị đúng chưa
+            console.log(formattedLastDay); // Kiểm tra giá trị đúng chưa
+            // Gán giá trị cho input date
+            document.getElementById('fromDate').value = formattedFirstDay;
+            document.getElementById('toDate').value = formattedLastDay;
+            initializeTomSelects();
+            loadTelephoneGrid();
+
+    });
+    function initializeTomSelects() {
+                const selectors = ["#zone"];
+
+            for (const id of selectors) {
+                const el = document.querySelector(id);
+                if (!el) continue;
+
+                if (el.tomselect) el.tomselect.destroy();
+
+                const ts = new TomSelect(el, {
+                    plugins: ['remove_button'],
+                    create: false,
+                    maxItems: null,
+                    allowEmptyOption: true,
+                    placeholder: '',
+                    persist: false,
+                    render: {
+                        option: function (data, escape) {
+                            return `<div>${escape(data.text)}</div>`;
+                        }
+                    }
+                });
+
+            }
+        }
+        $("#phoneNo").on("input", function () {
+        const value = $(this).val();
+        const grid = $("#gridContainer").dxDataGrid("instance");
+
+        grid.filter([
+            ["toPhoneNo", "contains", value]  // lọc theo cột telephone
+        ]);
+    });
+
+        $(document).off("click", "#btnPrint").on("click", "#btnPrint", function () {
+             $("#loadingSpinner").show();
+
+                $.ajax({
+                    url: '/FrontDesk/GetDialingInformation',
+                    type: 'GET',
+                    data: {
+                            fromDate: $("#fromDate").val(),
+                            toDate: $("#toDate").val(),
+                            phoneNo: $("#phoneNo").val(),
+                            view: $("#viewBy").val(),
+                            zone: ($("#zone").val() || []).join(","),
+                    },
+                    success: function (data) {
+                        console.log(data);
+                        loadTelephoneGrid(data);
+                        $("#loadingSpinner").hide();
+                    },
+                    error: function () {
+                        alert("Không thể tải dữ liệu");
+                        $("#loadingSpinner").hide();
+                    }
+                });
+        });
+            function loadTelephoneGrid(data) {
+            $("#gridContainer").dxDataGrid({
+                    dataSource: data,              
+                    height: 400,
+                    allowColumnResizing: true,
+                    selection: { mode: "single" },
+                    columns: [
+                            { dataField: "fromPhoneNo", caption: "From Phone No"},
+                            { dataField: "toPhoneNo", caption: "To Phone No" },
+                            { dataField: "timeStart", caption: "Time Start", dataType: "datetime", format: "dd/MM/yyyy HH:mm:ss" },          
+                            { dataField: "timeEnd", caption: "Time End",dataType: "datetime", format: "dd/MM/yyyy HH:mm:ss" },
+                            { dataField: "duration", caption: "Duration",dataType: "datetime", format: "HH:mm:ss" },
+                            { dataField: "area", caption: "Area" },
+                            { dataField: "amount", caption: "Amount", dataType: "number", format: "#,##0.00" },
+                            { dataField: "currency", caption: "Currency" }
+                    ],
+                scrolling: {
+                mode: "standard", // Không dùng virtual để footer hiển thị đúng
+                showScrollbar: "always",
+                scrollByContent: true
+            },
+            paging: {
+                pageSize: 20
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [20, 40, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true
+            },
+                filterRow: {
+            visible: true,
+            applyFilter: "auto"
+        },
+            showBorders: true
+        });
+        }
+            $("#btnExportExcel").click(function () {
+            const grid = $("#gridContainer").dxDataGrid("instance");   // 🔥 khai báo grid
+
+            const workbook = new ExcelJS.Workbook();
+            const companyName = localStorage.getItem("CompanyName") || "Tên công ty chưa xác định";
+            const worksheet = workbook.addWorksheet("Sheet 1");
+
+            // === Dòng 1: Tên công ty (merge theo 4 cột) ===
+            worksheet.addRow([companyName]);
+            worksheet.mergeCells('A1:D1');
+            worksheet.getRow(1).font = { bold: true };
+            worksheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'left' };
+
+            // === Dòng 2: Ngày giờ xuất (bên phải) ===
+            const now = new Date();
+            const exportDate = now.toLocaleString("vi-VN");
+            worksheet.addRow(['', '', '', exportDate]);
+            worksheet.mergeCells('D2:D2');  // cột D thôi
+            worksheet.getRow(2).alignment = { vertical: 'middle', horizontal: 'right' };
+
+            // === Dòng 3–4: trống
+            worksheet.addRow([]);
+            worksheet.addRow([]);
+
+            // === Dòng 5: Tiêu đề báo cáo (ở giữa) ===
+                const reportRow = worksheet.addRow(['Dialing Information']);
+            worksheet.mergeCells('A5:D5');
+            reportRow.font = { bold: true, size: 14 };
+            reportRow.alignment = { vertical: 'middle', horizontal: 'center' };
+
+            // === Dòng 6: trống
+            worksheet.addRow([]);
+
+            // === Xuất dữ liệu grid bắt đầu từ dòng 7 ===
+            DevExpress.excelExporter.exportDataGrid({
+                component: grid,
+                worksheet: worksheet,
+                autoFilterEnabled: true,
+                topLeftCell: { row: 7, column: 1 }
+            }).then(function () {
+                // Footer (sau cùng)
+                const lastRow = worksheet.lastRow.number + 2;
+                worksheet.mergeCells(`A${lastRow}:D${lastRow}`);
+                worksheet.getCell(`A${lastRow}`).alignment = { horizontal: 'center' };
+                worksheet.getCell(`A${lastRow}`).font = { italic: true };
+
+                // Ghi file
+                let fileName = "Dialing Information.xlsx";
+
+                workbook.xlsx.writeBuffer().then(function (buffer) {
+                    saveAs(new Blob([buffer], { type: "application/octet-stream" }), fileName);
+                });
+            });
+        });
+
+</script>

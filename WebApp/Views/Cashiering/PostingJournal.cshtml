@@ -1,0 +1,788 @@
+﻿@using DevExpress.XtraReports.UI
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    var selectedReport = @ViewBag.ReportHeader;
+    var tlplist = ViewBag.TransactionGroupList;
+    var transg = ViewBag.TransactionSubGroupList;
+    var user = ViewBag.UsersList;
+    var trans = ViewBag.TransactionsList;
+}
+
+
+<style>
+    #gridContainer .dx-datagrid-rowsview .dx-selection {
+        background-color: #005f87 !important; /* màu xanh ng?c */
+        color: white !important; /* ch? tr?ng */
+    }
+
+        #gridContainer .dx-datagrid-rowsview .dx-selection * {
+            color: white !important;
+        }
+
+    .dx-datagrid-headers .dx-header-row td {
+        white-space: pre-line !important;
+        text-align: center;
+        font-size: 11px;
+    }
+
+
+    .dx-datagrid .dx-editor-with-menu .dx-menu-item-content .dx-icon.dx-icon-filter-operation-default, .dx-datagrid-container .dx-editor-with-menu .dx-menu-item-content .dx-icon.dx-icon-filter-operation-default {
+        display: none;
+    }
+
+    #gridContainer .dx-datagrid-rowsview .dx-row > td {
+        padding-top: 2px !important;
+        padding-bottom: 2px !important;
+        font-size: 12px !important;
+        line-height: 24px !important;
+    }
+
+    #gridContainer .dx-datagrid-headers {
+        background-color: #3b9ac6 !important; /* Màu xanh duong */
+        color: white !important; /* Ch? tr?ng cho d? d?c */
+    }
+
+        #gridContainer .dx-datagrid-headers .dx-header-row > td {
+            padding-top: 12px !important;
+            padding-bottom: 12px !important;
+            font-size: 12px !important;
+        }
+
+        #gridContainer .dx-datagrid-headers .dx-header-row > td {
+            background-color: #3b9ac6 !important;
+            color: white !important;
+            font-weight: bold;
+            border-right: 1px solid #ddd !important;
+            text-align: center !important;
+        }
+
+        #gridContainer .dx-datagrid-rowsview td,
+        #gridContainer .dx-datagrid-headers td {
+            border-right: 1px solid #ddd !important;
+        }
+
+        /* Lo?i b? vi?n ph?i ? c?t cu?i cùng (tùy ch?n) */
+        #gridContainer .dx-datagrid-rowsview tr td:last-child,
+        #gridContainer .dx-datagrid-headers tr td:last-child {
+            border-right: none !important;
+        }
+
+    #gridContainer .dx-datagrid-rowsview .dx-selection {
+        background-color: #01579b !important;
+        color: white !important;
+    }
+
+        #gridContainer .dx-datagrid-rowsview .dx-selection * {
+            color: white !important;
+        }
+
+    #gridContainer .dx-datagrid-filter-row td .dx-datebox {
+        height: 24px !important;
+        min-height: 24px !important;
+    }
+
+        #gridContainer .dx-datagrid-filter-row td .dx-datebox input {
+            font-size: 12px !important;
+            height: 24px !important;
+        }
+
+    #gridContainer .dx-datagrid-filter-row td .dx-editor-with-menu,
+    #gridContainer .dx-datagrid-filter-row td .dx-texteditor input {
+        height: 24px !important;
+        line-height: 24px !important;
+        padding: 2px 6px !important;
+        font-size: 12px !important;
+        box-sizing: border-box;
+    }
+
+    #gridContainer .dx-datagrid-filter-row td .dx-datebox,
+    #gridContainer .dx-datagrid-filter-row td .dx-dropdowneditor {
+        height: 26px !important;
+        min-height: 26px !important;
+        font-size: 12px !important;
+    }
+
+    #logGridContainer .dx-datagrid-rowsview .dx-selection {
+        background-color: #005f87 !important; /* màu xanh ng?c */
+        color: white !important; /* ch? tr?ng */
+    }
+
+        #logGridContainer .dx-datagrid-rowsview .dx-selection * {
+            color: white !important;
+        }
+
+    #logGridContainer .dx-datagrid-rowsview .dx-row > td {
+        padding-top: 2px !important;
+        padding-bottom: 2px !important;
+        font-size: 12px !important;
+        line-height: 24px !important;
+    }
+
+    #logGridContainer .dx-datagrid-headers {
+        background-color: #3b9ac6 !important; /* Màu xanh duong */
+        color: white !important; /* Ch? tr?ng cho d? d?c */
+    }
+
+        #logGridContainer .dx-datagrid-headers .dx-header-row > td {
+            padding-top: 12px !important;
+            padding-bottom: 12px !important;
+            font-size: 12px !important;
+            background-color: #3b9ac6 !important;
+            color: white !important;
+            font-weight: bold;
+            border-right: 1px solid #ddd !important;
+            text-align: center !important;
+        }
+
+        #logGridContainer .dx-datagrid-rowsview td,
+        #logGridContainer .dx-datagrid-headers td {
+            border-right: 1px solid #ddd !important;
+        }
+
+        /* Lo?i b? vi?n ph?i ? c?t cu?i cùng (tùy ch?n) */
+        #logGridContainer .dx-datagrid-rowsview tr td:last-child,
+        #logGridContainer .dx-datagrid-headers tr td:last-child {
+            border-right: none !important;
+        }
+
+    #logGridContainer .dx-datagrid-rowsview .dx-selection {
+        background-color: #01579b !important;
+        color: white !important;
+    }
+
+        #logGridContainer .dx-datagrid-rowsview .dx-selection * {
+            color: white !important;
+        }
+
+    #logGridContainer .dx-datagrid-filter-row td .dx-datebox {
+        height: 24px !important;
+        min-height: 24px !important;
+    }
+
+        #logGridContainer .dx-datagrid-filter-row td .dx-datebox input {
+            font-size: 12px !important;
+            height: 24px !important;
+        }
+
+    #logGridContainer .dx-datagrid-filter-row td .dx-editor-with-menu,
+    #logGridContainer .dx-datagrid-filter-row td .dx-texteditor input {
+        height: 24px !important;
+        line-height: 24px !important;
+        padding: 2px 6px !important;
+        font-size: 12px !important;
+        box-sizing: border-box;
+    }
+
+    #logGridContainer .dx-datagrid-filter-row td .dx-datebox,
+    #logGridContainer .dx-datagrid-filter-row td .dx-dropdowneditor {
+        height: 26px !important;
+        min-height: 26px !important;
+        font-size: 12px !important;
+    }
+
+    .filter_wrapper {
+        /*     background-color: #ececec; */
+        /*   margin: 0px 8px 14px 8px; */
+        padding: 18px 0px 0px 14px;
+        border-radius: 8px;
+    }
+
+    .gridContainer {
+        margin: 0px 8px;
+    }
+
+    .button_wrapper {
+        display: flex;
+        column-gap: 12px;
+        margin: 0px 8px;
+    }
+
+        .button_wrapper .fa-solid {
+            margin-right: 5px;
+        }
+
+    .selected {
+        background-color: #4CAF50; /* Màu xanh */
+        color: white;
+    }
+
+    #gridContainer .dx-datagrid-rowsview .dx-selection {
+        background-color: #01579b !important; /* màu xanh ng?c */
+        color: white !important; /* ch? tr?ng */
+    }
+
+        #gridContainer .dx-datagrid-rowsview .dx-selection * {
+            color: white !important;
+        }
+
+    .sticky-header .form-control-sm {
+        padding: .1rem .35rem;
+        height: calc(1.1em + .2rem + 2px);
+    }
+
+    .sticky-header label[class*="me-"] {
+        margin-right: .5rem !important;
+    }
+
+    #gridContainer .dx-datagrid-headers .dx-header-row > td {
+        padding: 5px !important;
+        height: 24px !important;
+        font-size: 12px !important;
+        line-height: 1.1 !important;
+    }
+
+    .sticky-header input[type="date"].form-control-sm {
+        font-size: 12px !important; /* dúng 12?px */
+        height: calc(1.1em + .2rem + 2px); /* gi? cùng chi?u cao */
+    }
+
+    .sticky-header label {
+        font-size: 12px !important;
+        line-height: 1.2;
+    }
+
+
+    .sort-select {
+        max-width: 130px; /* ho?c 100px n?u mu?n nh? hon */
+        font-size: 12px;
+        padding: 0.15rem 0.5rem;
+    }
+
+    .sort-select {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background-image: none !important;
+        padding-right: 10px !important;
+    }
+
+    button:disabled {
+        pointer-events: none; /* Không cho hover/click */
+        opacity: 0.6; /* Cho nó mờ đi */
+        cursor: not-allowed; /* Hiện con trỏ cấm */
+        background-color: #ccc !important; /* tuỳ chỉnh màu khi disable */
+    }
+    .tomselect-custom {
+        width: 100px;
+        min-height: 30px !important; /* hoặc tùy theo chiều cao bạn muốn */
+        font-size: 12px !important;
+    }
+
+    .tomselect-custom .ts-control {
+        padding-left: 8px !important; /* hoặc bất kỳ giá trị nào bạn muốn */
+    }
+
+    #groupCode.form-control-sm,
+    #subGroupCode.form-control-sm {
+        height: 26px !important; /* chiều cao nhỏ */
+        font-size: 12px !important; /* chữ nhỏ */
+        padding: 2px 6px !important; /* padding nhỏ */
+        line-height: 1.2 !important; /* căn giữa chữ */
+        max-width: 180px; /* chiều rộng vừa phải */
+    }
+
+    .hide-band .dx-datagrid-bands > tr:first-child {
+        display: none !important;
+    }
+
+</style>
+<link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+<div class="text-center" id="reportTitle" style="font-size: 20px">Posting Journal</div>
+<div class="sticky-header bg-white p-2 shadow-sm z-3">
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-1" style="border: 1px solid #ced4da; border-radius: 6px; padding: 8px;">
+       
+        <div class="d-flex flex-column ">
+            <div class="d-flex align-items-center">
+                <div class="d-flex align-items-center me-2">
+                    <label class="me-2 mb-0">From Date:</label>
+                    <input type="date" id="fromDate" name="fromDate" class="form-control form-control-sm w-auto" />
+                </div>
+
+                <div class="d-flex align-items-center me-2">
+                    <label class="me-2 mb-0">To Date:</label>
+                    <input type="date" id="toDate" name="toDate" class="form-control form-control-sm w-auto" />
+                </div>
+            </div>
+        </div>
+        <div class="d-flex align-items-center me-2">
+        <label class="me-2 mb-0">Cashier.No:</label>
+        <select id="cashierNo" class="tomselect-custom" multiple>
+            @foreach (var u in ViewBag.UsersList)
+            {
+                <option value="@u.LoginName">@u.LoginName</option>
+            }
+        </select>
+        </div>       
+        <div class="d-flex align-items-center me-2">
+        <label class="me-2 mb-0">Group.Code:</label>
+            <select id="groupCode" class="form-control form-control-sm w-auto">
+            
+            <option value="0">-- Select Group --</option>
+            @foreach (var g in ViewBag.TransactionGroupList)
+            {
+                <option value="@g.ID">@g.Code - @g.Description</option>
+            }
+        </select>
+        </div>
+        <div class="d-flex align-items-center me-2">
+        <label class="me-2 mb-0">Subgroup.Code:</label>
+            <select id="subGroupCode" class="form-control form-control-sm w-auto">
+            <option value="0">-- Select SubGroup --</option>
+            @foreach (var sg in ViewBag.TransactionSubGroupList)
+            {
+                <option value="@sg.ID" data-group="@sg.TransactionGroupID">@sg.Code - @sg.Description</option>
+            }
+        </select>
+        </div>
+        <div class="d-flex align-items-center me-2">
+            <label class="me-2 mb-0">Transaction Code:</label>
+            <select id="transactionCode" class="tomselect-custom" style="width: 200px;" multiple>
+                @foreach (var tr in ViewBag.TransactionsList)
+                {
+                    <option value="@tr.Code" >@tr.Code - @tr.Description</option>
+                }
+            </select>
+        </div>
+        <div class="d-flex align-items-center me-2">
+            <label class="me-2 mb-0">Arrangement Code:</label>
+            <input style="width: 40px;" type="text" id="arrangementCode" name="arrangementCode" class="form-control form-control-sm " readonly />
+        </div>
+        <div class="d-flex align-items-center me-2">
+            <label class="me-2 mb-0">List Of Room:</label>
+            <input style="width: 40px;" type="text" id="listOfRoom" name="listOfRoom" class="form-control form-control-sm " />
+        </div>
+        <div class="d-flex align-items-center me-2">
+            <label class="me-2 mb-0">Ref.No:</label>
+            <input style="width: 40px;" type="text" id="ref" name="ref" class="form-control form-control-sm" readonly />
+        </div>
+        <label class="me-2 mb-0">View Mode:</label>
+    
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="rebateCode" value="Rebate">
+            <label class="form-check-label text-primary" for="rebateCode" style="cursor:pointer;">
+                View Only Rebate Code
+            </label>
+        </div>
+        <label class="me-2 mb-0">Option Filter:</label>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="optionFilter" id="byTotal" value="Total" checked>
+            <label class="form-check-label" for="byTotal">
+                By Total
+            </label>
+        </div>
+
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="optionFilter" id="byDetail" value="Detail">
+            <label class="form-check-label" for="byDetail">
+                By Detail
+            </label>
+        </div>
+
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="optionFilter" id="byDetailVat" value="DetailVat">
+            <label class="form-check-label" for="byDetailVat">
+                By Detail and VAT Information
+            </label>
+        </div>
+
+    </div>
+    <div class="">
+        <button style="border-radius: 4px;  margin-right: 6px;background-color: #3b9ac6;" id="btnPrint" class="mui-button mui-button-new"><i class="fa-solid fa-eye"></i>View</button>
+        <button style="border-radius: 4px;  margin-right: 6px;background-color: green;" id="btnExportExcel" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Excel</button>
+
+    </div>
+</div>
+
+<div class="mui-card">
+
+    <div id="gridWrapper" class="mt-2" style="max-height: 500px;">
+        <div id="gridContainer"></div>
+    </div>
+</div>
+<div id="loadingSpinner" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
+    <i class="fa-solid fa-spinner fa-spin"></i>
+</div>
+<script>
+    DevExpress.localization.locale("vi");
+      function formatDate(date) {
+            let year = date.getFullYear();
+            let month = (date.getMonth() + 1).toString().padStart(2, '0'); // Đảm bảo có 2 chữ số
+            let day = date.getDate().toString().padStart(2, '0'); // Đảm bảo có 2 chữ số
+            return `${year}-${month}-${day}`;
+        }
+      $(document).ready(function () {
+
+                const today = new Date();
+
+                const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+                // Lấy ngày cuối cùng của tháng
+                const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+                // Định dạng theo local time
+                const formattedFirstDay = formatDate(firstDayOfMonth);
+                const formattedLastDay = formatDate(lastDayOfMonth);
+
+                console.log(formattedFirstDay); // Kiểm tra giá trị đúng chưa
+                console.log(formattedLastDay); // Kiểm tra giá trị đúng chưa
+                // Gán giá trị cho input date
+                document.getElementById('fromDate').value = formattedFirstDay;
+                document.getElementById('toDate').value = formattedLastDay;
+                initializeTomSelects();
+                let grid = $("#gridContainer").dxDataGrid("instance");
+                if (grid) {
+                    ["market", "source", "company", "group", "reservationHolder", "country"]
+                        .forEach(field => grid.columnOption(field, "visible", false));
+                }
+        });
+      function initializeTomSelects() {
+                const selectors = ["#cashierNo","#transactionCode"];
+
+            for (const id of selectors) {
+                const el = document.querySelector(id);
+                if (!el) continue;
+
+                if (el.tomselect) el.tomselect.destroy();
+
+                const ts = new TomSelect(el, {
+                    plugins: ['remove_button'],
+                    create: false,
+                    maxItems: null,
+                    allowEmptyOption: true,
+                    placeholder: '',
+                    persist: false,
+                    render: {
+                        option: function (data, escape) {
+                            return `<div>${escape(data.text)}</div>`;
+                        }
+                    }
+                });
+
+            }
+        }
+            $("#listOfRoom").on("input", function () {
+        var value = $(this).val();
+
+        var grid = $("#gridContainer").dxDataGrid("instance");
+
+        if (value) {
+            grid.filter(["room", "contains", value]);
+        } else {
+            grid.clearFilter();
+        }
+    });
+    $("#groupCode").on("change", function () {
+        var selectedGroupId = $(this).val();
+
+        $("#subGroupCode option").each(function () {
+            var parentId = $(this).data("group");
+            if (!parentId || selectedGroupId === "0") {
+                $(this).show();
+            } else {
+                if (parentId == selectedGroupId) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            }
+        });
+        $("#subGroupCode").val("0"); // reset về mặc định
+    });
+        let cachedGrandTotal = null;
+        function prepareDataWithSubtotal(data) {
+        let result = [];
+        let grouped = {};
+
+        // Biến cộng dồn Grand Total
+        let grandDebitVND = 0, grandCreditVND = 0, grandDebitUSD = 0, grandCreditUSD = 0;
+
+        // Gom nhóm theo transactionCode
+        data.forEach(item => {
+            if (!grouped[item.transactionCode]) {
+                grouped[item.transactionCode] = [];
+            }
+            grouped[item.transactionCode].push(item);
+
+            // ✅ Cộng dồn Grand Total trực tiếp từ item gốc
+            grandDebitVND += (item.debitVND || 0);
+            grandCreditVND += (item.creditVND || 0);
+            grandDebitUSD += (item.debitUSD || 0);
+            grandCreditUSD += (item.creditUSD || 0);
+        });
+
+        // Duyệt từng nhóm và chèn Subtotal
+        Object.keys(grouped).forEach(code => {
+            let items = grouped[code];
+            let subtotal = {
+                transactionCode: code,
+                description: "Subtotal :",
+                debitVND: items.reduce((s, x) => s + (x.debitVND || 0), 0),
+                creditVND: items.reduce((s, x) => s + (x.creditVND || 0), 0),
+                debitUSD: items.reduce((s, x) => s + (x.debitUSD || 0), 0),
+                creditUSD: items.reduce((s, x) => s + (x.creditUSD || 0), 0),
+                isSubtotal: true
+            };
+
+            result.push(...items);   // Thêm các dòng chi tiết
+            result.push(subtotal);   // Thêm dòng subtotal
+        });
+
+        // Thêm Grand Total cuối bảng
+        cachedGrandTotal = {
+            transactionCode: "",
+            description: "Grand Total :",
+            debitVND: grandDebitVND,
+            creditVND: grandCreditVND,
+            debitUSD: grandDebitUSD,
+            creditUSD: grandCreditUSD,
+            isGrandTotal: true
+        };
+        result.push(cachedGrandTotal);
+
+        return result;
+    }
+
+    function loadPostingJournal() {
+        let type = $("input[name='optionFilter']:checked").val(); // total | detail | vat
+    let url = "";
+
+        if (type === "Total") {
+            url = "/Cashiering/GetPostingJournal";
+    } else if (type === "Detail") {
+        url = "/Cashiering/GetSearchTransactionJournalByNotVatInfor";
+        } else if (type === "DetailVat") {
+        url = "/Cashiering/GetSearchTransactionJournalByVatInfor";
+    }
+    $.ajax({
+        url: url,
+        type: "GET",
+        data: {
+            cashierNo: $("#cashierNo").val()?.map(r => r.replace("''")).join("','") || "",
+            transactionCodeList: $("#transactionCode").val()?.map(r => r.replace("''")).join("','") || "",
+            roomNoList: $("#roomNoList").val(),
+            fromDate: $("#fromDate").val(),
+            toDate: $("#toDate").val(),
+            fromProfitCode: "1",
+            toProfitCode: "17",
+            groupID: $("#groupCode").val(),
+            subgroupID: $("#subGroupCode").val(),
+        },
+        success: function (data) {
+            console.log("Data loaded:", data);
+            loadPostingJournalGrid(data);
+            $("#loadingSpinner").hide();
+        },
+        error: function () {
+            alert("Không thể tải dữ liệu");
+            $("#loadingSpinner").hide();
+        }
+    });
+}
+    $("#btnPrint").on("click", function () {
+        loadPostingJournal();
+    });
+
+    // ✅ Khi đổi radio
+        $("input[name='optionFilter']").on("change", function () {
+        loadPostingJournal();
+    });
+
+    function loadPostingJournalGrid(data) {
+         let preparedData = prepareDataWithSubtotal(data);
+            $("#gridContainer").dxDataGrid({
+                    dataSource: preparedData,
+                    height: 400,
+                    allowColumnResizing: true,
+                    selection: { mode: "single" },
+
+                    columns: [
+                        {
+                            caption: "Public Information",
+                            name: "profileInfo",
+                            columns: [
+                        { dataField: "transactionDate", caption: "Date", width:100, dataType: "date",format: "dd/MM/yyyy" },
+                        { dataField: "roomType", caption: "R.Type", width:100 },
+                        { dataField: "room", caption: "Room", width:100 },
+                        { dataField: "folioNo", caption: "Folio.No", width:100, dataType: "number" },
+                        { dataField: "profitCenterCode", caption: "PC", width:100, dataType: "number" },
+                        { dataField: "transactionCode", caption: "TA.Code", width:100, dataType: "number" },
+                        { dataField: "description", caption: "Description", width:270 },
+                        { dataField: "debitVND", caption: "Debit(VND)", width:180 , dataType: "number",customizeText: function(e) {
+                     return e.value
+                        .toLocaleString("vi-VN",
+                         { minimumFractionDigits: 2, maximumFractionDigits: 2 });}},
+                        { dataField: "creditVND", caption: "Credit(VND)", width:180 , dataType: "number",customizeText: function(e) {
+                     return e.value
+                        .toLocaleString("vi-VN",
+                         { minimumFractionDigits: 2, maximumFractionDigits: 2 });}},
+                        { dataField: "debitUSD", caption: "Debit(USD)", width:100 , dataType: "number",customizeText: function(e) {
+                     return e.value
+                        .toLocaleString("vi-VN",
+                         { minimumFractionDigits: 2, maximumFractionDigits: 2 });}},
+                        { dataField: "creditUSD", caption: "Credit(USD)", width:100, dataType: "number",customizeText: function(e) {
+                     return e.value
+                        .toLocaleString("vi-VN",
+                         { minimumFractionDigits: 2, maximumFractionDigits: 2 });}},
+                        { dataField: "confirmationNo", caption: "Confirm.No", width:100, dataType: "number" },
+                        { dataField: "crsNo", caption: "CRS.No" , width:100, dataType: "number"},
+                        { dataField: "nationality", caption: "Nat", width:100 },
+                        { dataField: "profileCode", caption: "Profile Code", width:100,dataType: "number" },
+                        { dataField: "accountName", caption: "Account Name", width:200 },
+                        { dataField: "arrivalDate", caption: "Arr.Date", width:100, dataType: "date",format: "dd/MM/yyyy" },
+                        { dataField: "departureDate", caption: "Dep.Date" , width:100, dataType: "date",format: "dd/MM/yyyy"},
+                        { dataField: "time", caption: "Time", width:100,  dataType: "datetime", format: "HH:mm:ss" }, 
+                        { dataField: "cashierNo", caption: "Cashier", width:100, dataType: "number" },
+                        ]
+                        },
+                        {
+                            caption: "Origin Profile Information",
+                            name: "originpro",
+                            columns: [
+                        { dataField: "market", caption: "Market", width:100},
+                        { dataField: "source", caption: "Source", width:100},
+                        { dataField: "company", caption: "Company", width:100},
+                        { dataField: "group", caption: "Group", width:100},
+                        { dataField: "reservationHolder", caption: "Reservation Holder", width:170},
+                        { dataField: "country", caption: "Country", width:100},
+                        ]
+                        },
+                        {
+                            caption: "Current Profile Information",
+                            name: "currentpro",
+                            columns: [
+                        { dataField: "market_C", caption: "Market", width:100},
+                        { dataField: "source_C", caption: "Source", width:100},
+                        { dataField: "origin_C", caption: "Origin", width:100},
+                        { dataField: "company_C", caption: "Company", width:100},
+                        { dataField: "group_C", caption: "Group", width:100},
+                        { dataField: "holderCode", caption: "Holder Code", width:100},
+                        { dataField: "reservationHolder_C", caption: "Reservation Holder", width:170},
+                        { dataField: "country_C", caption: "Country", width:100},
+                        ]
+                        },
+
+                        {caption: "More Information",
+                            name: "moreInfo",
+                            columns: [
+                        { dataField: "package", caption: "Pkg", width:100 },
+                        { dataField: "supplement", caption: "Supplement", width:200 },
+                        { dataField: "reference", caption: "Ref", width:200 },
+                        { dataField: "subGroupCode", caption: "Sub.Code", width:100 },
+                        { dataField: "groupCode", caption: "Group.Code", width:100 }
+                            ]
+                        }
+                        ],
+                scrolling: {
+                mode: "standard", // Không dùng virtual để footer hiển thị đúng
+                showScrollbar: "always",
+                scrollByContent: true
+            },
+            paging: {
+                pageSize: 50
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [50, 100, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true
+            },
+                filterRow: {
+            visible: true,
+            applyFilter: "auto"
+        },
+            showBorders: true,
+          summary: {
+        totalItems: [
+            {
+                column: "description",
+                summaryType: "custom",
+                name: "grandLabel",
+                customizeText: () => "Grand Total :"
+            },
+            {
+                column: "debitVND", summaryType: "custom", name: "sumDebitVND",
+                customizeText: () => cachedGrandTotal?.debitVND.toLocaleString("vi-VN",{minimumFractionDigits:2,maximumFractionDigits:2})
+            },
+            {
+                column: "creditVND", summaryType: "custom", name: "sumCreditVND",
+                customizeText: () => cachedGrandTotal?.creditVND.toLocaleString("vi-VN",{minimumFractionDigits:2,maximumFractionDigits:2})
+            },
+            {
+                column: "debitUSD", summaryType: "custom", name: "sumDebitUSD",
+                customizeText: () => cachedGrandTotal?.debitUSD.toLocaleString("vi-VN",{minimumFractionDigits:2,maximumFractionDigits:2})
+            },
+            {
+                column: "creditUSD", summaryType: "custom", name: "sumCreditUSD",
+                customizeText: () => cachedGrandTotal?.creditUSD.toLocaleString("vi-VN",{minimumFractionDigits:2,maximumFractionDigits:2})
+            }
+        ]
+    },
+
+            onRowPrepared: function(e) {
+                if (e.data && e.data.isSubtotal) {
+                    e.rowElement.css({ "font-weight": "bold"});
+                }
+                if (e.data && e.data.isGrandTotal) {
+                e.rowElement.css({ "font-weight": "bold" });
+                }
+            }
+        });          
+    }
+     
+         $("#btnExportExcel").click(function () {
+        const grid = $("#gridContainer").dxDataGrid("instance");   // 🔥 khai báo grid
+
+        const workbook = new ExcelJS.Workbook();
+        const companyName = localStorage.getItem("CompanyName") || "Tên công ty chưa xác định";
+        const worksheet = workbook.addWorksheet("Sheet 1");
+
+        // === Dòng 1: Tên công ty (merge theo 4 cột) ===
+        worksheet.addRow([companyName]);
+        worksheet.mergeCells('A1:D1');
+        worksheet.getRow(1).font = { bold: true };
+        worksheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'left' };
+
+        // === Dòng 2: Ngày giờ xuất (bên phải) ===
+        const now = new Date();
+        const exportDate = now.toLocaleString("vi-VN");
+        worksheet.addRow(['', '', '', exportDate]);
+        worksheet.mergeCells('D2:D2');  // cột D thôi
+        worksheet.getRow(2).alignment = { vertical: 'middle', horizontal: 'right' };
+
+        // === Dòng 3–4: trống
+        worksheet.addRow([]);
+        worksheet.addRow([]);
+
+        // === Dòng 5: Tiêu đề báo cáo (ở giữa) ===
+        const reportRow = worksheet.addRow(['Posting Journal']);
+        worksheet.mergeCells('A5:D5');
+        reportRow.font = { bold: true, size: 14 };
+        reportRow.alignment = { vertical: 'middle', horizontal: 'center' };
+
+        // === Dòng 6: trống
+        worksheet.addRow([]);
+
+        // === Xuất dữ liệu grid bắt đầu từ dòng 7 ===
+        DevExpress.excelExporter.exportDataGrid({
+            component: grid,
+            worksheet: worksheet,
+            autoFilterEnabled: true,
+            topLeftCell: { row: 7, column: 1 }
+        }).then(function () {
+            // Footer (sau cùng)
+            const lastRow = worksheet.lastRow.number + 2;
+            worksheet.mergeCells(`A${lastRow}:D${lastRow}`);
+            worksheet.getCell(`A${lastRow}`).alignment = { horizontal: 'center' };
+            worksheet.getCell(`A${lastRow}`).font = { italic: true };
+
+            // Ghi file
+            let fileName = "Posting Journal.xlsx";
+            workbook.xlsx.writeBuffer().then(function (buffer) {
+                saveAs(new Blob([buffer], { type: "application/octet-stream" }), fileName);
+            });
+        });
+    });
+</script>

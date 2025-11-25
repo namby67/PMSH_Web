@@ -1,0 +1,198 @@
+﻿<!-- Modal search allotment-->
+<div class="modal fade modal-xl" id="modalAllotment" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Search Profile</h5>
+                <button type="button" class="btn-close" onclick="closeModalSearchAllotment()"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-2">
+                    <button class="mui-button mui-button-new" onclick="getAllotment();"><i class="fas fa-search"></i> Search</button>
+                </div>
+                <div class="mb-2">
+                    <div class="row">
+                        <div class="col-md-2 mb-2">
+                            <label for="input1" class="form-label">Code</label>
+                            <input type="text" id="codeAllotmentSearch" />
+                        </div>
+                        <div class="col-md-2 mb-2">
+                            <label for="input2" class="form-label">Market</label>
+                            <select type="text" id="marketAllotmentSearch" asp-items="ViewBag.cboMarket">
+                            </select>
+                        </div>
+                        <div class="col-md-2 mb-2">
+                            <label for="input3" class="form-label">Allotment Type</label>
+                            <select type="text" id="allotmentTypeSearch" asp-items="ViewBag.cboAllotmentType"></select>
+                        </div>
+                        <div class="col-md-2 mb-2">
+                            <label for="input4" class="form-label">Profile</label>
+                            <select type="text" id="profileAllotmentSearch">
+                            </select>
+                        </div>
+                        <div class="col-md-2 mb-2">
+                            <label class="form-check-label" for="default">Default</label>
+                            <div>
+                                <input type="checkbox" name="default" value="1">
+                                </<div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="mui-card col-md-5">
+                        <div id="gridContainerSearchAllotment" class="mt-2 gridContainer"></div>
+                    </div>
+                    <div class="mui-card col-md-6" style="display:none" id="SearchAllotmentDetail_wrapper">
+                        <div id="gridContainerSearchAllotmentDetail" class="mt-2 gridContainer"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function openModalSearchAllotment(){
+        $('#modalAllotment').modal('show');
+        getAllotment();
+    }
+    function closeModalSearchAllotment(){
+        $('#SearchAllotmentDetail_wrapper').hide();
+
+        $('#modalAllotment').modal('hide');
+    }
+    function getAllotment(){
+        var check =  $('#default').is(':checked') ? 1 : '';
+        $.ajax({
+            url: '/Reservation/GetAllotmentSearch',
+            type: 'get',
+            dataType: 'json',
+            data:{
+                code : $('#codeAllotmentSearch').val(),
+                marketID: $('#marketAllotmentSearch').val(),
+                allotmentTypeID: $('#allotmentTypeSearch').val(),
+                profileID: $('#profileAllotmentSearch').val(),
+                isDefault: check,
+            },
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                    initializeDataGridSearchAllotment(result);
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                } else {
+                    informBox(TOAST_STATUS.DANGER, "Can not load allotment");
+                }
+            }
+        });
+    }
+
+    function initializeDataGridSearchAllotment(data) {
+        var columnWidth = 150;
+
+        $("#gridContainerSearchAllotment").dxDataGrid({
+
+            dataSource: data,   allowColumnResizing: true,
+            columns: [
+
+
+                { dataField: "ID", caption: "ID", width: columnWidth - 80, visible: false},
+                { dataField: "code", caption: "All.Code", width: columnWidth - 80 },
+                { dataField: "allotmentName", caption: "All. Name", width: columnWidth * 2 },
+                { dataField: "accountName", caption: "Profile", width: columnWidth },
+                { dataField: "market", caption: "Market", width: columnWidth },
+                { dataField: "allotmentType", caption: "All. Type", width: columnWidth },
+
+            ],
+            paging: { pageSize: 15 },
+            scrolling: {
+                rowRenderingMode: 'virtual',
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [15, 20, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true,
+            },
+            filterRow: {
+                    visible: true,
+                    applyFilter: "auto"
+            },
+            selection: {
+                mode: "single" // Allows only one row to be selected at a time
+            },
+            onRowClick:function(e){
+                getAllotmentDetail(e.data.id);
+                $('#SearchAllotmentDetail_wrapper').show();
+            },
+            onRowDblClick: function(e) {
+                $('#modalAllotment').modal('hide');
+                $('#txtAllotment').val(e.data.code);
+                $('#txtAllotmentID').val(e.data.id);
+                $('#codeAllotmentSearch').val(e.data.code);
+                $('#marketAllotmentSearch').val(e.data.marketID)
+                $('#allotmentTypeSearch').val(e.data.allotmentTypeID)
+                $('#profileAllotmentSearch').val(e.data.profileID)
+
+            }
+        });
+    }
+
+    function getAllotmentDetail(id){
+        var check =  $('#default').is(':checked') ? 1 : '';
+        $.ajax({
+                    url: '/Reservation/GetAllotmentSearchDetail',
+            type: 'get',
+            dataType: 'json',
+            data:{
+                allotmentID : id
+            },
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                initializeDataGridSearchAllotmentDetail(result);
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                } else {
+                    informBox(TOAST_STATUS.DANGER, "Can not load allotment");
+                }
+            }
+        });
+    }
+
+    function initializeDataGridSearchAllotmentDetail(data) {
+
+        $("#gridContainerSearchAllotmentDetail").dxDataGrid({
+
+            dataSource: data,   allowColumnResizing: true,
+            columnAutoWidth: true,
+            columnMinWidth: 90,
+            paging: { pageSize: 15 },
+            scrolling: {
+                rowRenderingMode: 'virtual',
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [15, 20, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true,
+            },
+            filterRow: {
+                    visible: true,
+                    applyFilter: "auto"
+            },
+            selection: {
+                mode: "single" // Allows only one row to be selected at a time
+            }
+        });
+        }
+</script>

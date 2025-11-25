@@ -1,0 +1,428 @@
+﻿ @* <link href="~/css/pages/reservation.css" rel="stylesheet" asp-append-version="true" /> *@ 
+<div class="header" style="justify-content:space-between;border-bottom:none">
+    <div class="header2">
+        <h3 id="content-title">
+            Accounting Search
+
+        </h3>
+        <i class="fas fa-info-circle info-icon" title="How to use?"></i>
+    </div>
+    <div class="header2">
+        <button class="submit-button-clear-reservation" onclick="openModalNew()">New</button>
+        <button class="submit-button-new-reservation" onclick="openModalMaintenance()">Maintenance</button>
+
+        <button class="submit-button-new-reservation" onclick="GetAccountAvailableByID()">Edit</button>
+    </div>
+
+</div>
+<div class="mb-2">
+    <div class="mui-card">
+        <div class="header" style="justify-content:space-between">
+            <div class="header2">
+                <i class="fa-solid fa-sliders" style="background-color:#2b6cb0;color:white;padding:4px"></i>
+
+                <h3 id="content-title">
+                    Filter
+
+                </h3>
+
+            </div>
+
+            <div class="header2">
+                <i class="fa-solid fa-magnifying-glass" onclick="searchReservation()"></i>
+
+            </div>
+        </div>
+
+        <div id="filter" class="tab-pane ">
+            <div class="row">
+                <div class="form-group-new-reservation col-md-1">
+                    <label>Account Name</label>
+                    <input type="text" id="accountName">
+                </div>
+                <div class="form-group-new-reservation col-md-1">
+                    <label>AccountNo</label>
+                    <input type="text" id="accountNo">
+                </div>
+
+
+
+                <div class="form-group-new-reservation col-md-1">
+                    <label>Account Type</label>
+                    <select id="accountType" asp-items="ViewBag.cboAccountType">
+
+                    </select>
+                </div>
+
+                <div class="col-md-9">
+
+                    <div class="form-group-new-reservation">
+                        <input type="radio" name="searchType" checked value="" style="height:auto">
+                        <label>All</label>
+                    </div>
+                    <div class="form-group-new-reservation">
+                        <input type="radio" name="searchType"  value="0" style="height:auto">
+                        <label>Open Balance</label>
+                    </div>
+                    <div class="form-group-new-reservation">
+                        <input type="radio" name="searchType"  value="3" style="height:auto">
+                        <label>No Blance</label>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalNew" tabindex="-1" aria-labelledby="transactionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="border: 1px solid #bcbcbc">
+            <div class="modal-header">
+                <h5 class="modal-title" id="transactionModalLabel">AR Account Receivable</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="button-group">
+                <button type="button" class="mui-button mui-button-search" onclick="AccountAvailableAdd();">Save</button>
+                <button type="button" class="mui-button mui-button-clear" data-bs-dismiss="modal">Close</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group-new-reservation">
+                    <label for="code">Account Type</label>
+                    <select id="accountTypeAdd" asp-items="ViewBag.cboAccountType"></select>
+                </div>
+                <div class="row">
+                    <div class="form-group-new-reservation col-md-4">
+                        <label >Account Number</label>
+                        <input type="text" id="accountNumberAdd">
+                    </div >
+                    <div class="form-group-new-reservation col-md-4">
+                        <label >Credit Limit/LOC</label>
+                        <input type="text" id="creditLimitAdd">
+                    </div>
+                    <div class="form-group-new-reservation col-md-4">
+                        <label  >Currency</label>
+                        <input type="text" id="currencyAdd" value="VND" readonly>
+                    </div>
+                </div>
+                <div class="form-group-new-reservation">
+                    <label >Profile</label>
+                    <select id="profileAdd"></select>
+                </div>
+                <div class="row">
+
+                    <div class="form-group-new-reservation col-md-4">
+                        <label>Contact</label>
+                        <input type="text" id="contactAdd">
+                    </div>
+                    <div class="form-group-new-reservation col-md-4">
+                        <label>Phone</label>
+                        <input type="text" id="phoneAdd">
+                    </div>
+                    <div class="form-group-new-reservation col-md-4">
+                        <label>Fax</label>
+                        <input type="text" id="faxAdd">
+                    </div>
+                </div>
+                <div class="form-group-new-reservation">
+                    <label>Email</label>
+                    <input type="text" id="emailAdd">
+                </div>
+                <div class="form-group-new-reservation">
+                    <label>Address1</label>
+                    <input type="text" id="address1Add">
+                </div>
+                <div class="form-group-new-reservation">
+                    <label>Address2</label>
+                    <input type="text" id="address2Add">
+                </div>
+                <div class="form-group-new-reservation">
+                    <label>Address3</label>
+                    <input type="text" id="address3Add">
+                </div>
+                <div class="row">
+
+                    <div class="form-group-new-reservation col-md-4">
+                        <label>PostalCode</label>
+                        <input type="text" id="postalCode">
+                    </div>
+                    <div class="form-group-new-reservation col-md-4">
+                        <label>City</label>
+                        <select id="cityAdd" asp-items="ViewBag.cboCity"></select>
+                    </div>
+                    <div class="form-group-new-reservation col-md-4">
+                        <label>Country</label>
+                        <select id="countryAdd" asp-items="ViewBag.cboCountry"></select>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="form-group-new-reservation col-md-6">
+                        <label>Payment Due Add</label>
+                        <input type="text" id="paymentDueAdd">
+                    </div>
+
+                    <div class="form-group-new-reservation col-md-6">
+                        <label>Description</label>
+                        <input type="text" id="desscriptionAdd">
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="form-group-new-reservation col-md-2">
+                        <label>Flagged</label>
+                        <input type="checkbox" id="paymentDueAdd">
+                    </div>
+
+                    <div class="form-group-new-reservation col-md-2">
+                        <label>Inactive</label>
+                        <input type="checkbox" id="inactive">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="gridContainer" class="gridContainer mt-2"></div>
+
+@await Html.PartialAsync("Options/Maintenance")
+
+<script>
+    $(document).ready(async function () {
+        await setTomSelect();
+        getProfileIndividual();
+        searchReservation();
+    });
+    function getProfileIndividual(){
+        $.ajax({
+         url: '/Reservation/GetProfileIndividual',
+            type: 'get',
+            dataType: 'json',
+                crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                if (result.length > 0) {
+                    let select = $('#profileAdd')[0].tomselect; // Lấy instance của TomSelect
+                    // select.clear(); // Xóa giá trị hiện tại
+                    select.clearOptions(); // Xóa tất cả option cũ
+
+                    select.addOption({ value: '0', text: '' });
+                    result.forEach(item => {
+                        select.addOption({ value: item.id, text: `${item.account}` });
+                    });
+
+                    select.setValue('0'); // Chọn giá trị mặc định
+
+
+                }
+                else{
+                    let select = $('#profileAdd')[0].tomselect; // Lấy instance của TomSelect
+                    select.clear(); // Xóa giá trị hiện tại
+                    select.clearOptions(); // Xóa tất cả option cũ
+                    select.addOption({ value: '0', text: '' });
+                    select.setValue('0');
+
+
+                }
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                } else {
+                }
+            }
+        });
+    }
+    async function setTomSelect(){
+        const ids = [
+            "#profileAdd"
+
+        ];
+
+        for (const id of ids) {
+            if ($(id).length) {
+                new TomSelect(id, {
+                    allowEmptyOption: true,
+                    create: true
+                });
+            }
+        }
+    }
+
+    function searchReservation() {
+
+        $.ajax({
+            url: '/Accounting/SearchAccounting',
+            type: 'get',
+            dataType: 'json',
+            data: {
+                accountName: $('#accountName').val(),
+                accountNo: $('#accountNo').val(),
+                accountType: $('#accountType').val(),
+                balance: $('input[name="searchType"]:checked').val(),
+            },
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                initializeDataGridBilling(result);
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                }
+            },
+
+        });
+
+    }
+    function initializeDataGridBilling(data) {
+
+        $("#gridContainer").dxDataGrid({
+            dataSource: data,
+            allowColumnResizing: true,
+
+            paging: { pageSize: 15 },
+            scrolling: {
+                rowRenderingMode: 'virtual'
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [15, 20, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true
+            },
+            filterRow: {
+                visible: true,
+                applyFilter: "auto"
+            },
+            selection: {
+                mode: "multiple",
+                showCheckBoxesMode: "always"
+            },
+            onRowClick: function(e) {
+                const grid = $("#gridContainer").dxDataGrid("instance");
+                grid.selectRows([e.key], false);
+            },
+        });
+    }
+
+    function openModalNew(){
+        $('#modalNew').modal('show');
+    }
+    
+    function closeModalNew(){
+        $('#modalNew').modal('hide');
+        id = 0;
+        $('#accountTypeAdd').val(0);
+        $('#accountNumberAdd').val('');
+        $('#creditLimitAdd').val('');
+        $('#currencyAdd').val('');
+        $('#profileAdd').val(0);
+        $('#contactAdd').val('');
+        $('#phoneAdd').val('');
+        $('#faxAdd').val('');
+        $('#emailAdd').val('');
+        $('#address1Add').val('');
+        $('#address2Add').val('');
+        $('#address3Add').val('');
+        $('#postalCode').val('');
+        $('#cityAdd').val(0);
+        $('#countryAdd').val(0);
+
+    }
+
+    function AccountAvailableAdd(){
+        const userName = JSON.parse(localStorage.getItem("Loginname"));
+        const userID = JSON.parse(localStorage.getItem("userID"));
+
+        var formData = new FormData
+        formData.append('id', id);
+        formData.append('accountType', $('#accountTypeAdd').val());
+        formData.append('accountNumber', $('#accountNumberAdd').val());
+        formData.append('creditLimit', $('#creditLimitAdd').val());
+        formData.append('currency', $('#currencyAdd').val());
+        formData.append('profile', $('#profileAdd').val());
+        formData.append('contact', $('#contactAdd').val());
+        formData.append('phone', $('#phoneAdd').val());
+        formData.append('fax', $('#faxAdd').val());
+        formData.append('email', $('#emailAdd').val());
+        formData.append('address1', $('#address1Add').val());
+        formData.append('address2', $('#address2Add').val());
+        formData.append('address3', $('#address3Add').val());
+        formData.append('postalCode', $('#postalCode').val());
+        formData.append('city', $('#cityAdd').val());
+        formData.append('country', $('#countryAdd').val());
+        formData.append('paymentDue', $('#paymentDueAdd').not('[type="checkbox"]').val());
+        formData.append('description', $('#desscriptionAdd').not('[type="checkbox"]').val());
+        formData.append('flagged', $('#paymentDueAdd[type="checkbox"]').is(':checked') ? 1 : 0);
+        formData.append('inactive', $('#inactive[type="checkbox"]').is(':checked') ? 1 : 0);
+        formData.append('userName', userName);
+        formData.append('userID', userID);
+
+        $.ajax({
+            url: '/Accounting/AccountReceivableAdd',
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            data: formData,
+            success: function (data) {
+                if (data.code == 0) {
+                    closeModalNew();
+                    searchReservation();
+                    showToast('Success', data.msg, true);
+                } else {
+                    showToast('Error', data.msg, false);
+                }
+            },
+            error: function (xhr, statusText, err) { }
+        });
+    }
+
+    function GetAccountAvailableByID(){
+        var grid = $("#gridContainer").dxDataGrid("instance");
+        var selectedRows = grid.getSelectedRowsData();
+        var selectedIds = selectedRows.map(row => row.ID);
+        $.ajax({
+         url: '/Accounting/GetAccountReceivable',
+            type: 'get',
+            dataType: 'json',
+            data:{
+                id: selectedIds[0]
+            },
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                console.log(result);
+                $('#accountTypeAdd').val(result.accountTypeID);
+                $('#accountNumberAdd').val(result.accountNo);
+                $('#creditLimitAdd').val(result.creditLimit);
+                $('#currencyAdd').val(result.currencyID);
+                $('#profileAdd').val(result.profileID);
+                $('#contactAdd').val(result.contactName);
+                $('#phoneAdd').val(result.telePhone);
+                $('#faxAdd').val(result.fax);
+                $('#emailAdd').val(result.email);
+                $('#address1Add').val(result.address1);
+                $('#address2Add').val(result.address2);
+                $('#address3Add').val(result.address3);
+                $('#postalCode').val(result.postalCode);
+                $('#cityAdd').val(result.cityID);
+                $('#countryAdd').val(result.countryID);
+                if(result.statusFlagged == true){
+                    document.getElementById("paymentDueAdd").checked = true;
+                }
+                if(result.statusInactive == true){
+                    document.getElementById("inactive").checked = true;
+
+                }
+                openModalNew();
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                } else {
+                }
+            }
+        });
+    }
+</script>
