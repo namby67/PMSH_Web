@@ -5838,7 +5838,10 @@ namespace Administration.Controllers
 
                 if (model.ID == 0)
                 {
-                    model.Description = model.Description;
+                    model.CreateDate = DateTime.Now;
+                    model.UpdateDate = DateTime.Now;
+                    model.UserInsertID = model.UserInsertID;
+                    model.UserUpdateID = model.UserUpdateID;
 
                     DepositRuleBO.Instance.Insert(model);
                     message = "Insert successfully!";
@@ -5849,10 +5852,10 @@ namespace Administration.Controllers
 
                     if (oldData != null)
                     {
-                       
+                    model.UserInsertID = oldData.UserInsertID;
                     }
 
-                    
+
 
                     DepositRuleBO.Instance.Update(model);
                     message = "Update successfully!";
