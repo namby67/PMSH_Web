@@ -20,14 +20,6 @@ namespace Administration.Controllers
         [HttpGet("")]
         public IActionResult RateCode()
         {
-            // List<RoomModel> listroom = PropertyUtils.ConvertToList<RoomModel>(RoomBO.Instance.FindAll());
-            // ViewBag.RoomList = listroom;
-            // List<ZoneModel> listzone = PropertyUtils.ConvertToList<ZoneModel>(ZoneBO.Instance.FindAll());
-            // ViewBag.ZoneList = listzone;
-            // List<RoomClassModel> listrclass = PropertyUtils.ConvertToList<RoomClassModel>(RoomClassBO.Instance.FindAll());
-            // ViewBag.RoomClassList = listrclass;
-            // List<CommentModel> listcmt = PropertyUtils.ConvertToList<CommentModel>(CommentBO.Instance.FindAll());
-            // ViewBag.CommentList = listcmt;
             List<RateCodeModel> listRateCode = PropertyUtils.ConvertToList<RateCodeModel>(RateCodeBO.Instance.FindAll());
             List<RateCategoryModel> listRateCate = PropertyUtils.ConvertToList<RateCategoryModel>(RateCategoryBO.Instance.FindAll());
             List<RateClassModel> listRateClass = PropertyUtils.ConvertToList<RateClassModel>(RateClassBO.Instance.FindAll());
@@ -64,7 +56,6 @@ namespace Administration.Controllers
         {
             try
             {
-                // 1. Validate ID trước
                 if (id <= 0)
                 {
                     return Json(new
@@ -73,11 +64,7 @@ namespace Administration.Controllers
                         message = "Invalid ID"
                     });
                 }
-
-                // 2. Lấy dữ liệu từ BO
                 var codeModel = RateCodeBO.Instance.FindByPrimaryKey(id) as RateCodeModel;
-
-                // 3. Kiểm tra dữ liệu tồn tại
                 if (codeModel == null || codeModel.ID == 0)
                 {
                     return Json(new
@@ -87,7 +74,6 @@ namespace Administration.Controllers
                     });
                 }
 
-                // 4. Trả dữ liệu ra FE
                 return Json(new
                 {
                     success = true,
@@ -97,9 +83,7 @@ namespace Administration.Controllers
             }
             catch (Exception ex)
             {
-                // TODO: nếu bạn có logger thì bật dòng sau
                 // _logger.LogError(ex, $"GetByID failed with ID {id}");
-
                 return Json(new
                 {
                     success = false,
@@ -117,7 +101,7 @@ namespace Administration.Controllers
                 // Basic null check
                 if (model == null)
                 {
-                    return BadRequest(new { success = false, message = "Payload is null" });
+                    return BadRequest(new { success = false, message = $"Payload is null" });
                 }
 
                 // Collect validation errors
@@ -141,12 +125,19 @@ namespace Administration.Controllers
                     errors.Add("DayUse must be 0 or 1.");
 
                 if (model.UserID <= 0)
-                    errors.Add("UserID is required and must be > 0.");
+                    errors.Add("UserID is required.");
+
+                if (model.RateClass <= 0)
+                    errors.Add("Rate Class is required.");
+
+
+                if (model.RateCategory <= 0)
+                    errors.Add("Rate Category is required.");
+
+
 
                 // Validate business date availability early
                 List<BusinessDateModel> businessDates = PropertyUtils.ConvertToList<BusinessDateModel>(BusinessDateBO.Instance.FindAll());
-                if (businessDates == null || businessDates.Count == 0)
-                    errors.Add("Business date not available. Contact system administrator.");
 
                 // Check duplicate RateCode (case-insensitive) for insert/update
                 var allRateCodes = PropertyUtils.ConvertToList<RateCodeModel>(RateCodeBO.Instance.FindAll()) ?? new List<RateCodeModel>();
@@ -156,7 +147,6 @@ namespace Administration.Controllers
                     if (duplicate)
                         errors.Add("RateCode already exists.");
                 }
-
                 // If there are validation errors, return them
                 if (errors.Any())
                 {
