@@ -62,6 +62,7 @@
                             </div>
                             <div class="col-md-8">
                                 <input type="text" id="txtCode" name="txtCode" class="form-control form-control-sm" />
+                                <div class="invalid-feedback">Code is required.</div>
                             </div>
                         </div>
 
@@ -106,6 +107,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <input type="text" class="form-control" id="depositAmount">
+                                        <div class="invalid-feedback">Amount must be valid number > 0.</div>
                                     </div>
                                 </div>
                             </div>
@@ -123,6 +125,7 @@
                                                 <option value="@item.ID">@item.ID</option>
                                             }
                                         </select>
+                                        <div class="invalid-feedback">Please select currency for Flat type.</div>
                                     </div>
                                 </div>
                             </div>
@@ -135,6 +138,7 @@
                                 <input type="text" id="daysBeforeArrival"
                                        class="form-control form-control-sm"
                                        style="width: 80px;">
+                                <div class="invalid-feedback">Must be number >= 0.</div>
                             </div>
 
                             <div class="col-auto">
@@ -142,6 +146,7 @@
                                 <input type="text" id="daysAfterBooking"
                                        class="form-control form-control-sm"
                                        style="width: 80px;">
+                                <div class="invalid-feedback">Must be number >= 0.</div>
                             </div>
 
                             <div class="col-auto">
@@ -149,6 +154,7 @@
                                 <input type="text" id="sequence"
                                        class="form-control form-control-sm"
                                        style="width: 80px;">
+                                <div class="invalid-feedback">Invalid number.</div>
                             </div>
                         </div>
 
@@ -175,7 +181,22 @@
 <script>
     $(document).ready(function () {
          $("#btnSearch").trigger("click");
+
+         // Remove is-invalid class on input/change
+         $("#itemForm input, #itemForm select, #itemForm textarea").on("input change", function () {
+            if ($(this).hasClass("is-invalid")) {
+                $(this).removeClass("is-invalid");
+            }
+        });
+        $("input[name='type']").change(function() {
+            toggleCurrency();
+
+            $("#currencyID").removeClass("is-invalid");
+        });
     });
+        
+
+
      
     let selectedRowData = null;
 
@@ -190,12 +211,56 @@
     }
     }
 
+        function validateForm() {
+        let isValid = true;
+
+        $("#itemForm .form-control, #itemForm .form-select").removeClass("is-invalid");
+
+        let code = $("#txtCode").val().trim();
+        if (code === "") {
+            $("#txtCode").addClass("is-invalid");
+            isValid = false;
+        }
+
+        let amount = $("#depositAmount").val();
+        if (amount === "" || isNaN(amount) || parseFloat(amount) < 0) {
+            $("#depositAmount").addClass("is-invalid");
+            isValid = false;
+        }
+
+        let typeVal = $("input[name='type']:checked").val();
+        if (typeVal == "0") {
+            if ($("#currencyID").val() === "") {
+                $("#currencyID").addClass("is-invalid");
+                isValid = false;
+            }
+        }
+
+        const isNonNegativeNumber = (val) => val === "" || (!isNaN(val) && parseFloat(val) >= 0);
+
+        if (!isNonNegativeNumber($("#daysBeforeArrival").val())) {
+            $("#daysBeforeArrival").addClass("is-invalid");
+            isValid = false;
+        }
+        if (!isNonNegativeNumber($("#daysAfterBooking").val())) {
+            $("#daysAfterBooking").addClass("is-invalid");
+            isValid = false;
+        }
+        if ($("#sequence").val() !== "" && isNaN($("#sequence").val())) {
+            $("#sequence").addClass("is-invalid");
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
     $("input[name='type']").change(function() {
         toggleCurrency();
     });
 
       $("#btnNew").click(function () {
            $("#itemForm")[0].reset();
+           $("#itemForm .form-control, #itemForm .form-select").removeClass("is-invalid");
            $("#id").val("0");
            $("#txtCode").prop("disabled", false);
            $("#typeFlat").prop("checked", true);
@@ -295,7 +360,7 @@
         }
     }
     function editItem(data) {
-        console.log("Editing Item:", data);
+          $("#itemForm .form-control, #itemForm .form-select").removeClass("is-invalid");
           $("#id").val(data.id);
           $("#txtCode").val(data.code);
           $("#txtCode").prop("disabled", true);
@@ -327,6 +392,10 @@
               editItem(selectedRowData);
       });
       $("#btnSaveItem").click(function () {
+          if (!validateForm()) {
+            showToast("Warning", "Please check input fields marked in red.", false);
+            return;
+          }
           const id = parseInt($("#id").val()) || 0;
           // let loginName = (localStorage.getItem("Loginname") || "")
           //   .trim()
@@ -335,18 +404,21 @@
 
           const currentType = $("input[name='type']:checked").val();
           const currencyValue = (currentType == 0) ? $("#currencyID").val() : "";
-
+          const amountVal = parseFloat($("#depositAmount").val()) || 0;
+          const daysBefore = parseInt($("#daysBeforeArrival").val()) || 0;
+          const daysAfter = parseInt($("#daysAfterBooking").val()) || 0;
+          const seq = parseInt($("#sequence").val()) || 0;
           const url = "/Administration/DepositRuleSave";
           const model = {
               ID: id,
               Code: $("#txtCode").val(),
               Description: $("#txtDescription").val(),
-              AmountValue: $("#depositAmount").val(),
+              AmountValue: amountVal,
               Type: currentType,
               CurrencyID: currencyValue,
-              DaysBeforeArrival: $("#daysBeforeArrival").val(),
-              DaysAfterBooking: $("#daysAfterBooking").val(),
-              Sequence: $("#sequence").val(),
+              DaysBeforeArrival: daysBefore,
+              DaysAfterBooking: daysAfter,
+              Sequence: seq,
               Inactive: $("#inActive").prop("checked"),
               UserInsertID: loginUser,
               UserUpdateID: loginUser
@@ -367,7 +439,7 @@
                     showToast("Success", res.message, true);
                     $("#itemModal").modal("hide");
                 } else {
-                    showToast("Error", res.errors, false);
+                    showToast("Error", res.message, false);
                 }
                   $("#btnSearch").click();
               },
