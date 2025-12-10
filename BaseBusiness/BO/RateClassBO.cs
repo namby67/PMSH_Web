@@ -1,4 +1,3 @@
-
 using BaseBusiness.bc;
 using BaseBusiness.Facade;
 using System;
@@ -9,17 +8,17 @@ using System.Threading.Tasks;
 
 namespace BaseBusiness.BO
 {
-    public class RateCategoryBO : BaseBO
+    public class RateClassBO : BaseBO
     {
-        private readonly RateCategoryFacade facade = RateCategoryFacade.Instance;
-        private readonly static RateCategoryBO instance = new();
+        private RateClassFacade facade = RateClassFacade.Instance;
+        protected static RateClassBO instance = new RateClassBO();
 
-        protected RateCategoryBO()
+        protected RateClassBO()
         {
             this.baseFacade = facade;
         }
 
-        public static RateCategoryBO Instance
+        public static RateClassBO Instance
         {
             get { return instance; }
         }

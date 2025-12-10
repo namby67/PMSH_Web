@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace BaseBusiness.Model
 {
     public class RateCategoryModel : BaseModel
@@ -23,8 +24,6 @@ namespace BaseBusiness.Model
         public DateTime CreatedDate { get; set; }
         public string UpdatedBy { get; set; }
         public DateTime UpdatedDate { get; set; }
-
-
 
     }
 }

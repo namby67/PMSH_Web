@@ -196,6 +196,7 @@ namespace Administration.Controllers
             }
         }
         [HttpPost]
+        #region DeleteMenber
         public ActionResult DeleteMember()
         {
             try
@@ -217,6 +218,7 @@ namespace Administration.Controllers
             }
 
         }
+        #endregion
         [HttpGet]
         public IActionResult GetMemberCategory(string code, string name, int inactive)
         {
@@ -4454,7 +4456,6 @@ namespace Administration.Controllers
             }
 
         }
-
         [HttpGet]
         public IActionResult GetCurrency()
         {
@@ -4682,7 +4683,6 @@ namespace Administration.Controllers
                 pt.CloseConnection();
             }
         }
-
         [HttpGet]
         public IActionResult GethkpEmployee(string code, string name, int inactive)
         {
@@ -5067,6 +5067,8 @@ namespace Administration.Controllers
                 pt.CloseConnection();
             }
         }
+
+
         [HttpPost]
         public ActionResult DeleteProperty()
         {
@@ -5237,6 +5239,8 @@ namespace Administration.Controllers
                 pt.CloseConnection();
             }
         }
+
+
         [HttpPost]
         public ActionResult DeletePropertyPermission()
         {
@@ -5366,6 +5370,7 @@ namespace Administration.Controllers
             };
             return View(model);
         }
+
 
         [HttpPost]
         public ActionResult UpdateMessage(string desc)
