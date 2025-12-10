@@ -132,11 +132,6 @@ builder.Services.AddSingleton<IFolioVATSearchService, FolioVATSearchService>();
 builder.Services.AddSingleton<IAccountingService, AccountingService>();
 builder.Services.AddSingleton<IEmailService, EmailService>();
 builder.Services.AddSingleton<ITransactionGroupService, TransactionGroupService>();
-<<<<<<< HEAD
- 
-=======
-
->>>>>>> main
 builder.Services.AddSingleton<ITransactionService, TransactionService>();
 builder.Services.AddSingleton<IProfileExportService, ProfileExportService>();
 builder.Services.AddSingleton<IMembershipService, MembershipService>();
@@ -155,8 +150,6 @@ builder.Services.AddSingleton<IGroupReservationService, GroupReservationService>
 builder.Services.AddSingleton<IMessageService, MessageService>();
 builder.Services.AddSingleton<IShareService, ShareService>();
 builder.Services.AddSingleton<IGroupAdminService, GroupAdminService>();
-<<<<<<< HEAD
-=======
 
 //Tuan
 builder.Services.AddSingleton<IRateClassService, RateClassService>();
@@ -164,7 +157,6 @@ builder.Services.AddSingleton<IRateCategoryService, RateCategory>();
 builder.Services.AddSingleton<IRateCodeService, RateCodeService>();
 
 
->>>>>>> main
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;

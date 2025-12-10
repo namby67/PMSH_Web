@@ -14,7 +14,7 @@ namespace Administration.Services.Implements
                 SqlParameter[] param = [
                     new SqlParameter("@Inactive", inactive)
                 ];
-                DataTable myTable = await DataTableHelper.getTableDataAsync("spFrmRateCategorySearch", param);
+                DataTable myTable =  DataTableHelper.getTableData("spFrmRateCategorySearch", param);
                 return myTable;
 
             }
