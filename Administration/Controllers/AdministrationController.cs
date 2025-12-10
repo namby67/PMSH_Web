@@ -1,22 +1,15 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using Administration.Services.Implements;
-using Administration.Services.Interfaces;
+﻿using Administration.Services.Interfaces;
 using BaseBusiness.BO;
 using BaseBusiness.Model;
 using BaseBusiness.util;
-using DevExpress.CodeParser;
+using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System.Data;
+using System.Text;
 namespace Administration.Controllers
 {
     public class AdministrationController : Controller
@@ -38,11 +31,11 @@ namespace Administration.Controllers
         }
         public IActionResult Index()
         {
-            return View(); // View này sẽ chứa DataGrid + script gọi API
+            return View(); 
         }
         [HttpGet]
 
-        public IActionResult GetMemberList(string code, string name, int inactive) //Get Member Card
+        public IActionResult GetMemberList(string code, string name, int inactive)
         {
             try
             {
@@ -4441,8 +4434,6 @@ namespace Administration.Controllers
                 pt.CloseConnection();
             }
         }
-
-
         [HttpPost]
         public ActionResult DeleteReservationType()
         {
@@ -4497,7 +4488,6 @@ namespace Administration.Controllers
         {
             return View(); // View này sẽ chứa DataGrid + script gọi API
         }
-
         [HttpPost]
         public ActionResult InsertCurrency()
         {
@@ -4625,8 +4615,6 @@ namespace Administration.Controllers
                 pt.CloseConnection();
             }
         }
-
-
         [HttpPost]
         public ActionResult DeleteCurrency()
         {
@@ -4658,8 +4646,6 @@ namespace Administration.Controllers
                 return Json(new { code = 1, msg = ex.Message });
             }
         }
-
-
         [HttpGet]
         public IActionResult GetCurrencyById(string id)
         {
@@ -4893,6 +4879,7 @@ namespace Administration.Controllers
                 pt.CloseConnection();
             }
         }
+
         [HttpGet]
         public IActionResult GetProperty()
         {
@@ -5104,6 +5091,7 @@ namespace Administration.Controllers
             }
 
         }
+
         [HttpGet]
         public IActionResult GetPropertyPermission(string userID)
         {
@@ -5275,6 +5263,7 @@ namespace Administration.Controllers
             }
 
         }
+
         [HttpGet]
         public IActionResult GetStatusList()
         {
@@ -5410,6 +5399,7 @@ namespace Administration.Controllers
                 pt.CloseConnection();
             }
         }
+
         [HttpGet]
         public IActionResult GetMemberTypeSearch(DateTime fromDate, DateTime toDate, string status, string memberID, int isSortByCardName)
         {
@@ -5444,6 +5434,7 @@ namespace Administration.Controllers
 
             // return PartialView("_ReportViewerPartial", report);
         }
+
         public ActionResult MemberTypeSearch()
         {
             List<MemberTypeModel> listctry = PropertyUtils.ConvertToList<MemberTypeModel>(MemberTypeBO.Instance.FindAll());
@@ -5452,6 +5443,7 @@ namespace Administration.Controllers
             ViewBag.MemberCategoryList = listmbc;
             return View();
         }
+
         [HttpGet]
         public IActionResult GetPostingHistory(DateTime fromDate, DateTime toDate, string fromFolioID, string toFolioID, string actionType, string user)
         {
@@ -5651,5 +5643,361 @@ namespace Administration.Controllers
             }
         }
         #endregion
+
+        #region RateCategory
+        public IActionResult RateCategory()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult GetRateCategory(string code, string name, int inactive)
+        {
+            try
+            {
+                DataTable dt = _iAdministrationService.RateCategory(code, name, inactive);
+                var result = (from r in dt.AsEnumerable()
+                              select new
+                              {
+                                  Code = !string.IsNullOrEmpty(r["Code"].ToString()) ? r["Code"] : "",
+                                  Name = !string.IsNullOrEmpty(r["Name"].ToString()) ? r["Name"] : "",
+                                  Description = !string.IsNullOrEmpty(r["Description"].ToString()) ? r["Description"] : "",
+                                  InactiveText = !string.IsNullOrEmpty(r["InactiveText"].ToString()) ? r["InactiveText"] : "",
+                                  CreatedBy = !string.IsNullOrEmpty(r["CreatedBy"].ToString()) ? r["CreatedBy"] : "",
+                                  CreatedDate = !string.IsNullOrEmpty(r["CreatedDate"].ToString()) ? r["CreatedDate"] : "",
+                                  UpdatedBy = !string.IsNullOrEmpty(r["UpdatedBy"].ToString()) ? r["UpdatedBy"] : "",
+                                  UpdatedDate = !string.IsNullOrEmpty(r["UpdatedDate"].ToString()) ? r["UpdatedDate"] : "",
+                                  ID = !string.IsNullOrEmpty(r["ID"].ToString()) ? r["ID"] : "",
+                                  Inactive = !string.IsNullOrEmpty(r["Inactive"].ToString()) ? r["Inactive"] : "",
+                              }).ToList();
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult RateCategorySave([FromBody] RateCategoryModel model)
+        {
+            string message = "";
+
+            try
+            {
+                if (model.Code == null || model.Code == "")
+                    throw new Exception(" Code cannot be left blank");
+
+                if (model.Name == null || model.Name == "")
+                    throw new Exception(" Name cannot be left blank");
+
+                if (model.ID == 0)
+                {
+                    model.CreatedDate = DateTime.Now;
+                    model.UpdatedDate = DateTime.Now;
+
+                    RateCategoryBO.Instance.Insert(model);
+                    message = "Insert successfully!";
+                }
+                else
+                {
+                    var oldData = (RateCategoryModel)RateCategoryBO.Instance.FindByPrimaryKey(model.ID);
+
+                    if (oldData != null)
+                    {
+                        model.CreatedBy = oldData.CreatedBy;
+                        model.CreatedDate = oldData.CreatedDate;
+
+                        model.UserInsertID = oldData.UserInsertID;
+                    }
+
+                    model.UpdatedDate = DateTime.Now;
+
+                    RateCategoryBO.Instance.Update(model);
+                    message = "Update successfully!";
+                }
+
+            }
+            catch (Exception ex)
+            {
+                message = ex.Message;
+                return Json(new { success = false, message });
+            }
+
+            return Json(new { success = true, message });
+        }
+
+        [HttpPost]
+        public IActionResult RateCategoryDelete(long id)
+        {
+            try
+            {
+                RateCategoryBO.Instance.Delete(id);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, ex.Message });
+            }
+
+            return Json(new { success = true });
+        }
+        #endregion
+
+        #region Deposit/Cancellation Rules Search 
+        public IActionResult DepositRule()
+        {
+            List<UsersModel> listUser = PropertyUtils.ConvertToList<UsersModel>(UsersBO.Instance.FindAll());
+            ViewBag.UsersList = listUser;
+
+            List<CurrencyModel> listCurr = PropertyUtils.ConvertToList<CurrencyModel>(CurrencyBO.Instance.FindAll());
+            ViewBag.CurrencyList = listCurr;
+            return View();
+        }
+        public IActionResult CancellationRule()
+        {
+            List<UsersModel> listUser = PropertyUtils.ConvertToList<UsersModel>(UsersBO.Instance.FindAll());
+            ViewBag.UsersList = listUser;
+
+            List<CurrencyModel> listCurr = PropertyUtils.ConvertToList<CurrencyModel>(CurrencyBO.Instance.FindAll());
+            ViewBag.CurrencyList = listCurr;
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult GetDepositRule(string code, string description)
+        {
+            try
+            {
+                DataTable dt = _iAdministrationService.DepositRule(code, description);
+                var result = (from r in dt.AsEnumerable()
+                              select new
+                              {
+                                  Code = !string.IsNullOrEmpty(r["Code"].ToString()) ? r["Code"] : "",
+                                  Description = !string.IsNullOrEmpty(r["Description"].ToString()) ? r["Description"] : "",
+                                  Type = !string.IsNullOrEmpty(r["Type"].ToString()) ? r["Type"] : "",
+                                  AmountValue = !string.IsNullOrEmpty(r["AmountValue"].ToString()) ? r["AmountValue"] : "",
+                                  CurrencyID = !string.IsNullOrEmpty(r["CurrencyID"].ToString()) ? r["CurrencyID"] : "",
+                                  DaysBeforeArrival = !string.IsNullOrEmpty(r["DaysBeforeArrival"].ToString()) ? r["DaysBeforeArrival"] : "",
+                                  DaysAfterBooking = !string.IsNullOrEmpty(r["DaysAfterBooking"].ToString()) ? r["DaysAfterBooking"] : "",
+                                  UserInsertID = r["UserInsertID"] != DBNull.Value ? Convert.ToInt32(r["UserInsertID"]) : 0,
+                                  CreateDate = !string.IsNullOrEmpty(r["CreateDate"].ToString()) ? r["CreateDate"] : "",
+                                  UserUpdateID = !string.IsNullOrEmpty(r["UserUpdateID"].ToString()) ? r["UserUpdateID"] : "",
+                                  UpdateDate = !string.IsNullOrEmpty(r["UpdateDate"].ToString()) ? r["UpdateDate"] : "",
+                                  ID = !string.IsNullOrEmpty(r["ID"].ToString()) ? r["ID"] : "",
+                              }).ToList();
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message);
+            }
+        }
+        [HttpGet]
+        public IActionResult GetDepositRuleById(int id)
+        {
+            var data = (DepositRuleModel)DepositRuleBO.Instance.FindByPrimaryKey(id);
+
+            if (data == null)
+            {
+                return Json(new { inactive = false, sequence = 0 });
+            }
+
+            return Json(new
+            {
+                inactive = data.Inactive,
+                sequence = data.Sequence
+            });
+        }
+        [HttpPost]
+        public IActionResult DepositRuleSave([FromBody] DepositRuleModel model)
+        {
+            var errors = new List<string>();
+
+            if (model == null)
+            {
+                errors.Add("Invalid data. Model is null.");
+                return Json(new { success = false, errors });
+            }
+
+            if (string.IsNullOrWhiteSpace(model.Code))
+                errors.Add("Code is required.");
+
+            if (model.AmountValue <= 0)
+                errors.Add("Amount must be greater than zero.");
+
+            if (model.Type != 0)
+                model.CurrencyID = null;
+
+            if (model.DaysBeforeArrival < 0 || model.DaysAfterBooking < 0)
+                errors.Add("Days cannot be negative.");
+
+            if (model.DaysBeforeArrival == 0 && model.DaysAfterBooking == 0)
+                errors.Add("Please enter Days Before or Days After.");
+
+            if (errors.Any())
+            {
+                return Json(new
+                {
+                    success = false,
+                    errors
+                });
+            }
+
+            string message;
+
+            if (model.ID == 0)
+            {
+                model.CreateDate = DateTime.Now;
+                model.UpdateDate = DateTime.Now;
+                DepositRuleBO.Instance.Insert(model);
+                message = "Insert successfully!";
+            }
+            else
+            {
+                var old = (DepositRuleModel)DepositRuleBO.Instance.FindByPrimaryKey(model.ID);
+                if (old != null)
+                {
+                    model.CreateDate = old.CreateDate;
+                    model.UserInsertID = old.UserInsertID;
+                }
+
+                model.UpdateDate = DateTime.Now;
+                DepositRuleBO.Instance.Update(model);
+                message = "Update successfully!";
+            }
+
+            return Json(new { success = true, message });
+        }
+
+
+        [HttpPost]
+        public IActionResult DepositRuleDelete(long id)
+        {
+            try
+            {
+                DepositRuleBO.Instance.Delete(id);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, ex.Message });
+            }
+
+            return Json(new { success = true });
+        }
+
+        [HttpGet]
+        public IActionResult GetCancellationRule(string code, string description)
+        {
+            try
+            {
+                DataTable dt = _iAdministrationService.CancellationRule(code, description);
+                var result = (from r in dt.AsEnumerable()
+                              select new
+                              {
+                                  Code = !string.IsNullOrEmpty(r["Code"].ToString()) ? r["Code"] : "",
+                                  Description = !string.IsNullOrEmpty(r["Description"].ToString()) ? r["Description"] : "",
+                                  Type = !string.IsNullOrEmpty(r["Type"].ToString()) ? r["Type"] : "",
+                                  AmountValue = !string.IsNullOrEmpty(r["AmountValue"].ToString()) ? r["AmountValue"] : "",
+                                  CurrencyID = !string.IsNullOrEmpty(r["CurrencyID"].ToString()) ? r["CurrencyID"] : "",
+                                  DaysBeforeArrival = !string.IsNullOrEmpty(r["DaysBeforeArrival"].ToString()) ? r["DaysBeforeArrival"] : "",
+                                  CancelBeforeTime = !string.IsNullOrEmpty(r["CancelBeforeTime"].ToString()) ? r["CancelBeforeTime"] : "",
+                                  UserInsertID = r["UserInsertID"] != DBNull.Value ? Convert.ToInt32(r["UserInsertID"]) : 0,
+                                  CreateDate = !string.IsNullOrEmpty(r["CreateDate"].ToString()) ? r["CreateDate"] : "",
+                                  UserUpdateID = !string.IsNullOrEmpty(r["UserUpdateID"].ToString()) ? r["UserUpdateID"] : "",
+                                  UpdateDate = !string.IsNullOrEmpty(r["UpdateDate"].ToString()) ? r["UpdateDate"] : "",
+                                  ID = !string.IsNullOrEmpty(r["ID"].ToString()) ? r["ID"] : "",
+                              }).ToList();
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message);
+            }
+        }
+        [HttpGet]
+        public IActionResult GetCancellationRuleById(int id)
+        {
+            var data = (CancellationRuleModel)CancellationRuleBO.Instance.FindByPrimaryKey(id);
+
+            if (data == null)
+            {
+                return Json(new { inactive = false, sequence = 0 });
+            }
+
+            return Json(new
+            {
+                inactive = data.Inactive,
+                sequence = data.Sequence
+            });
+        }
+        [HttpPost]
+        public IActionResult CancellationRuleSave([FromBody] CancellationRuleModel model)
+        {
+            string message = "";
+
+            try
+            {
+                if (model.Code == null || model.Code == "")
+                    throw new Exception(" Code is not empty!");
+                if (model.AmountValue <= 0)
+                    throw new Exception("Amount must be greater than zero!");
+                if (!decimal.TryParse(model.AmountValue.ToString(), out decimal amount))
+                    throw new Exception("Amount is not a valid number!");
+                if (string.IsNullOrWhiteSpace(Convert.ToString(model.AmountValue)))
+                    throw new Exception("Amount is not correct!");
+                if (string.IsNullOrWhiteSpace(Convert.ToString(model.DaysBeforeArrival)))
+                    throw new Exception("Please enter days before arrival or cancel before time !");
+                if (model.DaysBeforeArrival < 0)
+                    throw new Exception("DaysBeforeArrival or cancel before time cannot be negative!");
+
+
+                if (model.ID == 0)
+                {
+                    model.CreateDate = DateTime.Now;
+                    model.UpdateDate = DateTime.Now;
+
+                    CancellationRuleBO.Instance.Insert(model);
+                    message = "Insert successfully!";
+                }
+                else
+                {
+                    var oldData = (CancellationRuleModel)CancellationRuleBO.Instance.FindByPrimaryKey(model.ID);
+
+                    if (oldData != null)
+                    {
+                        model.CreateDate = oldData.CreateDate;
+                        model.UserInsertID = oldData.UserInsertID;
+                    }
+                    model.UpdateDate = model.UpdateDate;
+
+                    CancellationRuleBO.Instance.Update(model);
+                    message = "Update successfully!";
+                }
+
+            }
+            catch (Exception ex)
+            {
+                message = ex.Message;
+                return Json(new { success = false, message });
+            }
+
+            return Json(new { success = true, message });
+        }
+        [HttpPost]
+        public IActionResult CancellationRuleDelete(long id)
+        {
+            try
+            {
+                CancellationRuleBO.Instance.Delete(id);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, ex.Message });
+            }
+
+            return Json(new { success = true });
+        }
+        #endregion
     }
+
 }

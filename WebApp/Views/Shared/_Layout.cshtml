@@ -1,6 +1,9 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+<<<<<<< HEAD
+=======
 
+>>>>>>> main
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -31,6 +34,13 @@
     <script type="text/javascript" src="~/lib/jquery-confirm/jquery-confirm.min.js" rel="stylesheet"></script>
 
     <link asp-append-version="true" href="~/node_modules/jquery-ui-dist/jquery-ui.min.css" rel="stylesheet" />
+<<<<<<< HEAD
+    <link  asp-append-version="true" href="~/node_modules/devextreme/dist/css/dx.common.css" rel="stylesheet" />
+    <link  asp-append-version="true" href="~/node_modules/devextreme/dist/css/dx.light.css" rel="stylesheet" />
+    <link  asp-append-version="true" href="~/node_modules/@@devexpress/analytics-core/dist/css/dx-analytics.common.css" rel="stylesheet" />
+    <link  asp-append-version="true"href="~/node_modules/@@devexpress/analytics-core/dist/css/dx-analytics.light.css" rel="stylesheet" />
+    <link  asp-append-version="true" href="~/node_modules/devexpress-reporting/dist/css/dx-webdocumentviewer.css" rel="stylesheet" />
+=======
     <link asp-append-version="true" href="~/node_modules/devextreme/dist/css/dx.common.css" rel="stylesheet" />
     <link asp-append-version="true" href="~/node_modules/devextreme/dist/css/dx.light.css" rel="stylesheet" />
     <link asp-append-version="true" href="~/node_modules/@@devexpress/analytics-core/dist/css/dx-analytics.common.css"
@@ -39,6 +49,7 @@
         rel="stylesheet" />
     <link asp-append-version="true" href="~/node_modules/devexpress-reporting/dist/css/dx-webdocumentviewer.css"
         rel="stylesheet" />
+>>>>>>> main
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
@@ -60,10 +71,15 @@
     <script asp-append-version="true" src="~/node_modules/jquery-ui-dist/jquery-ui.js"></script>
     <script asp-append-version="true" src="~/node_modules/knockout/build/output/knockout-latest.js"></script>
     <script src="~/lib/devextreme/dist/js/dx.all.js"></script>
+<<<<<<< HEAD
+    <script asp-append-version="true" src="~/node_modules/@@devexpress/analytics-core/dist/js/dx-analytics-core.min.js"></script>
+    <script asp-append-version="true" src="~/node_modules/devexpress-reporting/dist/js/dx-webdocumentviewer.min.js"></script>
+=======
     <script asp-append-version="true"
         src="~/node_modules/@@devexpress/analytics-core/dist/js/dx-analytics-core.min.js"></script>
     <script asp-append-version="true"
         src="~/node_modules/devexpress-reporting/dist/js/dx-webdocumentviewer.min.js"></script>
+>>>>>>> main
     <!-- jsPDF core -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
@@ -89,11 +105,18 @@
     <link href="~/css/pages/reservation.css" rel="stylesheet" asp-append-version="true" />
 
     <style>
+<<<<<<< HEAD
+        
+
+    </style>
+</head>
+=======
 
 
     </style>
 </head>
 
+>>>>>>> main
 <body class="dx-viewport" style="background-color:#f5f5f5">
     <div class="container-fluid">
         <div class="banner">
@@ -114,8 +137,12 @@
                     <i class="fas fa-bell"></i>
                     <span class="notification-badge">3</span>
                 </div>
+<<<<<<< HEAD
+                <i class="fas fa-sign-out-alt logout-icon" title="Logout" onclick="window.location.href='/User/Index'"></i>
+=======
                 <i class="fas fa-sign-out-alt logout-icon" title="Logout"
                     onclick="window.location.href='/User/Index'"></i>
+>>>>>>> main
             </div>
         </div>
         <!-- Navbar -->
@@ -126,10 +153,16 @@
                 </button>
                 <div class="collapse navbar-collapse row" id="mainNavbar">
                     <ul class="navbar-nav">
+<<<<<<< HEAD
+                        <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">HOME</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link" >PROFILE</a>
+=======
                         <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">HOME</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link">PROFILE</a>
+>>>>>>> main
                             <div class="dropdown-menu-custom">
                                 <a asp-area="" asp-controller="Profile" asp-action="Index">New Profile</a>
                                 <a asp-area="" asp-controller="Profile" asp-action="SearchProfile">Search Profile</a>
@@ -139,6 +172,16 @@
                             </div>
                         </li>
                         <li class="nav-item">
+<<<<<<< HEAD
+                            <a class="nav-link" asp-controller="Reservation" asp-action="SearchReservation">RESERVATION</a>
+                            <div class="dropdown-menu-custom">
+                                <a asp-area="" asp-controller="Reservation" asp-action="NewReservation">New Reservation</a>
+                                <a asp-area="" asp-controller="Reservation" asp-action="SearchReservation">Search Reservation</a>
+                                <a asp-area="" asp-controller="Reservation" asp-action="GroupReservation">Group Reservation</a>
+                                <a asp-area="" asp-controller="Reservation" asp-action="WaitList">Wait List</a>
+                                <a asp-area="" asp-controller="Reservation" asp-action="OverBooking">Over Booking</a>
+                                <a asp-area="" asp-controller="Reservation" asp-action="RateCodeAuthor">Rate Code Authorization</a>
+=======
                             <a class="nav-link" asp-controller="Reservation"
                                 asp-action="SearchReservation">RESERVATION</a>
                             <div class="dropdown-menu-custom">
@@ -152,6 +195,7 @@
                                 <a asp-area="" asp-controller="Reservation" asp-action="OverBooking">Over Booking</a>
                                 <a asp-area="" asp-controller="Reservation" asp-action="RateCodeAuthor">Rate Code
                                     Authorization</a>
+>>>>>>> main
 
                             </div>
                         </li>
@@ -159,16 +203,28 @@
                             <a class="nav-link" href="#">FRONTDESK</a>
                             <div class="dropdown-menu-custom">
                                 <a asp-area="" asp-controller="FrontDesk" asp-action="TelephoneBook">Telephone Book</a>
+<<<<<<< HEAD
+                                <a asp-area="" asp-controller="FrontDesk" asp-action="TelephoneSwitch">Telephone Switch</a>
+                                <a asp-area="" asp-controller="FrontDesk" asp-action="DialingInformation">Dialing Information</a>
+=======
                                 <a asp-area="" asp-controller="FrontDesk" asp-action="TelephoneSwitch">Telephone
                                     Switch</a>
                                 <a asp-area="" asp-controller="FrontDesk" asp-action="DialingInformation">Dialing
                                     Information</a>
+>>>>>>> main
                                 <a asp-area="" asp-controller="FrontDesk" asp-action="WakeUpCall">Wake Up Call</a>
                             </div>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">ROOM MANAGEMENT</a>
                             <div class="dropdown-menu-custom">
+<<<<<<< HEAD
+                                <a asp-area="" asp-controller="RoomManagement" asp-action="Discrepancy">Room Discrepancy</a>
+                                <a asp-area="" asp-controller="RoomManagement" asp-action="ItemDailyInventory">Item Daily Inventory</a>
+                                <a asp-area="" asp-controller="RoomManagement" asp-action="ItemInventoryAvailable">Item Inventory Available</a>
+                                <a asp-area="" asp-controller="RoomManagement" asp-action="ItemSearch">Item Search</a>
+                                <a asp-area="" asp-controller="RoomManagement" asp-action="OOOSload">Out Of Order/Service</a>
+=======
                                 <a asp-area="" asp-controller="RoomManagement" asp-action="Discrepancy">Room
                                     Discrepancy</a>
                                 <a asp-area="" asp-controller="RoomManagement" asp-action="ItemDailyInventory">Item
@@ -178,6 +234,7 @@
                                 <a asp-area="" asp-controller="RoomManagement" asp-action="ItemSearch">Item Search</a>
                                 <a asp-area="" asp-controller="RoomManagement" asp-action="OOOSload">Out Of
                                     Order/Service</a>
+>>>>>>> main
                             </div>
                         </li>
                         <li class="nav-item">
@@ -187,6 +244,28 @@
                                     <a class="dropdown-submenu-toggle">Account Receivable</a>
                                     <div class="dropdown-submenu-content">
 
+<<<<<<< HEAD
+                                        <a asp-area="" asp-controller="Accounting" asp-action="AccountType">Account Type</a>
+                                        <a asp-area="" asp-controller="Accounting" asp-action="ARAgingLevels">AR Aging Levels</a>
+                                        <a asp-area="" asp-controller="Accounting" asp-action="AROpening">AR Opening</a>
+                                        <a asp-area="" asp-controller="Accounting" asp-action="AccountingSearch">Search account receivable</a>
+                                        <a asp-area="" asp-controller="Accounting" asp-action="ARTraces">AR Traces</a>
+                                    </div>
+                                </div>
+                                <a asp-area="" asp-controller="Cashiering" asp-action="PostingJournal">Posting Journal</a>
+                                <a asp-area="" asp-controller="Cashiering" asp-action="CashierAudit">Cashier Audit</a>
+                                <a asp-area="" asp-controller="Cashiering" asp-action="ExchangeRate">Exchange Rate</a>
+                                <a asp-area="" asp-controller="Cashiering" asp-action="ExchangeCurrency">Exchange Currency</a>
+                                <a asp-area="" asp-controller="Cashiering" asp-action="CloseShift">Close Shift</a>
+                                <a asp-area="" asp-controller="Cashiering" asp-action="CashieringManager">Cashiering Manager</a>
+                                <a asp-area="" asp-controller="Cashiering" asp-action="VATSearch">VAT Search</a>
+                                <a asp-area="" asp-controller="Cashiering" asp-action="FolioVATSearch">Search VAT Voucher</a>
+                                <a asp-area="" asp-controller="Cashiering" asp-action="FolioVATSearchByAccounting">Search VAT Voucher for Accounting</a>
+                               @*  <a asp-area="" asp-controller="Accounting" asp-action="AccountingSearch">Accounting Search</a> *@
+                                <a asp-area="" asp-controller="Cashiering" asp-action="FolioHistoryView">Folio History View</a>
+                                <a asp-area="" asp-controller="Cashiering" asp-action="ExchangeCurrencyReport">Exchange Currency Report</a>
+                             
+=======
                                         <a asp-area="" asp-controller="Accounting" asp-action="AccountType">Account
                                             Type</a>
                                         <a asp-area="" asp-controller="Accounting" asp-action="ARAgingLevels">AR Aging
@@ -217,6 +296,7 @@
                                 <a asp-area="" asp-controller="Cashiering" asp-action="ExchangeCurrencyReport">Exchange
                                     Currency Report</a>
 
+>>>>>>> main
                             </div>
                         </li>
                         <li class="nav-item">
@@ -228,6 +308,26 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">ADMINISTRATION</a>
+<<<<<<< HEAD
+							<div class="dropdown-menu-custom">
+                                <div class="dropdown-submenu">
+                                    <a class="dropdown-submenu-toggle">Rate Code & Package</a>
+                                    <div class="dropdown-submenu-content">
+                                        <a asp-area="" asp-controller="Administration" asp-action="">Rate Class</a>
+                                        <a asp-area="" asp-controller="Administration" asp-action="RateCategory">Rate Category</a>
+                                        <a asp-area="" asp-controller="Administration" asp-action="">Rate Code</a>
+                                        <a asp-area="" asp-controller="Administration" asp-action="">Rate Code Detail</a>
+                                        <a asp-area="" asp-controller="Administration" asp-action="">Rate Code User Right</a>
+                                        <a asp-area="" asp-controller="Administration" asp-action="">Package</a>
+                                    </div>
+                                </div>
+                                
+                                <div class="dropdown-submenu">
+                                    <a class="dropdown-submenu-toggle">Deposit & Cancellation Rule</a>
+                                    <div class="dropdown-submenu-content">
+                                        <a asp-area="" asp-controller="Administration" asp-action="DepositRule">Deposit Rule</a>
+                                        <a asp-area="" asp-controller="Administration" asp-action="CancellationRule">Cancellation Rule</a>
+=======
                             <div class="dropdown-menu-custom">
                                 <div class="dropdown-submenu">
                                     <a class="dropdown-submenu-toggle">Rate Code & Package</a>
@@ -241,10 +341,26 @@
                                         <a asp-area="">Rate Code User Right</a>
                                         <a asp-area="">Rate Package</a>
 
+>>>>>>> main
                                     </div>
                                 </div>
                                 <a asp-area="" asp-controller="Administration" asp-action="Index">Item Category</a>
                                 <a asp-area="" asp-controller="Administration" asp-action="Currency">Currency</a>
+<<<<<<< HEAD
+                                <a asp-area="" asp-controller="Administration" asp-action="hkpEmployee">House Keeping</a>
+                                <div class="dropdown-submenu">
+                                    <a class="dropdown-submenu-toggle">House Keeping</a>
+                                    <div class="dropdown-submenu-content">
+                                        <a asp-area="" asp-controller="HouseKeepingAdmin" asp-action="Attendants">Attendants</a>
+                                        <a asp-area="" asp-controller="HouseKeepingAdmin" asp-action="FacilityCode">Facility Code</a>
+                                        <a asp-area="" asp-controller="HouseKeepingAdmin" asp-action="FacilityCategory">Facility Category</a>
+                                        <a asp-area="" asp-controller="HouseKeepingAdmin" asp-action="Section">Section</a>
+                                        <a asp-area="" asp-controller="HouseKeepingAdmin" asp-action="HouseKeepingEmployee">House Keeping Employee</a>
+                                        <a asp-area="" asp-controller="HouseKeepingAdmin" asp-action="LostAndFoundZone">Lost And Found Zone</a>
+                                        <a asp-area="" asp-controller="HouseKeepingAdmin" asp-action="LostAndFoundStatus">Lost And Found Status</a>
+                                        <a asp-area="" asp-controller="HouseKeepingAdmin" asp-action="LostAndFoundQuality">Lost And Found Quality</a>
+                                        
+=======
                                 <a asp-area="" asp-controller="Administration" asp-action="hkpEmployee">House
                                     Keeping</a>
                                 <div class="dropdown-submenu">
@@ -267,6 +383,7 @@
                                         <a asp-area="" asp-controller="HouseKeepingAdmin"
                                             asp-action="LostAndFoundQuality">Lost And Found Quality</a>
 
+>>>>>>> main
                                     </div>
                                 </div>
                                 <a asp-area="" asp-controller="Administration" asp-action="MemberList">Member Card</a>
@@ -276,10 +393,15 @@
                                         <a asp-area="" asp-controller="Email" asp-action="SetupEmail">Setup Email</a>
                                         <a asp-area="" asp-controller="Email" asp-action="SendEmail">Send Email</a>
                                         <a asp-area="" asp-controller="Email" asp-action="SendSMS">Send SMS</a>
+<<<<<<< HEAD
+                                        <a asp-area="" asp-controller="Email" asp-action="SendEmailBirthday">Send Email Birthday</a>
+                                        <a asp-area="" asp-controller="Email" asp-action="EmailSendingHistory">Email Sending History</a>
+=======
                                         <a asp-area="" asp-controller="Email" asp-action="SendEmailBirthday">Send Email
                                             Birthday</a>
                                         <a asp-area="" asp-controller="Email" asp-action="EmailSendingHistory">Email
                                             Sending History</a>
+>>>>>>> main
                                     </div>
                                 </div>
                                 <div class="dropdown-submenu">
@@ -289,20 +411,31 @@
                                         <a asp-area="" asp-controller="Article" asp-action="Search">Article</a>
                                         <a asp-area="" asp-controller="Transaction" asp-action="Search">Transaction</a>
 
+<<<<<<< HEAD
+                                        <a asp-area="" asp-controller="TransactionSubGroup" asp-action="TransSubGroup">Transaction Sub Group</a>
+
+                                        <a asp-area="" asp-controller="TransactionGroup" asp-action="TransGroup">Transaction Group</a>
+=======
                                         <a asp-area="" asp-controller="TransactionSubGroup"
                                             asp-action="TransSubGroup">Transaction Sub Group</a>
 
                                         <a asp-area="" asp-controller="TransactionGroup"
                                             asp-action="TransGroup">Transaction Group</a>
+>>>>>>> main
                                     </div>
                                 </div>
                                 <div class="dropdown-submenu">
                                     <a class="dropdown-submenu-toggle">PersonInCharge</a>
                                     <div class="dropdown-submenu-content">
 
+<<<<<<< HEAD
+                                        <a asp-area="" asp-controller="Administration" asp-action="PersonInCharge">PersonInCharge</a>
+                                        
+=======
                                         <a asp-area="" asp-controller="Administration"
                                             asp-action="PersonInCharge">PersonInCharge</a>
 
+>>>>>>> main
                                     </div>
                                 </div>
                                 <a asp-area="">RateCode & Package</a>
@@ -313,13 +446,34 @@
                             <div class="dropdown-menu-custom">
                                 <a asp-area="" asp-controller="NightAudit" asp-action="RoomRate">Room Rate</a>
                                 <a asp-area="" asp-controller="Report" asp-action="OtherReportChart">Fixed Charge</a>
+<<<<<<< HEAD
+                                <a asp-area="" asp-controller="NightAudit" asp-action="RunNightAudit">Run Night Audit</a>
+=======
                                 <a asp-area="" asp-controller="NightAudit" asp-action="RunNightAudit">Run Night
                                     Audit</a>
+>>>>>>> main
                             </div>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">HOUSE KEEPING</a>
                             <div class="dropdown-menu-custom">
+<<<<<<< HEAD
+                                <a class="dropdown-item" asp-area="" asp-controller="HouseKeeping" asp-action="RoomControlPanel">Room Control Panel</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="HouseKeeping" asp-action="RoomFacilityForecast">Room Facility Forecast</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="HouseKeeping" asp-action="RoomStatus">Room Status</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="HouseKeeping" asp-action="RoomPlan">Room Plan</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="HouseKeeping" asp-action="HouseStatus">House Status</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="HouseKeeping" asp-action="FloorPlan">Floor Plan</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="HouseKeeping" asp-action="AttendantPoint">Attendant Point</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="HouseKeeping" asp-action="GuestServiceStatus">Guest Service Status</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="HouseKeeping" asp-action="TaskSheetStatus">Task Sheet Status</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="HouseKeeping" asp-action="TaskAssignment">Task Assignment</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="HouseKeeping" asp-action="RoomAttendentDailyWorksheet">Room Attendant Daily Worksheet</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="HouseKeeping" asp-action="MakeupServiceRoom">Makeup Service Room</a>
+                                <a class="dropdown-item">Update Room Status</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="HouseKeeping" asp-action="TurndownTasksheet">Turndown Tasksheet</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="HouseKeeping" asp-action="LostAndFound">Lost And Found</a>
+=======
                                 <a class="dropdown-item" asp-area="" asp-controller="HouseKeeping"
                                     asp-action="RoomControlPanel">Room Control Panel</a>
                                 <a class="dropdown-item" asp-area="" asp-controller="HouseKeeping"
@@ -349,16 +503,23 @@
                                     asp-action="TurndownTasksheet">Turndown Tasksheet</a>
                                 <a class="dropdown-item" asp-area="" asp-controller="HouseKeeping"
                                     asp-action="LostAndFound">Lost And Found</a>
+>>>>>>> main
                             </div>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">MISCELLANEOUS</a>
                             <div class="dropdown-menu-custom">
+<<<<<<< HEAD
+                                <a asp-area="" asp-controller="Miscellaneous" asp-action="CardManagement">Card Management</a>
+                                <a asp-area="" asp-controller="Miscellaneous" asp-action="MealReport">Meal Report</a>
+                                <a asp-area="" asp-controller="Miscellaneous" asp-action="IssuingCardToGuests">Issuing Card To Guests</a>
+=======
                                 <a asp-area="" asp-controller="Miscellaneous" asp-action="CardManagement">Card
                                     Management</a>
                                 <a asp-area="" asp-controller="Miscellaneous" asp-action="MealReport">Meal Report</a>
                                 <a asp-area="" asp-controller="Miscellaneous" asp-action="IssuingCardToGuests">Issuing
                                     Card To Guests</a>
+>>>>>>> main
                             </div>
                         </li>
                     </ul>
@@ -386,7 +547,10 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+<<<<<<< HEAD
+=======
 
+>>>>>>> main
 </html>
 <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -420,7 +584,11 @@
     //                 "opacity": "0.5",
     //                 "color": "gray"
     //             });
+<<<<<<< HEAD
+           
+=======
 
+>>>>>>> main
     //         }
     //     });
 
@@ -590,6 +758,29 @@
             }
         });
 
+<<<<<<< HEAD
+           $(".dropdown-item:contains('Update Room Status')").on("click", function () {
+                $.ajax({
+                    url: '/HouseKeeping/UpdateRoomStatus',
+                    type: 'GET',
+                    traditional: true,
+                    crossDomain: false,
+                    headers: {
+                        "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val()
+                    },
+                    success: function (result) {
+                        showToast('Success', result.message, true);
+                        $('#popupNewGridAddUser').hide();
+                        $("#loadingSpinner").hide();
+                        $("#btnPrint").trigger("click");
+                    },
+                    error: function () {
+                        alert("Không thể tải báo cáo.");
+                        $("#loadingSpinner").hide();
+                    }
+                });
+            });
+=======
         $(".dropdown-item:contains('Update Room Status')").on("click", function () {
             $.ajax({
                 url: '/HouseKeeping/UpdateRoomStatus',
@@ -611,6 +802,7 @@
                 }
             });
         });
+>>>>>>> main
 
 
         // Lắng nghe sự kiện thay đổi trạng thái toàn màn hình
@@ -667,3 +859,8 @@
         });
     });
 </script>
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> main

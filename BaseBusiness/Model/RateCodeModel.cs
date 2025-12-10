@@ -13,6 +13,7 @@ namespace BaseBusiness.Model
         public string RateCode { get; set; }
         public int RateCategoryID { get; set; }
         public int RateClassID { get; set; }
+
         public string Descripton { get; set; }
         public int Sequence { get; set; }
         public bool Status { get; set; }

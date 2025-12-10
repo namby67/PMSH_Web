@@ -451,5 +451,40 @@ namespace Administration.Services.Implements
             DataTable myTable = DataTableHelper.getTableData("spPersonInChargeSearch", param);
             return myTable;
         }
+
+        public DataTable RateCategory(string code, string name, int inactive)
+        {
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@Code", code ?? ""),
+                new SqlParameter("@Name", name ?? ""),
+                new SqlParameter("@Inactive", inactive),
+            };
+
+            DataTable dt = DataTableHelper.getTableData("spFrmRateCategorySearch", parameters);
+            return dt;
+        }
+        public DataTable DepositRule(string code, string description)
+        {
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@Code", code ?? ""),
+                new SqlParameter("@Description", description ?? ""),
+            };
+
+            DataTable dt = DataTableHelper.getTableData("spSearchDepositRule", parameters);
+            return dt;
+        }
+        public DataTable CancellationRule(string code, string description)
+        {
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@Code", code ?? ""),
+                new SqlParameter("@Description", description ?? ""),
+            };
+
+            DataTable dt = DataTableHelper.getTableData("spSearchCancellationRule", parameters);
+            return dt;
+        }
     }
 }

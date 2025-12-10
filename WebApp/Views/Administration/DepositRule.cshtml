@@ -1,0 +1,463 @@
+﻿@using DevExpress.XtraReports.UI
+
+@{
+    var listCurr = ViewBag.CurrencyList;
+}
+
+<div class="text-center" id="reportTitle" style="font-size: 20px">Deposit Rules Search</div>
+
+<div class="sticky-header bg-white p-2 shadow-sm z-3">
+    <div class="d-flex align-items-center gap-3 p-2" style="border: 1px solid #ccc; border-radius: 6px; padding: 8px;">
+
+        <div class="d-flex flex-column ">
+
+            <div class="d-flex align-items-center">
+                <div class="d-flex align-items-center me-4">
+                    <label for="tracetime" class="me-2 mb-0">Deposit Code:</label>
+                    <input type="text" id="codeInput"
+                           class="form-control form-control-sm w-auto" />
+                </div>
+                <div class="d-flex align-items-center me-4">
+                    <label for="tracetime" class="me-2 mb-0">Description:</label>
+                    <input type="text" id="descriptionInput" class="form-control form-control-sm w-auto" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mt-2">
+        <button id="btnSearch" class="mui-button button-report-view"><i class="fa-solid fa-eye"></i> View</button>
+        <button id="btnNew" class="mui-button mui-button-new"><i class="fa-solid fa-plus"></i> New</button>
+        <button id="btnUpdate" class="mui-button mui-button-edit"> <i class="fa-solid fa-pen"></i> Edit</button>
+        <button id="btnDelete" class="mui-button button-report-delete"> <i class="fa-solid fa-trash-can"></i> Delete</button>
+        <button id="btnExportExcel" class="mui-button mui-button-export" type="button"> <i class="fa-solid fa-file-excel"></i> Excel</button>
+    </div>
+
+</div>
+<div class="mui-card">
+    <div id="gridContainer" class="gridContainer mt-2"></div>
+</div>
+<!-- Modal Popup for New Item -->
+<div class="modal fade" id="itemModal" tabindex="-1" aria-labelledby="itemModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="itemModalLabel">New/Edit Item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-footer justify-content-start">
+                <button type="button" id="btnSaveItem" class="mui-button mui-button-export">
+                    <i class="fa-solid fa-floppy-disk"></i> Save
+                </button>
+                <button type="button" class="mui-button button-report-delete" data-bs-dismiss="modal">
+                    <i class="fa-solid fa-xmark"></i> Close
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="itemForm">
+                    <div class="container-fluid" style="border: 1px solid #ccc; border-radius: 6px; padding: 8px;">
+
+                        <div class="row mb-1 align-items-center">
+                            <div class="col-md-4">
+                                <label for="txtCode" class="form-label mb-0">Deposit Rule Code</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" id="txtCode" name="txtCode" class="form-control form-control-sm" />
+                            </div>
+                        </div>
+
+                        <div class="row mb-1">
+                            <div class="col-md-4">
+                                <label for="txtDescription" class="form-label">Description</label>
+                            </div>
+                            <div class="col-md-8">
+                                <textarea id="txtDescription" name="txtDescription" class="form-control" rows="4"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="row mb-2 align-items-center">
+                            <div class="col-md-4">
+                                <label class="col-sm-2 col-form-label">Type</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="row">
+                                    <div class="col-md-4 form-check">
+                                        <input class="form-check-input" type="radio" name="type" id="typeFlat" value="0" checked>
+                                        <label class="form-check-label" for="typeFlat">Flat</label>
+                                    </div>
+
+                                    <div class="col-md-4 form-check">
+                                        <input class="form-check-input" type="radio" name="type" id="typePercentage" value="1">
+                                        <label class="form-check-label" for="typePercentage">Percentage</label>
+                                    </div>
+
+                                    <div class="col-md-4 form-check">
+                                        <input class="form-check-input" type="radio" name="type" id="typeNights" value="2">
+                                        <label class="form-check-label" for="typeNights">Nights</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-1 align-items-center">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Deposit Amount</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" id="depositAmount">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6" id="divCurrency">
+                                <div class="row mb-3">
+                                    <div class="col-md-5">
+                                        <label class="col-form-label text-md-end w-100">Currency:</label>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <select id="currencyID" class="form-select form-select-sm">
+                                            <option value="">--All--</option>
+                                            @foreach (var item in listCurr)
+                                            {
+                                                <option value="@item.ID">@item.ID</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-2 align-items-center">
+
+                            <div class="col-md-4">
+                                <label class="me-2 mb-0" style="white-space: nowrap;">Days before Arrival</label>
+                                <input type="text" id="daysBeforeArrival"
+                                       class="form-control form-control-sm"
+                                       style="width: 80px;">
+                            </div>
+
+                            <div class="col-auto">
+                                <label class="me-2 mb-0" style="white-space: nowrap;">Days after Booking</label>
+                                <input type="text" id="daysAfterBooking"
+                                       class="form-control form-control-sm"
+                                       style="width: 80px;">
+                            </div>
+
+                            <div class="col-auto">
+                                <label class="me-2 mb-0" style="white-space: nowrap;">Sequence</label>
+                                <input type="text" id="sequence"
+                                       class="form-control form-control-sm"
+                                       style="width: 80px;">
+                            </div>
+                        </div>
+
+                        <div class="row mb-1 align-items-center">
+                            <div class="col-auto">
+                                <input type="checkbox" id="inActive" name="inActive"
+                                       class="form-check-input me-2" />
+                                <label for="inActive" class="form-check-label text-danger mb-0">Inactive</label>
+                            </div>
+                        </div>
+
+                        <input type="hidden" id="id" name="id" value="0" />
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="loadingSpinner" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
+    <i class="fa-solid fa-spinner fa-spin"></i>
+</div>
+
+<script>
+    $(document).ready(function () {
+         $("#btnSearch").trigger("click");
+    });
+     
+    let selectedRowData = null;
+
+    function toggleCurrency() {
+        let typeVal = $("input[name='type']:checked").val();
+        let $div = $("#divCurrency");
+
+        if (typeVal == "0") {
+        $div.removeClass("d-none").addClass("d-flex");
+    } else {
+        $div.addClass("d-none").removeClass("d-flex");
+    }
+    }
+
+    $("input[name='type']").change(function() {
+        toggleCurrency();
+    });
+
+      $("#btnNew").click(function () {
+           $("#itemForm")[0].reset();
+           $("#id").val("0");
+           $("#txtCode").prop("disabled", false);
+           $("#typeFlat").prop("checked", true);
+           toggleCurrency();
+
+           $("#itemModalLabel").text("Add Deposit Rules Search");
+           $("#itemModal").modal("show");
+      });
+         function getData(data){
+           var listUser = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.UsersList ?? new List<object>()));
+          $("#gridContainer").dxDataGrid({
+              dataSource: data,
+              showBorders: true,
+              selection: { mode: "single" },
+              paging: { pageSize: 20 },
+              height: 500,
+              width: "100%",
+              pager: {
+                  visible: true,
+                  showPageSizeSelector: true,
+                  allowedPageSizes: [20, 50, 100],
+                  showInfo: true,
+                  showNavigationButtons:true
+              },
+              filterRow: { visible: true },
+             columns: [
+                         { dataField: "id", caption: "ID", width: 80, visible: false },
+                         { dataField: "code", caption: "Code" , width: 130 },
+                         { dataField: "description", caption: "Description", width: 250 },
+                         { dataField: "type", caption: "Type", width: 100 },
+                         { dataField: "amountValue", caption: "Amount", width: 70 },
+                         { dataField: "currencyID", caption: "$", width: 50 },
+                         { dataField: "daysBeforeArrival", caption: "Days Before Arrival", width: 120 },
+                         { dataField: "daysAfterBooking", caption: "Days After Booking", width: 120 },
+                         {
+                            dataField: "userInsertID",
+                            caption: "Create By",
+                            width: 70,
+                            lookup: {
+                                dataSource: listUser,
+                                valueExpr: "ID",
+                                displayExpr: "LoginName"
+                            }
+                         },
+                         { dataField: "createDate", caption: "Create Date", dataType: "date", format: "dd/MM/yyyy HH:mm", width: 150 },
+                         {
+                            dataField: "userUpdateID",
+                            caption: "Update By",
+                            width: 70,
+                            lookup: {
+                                dataSource: listUser,
+                                valueExpr: "ID",
+                                displayExpr: "LoginName"
+                            }
+                         },
+                         { dataField: "updateDate", caption: "Update Date", dataType: "date", format: "dd/MM/yyyy HH:mm", width: 150 },
+                     ],
+              scrolling: {
+                      mode: "standard",
+                      showScrollbar: "always",
+                      scrollByContent: true
+                  },
+               onSelectionChanged: function(e){
+                  selectedRowData = e.selectedRowsData.length > 0 ? e.selectedRowsData[0] : null;
+              }
+         });
+     }
+
+       $(document).off("click", "#btnSearch").on("click", "#btnSearch", function () {
+          $("#loadingSpinner").show();
+          $.ajax({
+              url: "/Administration/GetDepositRule/",
+              type: "GET",
+              data: {
+                 code: $("#codeInput").val(),
+                 description: $("#descriptionInput").val(),
+              },
+              traditional: true,
+                   crossDomain: false,
+                     headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+              success: function(data){
+                  getData(data);
+                  $("#loadingSpinner").hide();
+              },
+              error: function(xhr, status, error){
+                 alert("Không thể tải dữ liệu");
+                 $("#loadingSpinner").hide();
+              }
+        });
+    });
+        function mapTypeStringToInt(typeStr) {
+        switch (typeStr) {
+            case "Flat": return 0;
+            case "Percentage": return 1;
+            case "Nights": return 2;
+            default: return 0;
+        }
+    }
+    function editItem(data) {
+        console.log("Editing Item:", data);
+          $("#id").val(data.id);
+          $("#txtCode").val(data.code);
+          $("#txtCode").prop("disabled", true);
+          $("#txtDescription").val(data.description);
+          const typeInt = mapTypeStringToInt(data.type);
+
+            if (typeInt === 0) $("#typeFlat").prop("checked", true);
+            if (typeInt === 1) $("#typePercentage").prop("checked", true);
+            if (typeInt === 2) $("#typeNights").prop("checked", true);
+
+          $("#depositAmount").val(data.amountValue);
+
+          $("#currencyID").val(data.currencyID || "");
+          $("#daysBeforeArrival").val(data.daysBeforeArrival);
+          $("#daysAfterBooking").val(data.daysAfterBooking);
+              toggleCurrency();
+          $.get("/Administration/GetDepositRuleById", { id: data.id }, function (res) {
+              $("#inActive").prop("checked",res.inactive === 1 || res.inactive === true);
+              $("#sequence").val(res.sequence);
+          });
+          $("#itemModal").modal("show");
+      }
+      $("#btnUpdate").click(function () {
+            if (!selectedRowData || selectedRowData.id === 0) {
+              showToast('Warning', "Select 1 row, please!", true);
+              return;
+          }
+           $("#itemModalLabel").text("Edit Deposit Rules Search");
+              editItem(selectedRowData);
+      });
+      $("#btnSaveItem").click(function () {
+          const id = parseInt($("#id").val()) || 0;
+          // let loginName = (localStorage.getItem("Loginname") || "")
+          //   .trim()
+          //   .replace(/^"(.*)"$/, '$1');
+          const loginUser = parseInt(localStorage.getItem("userID")) || 0;
+
+          const currentType = $("input[name='type']:checked").val();
+          const currencyValue = (currentType == 0) ? $("#currencyID").val() : "";
+
+          const url = "/Administration/DepositRuleSave";
+          const model = {
+              ID: id,
+              Code: $("#txtCode").val(),
+              Description: $("#txtDescription").val(),
+              AmountValue: $("#depositAmount").val(),
+              Type: currentType,
+              CurrencyID: currencyValue,
+              DaysBeforeArrival: $("#daysBeforeArrival").val(),
+              DaysAfterBooking: $("#daysAfterBooking").val(),
+              Sequence: $("#sequence").val(),
+              Inactive: $("#inActive").prop("checked"),
+              UserInsertID: loginUser,
+              UserUpdateID: loginUser
+          };
+
+          $("#loadingSpinner").show();
+
+          $.ajax({
+               url: url,
+              type: "POST",
+              contentType: "application/json",
+              data: JSON.stringify(model),
+              traditional: true,
+                   crossDomain: false,
+                     headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+              success: function (res) {
+                  if (res.success) {
+                    showToast("Success", res.message, true);
+                    $("#itemModal").modal("hide");
+                } else {
+                    showToast("Error", res.errors, false);
+                }
+                  $("#btnSearch").click();
+              },
+              error: function (xhr, status, error) {
+                  $("#loadingSpinner").hide();
+                      showToast("Error",error.message, false);
+              }
+          });
+      });
+         $("#btnDelete").click(function () {
+           if (!selectedRowData || selectedRowData.id === 0) {
+               showToast('Warning', "Select 1 row, please!", true);
+
+               return;
+           }
+           if (!confirm("Are you sure you want to delete this record?")) {
+                return;
+            }
+           $.ajax({
+               url: `/Administration/DepositRuleDelete/`+ selectedRowData.id,
+               type: "POST",
+               traditional: true,
+               crossDomain: false,
+               headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+               success: function(result){
+                    if(result.success){
+                        $("#btnSearch").trigger("click");
+                        showToast("Success","Delete Successfully!",true);
+                    } else {
+                        showToast("Error",result.message,false);
+                    }
+               },
+               error: function(){
+                    showToast("Error","Delete failed!",false);
+                    $("#loadingSpinner").hide();
+               },
+           });
+       });
+
+      $("#btnExportExcel").click(function () {
+         const grid = $("#gridContainer").dxDataGrid("instance");
+
+         const workbook = new ExcelJS.Workbook();
+         const companyName = localStorage.getItem("CompanyName") || "Tên công ty chưa xác định";
+         const worksheet = workbook.addWorksheet("Sheet 1");
+
+         // === Dòng 1: Tên công ty (merge theo 4 cột) ===
+         worksheet.addRow([companyName]);
+         worksheet.mergeCells('A1:D1');
+         worksheet.getRow(1).font = { bold: true };
+         worksheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'left' };
+
+         // === Dòng 2: Ngày giờ xuất (bên phải) ===
+         const now = new Date();
+         const exportDate = now.toLocaleString("vi-VN");
+         worksheet.addRow(['', '', '', exportDate]);
+         worksheet.mergeCells('D2:D2');  // cột D thôi
+         worksheet.getRow(2).alignment = { vertical: 'middle', horizontal: 'right' };
+
+         // === Dòng 3–4: trống
+         worksheet.addRow([]);
+         worksheet.addRow([]);
+
+         // === Dòng 5: Tiêu đề báo cáo (ở giữa) ===
+         const reportRow = worksheet.addRow(['Reason']);
+         worksheet.mergeCells('A5:D5');
+         reportRow.font = { bold: true, size: 14 };
+         reportRow.alignment = { vertical: 'middle', horizontal: 'center' };
+
+         // === Dòng 6: trống
+         worksheet.addRow([]);
+
+         // === Xuất dữ liệu grid bắt đầu từ dòng 7 ===
+         DevExpress.excelExporter.exportDataGrid({
+             component: grid,
+             worksheet: worksheet,
+             autoFilterEnabled: true,
+             topLeftCell: { row: 7, column: 1 }
+         }).then(function () {
+             // Footer (sau cùng)
+             const lastRow = worksheet.lastRow.number + 2;
+             worksheet.mergeCells(`A${lastRow}:D${lastRow}`);
+             worksheet.getCell(`A${lastRow}`).alignment = { horizontal: 'center' };
+             worksheet.getCell(`A${lastRow}`).font = { italic: true };
+
+             // Ghi file
+             let fileName = "DepositRulesSearch.xlsx";
+             workbook.xlsx.writeBuffer().then(function (buffer) {
+                 saveAs(new Blob([buffer], { type: "application/octet-stream" }), fileName);
+             });
+         });
+         });
+</script>

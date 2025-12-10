@@ -69,7 +69,6 @@ namespace RoomManagement.Controllers
                                   HKPersons = !string.IsNullOrEmpty(d["HK Persons"].ToString()) ? d["HK Persons"] : "",
                                   FOPersons = !string.IsNullOrEmpty(d["FO Persons"].ToString()) ? d["FO Persons"] : "",
                                   Discrepancy = !string.IsNullOrEmpty(d["Discrepancy"].ToString()) ? d["Discrepancy"] : "",
-
                               }).ToList();
                 return Json(result);
             }
@@ -188,7 +187,6 @@ namespace RoomManagement.Controllers
                                   ThirtheenDate = !string.IsNullOrEmpty(d["ThirtheenDate"].ToString()) ? d["ThirtheenDate"] : "",
                                   FourtheenDate = !string.IsNullOrEmpty(d["FourtheenDate"].ToString()) ? d["FourtheenDate"] : "",
                                   FiftheenDate = !string.IsNullOrEmpty(d["FiftheenDate"].ToString()) ? d["FiftheenDate"] : "",
-
                               }).ToList();
                 return Json(result);
             }
@@ -334,7 +332,6 @@ namespace RoomManagement.Controllers
                                   ReservedTo = !string.IsNullOrEmpty(d["Reserved To"].ToString()) ? d["Reserved To"] : "",
                                   Qty = !string.IsNullOrEmpty(d["Qty"].ToString()) ? d["Qty"] : "",
                                   ID = !string.IsNullOrEmpty(d["ID"].ToString()) ? d["ID"] : "",
-
 
                               }).ToList();
                 return Json(result);
