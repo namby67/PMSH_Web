@@ -28,11 +28,11 @@ namespace Administration.Controllers
 
 
         [HttpGet("GetAllRateCategory")]
-        public async Task<IActionResult> RateCategoryGetAll(int inactive = 0)
+        public async Task<IActionResult> RateCategoryGetAll(string? code, string? name, int inactive = 0)
         {
             try
             {
-                DataTable dataTable = await _svRateCategory.RateCategoryTypeData(inactive);
+                DataTable dataTable = await _svRateCategory.RateCategoryTypeData(code, name, inactive);
                 var result = (from d in dataTable.AsEnumerable()
                               select new
                               {
