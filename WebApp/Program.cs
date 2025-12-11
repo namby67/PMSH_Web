@@ -1,4 +1,5 @@
 using Administration.Controllers;
+using Administration.Services;
 using Administration.Services.Implements;
 using Administration.Services.Interfaces;
 using Billing.Controllers;
@@ -155,6 +156,7 @@ builder.Services.AddSingleton<IGroupAdminService, GroupAdminService>();
 builder.Services.AddSingleton<IRateClassService, RateClassService>();
 builder.Services.AddSingleton<IRateCategoryService, RateCategory>();
 builder.Services.AddSingleton<IRateCodeService, RateCodeService>();
+builder.Services.AddSingleton<IRateCodeDetailService, RateCodeDetailService>();
 
 
 builder.Services.AddAuthentication(options =>

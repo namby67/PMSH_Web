@@ -1,22 +1,21 @@
 using System.Collections;
 using System.Data;
 using System.Linq;
+using Administration.Services;
 using Administration.Services.Interfaces;
 using BaseBusiness.BO;
 using BaseBusiness.Model;
 using BaseBusiness.util;
 using Microsoft.AspNetCore.Mvc;
+using static Administration.DTO.RateCodeDetailDTO;
 
 namespace Administration.Controllers
 {
     [Route("/Administration/RateCode")]
-    public class RateCodeDetailController : Controller
+    public class RateCodeDetailController(IRateCodeDetailService detail) : Controller
     {
-        private readonly IRateClassService _svRateClass;
-        // public RateCodeDetailController(IRateClassService rateClass)
-        // {
-        //     _svRateClass = rateClass;
-        // }
+        private readonly IRateCodeDetailService _detail = detail;
+
         [HttpGet("RateCodeDetail")] // Truyeenf DataGrid , script api
         public IActionResult RateCodeDetail()
         {
@@ -28,155 +27,174 @@ namespace Administration.Controllers
             // Truyền đường dẫn chuẩn vào để tìm đúng
         }
 
+        [HttpGet("GetAllRateCodeDetail")]
+        public async Task<IActionResult> GetAllRateCodeDetail(
+            string? rateCode,
+            string? rateCategory,
+            int? typeOfDate,
+            DateTime? fromDate,
+            DateTime? toDate)
+        {
+            try
+            {
+                DataTable dataTable = await _detail.RateCodeTypeData(rateCode, rateCategory, typeOfDate, fromDate, toDate);
+                var result = (from d in dataTable.AsEnumerable()
+                              select new
+                              {
+                                  RateCode = d["RateCode"]?.ToString() ?? "",
+                                  Description = d["Description"]?.ToString() ?? "",
+                                  RateCategory = d["RateCategory"]?.ToString() ?? "",
+                                  IDRateCode = d["ID"] != DBNull.Value ? Convert.ToInt32(d["ID"]) : 0,
+                                  BeginDate = d["BeginDate"] != DBNull.Value ? Convert.ToDateTime(d["BeginDate"]) : (DateTime?)null,
+                                  EndDate = d["EndDate"] != DBNull.Value ? Convert.ToDateTime(d["EndDate"]) : (DateTime?)null
+                              }).ToList();
 
+                return Json(result);
 
+            }
+            catch (Exception ex)
+            {
 
-        // public async Task<IActionResult> RateClassGetAll(int inactive = 0)
-        // {
-        //     try
-        //     {
-        //         DataTable dataTable = await _svRateClass.RateClassTypeData(inactive);
-        //         var result = (from d in dataTable.AsEnumerable()
-        //                       select new
-        //                       {
-        //                           ID = d["ID"]?.ToString() ?? "",
-        //                           Code = d["Code"]?.ToString() ?? "",
-        //                           Description = d["Description"]?.ToString() ?? "",
-        //                           CreatedDate = d["CreatedDate"] != DBNull.Value ? Convert.ToDateTime(d["CreatedDate"]) : (DateTime?)null,
-        //                           UpdatedDate = d["UpdatedDate"] != DBNull.Value ? Convert.ToDateTime(d["UpdatedDate"]) : (DateTime?)null,
-        //                           CreatedBy = d["CreatedBy"]?.ToString() ?? "",
-        //                           UpdatedBy = d["UpdatedBy"]?.ToString() ?? "",
-        //                           Inactive = d["Inactive"] != DBNull.Value ? Convert.ToInt32(d["Inactive"]) : 0,
+                return BadRequest(new { success = false, message = ex.Message });
+            }
+        }
 
-        //                       }).ToList();
-        //         return Json(result);
-        //     }
-        //     catch (Exception ex)
-        //     {
+        [HttpGet("RateCodeGroupDataByID")]
+        public async Task<IActionResult> RateCodeGroupDataByID(int? rateCodeID)
+        {
+            try
+            {
+                DataTable dataTable = await _detail.RateCodeGroupDataByID(rateCodeID);
+                var result = (from d in dataTable.AsEnumerable()
+                              select new
+                              {
+                                  code = d["RateCode"]?.ToString() ?? "",
+                                  roomType = d["RoomType"]?.ToString() ?? "",
+                                  package = d["Package"]?.ToString() ?? "",
+                                  beginDate = d["BeginDate"] != DBNull.Value ? Convert.ToDateTime(d["BeginDate"]) : (DateTime?)null,
+                                  endDate = d["EndDate"] != DBNull.Value ? Convert.ToDateTime(d["EndDate"]) : (DateTime?)null,
+                                  dataField = d["TransactionCode"]?.ToString() ?? "",
+                                  curr = d["CurrencyID"]?.ToString() ?? "",
+                                  RateCodeID = d["RateCodeID"] != DBNull.Value ? Convert.ToInt32(d["RateCodeID"]) : 0,
+                                  PackageID = d["PackageID"] != DBNull.Value ? Convert.ToInt32(d["PackageID"]) : (int?)null,
+                                  RoomTypeID = d["RoomTypeID"] != DBNull.Value ? Convert.ToInt32(d["RoomTypeID"]) : 0,
+                                  A1 = d["A1"] != DBNull.Value ? Convert.ToInt32(d["A1"]) : 0,
+                                  A2 = d["A2"] != DBNull.Value ? Convert.ToInt32(d["A2"]) : 0,
+                                  A3 = d["A3"] != DBNull.Value ? Convert.ToInt32(d["A3"]) : 0,
+                                  A4 = d["A4"] != DBNull.Value ? Convert.ToInt32(d["A4"]) : 0,
+                                  A5 = d["A5"] != DBNull.Value ? Convert.ToInt32(d["A5"]) : 0,
+                                  A6 = d["A6"] != DBNull.Value ? Convert.ToInt32(d["A6"]) : 0,
+                                  C1 = d["C1"] != DBNull.Value ? Convert.ToInt32(d["C1"]) : 0,
+                                  C2 = d["C2"] != DBNull.Value ? Convert.ToInt32(d["C2"]) : 0,
+                                  C3 = d["C3"] != DBNull.Value ? Convert.ToInt32(d["C3"]) : 0,
+                                  MinLOS = d["MinLOS"] != DBNull.Value ? Convert.ToInt32(d["MinLOS"]) : 0,
+                                  MaxLOS = d["MaxLOS"] != DBNull.Value ? Convert.ToInt32(d["MaxLOS"]) : 0,
+                                  MinNoOfRoom = d["MinNoOfRoom"] != DBNull.Value ? Convert.ToInt32(d["MinNoOfRoom"]) : 0,
+                                  MaxNoOfRoom = d["MaxNoOfRoom"] != DBNull.Value ? Convert.ToInt32(d["MaxNoOfRoom"]) : 0
+                              }).ToList();
 
-        //         return BadRequest(new { success = false, message = ex.Message });
-        //     }
-        // }
+                return Json(result);
 
+            }
+            catch (Exception ex)
+            {
 
+                return BadRequest(new { success = false, message = ex.Message });
+            }
+        }
 
-        // [HttpPost("RateClassSave")]
-        // public async Task<IActionResult> RateClassSave(string idRateClass, string codeClass, string descriptionaccty, string user, string inactive)
-        // {
-        //     try
-        //     {
-        //         // Collect validation errors
-        //         List<string> errors = new();
+        [HttpPost("GetDetails")]
+        public async Task<IActionResult> GetDetails([FromBody] RateCodeDetailInputDto input)
+        {
+            try
+            {
+                DataTable dt = await _detail.GetRateCodeDetailsAsync(input);
 
-        //         // Validate inputs
-        //         if (string.IsNullOrWhiteSpace(codeClass))
-        //             errors.Add("Code is required.");
-        //         else if (codeClass.Length > 50)
-        //             errors.Add("Code must be at most 50 characters.");
+                var result = dt.AsEnumerable().Select(d => new RateCodeDetailOutputDto
+                {
+                    ID = d["ID"] != DBNull.Value ? Convert.ToInt32(d["ID"]) : 0,
+                    RateCode = d["RateCode"]?.ToString() ?? "",
+                    RoomType = d["RoomType"]?.ToString() ?? "",
+                    RateDate = d["RateDate"] != DBNull.Value ? Convert.ToDateTime(d["RateDate"]) : null,
+                    RateCodeID = d["RateCodeID"] != DBNull.Value ? Convert.ToInt32(d["RateCodeID"]) : 0,
+                    RoomTypeID = d["RoomTypeID"] != DBNull.Value ? Convert.ToInt32(d["RoomTypeID"]) : 0,
 
-        //         if (!string.IsNullOrEmpty(descriptionaccty) && descriptionaccty.Length > 500)
-        //             errors.Add("Description must be at most 500 characters.");
+                    A1 = d["A1"] != DBNull.Value ? Convert.ToDecimal(d["A1"]) : 0,
+                    A1AfterTax = d["A1AfterTax"] != DBNull.Value ? Convert.ToDecimal(d["A1AfterTax"]) : 0,
+                    A2 = d["A2"] != DBNull.Value ? Convert.ToDecimal(d["A2"]) : 0,
+                    A2AfterTax = d["A2AfterTax"] != DBNull.Value ? Convert.ToDecimal(d["A2AfterTax"]) : 0,
+                    A3 = d["A3"] != DBNull.Value ? Convert.ToDecimal(d["A3"]) : 0,
+                    A3AfterTax = d["A3AfterTax"] != DBNull.Value ? Convert.ToDecimal(d["A3AfterTax"]) : 0,
+                    A4 = d["A4"] != DBNull.Value ? Convert.ToDecimal(d["A4"]) : 0,
+                    A4AfterTax = d["A4AfterTax"] != DBNull.Value ? Convert.ToDecimal(d["A4AfterTax"]) : 0,
+                    A5 = d["A5"] != DBNull.Value ? Convert.ToDecimal(d["A5"]) : 0,
+                    A5AfterTax = d["A5AfterTax"] != DBNull.Value ? Convert.ToDecimal(d["A5AfterTax"]) : 0,
+                    A6 = d["A6"] != DBNull.Value ? Convert.ToDecimal(d["A6"]) : 0,
+                    A6AfterTax = d["A6AfterTax"] != DBNull.Value ? Convert.ToDecimal(d["A6AfterTax"]) : 0,
 
-        //         if (string.IsNullOrWhiteSpace(user))
-        //             errors.Add("User is required.");
-        //         else
-        //         {
-        //             user = user.Trim().Trim('"');
-        //             if (user.Length > 100)
-        //                 errors.Add("User must be at most 100 characters.");
-        //         }
+                    C1 = d["C1"] != DBNull.Value ? Convert.ToDecimal(d["C1"]) : 0,
+                    C1AfterTax = d["C1AfterTax"] != DBNull.Value ? Convert.ToDecimal(d["C1AfterTax"]) : 0,
+                    C2 = d["C2"] != DBNull.Value ? Convert.ToDecimal(d["C2"]) : 0,
+                    C2AfterTax = d["C2AfterTax"] != DBNull.Value ? Convert.ToDecimal(d["C2AfterTax"]) : 0,
+                    C3 = d["C3"] != DBNull.Value ? Convert.ToDecimal(d["C3"]) : 0,
+                    C3AfterTax = d["C3AfterTax"] != DBNull.Value ? Convert.ToDecimal(d["C3AfterTax"]) : 0,
 
-        //         if (inactive != null && inactive != "0" && inactive != "1")
-        //             errors.Add("Inactive must be 0 or 1.");
+                    AdultExtra = d.Table.Columns.Contains("AdultExtra") && d["AdultExtra"] != DBNull.Value ? Convert.ToDecimal(d["AdultExtra"]) : 0,
+                    AdultExtraTax = d.Table.Columns.Contains("AdultExtraTax") && d["AdultExtraTax"] != DBNull.Value ? Convert.ToDecimal(d["AdultExtraTax"]) : 0,
 
-        //         // Validate ID format for update
-        //         int parsedId = 0;
-        //         bool isUpdate = false;
-        //         if (!string.IsNullOrWhiteSpace(idRateClass) && idRateClass != "0")
-        //         {
-        //             if (!int.TryParse(idRateClass, out parsedId) || parsedId <= 0)
-        //                 errors.Add("Invalid Rate Class ID format.");
-        //             else
-        //                 isUpdate = true;
-        //         }
+                    TransactionCode = d["TransactionCode"]?.ToString() ?? "",
+                    CurrencyID = d["CurrencyID"]?.ToString() ?? ""
+                }).ToList();
 
-        //         // Get business dates
-        //         List<BusinessDateModel> businessDates = PropertyUtils.ConvertToList<BusinessDateModel>(BusinessDateBO.Instance.FindAll());
-        //         if (businessDates == null || businessDates.Count == 0)
-        //             errors.Add("Business date not available. Contact system administrator.");
-
-        //         // Check for duplicate Code (case-insensitive) for insert/update
-        //         if (!string.IsNullOrWhiteSpace(codeClass))
-        //         {
-        //             var allRateClasses = PropertyUtils.ConvertToList<RateClassModel>(RateClassBO.Instance.FindAll()) ?? new List<RateClassModel>();
-        //             bool duplicate = allRateClasses.Any(r => string.Equals(r.Code?.Trim(), codeClass.Trim(), StringComparison.OrdinalIgnoreCase) && r.ID != parsedId);
-        //             if (duplicate)
-        //                 errors.Add("Code already exists.");
-        //         }
-
-        //         // Return errors if any
-        //         if (errors.Any())
-        //         {
-        //             return BadRequest(new { success = false, message = "Validation failed.", errors });
-        //         }
-
-        //         // Prepare model
-        //         RateClassModel _Model = new();
-        //         _Model.Code = codeClass.Trim();
-        //         _Model.Description = descriptionaccty ?? string.Empty;
-        //         _Model.Inactive = inactive == "1";
-
-        //         if (isUpdate)
-        //         {
-        //             // Verify existing record
-        //             var existing = RateClassBO.Instance.FindByPrimaryKey(parsedId) as RateClassModel;
-        //             if (existing == null || existing.ID == 0)
-        //             {
-        //                 return NotFound(new { success = false, message = $"Rate Class not found (ID = {parsedId})" });
-        //             }
-
-        //             _Model.ID = parsedId;
-        //             _Model.UpdatedBy = user;
-        //             _Model.UpdatedDate = businessDates![0].BusinessDate;
-        //             _Model.CreatedBy = existing.CreatedBy;
-        //             _Model.CreatedDate = existing.CreatedDate;
-        //             RateClassBO.Instance.Update(_Model);
-        //         }
-        //         else
-        //         {
-        //             _Model.UpdatedBy = user;
-        //             _Model.CreatedBy = user;
-        //             _Model.CreatedDate = businessDates![0].BusinessDate;
-        //             _Model.UpdatedDate = _Model.CreatedDate;
-        //             RateClassBO.Instance.Insert(_Model);
-        //         }
-
-        //         return Json(new { success = true, message = "Success", data = new { id = _Model.ID } });
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         return BadRequest(new { success = false, message = ex.Message });
-        //     }
-        // }
-        // [HttpPost("RateClassDelete")]
-        // public IActionResult RateClassDelete(int id)
-        // {
-        //     try
-        //     {
-        //         ArrayList arr = RateCodeBO.Instance.FindByAttribute("RateClassID", id);
-        //         if (arr.Count == 0)
-        //         {
-        //             return Json(new { success = false, message = "Rate Class is being referenced to in other modules.\nDelete failed.!" });
-        //         }
-        //         RateClassBO.Instance.Delete(id);
-
-        //         return Json(new { success = true, message = $"Success Delete! {id}" });
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         return BadRequest(new { success = false, message = ex.Message });
-        //     }
-        // }
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { success = false, message = ex.Message });
+            }
+        }
     }
 }
 
+// [HttpGet("GetAllRateCodeDetail")]
+// public async Task<IActionResult> GetAllRateCodeDetail(
+//     string? rateCode,
+//     string? rateCategory,
+//     int? typeOfDate,
+//     DateTime? fromDate,
+//     DateTime? toDate)
+// {
+//     var parameters = new Dictionary<string, object?>
+//     {
+//         { "@strRateCode", rateCode },
+//         { "@strRateCategory", rateCategory },
+//         { "@TypeOfDate", typeOfDate ?? 0 },
+//         { "@FromDate", fromDate },
+//         { "@ToDate",  }
+//     };
+//     var data = await _detail.RateCodeTypeData(parameters);
+//     var result = data.AsEnumerable()
+//     .Select(row => data.Columns.Cast<DataColumn>()
+//     .ToDictionary(
+//         col => col.ColumnName,
+//         col2 => row[col2] == DBNull.Value ? null : row[col2]
+//     )).ToList();
+//     return Json(result);
+// }
+
+// [HttpGet("RateCodeGroupDataByID")]
+// public async Task<IActionResult> RateCodeGroupDataByID(int? RateCodeID)
+// {
+//     var parameters = new Dictionary<string, object?>
+//     {
+//         { "@RateCodeID", RateCodeID },
+//     };
+//     var data = await _detail.RateCodeGroupDataByID(parameters);
+//     var result = data.AsEnumerable()
+//     .Select(row => data.Columns.Cast<DataColumn>()
+//     .ToDictionary(
+//         col => col.ColumnName,
+//         col2 => row[col2] == DBNull.Value ? null : row[col2]
+//     )).ToList();
+//     return Json(result);
+// }
