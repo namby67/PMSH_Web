@@ -5,6 +5,6 @@ namespace Administration.Services.Interfaces
     public interface IRateCategoryService
     {
         // lấy danh sách cho DataGrid
-        Task<DataTable> RateCategoryTypeData(int inactive = 0);
+        Task<DataTable> RateCategoryTypeData(string? Code, string? Name, int inactive = 0);
     }
 }

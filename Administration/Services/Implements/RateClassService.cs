@@ -7,14 +7,16 @@ namespace Administration.Services.Implements
 {
     public class RateClassService : IRateClassService
     {
-        public async Task<DataTable> RateClassTypeData(int inactive = 0)
+        public async Task<DataTable> RateClassTypeData(string? Code, string? Name, int inactive = 0)
         {
             try
             {
                 SqlParameter[] param = [
+                    new SqlParameter("@Code", Code ?? string.Empty),
+                    new SqlParameter("@Name", Name ?? string.Empty),
                     new SqlParameter("@Inactive", inactive)
-                ];
-                DataTable myTable =  DataTableHelper.getTableData("spFrmRateClassSearch", param);
+                    ];
+                DataTable myTable = DataTableHelper.getTableData("spFrmRateClassSearch", param);
                 return myTable;
 
             }

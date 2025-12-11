@@ -27,16 +27,17 @@ namespace Administration.Controllers
 
 
         [HttpGet("GetAllRateClass")]
-        public async Task<IActionResult> RateClassGetAll(int inactive = 0)
+        public async Task<IActionResult> RateClassGetAll(string? code, string? name, int inactive = 0)
         {
             try
             {
-                DataTable dataTable = await _svRateClass.RateClassTypeData(inactive);
+                DataTable dataTable = await _svRateClass.RateClassTypeData(code, name, inactive);
                 var result = (from d in dataTable.AsEnumerable()
                               select new
                               {
                                   ID = d["ID"]?.ToString() ?? "",
                                   Code = d["Code"]?.ToString() ?? "",
+                                  Name = d["Name"]?.ToString() ?? "",
                                   Description = d["Description"]?.ToString() ?? "",
                                   CreatedDate = d["CreatedDate"] != DBNull.Value ? Convert.ToDateTime(d["CreatedDate"]) : (DateTime?)null,
                                   UpdatedDate = d["UpdatedDate"] != DBNull.Value ? Convert.ToDateTime(d["UpdatedDate"]) : (DateTime?)null,
@@ -57,7 +58,7 @@ namespace Administration.Controllers
 
 
         [HttpPost("RateClassSave")]
-        public async Task<IActionResult> RateClassSave(string idRateClass, string codeClass, string descriptionaccty, string user, string inactive)
+        public async Task<IActionResult> RateClassSave(string idRateClass, string codeClass,string nameClass, string descriptionaccty, string user, string inactive)
         {
             try
             {
@@ -69,6 +70,10 @@ namespace Administration.Controllers
                     errors.Add("Code is required.");
                 else if (codeClass.Length > 50)
                     errors.Add("Code must be at most 50 characters.");
+                if (string.IsNullOrWhiteSpace(nameClass))
+                    errors.Add("Name is required.");
+                else if (nameClass.Length > 50)
+                    errors.Add("Name must be at most 50 characters.");
 
                 if (!string.IsNullOrEmpty(descriptionaccty) && descriptionaccty.Length > 500)
                     errors.Add("Description must be at most 500 characters.");
@@ -119,6 +124,7 @@ namespace Administration.Controllers
                 // Prepare model
                 RateClassModel _Model = new();
                 _Model.Code = codeClass.Trim();
+                _Model.Name = nameClass.Trim();
                 _Model.Description = descriptionaccty ?? string.Empty;
                 _Model.Inactive = inactive == "1";
 
