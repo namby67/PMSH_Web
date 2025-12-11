@@ -111,11 +111,27 @@
             Delete</button>
         <button id="btnExportExcel" class="mui-button mui-button-export" type="button"> <i
                 class="fa-solid fa-file-excel"></i> Excel</button>
-        <div class="form-check" style="display: inline-block; margin-left: 20px;">
-            <input class="form-check-input" type="checkbox" id="chkShowInactive" name="showInactive" value="1">
-            <label class="form-check-label" for="chkShowInactive" style="margin-bottom: 0;">
-                Show Inactive
-            </label>
+    </div>
+    <div class="d-flex align-items-center gap-3 p-2 mt-2 "
+        style="border: 1px solid #ccc; border-radius: 6px; padding: 8px;width: fit-content;">
+
+        <div class="d-flex align-items-center">
+            <div class="d-flex align-items-center me-4">
+                <label for="tracetime" class="me-2 mb-0">Code:</label>
+                <input type="text" id="codeInput" class="form-control form-control-sm w-auto" />
+            </div>
+            <div class="d-flex align-items-center me-4">
+                <label for="tracetime" class="me-2 mb-0">Name:</label>
+                <input type="text" id="nameInput" class="form-control form-control-sm w-auto" />
+            </div>
+
+            <div class="d-flex align-items-center me-3">
+                <div class="form-check d-flex align-items-center gap-2">
+                    <span class="status-color-box color-clean-uncheck"></span>
+                    <input class="form-check-input" type="checkbox" id="chkshowInactive" name="chkshowInactive">
+                    <label class="form-check-label mb-0" for="chkshowInactive">Show Inactive</label>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -161,7 +177,7 @@
                 </div>
                 <div class="mb-2 d-flex align-items-center">
                     <label for="nameClass" class="me-2 mb-0" style="width: 80px;">Name:</label>
-                    <input type="text" id="codeClass" name="codeClass" class="form-control form-control-sm flex-fill" />
+                    <input type="text" id="nameClass" name="codeClass" class="form-control form-control-sm flex-fill" />
                 </div>
 
                 <div class="mb-2 d-flex align-items-center">
@@ -217,7 +233,11 @@
         $.ajax({
             url: "/Administration/RateCode/GetAllRateCategory",
             type: "GET",
-            data: { inactive: inactive },
+            data: {
+                code: $("#codeInput").val(),
+                name: $("#nameInput").val(),
+                inactive: inactive
+            }, 
             traditional: true,
             crossDomain: false,
             headers: {
