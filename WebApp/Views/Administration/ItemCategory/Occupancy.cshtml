@@ -1,0 +1,184 @@
+﻿@using DevExpress.XtraReports.UI
+
+@{
+    //
+}
+
+<div class="header">
+    <h3 id="content-title">Occupancy Config</h3>
+</div>
+<div class="sticky-header bg-white p-2 shadow-sm z-3">
+    <div class="d-flex align-items-center gap-3 p-2" style="border: 1px solid #ccc; border-radius: 6px; padding: 8px;">
+        <div class="d-flex flex-column ">
+
+            <div class="d-flex align-items-center">
+                <div class="d-flex align-items-center me-4">
+                    <label for="tracetime" class="me-2 mb-0">Type:</label>
+                    <input type="text" id="typeInput"
+                           class="form-control form-control-sm w-auto" />
+                </div>
+                <div class="d-flex align-items-center me-4">
+                    <label for="tracetime" class="me-2 mb-0">Occ. Level:</label>
+                    <input type="text" id="occLevelInput" class="form-control form-control-sm w-auto" />
+                    <div class="invalid-feedback">Occ. Level is not blank !.</div>
+                </div>
+
+                <div class="d-flex align-items-center mb-3">
+                    <label class="me-2 mb-0 fw-bold">Color:</label>
+
+                    <div class="input-group" style="width: 300px;">
+                        <input type="text" id="colorDisplay" class="form-control fw-bold"
+                               placeholder="No color selected" readonly
+                               style="background-color: #ffffff; color: #000;">
+
+                        <div class="input-group-text p-0" style="overflow:hidden; width: 40px; position: relative;">
+                            <input type="color" id="colorPicker" class="form-control form-control-color border-0"
+                                   value="#00ffff" title="Choose your color"
+                                   style="width: 100%; height: 100%; padding: 2px; cursor: pointer;">
+                        </div>
+
+                        <button class="btn btn-outline-danger" type="button" id="btnClearColor" title="Clear color">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="d-flex align-items-center mt-1 mb-2">
+                    <label class="me-2 mb-0" style="width: 90px;">Title:</label>
+                    <input type="text" id="titleInput" class="form-control form-control-sm" />
+                </div>
+
+                <div class="d-flex align-items-center mb-2">
+                    <label class="me-2 mb-0" style="width: 90px;">Email:</label>
+                    <input type="email" id="emailInput" class="form-control form-control-sm" />
+                </div>
+
+                <div class="d-flex align-items-start mb-2">
+                    <label class="me-2 mb-0" style="width: 90px;">Description:</label>
+                    <textarea id="descriptionInput" rows="2"
+                              class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mt-2">
+        <button id="btnNew" class="mui-button mui-button-new"><i class="fa-solid fa-plus"></i> New</button>
+        <button id="btnUpdate" class="mui-button mui-button-edit"> <i class="fa-solid fa-pen"></i> Edit</button>
+        <button id="btnDelete" class="mui-button button-report-delete"> <i class="fa-solid fa-trash-can"></i> Delete</button>
+    </div>
+
+</div>
+<div class="mui-card">
+    <div id="gridContainerRateCode" class="mt-2 gridContainer"></div>
+</div>
+<div id="loadingSpinnerRateCode" style="display: none; text-align: center; padding: 20px;">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+
+<script>
+    DevExpress.localization.locale("vi");
+       let selectedRowData = null;
+
+         $(document).ready(function () {
+            function getContrastYIQ(hexcolor){
+                hexcolor = hexcolor.replace("#", "");
+                var r = parseInt(hexcolor.substr(0,2),16);
+                var g = parseInt(hexcolor.substr(2,2),16);
+                var b = parseInt(hexcolor.substr(4,2),16);
+                var yiq = ((r*299)+(g*587)+(b*114))/1000;
+                return (yiq >= 128) ? 'black' : 'white';
+            }
+
+            // Hàm cập nhật giao diện
+            function updateColorUI(colorHex) {
+                // Cập nhật giá trị text
+                $('#colorDisplay').val(colorHex);
+                // Cập nhật màu nền ô input
+                $('#colorDisplay').css('background-color', colorHex);
+                // Cập nhật màu chữ cho dễ nhìn
+                $('#colorDisplay').css('color', getContrastYIQ(colorHex));
+                // Đồng bộ với input color picker
+                $('#colorPicker').val(colorHex);
+            }
+
+            // 1. Khi người dùng chọn màu từ bảng màu
+            $('#colorPicker').on('input change', function () {
+                var selectedColor = $(this).val();
+                updateColorUI(selectedColor);
+            });
+
+            // 2. Khi nhấn nút Xóa (X)
+            $('#btnClearColor').on('click', function () {
+                $('#colorDisplay').val(''); // Xóa mã màu
+                $('#colorDisplay').css('background-color', '#ffffff'); // Về nền trắng
+                $('#colorDisplay').css('color', '#000000'); // Về chữ đen
+                $('#colorPicker').val('#ffffff'); // Reset picker về trắng
+            });
+
+            // Khởi tạo mặc định (nếu cần)
+            // updateColorUI('#00ffff');
+        reloadGrid();
+        });
+
+
+    function loadGrid(data) {
+        $("#gridContainerRateCode").dxDataGrid({
+            dataSource: data,
+            height: 500,
+            width: "100%",
+            columnAutoWidth: true,
+            allowColumnResizing: true,
+            columnResizingMode: "widget",
+            selection: { mode: "single" },
+             columns: [
+                        { dataField: "id", caption: "ID" },
+                        { dataField: "type", caption: "Type" },
+                        { dataField: "occupancylevel", caption: "Occ. Level" },
+                        { dataField: "title", caption: "Title" },
+                        { dataField: "email", caption: "Email" },
+                        { dataField: "description", caption: "Description" },
+                        { dataField: "createBy", caption: "CreateBy" },
+                        { dataField: "createDate", caption: "CreateDate", dataType: "date", format: "dd/MM/yyyy" },
+                        { dataField: "updateBy", caption: "UpdateBy"},
+                        { dataField: "updateDate", caption: "UpdateDate", dataType: "date", format: "dd/MM/yyyy" },
+                    ],
+            filterRow: { visible:true, applyFilter:"auto" },
+            paging: { pageSize:20 },
+            pager: {
+                visible:true,
+                allowedPageSizes:[20,50,'all'],
+                showPageSizeSelector:true,
+                showInfo:true,
+                showNavigationButtons:true
+            },
+            scrolling: { mode:"standard", showScrollbar:"always", scrollByContent:true },
+            onSelectionChanged: function(e){
+                selectedRowData = e.selectedRowsData.length > 0 ? e.selectedRowsData[0] : null;
+                console.log("Selected Row:", selectedRowData);
+            }
+        });
+    }
+
+    function reloadGrid() {
+        $("#loadingSpinnerRateCode").show();
+
+        $.ajax({
+            url: "/Administration/GetOccupancy",
+            type: 'GET',
+            data: {},
+            success: function(data){
+                loadGrid(data);
+                $("#loadingSpinnerRateCode").hide();
+            },
+            error: function(xhr, status, error){
+                showToast("Error","Không thể tải dữ liệu",false);
+                $("#loadingSpinnerRateCode").hide();
+            }
+        });
+    }
+
+</script>
