@@ -1,203 +1,44 @@
 ﻿@using DevExpress.XtraReports.UI
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+
 @{
-    // Kiểm tra xem có biến `media` nào được dùng không
-    // Ví dụ: var media = Model.Media; // Đảm bảo Model có thuộc tính Media nếu cần
+    //
 }
+<div class="header">
+    <h3 id="content-title">
+        Comment Type
 
-<!-- Comment reservation.css để tránh xung đột, nhưng có thể thêm lại sau khi fix -->
-@* <link href="~/css/pages/reservation.css" rel="stylesheet" /> *@
-<style>
-    :root {
-        --main-color: #2b6cb0; /* Màu chính (xanh dương) */
-        --secondary-color: #f5f5f5; /* Màu nền thứ cấp (xám nhạt) */
-        --highlight-color: #d65a00; /* Màu nổi bật (cam) */
-        --text-color: #2d3748; /* Màu chữ (xám đậm) */
-        --accent-color: #ffffff; /* Màu bổ sung (trắng) */
-    }
+    </h3>
+</div>
 
-    .menu-group-title {
-        font-weight: bold;
-        padding: 8px;
-        cursor: pointer;
-        background: var(--secondary-color);
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+<div class="sticky-header bg-white p-2 shadow-sm z-3">
+    <div class="d-flex align-items-center gap-3 p-2" style="border: 1px solid #ccc; border-radius: 6px; padding: 8px;">
 
-    .menu-left .submenu {
-        display: none;
-        margin-top: 2px;
-        padding-left: 10px;
-        background: var(--accent-color);
-        border: 1px solid #d1d5db;
-        border-radius: 0.5rem;
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-        min-width: 120px;
-        position: relative;
-        z-index: 20;
-    }
-
-        .menu-left .submenu.active {
-            display: block !important;
-        }
-
-    /* Đảm bảo các style khác sử dụng biến CSS */
-    .menu-item {
-        display: block;
-        padding: 12px 16px;
-        color: var(--text-color);
-        text-decoration: none;
-        font-size: 13px;
-        font-weight: 500;
-        border-bottom: 1px solid #bcbcbc;
-        transition: all 0.3s ease;
-        border-left: 4px solid transparent;
-    }
-
-        .menu-item:hover,
-        .menu-item.active {
-            color: var(--text-color);
-            background-color: var(--secondary-color);
-            border-left: 4px solid var(--highlight-color);
-        }
-
-    .menu-group > .menu-left {
-        display: none; /* ẩn mặc định */
-        margin-top: 2px;
-        background: var(--accent-color);
-        border: 1px solid #d1d5db;
-        border-radius: 0.5rem;
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-    }
-</style>
-<div class="mt-3">
-    <div class="row">
-        <!-- Menu trái -->
-        <div class="col-md-2 mb-2">
-            <div class="menu-left">
-                <button class="toggle-btn"><i class="fas fa-bars"></i></button>
-
-                <!-- Group 1 -->
-                <div class="menu-group">
-                    <div class="menu-group-title">
-                        Profile <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="menu-left">
-                        <a class="menu-item" asp-controller="Administration" asp-action="City">CITY</a>
-                        <a class="menu-item" asp-controller="Administration" asp-action="Country">COUNTRY</a>
-                        <a class="menu-item" asp-controller="Administration" asp-action="Language">LANGUAGE</a>
-                        <a class="menu-item" asp-controller="Administration" asp-action="Nationality">NATITONALITY</a>
-                        <a class="menu-item" asp-controller="Administration" asp-action="Title">TITLE</a>
-                        <a class="menu-item" asp-controller="Administration" asp-action="Territory">TERRITORY</a>
-                        <a class="menu-item" asp-controller="Administration" asp-action="State">STATE</a>
-                        <a class="menu-item" asp-controller="Administration" asp-action="VIP">VIP</a>
-
-
-                    </div>
-                </div>
-
-                <!-- Group 2 -->
-                <div class="menu-group">
-                    <div class="menu-group-title">
-                        Reservation <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="menu-left">
-                        <a class="menu-item" asp-controller="Administration" asp-action="Market">MARKET</a>
-                        <a class="menu-item" asp-controller="Administration" asp-action="MarketType">MARKET TYPE</a>
-                        <a class="menu-item" asp-controller="Administration" asp-action="PickupDropPlace">PICKUP DROP PLACE</a>
-                        <a class="menu-item" asp-controller="Administration" asp-action="TransportType">TRANSPORT TYPE</a>
-                        <a class="menu-item" asp-controller="Administration" asp-action="ReservationType">RESERVATION TYPE</a>
-                        <a class="menu-item" asp-controller="Administration" asp-action="Reason">REASON</a>
-                        <a class="menu-item" asp-controller="Administration" asp-action="Origin">ORIGIN</a>
-                        <a class="menu-item" asp-controller="Administration" asp-action="Source">SOURCE</a>
-                    </div>
-                </div>
-                <div class="menu-group">
-                    <div class="menu-group-title">
-                        Other <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="menu-left">
-                        <a class="menu-item" asp-controller="Administration" asp-action="AlertsSetup">ALERTS SETUP</a>
-                        <a class="menu-item" asp-controller="Administration" asp-action="MarketType">MARKET TYPE</a>
-                        <a class="menu-item" asp-controller="Administration" asp-action="Comment">COMMENTS</a>
-                        <a class="menu-item active"> COMMENT TYPE</a>
-                        <a class="menu-item" asp-controller="Administration" asp-action="Season">SEASON</a>
-                        <a class="menu-item" asp-controller="Administration" asp-action="Zone">ZONE</a>
-                        <a class="menu-item" asp-controller="Administration" asp-action="Department">DEPARTMENT</a>
-                    </div>
-                </div>
-                <div class="menu-group">
-                    <div class="menu-group-title">
-                        Owner <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="menu-left">
-                        <a class="menu-item" asp-controller="Administration" asp-action="Owner"> OWNER</a>
-
-                    </div>
-                </div>
-                <div class="menu-group">
-                    <div class="menu-group-title">
-                        Property Type<i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="menu-left">
-                        <a class="menu-item" asp-controller="Administration" asp-action="PropertyType"> PROPERTY TYPE</a>
-                        <a class="menu-item" asp-controller="Administration" asp-action="Property"> PROPERTY</a>
-                        <a class="menu-item" asp-controller="Administration" asp-action="PropertyPermission"> PROPERTY PERMISSION</a>
-                    </div>
-                </div>
-            </div>
+        <div class="d-flex align-items-center">
+            <label for="code" class="me-2 mb-0">Code</label>
+            <input type="text" id="code" class="form-control form-control-sm" style="width: 100px;" />
         </div>
+        <div class="d-flex align-items-center">
+            <label for="name" class="me-2 mb-0">Name</label>
+            <input type="text" id="name" class="form-control form-control-sm" style="width: 100px;" />
+        </div>
+        <div class="d-flex align-items-center me-3">
+            <input type="checkbox" id="chkshowInactive" class="form-check-input mt-0" />
+            <label class="me-2 mb-0"> Show Inactive</label>
 
-
-        <!-- Nội dung bên phải -->
-        <div class="col-md-10">
-            <div class="content-right">
-                <div class="header">
-                    <h3 id="content-title">
-                        Comment Type
-
-                    </h3>
-                </div>
-
-                <div class="sticky-header bg-white p-2 shadow-sm z-3">
-                    <div class="d-flex align-items-center gap-3 p-2" style="border: 1px solid #ccc; border-radius: 6px; padding: 8px;">
-
-                        <div class="d-flex align-items-center">
-                            <label for="code" class="me-2 mb-0">Code</label>
-                            <input type="text" id="code" class="form-control form-control-sm" style="width: 100px;" />
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <label for="name" class="me-2 mb-0">Name</label>
-                            <input type="text" id="name" class="form-control form-control-sm" style="width: 100px;" />
-                        </div>
-                        <div class="d-flex align-items-center me-3">
-                            <input type="checkbox" id="chkshowInactive" class="form-check-input mt-0" />
-                            <label class="me-2 mb-0"> Show Inactive</label>
-
-                        </div>
-                    </div>
-                    <div class=" mt-1">
-                        <button style="border-radius: 4px;  margin-right: 6px;background-color: #6c757d;" id="btnView" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> View</button>
-                        <button style="border-radius: 4px;  margin-right: 6px;background-color: #28a745;" id="btnNew" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> New</button>
-                        <button style="border-radius: 4px;  margin-right: 6px;background-color: #007bff;" id="btnEdit" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Edit</button>
-                        <button style="border-radius: 4px;  margin-right: 6px;background-color: #dc3545;" id="btnDelete" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Delete</button>
-                        <button style="border-radius: 4px;  margin-right: 6px;background-color: green;" id="btnExportExcel" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Excel</button>
-
-                    </div>
-                </div>
-
-                <div class="mui-card">
-                    <div id="gridContainerRateCode" class="mt-2 gridContainer"></div>
-                </div>
-            </div>
         </div>
     </div>
+    <div class=" mt-1">
+        <button style="border-radius: 4px;  margin-right: 6px;background-color: #6c757d;" id="btnView" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> View</button>
+        <button style="border-radius: 4px;  margin-right: 6px;background-color: #28a745;" id="btnNew" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> New</button>
+        <button style="border-radius: 4px;  margin-right: 6px;background-color: #007bff;" id="btnEdit" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Edit</button>
+        <button style="border-radius: 4px;  margin-right: 6px;background-color: #dc3545;" id="btnDelete" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Delete</button>
+        <button style="border-radius: 4px;  margin-right: 6px;background-color: green;" id="btnExportExcel" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Excel</button>
+
+    </div>
+</div>
+
+<div class="mui-card">
+    <div id="gridContainerRateCode" class="mt-2 gridContainer"></div>
 </div>
 <!-- Modal Popup for New Item -->
 <div class="modal fade" id="itemModal" tabindex="-1" aria-labelledby="itemModalLabel" aria-hidden="true">
@@ -264,18 +105,6 @@
        let selectedRowData = null;
 
         $(document).ready(function () {
-        $(".menu-group-title").on("click", function (event) {
-                const submenu = $(this).next(".menu-left"); // lấy thằng menu-left con
-           const icon = $(this).find("i");
-
-           // toggle submenu
-           submenu.slideToggle(200);
-
-           // đổi icon
-           icon.toggleClass("fa-chevron-down fa-chevron-up");
-           });
-
-
          reloadGrid();
      });
 
@@ -285,7 +114,7 @@
 
         $("#btnNew").click(function () {
         $("#itemForm")[0].reset();
-        $("#id").val("0");   // 🔥 reset về 0 để phân biệt Insert
+        $("#id").val("0");
         $("#itemModal").modal("show");
     });
 
@@ -295,7 +124,7 @@
          console.log("FormData:", formData);
         let url = "/Administration/InsertCommentType";
         if ($("#id").val() && $("#id").val() !== "0") {
-            url = "/Administration/UpdateCommentType"; // nếu có id thì update
+            url = "/Administration/UpdateCommentType";
         }
 
         $.ajax({

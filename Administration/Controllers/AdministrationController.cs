@@ -31,7 +31,7 @@ namespace Administration.Controllers
         }
         public IActionResult Index()
         {
-            return View(); 
+            return View();
         }
         [HttpGet]
 
@@ -5981,6 +5981,46 @@ namespace Administration.Controllers
             return Json(new { success = true });
         }
         #endregion
-    }
 
+
+        #region Config
+
+        public IActionResult Occupancy()
+        {
+            return View();
+        }
+        [HttpGet]
+        public IActionResult GetOccupancy()
+        {
+            try
+            {
+                DataTable dt = TextUtils.Select(@"SELECT o.ID,  CASE o.[Type] 
+                    WHEN 0 THEN 'Hotel' ELSE 'Room Type' END AS [Type], b.Name AS RoomType,
+                    o.Occupancylevel,o.Title,o.Email, o.[Description],o.Color, 
+                    o.CreateDate, o.CreateBy, o.UpdateDate, o.UpdateBy 
+                    FROM Occupancy o left JOIN RoomType b ON o.RoomTypeID=b.ID");
+                var result = (from r in dt.AsEnumerable()
+                              select new
+                              {
+                                  ID = !string.IsNullOrEmpty(r["ID"].ToString()) ? r["ID"] : "",
+                                  Type = !string.IsNullOrEmpty(r["Type"].ToString()) ? r["Type"] : "",
+                                  Occupancylevel = !string.IsNullOrEmpty(r["Occupancylevel"].ToString()) ? r["Occupancylevel"] : "",
+                                  Title = !string.IsNullOrEmpty(r["Title"].ToString()) ? r["Title"] : "",
+                                  Email = !string.IsNullOrEmpty(r["Email"].ToString()) ? r["Email"] : "",
+                                  Description = !string.IsNullOrEmpty(r["Description"].ToString()) ? r["Description"] : "",
+                                  CreateDate = !string.IsNullOrEmpty(r["CreateDate"].ToString()) ? r["CreateDate"] : "",
+                                  CreateBy = !string.IsNullOrEmpty(r["CreateBy"].ToString()) ? r["CreateBy"] : "",
+                                  UpdateDate = !string.IsNullOrEmpty(r["UpdateDate"].ToString()) ? r["UpdateDate"] : "",
+                                  UpdateBy = !string.IsNullOrEmpty(r["UpdateBy"].ToString()) ? r["UpdateBy"] : "",
+                              }).ToList();
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message);
+            }
+        }
+        #endregion
+
+    }
 }

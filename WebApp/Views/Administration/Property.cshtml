@@ -1,290 +1,120 @@
 ﻿@using DevExpress.XtraReports.UI
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+
 @{
-    // Kiểm tra xem có biến `media` nào được dùng không
-    // Ví dụ: var media = Model.Media; // Đảm bảo Model có thuộc tính Media nếu cần
+    //
 }
+<div class="header">
+    <h3 id="content-title">Property</h3>
+</div>
 
-<!-- Comment reservation.css để tránh xung đột, nhưng có thể thêm lại sau khi fix -->
-@* <link href="~/css/pages/reservation.css" rel="stylesheet" /> *@
-<style>
-    :root {
-        --main-color: #2b6cb0; /* Màu chính (xanh dương) */
-        --secondary-color: #f5f5f5; /* Màu nền thứ cấp (xám nhạt) */
-        --highlight-color: #d65a00; /* Màu nổi bật (cam) */
-        --text-color: #2d3748; /* Màu chữ (xám đậm) */
-        --accent-color: #ffffff; /* Màu bổ sung (trắng) */
-    }
-
-    .menu-group-title {
-        font-weight: bold;
-        padding: 8px;
-        cursor: pointer;
-        background: var(--secondary-color);
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .menu-left .submenu {
-        display: none;
-        margin-top: 2px;
-        padding-left: 10px;
-        background: var(--accent-color);
-        border: 1px solid #d1d5db;
-        border-radius: 0.5rem;
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-        min-width: 120px;
-        position: relative;
-        z-index: 20;
-    }
-
-        .menu-left .submenu.active {
-            display: block !important;
-        }
-
-    /* Đảm bảo các style khác sử dụng biến CSS */
-    .menu-item {
-        display: block;
-        padding: 12px 16px;
-        color: var(--text-color);
-        text-decoration: none;
-        font-size: 13px;
-        font-weight: 500;
-        border-bottom: 1px solid #bcbcbc;
-        transition: all 0.3s ease;
-        border-left: 4px solid transparent;
-    }
-
-        .menu-item:hover,
-        .menu-item.active {
-            color: var(--text-color);
-            background-color: var(--secondary-color);
-            border-left: 4px solid var(--highlight-color);
-        }
-
-    .menu-group > .menu-left {
-        display: none; /* ẩn mặc định */
-        margin-top: 2px;
-        background: var(--accent-color);
-        border: 1px solid #d1d5db;
-        border-radius: 0.5rem;
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-    }
-</style>
-<div class="mt-3">
-    <div class="row">
-        <!-- Menu trái -->
-        <div class="col-md-2 mb-2">
-            <div class="menu-left">
-                <button class="toggle-btn"><i class="fas fa-bars"></i></button>
-
-                <!-- Group 1 -->
-                <div class="menu-group">
-                    <div class="menu-group-title">
-                        Profile <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="menu-left">
-                        <a class="menu-item" asp-controller="Administration" asp-action="City">CITY</a>
-                        <a class="menu-item" asp-controller="Administration" asp-action="Country">COUNTRY</a>
-                        <a class="menu-item" asp-controller="Administration" asp-action="Language">LANGUAGE</a>
-                        <a class="menu-item" asp-controller="Administration" asp-action="Nationality">NATITONALITY</a>
-                        <a class="menu-item" asp-controller="Administration" asp-action="Title">TITLE</a>
-                        <a class="menu-item" asp-controller="Administration" asp-action="Territory">TERRITORY</a>
-                        <a class="menu-item" asp-controller="Administration" asp-action="State">STATE</a>
-                        <a class="menu-item" asp-controller="Administration" asp-action="VIP">VIP</a>
-                    </div>
+<div class="sticky-header bg-white p-2 shadow-sm z-3">
+    <div class="p-2 border rounded">
+        <form id="itemForm">
+            <div class="row mb-2">
+                <div class="col-md-4 d-flex align-items-center">
+                    <label for="code" class="me-2 mb-0" style="width:100px;">Code</label>
+                    <input type="text" id="code" name="code" class="form-control form-control-sm" />
                 </div>
 
-                <!-- Group 2 -->
-                <div class="menu-group">
-                    <div class="menu-group-title">
-                        Reservation <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="menu-left">
-                        <a class="menu-item" asp-controller="Administration" asp-action="Market">MARKET</a>
-                        <a class="menu-item" asp-controller="Administration" asp-action="MarketType">MARKET TYPE</a>
-                        <a class="menu-item" asp-controller="Administration" asp-action="PickupDropPlace">PICKUP DROP PLACE</a>
-                        <a class="menu-item" asp-controller="Administration" asp-action="TransportType">TRANSPORT TYPE</a>
-                        <a class="menu-item" asp-controller="Administration" asp-action="ReservationType">RESERVATION TYPE</a>
-                        <a class="menu-item" asp-controller="Administration" asp-action="Reason">REASON</a>
-                        <a class="menu-item" asp-controller="Administration" asp-action="Origin">ORIGIN</a>
-                        <a class="menu-item" asp-controller="Administration" asp-action="Source">SOURCE</a>
-                    </div>
+                <div class="col-md-4 d-flex align-items-center">
+                    <label for="fax" class="me-2 mb-0" style="width:100px;">Fax</label>
+                    <input type="text" id="fax" name="fax" class="form-control form-control-sm" />
                 </div>
-                <div class="menu-group">
-                    <div class="menu-group-title">
-                        Other <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="menu-left">
-                        <a class="menu-item" asp-controller="Administration" asp-action="AlertsSetup">ALERTS SETUP</a>
-                        <a class="menu-item" asp-controller="Administration" asp-action="Comment">COMMENTS</a>
-                        <a class="menu-item" asp-controller="Administration" asp-action="CommentType">COMMENT TYPE</a>
-                        <a class="menu-item" asp-controller="Administration" asp-action="Season">SEASON</a>
-                        <a class="menu-item" asp-controller="Administration" asp-action="Zone">ZONE</a>
-                        <a class="menu-item" asp-controller="Administration" asp-action="Department">DEPARTMENT</a>
-                    </div>
+                <div class="col-md-4 d-flex align-items-center">
+                    <label for="serverName" class="me-2 mb-0" style="width:120px;">ServerName</label>
+                    <input type="text" id="serverName" name="serverName" class="form-control form-control-sm" />
                 </div>
-                <div class="menu-group">
-                    <div class="menu-group-title">
-                        Owner <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="menu-left">
-                        <a class="menu-item" asp-controller="Administration" asp-action="Owner"> OWNER</a>
+            </div>
 
-                    </div>
+            <!-- Row 1 -->
+            <div class="row mb-2">
+                <div class="col-md-4 d-flex align-items-center">
+                    <label for="propertyType" class="me-2 mb-0" style="width:100px;">Proper Type</label>
+                    <select id="propertyType" name="propertyType" class="form-control form-control-sm">
+                        <option value="">--Select PropertyType--</option>
+                        @foreach (var sg in ViewBag.PropertyTypeList)
+                        {
+                            <option value="@sg.ID" data-code="@sg.Code">@sg.Code - @sg.Description</option>
+                        }
+                    </select>
                 </div>
-                <div class="menu-group">
-                    <div class="menu-group-title">
-                        Property Type<i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="menu-left">
-                        <a class="menu-item" asp-controller="Administration" asp-action="PropertyType"> PROPERTY TYPE</a>
-                        <a class="menu-item active"> PROPERTY</a>
-                        <a class="menu-item" asp-controller="Administration" asp-action="PropertyPermission"> PROPERTY PERMISSION</a>
+
+                <div class="col-md-4 d-flex align-items-center">
+                    <label for="email" class="me-2 mb-0" style="width:100px;">Email</label>
+                    <input type="text" id="email" name="email" class="form-control form-control-sm" />
+                </div>
+                <div class="col-md-4 d-flex align-items-center">
+                    <label for="databaseName" class="me-2 mb-0" style="width:120px;">DatabaseName</label>
+                    <input type="text" id="databaseName" name="databaseName" class="form-control form-control-sm" />
+                </div>
+            </div>
+
+            <!-- Row 2 -->
+            <div class="row mb-2">
+                <div class="col-md-4 d-flex align-items-center">
+                    <label for="propertyName" class="me-2 mb-0" style="width:100px;">Name</label>
+                    <input type="text" id="propertyName" name="propertyName" class="form-control form-control-sm" />
+                </div>
+
+
+                <div class="col-md-4 d-flex align-items-center">
+                    <label for="website" class="me-2 mb-0" style="width:100px;">Website</label>
+                    <input type="text" id="website" name="website" class="form-control form-control-sm" />
+                </div>
+                <div class="col-md-4 d-flex align-items-center">
+                    <label for="login" class="me-2 mb-0" style="width:120px;">Login</label>
+                    <input type="text" id="login" name="login" class="form-control form-control-sm" />
+                </div>
+            </div>
+
+            <!-- Row 3 -->
+            <div class="row mb-2">
+
+                <div class="col-md-4 d-flex align-items-center">
+                    <label for="telephone" class="me-2 mb-0" style="width:100px;">Telephone</label>
+                    <input type="text" id="telephone" name="telephone" class="form-control form-control-sm" />
+                </div>
+                <div class="col-md-4 d-flex align-items-center">
+                    <label for="address" class="me-2 mb-0" style="width:100px;">Address</label>
+                    <input type="text" id="address" name="address" class="form-control form-control-sm" />
+                </div>
+                <div class="col-md-4 d-flex align-items-center">
+                    <label for="password" class="me-2 mb-0" style="width:120px;">LoPasswordgin</label>
+                    <input type="text" id="password" name="password" class="form-control form-control-sm" />
+                </div>
+
+            </div>
+
+            <!-- Row 4 -->
+            <div class="row mb-2">
+
+                <div class="col-md-4 d-flex align-items-center">
+                    <div class="form-check">
+                        <input type="checkbox" id="chkshowInactive" name="inactive" class="form-check-input me-2" />
+                        <label for="chkshowInactive" class="form-check-label">Inactive</label>
                     </div>
                 </div>
             </div>
-        </div>
-        @* <div class="d-flex align-items-center">
-            <label for="propertyType" class="me-2 mb-0">Country</label>
-            <select id="propertyType" name="propertyType" class="form-control form-control-sm " style="width: 446px;">
-                <option value="">--Select PropertyType--</option>
-                @foreach (var sg in ViewBag.PropertyTypeList)
-                {
-                    <option value="@sg.ID" data-code="@sg.Code">@sg.Code - @sg.Description</option>
-                }
-            </select>
-        </div>
-        <div class="d-flex align-items-center">
-            <label for="name" class="me-2 mb-0">Name</label>
-            <input type="text" id="name" class="form-control form-control-sm" style="width: 100px;" />
-        </div> *@
 
-        <!-- Nội dung bên phải -->
-        <div class="col-md-10">
-            <div class="content-right">
-                <div class="header">
-                    <h3 id="content-title">Property</h3>
-                </div>
+            <input type="hidden" id="id" name="id" value="0" />
+        </form>
+    </div>
 
-                <div class="sticky-header bg-white p-2 shadow-sm z-3">
-                    <div class="p-2 border rounded">
-                        <form id="itemForm">
-                            <div class="row mb-2">
-                                <div class="col-md-4 d-flex align-items-center">
-                                    <label for="code" class="me-2 mb-0" style="width:100px;">Code</label>
-                                    <input type="text" id="code" name="code" class="form-control form-control-sm" />
-                                </div>
-                              
-                                <div class="col-md-4 d-flex align-items-center">
-                                    <label for="fax" class="me-2 mb-0" style="width:100px;">Fax</label>
-                                    <input type="text" id="fax" name="fax" class="form-control form-control-sm" />
-                                </div>
-                                <div class="col-md-4 d-flex align-items-center">
-                                    <label for="serverName" class="me-2 mb-0" style="width:120px;">ServerName</label>
-                                    <input type="text" id="serverName" name="serverName" class="form-control form-control-sm" />
-                                </div>
-                            </div>
+    <div class=" mt-1">
+        <button style="border-radius: 4px;  margin-right: 6px;background-color: #6c757d;" id="btnView" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> View</button>
+        <button style="border-radius: 4px;  margin-right: 6px;background-color: #28a745;" id="btnNew" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> New</button>
+        <button style="border-radius: 4px;  margin-right: 6px;background-color: #007bff;" id="btnEdit" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Edit</button>
+        <button style="border-radius: 4px;  margin-right: 6px;background-color: #007bff;" id="btnSaveItem" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Save</button>
+        <button style="border-radius: 4px;  margin-right: 6px;background-color: #dc3545;" id="btnDelete" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Delete</button>
+        <button style="border-radius: 4px;  margin-right: 6px;background-color: #dc3545;" id="btnCancel" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Cancel</button>
 
-                            <!-- Row 1 -->
-                            <div class="row mb-2">
-                                <div class="col-md-4 d-flex align-items-center">
-                                    <label for="propertyType" class="me-2 mb-0" style="width:100px;">Proper Type</label>
-                                    <select id="propertyType" name="propertyType" class="form-control form-control-sm">
-                                        <option value="">--Select PropertyType--</option>
-                                        @foreach (var sg in ViewBag.PropertyTypeList)
-                                        {
-                                            <option value="@sg.ID" data-code="@sg.Code">@sg.Code - @sg.Description</option>
-                                        }
-                                    </select>
-                                </div>
-                               
-                                <div class="col-md-4 d-flex align-items-center">
-                                    <label for="email" class="me-2 mb-0" style="width:100px;">Email</label>
-                                    <input type="text" id="email" name="email" class="form-control form-control-sm" />
-                                </div>
-                                <div class="col-md-4 d-flex align-items-center">
-                                    <label for="databaseName" class="me-2 mb-0" style="width:120px;">DatabaseName</label>
-                                    <input type="text" id="databaseName" name="databaseName" class="form-control form-control-sm" />
-                                </div>
-                            </div>
-
-                            <!-- Row 2 -->
-                            <div class="row mb-2">
-                                <div class="col-md-4 d-flex align-items-center">
-                                    <label for="propertyName" class="me-2 mb-0" style="width:100px;">Name</label>
-                                    <input type="text" id="propertyName" name="propertyName" class="form-control form-control-sm" />
-                                </div>
-                               
-                           
-                                <div class="col-md-4 d-flex align-items-center">
-                                    <label for="website" class="me-2 mb-0" style="width:100px;">Website</label>
-                                    <input type="text" id="website" name="website" class="form-control form-control-sm" />
-                                </div>
-                                <div class="col-md-4 d-flex align-items-center">
-                                    <label for="login" class="me-2 mb-0" style="width:120px;">Login</label>
-                                    <input type="text" id="login" name="login" class="form-control form-control-sm" />
-                                </div>
-                            </div>
-
-                            <!-- Row 3 -->
-                            <div class="row mb-2">
-                                
-                                <div class="col-md-4 d-flex align-items-center">
-                                    <label for="telephone" class="me-2 mb-0" style="width:100px;">Telephone</label>
-                                    <input type="text" id="telephone" name="telephone" class="form-control form-control-sm" />
-                                </div>
-                                <div class="col-md-4 d-flex align-items-center">
-                                    <label for="address" class="me-2 mb-0" style="width:100px;">Address</label>
-                                    <input type="text" id="address" name="address" class="form-control form-control-sm" />
-                                </div>
-                                <div class="col-md-4 d-flex align-items-center">
-                                    <label for="password" class="me-2 mb-0" style="width:120px;">LoPasswordgin</label>
-                                    <input type="text" id="password" name="password" class="form-control form-control-sm" />
-                                </div>
-                       
-                            </div>
-
-                            <!-- Row 4 -->
-                            <div class="row mb-2">
-                               
-                                <div class="col-md-4 d-flex align-items-center">
-                                    <div class="form-check">
-                                        <input type="checkbox" id="chkshowInactive" name="inactive" class="form-check-input me-2" />
-                                        <label for="chkshowInactive" class="form-check-label">Inactive</label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <input type="hidden" id="id" name="id" value="0" />
-                        </form>
-                    </div>
-
-                    <div class=" mt-1">
-                        <button style="border-radius: 4px;  margin-right: 6px;background-color: #6c757d;" id="btnView" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> View</button>
-                        <button style="border-radius: 4px;  margin-right: 6px;background-color: #28a745;" id="btnNew" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> New</button>
-                        <button style="border-radius: 4px;  margin-right: 6px;background-color: #007bff;" id="btnEdit" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Edit</button>
-                        <button style="border-radius: 4px;  margin-right: 6px;background-color: #007bff;" id="btnSaveItem" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Save</button>
-                        <button style="border-radius: 4px;  margin-right: 6px;background-color: #dc3545;" id="btnDelete" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Delete</button>
-                        <button style="border-radius: 4px;  margin-right: 6px;background-color: #dc3545;" id="btnCancel" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Cancel</button>
-
-                    </div>
-                </div>
-
-                <div class="mui-card">
-                    <div id="gridContainerRateCode" class="mt-2 gridContainer"></div>
-                </div>
-            </div>
-        </div>
-
+    </div>
 </div>
 
+<div class="mui-card">
+    <div id="gridContainerRateCode" class="mt-2 gridContainer"></div>
 </div>
+
 <div id="loadingSpinnerRateCode" style="display: none; text-align: center; padding: 20px;">
     <div class="spinner-border text-primary" role="status">
         <span class="visually-hidden">Loading...</span>
@@ -296,19 +126,7 @@
        let selectedRowData = null;
 
          $(document).ready(function () {
-         $(".menu-left .submenu").removeClass("active").css("display", "none");
 
-        // Xử lý sự kiện nhấp
-        $(".menu-group-title").on("click", function (event) {
-             const submenu = $(this).next(".menu-left"); // lấy thằng menu-left con
-        const icon = $(this).find("i");
-
-        // toggle submenu
-        submenu.slideToggle(200);
-
-        // đổi icon
-        icon.toggleClass("fa-chevron-down fa-chevron-up");
-        });
          reloadGrid();
          $("#btnEdit").show();
            $("#btnDelete").show();
