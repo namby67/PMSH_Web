@@ -15,7 +15,7 @@
     .dx-datagrid .dx-data-row td {
         font-size: 11px !important;
         padding: 6px 8px !important;
-        text-align: center !important;
+        text-align: left !important;
     }
 
 
@@ -247,9 +247,10 @@
             },
             success: function (result) {
                 if (result.length > 0) {
-                    let firstItem = res[0];
+                    let firstItem = result[0];
                     let id = firstItem.ID;
-
+                    initializeAccountTypeGrid(result);
+                    $("#loadingSpinner").hide();
 
                 }
             },

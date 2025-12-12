@@ -19,7 +19,7 @@
     .dx-datagrid .dx-data-row td {
         font-size: 11px !important;
         padding: 6px 8px !important;
-        text-align: center !important;
+        text-align: left !important;
     }
 
     .dx-datagrid .dx-editor-with-menu .dx-menu-item-content .dx-icon.dx-icon-filter-operation-default,
@@ -354,49 +354,13 @@
     <i class="fa-solid fa-spinner fa-spin"></i>
 </div>
 <script>
-    // Sample data for testing
-    var sampleRateCodes = [
-        { id: 1, code: "RC001", description: "Standard Rate" },
-        { id: 2, code: "RC002", description: "Premium Rate" },
-        { id: 3, code: "RC003", description: "Budget Rate" }
-    ];
-
-    var sampleRateDetails = [
-        {
-            id: 1, rateCode: "RC001", roomType: "Single", transaction: "Sale", package: "Standard",
-            beginDate: "2025-01-01", endDate: "2025-12-31", currency: "VND",
-            minLOS: 1, maxLOS: 7, amount: 500000, percentage: 0, description: "Standard single room",
-            roomTypeID: 1, transactionID: 1, packageID: 1, active: true
-        },
-        {
-            id: 2, rateCode: "RC001", roomType: "Double", transaction: "Sale", package: "Standard",
-            beginDate: "2025-01-01", endDate: "2025-12-31", currency: "VND",
-            minLOS: 1, maxLOS: 7, amount: 750000, percentage: 0, description: "Standard double room",
-            roomTypeID: 2, transactionID: 1, packageID: 1, active: true
-        },
-        {
-            id: 3, rateCode: "RC002", roomType: "Single", transaction: "Sale", package: "Premium",
-            beginDate: "2025-01-01", endDate: "2025-12-31", currency: "VND",
-            minLOS: 1, maxLOS: 30, amount: 750000, percentage: 10, description: "Premium single room",
-            roomTypeID: 1, transactionID: 1, packageID: 2, active: true
-        },
-        {
-            id: 4, rateCode: "RC002", roomType: "Suite", transaction: "Sale", package: "Premium",
-            beginDate: "2025-01-01", endDate: "2025-12-31", currency: "VND",
-            minLOS: 1, maxLOS: 30, amount: 1500000, percentage: 15, description: "Premium suite",
-            roomTypeID: 3, transactionID: 1, packageID: 2, active: true
-        },
-        {
-            id: 5, rateCode: "RC003", roomType: "Single", transaction: "Sale", package: "Budget",
-            beginDate: "2025-01-01", endDate: "2025-12-31", currency: "VND",
-            minLOS: 3, maxLOS: 30, amount: 300000, percentage: 5, description: "Budget single room",
-            roomTypeID: 1, transactionID: 1, packageID: 3, active: true
-        }
-    ];
-
     $(document).ready(function () {
         $("#btnPrint").trigger("click");
     });
+
+    var selectedRowData = null;
+    var selectedRateCode = null;
+    var selectedRateCodeDetail = null;
 
     function closePopup() {
         $("#popupDetail").hide();
@@ -421,15 +385,64 @@
     }
 
     async function RateCodeGroupDataByID(rateCodeID) {
-        return $.ajax({
-            url: "/Administration/RateCode/RateCodeGroupDataByID",
-            type: "GET",
-            data: { rateCodeID: rateCodeID }
-        });
+        try {
+            return $.ajax({
+                url: "/Administration/RateCode/RateCodeGroupDataByID",
+                type: "GET",
+                data: { rateCodeID: rateCodeID }
+            });
+        } catch (error) {
+            console.error(error);
+            showToast('Error', "The report could not be loaded.", false);
+        } finally {
+            $("#loadingSpinner").hide(); // luôn hide spinner ở cuối
+        }
+
     }
 
-    var selectedRowData = null;
-    var selectedRateCode = null;
+    async function updateDetailsGrid(selectedGroupDetail) {
+        try {
+            $("#loadingSpinner").show();
+
+            // Lấy dữ liệu chính
+            return $.ajax({
+                url: "/Administration/RateCode/GetDetails",
+                type: "GET",
+                data: {
+                    RateCodeID: selectedGroupDetail.rateCodeID,
+                    BeginDate: selectedGroupDetail.beginDate,
+                    EndDate: selectedGroupDetail.endDate,
+                    RoomType: selectedGroupDetail.roomType,
+                    TransCode: selectedGroupDetail.transaction,
+                    CurrencyID: selectedGroupDetail.curr,
+                    PackageID: selectedGroupDetail.packageID,
+                    A1: selectedGroupDetail.a1,
+                    A2: selectedGroupDetail.a2,
+                    A3: selectedGroupDetail.a3,
+                    A4: selectedGroupDetail.a4,
+                    A5: selectedGroupDetail.a5,
+                    A6: selectedGroupDetail.a6,
+                    C1: selectedGroupDetail.c1,
+                    C2: selectedGroupDetail.c2,
+                    C3: selectedGroupDetail.c3,
+                    MinLOS: selectedGroupDetail.minLOS,
+                    MaxLOS: selectedGroupDetail.maxLOS,
+                    MinRoom: selectedGroupDetail.minNoOfRoom,
+                    MaxRoom: selectedGroupDetail.maxNoOfRoom
+                },
+                traditional: true,
+                crossDomain: false,
+                headers: {
+                    "X-CSRF-TOKEN-HEADERNAME": $("input[name='__RequestVerificationToken']").val()
+                }
+            });
+        } catch (error) {
+            console.error(error);
+            showToast('Error', "The report could not be loaded.", false);
+        } finally {
+            $("#loadingSpinner").hide(); // luôn hide spinner ở cuối
+        }
+    }
 
     async function loadRateCodeReport() {
         try {
@@ -455,22 +468,25 @@
 
             if (result && result.length > 0) {
                 let ids = result[0].idRateCode;
+                console.log('Relust', result);
+
 
                 // Lấy dữ liệu group
                 let groupData = await RateCodeGroupDataByID(ids);
-                console.log("Group: ", groupData);
-                console.log('ID', ids);
-                console.log('GetAllRateCodeDetail', result);
+
+                let idGroup = groupData[0];
+
+                let detail = await updateDetailsGrid(idGroup)
 
                 // Gọi initialize grids sau khi có dữ liệu
-                initializeGrids(result, groupData);
+                initializeGrids(result, groupData, detail);
             } else {
-                alert("Không tìm thấy dữ liệu RateCode.");
+                showToast('Error', "RateCode data not found.", false);
             }
 
         } catch (error) {
             console.error(error);
-            alert("Không thể tải báo cáo.");
+            showToast('Error', "The report could not be loaded.", false);
         } finally {
             $("#loadingSpinner").hide(); // luôn hide spinner ở cuối
         }
@@ -479,7 +495,7 @@
     // Gắn sự kiện
     $(document).off("click", "#btnPrint").on("click", "#btnPrint", loadRateCodeReport);
 
-    function initializeGrids(rateCodes, rateDetails) {
+    async function initializeGrids(rateCodes, rateDetails, detail) {
         // Left Grid: Rate Codes
         $("#gridRateCodes").dxDataGrid({
             dataSource: rateCodes,
@@ -501,12 +517,23 @@
             ],
             scrolling: { mode: "standard" },
             paging: { pageSize: 20 },
-            onSelectionChanged: function (e) {
+            onSelectionChanged: async function (e) {
                 if (e.selectedRowsData.length > 0) {
-                    selectedRateCode = e.selectedRowsData[0];
-                    console.log("Selected Rate Code:", selectedRateCode);
+                    selectedRateCode = e.selectedRowsData[0].idRateCode;
                     // Update grouped grid
-                    updateGroupedDetails(selectedRateCode.code, rateDetails);
+                    const newGroupData = await RateCodeGroupDataByID(selectedRateCode);
+
+                    const gridGroup = $("#gridRateDetailsGrouped").dxDataGrid("instance");
+                    gridGroup.option("dataSource", newGroupData);
+
+                    let detail = [];
+                    if (newGroupData.length > 0) {
+                        detail = await updateDetailsGrid(newGroupData[0]);
+                    }
+
+                    // Cập nhật grid chi tiết
+                    const gridDetails = $("#gridDetails").dxDataGrid("instance");
+                    gridDetails.option("dataSource", detail);
                 }
             }
         });
@@ -534,65 +561,60 @@
             ],
             scrolling: { mode: "standard" },
             paging: { pageSize: 20 },
-            onSelectionChanged: function (e) {
+            onSelectionChanged: async function (e) {
                 if (e.selectedRowsData.length > 0) {
                     selectedRowData = e.selectedRowsData[0];
-                    console.log("Selected Detail:", selectedRowData);
                     // Update bottom details grid
-                    updateDetailsGrid(selectedRowData, rateDetails);
+                    const data = await updateDetailsGrid(selectedRowData);
+                    const gridDetails = $("#gridDetails").dxDataGrid("instance");
+                    gridDetails.option("dataSource", data);
                 }
             }
         });
 
         // Bottom Grid: Details
         $("#gridDetails").dxDataGrid({
-            dataSource: [],
+            dataSource: detail,
             showBorders: true,
+            selection: { mode: "single" },
+            filterRow: { visible: true },
             columns: [
-                { dataField: "code", caption: "Code", width: "100px", dataType: "string" },
+                { dataField: "id", caption: "ID", width: 80, visible: false },
+                { dataField: "roomTypeID", caption: "RoomTypeID", width: 80, visible: false },
+                { dataField: "rateCode", caption: "Code", width: "100px", dataType: "string" },
                 { dataField: "roomType", caption: "Room Type", width: "120px" },
-                { dataField: "date", caption: "Date", width: "100px", dataType: "date", format: "dd/mm/yyyy" },
-                { dataField: "transaction", caption: "Transaction", width: "120px" },
-                { dataField: "currency", caption: "Curr.", width: "70px" },
-                { dataField: "a1Net", caption: "A1 Net", width: "100px", format: "#,##0", dataType: "number", },
-                { dataField: "a2Net", caption: "A2 Net", width: "100px", format: "#,##0", dataType: "number", },
-                { dataField: "a3Net", caption: "A3 Net", width: "100px", format: "#,##0", dataType: "number", },
-                { dataField: "a4Net", caption: "A4 Net", width: "100px", format: "#,##0", dataType: "number", },
-                { dataField: "a5Net", caption: "A5 Net", width: "100px", format: "#,##0", dataType: "number", },
-                { dataField: "a6Net", caption: "A6 Net", width: "100px", format: "#,##0", dataType: "number", },
-                { dataField: "a7Net", caption: "A7 Net", width: "100px", format: "#,##0", dataType: "number", },
-                { dataField: "a8Net", caption: "A8 Net", width: "100px", format: "#,##0", dataType: "number", },
-                { dataField: "a9Net", caption: "A9 Net", width: "100px", format: "#,##0", dataType: "number", },
-                { dataField: "a10Net", caption: "A10 Net", width: "100px", format: "#,##0", dataType: "number", },
-                { dataField: "a11Net", caption: "A11 Net", width: "100px", format: "#,##0", dataType: "number", },
-                { dataField: "a12Net", caption: "A12 Net", width: "100px", format: "#,##0", dataType: "number", },
-                { dataField: "a13Net", caption: "A13 Net", width: "100px", format: "#,##0", dataType: "number", },
-                { dataField: "a14Net", caption: "A14 Net", width: "100px", format: "#,##0", dataType: "number", },
-                { dataField: "a15Net", caption: "A15 Net", width: "100px", format: "#,##0", dataType: "number", },
-                { dataField: "c1Net", caption: "C1 Net", width: "100px", format: "#,##0", dataType: "number", },
-                { dataField: "c2Net", caption: "C2 Net", width: "100px", format: "#,##0", dataType: "number", },
-                { dataField: "c3Net", caption: "C3 Net", width: "100px", format: "#,##0", dataType: "number", },
-                { dataField: "aldulExtra", caption: "Aldul Extra", width: "100px", format: "#,##0", dataType: "number", },
+                { dataField: "rateDate", caption: "Date", width: "100px", dataType: "date", format: "dd/mm/yyyy" },
+                { dataField: "transactionCode", caption: "Transaction", width: "120px" },
+                { dataField: "currencyID", caption: "Curr.", width: "70px" },
+                { dataField: "a1AfterTax", caption: "A1 Net", width: "100px", format: "#,##0", dataType: "number", },
+                { dataField: "a2AfterTax", caption: "A2 Net", width: "100px", format: "#,##0", dataType: "number", },
+                { dataField: "a3AfterTax", caption: "A3 Net", width: "100px", format: "#,##0", dataType: "number", },
+                { dataField: "a4AfterTax", caption: "A4 Net", width: "100px", format: "#,##0", dataType: "number", },
+                { dataField: "a5AfterTax", caption: "A5 Net", width: "100px", format: "#,##0", dataType: "number", },
+                { dataField: "a6AfterTax", caption: "A6 Net", width: "100px", format: "#,##0", dataType: "number", },
+                { dataField: "a7fterTax", caption: "A7 Net", width: "100px", format: "#,##0", dataType: "number", },
+                { dataField: "a81AfterTax", caption: "A8 Net", width: "100px", format: "#,##0", dataType: "number", },
+                { dataField: "a9AfterTax", caption: "A9 Net", width: "100px", format: "#,##0", dataType: "number", },
+                { dataField: "a10AfterTax", caption: "A10 Net", width: "100px", format: "#,##0", dataType: "number", },
+                { dataField: "a11AfterTax", caption: "A11 Net", width: "100px", format: "#,##0", dataType: "number", },
+                { dataField: "a12AfterTax", caption: "A12 Net", width: "100px", format: "#,##0", dataType: "number", },
+                { dataField: "a13AfterTax", caption: "A13 Net", width: "100px", format: "#,##0", dataType: "number", },
+                { dataField: "a14AfterTax", caption: "A14 Net", width: "100px", format: "#,##0", dataType: "number", },
+                { dataField: "a15AfterTax", caption: "A15 Net", width: "100px", format: "#,##0", dataType: "number", },
+                { dataField: "c1AfterTax", caption: "C1 Net", width: "100px", format: "#,##0", dataType: "number", },
+                { dataField: "c2AfterTax", caption: "C2 Net", width: "100px", format: "#,##0", dataType: "number", },
+                { dataField: "c3AfterTax", caption: "C3 Net", width: "100px", format: "#,##0", dataType: "number", },
+                { dataField: "adultExtraTax", caption: "Aldul Extra", width: "100px", format: "#,##0", dataType: "number", },
             ],
-            scrolling: { mode: "standard" }
+            scrolling: { mode: "standard" },
+            onSelectionChanged: async function (e) {
+                if (e.selectedRateCodeDetail.length > 0) {
+                    selectedRateCodeDetail = e.selectedRowsData[0].idRateCode;
+                    console.log("Selected Detail:", selectedRateCodeDetail);
+
+                }
+            }
         });
-    }
-
-    function updateGroupedDetails(rateCode, allDetails) {
-        var grouped = allDetails.filter(d => d.rateCode === rateCode);
-        var gridInstance = $("#gridRateDetailsGrouped").dxDataGrid("instance");
-        gridInstance.option("dataSource", grouped);
-    }
-
-    function updateDetailsGrid(selectedDetail, allDetails) {
-        var details = allDetails.filter(d =>
-            d.rateCode === selectedDetail.rateCode &&
-            d.roomType === selectedDetail.roomType &&
-            d.transaction === selectedDetail.transaction &&
-            d.package === selectedDetail.package
-        );
-        var gridInstance = $("#gridDetails").dxDataGrid("instance");
-        gridInstance.option("dataSource", details);
     }
 
     $(document).off("click", "#btnNew").on("click", "#btnNew", function () {
@@ -623,7 +645,6 @@
                 let data = res.data;
                 $("#modalDetailId").val(data.id);
                 $("#popupTitle").text("Edit Rate Code Detail");
-
                 $("#txtRateCode").val(data.rateCode).prop("disabled", true);
                 $("#selRoomType").val(data.roomTypeID || "");
                 $("#txtBeginDate").val(data.beginDate ? data.beginDate.split('T')[0] : "");

@@ -73,7 +73,7 @@ namespace Administration.Controllers
                                   package = d["Package"]?.ToString() ?? "",
                                   beginDate = d["BeginDate"] != DBNull.Value ? Convert.ToDateTime(d["BeginDate"]) : (DateTime?)null,
                                   endDate = d["EndDate"] != DBNull.Value ? Convert.ToDateTime(d["EndDate"]) : (DateTime?)null,
-                                  dataField = d["TransactionCode"]?.ToString() ?? "",
+                                  transaction = d["TransactionCode"]?.ToString() ?? "",
                                   curr = d["CurrencyID"]?.ToString() ?? "",
                                   RateCodeID = d["RateCodeID"] != DBNull.Value ? Convert.ToInt32(d["RateCodeID"]) : 0,
                                   PackageID = d["PackageID"] != DBNull.Value ? Convert.ToInt32(d["PackageID"]) : (int?)null,
@@ -102,9 +102,8 @@ namespace Administration.Controllers
                 return BadRequest(new { success = false, message = ex.Message });
             }
         }
-
-        [HttpPost("GetDetails")]
-        public async Task<IActionResult> GetDetails([FromBody] RateCodeDetailInputDto input)
+        [HttpGet("GetDetails")]
+        public async Task<IActionResult> GetDetails([FromQuery] RateCodeDetailInputDto input)
         {
             try
             {

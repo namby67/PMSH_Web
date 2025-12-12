@@ -15,7 +15,6 @@
     .dx-datagrid .dx-data-row td {
         font-size: 11px !important;
         padding: 6px 8px !important;
-        text-align: center !important;
     }
 
 
@@ -258,7 +257,6 @@
             success: function (result) {
                 // $("#reportViewerContainer").html(result);
                 // $("#loadingSpinner").hide();
-                console.log(result);
                 initializeAccountTypeGrid(result);
                 $("#loadingSpinner").hide();
             },
@@ -330,7 +328,6 @@
             // 🔥 Quan trọng: gán selectedRowData khi click chọn
             onRowClick: function (e) {
                 selectedRowData = e.data; // 🔥 lấy data của row vừa click
-                console.log("Selected Row (RowClick):", selectedRowData);
             }
         });
     }
@@ -380,8 +377,6 @@
                 $("#loadingSpinner").hide();
             }
         });
-
-
     });
 
     $(document).off("click", "#btnUpdate").on("click", "#btnUpdate", function () {
