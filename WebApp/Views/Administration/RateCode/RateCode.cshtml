@@ -560,13 +560,13 @@
             },
             error: function (xhr, status, error) {
                 // Nếu có mảng errors thì hiển thị từng cái
-                    if (Array.isArray(xhr.responseJSON?.errors)) {
-        xhr.responseJSON.errors.forEach((err, index) => {
-            setTimeout(() => {
-                showToast("Error", err, false);
-            }, index * 1000); // delay 300ms mỗi toast
-        });
-    }
+                if (Array.isArray(xhr.responseJSON?.errors)) {
+                    xhr.responseJSON.errors.forEach((err, index) => {
+                        setTimeout(() => {
+                            showToast("Error", err, false);
+                        }, index * 1000); // delay 300ms mỗi toast
+                    });
+                }
 
                 $("#loadingSpinner").hide();
             }

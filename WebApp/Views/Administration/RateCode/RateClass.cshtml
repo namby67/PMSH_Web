@@ -327,6 +327,8 @@
             },
             // 🔥 Quan trọng: gán selectedRowData khi click chọn
             onRowClick: function (e) {
+                console.log('Data', selectedRowData);
+
                 selectedRowData = e.data; // 🔥 lấy data của row vừa click
             }
         });

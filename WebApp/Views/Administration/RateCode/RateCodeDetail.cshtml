@@ -512,8 +512,8 @@
                 { dataField: "id", caption: "ID", width: 80, visible: false },
                 { dataField: "rateCode", caption: "Rate Code", width: "100" },
                 { dataField: "rateCategory", caption: "Rate Category", width: "130" },
-                { dataField: "beginDate", caption: "Begin Date", width: "130" },
-                { dataField: "endDate", caption: "End Date", width: "130" }
+                { dataField: "beginDate", caption: "Begin Date", width: "130", dataType: "date", format: "dd/MM/yyyy HH:mm", width: 160 },
+                { dataField: "endDate", caption: "End Date", width: "130", dataType: "date", format: "dd/MM/yyyy HH:mm", width: 160 }
             ],
             scrolling: { mode: "standard" },
             paging: { pageSize: 20 },
@@ -543,7 +543,6 @@
             dataSource: rateDetails,
             showBorders: true,
             selection: { mode: "single" },
-            paging: { pageSize: 20 },
             pager: {
                 showPageSizeSelector: true,
                 allowedPageSizes: [20, 50, 100],
@@ -555,8 +554,8 @@
                 { dataField: "roomType", caption: "Room Type", width: "100px" },
                 { dataField: "transaction", caption: "Transaction", width: "100px" },
                 { dataField: "package", caption: "Package", width: "100px" },
-                { dataField: "beginDate", caption: "Begin Date", width: "130" },
-                { dataField: "endDate", caption: "End Date", width: "130" },
+                { dataField: "beginDate", caption: "Begin Date", width: "130", dataType: "date", format: "dd/MM/yyyy HH:mm" },
+                { dataField: "endDate", caption: "End Date", width: "130", dataType: "date", format: "dd/MM/yyyy HH:mm" },
                 { dataField: "curr", caption: "Curr.", width: "100px" }
             ],
             scrolling: { mode: "standard" },
@@ -608,10 +607,13 @@
             ],
             scrolling: { mode: "standard" },
             onSelectionChanged: async function (e) {
-                if (e.selectedRateCodeDetail.length > 0) {
-                    selectedRateCodeDetail = e.selectedRowsData[0].idRateCode;
-                    console.log("Selected Detail:", selectedRateCodeDetail);
+                if (e.selectedRowsData.length > 0) {
 
+                    const row = e.selectedRowsData[0];
+
+                    selectedRateCodeDetail = row.id; // Lấy id chi tiết
+
+                    console.log("Selected Detail:", selectedRateCodeDetail);
                 }
             }
         });

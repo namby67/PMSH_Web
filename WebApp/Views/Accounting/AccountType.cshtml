@@ -8,16 +8,17 @@
 }
 
 <style>
-
     .dx-datagrid-headers .dx-header-row td {
         white-space: pre-line !important;
         text-align: center;
         font-size: 11px;
     }
+
     .dx-datagrid .dx-editor-with-menu .dx-menu-item-content .dx-icon.dx-icon-filter-operation-default,
     .dx-datagrid-container .dx-editor-with-menu .dx-menu-item-content .dx-icon.dx-icon-filter-operation-default {
         display: none;
     }
+
     .filter_wrapper {
         /*     background-color: #ececec; */
         /*   margin: 0px 8px 14px 8px; */
@@ -343,8 +344,7 @@
                             .css("transform", "scale(0.8)") // thu nhỏ checkbox
                             .appendTo(container);
                     }
-
-
+                },
                 { dataField: "userInsert", caption: "User Insert", width: 120 },
                 { dataField: "createdDate", caption: "Created Date", dataType: "date", format: "dd/MM/yyyy HH:mm", width: 160 },
                 { dataField: "userUpdate", caption: "User Update", width: 120 },
