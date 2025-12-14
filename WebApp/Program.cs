@@ -157,6 +157,7 @@ builder.Services.AddSingleton<IRateClassService, RateClassService>();
 builder.Services.AddSingleton<IRateCategoryService, RateCategory>();
 builder.Services.AddSingleton<IRateCodeService, RateCodeService>();
 builder.Services.AddSingleton<IRateCodeDetailService, RateCodeDetailService>();
+builder.Services.AddSingleton<IRateCodeUserRightService, RateCodeUserRightService>();
 
 
 builder.Services.AddAuthentication(options =>
