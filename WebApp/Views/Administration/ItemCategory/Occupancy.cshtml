@@ -1,0 +1,245 @@
+﻿@using DevExpress.XtraReports.UI
+
+@{
+    //
+}
+
+<div class="header">
+    <h3 id="content-title">Occupancy Config</h3>
+</div>
+<div class="sticky-header bg-white p-2 shadow-sm z-3">
+    <div class="d-flex align-items-center gap-3 p-2" style="border: 1px solid #ccc; border-radius: 6px; padding: 8px;">
+        <div class="row g-3">
+
+            <div class="col-md-4">
+                <label class="form-label mb-1">Type:</label>
+                <input type="text"
+                       id="typeInput"
+                       class="form-control form-control-sm"
+                       value="Hotel"
+                       disabled>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label mb-1">Occ. Level:</label>
+                <input type="text" id="occLevelInput" class="form-control form-control-sm">
+                <div class="invalid-feedback">Occ. Level is not blank !.</div>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label mb-1 fw-bold">Color:</label>
+
+                <div class="input-group input-group-sm">
+                    <input type="text" id="colorDisplay"
+                           class="form-control"
+                           placeholder="No color"
+                           readonly />
+
+                    <span class="input-group-text p-0">
+                        <input type="color" id="colorPicker"
+                               class="form-control form-control-color border-0"
+                               style="width: 36px; height: 30px; padding: 0; cursor: pointer;">
+                    </span>
+
+                    <button class="btn btn-outline-danger" type="button" id="btnClearColor">
+                        <i class="fas fa-times"></i>
+                    </button>
+
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label mb-1">Title:</label>
+                <input type="text" id="titleInput" class="form-control form-control-sm">
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label mb-1">Email:</label>
+                <input type="email" id="emailInput" class="form-control form-control-sm">
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label mb-1">Description:</label>
+                <textarea id="descriptionInput" rows="2" class="form-control form-control-sm"></textarea>
+            </div>
+
+        </div>
+    </div>
+    <div class="mt-2">
+        <button id="btnNew" class="mui-button mui-button-new"><i class="fa-solid fa-plus"></i> New</button>
+        <button id="btnUpdate" class="mui-button mui-button-edit"> <i class="fa-solid fa-pen"></i> Edit</button>
+        <button id="btnDelete" class="mui-button button-report-delete"> <i class="fa-solid fa-trash-can"></i> Delete</button>
+        <button id="btnSave" class="mui-button mui-button-export d-none"><i class="fa-solid fa-check"></i> Save</button>
+        <button id="btnCancel" class="mui-button button-report-delete d-none"><i class="fa-solid fa-xmark"></i> Cancel</button>
+    </div>
+
+</div>
+<div class="mui-card">
+    <div id="gridContainerRateCode" class="mt-2 gridContainer"></div>
+</div>
+<div id="loadingSpinnerRateCode" style="display: none; text-align: center; padding: 20px;">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+
+<script>
+    DevExpress.localization.locale("vi");
+    let selectedRowData = null;
+
+    $(document).ready(function () {
+
+        reloadGrid();
+    });
+
+    // Convert HEX → ARGB
+    const hexToArgbInt = hex => {
+        hex = hex.replace("#", "");
+        const r = parseInt(hex.substr(0, 2), 16);
+        const g = parseInt(hex.substr(2, 2), 16);
+        const b = parseInt(hex.substr(4, 2), 16);
+        const a = 255;
+        return (a << 24) | (r << 16) | (g << 8) | b;
+    };
+
+    // Color Picker
+    const inputColor = document.getElementById("colorPicker");
+    const inputDisplay = document.getElementById("colorDisplay");
+
+    inputColor.oninput = () => {
+        inputDisplay.value = hexToArgbInt(inputColor.value);
+    };
+
+    document.getElementById("btnClearColor").onclick = () => {
+        inputDisplay.value = "";
+        inputColor.value = "#ffffff";
+    };
+
+    function loadGrid(data) {
+        $("#gridContainerRateCode").dxDataGrid({
+            dataSource: data,
+            height: 500,
+            width: "100%",
+            columnAutoWidth: true,
+            allowColumnResizing: true,
+            columnResizingMode: "widget",
+            selection: { mode: "single" },
+
+            columns: [
+                { dataField: "id", caption: "ID" },
+                { dataField: "type", caption: "Type" },
+                { dataField: "occupancylevel", caption: "Occ. Level" },
+                { dataField: "title", caption: "Title" },
+                { dataField: "email", caption: "Email" },
+                { dataField: "description", caption: "Description" },
+                { dataField: "color", caption: "Color", visible: false },
+                { dataField: "createBy", caption: "CreateBy" },
+                { dataField: "createDate", caption: "CreateDate", dataType: "date", format: "dd/MM/yyyy" },
+                { dataField: "updateBy", caption: "UpdateBy" },
+                { dataField: "updateDate", caption: "UpdateDate", dataType: "date", format: "dd/MM/yyyy" },
+            ],
+
+            filterRow: { visible: true, applyFilter: "auto" },
+            paging: { pageSize: 20 },
+            pager: {
+                visible: true,
+                allowedPageSizes: [20, 50, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true
+            },
+            scrolling: { mode: "standard", showScrollbar: "always" },
+
+            onSelectionChanged: e => {
+                selectedRowData = e.selectedRowsData[0] || null;
+            }
+        });
+    }
+
+    function reloadGrid() {
+        $("#loadingSpinnerRateCode").show();
+
+        $.get("/Administration/GetOccupancy")
+            .done(data => loadGrid(data))
+            .fail(() => showToast("Error", "Không thể tải dữ liệu", false))
+            .always(() => $("#loadingSpinnerRateCode").hide());
+    }
+
+    @*JS handle button new edit*@
+        function switchToEditMode() {
+        $("#btnNew, #btnUpdate, #btnDelete").addClass("d-none");
+        $("#btnSave, #btnCancel").removeClass("d-none");
+    }
+
+    function switchToNormalMode() {
+        $("#btnNew, #btnUpdate, #btnDelete").removeClass("d-none");
+        $("#btnSave, #btnCancel").addClass("d-none");
+    }
+
+    // --- NÚT NEW ---
+    $("#btnNew").click(function () {
+        switchToEditMode();
+
+        // clear input để nhập mới
+        $("#occLevelInput, #titleInput, #emailInput, #descriptionInput").val("");
+        $("#colorPicker").val("#ffffff");
+        $("#colorDisplay").val("");
+    });
+
+    // --- NÚT EDIT ---
+    $("#btnUpdate").click(function () {
+        if (!selectedRowData) {
+            showToast("Warning", "Vui lòng chọn dòng để sửa.", false);
+            return;
+        }
+
+        switchToEditMode();
+
+        // fill dữ liệu vào form
+        $("#occLevelInput").val(selectedRowData.occupancylevel);
+        $("#titleInput").val(selectedRowData.title);
+        $("#emailInput").val(selectedRowData.email);
+        $("#descriptionInput").val(selectedRowData.description);
+
+        if (selectedRowData.color) {
+            const hex = argbIntToHex(selectedRowData.color);
+            $("#colorPicker").val(hex);
+            $("#colorDisplay").val(selectedRowData.color);
+        } else {
+            $("#colorPicker").val("#ffffff");
+            $("#colorDisplay").val("");
+        }
+
+    });
+
+    // --- NÚT CANCEL ---
+    $("#btnCancel").click(function () {
+        clearForm();    
+        switchToNormalMode();
+    });
+    
+    function clearForm() {
+        $("#occLevelInput").val("");
+        $("#titleInput").val("");
+        $("#emailInput").val("");
+        $("#descriptionInput").val("");
+
+        // Reset color
+        $("#colorPicker").val("#ffffff");
+        $("#colorDisplay").val("");
+    }
+
+    function argbIntToHex(argb) {
+        let unsigned = argb >>> 0; // convert int âm → unsigned 32-bit
+
+        let r = (unsigned >> 16) & 0xFF;
+        let g = (unsigned >> 8) & 0xFF;
+        let b = unsigned & 0xFF;
+
+        return "#" +
+            r.toString(16).padStart(2, '0') +
+            g.toString(16).padStart(2, '0') +
+            b.toString(16).padStart(2, '0');
+    }
+
+</script>
