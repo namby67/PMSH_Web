@@ -4191,9 +4191,10 @@ namespace Administration.Controllers
                     var oldData = (OccupancyModel)OccupancyBO.Instance.FindByPrimaryKey(model.ID);
                     if (oldData != null)
                     {
-                        model.CreatedBy = oldData.CreatedBy;
+                        model.CreateBy = oldData.CreateBy;
                         model.CreateDate = oldData.CreateDate;
                     }
+                    model.UpdateDate = DateTime.Now;
                     OccupancyBO.Instance.Update(model);
                     message = "Update successfully.";
                 }
@@ -4206,6 +4207,7 @@ namespace Administration.Controllers
         }
         [HttpPost]
         public IActionResult OccupancyDelete(int id){
+            
             try
             {
                 OccupancyBO.Instance.Delete(id);
