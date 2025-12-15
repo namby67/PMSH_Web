@@ -4166,7 +4166,56 @@ namespace Administration.Controllers
                 return Json(ex.Message);
             }
         }
+        [HttpPost]
+        public IActionResult OccupancySave([FromBody] OccupancyModel model)
+        {
+            if (model == null)
+                return Json(new { success = false, message = "Invalid data." });
+            if (!model.Occupancylevel.HasValue)
+                return Json(new { success = false, message = "Occupancy level is not blank." });
+            if (model.Occupancylevel.Value < 0)
+                return Json(new { success = false, message = "Occupancy level must be >= 0." });
 
+            string message;
+            try
+            {
+                if (model.ID == 0)
+                {
+                    model.CreateDate = DateTime.Now;
+                    model.UpdateDate = DateTime.Now;
+                    OccupancyBO.Instance.Insert(model);
+                    message = "Insert successfully.";
+                }
+                else
+                {
+                    var oldData = (OccupancyModel)OccupancyBO.Instance.FindByPrimaryKey(model.ID);
+                    if (oldData != null)
+                    {
+                        model.CreatedBy = oldData.CreatedBy;
+                        model.CreateDate = oldData.CreateDate;
+                    }
+                    OccupancyBO.Instance.Update(model);
+                    message = "Update successfully.";
+                }
+                return Json(new { success = true, message = message });
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message);
+            }
+        }
+        [HttpPost]
+        public IActionResult OccupancyDelete(int id){
+            try
+            {
+                OccupancyBO.Instance.Delete(id);
+                return Json(new { success = true, message = "Delete successfully." });
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message);
+            }
+        }
         #endregion      
 
         #region ItemCategory/Owner
