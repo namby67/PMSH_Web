@@ -70,128 +70,171 @@ namespace Administration.Controllers
             }
         }
 
-        // [HttpPost("RateCodeUserRightSave")]
-        // public async Task<IActionResult> RateCodeUserRightSave(string idRateCodeUserRight, string codeClass, string nameClass, string descriptionaccty, string user, string inactive)
-        // {
-        //     try
-        //     {
-        //         // Collect validation errors
-        //         List<string> errors = [];
-        //         user = user.Trim().Trim('"');
+        [HttpPost("RateCodeUserRightSave")]
+        public async Task<IActionResult> RateCodeUserRightSave([FromBody] RateCodeUserRightSaveDto dto)
+        {
+            try
+            {
+                List<string> errors = [];
 
-        //         // Validate inputs
-        //         if (string.IsNullOrWhiteSpace(codeClass))
-        //             errors.Add("Code is required.");
-        //         else if (codeClass.Length > 50)
-        //             errors.Add("Code must be at most 50 characters.");
-        //         if (string.IsNullOrWhiteSpace(nameClass))
-        //             errors.Add("Name is required.");
-        //         else if (nameClass.Length > 50)
-        //             errors.Add("Name must be at most 50 characters.");
+                var userLogin = dto.UserLogin?.Trim().Trim('"') ?? string.Empty;
 
-        //         if (!string.IsNullOrEmpty(descriptionaccty) && descriptionaccty.Length > 500)
-        //             errors.Add("Description must be at most 500 characters.");
+                // ===== VALIDATION =====
+                if (dto.UserID <= 0)
+                    errors.Add("User is required.");
 
-        //         if (string.IsNullOrWhiteSpace(user))
-        //             errors.Add("User is required.");
-        //         else
-        //         {
-        //             if (user.Length > 100)
-        //                 errors.Add("User must be at most 100 characters.");
-        //         }
+                if (string.IsNullOrWhiteSpace(dto.UserName))
+                    errors.Add("UserName is required.");
+                else if (dto.UserName.Length > 50)
+                    errors.Add("UserName max length is 50.");
 
-        //         if (inactive != null && inactive != "0" && inactive != "1")
-        //             errors.Add("Inactive must be 0 or 1.");
+                if (dto.RateCodeID <= 0)
+                    errors.Add("RateCode is required.");
 
-        //         // Validate ID format for update
-        //         int parsedId = 0;
-        //         bool isUpdate = false;
-        //         if (!string.IsNullOrWhiteSpace(idRateCodeUserRight) && idRateCodeUserRight != "0")
-        //         {
-        //             if (!int.TryParse(idRateCodeUserRight, out parsedId) || parsedId <= 0)
-        //                 errors.Add("Invalid Rate Category ID format.");
-        //             else
-        //                 isUpdate = true;
-        //         }
+                if (string.IsNullOrWhiteSpace(dto.RateCode))
+                    errors.Add("RateCode is required.");
+                else if (dto.RateCode.Length > 20)
+                    errors.Add("RateCode max length is 20.");
 
-        //         // Get business dates
-        //         List<BusinessDateModel> businessDates = PropertyUtils.ConvertToList<BusinessDateModel>(BusinessDateBO.Instance.FindAll());
-        //         if (businessDates == null || businessDates.Count == 0)
-        //             errors.Add("Business date not available. Contact system administrator.");
+                if (string.IsNullOrWhiteSpace(userLogin))
+                    errors.Add("Login user is required.");
 
-        //         // Check for duplicate Code (case-insensitive) for insert/update
-        //         if (!string.IsNullOrWhiteSpace(codeClass))
-        //         {
-        //             var allRateCategories = PropertyUtils.ConvertToList<RateCodeUserRightModel>(RateCodeUserRightBO.Instance.FindAll()) ?? new List<RateCodeUserRightModel>();
-        //             bool duplicate = allRateCategories.Any(r => string.Equals(r.Code?.Trim(), codeClass.Trim(), StringComparison.OrdinalIgnoreCase) && r.ID != parsedId);
-        //             if (duplicate)
-        //                 errors.Add("Code already exists.");
-        //         }
+                // ===== CHECK ID =====
+                int parsedId = 0;
+                bool isUpdate = false;
 
-        //         // Return errors if any
-        //         if (errors.Any())
-        //         {
-        //             return BadRequest(new { success = false, message = "Validation failed.", errors });
-        //         }
+                if (dto.Id > 0)
+                {
+                    parsedId = dto.Id;
+                    isUpdate = true;
+                }
 
-        //         // Prepare model
-        //         RateCodeUserRightModel _Model = new();
-        //         _Model.Code = codeClass.Trim();
-        //         _Model.Name = nameClass.Trim();
-        //         _Model.Description = descriptionaccty ?? string.Empty;
-        //         _Model.Inactive = inactive == "1";
+                // ===== BUSINESS DATE =====
+                var businessDates = PropertyUtils.ConvertToList<BusinessDateModel>(
+                    BusinessDateBO.Instance.FindAll()
+                );
 
-        //         if (isUpdate)
-        //         {
-        //             // Verify existing record
-        //             var existing = RateCodeUserRightBO.Instance.FindByPrimaryKey(parsedId) as RateCodeUserRightModel;
-        //             if (existing == null || existing.ID == 0)
-        //             {
-        //                 return NotFound(new { success = false, message = $"Rate Category not found (ID = {parsedId})" });
-        //             }
+                if (businessDates == null || businessDates.Count == 0)
+                    errors.Add("Business date not available.");
 
-        //             _Model.ID = parsedId;
-        //             _Model.UpdatedBy = user;
-        //             _Model.UpdatedDate = businessDates![0].BusinessDate;
-        //             _Model.CreatedBy = existing.CreatedBy;
-        //             _Model.CreatedDate = existing.CreatedDate;
-        //             RateCodeUserRightBO.Instance.Update(_Model);
-        //         }
-        //         else
-        //         {
-        //             _Model.UpdatedBy = user;
-        //             _Model.CreatedBy = user;
-        //             _Model.CreatedDate = businessDates![0].BusinessDate;
-        //             _Model.UpdatedDate = _Model.CreatedDate;
-        //             RateCodeUserRightBO.Instance.Insert(_Model);
-        //         }
+                // ===== DUPLICATE CHECK (User + RateCode) =====
+                var allPermissions =
+                    PropertyUtils.ConvertToList<UserRateCodePermissionModel>(
+                        UserRateCodePermissionBO.Instance.FindAll()
+                    ) ?? [];
 
-        //         return Json(new { success = true, message = "Success", data = new { id = _Model.ID } });
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         return BadRequest(new { success = false, message = ex.Message });
-        //     }
-        // }
-        // [HttpPost("RateCodeUserRightDelete")]
-        // public IActionResult RateCodeUserRightDelete(int id)
-        // {
-        //     try
-        //     {
-        //         ArrayList arr = RateCodeBO.Instance.FindByAttribute("RateCodeUserRightID", id);
-        //         if (arr.Count == 0)
-        //         {
-        //             return Json(new { success = false, message = "Rate Category is being referenced to in other modules.\nDelete failed.!" });
-        //         }
-        //         RateCodeUserRightBO.Instance.Delete(id);
+                bool isDuplicate = allPermissions.Any(x =>
+                    x.UserID == dto.UserID &&
+                    x.RateCodeID == dto.RateCodeID &&
+                    x.ID != parsedId
+                );
 
-        //         return Json(new { success = true, message = $"Success Delete! {id}" });
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         return BadRequest(new { success = false, message = ex.Message });
-        //     }
-        // }
+                if (isDuplicate)
+                    errors.Add("This user already has permission for this RateCode.");
+
+                // ===== RETURN ERRORS =====
+                if (errors.Any())
+                {
+                    return BadRequest(new
+                    {
+                        success = false,
+                        message = "Validation failed",
+                        errors
+                    });
+                }
+
+                // ===== PREPARE MODEL =====
+                var userName = dto.UserName!;
+                var rateCode = dto.RateCode!;
+
+                UserRateCodePermissionModel model = new()
+                {
+                    UserID = dto.UserID,
+                    UserName = userName.Trim(),
+                    RateCodeID = dto.RateCodeID,
+                    RateCode = rateCode.Trim()
+                };
+                // ===== UPDATE =====
+                if (isUpdate)
+                {
+                    var existing =
+                        UserRateCodePermissionBO.Instance.FindByPrimaryKey(parsedId)
+                        as UserRateCodePermissionModel;
+
+                    if (existing == null || existing.ID == 0)
+                    {
+                        return NotFound(new
+                        {
+                            success = false,
+                            message = $"Permission not found (ID = {parsedId})"
+                        });
+                    }
+
+                    model.ID = parsedId;
+                    model.CreatedBy = existing.CreatedBy;
+                    model.CreatedDate = existing.CreatedDate;
+                    model.UpdatedBy = userLogin;
+                    model.UpdatedDate = businessDates![0].BusinessDate;
+
+                    UserRateCodePermissionBO.Instance.Update(model);
+                }
+                // ===== INSERT =====
+                else
+                {
+                    model.CreatedBy = userLogin;
+                    model.CreatedDate = businessDates![0].BusinessDate;
+                    model.UpdatedBy = userLogin;
+                    model.UpdatedDate = model.CreatedDate;
+
+                    UserRateCodePermissionBO.Instance.Insert(model);
+                }
+
+                return Json(new
+                {
+                    success = true,
+                    message = "Save successful",
+                    data = new { id = model.ID }
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = ex.Message
+                });
+            }
+        }
+
+        [HttpPost("RateCodeUserRightDelete")]
+        public IActionResult RateCodeUserRightDelete(int id)
+        {
+            try
+            {
+                if (UserRateCodePermissionBO.Instance.FindByPrimaryKey(id) is not UserRateCodePermissionModel existing || existing.ID == 0)
+                {
+                    return NotFound(new { success = false, message = $"Rate Code User Right ID {id} not found." });
+                }
+
+                UserRateCodePermissionBO.Instance.Delete(id);
+                return Json(new { success = true, message = $"Successfully deleted RateCodeUserRight ID {id}." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { success = false, message = ex.Message });
+            }
+        }
+
+        public class RateCodeUserRightSaveDto
+        {
+            public int Id { get; set; }
+            public int UserID { get; set; }
+            public string? UserName { get; set; }
+            public int RateCodeID { get; set; }
+            public string? RateCode { get; set; }
+            public string? UserLogin { get; set; }
+        }
+
     }
 }
 

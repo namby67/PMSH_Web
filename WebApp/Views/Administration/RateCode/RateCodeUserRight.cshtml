@@ -127,7 +127,7 @@
 <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
 
-<div class="text-center" id="reportTitle" style="font-size: 20px">Rate Code vs </div>
+<div class="text-center" id="reportTitle" style="font-size: 20px">Rate Code User Right </div>
 <div class="sticky-header bg-white p-2 shadow-sm z-3">
     <div class="d-flex flex-wrap align-items-center gap-2 mb-1"
         style="border: 1px solid #ced4da; border-radius: 6px; padding: 8px;">
@@ -191,7 +191,7 @@
                                     <label>User Name <span style="color:red">*</span></label>
                                     <div class="row" style="margin-left:1px;margin-right:2px">
                                         <input id="idUserName" class="col-md-10" type="hidden" />
-                                        <input id="txtUserName" class="col-md-10" disabled />
+                                        <input id="txtUserName" class="col-md-10" readonly />
                                         <button onclick="openModalSearchUser()" class="col-md-2"><i
                                                 class="fa-solid fa-arrow-down"></i></button>
                                     </div>
@@ -203,7 +203,7 @@
                                     <label>Rate Code <span style="color:red">*</span></label>
                                     <div class="row" style="margin-left:1px;margin-right:2px">
                                         <input id="idRateCode" class="col-md-10" disabled type="hidden" />
-                                        <input id="txtRateCode" class="col-md-10" disabled />
+                                        <input id="txtRateCode" class="col-md-10" readonly />
                                         <button onclick="openModalSearchRateCode()" class="col-md-2"><i
                                                 class="fa-solid fa-arrow-down"></i></button>
                                     </div>
@@ -216,11 +216,12 @@
                         </div>
                     </div>
                 </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnSave" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" id="btnSaveItem" class="btn btn-primary">Save</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
+
         </div>
     </div>
 </div>
@@ -361,8 +362,11 @@
 
     $("#btnNew").click(function () {
         $("#modalItemId").val(0);
-        $("#modalItemId").val(0);
-        $("#itemModalLabel").text("New Rate Code");
+        $("#idUserName").val("");
+        $("#txtUserName").val("");
+        $("#idRateCode").val("");
+        $("#txtRateCode").val("");
+        $("#itemModalLabel").text("New Rate Code User Right");
         $("#itemModal").modal("show");
     });
 
@@ -376,24 +380,22 @@
         let id = selectedRowData.id;
 
         // 🔥 dùng trực tiếp selectedRowData
-        $("idUserName").val(selectedRowData.userID);
+        $("#modalItemId").val(id);
+        $("#idUserName").val(selectedRowData.userID);
         $("#txtUserName").val(selectedRowData.userName);
         $("#idRateCode").val(selectedRowData.rateCodeID);
         $("#txtRateCode").val(selectedRowData.rateCode);
+        $("#itemModalLabel").text("Edit Rate Code User Right");
         // Hiển thị popup
         $("#itemModal").modal("show");
 
     });
 
 
-    function openEditRateCode(selectedRowData) {
-
-    }
-
     // Shared save function for New and Edit
-    $(document).off("click", "#btnSaveItem").on("click", "#btnSaveItem", function () {
+    $(document).off("click", "#btnSave").on("click", "#btnSave", function () {
         try {
-            saveRateCode();
+            saveRateCodeUserRight();
         } catch (error) {
             showToast('Error', `Unable to load report: ${error}`, false);
         }
@@ -412,7 +414,7 @@
         }
 
         $.ajax({
-            url: '/Administration/RateCode/RateCodeDelete',
+            url: '/Administration/RateCode/RateCodeUserRightDelete',
             type: 'POST',
             data: {
                 id: selectedRowData.id
@@ -440,27 +442,26 @@
     });
 
 
-    function saveRateCode() {
+    function saveRateCodeUserRight() {
         var data = {
             id: parseInt($("#modalItemId").val()) || 0,
-            rateCode: $("#txtRateCode").val(),
-            description: $("#txtDescription").val(),
-            rateClass: parseInt($("#modalRateCodeSel").val()) || 0,
-            rateCategory: parseInt($("#modalRateCategorySel").val()) || 0,
-            sequence: parseInt($("#txtSequence").val()) || 0,
-            display: parseInt($("input[name='display']:checked").val()) || 0,
-            dayUse: ($("#chkDayUse").is(":checked") ? 1 : 0),  // Chuyển checkbox thành 0/1
-            active: $("#chkActive").is(":checked"),
-            negotiated: $("#chkNegotiated").is(":checked"),
-            individualOnly: $("#chkIndividualOnly").is(":checked"),
-            isModifiable: $("#chkIsModifiable").is(":checked"),
-            userID: parseInt(localStorage.getItem("userID")) || 0
+
+            rateCodeID: parseInt($("#idRateCode").val()) || 0,
+            rateCode: $("#txtRateCode").val()?.trim() || "",
+
+            userID: parseInt($("#idUserName").val()) || 0,
+            userName: $("#txtUserName").val()?.trim() || "",
+
+            userLogin: localStorage.getItem("Loginname")
         };
+        console.log('Log', data);
+
+
 
         $("#loadingSpinner").show();
 
         $.ajax({
-            url: "/Administration/RateCode/Save",
+            url: "/Administration/RateCode/RateCodeUserRightSave",
             type: "POST",
             contentType: "application/json",   // gửi JSON
             data: JSON.stringify(data),         // convert object -> JSON

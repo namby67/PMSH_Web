@@ -212,8 +212,7 @@ namespace Administration.Controllers
         {
             try
             {
-                var existing = RateCodeBO.Instance.FindByPrimaryKey(id) as RateCodeModel;
-                if (existing == null || existing.ID == 0)
+                if (RateCodeBO.Instance.FindByPrimaryKey(id) is not RateCodeModel existing || existing.ID == 0)
                 {
                     return NotFound(new { success = false, message = $"RateCode ID {id} not found." });
                 }
