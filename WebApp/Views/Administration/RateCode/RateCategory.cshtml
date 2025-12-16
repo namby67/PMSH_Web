@@ -15,7 +15,7 @@
     .dx-datagrid .dx-data-row td {
         font-size: 11px !important;
         padding: 6px 8px !important;
-        text-align: center !important;
+        text-align: left !important;
     }
 
 
@@ -128,8 +128,8 @@
             <div class="d-flex align-items-center me-3">
                 <div class="form-check d-flex align-items-center gap-2">
                     <span class="status-color-box color-clean-uncheck"></span>
-                    <input class="form-check-input" type="checkbox" id="chkshowInactive" name="chkshowInactive">
-                    <label class="form-check-label mb-0" for="chkshowInactive">Show Inactive</label>
+                    <input class="form-check-input" type="checkbox" id="chkShowInactive" name="chkShowInactive">
+                    <label class="form-check-label mb-0" for="chkShowInactive">Show Inactive</label>
                 </div>
             </div>
         </div>
@@ -237,7 +237,7 @@
                 code: $("#codeInput").val(),
                 name: $("#nameInput").val(),
                 inactive: inactive
-            }, 
+            },
             traditional: true,
             crossDomain: false,
             headers: {
@@ -246,11 +246,13 @@
                 ).val(),
             },
             success: function (result) {
-                // $("#reportViewerContainer").html(result);
-                // $("#loadingSpinner").hide();
-                console.log(result);
-                initializeAccountTypeGrid(result);
-                $("#loadingSpinner").hide();
+                if (result.length > 0) {
+                    let firstItem = result[0];
+                    let id = firstItem.ID;
+                    initializeAccountTypeGrid(result);
+                    $("#loadingSpinner").hide();
+
+                }
             },
             error: function () {
                 alert("Không thể tải báo cáo.");
@@ -373,6 +375,7 @@
         // Gán giá trị từ row vào form
         $("#idRateCategory").val(selectedRowData.id);
         $("#codeClass").val(selectedRowData.code);
+        $("#nameClass").val(selectedRowData.name);
         $("#descriptionaccty").val(selectedRowData.description);
         // Include Payment (checkbox)
         if (selectedRowData.inactive == 1) {

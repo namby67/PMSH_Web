@@ -1,0 +1,138 @@
+<!-- Modal search User -->
+<div class="modal fade modal-xl" id="modalUser" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Search User</h5>
+                <button type="button" class="btn-close" onclick="closeModalSearchUser()"></button>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="row mb-2">
+                    <div class="col-md-4">
+                        <label>Search</label>
+                        <input type="text" id="nameUserSearch" class="form-control" placeholder="Enter User name"
+                            onkeyup="filterUserList()" />
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover table-sm">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width:120px">Login Name</th>
+                                <th>Job Description</th>
+                            </tr>
+                        </thead>
+                        <tbody id="UserTableBody">
+                            @foreach (var u in ViewBag.UserList)
+                            {
+                                <tr onclick="selectUser('@u.ID','@u.LoginName')" style="cursor:pointer">
+                                    <td>@u.LoginName</td>
+                                    <td>@u.JobDescription</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="modal fade modal-xl" id="modalRateCode" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Search Rate Code</h5>
+                <button type="button" class="btn-close" onclick="closeModalSearchRateCode()"></button>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="row mb-2">
+                    <div class="col-md-4">
+                        <label>Search</label>
+                        <input type="text" id="nameRateCodeSearch" class="form-control"
+                            placeholder="Enter RateCode name" onkeyup="filterRateCodeList()" />
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover table-sm">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width:120px">Rate Code</th>
+                                <th>Descripton</th>
+                            </tr>
+                        </thead>
+                        <tbody id="RateCodeTableBody">
+                            @foreach (var u in ViewBag.RateCodeList)
+                            {
+                                <tr onclick="selectRateCode('@u.ID','@u.RateCode')" style="cursor:pointer">
+                                    <td>@u.RateCode</td>
+                                    <td>@u.Descripton</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    function openModalSearchUser() {
+        $('#modalUser').modal('show');
+    }
+
+    function closeModalSearchUser() {
+        $('#nameUserSearch').val('');
+        filterUserList();
+        $('#modalUser').modal('hide');
+    }
+
+    function selectUser(id, name) {
+        $('#txtUserName').val(name);      // gán ra form chính
+        $('#modalUser').modal('hide');
+    }
+
+    function filterUserList() {
+        let keyword = $('#nameUserSearch').val().toLowerCase();
+
+        $('#userTableBody tr').each(function () {
+            let text = $(this).text().toLowerCase();
+            $(this).toggle(text.includes(keyword));
+        });
+    }
+    function openModalSearchRateCode() {
+        $('#modalRateCode').modal('show');
+    }
+
+    function closeModalSearchRateCode() {
+        $('#nameRateCodeSearch').val('');
+        filterRateCodeList();
+        $('#modalRateCode').modal('hide');
+    }
+
+    function selectRateCode(id, name) {
+        $('#txtRateCode').val(name);      // gán ra form chính
+        $('#modalRateCode').modal('hide');
+    }
+
+    function filterRateCodeList() {
+        let keyword = $('#nameRateCodeSearch').val().toLowerCase();
+
+        $('#RateCodeTableBody tr').each(function () {
+            let text = $(this).text().toLowerCase();
+            $(this).toggle(text.includes(keyword));
+        });
+    }
+
+</script>

@@ -39,111 +39,158 @@
 </div>
 <!-- Modal Popup for New Item -->
 <div class="modal fade" id="itemModal" tabindex="-1" aria-labelledby="itemModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-md">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="itemModalLabel">New/Edit Item</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-			<div class="modal-footer justify-content-start">
-                <button type="button" id="btnSaveItem" class="btn btn-primary">Save</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <div class="modal-footer justify-content-start">
+                <button type="button" id="btnSaveItem" class="mui-button mui-button-export">
+                    <i class="fa-solid fa-floppy-disk"></i> Save
+                </button>
+                <button type="button" class="mui-button button-report-delete" data-bs-dismiss="modal">
+                    <i class="fa-solid fa-xmark"></i> Close
+                </button>
             </div>
             <div class="modal-body">
                 <form id="itemForm">
                     <div class="container-fluid" style="border: 1px solid #ccc; border-radius: 6px; padding: 8px;">
 
                         <div class="row mb-1 align-items-center">
-                            <div class="col-auto">
+                            <div class="col-md-4">
                                 <label for="txtCode" class="form-label mb-0">Cancellation Rule Code</label>
-                                <input type="text" id="txtCode" name="txtCode" class="form-control form-control-sm" />
                             </div>
-                            <div class="col-auto d-flex align-items-center">
-                                <input type="checkbox" id="inActive" name="inActive" class="form-check-input me-2" />
-                                <label for="inActive" class="form-check-label text-danger mb-0">Inactive</label>
+                            <div class="col-md-4">
+                                <input type="text" id="txtCode" name="txtCode" class="form-control form-control-sm" />
+                                <div class="invalid-feedback">Code is required.</div>
                             </div>
                         </div>
 
                         <div class="row mb-1">
-                            <div class="col">
+                            <div class="col-md-4">
                                 <label for="txtDescription" class="form-label">Description</label>
-                                <textarea id="txtDescription" name="txtDescription" class="form-control" rows="4" style="background-color:#ffffe6"></textarea>
+                            </div>
+                            <div class="col-md-4">
+                                <textarea id="txtDescription" name="txtDescription" class="form-control" rows="4"></textarea>
                             </div>
                         </div>
 
                         <div class="row mb-2 align-items-center">
-                            <label class="col-sm-2 col-form-label">Type</label>
+                            <div class="col-md-2">
+                                <label class="form-label">Type</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="row">
+                                    <div class="col-md-2 form-check">
+                                        <input class="form-check-input" type="radio" name="type" id="typeFlat" value="0" checked>
+                                        <label class="form-check-label" for="typeFlat">Flat</label>
+                                    </div>
 
-                            <div class="col-sm-10">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="type" id="typeFlat" value="0" checked>
-                                    <label class="form-check-label" for="typeFlat">Flat</label>
-                                </div>
+                                    <div class="col-md-3 form-check">
+                                        <input class="form-check-input" type="radio" name="type" id="typePercentage" value="1">
+                                        <label class="form-check-label" for="typePercentage">Percentage</label>
+                                    </div>
 
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="type" id="typePercentage" value="1">
-                                    <label class="form-check-label" for="typePercentage">Percentage</label>
-                                </div>
+                                    <div class="col-md-2 form-check">
+                                        <input class="form-check-input" type="radio" name="type" id="typeNights" value="2">
+                                        <label class="form-check-label" for="typeNights">Nights</label>
+                                    </div>
 
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="type" id="typeNights" value="2">
-                                    <label class="form-check-label" for="typeNights">Nights</label>
-                                </div>
-								<div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="type" id="typeNights" value="2">
-                                    <label class="form-check-label" for="typeNightsPercentage">Nights Percentage</label>
-                                </div>
-								<div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="type" id="typeNights" value="2">
-                                    <label class="form-check-label" for="typeNonCancelable">Non Cancelable</label>
+                                    <div class="col-md-3 form-check">
+                                        <input class="form-check-input" type="radio" name="type" id="typeNightsPercentage" value="3">
+                                        <label class="form-check-label" for="typeNightsPercentage">Nights Percentage</label>
+                                    </div>
+
+                                    <div class="col-md-2 form-check">
+                                        <input class="form-check-input" type="radio" name="type" id="typeNonCancelable" value="4">
+                                        <label class="form-check-label" for="typeNonCancelable">Non Cancelable</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
                         <div class="row mb-1 align-items-center">
-
-                            <div class="col-auto">
-                                <label class="form-label mb-0">Deposit Amount</label>
-                                <input type="text" class="form-control form-control-sm" id="depositAmount">
+                            <div class="col-md-4">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label class="form-label">Penalty Amount</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="text" class="form-control" id="penaltyAmount">
+                                        <div class="invalid-feedback">Amount must be valid number > 0.</div>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="col-md-3 align-items-center" id="divCurrency">
-                                <label class="me-2 mb-0">Currency:</label>
-                                <select id="currencyID" class="form-select form-select-sm w-auto">
-                                    <option value="">--ALL--</option>
-                                    @foreach (var item in listCurr)
-                                    {
-                                        <option value="@item.ID">@item.ID</option>
-                                    }
-                                </select>
+                            <div class="col-md-5" id="divCurrency">
+                                <div class="row mb-3">
+                                    <div class="col-md-5">
+                                        <label class="col-form-label text-md-end w-100">Currency:</label>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <select id="currencyID" class="form-select form-select-sm">
+                                            <option value="">--All--</option>
+                                            @foreach (var item in listCurr)
+                                            {
+                                                <option value="@item.ID">@item.ID</option>
+                                            }
+                                        </select>
+                                        <div class="invalid-feedback">Please select currency for Flat type.</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="row mb-1 align-items-center">
-
-                            <div class="col-auto">
-                                <label class="me-2 mb-0" style="white-space: nowrap;">Days before Arrival</label>
-                                <input type="text" id="daysBeforeArrival" class="form-control form-control-sm" style="width: 80px;">
+                        <div class="row mb-2 align-items-center">
+                            <div class="col-md-3">
+                                <div class="col align-items-center">
+                                    <div class="col-6">
+                                        <label class="form-label mb-0" style="white-space: nowrap;">Days before Arrival</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="text" id="daysBeforeArrival" class="form-control form-control-sm" style="width:7.5rem;">
+                                        <div class="invalid-feedback">Must be number >= 0.</div>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="col-auto">
-								<label class="me-2 mb-0" style="white-space: nowrap;">Cancel before Time</label>
-								<input type="time" id="cancelBeforeTime" class="form-control form-control-sm" style="width: 120px;">
-							</div>	
-
-                            <div class="col-auto">
-                                <label class="me-2 mb-0" style="white-space: nowrap;">Sequence</label>
-                                <input type="text" id="sequence" class="form-control form-control-sm" style="width: 80px;">
+                            <div class="col-md-3">
+                                <div class="col align-items-center">
+                                    <div class="col-6">
+                                        <label class="form-label mb-0" style="white-space: nowrap;">Cancel Time Before</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="datetime-local" id="cancelBeforeTime" class="form-control form-control-sm" style="width:11.063rem;">
+                                        <div class="invalid-feedback">Invalid datetime.</div>
+                                    </div>
+                                </div>
                             </div>
 
+                            <div class="col-md-3">
+                                <div class="col align-items-center">
+                                    <div class="col-6">
+                                        <label class="form-label mb-0" style="white-space: nowrap;">Sequence</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="text" id="sequence" class="form-control form-control-sm">
+                                        <div class="invalid-feedback">Invalid number.</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <input type="checkbox" id="inActive" name="inActive" class="form-check-input me-2" />
+                                <label for="inActive" class="form-check-label text-danger mb-0">Inactive</label>
+                            </div>
                         </div>
-
                         <input type="hidden" id="id" name="id" value="0" />
                     </div>
                 </form>
             </div>
         </div>
     </div>
+
 </div>
 <div id="loadingSpinner" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
 	<i class="fa-solid fa-spinner fa-spin"></i>
@@ -152,20 +199,78 @@
 <script>
     $(document).ready(function () {
          $("#btnSearch").trigger("click");
+
+         // Remove is-invalid class on input/change
+         $("#itemForm input, #itemForm select, #itemForm textarea").on("input change", function () {
+            if ($(this).hasClass("is-invalid")) {
+                $(this).removeClass("is-invalid");
+            }
+        });
+        $("input[name='type']").change(function() {
+            toggleCurrency();
+
+            $("#currencyID").removeClass("is-invalid");
+        });
     });
 
     let selectedRowData = null;
 
-    function toggleCurrency() { 
+    function toggleCurrency() {
         let typeVal = $("input[name='type']:checked").val();
         let $div = $("#divCurrency");
 
         if (typeVal == "0") {
         $div.removeClass("d-none").addClass("d-flex");
-    } else {
-        $div.addClass("d-none").removeClass("d-flex");
-        $("#currencyID").val("");
+        } else {
+            $div.addClass("d-none").removeClass("d-flex");
+        }
     }
+
+        function validateForm() {
+        let isValid = true;
+
+        $("#itemForm .form-control, #itemForm .form-select").removeClass("is-invalid");
+
+        let code = $("#txtCode").val().trim();
+        if (code === "") {
+            $("#txtCode").addClass("is-invalid");
+            isValid = false;
+        }
+
+        let amount = $("#penaltyAmount").val();
+        if (amount === "" || isNaN(amount) || parseFloat(amount) < 0) {
+            $("#penaltyAmount").addClass("is-invalid");
+            isValid = false;
+        }
+
+        let typeVal = $("input[name='type']:checked").val();
+        if (typeVal == "0") {
+            if ($("#currencyID").val() === "") {
+                $("#currencyID").addClass("is-invalid");
+                isValid = false;
+            }
+        }
+
+        const isNonNegativeNumber = (val) => val === "" || (!isNaN(val) && parseFloat(val) >= 0);
+
+        if (!isNonNegativeNumber($("#daysBeforeArrival").val())) {
+            $("#daysBeforeArrival").addClass("is-invalid");
+            isValid = false;
+        }
+        if ($("#sequence").val() !== "" && isNaN($("#sequence").val())) {
+            $("#sequence").addClass("is-invalid");
+            isValid = false;
+        }
+
+        // valid cancelBeforeTime 
+    let cancelTime = $("#cancelBeforeTime").val().trim();
+
+    if (cancelTime === "") {
+        $("#cancelBeforeTime").addClass("is-invalid");
+        isValid = false;
+    } 
+
+        return isValid;
     }
 
     $("input[name='type']").change(function() {
@@ -174,12 +279,13 @@
 
       $("#btnNew").click(function () {
            $("#itemForm")[0].reset();
+           $("#itemForm .form-control, #itemForm .form-select").removeClass("is-invalid");
            $("#id").val("0");
            $("#txtCode").prop("disabled", false);
            $("#typeFlat").prop("checked", true);
            toggleCurrency();
 
-           $("#itemModalLabel").text("Add Deposit Rules Search");
+           $("#itemModalLabel").text("Add Cancellation Rules Search");
            $("#itemModal").modal("show");
       });
          function getData(data){
@@ -200,36 +306,36 @@
               },
               filterRow: { visible: true },
              columns: [
-                         { dataField: "id", caption: "ID", width: 80, visible: false },
+                         { dataField: "id", caption: "ID", visible: false },
                          { dataField: "code", caption: "Code" , width: 130 },
-                         { dataField: "description", caption: "Description", width: 250 },
-                         { dataField: "type", caption: "Type", width: 100 },
+                         { dataField: "description", caption: "Description", width: 270 },
+                         { dataField: "type", caption: "Type", width: 120 },
                          { dataField: "amountValue", caption: "Amount", width: 70 },
                          { dataField: "currencyID", caption: "$", width: 50 },
-                         { dataField: "daysBeforeArrival", caption: "Days Before Arrival", width: 120 },
-                         { dataField: "cancelBeforeTime", caption: "Cancel Before Time", width: 70 },
+                         { dataField: "daysBeforeArrival", caption: "Days Before Arrival", width: 120 }, 
+                         { dataField: "cancelBeforeTime", caption: "Cancel Before Time", width: 120 },
                          {
                             dataField: "userInsertID",
                             caption: "Create By",
                             width: 70,
                             lookup: {
                                 dataSource: listUser,
-                                valueExpr: "ID",   
-                                displayExpr: "LoginName" 
+                                valueExpr: "ID",
+                                displayExpr: "LoginName"
                             }
                          },
-                         { dataField: "createDate", caption: "Create Date", dataType: "date", format: "dd/MM/yyyy HH:mm", width: 150 },
+                         { dataField: "createDate", caption: "Create Date", dataType: "date", format: "dd/MM/yyyy", width: 90 },
                          {
                             dataField: "userUpdateID",
                             caption: "Update By",
                             width: 70,
                             lookup: {
                                 dataSource: listUser,
-                                valueExpr: "ID",  
+                                valueExpr: "ID",
                                 displayExpr: "LoginName"
                             }
                          },
-                         { dataField: "updateDate", caption: "Update Date", dataType: "date", format: "dd/MM/yyyy HH:mm", width: 150 },
+                         { dataField: "updateDate", caption: "Update Date", dataType: "date", format: "dd/MM/yyyy", width: 90 },
                      ],
               scrolling: {
                       mode: "standard",
@@ -238,7 +344,7 @@
                   },
                onSelectionChanged: function(e){
                   selectedRowData = e.selectedRowsData.length > 0 ? e.selectedRowsData[0] : null;
-                  console.log("Selected Row:", selectedRowData);
+                  console.log("Selected Row Data:", selectedRowData);
               }
          });
      }
@@ -246,7 +352,7 @@
        $(document).off("click", "#btnSearch").on("click", "#btnSearch", function () {
           $("#loadingSpinner").show();
           $.ajax({
-              url: "/Administration/GetDepositRule/",
+              url: "/Administration/GetCancellationRule/",
               type: "GET",
               data: {
                  code: $("#codeInput").val(),
@@ -276,7 +382,7 @@
         }
     }
     function editItem(data) {
-        console.log("Editing Item:", data);
+          $("#itemForm .form-control, #itemForm .form-select").removeClass("is-invalid");
           $("#id").val(data.id);
           $("#txtCode").val(data.code);
           $("#txtCode").prop("disabled", true);
@@ -287,21 +393,18 @@
             if (typeInt === 1) $("#typePercentage").prop("checked", true);
             if (typeInt === 2) $("#typeNights").prop("checked", true);
             if (typeInt === 3) $("#typeNightsPercentage").prop("checked", true);
-            if (typeInt === 4) $("#typeNonCancel").prop("checked", true);
-          $("#depositAmount").val(data.amountValue);
-          if (data.type == 0) {
-            $("#currencyID").val(data.currencyID);
-          } else {
-            $("#currencyID").val("");
-          }
+            if (typeInt === 4) $("#typeNonCancelable").prop("checked", true);
+
+          $("#penaltyAmount").val(data.amountValue);
+
           $("#currencyID").val(data.currencyID || "");
           $("#daysBeforeArrival").val(data.daysBeforeArrival);
-          $("#daysAfterBooking").val(data.daysAfterBooking);
               toggleCurrency();
-          $.get("/Administration/GetDepositRuleById", { id: data.id }, function (res) {
+          $.get("/Administration/GetCancellationRuleById", { id: data.id }, function (res) {
               $("#inActive").prop("checked",res.inactive === 1 || res.inactive === true);
               $("#sequence").val(res.sequence);
-          }); 
+              $("#cancelBeforeTime").val(res.cancelBeforeTime);
+          });
           $("#itemModal").modal("show");
       }
       $("#btnUpdate").click(function () {
@@ -309,10 +412,14 @@
               showToast('Warning', "Select 1 row, please!", true);
               return;
           }
-           $("#itemModalLabel").text("Edit Deposit Rules Search");
-           editItem(selectedRowData);
+           $("#itemModalLabel").text("Edit Cancellation Rules Search");
+              editItem(selectedRowData);
       });
       $("#btnSaveItem").click(function () {
+          if (!validateForm()) {
+            showToast("Warning", "Please check input fields marked in red.", false);
+            return;
+          }
           const id = parseInt($("#id").val()) || 0;
           // let loginName = (localStorage.getItem("Loginname") || "")
           //   .trim()
@@ -321,18 +428,20 @@
 
           const currentType = $("input[name='type']:checked").val();
           const currencyValue = (currentType == 0) ? $("#currencyID").val() : "";
-
-          const url = "/Administration/DepositRuleSave";
+          const amountVal = parseFloat($("#penaltyAmount").val()) || 0;
+          const daysBefore = parseInt($("#daysBeforeArrival").val()) || 0;
+          const seq = parseInt($("#sequence").val()) || 0;
+          const url = "/Administration/CancellationRuleSave";
           const model = {
               ID: id,
               Code: $("#txtCode").val(),
-              Description: $("#txtDescription").val(),  
-              AmountValue: $("#depositAmount").val(),
+              Description: $("#txtDescription").val(),
+              AmountValue: amountVal,
               Type: currentType,
               CurrencyID: currencyValue,
-              DaysBeforeArrival: $("#daysBeforeArrival").val(),
-              DaysAfterBooking: $("#daysAfterBooking").val(),
-              Sequence: $("#sequence").val(),
+              DaysBeforeArrival: daysBefore,
+              CancelBeforeTime: $("#cancelBeforeTime").val(),
+              Sequence: seq,
               Inactive: $("#inActive").prop("checked"),
               UserInsertID: loginUser,
               UserUpdateID: loginUser
@@ -345,16 +454,17 @@
               type: "POST",
               contentType: "application/json",
               data: JSON.stringify(model),
-              headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
-              success: function (response) {
-                  $("#loadingSpinner").hide();
-                  if (response.success) {
-                       showToast("Success",response.message, true);
-                      $("#itemModal").modal("hide");
-                      $("#btnSearch").trigger("click");
-                  } else {
-                       showToast("Error",response.message, false);
-                  }
+              traditional: true,
+                   crossDomain: false,
+                     headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+              success: function (res) {
+                  if (res.success) {
+                    showToast("Success", res.message, true);
+                    $("#itemModal").modal("hide");
+                } else {
+                    showToast("Error", res.message, false);
+                }
+                  $("#btnSearch").click();
               },
               error: function (xhr, status, error) {
                   $("#loadingSpinner").hide();
@@ -372,7 +482,7 @@
                 return;
             }
            $.ajax({
-               url: `/Administration/DepositRuleDelete/`+ selectedRowData.id,
+               url: `/Administration/CancellationRuleDelete/`+ selectedRowData.id,
                type: "POST",
                traditional: true,
                crossDomain: false,
@@ -439,7 +549,7 @@
              worksheet.getCell(`A${lastRow}`).font = { italic: true };
 
              // Ghi file
-             let fileName = "DepositRulesSearch.xlsx";
+             let fileName = "CancellationRulesSearch.xlsx";
              workbook.xlsx.writeBuffer().then(function (buffer) {
                  saveAs(new Blob([buffer], { type: "application/octet-stream" }), fileName);
              });

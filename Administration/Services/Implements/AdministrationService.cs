@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -486,5 +486,6 @@ namespace Administration.Services.Implements
             DataTable dt = DataTableHelper.getTableData("spSearchCancellationRule", parameters);
             return dt;
         }
+
     }
 }
