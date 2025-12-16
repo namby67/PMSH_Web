@@ -191,7 +191,6 @@
 
             onSelectionChanged: function(e){
                   selectedRowData = e.selectedRowsData.length > 0 ? e.selectedRowsData[0] : null;
-                  console.log("Selected Row:", selectedRowData);
             }
         });
     }
@@ -307,7 +306,6 @@
                 createBy: loginName,
                 updateBy: loginName,
             };
-            console.log("Model to save: ", model);
             let url = "/Administration/OccupancySave";
             $.ajax({
                url: url,
@@ -328,7 +326,7 @@
                 }
               },
               error: function (xhr, status, error) {
-                  $("#loadingSpinner").hide();
+                  $("#loadingSpinnerRateCode").hide();
                       showToast("Error",error.message, false);
               }
           });
@@ -383,7 +381,7 @@
                },
                error: function(){
                     showToast("Error","Delete failed!",false);
-                    $("#loadingSpinner").hide();
+                    $("#loadingSpinnerRateCode").hide();
                },
            });
     });
