@@ -3,12 +3,22 @@
 @{
     //
 }
+<style>
+    .form-locked {
+        pointer-events: none; /* khóa toàn bộ click */
+        opacity: 0.6; /* làm mờ */
+    }
 
+    .form-unlocked {
+        pointer-events: auto;
+        opacity: 1;
+    }
+</style>
 <div class="header">
     <h3 id="content-title">Occupancy Config</h3>
 </div>
 <div class="sticky-header bg-white p-2 shadow-sm z-3">
-    <div class="d-flex align-items-center gap-3 p-2" style="border: 1px solid #ccc; border-radius: 6px; padding: 8px;">
+    <div id="formContainer" class="d-flex align-items-center gap-3 p-2 formLocked" style="border: 1px solid #ccc; border-radius: 6px; padding: 8px;">
         <div class="row g-3">
 
             <div class="col-md-4">
@@ -23,7 +33,7 @@
             <div class="col-md-4">
                 <label class="form-label mb-1">Occ. Level:</label>
                 <input type="text" id="occLevelInput" class="form-control form-control-sm">
-                <div class="invalid-feedback">Occ. Level is not blank !.</div>
+                <div class="invalid-feedback" id="occLevelError"></div>
             </div>
 
             <div class="col-md-4">
@@ -93,8 +103,21 @@
                 $(this).removeClass("is-invalid");
             }
         });
+        lockForm();
         reloadGrid();
     });
+
+        function lockForm() {
+        $("#formContainer")
+            .removeClass("form-unlocked")
+            .addClass("form-locked");
+    }
+
+    function unlockForm() {
+        $("#formContainer")
+            .removeClass("form-locked")
+            .addClass("form-unlocked");
+    }
 
     // Convert HEX → ARGB
     const hexToArgbInt = hex => {
@@ -168,7 +191,6 @@
 
             onSelectionChanged: function(e){
                   selectedRowData = e.selectedRowsData.length > 0 ? e.selectedRowsData[0] : null;
-                  console.log("Selected Row:", selectedRowData);
             }
         });
     }
@@ -186,13 +208,14 @@
         function switchToEditMode() {
         $("#btnNew, #btnUpdate, #btnDelete").addClass("d-none");
         $("#btnSave, #btnCancel").removeClass("d-none");
-        $("#content-title").text("Edit Occupancy Config");
+        unlockForm();
     }
 
     function switchToNormalMode() {
         $("#btnNew, #btnUpdate, #btnDelete").removeClass("d-none");
         $("#btnSave, #btnCancel").addClass("d-none");
         $("#content-title").text("Occupancy Config");
+        lockForm();
     }
 
     // --- NÚT NEW ---
@@ -211,7 +234,7 @@
         }
 
         switchToEditMode();
-
+         $("#content-title").text("Edit Occupancy Config");
         // fill dữ liệu vào form
         $("#occLevelInput").val(selectedRowData.occupancylevel);
         $("#titleInput").val(selectedRowData.title);
@@ -234,10 +257,10 @@
     $("#btnCancel").click(function () {
         $(".form-control").removeClass("is-invalid is-valid");
 
-        clearForm();    
+        clearForm();
         switchToNormalMode();
     });
-    
+
     // --- NÚT SAVE ---
     $("#btnSave").click(function(){
         let isValid = true;
@@ -245,14 +268,24 @@
         let occLevelRaw = $("#occLevelInput").val().trim();
         let occLevel = occLevelRaw === "" ? null : Number(occLevelRaw);
 
-        // check trống
+        $("#occLevelInput").removeClass("is-invalid");
+
+           // check trống
         if (occLevelRaw === "") {
             $("#occLevelInput").addClass("is-invalid");
+            $("#occLevelError").text("Occ. Level must not be blank.");
             isValid = false;
         }
-        // check số âm / không phải số
-        else if (isNaN(occLevel) || occLevel < 0) {
+        // check không phải số
+        else if (isNaN(occLevel)) {
             $("#occLevelInput").addClass("is-invalid");
+            $("#occLevelError").text("Occ. Level must be a number.");
+            isValid = false;
+        }
+        // check số âm
+        else if (occLevel < 0) {
+            $("#occLevelInput").addClass("is-invalid");
+            $("#occLevelError").text("Occ. Level must be greater than or equal to 0.");
             isValid = false;
         }
 
@@ -273,7 +306,6 @@
                 createBy: loginName,
                 updateBy: loginName,
             };
-            console.log("Model to save: ", model);
             let url = "/Administration/OccupancySave";
             $.ajax({
                url: url,
@@ -287,20 +319,15 @@
                   if (res.success) {
                     showToast("Success", res.message, true);
                     reloadGrid();
+                    switchToNormalMode();
                     clearForm();
-           // console.log("Model: "+model);
-
                 } else {
                     showToast("Error", res.message, false);
-           // console.log("Model: "+model);
-
                 }
               },
               error: function (xhr, status, error) {
-                  $("#loadingSpinner").hide();
+                  $("#loadingSpinnerRateCode").hide();
                       showToast("Error",error.message, false);
-           // console.log("Model: "+model);
-
               }
           });
         }
@@ -354,7 +381,7 @@
                },
                error: function(){
                     showToast("Error","Delete failed!",false);
-                    $("#loadingSpinner").hide();
+                    $("#loadingSpinnerRateCode").hide();
                },
            });
     });

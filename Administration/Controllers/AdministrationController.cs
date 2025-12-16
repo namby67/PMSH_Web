@@ -4194,6 +4194,7 @@ namespace Administration.Controllers
                         model.CreateBy = oldData.CreateBy;
                         model.CreateDate = oldData.CreateDate;
                     }
+                    model.UpdateDate = DateTime.Now;
                     OccupancyBO.Instance.Update(model);
                     message = "Update successfully.";
                 }
@@ -4205,7 +4206,9 @@ namespace Administration.Controllers
             }
         }
         [HttpPost]
-        public IActionResult OccupancyDelete(int id){
+        public IActionResult OccupancyDelete(int id)
+        {
+
             try
             {
                 OccupancyBO.Instance.Delete(id);
@@ -4217,6 +4220,132 @@ namespace Administration.Controllers
             }
         }
         #endregion      
+
+        #region ItemCategory/ConfirmationConfig
+
+        public IActionResult ConfirmationConfig()
+        {
+            return View("ItemCategory/ConfirmationConfig");
+        }
+        [HttpGet]
+        public IActionResult GetConfirmationConfig()
+        {
+            try
+            {
+                DataTable dt = TextUtils.Select("SELECT * FROM ConfirmationConfig");
+                var result = (from r in dt.AsEnumerable()
+                              select new
+                              {
+                                  ID = !string.IsNullOrEmpty(r["ID"].ToString()) ? r["ID"] : "",
+                                  EmailAddress = !string.IsNullOrEmpty(r["EmailAddress"].ToString()) ? r["EmailAddress"] : "",
+                                  MailUser = !string.IsNullOrEmpty(r["MailUser"].ToString()) ? r["MailUser"] : "",
+                                  MailPassword = !string.IsNullOrEmpty(r["MailPassword"].ToString()) ? r["MailPassword"] : "",
+                                  ServerName = !string.IsNullOrEmpty(r["ServerName"].ToString()) ? r["ServerName"] : "",
+                                  ServerPort = !string.IsNullOrEmpty(r["ServerPort"].ToString()) ? r["ServerPort"] : "",
+                                  MailSubject = !string.IsNullOrEmpty(r["MailSubject"].ToString()) ? r["MailSubject"] : "",
+                                  MailBody = !string.IsNullOrEmpty(r["MailBody"].ToString()) ? r["MailBody"] : "",
+                                  MailSubjectENG = !string.IsNullOrEmpty(r["MailSubjectENG"].ToString()) ? r["MailSubjectENG"] : "",
+                                  MailBodyENG = !string.IsNullOrEmpty(r["MailBodyENG"].ToString()) ? r["MailBodyENG"] : "",
+                                  CreatedBy = !string.IsNullOrEmpty(r["CreatedBy"].ToString()) ? r["CreatedBy"] : "",
+                                  CreatedDate = !string.IsNullOrEmpty(r["CreatedDate"].ToString()) ? r["CreatedDate"] : "",
+                                  UpdatedBy = !string.IsNullOrEmpty(r["UpdatedBy"].ToString()) ? r["UpdatedBy"] : "",
+                                  UpdatedDate = !string.IsNullOrEmpty(r["UpdatedDate"].ToString()) ? r["UpdatedDate"] : "",
+                              }).ToList();
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message);
+            }
+        }
+        [HttpPost]
+        public IActionResult ConfirmationConfigSave([FromBody] ConfirmationConfigModel model)
+        {
+            if (model == null)
+                return Json(new { success = false, message = "Invalid data." });
+
+            string message;
+            try
+            {
+                var oldData = (ConfirmationConfigModel)ConfirmationConfigBO.Instance.FindByPrimaryKey(model.ID);
+                if (oldData != null)
+                {
+                    model.CreatedBy = oldData.CreatedBy;
+                    model.CreatedDate = oldData.CreatedDate;
+                }
+                model.UpdatedDate = DateTime.Now;
+                ConfirmationConfigBO.Instance.Update(model);
+                message = "Update successfully.";
+                return Json(new { success = true, message = message });
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region ItemCategory/ConfirmationTemp
+
+        public IActionResult ConfirmationTemp()
+        {
+            return View("ItemCategory/ConfirmationTemp");
+        }
+        [HttpGet]
+        public IActionResult GetConfirmationTemp()
+        {
+            try
+            {
+                DataTable dt = TextUtils.Select("SELECT * FROM ConfirmationTemp");
+                var result = (from r in dt.AsEnumerable()
+                              select new
+                              {
+                                  ID = !string.IsNullOrEmpty(r["ID"].ToString()) ? r["ID"] : "",
+                                  LetterName = !string.IsNullOrEmpty(r["LetterName"].ToString()) ? r["LetterName"] : "",
+                                  RateCodeID = !string.IsNullOrEmpty(r["RateCodeID"].ToString()) ? r["RateCodeID"] : "",
+                                  Nationality = !string.IsNullOrEmpty(r["Nationality"].ToString()) ? r["Nationality"] : "",
+                                  GroupBy = !string.IsNullOrEmpty(r["GroupBy"].ToString()) ? r["GroupBy"] : "",
+                                  Template = !string.IsNullOrEmpty(r["Template"].ToString()) ? r["Template"] : "",
+                                  CreatedBy = !string.IsNullOrEmpty(r["CreatedBy"].ToString()) ? r["CreatedBy"] : "",
+                                  CreatedDate = !string.IsNullOrEmpty(r["CreatedDate"].ToString()) ? r["CreatedDate"] : "",
+                                  UpdatedBy = !string.IsNullOrEmpty(r["UpdatedBy"].ToString()) ? r["UpdatedBy"] : "",
+                                  UpdatedDate = !string.IsNullOrEmpty(r["UpdatedDate"].ToString()) ? r["UpdatedDate"] : "",
+                              }).ToList();
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message);
+            }
+        }
+        [HttpPost]
+        public IActionResult ConfirmationTempSave([FromBody] ConfirmationTempModel model)
+        {
+            if (model == null)
+                return Json(new { success = false, message = "Invalid data." });
+
+            string message;
+            try
+            {
+                var oldData = (ConfirmationTempModel)ConfirmationTempBO.Instance.FindByPrimaryKey(model.ID);
+                if (oldData != null)
+                {
+                    model.CreatedBy = oldData.CreatedBy;
+                    model.CreatedDate = oldData.CreatedDate;
+                }
+                model.UpdatedDate = DateTime.Now;
+                ConfirmationTempBO.Instance.Update(model);
+                message = "Update successfully.";
+                return Json(new { success = true, message = message });
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message);
+            }
+        }
+
+        #endregion
 
         #region ItemCategory/Owner
         [HttpGet]
