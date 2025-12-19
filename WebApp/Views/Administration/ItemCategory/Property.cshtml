@@ -13,6 +13,26 @@
         pointer-events: auto;
         opacity: 1;
         background-color: #fff;
+
+        /* 1. Label: Nhỏ, đậm để dễ nhìn, màu xám đậm */
+    .form-label {
+        font-size: 12px;       /* Kích thước */
+        font-weight: 600;      /* Đậm vừa phải */
+        color: #495057;        /* Màu xám đậm cho chuyên nghiệp */
+        margin-bottom: 2px;    /* Khoảng cách với ô input sát lại chút */
+    }
+
+    /* 2. Input: Chữ vừa phải, gọn */
+    .form-control-sm, .form-select-sm {
+        font-size: 13px;       
+        padding-top: 4px;      /* Căn chỉnh padding cho ô input gọn hơn */
+        padding-bottom: 4px;
+    }
+
+    /* 3. Placeholder (Chữ mờ bên trong input) */
+    ::placeholder {
+        font-size: 12px;
+        opacity: 0.6;
     }
 
 </style>
@@ -22,85 +42,89 @@
 </div>
 
 <div class="sticky-header bg-white p-2 shadow-sm z-3">
-    <div id="formContainer" class="p-2 form-locked  " style="border: 1px solid #ccc; border-radius: 6px;">
-        <div class="row g-2 w-100 align-items-start">
-            <div class="col-lg-1 col-md-2">
-                <label for="code" class="form-label mb-0" style="font-size:12px;">Code <span class="text-danger">*</span></label>
-                <input type="text" id="code" name="code" class="form-control form-control-sm" />
+    <div id="formContainer" class="p-3 form-locked" style="border: 1px solid #ccc; border-radius: 6px; background-color: #f8f9fa;">
+    <div class="row g-3 mb-2">
+        <div class="col-md-2">
+            <label for="code" class="form-label mb-1 fw-bold">Code <span class="text-danger">*</span></label>
+            <input type="text" id="code" name="code" class="form-control form-control-sm" placeholder="Enter code property..." required />
+            <div class="invalid-feedback">Code is required.</div>
+        </div>
+        <div class="col-md-4">
+            <label for="propertyName" class="form-label mb-1 fw-bold" >Property Name <span class="text-danger">*</span></label>
+            <input type="text" id="propertyName" name="propertyName" class="form-control form-control-sm" placeholder="Enter property name..." required />
+            <div class="invalid-feedback">Property Name is required.</div>
+        </div>
+        <div class="col-md-4">
+            <label for="propertyType" class="form-label mb-1 fw-bold" >Property Type <span class="text-danger">*</span></label>
+            <select id="propertyType" name="propertyType" class="form-select form-select-sm" required>
+                <option value="">-- Select Property Type --</option>
+                @foreach (var sg in ViewBag.PropertyTypeList)
+                {
+                    <option value="@sg.ID" data-code="@sg.Code">@sg.Code - @sg.Description</option>
+                }
+            </select>
+            <div class="invalid-feedback">Please select a Property Type.</div>
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+            <div class="form-check mb-1">
+                <input type="checkbox" id="chkshowInactive" name="inactive" class="form-check-input" style="cursor: pointer;"/>
+                <label for="chkshowInactive" class="form-check-label" style="cursor: pointer;">Inactive</label>
             </div>
-
-            <div class="col-lg-1 col-md-2">
-                <label for="fax" class="form-label mb-1" style="font-size: 12px;">Fax</label>
-                <input type="text" id="fax" name="fax" class="form-control form-control-sm" />
-            </div>
-                                 
-            <div class="col-lg-1 col-md-2">
-                <label for="serverName" class="form-label mb-1" style="font-size: 12px;">ServerName <span class="text-danger">*</span></label>
-                <input type="text" id="serverName" name="serverName" class="form-control form-control-sm" />
-            </div>
-                                 
-            <div class="col-lg-2 col-md-2">
-                <label for="propertyType" class="form-label mb-1" style="font-size: 12px;">Proper Type <span class="text-danger">*</span></label>
-                <select id="propertyType" name="propertyType" class="form-control form-control-sm">
-                    <option value="">-- Select Property Type --</option>
-                    @foreach (var sg in ViewBag.PropertyTypeList)
-                    {
-                        <option value="@sg.ID" data-code="@sg.Code">@sg.Code - @sg.Description</option>
-                    }
-                </select>
-            </div>
-                                 
-            <div class="col-lg-2 col-md-2">
-                <label for="email" class="form-label mb-1" style="font-size: 12px;">Email</label>
-                <input type="text" id="email" name="email" class="form-control form-control-sm" />
-            </div>
-                                 
-            <div class="col-lg-2 col-md-2">
-                <label for="databaseName" class="form-label mb-1" style="font-size: 12px;">DatabaseName <span class="text-danger">*</span></label>
-                <input type="text" id="databaseName" name="databaseName" class="form-control form-control-sm" />
-            </div>
-                                 
-            <div class="col-lg-2 col-md-2">
-                <label for="propertyName" class="form-label mb-1" style="font-size: 12px;">Name <span class="text-danger">*</span></label>
-                <input type="text" id="propertyName" name="propertyName" class="form-control form-control-sm" />
-            </div>
-                                 
-            <div class="col-lg-1 col-md-2">
-                <label for="website" class="form-label mb-1" style="font-size: 12px;">Website</label>
-                <input type="text" id="website" name="website" class="form-control form-control-sm" />
-            </div>
-                                 
-            <div class="col-lg-1 col-md-2">
-                <label for="login" class="form-label mb-1" style="font-size: 12px;">Login <span class="text-danger">*</span></label>
-                <input type="text" id="login" name="login" class="form-control form-control-sm" />
-            </div>
-                                 
-            <div class="col-lg-1 col-md-2">
-                <label for="password" class="form-label mb-1" style="font-size: 12px;">Password <span class="text-danger">*</span></label>
-                <input type="password" id="password" name="password" class="form-control form-control-sm" />
-            </div>
-
-            <div class="col-lg-1 col-md-2">
-                <label for="telephone" class="form-label mb-1" style="font-size: 12px;">Telephone</label>
-                <input type="text" id="telephone" name="telephone" class="form-control form-control-sm" />
-            </div>
-                                 
-            <div class="col-lg-2 col-md-2">
-                <label for="address" class="form-label mb-1" style="font-size: 12px;">Address</label>
-                <input type="text" id="address" name="address" class="form-control form-control-sm" />
-            </div>
-                               
-            <div class="col-lg-1 col-md-2">
-                <div class="form-check">
-                    <input type="checkbox" id="chkshowInactive" name="inactive" class="form-check-input me-2" />
-                    <label for="chkshowInactive" class="form-check-label">Inactive</label>
-                </div>
-            </div>
-
-            <input type="hidden" id="id" name="id" value="0" />
-        </div>            
+        </div>
     </div>
 
+    <div class="row g-2 mb-3"> 
+    <div class="col-md-3">
+        <label for="address" class="form-label mb-1">Address</label>
+        <input type="text" id="address" name="address" class="form-control form-control-sm" placeholder="Enter address..." />
+    </div>
+
+    <div class="col-md-3">
+        <label for="email" class="form-label mb-1">Email</label>
+        <input type="text" id="email" name="email" class="form-control form-control-sm" placeholder="Enter email..." />
+    </div>
+
+    <div class="col-md-2">
+        <label for="website" class="form-label mb-1">Website</label>
+        <input type="text" id="website" name="website" class="form-control form-control-sm" placeholder="Enter website..." />
+    </div>
+    
+    <div class="col-md-2">
+        <label for="telephone" class="form-label mb-1">Telephone</label>
+        <input type="text" id="telephone" name="telephone" class="form-control form-control-sm" placeholder="Enter telephone..." />
+    </div>
+
+    <div class="col-md-2">
+        <label for="fax" class="form-label mb-1">Fax</label>
+        <input type="text" id="fax" name="fax" class="form-control form-control-sm" placeholder="Enter fax..." />
+    </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-md-3">
+            <label for="serverName" class="form-label mb-1 fw-bold">Server Name <span class="text-danger">*</span></label>
+            <input type="text" id="serverName" name="serverName" class="form-control form-control-sm" placeholder="Enter server name..."  required />
+            <div class="invalid-feedback">Server Name is required.</div>
+        </div>
+        <div class="col-md-3">
+            <label for="databaseName" class="form-label mb-1 fw-bold">Database Name <span class="text-danger">*</span></label>
+            <input type="text" id="databaseName" name="databaseName" class="form-control form-control-sm" placeholder="Enter database name..." required />
+            <div class="invalid-feedback">Database Name is required.</div>
+        </div>
+        <div class="col-md-3">
+            <label for="login" class="form-label mb-1 fw-bold">Login User <span class="text-danger">*</span></label>
+            <input type="text" id="login" name="login" class="form-control form-control-sm" placeholder="Enter username..." required />
+            <div class="invalid-feedback">Login User is required.</div>
+        </div>
+        <div class="col-md-3">
+            <label for="password" class="form-label mb-1 fw-bold">Password <span class="text-danger">*</span></label>
+            <input type="password" id="password" name="password" class="form-control form-control-sm" placeholder="Enter password..." required />
+            <div class="invalid-feedback">Password is required.</div>
+        </div>
+    </div>
+
+    <input type="hidden" id="id" name="id" value="0" />
+</div>
     <div class="mt-2">
         <button id="btnNew" class="mui-button mui-button-new"><i class="fa-solid fa-plus"></i> New</button>
         <button id="btnUpdate" class="mui-button mui-button-edit"><i class="fa-solid fa-pen"></i> Edit</button>
@@ -125,7 +149,7 @@
     var selectedRowData = null;
 
     $(document).ready(function () {
-        $("input").on("input change", function () {
+        $("#formContainer").on("input change", "input, select", function () {
             if ($(this).hasClass("is-invalid")) {
                 $(this).removeClass("is-invalid");
             }
@@ -136,12 +160,12 @@
 
     function lockForm() {
         $("#formContainer").addClass("form-locked").removeClass("form-unlocked");
-        $("#code, #description, #sequence").prop("disabled", true);
+        $("#formContainer").find("input, select, textarea").prop("disabled", true);
     }
 
     function unlockForm() {
         $("#formContainer").removeClass("form-locked").addClass("form-unlocked");
-        $("#code, #description, #sequence").prop("disabled", false);
+        $("#formContainer").find("input, select, textarea").prop("disabled", false);
     }
 
     function editMember(data) {
@@ -164,7 +188,7 @@
         }
     }
 
-    // hiển thị dữ liệu của các cột
+    // các hàm hỗ trợ grid 
     function tooltipCell(container, options) {
         $("<span>")
             .text(options.value)
@@ -177,34 +201,32 @@
         const dataSource = data || [];
         $("#gridContainerRateCode").dxDataGrid({
             dataSource: dataSource,
-            height: 350,
+            height: 300,
             width: "100%",
             columnAutoWidth: true,
             allowColumnResizing: true,
             selection: { mode: "single" },
             hoverStateEnabled: true,
             columns: [
-                { dataField: "propertyCode", caption: "Code", width: "7%", cellTemplate: tooltipCell },
+                { dataField: "propertyCode", caption: "Code", width: "5%", cellTemplate: tooltipCell },
                 { dataField: "propertyName", caption: "Property Name", width: "12%", cellTemplate: tooltipCell },
-                { dataField: "propertyType", caption: "Type", width: "8%", cellTemplate: tooltipCell },
+                { dataField: "propertyType", caption: "Type", width: "6%", cellTemplate: tooltipCell },
                 { dataField: "telephone", caption: "Tel", width: "7%", cellTemplate: tooltipCell },
-                { dataField: "fax", caption: "Fax", width: "5%" , cellTemplate: tooltipCell},
+                { dataField: "fax", caption: "Fax", width: "6%" , cellTemplate: tooltipCell},
                 { dataField: "email", caption: "Email", width: "10%", cellTemplate: tooltipCell },
                 { dataField: "website", caption: "Website", width: "8%", cellTemplate: tooltipCell },
-                { dataField: "address", caption: "Address", width: "15%", cellTemplate: tooltipCell },
+                { dataField: "address", caption: "Address", width: "17%", cellTemplate: tooltipCell },
                 { dataField: "serverName", caption: "Server", width: "7%", cellTemplate: tooltipCell },
                 { dataField: "databaseName", caption: "DB Name", width: "10%", cellTemplate: tooltipCell },
                 { dataField: "login", caption: "Login", width: "6%", cellTemplate: tooltipCell },
                 { dataField: "inactive", caption: "Inactive",width: "5%"},
             ],
             onContentReady: function () {
-                $('[data-bs-toggle="tooltip"]').tooltip({
-                    container: 'body'
-                });
+                $('[data-bs-toggle="tooltip"]').tooltip({ container: 'body' });
             },
             filterRow: { visible: true, applyFilter: "auto" },
             paging: { pageSize: 20 },
-            pager: { showPageSizeSelector: true, allowedPageSizes: [20, 50], showInfo: true },
+            pager: { showPageSizeSelector: true, visible:true, allowedPageSizes: [20, 50, 'all'], showInfo: true,showNavigationButtons: true },
             onSelectionChanged: function (e) {
                 selectedRowData = e.selectedRowsData.length > 0 ? e.selectedRowsData[0] : null;
             }
@@ -245,10 +267,12 @@
     }
 
     function clearForm() {
-        $("#id").val("0");
-        $("#code").val("");
-        $("#description").val("");
-        $("#sequence").val("");
+        const $form = $("#formContainer");
+        $form.find("input[type='text'], input[type='password'], input[type='email']").val("");
+        $form.find("input[type='checkbox']").prop("checked", false);
+        $form.find("select").prop("selectedIndex", 0);
+        $form.find(".is-invalid, .is-valid").removeClass("is-invalid is-valid");
+        $form.find("[data-bs-toggle='tooltip']").tooltip("dispose");
     }
 
     // --- NEW ---
@@ -279,24 +303,57 @@
 
     // --- SAVE ---
     $("#btnSave").click(function () {
-        $("#code").removeClass("is-invalid");
+        $(".is-invalid").removeClass("is-invalid");
+
         const id = parseInt($("#id").val()) || 0;
         let loginName = (localStorage.getItem("Loginname") || "").trim()
             .replace(/^"(.*)"$/, '$1');
 
         const model = {
             id: id,
-            code: $("#code").val().trim(),
-            description: $("#description").val().trim(),
-            sequence: ($("#sequence").val() || "").trim(),
+            propertyCode: $("#code").val().trim(),
+            propertyName: $("#propertyName").val().trim(),
+            propertyTypeID: $("#propertyType").val(), 
+            
+            address: $("#address").val().trim(),
+            email: $("#email").val().trim(),
+            website: $("#website").val().trim(),
+            telephone: $("#telephone").val().trim(),
+            fax: $("#fax").val().trim(),
+            
+            serverName: $("#serverName").val().trim(),
+            databaseName: $("#databaseName").val().trim(),
+            login: $("#login").val().trim(),
+            password: $("#password").val().trim(),
+            
+            inactive: $("#chkshowInactive").prop("checked"),
             createdBy: loginName,
             updatedBy: loginName,
         };
 
-        if (!model.code) {
-            $("#code").addClass("is-invalid");
-            $("#codeError").text("Code cannot be left blank.");
-            return;
+        let isValid = true;
+
+        const requiredFields = [
+            "#code", 
+            "#propertyName", 
+            "#propertyType", 
+            "#serverName", 
+            "#databaseName", 
+            "#login", 
+            "#password"
+        ];
+
+        requiredFields.forEach(function(fieldId) {
+            const val = $(fieldId).val();
+            if (!val || val.toString().trim() === "") {
+                $(fieldId).addClass("is-invalid");
+                isValid = false;
+            }
+        });
+
+        if (!isValid) {
+            showToast("Warning", "Please fill in all required fields (*).", false);
+            return; 
         }
 
         $.ajax({

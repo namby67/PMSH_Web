@@ -177,6 +177,7 @@
             dataSource: data,
             height: 500,
             width: "100%",
+            columnAutoWidth: false,// Tắt auto width để tuân thủ width % bên dưới
             allowColumnResizing: true,
             columnResizingMode: "widget",
             selection: { mode: "single" },
@@ -202,7 +203,7 @@
                 showNavigationButtons: true
             },
             scrolling: { mode: "standard", showScrollbar: "always" },
-              onSelectionChanged: function(e){
+            onSelectionChanged: function(e){
                   selectedRowData = e.selectedRowsData.length > 0 ? e.selectedRowsData[0] : null;
             }
         });

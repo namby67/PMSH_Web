@@ -973,12 +973,6 @@ namespace Administration.Controllers
             {
                 return Json(ex.Message);
             }
-            //  report.DataSource = dataTable;
-
-            // Không cần gán parameter
-            // report.RequestParameters = false;
-
-            // return PartialView("_ReportViewerPartial", report);
         }
         public ActionResult MemberTypeSearch()
         {
@@ -1575,9 +1569,8 @@ namespace Administration.Controllers
             try
             {
                 if (model == null)
-                {
                     return Json(new { success = false, message = "Invalid data." });
-                }
+                //if (model.Code)
 
                 if (model.ID == 0)
                 {
@@ -2037,8 +2030,6 @@ namespace Administration.Controllers
         {
             try
             {
-
-
                 DataTable dataTable = _iAdministrationService.Territory(code, name, inactive);
                 var result = (from d in dataTable.AsEnumerable()
                               select new
@@ -2312,7 +2303,7 @@ namespace Administration.Controllers
                 message = ex.Message;
                 return Json(new { success = false, message });
             }
-
+            
             return Json(new { success = true, message });
         }
         [HttpPost]
@@ -2520,7 +2511,7 @@ namespace Administration.Controllers
 
         }
         #endregion
-
+        //chua fix
         #region ItemCategory/MarketType
         [HttpGet]
         public IActionResult GetMarketType(string code, string name, int inactive)
@@ -2548,141 +2539,74 @@ namespace Administration.Controllers
             {
                 return Json(ex.Message);
             }
-            //  report.DataSource = dataTable;
-
-            // Không cần gán parameter
-            // report.RequestParameters = false;
-
-            // return PartialView("_ReportViewerPartial", report);
         }
         public IActionResult MarketType()
         {
             return PartialView("ItemCategory/MarketType");
         }
         [HttpPost]
-        public ActionResult InsertMarketType()
+        public IActionResult MarketTypeSave([FromBody] MarketTypeModel model)
         {
-            ProcessTransactions pt = new ProcessTransactions();
+            string message = "";
+
             try
             {
-                pt.OpenConnection();
-                pt.BeginTransaction();
-
-                MarketTypeModel member = new MarketTypeModel();
-
-                // Lấy dữ liệu từ form
-                member.Code = Request.Form["txtcode"].ToString();
-                member.Name = Request.Form["txtname"].ToString();
-                member.Description = Request.Form["txtdescription"].ToString();
-                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
-                                  && Request.Form["inactive"].ToString() == "on";
-                // Thông tin người dùng
-                member.CreatedBy = HttpContext.Session.GetString("LoginName") ?? "";
-                member.UpdatedBy = member.CreatedBy;
-                member.CreatedDate = DateTime.Now;
-                member.UpdatedDate = DateTime.Now;
-
-                // Gọi BO để lưu
-                long memberId = MarketTypeBO.Instance.Insert(member);
-
-                pt.CommitTransaction();
-
-                return Json(new { success = true, id = memberId });
-            }
-            catch (Exception ex)
-            {
-                pt.RollBack();
-                return Json(new { success = false, message = ex.Message });
-            }
-            finally
-            {
-                pt.CloseConnection();
-            }
-        }
-        [HttpPost]
-        public ActionResult UpdateMarketType()
-        {
-            ProcessTransactions pt = new ProcessTransactions();
-            try
-            {
-                pt.OpenConnection();
-                pt.BeginTransaction();
-
-                MarketTypeModel member = new MarketTypeModel();
-
-                // Lấy ID từ form (có khi edit)
-                member.ID = !string.IsNullOrEmpty(Request.Form["id"])
-                             ? int.Parse(Request.Form["id"])
-                             : 0;
-
-                // Lấy dữ liệu từ form
-                member.Code = Request.Form["txtcode"].ToString();
-                member.Name = Request.Form["txtname"].ToString();
-                member.Description = Request.Form["txtdescription"].ToString();
-                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
-                                  && Request.Form["inactive"].ToString() == "on";
-                string loginName = HttpContext.Session.GetString("LoginName") ?? "";
-
-                if (member.ID == 0) // Insert mới
+                if (model == null)
                 {
-                    member.CreatedBy = loginName;
-                    member.CreatedDate = DateTime.Now;
-                    member.UpdatedBy = loginName;
-                    member.UpdatedDate = DateTime.Now;
-
-                    MarketTypeBO.Instance.Insert(member);
+                    return Json(new { success = false, message = "Invalid data." });
                 }
-                else // Update
+
+                if (model.ID == 0)
                 {
-                    // Trước khi update, lấy lại bản ghi cũ từ DB để giữ CreatedBy, CreatedDate
-                    var oldData = MarketTypeBO.Instance.GetById(member.ID, pt.Connection, pt.Transaction);
+                    model.CreateDate = DateTime.Now;
+                    model.CreatedDate = DateTime.Now;
+                    model.UpdateDate = DateTime.Now;
+                    model.UpdatedDate = DateTime.Now;
+
+                    MarketTypeBO.Instance.Insert(model);
+                    message = "Insert successfully!";
+                }
+                else
+                {
+                    var oldData = (MarketTypeModel)MarketTypeBO.Instance.FindByPrimaryKey(model.ID);
 
                     if (oldData != null)
                     {
-                        member.CreatedBy = oldData.CreatedBy;
-                        member.CreatedDate = oldData.CreatedDate;
+                        model.UserInsertID = oldData.UserInsertID;
+                        model.CreatedBy = oldData.CreatedBy;
+                        model.CreateDate = oldData.CreatedDate;
+                        model.CreatedDate = oldData.CreatedDate;
                     }
 
-                    member.UpdatedBy = loginName;
-                    member.UpdatedDate = DateTime.Now;
+                    model.UpdateDate = DateTime.Now;
+                    model.UpdatedDate = DateTime.Now;
 
-                    MarketTypeBO.Instance.Update(member);
+                    MarketTypeBO.Instance.Update(model);
+                    message = "Update successfully!";
                 }
 
-                pt.CommitTransaction();
-                return Json(new { success = true });
             }
             catch (Exception ex)
             {
-                pt.RollBack();
-                return Json(new { success = false, message = ex.Message });
+                message = ex.Message;
+                return Json(new { success = false, message });
             }
-            finally
-            {
-                pt.CloseConnection();
-            }
+
+            return Json(new { success = true, message });
         }
         [HttpPost]
-        public ActionResult DeleteMarketType()
+        public IActionResult DeleteMarketType(int id)
         {
             try
             {
-
-                MarketTypeModel memberModel = (MarketTypeModel)MarketTypeBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["id"].ToString()));
-                if (memberModel == null || memberModel.ID == 0)
-                {
-                    return Json(new { code = 1, msg = "Can not find Lost And Found" });
-
-                }
-                MarketTypeBO.Instance.Delete(int.Parse(Request.Form["id"].ToString()));
-                return Json(new { code = 0, msg = "Delete Lost And Found was successfully" });
-
+                MarketTypeBO.Instance.Delete(id);
             }
             catch (Exception ex)
             {
-                return Json(new { code = 1, msg = ex.Message });
+                return Json(new { success = false, ex.Message });
             }
 
+            return Json(new { success = true });
         }
         #endregion
 
@@ -2692,8 +2616,6 @@ namespace Administration.Controllers
         {
             try
             {
-
-
                 DataTable dataTable = _iAdministrationService.PickupDropPlace(code, name, inactive);
                 var result = (from d in dataTable.AsEnumerable()
                               select new
@@ -2715,12 +2637,6 @@ namespace Administration.Controllers
             {
                 return Json(ex.Message);
             }
-            //  report.DataSource = dataTable;
-
-            // Không cần gán parameter
-            // report.RequestParameters = false;
-
-            // return PartialView("_ReportViewerPartial", report);
         }
 
         public IActionResult PickupDropPlace()
@@ -2728,129 +2644,68 @@ namespace Administration.Controllers
             return PartialView("ItemCategory/PickupDropPlace");
         }
         [HttpPost]
-        public ActionResult InsertPickupDropPlace()
+        public IActionResult PickupDropPlaceSave([FromBody] PickupDropPlaceModel model)
         {
-            ProcessTransactions pt = new ProcessTransactions();
+            string message = "";
+
             try
             {
-                pt.OpenConnection();
-                pt.BeginTransaction();
-
-                PickupDropPlaceModel member = new PickupDropPlaceModel();
-
-                // Lấy dữ liệu từ form
-                member.Code = Request.Form["txtcode"].ToString();
-                member.Name = Request.Form["txtname"].ToString();
-                member.Description = Request.Form["txtdescription"].ToString();
-                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
-                                  && Request.Form["inactive"].ToString() == "on";
-                // Thông tin người dùng
-                member.CreatedBy = HttpContext.Session.GetString("LoginName") ?? "";
-                member.UpdatedBy = member.CreatedBy;
-                member.CreatedDate = DateTime.Now;
-                member.UpdatedDate = DateTime.Now;
-
-                // Gọi BO để lưu
-                long memberId = PickupDropPlaceBO.Instance.Insert(member);
-
-                pt.CommitTransaction();
-
-                return Json(new { success = true, id = memberId });
-            }
-            catch (Exception ex)
-            {
-                pt.RollBack();
-                return Json(new { success = false, message = ex.Message });
-            }
-            finally
-            {
-                pt.CloseConnection();
-            }
-        }
-        [HttpPost]
-        public ActionResult UpdatePickupDropPlace()
-        {
-            ProcessTransactions pt = new ProcessTransactions();
-            try
-            {
-                pt.OpenConnection();
-                pt.BeginTransaction();
-
-                PickupDropPlaceModel member = new PickupDropPlaceModel();
-
-                // Lấy ID từ form (có khi edit)
-                member.ID = !string.IsNullOrEmpty(Request.Form["id"])
-                             ? int.Parse(Request.Form["id"])
-                             : 0;
-
-                // Lấy dữ liệu từ form
-                member.Code = Request.Form["txtcode"].ToString();
-                member.Name = Request.Form["txtname"].ToString();
-                member.Description = Request.Form["txtdescription"].ToString();
-                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
-                                  && Request.Form["inactive"].ToString() == "on";
-                string loginName = HttpContext.Session.GetString("LoginName") ?? "";
-
-                if (member.ID == 0) // Insert mới
+                if (model == null)
                 {
-                    member.CreatedBy = loginName;
-                    member.CreatedDate = DateTime.Now;
-                    member.UpdatedBy = loginName;
-                    member.UpdatedDate = DateTime.Now;
-
-                    PickupDropPlaceBO.Instance.Insert(member);
+                    return Json(new { success = false, message = "Invalid data." });
                 }
-                else // Update
+
+                if (model.ID == 0)
                 {
-                    // Trước khi update, lấy lại bản ghi cũ từ DB để giữ CreatedBy, CreatedDate
-                    var oldData = PickupDropPlaceBO.Instance.GetById(member.ID, pt.Connection, pt.Transaction);
+                    model.CreateDate = DateTime.Now;
+                    model.CreatedDate = DateTime.Now;
+                    model.UpdateDate = DateTime.Now;
+                    model.UpdatedDate = DateTime.Now;
+
+                    PickupDropPlaceBO.Instance.Insert(model);
+                    message = "Insert successfully!";
+                }
+                else
+                {
+                    var oldData = (PickupDropPlaceModel)PickupDropPlaceBO.Instance.FindByPrimaryKey(model.ID);
 
                     if (oldData != null)
                     {
-                        member.CreatedBy = oldData.CreatedBy;
-                        member.CreatedDate = oldData.CreatedDate;
+                        model.UserInsertID = oldData.UserInsertID;
+                        model.CreatedBy = oldData.CreatedBy;
+                        model.CreateDate = oldData.CreatedDate;
+                        model.CreatedDate = oldData.CreatedDate;
                     }
 
-                    member.UpdatedBy = loginName;
-                    member.UpdatedDate = DateTime.Now;
+                    model.UpdateDate = DateTime.Now;
+                    model.UpdatedDate = DateTime.Now;
 
-                    PickupDropPlaceBO.Instance.Update(member);
+                    PickupDropPlaceBO.Instance.Update(model);
+                    message = "Update successfully!";
                 }
 
-                pt.CommitTransaction();
-                return Json(new { success = true });
             }
             catch (Exception ex)
             {
-                pt.RollBack();
-                return Json(new { success = false, message = ex.Message });
+                message = ex.Message;
+                return Json(new { success = false, message });
             }
-            finally
-            {
-                pt.CloseConnection();
-            }
+
+            return Json(new { success = true, message });
         }
         [HttpPost]
-        public ActionResult DeletePickupDropPlace()
+        public IActionResult DeletePickupDropPlace(int id)
         {
             try
             {
-
-                PickupDropPlaceModel memberModel = (PickupDropPlaceModel)PickupDropPlaceBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["id"].ToString()));
-                if (memberModel == null || memberModel.ID == 0)
-                {
-                    return Json(new { code = 1, msg = "Can not find Lost And Found" });
-
-                }
-                PickupDropPlaceBO.Instance.Delete(int.Parse(Request.Form["id"].ToString()));
-                return Json(new { code = 0, msg = "Delete Lost And Found was successfully" });
-
+                PickupDropPlaceBO.Instance.Delete(id);
             }
             catch (Exception ex)
             {
-                return Json(new { code = 1, msg = ex.Message });
+                return Json(new { success = false, ex.Message });
             }
 
+            return Json(new { success = true });
         }
         #endregion
 
@@ -2881,145 +2736,77 @@ namespace Administration.Controllers
             {
                 return Json(ex.Message);
             }
-            //  report.DataSource = dataTable;
-
-            // Không cần gán parameter
-            // report.RequestParameters = false;
-
-            // return PartialView("_ReportViewerPartial", report);
         }
-
         public IActionResult TransportType()
         {
             return PartialView("ItemCategory/TransportType");
         }
         [HttpPost]
-        public ActionResult InsertTransportType()
+        public IActionResult TransportTypeSave([FromBody] TransportTypeModel model)
         {
-            ProcessTransactions pt = new ProcessTransactions();
+            string message = "";
+
             try
             {
-                pt.OpenConnection();
-                pt.BeginTransaction();
-
-                TransportTypeModel member = new TransportTypeModel();
-
-                // Lấy dữ liệu từ form
-                member.Code = Request.Form["txtcode"].ToString();
-                member.Name = Request.Form["txtname"].ToString();
-                member.Description = Request.Form["txtdescription"].ToString();
-                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
-                                  && Request.Form["inactive"].ToString() == "on";
-                // Thông tin người dùng
-                member.CreatedBy = HttpContext.Session.GetString("LoginName") ?? "";
-                member.UpdatedBy = member.CreatedBy;
-                member.CreatedDate = DateTime.Now;
-                member.UpdatedDate = DateTime.Now;
-
-                // Gọi BO để lưu
-                long memberId = TransportTypeBO.Instance.Insert(member);
-
-                pt.CommitTransaction();
-
-                return Json(new { success = true, id = memberId });
-            }
-            catch (Exception ex)
-            {
-                pt.RollBack();
-                return Json(new { success = false, message = ex.Message });
-            }
-            finally
-            {
-                pt.CloseConnection();
-            }
-        }
-        [HttpPost]
-        public ActionResult UpdateTransportType()
-        {
-            ProcessTransactions pt = new ProcessTransactions();
-            try
-            {
-                pt.OpenConnection();
-                pt.BeginTransaction();
-
-                TransportTypeModel member = new TransportTypeModel();
-
-                // Lấy ID từ form (có khi edit)
-                member.ID = !string.IsNullOrEmpty(Request.Form["id"])
-                             ? int.Parse(Request.Form["id"])
-                             : 0;
-
-                // Lấy dữ liệu từ form
-                member.Code = Request.Form["txtcode"].ToString();
-                member.Name = Request.Form["txtname"].ToString();
-                member.Description = Request.Form["txtdescription"].ToString();
-                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
-                                  && Request.Form["inactive"].ToString() == "on";
-                string loginName = HttpContext.Session.GetString("LoginName") ?? "";
-
-                if (member.ID == 0) // Insert mới
+                if (model == null)
                 {
-                    member.CreatedBy = loginName;
-                    member.CreatedDate = DateTime.Now;
-                    member.UpdatedBy = loginName;
-                    member.UpdatedDate = DateTime.Now;
-
-                    TransportTypeBO.Instance.Insert(member);
+                    return Json(new { success = false, message = "Invalid data." });
                 }
-                else // Update
+
+                if (model.ID == 0)
                 {
-                    // Trước khi update, lấy lại bản ghi cũ từ DB để giữ CreatedBy, CreatedDate
-                    var oldData = TransportTypeBO.Instance.GetById(member.ID, pt.Connection, pt.Transaction);
+                    model.CreateDate = DateTime.Now;
+                    model.CreatedDate = DateTime.Now;
+                    model.UpdateDate = DateTime.Now;
+                    model.UpdatedDate = DateTime.Now;
+
+                    TransportTypeBO.Instance.Insert(model);
+                    message = "Insert successfully!";
+                }
+                else
+                {
+                    var oldData = (TransportTypeModel)TransportTypeBO.Instance.FindByPrimaryKey(model.ID);
 
                     if (oldData != null)
                     {
-                        member.CreatedBy = oldData.CreatedBy;
-                        member.CreatedDate = oldData.CreatedDate;
+                        model.UserInsertID = oldData.UserInsertID;
+                        model.CreatedBy = oldData.CreatedBy;
+                        model.CreateDate = oldData.CreatedDate;
+                        model.CreatedDate = oldData.CreatedDate;
                     }
 
-                    member.UpdatedBy = loginName;
-                    member.UpdatedDate = DateTime.Now;
+                    model.UpdateDate = DateTime.Now;
+                    model.UpdatedDate = DateTime.Now;
 
-                    TransportTypeBO.Instance.Update(member);
+                    TransportTypeBO.Instance.Update(model);
+                    message = "Update successfully!";
                 }
 
-                pt.CommitTransaction();
-                return Json(new { success = true });
             }
             catch (Exception ex)
             {
-                pt.RollBack();
-                return Json(new { success = false, message = ex.Message });
+                message = ex.Message;
+                return Json(new { success = false, message });
             }
-            finally
-            {
-                pt.CloseConnection();
-            }
+
+            return Json(new { success = true, message });
         }
         [HttpPost]
-        public ActionResult DeleteTransportType()
+        public IActionResult DeleteTransportType(int id)
         {
             try
             {
-
-                TransportTypeModel memberModel = (TransportTypeModel)TransportTypeBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["id"].ToString()));
-                if (memberModel == null || memberModel.ID == 0)
-                {
-                    return Json(new { code = 1, msg = "Can not find Lost And Found" });
-
-                }
-                TransportTypeBO.Instance.Delete(int.Parse(Request.Form["id"].ToString()));
-                return Json(new { code = 0, msg = "Delete Lost And Found was successfully" });
-
+                TransportTypeBO.Instance.Delete(id);
             }
             catch (Exception ex)
             {
-                return Json(new { code = 1, msg = ex.Message });
+                return Json(new { success = false, ex.Message });
             }
 
+            return Json(new { success = true });
         }
         #endregion
-
+        //chua fix
         #region ItemCategory/ReservationType
         [HttpGet]
         public IActionResult GetReservationType()
@@ -3028,7 +2815,6 @@ namespace Administration.Controllers
             {
                 DataTable dataTable = _iAdministrationService.ReservationType();
                 var colNames = string.Join(", ", dataTable.Columns.Cast<DataColumn>().Select(c => c.ColumnName));
-                Console.WriteLine("Columns in ReservationType: " + colNames);
                 var result = (from d in dataTable.AsEnumerable()
                               select new
                               {
@@ -3220,8 +3006,6 @@ namespace Administration.Controllers
         {
             try
             {
-
-
                 DataTable dataTable = _iAdministrationService.Reason(code, name, inactive);
                 var result = (from d in dataTable.AsEnumerable()
                               select new
@@ -3243,141 +3027,74 @@ namespace Administration.Controllers
             {
                 return Json(ex.Message);
             }
-            //  report.DataSource = dataTable;
-
-            // Không cần gán parameter
-            // report.RequestParameters = false;
-
-            // return PartialView("_ReportViewerPartial", report);
         }
         public IActionResult Reason()
         {
             return PartialView("ItemCategory/Reason");
         }
         [HttpPost]
-        public ActionResult InsertReason()
+        public IActionResult ReasonSave([FromBody] ReasonModel model)
         {
-            ProcessTransactions pt = new ProcessTransactions();
+            string message = "";
+
             try
             {
-                pt.OpenConnection();
-                pt.BeginTransaction();
-
-                ReasonModel member = new ReasonModel();
-
-                // Lấy dữ liệu từ form
-                member.Code = Request.Form["txtcode"].ToString();
-                member.Name = Request.Form["txtname"].ToString();
-                member.Description = Request.Form["txtdescription"].ToString();
-                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
-                                  && Request.Form["inactive"].ToString() == "on";
-                // Thông tin người dùng
-                member.CreatedBy = HttpContext.Session.GetString("LoginName") ?? "";
-                member.UpdatedBy = member.CreatedBy;
-                member.CreatedDate = DateTime.Now;
-                member.UpdatedDate = DateTime.Now;
-
-                // Gọi BO để lưu
-                long memberId = ReasonBO.Instance.Insert(member);
-
-                pt.CommitTransaction();
-
-                return Json(new { success = true, id = memberId });
-            }
-            catch (Exception ex)
-            {
-                pt.RollBack();
-                return Json(new { success = false, message = ex.Message });
-            }
-            finally
-            {
-                pt.CloseConnection();
-            }
-        }
-        [HttpPost]
-        public ActionResult UpdateReason()
-        {
-            ProcessTransactions pt = new ProcessTransactions();
-            try
-            {
-                pt.OpenConnection();
-                pt.BeginTransaction();
-
-                ReasonModel member = new ReasonModel();
-
-                // Lấy ID từ form (có khi edit)
-                member.ID = !string.IsNullOrEmpty(Request.Form["id"])
-                             ? int.Parse(Request.Form["id"])
-                             : 0;
-
-                // Lấy dữ liệu từ form
-                member.Code = Request.Form["txtcode"].ToString();
-                member.Name = Request.Form["txtname"].ToString();
-                member.Description = Request.Form["txtdescription"].ToString();
-                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
-                                  && Request.Form["inactive"].ToString() == "on";
-                string loginName = HttpContext.Session.GetString("LoginName") ?? "";
-
-                if (member.ID == 0) // Insert mới
+                if (model == null)
                 {
-                    member.CreatedBy = loginName;
-                    member.CreatedDate = DateTime.Now;
-                    member.UpdatedBy = loginName;
-                    member.UpdatedDate = DateTime.Now;
-
-                    ReasonBO.Instance.Insert(member);
+                    return Json(new { success = false, message = "Invalid data." });
                 }
-                else // Update
+
+                if (model.ID == 0)
                 {
-                    // Trước khi update, lấy lại bản ghi cũ từ DB để giữ CreatedBy, CreatedDate
-                    var oldData = ReasonBO.Instance.GetById(member.ID, pt.Connection, pt.Transaction);
+                    model.CreateDate = DateTime.Now;
+                    model.CreatedDate = DateTime.Now;
+                    model.UpdateDate = DateTime.Now;
+                    model.UpdatedDate = DateTime.Now;
+
+                    ReasonBO.Instance.Insert(model);
+                    message = "Insert successfully!";
+                }
+                else
+                {
+                    var oldData = (ReasonModel)ReasonBO.Instance.FindByPrimaryKey(model.ID);
 
                     if (oldData != null)
                     {
-                        member.CreatedBy = oldData.CreatedBy;
-                        member.CreatedDate = oldData.CreatedDate;
+                        model.UserInsertID = oldData.UserInsertID;
+                        model.CreatedBy = oldData.CreatedBy;
+                        model.CreateDate = oldData.CreatedDate;
+                        model.CreatedDate = oldData.CreatedDate;
                     }
 
-                    member.UpdatedBy = loginName;
-                    member.UpdatedDate = DateTime.Now;
+                    model.UpdateDate = DateTime.Now;
+                    model.UpdatedDate = DateTime.Now;
 
-                    ReasonBO.Instance.Update(member);
+                    ReasonBO.Instance.Update(model);
+                    message = "Update successfully!";
                 }
 
-                pt.CommitTransaction();
-                return Json(new { success = true });
             }
             catch (Exception ex)
             {
-                pt.RollBack();
-                return Json(new { success = false, message = ex.Message });
+                message = ex.Message;
+                return Json(new { success = false, message });
             }
-            finally
-            {
-                pt.CloseConnection();
-            }
+
+            return Json(new { success = true, message });
         }
         [HttpPost]
-        public ActionResult DeleteReason()
+        public IActionResult DeleteReason(int id)
         {
             try
             {
-
-                ReasonModel memberModel = (ReasonModel)ReasonBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["id"].ToString()));
-                if (memberModel == null || memberModel.ID == 0)
-                {
-                    return Json(new { code = 1, msg = "Can not find Lost And Found" });
-
-                }
-                ReasonBO.Instance.Delete(int.Parse(Request.Form["id"].ToString()));
-                return Json(new { code = 0, msg = "Delete Lost And Found was successfully" });
-
+                ReasonBO.Instance.Delete(id);
             }
             catch (Exception ex)
             {
-                return Json(new { code = 1, msg = ex.Message });
+                return Json(new { success = false, ex.Message });
             }
 
+            return Json(new { success = true });
         }
         #endregion
 
@@ -3387,8 +3104,6 @@ namespace Administration.Controllers
         {
             try
             {
-
-
                 DataTable dataTable = _iAdministrationService.Origin(code, name, inactive);
                 var result = (from d in dataTable.AsEnumerable()
                               select new
@@ -3410,141 +3125,74 @@ namespace Administration.Controllers
             {
                 return Json(ex.Message);
             }
-            //  report.DataSource = dataTable;
-
-            // Không cần gán parameter
-            // report.RequestParameters = false;
-
-            // return PartialView("_ReportViewerPartial", report);
         }
         public IActionResult Origin()
         {
             return PartialView("ItemCategory/Origin");
         }
         [HttpPost]
-        public ActionResult InsertOrigin()
+        public IActionResult OriginSave([FromBody] OriginModel model)
         {
-            ProcessTransactions pt = new ProcessTransactions();
+            string message = "";
+
             try
             {
-                pt.OpenConnection();
-                pt.BeginTransaction();
-
-                OriginModel member = new OriginModel();
-
-                // Lấy dữ liệu từ form
-                member.Code = Request.Form["txtcode"].ToString();
-                member.Name = Request.Form["txtname"].ToString();
-                member.Description = Request.Form["txtdescription"].ToString();
-                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
-                                  && Request.Form["inactive"].ToString() == "on";
-                // Thông tin người dùng
-                member.CreatedBy = HttpContext.Session.GetString("LoginName") ?? "";
-                member.UpdatedBy = member.CreatedBy;
-                member.CreatedDate = DateTime.Now;
-                member.UpdatedDate = DateTime.Now;
-
-                // Gọi BO để lưu
-                long memberId = OriginBO.Instance.Insert(member);
-
-                pt.CommitTransaction();
-
-                return Json(new { success = true, id = memberId });
-            }
-            catch (Exception ex)
-            {
-                pt.RollBack();
-                return Json(new { success = false, message = ex.Message });
-            }
-            finally
-            {
-                pt.CloseConnection();
-            }
-        }
-        [HttpPost]
-        public ActionResult UpdateOrigin()
-        {
-            ProcessTransactions pt = new ProcessTransactions();
-            try
-            {
-                pt.OpenConnection();
-                pt.BeginTransaction();
-
-                OriginModel member = new OriginModel();
-
-                // Lấy ID từ form (có khi edit)
-                member.ID = !string.IsNullOrEmpty(Request.Form["id"])
-                             ? int.Parse(Request.Form["id"])
-                             : 0;
-
-                // Lấy dữ liệu từ form
-                member.Code = Request.Form["txtcode"].ToString();
-                member.Name = Request.Form["txtname"].ToString();
-                member.Description = Request.Form["txtdescription"].ToString();
-                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
-                                  && Request.Form["inactive"].ToString() == "on";
-                string loginName = HttpContext.Session.GetString("LoginName") ?? "";
-
-                if (member.ID == 0) // Insert mới
+                if (model == null)
                 {
-                    member.CreatedBy = loginName;
-                    member.CreatedDate = DateTime.Now;
-                    member.UpdatedBy = loginName;
-                    member.UpdatedDate = DateTime.Now;
-
-                    OriginBO.Instance.Insert(member);
+                    return Json(new { success = false, message = "Invalid data." });
                 }
-                else // Update
+
+                if (model.ID == 0)
                 {
-                    // Trước khi update, lấy lại bản ghi cũ từ DB để giữ CreatedBy, CreatedDate
-                    var oldData = OriginBO.Instance.GetById(member.ID, pt.Connection, pt.Transaction);
+                    model.CreateDate = DateTime.Now;
+                    model.CreatedDate = DateTime.Now;
+                    model.UpdateDate = DateTime.Now;
+                    model.UpdatedDate = DateTime.Now;
+
+                    OriginBO.Instance.Insert(model);
+                    message = "Insert successfully!";
+                }
+                else
+                {
+                    var oldData = (OriginModel)OriginBO.Instance.FindByPrimaryKey(model.ID);
 
                     if (oldData != null)
                     {
-                        member.CreatedBy = oldData.CreatedBy;
-                        member.CreatedDate = oldData.CreatedDate;
+                        model.UserInsertID = oldData.UserInsertID;
+                        model.CreatedBy = oldData.CreatedBy;
+                        model.CreateDate = oldData.CreatedDate;
+                        model.CreatedDate = oldData.CreatedDate;
                     }
 
-                    member.UpdatedBy = loginName;
-                    member.UpdatedDate = DateTime.Now;
+                    model.UpdateDate = DateTime.Now;
+                    model.UpdatedDate = DateTime.Now;
 
-                    OriginBO.Instance.Update(member);
+                    OriginBO.Instance.Update(model);
+                    message = "Update successfully!";
                 }
 
-                pt.CommitTransaction();
-                return Json(new { success = true });
             }
             catch (Exception ex)
             {
-                pt.RollBack();
-                return Json(new { success = false, message = ex.Message });
+                message = ex.Message;
+                return Json(new { success = false, message });
             }
-            finally
-            {
-                pt.CloseConnection();
-            }
+
+            return Json(new { success = true, message });
         }
         [HttpPost]
-        public ActionResult DeleteOrigin()
+        public IActionResult DeleteOrigin(int id)
         {
             try
             {
-
-                OriginModel memberModel = (OriginModel)OriginBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["id"].ToString()));
-                if (memberModel == null || memberModel.ID == 0)
-                {
-                    return Json(new { code = 1, msg = "Can not find Lost And Found" });
-
-                }
-                OriginBO.Instance.Delete(int.Parse(Request.Form["id"].ToString()));
-                return Json(new { code = 0, msg = "Delete Lost And Found was successfully" });
-
+                OriginBO.Instance.Delete(id);
             }
             catch (Exception ex)
             {
-                return Json(new { code = 1, msg = ex.Message });
+                return Json(new { success = false, ex.Message });
             }
 
+            return Json(new { success = true });
         }
         #endregion
 
@@ -3554,8 +3202,6 @@ namespace Administration.Controllers
         {
             try
             {
-
-
                 DataTable dataTable = _iAdministrationService.Source(code, name, inactive);
                 var result = (from d in dataTable.AsEnumerable()
                               select new
@@ -3577,12 +3223,6 @@ namespace Administration.Controllers
             {
                 return Json(ex.Message);
             }
-            //  report.DataSource = dataTable;
-
-            // Không cần gán parameter
-            // report.RequestParameters = false;
-
-            // return PartialView("_ReportViewerPartial", report);
         }
 
         public IActionResult Source()
@@ -3591,130 +3231,68 @@ namespace Administration.Controllers
         }
 
         [HttpPost]
-        public ActionResult InsertSource()
+        public IActionResult SourceSave([FromBody] SourceModel model)
         {
-            ProcessTransactions pt = new ProcessTransactions();
+            string message = "";
+
             try
             {
-                pt.OpenConnection();
-                pt.BeginTransaction();
-
-                SourceModel member = new SourceModel();
-
-                // Lấy dữ liệu từ form
-                member.Code = Request.Form["txtcode"].ToString();
-                member.Name = Request.Form["txtname"].ToString();
-                member.Description = Request.Form["txtdescription"].ToString();
-                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
-                                  && Request.Form["inactive"].ToString() == "on";
-                // Thông tin người dùng
-                member.CreatedBy = HttpContext.Session.GetString("LoginName") ?? "";
-                member.UpdatedBy = member.CreatedBy;
-                member.CreatedDate = DateTime.Now;
-                member.UpdatedDate = DateTime.Now;
-
-                // Gọi BO để lưu
-                long memberId = SourceBO.Instance.Insert(member);
-
-                pt.CommitTransaction();
-
-                return Json(new { success = true, id = memberId });
-            }
-            catch (Exception ex)
-            {
-                pt.RollBack();
-                return Json(new { success = false, message = ex.Message });
-            }
-            finally
-            {
-                pt.CloseConnection();
-            }
-        }
-        [HttpPost]
-        public ActionResult UpdateSource()
-        {
-            ProcessTransactions pt = new ProcessTransactions();
-            try
-            {
-                pt.OpenConnection();
-                pt.BeginTransaction();
-
-                SourceModel member = new SourceModel();
-
-                // Lấy ID từ form (có khi edit)
-                member.ID = !string.IsNullOrEmpty(Request.Form["id"])
-                             ? int.Parse(Request.Form["id"])
-                             : 0;
-
-                // Lấy dữ liệu từ form
-                member.Code = Request.Form["txtcode"].ToString();
-                member.Name = Request.Form["txtname"].ToString();
-                member.Description = Request.Form["txtdescription"].ToString();
-                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
-                                  && Request.Form["inactive"].ToString() == "on";
-                string loginName = HttpContext.Session.GetString("LoginName") ?? "";
-
-                if (member.ID == 0) // Insert mới
+                if (model == null)
                 {
-                    member.CreatedBy = loginName;
-                    member.CreatedDate = DateTime.Now;
-                    member.UpdatedBy = loginName;
-                    member.UpdatedDate = DateTime.Now;
-
-                    SourceBO.Instance.Insert(member);
+                    return Json(new { success = false, message = "Invalid data." });
                 }
-                else // Update
+
+                if (model.ID == 0)
                 {
-                    // Trước khi update, lấy lại bản ghi cũ từ DB để giữ CreatedBy, CreatedDate
-                    var oldData = SourceBO.Instance.GetById(member.ID, pt.Connection, pt.Transaction);
+                    model.CreateDate = DateTime.Now;
+                    model.CreatedDate = DateTime.Now;
+                    model.UpdateDate = DateTime.Now;
+                    model.UpdatedDate = DateTime.Now;
+
+                    SourceBO.Instance.Insert(model);
+                    message = "Insert successfully!";
+                }
+                else
+                {
+                    var oldData = (SourceModel)SourceBO.Instance.FindByPrimaryKey(model.ID);
 
                     if (oldData != null)
                     {
-                        member.CreatedBy = oldData.CreatedBy;
-                        member.CreatedDate = oldData.CreatedDate;
+                        model.UserInsertID = oldData.UserInsertID;
+                        model.CreatedBy = oldData.CreatedBy;
+                        model.CreateDate = oldData.CreatedDate;
+                        model.CreatedDate = oldData.CreatedDate;
                     }
 
-                    member.UpdatedBy = loginName;
-                    member.UpdatedDate = DateTime.Now;
+                    model.UpdateDate = DateTime.Now;
+                    model.UpdatedDate = DateTime.Now;
 
-                    SourceBO.Instance.Update(member);
+                    SourceBO.Instance.Update(model);
+                    message = "Update successfully!";
                 }
 
-                pt.CommitTransaction();
-                return Json(new { success = true });
             }
             catch (Exception ex)
             {
-                pt.RollBack();
-                return Json(new { success = false, message = ex.Message });
+                message = ex.Message;
+                return Json(new { success = false, message });
             }
-            finally
-            {
-                pt.CloseConnection();
-            }
+
+            return Json(new { success = true, message });
         }
         [HttpPost]
-        public ActionResult DeleteSource()
+        public IActionResult DeleteSource(int id)
         {
             try
             {
-
-                SourceModel memberModel = (SourceModel)SourceBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["id"].ToString()));
-                if (memberModel == null || memberModel.ID == 0)
-                {
-                    return Json(new { code = 1, msg = "Can not find Lost And Found" });
-
-                }
-                SourceBO.Instance.Delete(int.Parse(Request.Form["id"].ToString()));
-                return Json(new { code = 0, msg = "Delete Lost And Found was successfully" });
-
+                SourceBO.Instance.Delete(id);
             }
             catch (Exception ex)
             {
-                return Json(new { code = 1, msg = ex.Message });
+                return Json(new { success = false, ex.Message });
             }
 
-
+            return Json(new { success = true });
         }
         #endregion
 
@@ -4044,12 +3622,10 @@ namespace Administration.Controllers
                 return Json(ex.Message);
             }
         }
-
         public IActionResult Season()
         {
             return PartialView("ItemCategory/Season");
         }
-
         [HttpPost]
         public IActionResult SeasonSave([FromBody] SeasonModel model)
         {
@@ -4122,8 +3698,6 @@ namespace Administration.Controllers
         {
             try
             {
-
-
                 DataTable dataTable = _iAdministrationService.Zone(code, name, inactive);
                 var result = (from d in dataTable.AsEnumerable()
                               select new
@@ -4151,130 +3725,68 @@ namespace Administration.Controllers
             return PartialView("ItemCategory/Zone");
         }
         [HttpPost]
-        public ActionResult InsertZone()
+        public IActionResult ZoneSave([FromBody] ZoneModel model)
         {
-            ProcessTransactions pt = new ProcessTransactions();
+            string message = "";
+
             try
             {
-                pt.OpenConnection();
-                pt.BeginTransaction();
-
-                ZoneModel member = new ZoneModel();
-
-                // Lấy dữ liệu từ form
-                member.Code = Request.Form["txtcode"].ToString();
-                member.Name = Request.Form["txtname"].ToString();
-                member.Description = Request.Form["txtdescription"].ToString();
-                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
-                                  && Request.Form["inactive"].ToString() == "on";
-                // Thông tin người dùng
-                member.CreatedBy = HttpContext.Session.GetString("LoginName") ?? "";
-                member.UpdatedBy = member.CreatedBy;
-                member.CreatedDate = DateTime.Now;
-                member.UpdatedDate = DateTime.Now;
-
-                // Gọi BO để lưu
-                long memberId = ZoneBO.Instance.Insert(member);
-
-                pt.CommitTransaction();
-
-                return Json(new { success = true, id = memberId });
-            }
-            catch (Exception ex)
-            {
-                pt.RollBack();
-                return Json(new { success = false, message = ex.Message });
-            }
-            finally
-            {
-                pt.CloseConnection();
-            }
-        }
-        [HttpPost]
-        public ActionResult UpdateZone()
-        {
-            ProcessTransactions pt = new ProcessTransactions();
-            try
-            {
-                pt.OpenConnection();
-                pt.BeginTransaction();
-
-                ZoneModel member = new ZoneModel();
-
-                // Lấy ID từ form
-                member.ID = !string.IsNullOrEmpty(Request.Form["id"])
-                             ? int.Parse(Request.Form["id"])
-                             : 0;
-
-                // Lấy dữ liệu từ form
-                member.Code = Request.Form["txtcode"].ToString();
-                member.Name = Request.Form["txtname"].ToString();
-                member.Description = Request.Form["txtdescription"].ToString();
-                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
-                                   && Request.Form["inactive"].ToString() == "on";
-
-                string loginName = HttpContext.Session.GetString("LoginName") ?? "";
-
-                if (member.ID == 0) // Insert mới
+                if (model == null)
                 {
-                    member.CreatedBy = loginName;
-                    member.CreatedDate = DateTime.Now;
-                    member.UpdatedBy = loginName;
-                    member.UpdatedDate = DateTime.Now;
-
-                    ZoneBO.Instance.Insert(member);
+                    return Json(new { success = false, message = "Invalid data." });
                 }
-                else // Update
+
+                if (model.ID == 0)
                 {
-                    // Trước khi update, lấy lại bản ghi cũ từ DB để giữ CreatedBy, CreatedDate
-                    var oldData = ZoneBO.Instance.GetById(member.ID, pt.Connection, pt.Transaction);
+                    model.CreateDate = DateTime.Now;
+                    model.CreatedDate = DateTime.Now;
+                    model.UpdateDate = DateTime.Now;
+                    model.UpdatedDate = DateTime.Now;
+
+                    ZoneBO.Instance.Insert(model);
+                    message = "Insert successfully!";
+                }
+                else
+                {
+                    var oldData = (ZoneModel)ZoneBO.Instance.FindByPrimaryKey(model.ID);
 
                     if (oldData != null)
                     {
-                        member.CreatedBy = oldData.CreatedBy;
-                        member.CreatedDate = oldData.CreatedDate;
+                        model.UserInsertID = oldData.UserInsertID;
+                        model.CreatedBy = oldData.CreatedBy;
+                        model.CreateDate = oldData.CreatedDate;
+                        model.CreatedDate = oldData.CreatedDate;
                     }
 
-                    member.UpdatedBy = loginName;
-                    member.UpdatedDate = DateTime.Now;
+                    model.UpdateDate = DateTime.Now;
+                    model.UpdatedDate = DateTime.Now;
 
-                    ZoneBO.Instance.Update(member);
+                    ZoneBO.Instance.Update(model);
+                    message = "Update successfully!";
                 }
 
-                pt.CommitTransaction();
-                return Json(new { success = true });
             }
             catch (Exception ex)
             {
-                pt.RollBack();
-                return Json(new { success = false, message = ex.Message });
+                message = ex.Message;
+                return Json(new { success = false, message });
             }
-            finally
-            {
-                pt.CloseConnection();
-            }
+
+            return Json(new { success = true, message });
         }
         [HttpPost]
-        public ActionResult DeleteZone()
+        public IActionResult DeleteZone(int id)
         {
             try
             {
-
-                ZoneModel memberModel = (ZoneModel)ZoneBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["id"].ToString()));
-                if (memberModel == null || memberModel.ID == 0)
-                {
-                    return Json(new { code = 1, msg = "Can not find Lost And Found" });
-
-                }
-                ZoneBO.Instance.Delete(int.Parse(Request.Form["id"].ToString()));
-                return Json(new { code = 0, msg = "Delete Lost And Found was successfully" });
-
+                ZoneBO.Instance.Delete(id);
             }
             catch (Exception ex)
             {
-                return Json(new { code = 1, msg = ex.Message });
+                return Json(new { success = false, ex.Message });
             }
 
+            return Json(new { success = true });
         }
         #endregion
 
@@ -4284,8 +3796,6 @@ namespace Administration.Controllers
         {
             try
             {
-
-
                 DataTable dataTable = _iAdministrationService.Department(code, name, inactive);
                 var result = (from d in dataTable.AsEnumerable()
                               select new
@@ -4307,150 +3817,74 @@ namespace Administration.Controllers
             {
                 return Json(ex.Message);
             }
-            //  report.DataSource = dataTable;
-
-            // Không cần gán parameter
-            // report.RequestParameters = false;
-
-            // return PartialView("_ReportViewerPartial", report);
         }
         public IActionResult Department()
         {
             return PartialView("ItemCategory/Department");
         }
         [HttpPost]
-        public ActionResult InsertDepartment()
+        public IActionResult DepartmentSave([FromBody] DepartmentModel model)
         {
-            ProcessTransactions pt = new ProcessTransactions();
+            string message = "";
+
             try
             {
-                pt.OpenConnection();
-                pt.BeginTransaction();
-
-                DepartmentModel member = new DepartmentModel();
-
-                // Lấy dữ liệu từ form
-                member.Code = Request.Form["txtcode"].ToString();
-                member.Name = Request.Form["txtname"].ToString();
-                member.Description = Request.Form["txtdescription"].ToString();
-                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
-                                  && Request.Form["inactive"].ToString() == "on";
-                // Thông tin người dùng
-                member.CreatedBy = HttpContext.Session.GetString("LoginName") ?? "";
-                member.UpdatedBy = member.CreatedBy;
-                member.CreatedDate = DateTime.Now;
-                member.UpdatedDate = DateTime.Now;
-                if (string.IsNullOrWhiteSpace(member.Code))
-                    return Json(new { success = false, message = "Code không được để trống." });
-
-                if (string.IsNullOrWhiteSpace(member.Name))
-                    return Json(new { success = false, message = "Name không được để trống." });
-                // Gọi BO để lưu
-                long memberId = DepartmentBO.Instance.Insert(member);
-
-                pt.CommitTransaction();
-
-                return Json(new { success = true, id = memberId });
-            }
-            catch (Exception ex)
-            {
-                pt.RollBack();
-                return Json(new { success = false, message = ex.Message });
-            }
-            finally
-            {
-                pt.CloseConnection();
-            }
-        }
-        [HttpPost]
-        public ActionResult UpdateDepartment()
-        {
-            ProcessTransactions pt = new ProcessTransactions();
-            try
-            {
-                pt.OpenConnection();
-                pt.BeginTransaction();
-
-                DepartmentModel member = new DepartmentModel();
-
-                // Lấy ID từ form
-                member.ID = !string.IsNullOrEmpty(Request.Form["id"])
-                             ? int.Parse(Request.Form["id"])
-                             : 0;
-
-                // Lấy dữ liệu từ form
-                member.Code = Request.Form["txtcode"].ToString();
-                member.Name = Request.Form["txtname"].ToString();
-                member.Description = Request.Form["txtdescription"].ToString();
-                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
-                                   && Request.Form["inactive"].ToString() == "on";
-
-                string loginName = HttpContext.Session.GetString("LoginName") ?? "";
-                if (string.IsNullOrWhiteSpace(member.Code))
-                    return Json(new { success = false, message = "Code không được để trống." });
-
-                if (string.IsNullOrWhiteSpace(member.Name))
-                    return Json(new { success = false, message = "Name không được để trống." });
-                if (member.ID == 0) // Insert mới
+                if (model == null)
                 {
-                    member.CreatedBy = loginName;
-                    member.CreatedDate = DateTime.Now;
-                    member.UpdatedBy = loginName;
-                    member.UpdatedDate = DateTime.Now;
-
-                    DepartmentBO.Instance.Insert(member);
+                    return Json(new { success = false, message = "Invalid data." });
                 }
-                else // Update
+
+                if (model.ID == 0)
                 {
-                    // Trước khi update, lấy lại bản ghi cũ từ DB để giữ CreatedBy, CreatedDate
-                    var oldData = DepartmentBO.Instance.GetById(member.ID, pt.Connection, pt.Transaction);
+                    model.CreateDate = DateTime.Now;
+                    model.CreatedDate = DateTime.Now;
+                    model.UpdateDate = DateTime.Now;
+                    model.UpdatedDate = DateTime.Now;
+
+                    DepartmentBO.Instance.Insert(model);
+                    message = "Insert successfully!";
+                }
+                else
+                {
+                    var oldData = (DepartmentModel)DepartmentBO.Instance.FindByPrimaryKey(model.ID);
 
                     if (oldData != null)
                     {
-                        member.CreatedBy = oldData.CreatedBy;
-                        member.CreatedDate = oldData.CreatedDate;
+                        model.UserInsertID = oldData.UserInsertID;
+                        model.CreatedBy = oldData.CreatedBy;
+                        model.CreateDate = oldData.CreatedDate;
+                        model.CreatedDate = oldData.CreatedDate;
                     }
 
-                    member.UpdatedBy = loginName;
-                    member.UpdatedDate = DateTime.Now;
+                    model.UpdateDate = DateTime.Now;
+                    model.UpdatedDate = DateTime.Now;
 
-                    DepartmentBO.Instance.Update(member);
+                    DepartmentBO.Instance.Update(model);
+                    message = "Update successfully!";
                 }
 
-                pt.CommitTransaction();
-                return Json(new { success = true });
             }
             catch (Exception ex)
             {
-                pt.RollBack();
-                return Json(new { success = false, message = ex.Message });
+                message = ex.Message;
+                return Json(new { success = false, message });
             }
-            finally
-            {
-                pt.CloseConnection();
-            }
+
+            return Json(new { success = true, message });
         }
         [HttpPost]
-        public ActionResult DeleteDepartment()
+        public IActionResult DeleteDepartment(int id)
         {
             try
             {
-
-                DepartmentModel memberModel = (DepartmentModel)DepartmentBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["id"].ToString()));
-                if (memberModel == null || memberModel.ID == 0)
-                {
-                    return Json(new { code = 1, msg = "Can not find Lost And Found" });
-
-                }
-                DepartmentBO.Instance.Delete(int.Parse(Request.Form["id"].ToString()));
-                return Json(new { code = 0, msg = "Delete Lost And Found was successfully" });
-
+                DepartmentBO.Instance.Delete(id);
             }
             catch (Exception ex)
             {
-                return Json(new { code = 1, msg = ex.Message });
+                return Json(new { success = false, ex.Message });
             }
 
+            return Json(new { success = true });
         }
         #endregion
 
@@ -4768,7 +4202,7 @@ namespace Administration.Controllers
                     {
                         model.UserInsertID = oldData.UserInsertID;
                         model.CreatedBy = oldData.CreatedBy;
-                        model.CreateDate = oldData.CreatedDate;
+                        model.CreateDate = oldData.CreateDate;
                         model.CreatedDate = oldData.CreatedDate;
                     }
 
@@ -5004,152 +4438,97 @@ namespace Administration.Controllers
             {
                 return Json(ex.Message);
             }
-            //  report.DataSource = dataTable;
-
-            // Không cần gán parameter
-            // report.RequestParameters = false;
-
-            // return PartialView("_ReportViewerPartial", report);
         }
         public IActionResult PropertyPermission()
         {
-            List<PropertyModel> listctry = PropertyUtils.ConvertToList<PropertyModel>(PropertyBO.Instance.FindAll());
-            ViewBag.PropertyList = listctry;
+            List<PropertyModel> listProperty= PropertyUtils.ConvertToList<PropertyModel>(PropertyBO.Instance.FindAll());
+            ViewBag.PropertyList = listProperty;
             List<UsersModel> listuser = PropertyUtils.ConvertToList<UsersModel>(UsersBO.Instance.FindAll());
             ViewBag.UsersList = listuser;
             return PartialView("ItemCategory/PropertyPermission");
         }
         [HttpPost]
-        public ActionResult InsertPropertyPermission()
+        public IActionResult PropertyPermissionSave([FromBody] List<PropertyPermissionModel> listModels)
         {
-            ProcessTransactions pt = new ProcessTransactions();
+            string message = "";
+            int successCount = 0;
+
             try
             {
-
-                pt.OpenConnection();
-                pt.BeginTransaction();
-
-                PropertyPermissionModel member = new PropertyPermissionModel();
-
-
-                string propertyTypeValue = Request.Form["propertyType"];
-                member.PropertyID = int.TryParse(propertyTypeValue, out int cId) ? cId : 0;
-
-                string userValue = Request.Form["chooseuser"];
-                member.UserID = int.TryParse(userValue, out int uId) ? uId : 0;
-
-                member.CreatedBy = HttpContext.Session.GetString("LoginName") ?? "";
-                member.UpdatedBy = member.CreatedBy;
-                member.CreatedDate = DateTime.Now;
-                member.UpdatedDate = DateTime.Now;
-
-                long memberId = PropertyPermissionBO.Instance.Insert(member);
-
-                pt.CommitTransaction();
-
-                return Json(new { success = true, id = memberId });
-            }
-            catch (Exception ex)
-            {
-                pt.RollBack();
-                return Json(new { success = false, message = ex.Message });
-            }
-            finally
-            {
-                pt.CloseConnection();
-            }
-        }
-        [HttpPost]
-        public ActionResult UpdatePropertyPermission()
-        {
-            ProcessTransactions pt = new ProcessTransactions();
-            try
-            {
-                pt.OpenConnection();
-                pt.BeginTransaction();
-
-                PropertyPermissionModel member = new PropertyPermissionModel();
-
-                // Lấy ID từ form
-                member.ID = !string.IsNullOrEmpty(Request.Form["id"])
-                             ? int.Parse(Request.Form["id"])
-                             : 0;
-
-                string propertyTypeValue = Request.Form["propertyType"];
-                member.PropertyID = int.TryParse(propertyTypeValue, out int cId) ? cId : 0;
-
-                string userValue = Request.Form["chooseuser"];
-                member.UserID = int.TryParse(userValue, out int uId) ? uId : 0;
-
-                string loginName = HttpContext.Session.GetString("LoginName") ?? "";
-                member.UpdatedBy = member.CreatedBy;
-                member.CreatedDate = DateTime.Now;
-                member.UpdatedDate = DateTime.Now;
-
-                if (member.ID == 0) // Insert mới
+                if (listModels == null || listModels.Count == 0)
                 {
-                    member.CreatedBy = loginName;
-                    member.CreatedDate = DateTime.Now;
-                    member.UpdatedBy = loginName;
-                    member.UpdatedDate = DateTime.Now;
-
-                    PropertyPermissionBO.Instance.Insert(member);
+                    return Json(new { success = false, message = "No data received." });
                 }
-                else // Update
-                {
-                    // Trước khi update, lấy lại bản ghi cũ từ DB để giữ CreatedBy, CreatedDate
-                    var oldData = PropertyPermissionBO.Instance.GetById(member.ID, pt.Connection, pt.Transaction);
 
-                    if (oldData != null)
+                foreach (var model in listModels)
+                {
+                    if (model.ID == 0)
                     {
-                        member.CreatedBy = oldData.CreatedBy;
-                        member.CreatedDate = oldData.CreatedDate;
+                        model.CreatedDate = DateTime.Now;
+                        model.UpdatedDate = DateTime.Now;
+
+                        PropertyPermissionBO.Instance.Insert(model);
+                    }
+                    else
+                    {
+                        var oldData = (PropertyPermissionModel)PropertyPermissionBO.Instance.FindByPrimaryKey(model.ID);
+
+                        if (oldData != null)
+                        {
+                            model.CreatedBy = oldData.CreatedBy;
+                            model.CreatedDate = oldData.CreatedDate;
+                        }
+
+                        model.UpdatedDate = DateTime.Now;
+                        PropertyPermissionBO.Instance.Update(model);
                     }
 
-                    member.UpdatedBy = loginName;
-                    member.UpdatedDate = DateTime.Now;
-
-                    PropertyPermissionBO.Instance.Update(member);
+                    successCount++;
                 }
 
-                pt.CommitTransaction();
-                return Json(new { success = true });
+                message = $"Successfully saved {successCount} permissions!";
             }
             catch (Exception ex)
             {
-                pt.RollBack();
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error: " + ex.Message });
             }
-            finally
-            {
-                pt.CloseConnection();
-            }
+
+            return Json(new { success = true, message });
         }
         [HttpPost]
-        public ActionResult DeletePropertyPermission()
+        public IActionResult DeletePropertyPermission([FromBody] List<int> ids)
         {
+            string message = "";
+            int successCount = 0;
+
             try
             {
-
-                PropertyPermissionModel memberModel = (PropertyPermissionModel)PropertyPermissionBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["id"].ToString()));
-                if (memberModel == null || memberModel.ID == 0)
+                if (ids == null || ids.Count == 0)
                 {
-                    return Json(new { code = 1, msg = "Can not find Lost And Found" });
-
+                    return Json(new { success = false, message = "No items selected to delete." });
                 }
-                PropertyPermissionBO.Instance.Delete(int.Parse(Request.Form["id"].ToString()));
-                return Json(new { code = 0, msg = "Delete Lost And Found was successfully" });
 
+                foreach (var id in ids)
+                {
+                    if (id > 0)
+                    {
+                        PropertyPermissionBO.Instance.Delete(id);
+                        successCount++;
+                    }
+                }
+
+                message = $"Successfully deleted {successCount} items!";
             }
             catch (Exception ex)
             {
-                return Json(new { code = 1, msg = ex.Message });
+                return Json(new { success = false, message = ex.Message });
             }
 
+            return Json(new { success = true, message });
         }
         #endregion
 
-        
+
 
 
     }

@@ -24,10 +24,5 @@ namespace BaseBusiness.BO
         {
             get { return instance; }
         }
-        public TransportTypeModel GetById(int id, SqlConnection conn, SqlTransaction tx)
-        {
-            const string sql = "SELECT ID, Code, Name, Description, CreatedBy, CreatedDate,  UpdatedBy, UpdatedDate FROM TransportType WHERE ID = @id";
-            return conn.QuerySingleOrDefault<TransportTypeModel>(sql, new { id }, tx);
-        }
     }
 }
