@@ -148,20 +148,11 @@
 
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="mb-0">Rate Class</h5>
-        <button id="btnClosePopup" onclick="$('#popupNewRateCategory').hide()" class="btn btn-sm btn-outline-secondary"
-            style="border-radius: 4px;">
+        <h5 class="mb-0">Rate Category</h5>
+        <button id="btnClosePopup" class="btn btn-sm btn-outline-secondary" style="border-radius: 4px;">
             <i class="fa-solid fa-xmark"></i>
         </button>
     </div>
-
-    <!-- Buttons -->
-    <div class="d-flex justify-content-start mb-3 gap-2">
-        <button id="btnOkAuto" class="btn btn-primary btn-sm" type="button">
-            <i class="fa-solid fa-floppy-disk me-1"></i> Save and Cancel
-        </button>
-    </div>
-
     <!-- Form Body -->
     <div class="sticky-header bg-white p-2 shadow-sm rounded">
         <div class="d-flex flex-wrap gap-4">
@@ -172,16 +163,16 @@
                 <input type="hidden" id="idRateCategory" name="idRateCategory" />
 
                 <div class="mb-2 d-flex align-items-center">
-                    <label for="codeClass" class="me-2 mb-0" style="width: 80px;">Code:</label>
+                    <label for="codeClass" class="me-2 mb-0" style="width: 100px;">Code:</label>
                     <input type="text" id="codeClass" name="codeClass" class="form-control form-control-sm flex-fill" />
                 </div>
                 <div class="mb-2 d-flex align-items-center">
-                    <label for="nameClass" class="me-2 mb-0" style="width: 80px;">Name:</label>
-                    <input type="text" id="nameClass" name="codeClass" class="form-control form-control-sm flex-fill" />
+                    <label for="nameClass" class="me-2 mb-0" style="width: 100px;">Name:</label>
+                    <input type="text" id="nameClass" name="nameClass" class="form-control form-control-sm flex-fill" />
                 </div>
 
                 <div class="mb-2 d-flex align-items-center">
-                    <label for="descriptionaccty" class="me-2 mb-0" style="width: 80px;">Description:</label>
+                    <label for="descriptionaccty" class="me-2 mb-0" style="width: 100px;">Description:</label>
                     <input type="text" id="descriptionaccty" name="descriptionaccty"
                         class="form-control form-control-sm flex-fill" />
                 </div>
@@ -201,6 +192,11 @@
 
         </div>
     </div>
+    <div class="modal-footer p-2">
+        <button type="button" id="btnOkAuto" class="btn btn-primary">Save</button>
+        <button type="button" id="btnClosePopup" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    </div>
+
 </div>
 
 <div id="loadingSpinner"
@@ -221,6 +217,7 @@
         // Xóa giá trị của input text/number
         $("#idRateCategory").val("");
         $("#codeClass").val("");
+        $("#nameClass").val("");
         $("#descriptionaccty").val("");
         // Bỏ check checkbox
         $("#inactive").prop("checked", false);
@@ -252,6 +249,10 @@
                     initializeAccountTypeGrid(result);
                     $("#loadingSpinner").hide();
 
+                }
+                else {
+                    showToast('Warning', 'No records.', false);
+                    $("#loadingSpinner").hide();
                 }
             },
             error: function () {
@@ -298,9 +299,9 @@
                             .appendTo(container);
                     },
                 },
-                { dataField: "createdDate", caption: "Created Date", dataType: "date", format: "dd/MM/yyyy HH:mm", width: 160 },
+                { dataField: "createdDate", caption: "Created Date", dataType: "date", format: "dd/MM/yyyy", width: 160 },
                 { dataField: "updatedBy", caption: "UpdatedBy", width: 120 },
-                { dataField: "updatedDate", caption: "Updated Date", dataType: "date", format: "dd/MM/yyyy HH:mm", width: 160 },],
+                { dataField: "updatedDate", caption: "Updated Date", dataType: "date", format: "dd/MM/yyyy ", width: 160 },],
             scrolling: {
                 mode: "standard", // Không dùng virtual để footer hiển thị đúng
                 showScrollbar: "always",

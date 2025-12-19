@@ -354,6 +354,11 @@
     <i class="fa-solid fa-spinner fa-spin"></i>
 </div>
 <script>
+
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('toDate').value = today;
+    document.getElementById('fromDate').value = '2000-01-01';
+
     $(document).ready(function () {
         $("#btnPrint").trigger("click");
     });
@@ -468,9 +473,6 @@
 
             if (result && result.length > 0) {
                 let ids = result[0].idRateCode;
-                console.log('Relust', result);
-
-
                 // Lấy dữ liệu group
                 let groupData = await RateCodeGroupDataByID(ids);
 
@@ -481,7 +483,7 @@
                 // Gọi initialize grids sau khi có dữ liệu
                 initializeGrids(result, groupData, detail);
             } else {
-                showToast('Error', "RateCode data not found.", false);
+                showToast('Warning', "Rate Code data not found.", false);
             }
 
         } catch (error) {
@@ -502,6 +504,7 @@
             showBorders: true,
             selection: { mode: "single" },
             paging: { pageSize: 20 },
+            height: 350,
             pager: {
                 showPageSizeSelector: true,
                 allowedPageSizes: [20, 50, 100],
@@ -512,8 +515,8 @@
                 { dataField: "id", caption: "ID", width: 80, visible: false },
                 { dataField: "rateCode", caption: "Rate Code", width: "100" },
                 { dataField: "rateCategory", caption: "Rate Category", width: "130" },
-                { dataField: "beginDate", caption: "Begin Date", width: "130", dataType: "date", format: "dd/MM/yyyy HH:mm", width: 160 },
-                { dataField: "endDate", caption: "End Date", width: "130", dataType: "date", format: "dd/MM/yyyy HH:mm", width: 160 }
+                { dataField: "beginDate", caption: "Begin Date", width: "130", dataType: "date", format: "dd/MM/yyyy  ", width: 160 },
+                { dataField: "endDate", caption: "End Date", width: "130", dataType: "date", format: "dd/MM/yyyy  ", width: 160 }
             ],
             scrolling: { mode: "standard" },
             paging: { pageSize: 20 },
@@ -548,14 +551,14 @@
                 allowedPageSizes: [20, 50, 100],
                 showInfo: true
             },
-
+            height: 350,
             columns: [
                 { dataField: "code", caption: "Code", width: "80px" },
                 { dataField: "roomType", caption: "Room Type", width: "100px" },
                 { dataField: "transaction", caption: "Transaction", width: "100px" },
                 { dataField: "package", caption: "Package", width: "100px" },
-                { dataField: "beginDate", caption: "Begin Date", width: "130", dataType: "date", format: "dd/MM/yyyy HH:mm" },
-                { dataField: "endDate", caption: "End Date", width: "130", dataType: "date", format: "dd/MM/yyyy HH:mm" },
+                { dataField: "beginDate", caption: "Begin Date", width: "130", dataType: "date", format: "dd/MM/yyyy  " },
+                { dataField: "endDate", caption: "End Date", width: "130", dataType: "date", format: "dd/MM/yyyy  " },
                 { dataField: "curr", caption: "Curr.", width: "100px" }
             ],
             scrolling: { mode: "standard" },
