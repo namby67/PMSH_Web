@@ -38,7 +38,7 @@ namespace Administration.Services.Implements
                     ];
                 DataTable myTable = DataTableHelper.getTableData("spGetRateCodeDetailByRateCodeIDGrouped", param);
                 return myTable;
-
+                
             }
             catch (Exception ex)
             {

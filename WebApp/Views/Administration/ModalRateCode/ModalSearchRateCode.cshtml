@@ -1,5 +1,9 @@
-<!-- Modal search User -->
-<div class="modal fade modal-md mt-2" id="modalUser" tabindex="-1" style="height: 80%;">
+<style>
+    .fixHeight {
+        height: 400px;
+    }
+</style>
+<div class="modal fade modal-md mt-2 " id="modalUser" tabindex="-1" style="height: 80%;">
     <div class="modal-dialog">
         <div class="modal-content">
 
@@ -9,15 +13,14 @@
             </div>
 
             <div class="modal-body">
-
                 <div class="row mb-2">
-                    <div class="col-md-4">
+                    <div class="col-md-8">
                         <label>Search</label>
                         <input type="text" id="nameUserSearch" class="form-control" placeholder="Enter User name"
                             onkeyup="filterUserList()" />
                     </div>
                 </div>
-                <div class="table-responsive">
+                <div class="table-responsive fixHeight">
                     <table class="table table-bordered table-hover table-sm">
                         <thead class="table-light">
                             <tr>
@@ -54,14 +57,14 @@
             <div class="modal-body">
 
                 <div class="row mb-2">
-                    <div class="col-md-4">
+                    <div class="col-md-8">
                         <label>Search</label>
                         <input type="text" id="nameRateCodeSearch" class="form-control"
                             placeholder="Enter RateCode name" onkeyup="filterRateCodeList()" />
                     </div>
                 </div>
 
-                <div class="table-responsive">
+                <div class="table-responsive fixHeight">
                     <table class="table table-bordered table-hover table-sm">
                         <thead class="table-light">
                             <tr>

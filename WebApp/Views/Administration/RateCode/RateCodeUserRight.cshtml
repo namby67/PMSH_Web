@@ -156,7 +156,7 @@
     </div>
 
     <div class="">
-        <button style="border-radius: 4px;  margin-right: 6px;" id="btnView" class="mui-button mui-button-view"><i
+        <button style="border-radius: 4px;  margin-right: 6px;" id="btnView" class="mui-button mui-button-new"><i
                 class="fa-solid fa-eye"></i>View</button>
         <button style="border-radius: 4px;  margin-right: 6px;" id="btnNew" class="mui-button mui-button-new"
             type="button"> <i class="fa-solid fa-file-excel"></i> New</button>
@@ -308,16 +308,30 @@
             allowColumnResizing: true,
             columnResizingMode: "widget",
             selection: { mode: "single" },
+            width: "100%",
             columns: [
-                { dataField: "id", caption: "ID", width: 80, visible: false },
-                { dataField: "rateCodeID", caption: "RateCodeID", width: 80, visible: false },
-                { dataField: "userID", caption: "UserID", width: 80, visible: false },
-                { dataField: "userName", caption: "User Name", width: 130 },
-                { dataField: "rateCode", caption: "Rate Code", width: 130 },
-                { dataField: "createdBy", caption: "Created By", width: 130 },
-                { dataField: "createdDate", caption: "Created Date", width: "130", dataType: "date", format: "dd/MM/yyyy HH:mm", width: 160 },
-                { dataField: "updatedBy", caption: "Update By", width: 130 },
-                { dataField: "updatedDate", caption: "Updated Date", width: 130, dataType: "date", format: "dd/MM/yyyy HH:mm", width: 160 },
+                { dataField: "id", visible: false },
+                { dataField: "rateCodeID", visible: false },
+                { dataField: "userID", visible: false },
+
+                { dataField: "userName", caption: "User Name", width: "22%" },
+                { dataField: "rateCode", caption: "Rate Code", width: "18%" },
+                { dataField: "createdBy", caption: "Created By", width: "15%" },
+                {
+                    dataField: "createdDate",
+                    caption: "Created Date",
+                    dataType: "date",
+                    format: "dd/MM/yyyy",
+                    width: "15%"
+                },
+                { dataField: "updatedBy", caption: "Updated By", width: "15%" },
+                {
+                    dataField: "updatedDate",
+                    caption: "Updated Date",
+                    dataType: "date",
+                    format: "dd/MM/yyyy",
+                    width: "15%"
+                }
             ],
             scrolling: {
                 mode: "standard", // Không dùng virtual để footer hiển thị đúng

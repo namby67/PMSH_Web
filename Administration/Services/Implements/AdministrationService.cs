@@ -5,7 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Administration.Services.Interfaces;
+using BaseBusiness.Model;
 using BaseBusiness.util;
+using DevExpress.Pdf.Native.BouncyCastle.Asn1.X509;
 using DevExpress.XtraRichEdit.Model;
 using Microsoft.Data.SqlClient;
 using static DevExpress.DataProcessing.InMemoryDataProcessor.AddSurrogateOperationAlgorithm;
@@ -354,6 +356,43 @@ namespace Administration.Services.Implements
 
             DataTable myTable = DataTableHelper.getTableData("spSearchAllForTrans", param);
             return myTable;
+        }
+
+        public List<CurrencyModel> GetAllCurrency()
+        {
+            try
+            {
+                string sql = @"
+                    SELECT *
+                    FROM Currency
+                    WHERE IsShow = 1 AND Inactive = 0
+                    ORDER BY ID
+                ";
+
+                DataTable dataTable = TextUtils.Select(sql.ToString());
+                // Chuyển DataTable sang List<CurrencyModel>
+                var currencies = (from d in dataTable.AsEnumerable()
+                                  select new CurrencyModel
+                                  {
+                                      ID = d["ID"]?.ToString() ?? string.Empty,
+                                      Description = d["Description"]?.ToString() ?? string.Empty,
+                                      MasterStatus = d["MasterStatus"] != DBNull.Value ? Convert.ToBoolean(d["MasterStatus"]) : false,
+                                      UserInsertID = d["UserInsertID"] != DBNull.Value ? Convert.ToInt32(d["UserInsertID"]) : 0,
+                                      CreateDate = d["CreateDate"] != DBNull.Value ? Convert.ToDateTime(d["CreateDate"]) : DateTime.MinValue,
+                                      UpdateDate = d["UpdateDate"] != DBNull.Value ? Convert.ToDateTime(d["UpdateDate"]) : DateTime.MinValue,
+                                      UserUpdateID = d["UserUpdateID"] != DBNull.Value ? Convert.ToInt32(d["UserUpdateID"]) : 0,
+                                      TransactionCode = d["TransactionCode"]?.ToString() ?? string.Empty,
+                                      IsShow = d["IsShow"] != DBNull.Value ? Convert.ToBoolean(d["IsShow"]) : false,
+                                      Inactive = d["Inactive"] != DBNull.Value ? Convert.ToBoolean(d["Inactive"]) : false,
+                                      Decimals = d["Decimals"] != DBNull.Value ? Convert.ToInt32(d["Decimals"]) : 0,
+                                      IsSynchronous = d["IsSynchronous"] != DBNull.Value ? Convert.ToBoolean(d["IsSynchronous"]) : false
+                                  }).ToList();
+                return currencies;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"ERROR: {ex.Message}", ex);
+            }
         }
 
         public DataTable hkpEmployee(string code, string name, int inactive)

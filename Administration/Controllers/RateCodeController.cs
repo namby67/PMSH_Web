@@ -214,17 +214,27 @@ namespace Administration.Controllers
             {
                 if (RateCodeBO.Instance.FindByPrimaryKey(id) is not RateCodeModel existing || existing.ID == 0)
                 {
-                    return NotFound(new { success = false, message = $"RateCode ID {id} not found." });
+                    return Ok(new { success = false, message = $"RateCode ID {id} not found." });
+                }
+
+                var arr = PropertyUtils.ConvertToList<RateCodeDetailModel>(
+                    RateCodeDetailBO.Instance.FindByAttribute("RateCodeID", id)
+                );
+
+                if (arr != null && arr.Count > 0)
+                {
+                    return Ok(new { success = false, message = "Rate Code is being referenced in other modules.\nDelete failed!" });
                 }
 
                 RateCodeBO.Instance.Delete(id);
-                return Json(new { success = true, message = $"Successfully deleted RateCode ID {id}." });
+                return Ok(new { success = true, message = $"Successfully deleted RateCode ID {id}." });
             }
             catch (Exception ex)
             {
                 return BadRequest(new { success = false, message = ex.Message });
             }
         }
+
 
         public class RateCodeDto
         {

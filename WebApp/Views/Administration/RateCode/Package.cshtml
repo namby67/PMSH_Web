@@ -14,6 +14,13 @@
     .mui-card {
         width: 30% !important;
     }
+
+    .gridContainerv2 {
+        max-height: 300px;
+        /* chiều cao cố định */
+        overflow-y: auto;
+        /* chỉ body scroll */
+    }
 </style>
 <div class="text-center" id="reportTitle" style="font-size: 20px">Package</div>
 <div class="sticky-header bg-white p-2 shadow-sm z-3">
@@ -21,126 +28,25 @@
         <button style="border-radius: 4px;  margin-right: 6px;" id="btnView" onclick="openModalSearchUser()"
             class="mui-button mui-button-search"><i class="fa-solid fa-search"></i>Search</button>
         <button style="border-radius: 4px;  margin-right: 6px;" id="btnNew" class="mui-button mui-button-new"
-            type="button"> <i class="fa-solid fa-file-excel"></i> New</button>
+            type="button"><i class="fa-solid fa-plus"></i> New</button>
         <button style="border-radius: 4px;  margin-right: 6px;" id="btnEdit" class="mui-button mui-button-edit "
-            type="button"> <i class="fa-solid fa-file-excel"></i> Edit</button>
+            type="button"><i class="fa-solid fa-pen"></i> Edit</button>
+        <button style="border-radius: 4px;  margin-right: 6px;" id="btnSave" class="mui-button mui-button-export "
+            type="button"> <i class="fa-solid fa-floppy-disk"></i> Save</button>
         <button style="border-radius: 4px;  margin-right: 6px;" id="btnDelete" class="mui-button button-report-delete"
-            type="button"> <i class="fa-solid fa-file-excel"></i> Delete</button>
+            type="button"> <i class="fa-solid fa-trash-can"></i> Delete</button>
     </div>
 </div>
 <div class="mui-card"></div>
-
-<div class="dx-tab-form" data-tab="1">
-    <div class="row">
-        <!-- LEFT FORM -->
-        <div class="col-md-4">
-            <div class="row g-2">
-
-                <div class="col-12">
-                    <label class="form-label me-2 mb-0">Season Code</label>
-                    <input type="text" class="form-control mb-2">
-                </div>
-
-                <div class="col-6">
-                    <label class="form-label me-2 mb-0">Start Date</label>
-                    <input type="date" class="form-control mb-2">
-                </div>
-
-                <div class="col-6">
-                    <label class="form-label me-2 mb-0">End Date</label>
-                    <input type="date" class="form-control mb-2">
-                </div>
-
-                <div class="col-12">
-                    <label class="form-label me-2 mb-0">Trans. Code</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control mb-2">
-                        <button class="btn btn-outline-secondary">...</button>
-                    </div>
-                </div>
-
-                <div class="col-12">
-                    <label class="form-label me-2 mb-0">Currency</label>
-                    <select class="form-select" mb-2>
-                        <option></option>
-                    </select>
-                </div>
-
-                <div class="col-12">
-                    <label class="form-label me-2 mb-0">Price ++</label>
-                    <input type="number" class="form-control mb-2">
-                </div>
-
-                <div class="col-12">
-                    <label class="form-label me-2 mb-0">Price Net</label>
-                    <input type="number" class="form-control mb-2">
-                </div>
-
-                <div class="col-12">
-                    <label class="form-label me-2 mb-0">Allowance</label>
-                    <input type="number" class="form-control mb-2">
-                </div>
-
-                <div class="col-12">
-                    <label class="form-label me-2 mb-0">Posting Rhythm</label>
-                    <select class="form-select mb-2">
-                        <option></option>
-                    </select>
-                </div>
-
-                <div class="col-12">
-                    <label class="form-label me-2 mb-0">Calculation Rule</label>
-                    <select class="form-select mb-2">
-                        <option></option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Buttons -->
-            <div class="mt-3 d-flex gap-2">
-                <button class="btn btn-secondary">Clear</button>
-                <button class="btn btn-primary">Add</button>
-                <button class="btn btn-danger">Remove</button>
-            </div>
-        </div>
-
-        <!-- RIGHT TABLE -->
-        <div class="col-md-8">
-            <div class="table-responsive border">
-                <table class="table table-bordered table-sm mb-0">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Trans. Code</th>
-                            <th>Description</th>
-                            <th>Price</th>
-                            <th>Price After Tax</th>
-                            <th>Currency</th>
-                            <th>Start Date</th>
-                            <th>End Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td colspan="7" class="text-center text-muted">
-                                No data
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-    </div>
-</div>
-
 <div class="dx-tab-form dx-visible" data-tab="0">
     <div class="tabs-container border p-3 mt-3 mx-auto">
-
         <!-- Thông tin chính -->
         <div class="row g-3 mb-3">
+            <input type="hidden" id="ID" name="ID" />
+
             <div class="col-md-6">
                 <label class="form-label" id="code">Code</label>
-                <input type="text" class="form-control mb-2">
+                <input type="text" id="txtCode" class="form-control mb-2">
             </div>
             <div class="col-md-6 d-flex align-items-end">
                 <div class="w-100">
@@ -159,31 +65,35 @@
         <div class="row g-3 mb-3">
             <div class="col-md-6">
                 <label class="form-label">Type</label>
-                <select class="form-control form-select form-control-sm" disabled>
+                <select id="type" class="form-control form-select form-control-sm" disabled>
                     <option value="0">Element</option>
                 </select>
             </div>
             <div class="col-md-6 d-flex align-items-end">
                 <div class="w-100">
                     <label class="form-label">Transaction Code</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control">
-                    </div>
+                    <select class="form-control form-select form-control-sm" id="transactionCode">
+                        <option value="0">-- Select Transaction Code -- </option>
+                        @foreach (dynamic u in ViewBag.TransactionList)
+                        {
+                            <option value="@u.Code">@u.Code / @u.Description</option>
+                        }
+                    </select>
                 </div>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Description</label>
-                <input type="text" class="form-control">
+                <input id="txtDescription" type="text" class="form-control">
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Display in Folio</label>
-                <input type="text" class="form-control">
+                <input id="textInNightAudit" type="text" class="form-control">
             </div>
 
             <div class="checkbox">
-                <input class="form-check-input" type="checkbox" id="active" checked>
+                <input class="form-check-input" type="checkbox" id="chkActive" checked>
                 <label class="form-check-label" for="active">Active</label>
             </div>
 
@@ -193,9 +103,9 @@
                 <div class="col-md-6 border p-3">
                     <label for="">Default Display</label>
                     <div class="group-box">
-                        <label><input type="radio" name="attr" value="1" id="included" checked>
+                        <label><input type="radio" name="attr" value="1" id="chkIncludedInRate" checked>
                             Included In Rate</label><br />
-                        <label><input type="radio" name="attr" value="0" id="separate">
+                        <label><input type="radio" name="attr" value="0" id="chkRateSeparateLine">
                             Add Rate Separate Line</label><br />
                     </div>
                 </div>
@@ -220,7 +130,123 @@
 
         </div>
     </div>
+
 </div>
+<div class="dx-tab-form" data-tab="1">
+    <div class="row">
+        <!-- LEFT FORM -->
+        <div class="col-md-3 border border-2">
+            <input type="hidden" id="packageID">
+            <input type="hidden" id="packageDetailID">
+            <div class="row g-2">
+                <div class="col-12">
+                    <label class="form-label me-2 mb-0">Header Code</label>
+                    <input id="targetCode" class="form-control mb-2 noReadOnly" disabled value="No target Package" />
+                </div>
+                <div class="col-12">
+                    <label class="form-label me-2 mb-0">Season Code</label>
+                    <select class="form-control form-select form-control-sm " id="seasonCode">
+                        <option value="0">-- Select Season Code -- </option>
+                        @foreach (dynamic u in ViewBag.SeasonList)
+                        {
+                            <option value="@u.ID">@u.Code / @u.Name</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-6">
+                    <label class="form-label me-2 mb-0">Start Date</label>
+                    <input type="date" class="form-control mb-2" id="startDate" data-business-date>
+                </div>
+
+                <div class="col-6">
+                    <label class="form-label me-2 mb-0">End Date</label>
+                    <input type="date" class="form-control mb-2 " id="endDate" data-business-date>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label me-2 mb-0">Trans. Code</label>
+                    <select class="form-control form-select form-control-sm " id="transactionCode">
+                        <option value="0">-- Select Transaction Code -- </option>
+                        @foreach (dynamic u in ViewBag.TransactionList)
+                        {
+                            <option value="@u.Code">@u.Code / @u.Description</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label me-2 mb-0">Currency</label>
+                    <select class="form-control form-select form-control-sm noReadOnly" disabled id="currencyID" mb-2>
+                        @foreach (dynamic u in ViewBag.CurrencyList)
+                        {
+                            <option value="@u.ID">@u.ID / @u.Description</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label me-2 mb-0 ">Price ++</label>
+                    <input type="number" class="form-control mb-2 " id="price">
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label me-2 mb-0">Price Net</label>
+                    <input type="number" class="form-control mb-2 " id="priceAfterTax">
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label me-2 mb-0">Allowance</label>
+                    <input type="number" class="form-control mb-2 " id="allowanceAmount">
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label me-2 mb-0 ">Posting Rhythm</label>
+                    <select class="form-control form-select form-control-sm " id="rhythmPostingID" mb-2>
+                        @foreach (dynamic u in ViewBag.RhythmPostingList)
+                        {
+                            <option value="@u.ID">@u.Name</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-12">
+                    <label
+                        class="form-label me-2 mb-0                                                                                                                                                                                                        ">Calculation
+                        Rule</label>
+                    <select class="form-control form-select form-control-sm" id="calculationRuleID" mb-2>
+                        <option value="0">-- Calculation Rule --</option>
+                        <option value="1">Per Person</option>
+                        <option value="2">Per Adult</option>
+                        <option value="3">Per Child</option>
+                        <option value="4">Per Room</option>
+                        <option value="5">Per Child1</option>
+                        <option value="6">Per Child2</option>
+                        <option value="7">Per Child3</option>
+                        <option value="8">Per Adutl + C</option>
+                        <option value="9">Per Adutl + C + C1</option>
+                        <option value="10">Per Adutl + C1</option>
+                        <option value="11">Per C + C1</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="mt-3 d-flex gap-2">
+                <button class="btn btn-secondary">Clear</button>
+                <button class="btn btn-primary">Add</button>
+                <button class="btn btn-danger">Remove</button>
+            </div>
+        </div>
+
+        <!-- RIGHT TABLE -->
+        <div class="col-md-8">
+            <div id="packageDetailGrid" class="gridContainer"></div>
+        </div>
+    </div>
+</div>
+
+
 <div class="modal fade modal-md mt-2 modal-search" id="modalSearch" tabindex="-1" style="height: 80%;">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -233,18 +259,18 @@
             <div class="modal-body">
 
                 <div class="row mb-2">
-                    <div class="col-md-4">
+                    <div class="col-md-8">
                         <label>Search</label>
                         <input type="text" id="packageSearch" class="form-control" placeholder="Enter User name"
                             onkeyup="filterUserList()" />
                     </div>
                 </div>
-                <div class="table-responsive">
-                    <table class="table table-bordered table-hover table-sm">
-                        <thead class="table-light">
+                <div class="table-responsive gridContainer" style="height: 400px;">
+                    <table class="table table-bordered table-hover table-sm mb-0">
+                        <thead class="table-light sticky-top">
                             <tr>
                                 <th style="width:120px">Code</th>
-                                <th>Job Description</th>
+                                <th>Description</th>
                             </tr>
                         </thead>
                         <tbody id="userTableBody">
@@ -259,12 +285,22 @@
                     </table>
                 </div>
 
+
             </div>
 
         </div>
     </div>
 </div>
 <script>
+    $(document).ready(function () {
+        initializePackageDetailGrid();
+    });
+    const txtDescription = document.getElementById("txtDescription");
+    const textInNightAudit = document.getElementById("textInNightAudit");
+
+    txtDescription.addEventListener("input", function () {
+        textInNightAudit.value = this.value;
+    });
     const tabsText = [
         { text: 'Package Header' },
         { text: 'Package Detail' },
@@ -291,8 +327,11 @@
 
     function setFormReadOnly(readOnly = true) {
         // Tất cả input, textarea, select ngoại trừ select Type
-        $('.dx-tab-form input, .dx-tab-form textarea, .dx-tab-form ,#forecastGroup').not('select,.modal-search').prop('disabled', readOnly);
-
+        $('.dx-tab-form')
+            .find('input, textarea, select')
+            .not('.modal-search,#type,.noReadOnly')
+            .prop('disabled', readOnly);
+        $('#forecastGroup').prop('disabled', readOnly);
         // Checkbox và radio
         $('.dx-tab-form input[type=checkbox], .dx-tab-form input[type=radio]').prop('disabled', readOnly);
 
@@ -300,24 +339,50 @@
         //        $('select').prop('disabled', true);
     }
     function clearFormData() {
-        // Xóa giá trị các input text, textarea
-        $('.dx-tab-form input[type="text"], .dx-tab-form textarea').val('');
+        const $tabs = $('.dx-tab-form');
 
-        // Reset các select về giá trị mặc định (thường là option đầu tiên)
-        $('.dx-tab-form select').each(function () {
+        // Clear tất cả input có value (kể cả disabled)
+        $tabs.find('input:not([type="checkbox"]):not([type="radio"])')
+            .val('');
+
+        // Clear textarea
+        $tabs.find('textarea').val('');
+
+        // Reset select (kể cả disabled)
+        $tabs.find('select').each(function () {
             this.selectedIndex = 0;
         });
 
-        // Reset checkbox/radio về mặc định (checked hay không tuỳ theo HTML ban đầu)
-        $('.dx-tab-form input[type="checkbox"], .dx-tab-form input[type="radio"]').each(function () {
-            this.checked = $(this).prop('defaultChecked');
-        });
+        // Uncheck checkbox
+        $tabs.find('input[type="checkbox"]').prop('checked', false);
+
+        // Uncheck radio
+        $tabs.find('input[type="radio"]').prop('checked', false);
+
+        // Clear DevExtreme Grid
+        const grid = $('#packageDetailGrid').dxDataGrid('instance');
+        if (grid) {
+            grid.option('dataSource', []);
+        }
+
+        // ===== SET LẠI GIÁ TRỊ MẶC ĐỊNH (NẾU CẦN) =====
+        $('#chkActive').prop('checked', true);            // Active = true
+        $('#chkIncludedInRate').prop('checked', true);    // Radio mặc định
     }
     // Khi load page, form chỉ đọc
     setFormReadOnly(true);
     $('#btnNew').on('click', function () {
         clearFormData();
         setFormReadOnly(false);  // Bỏ disabled
+    });
+    let isReadOnly = true;
+
+    $('#btnEdit').on('click', function () {
+        isReadOnly = !isReadOnly;
+        setFormReadOnly(isReadOnly);
+
+        // (tuỳ chọn) đổi text / icon
+        // $(this).text(isReadOnly ? 'Edit' : 'Lock');
     });
 
     // sử lý modal
@@ -331,24 +396,153 @@
         $('#modalSearch').modal('hide');
     }
 
-    function selectPackage(id) {
-        $.ajax({
-            url: '/Administration/RateCode/GetByIDPackage',
-            type: 'GET',
-            data: { id: id },
-            success: function (res) {
-                console.log('API RES:', res);
-                $('#idUserName').val(id);
-                $('#txtUserName').val(name);      // gán ra form chính
-                $('#modalSearch').modal('hide');
+    async function initializePackageDetailGrid(dataPackageDetailGrid) {
+        $("#packageDetailGrid").dxDataGrid({
+            dataSource: dataPackageDetailGrid || [],
+            showBorders: true,
+            selection: { mode: "single" },
+            paging: { pageSize: 20 },
+            pager: {
+                showPageSizeSelector: true,
+                allowedPageSizes: [20, 50, 100],
+                showInfo: true
             },
-            error: function () {
-                alert("Không thể tải dữ liệu");
-                $("#loadingSpinner").hide();
-            }
-        })
+            filterRow: { visible: true },
+            columns: [
+                { dataField: "id", caption: "ID", visible: false },
+                { dataField: "transCode", caption: "Trans. Code", width: "13%" },
+                { dataField: "transactionDescription", caption: "Description", dataType: "string" },
+                { dataField: "priceAfterTax", caption: "Price After Tax", format: "#,##0", dataType: "number" },
+                { dataField: "currencyID", caption: "Currency", width: 120 },
+                { dataField: "startDate", caption: "Start Date", width: "130", dataType: "date", format: "dd/MM/yyyy  " },
+                { dataField: "endDate", caption: "End Date", width: "130", dataType: "date", format: "dd/MM/yyyy  " },
+                { dataField: "postingDay", caption: "Posting Day", width: "13%" },
 
+
+            ],
+            scrolling: {
+                mode: "standard", // Không dùng virtual để footer hiển thị đúng
+                showScrollbar: "always",
+                scrollByContent: true
+            },
+            filterRow: {
+                visible: true,
+                applyFilter: "auto"
+            },
+            // 🔥 Quan trọng: gán selectedRowData khi click chọn
+            onRowClick: function (e) {
+                selectedRowData = e.data; // 🔥 lấy data của row vừa click
+                console.log("Selected Row (RowClick):", selectedRowData);
+                selectPackageDetail(selectedRowData);
+            },
+            noDataText: "No records to display" // hiển thị text khi chưa có dữ liệu
+        });
     }
+
+    async function selectPackageDetail(data) {
+        try {
+            $("#loadingSpinner").show();
+
+            if (data == null) {
+                showToast('Error', resPackage?.message || 'Failed to load package.', false);
+                return;
+            }
+
+            $('#packageDetailID').val(data.id);
+            $('#seasonCode').val(data.seasonID);
+            $('#startDate').val(data.startDate.split('T')[0]);
+            $('#endDate').val(data.endDate.split('T')[0]);
+            $('#transactionCode').val(data.transCode);
+            $('#currencyID').val(data.currencyID);
+            $('#price').val(data.price);
+
+            $('#priceAfterTax').val(data.priceAfterTax);
+            $('#allowanceAmount').val(data.allowanceAmount);
+            $('#rhythmPostingID').val(data.rhythmPostingID);
+            $('#calculationRuleID').val(data.calculationRuleID);
+            setFormReadOnly(true);
+
+        } catch (err) {
+            console.error(err);
+            showToast('Error', 'Failed to load data.', false);
+        } finally {
+            $("#loadingSpinner").hide();
+        }
+    }
+    async function selectPackage(id) {
+        try {
+            $("#loadingSpinner").show();
+
+            // ===== 1. Lấy Package =====
+            const resPackage = await $.ajax({
+                url: '/Administration/RateCode/GetByIDPackage',
+                method: 'GET',
+                data: { id }
+            });
+
+            if (!resPackage?.success) {
+                showToast('Error', resPackage?.message || 'Failed to load package.', false);
+                return;
+            }
+
+            const pkg = resPackage.data;
+            console.log('pkg', pkg);
+
+
+            $('#ID').val(pkg.id);
+            $('#packageID').val(pkg.id);
+            $('#txtCode').val(pkg.code);
+            $('#targetCode').val(pkg.code || "No target Package");
+            $('#txtDescription').val(pkg.description);
+            $('#forecastGroup').val(pkg.forecastGroupID);
+            $('#type').val(pkg.type);
+            $('#transactionCode').val(pkg.transCodeAlt);
+            $('#textInNightAudit').val(pkg.textInNightAudit);
+
+            $('#chkTaxInclusive').prop('checked', pkg.taxInclusive);
+            $('#chkIncludedInRate').prop('checked', pkg.includedInRate);
+            $('#chkRateSeparateLine').prop('checked', pkg.rateSeparateLine);
+            $('#chkActive').prop('checked', pkg.active);
+
+            $('#breakfast').prop('checked', pkg.breakfast);
+            $('#lunch').prop('checked', pkg.lunch);
+            $('#dinner').prop('checked', pkg.dinner);
+            $('#chkVap').prop('checked', pkg.vap);
+
+            setFormReadOnly(true);
+
+            // ===== 2. Lấy Package Detail =====
+            const resDetail = await $.ajax({
+                url: '/Administration/RateCode/GetPackageDetailByIDPackage',
+                method: 'GET',
+                data: { id }
+            });
+
+            if (!resDetail?.success) {
+                showToast('Error', resDetail?.message || 'Failed to load package detail.', false);
+                return;
+            }
+
+            const details = resDetail.data;
+            console.log('PackageDetail:', details);
+            initializePackageDetailGrid(details);
+
+            // TODO: bind detail grid/table 
+            $('#seasonCode').val(details.idseasonID);
+
+            $('#modalSearch').modal('hide');
+
+        } catch (err) {
+            console.error(err);
+            showToast('Error', 'Failed to load data.', false);
+        } finally {
+            $("#loadingSpinner").hide();
+        }
+    }
+
+
+
+
 
     function filterUserList() {
         let keyword = $('#packageSearch').val().toLowerCase();

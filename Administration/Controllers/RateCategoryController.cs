@@ -164,7 +164,7 @@ namespace Administration.Controllers
             try
             {
                 ArrayList arr = RateCodeBO.Instance.FindByAttribute("RateCategoryID", id);
-                if (arr.Count == 0)
+                if (arr.Count > 0)
                 {
                     return Json(new { success = false, message = "Rate Category is being referenced to in other modules.\nDelete failed.!" });
                 }
