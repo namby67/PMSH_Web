@@ -24,10 +24,5 @@ namespace BaseBusiness.BO
         {
             get { return instance; }
         }
-        public TerritoryModel GetById(int id, SqlConnection conn, SqlTransaction tx)
-        {
-            const string sql = "SELECT ID, Code, Name, Description, CreatedBy, CreatedDate,  UpdatedBy, UpdatedDate FROM Territory WHERE ID = @id";
-            return conn.QuerySingleOrDefault<TerritoryModel>(sql, new { id }, tx);
-        }
     }
 }

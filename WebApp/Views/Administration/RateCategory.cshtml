@@ -8,7 +8,6 @@
 
 <div class="sticky-header bg-white p-2 shadow-sm z-3">
 	<div class="d-flex align-items-center gap-3 p-2" style="border: 1px solid #ccc; border-radius: 6px; padding: 8px;">
-
 		<div class="d-flex flex-column ">
 
 			<div class="d-flex align-items-center">
@@ -57,9 +56,6 @@
 				<button type="button" id="btnSaveItem" class="mui-button mui-button-export">
 					<i class="fa-solid fa-floppy-disk"></i> Save
 				</button>
-				<button type="button" class="mui-button button-report-delete" data-bs-dismiss="modal">
-					<i class="fa-solid fa-xmark"></i> Close
-				</button>
 			</div>
 			<div class="modal-body">
 				<form id="itemForm">
@@ -104,7 +100,7 @@
 	 $(document).ready(function () {
 		 $("#btnSearch").trigger("click");
 	 });
-	   let selectedRowData = null;
+	   var selectedRowData = null;
 	  $("#btnNew").click(function () {
 		   $("#itemForm")[0].reset();
 		   $("#id").val("0");
@@ -193,7 +189,7 @@
 
 		  const loginUser = parseInt(localStorage.getItem("userID")) || 0;
 
-		   const url = "/Administration/RateCategorySave";
+		  const url = "/Administration/RateCategorySave";
 		  const model = {
 			  ID: id,
 			  Code: $("#txtcode").val(),
@@ -209,7 +205,7 @@
 		  $("#loadingSpinner").show();
 
 		  $.ajax({
-			   url: url,
+			  url: url,
 			  type: "POST",
 			  contentType: "application/json",
 			  data: JSON.stringify(model),

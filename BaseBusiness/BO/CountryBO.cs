@@ -24,10 +24,5 @@ namespace BaseBusiness.BO
         {
             get { return instance; }
         }
-        public CountryModel GetById(int id, SqlConnection conn, SqlTransaction tx)
-        {
-            const string sql = "SELECT ID, Code, Name, Description, CreatedBy, CreatedDate,  UpdatedBy, UpdatedDate FROM Country WHERE ID = @id";
-            return conn.QuerySingleOrDefault<CountryModel>(sql, new { id }, tx);
-        }
     }
 }

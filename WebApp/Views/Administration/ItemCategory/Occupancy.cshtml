@@ -13,16 +13,20 @@
         pointer-events: auto;
         opacity: 1;
     }
+    /* CSS để khi hover vào hàng đã tô màu, màu không bị đè bởi màu hover mặc định (tùy chọn) */
+    .dx-datagrid-rowsview .dx-row.dx-data-row:hover:not(.dx-selection) > td {
+        filter: brightness(95%);
+    }
 </style>
 <div class="header">
     <h3 id="content-title">Occupancy Config</h3>
 </div>
 <div class="sticky-header bg-white p-2 shadow-sm z-3">
     <div id="formContainer" class="d-flex align-items-center gap-3 p-2 formLocked" style="border: 1px solid #ccc; border-radius: 6px; padding: 8px;">
-        <div class="row g-3">
+        <div class="row g-2 w-100 align-items-start">
 
-            <div class="col-md-4">
-                <label class="form-label mb-1">Type:</label>
+            <div class="col-lg-1 col-md-2">
+                <label class="form-label mb-1" style="font-size: 12px;">Type:</label>
                 <input type="text"
                        id="typeInput"
                        class="form-control form-control-sm"
@@ -30,48 +34,46 @@
                        disabled>
             </div>
 
-            <div class="col-md-4">
-                <label class="form-label mb-1">Occ. Level:</label>
+            <div class="col-lg-1 col-md-2">
+                <label class="form-label mb-1" style="font-size: 12px;">Occ. Level:</label>
                 <input type="text" id="occLevelInput" class="form-control form-control-sm">
                 <div class="invalid-feedback" id="occLevelError"></div>
             </div>
 
-            <div class="col-md-4">
-                <label class="form-label mb-1 fw-bold">Color:</label>
-
+            <div class="col-lg-2 col-md-3">
+                <label class="form-label mb-1 fw-bold" style="font-size: 12px;">Color:</label>
                 <div class="input-group input-group-sm">
                     <input type="text" id="colorDisplay"
                            class="form-control"
-                           placeholder="No color"
+                           placeholder="None"
+                           style="min-width: 50px;"
                            readonly />
-
                     <span class="input-group-text p-0">
                         <input type="color" id="colorPicker"
                                class="form-control form-control-color border-0"
-                               style="width: 36px; height: 30px; padding: 0; cursor: pointer;">
+                               style="width: 30px; height: 30px; padding: 0; cursor: pointer;">
                     </span>
-
-                    <button class="btn btn-outline-danger" type="button" id="btnClearColor">
+                    <button class="btn btn-outline-danger px-2" type="button" id="btnClearColor">
                         <i class="fas fa-times"></i>
                     </button>
-
                 </div>
             </div>
 
-            <div class="col-md-4">
-                <label class="form-label mb-1">Title:</label>
+            <div class="col-lg-2 col-md-3">
+                <label class="form-label mb-1" style="font-size: 12px;">Title:</label>
                 <input type="text" id="titleInput" class="form-control form-control-sm">
             </div>
 
-            <div class="col-md-4">
-                <label class="form-label mb-1">Email:</label>
+            <div class="col-lg-2 col-md-4">
+                <label class="form-label mb-1" style="font-size: 12px;">Email:</label>
                 <input type="email" id="emailInput" class="form-control form-control-sm">
             </div>
 
-            <div class="col-md-4">
-                <label class="form-label mb-1">Description:</label>
-                <textarea id="descriptionInput" rows="2" class="form-control form-control-sm"></textarea>
+            <div class="col-lg-4 col-md-12">
+                <label class="form-label mb-1" style="font-size: 12px;">Description:</label>
+                <textarea id="descriptionInput" class="form-control form-control-sm"></textarea>
             </div>
+
             <input type="hidden" id="id" name="id" value="0" />
         </div>
     </div>
@@ -95,88 +97,111 @@
 
 <script>
     DevExpress.localization.locale("vi");
-    let selectedRowData = null;
+    var selectedRowData = null;
 
     $(document).ready(function () {
+        reloadGrid();
+
         $("input").on("input change", function () {
             if ($(this).hasClass("is-invalid")) {
                 $(this).removeClass("is-invalid");
             }
         });
         lockForm();
-        reloadGrid();
     });
 
-        function lockForm() {
-        $("#formContainer")
-            .removeClass("form-unlocked")
-            .addClass("form-locked");
+    function lockForm() {
+        $("#formContainer").removeClass("form-unlocked").addClass("form-locked");
     }
 
     function unlockForm() {
-        $("#formContainer")
-            .removeClass("form-locked")
-            .addClass("form-unlocked");
+        $("#formContainer").removeClass("form-locked").addClass("form-unlocked");
     }
 
-    // Convert HEX → ARGB
-    const hexToArgbInt = hex => {
+    function hexToArgbInt(hex) {
         hex = hex.replace("#", "");
         const r = parseInt(hex.substr(0, 2), 16);
         const g = parseInt(hex.substr(2, 2), 16);
         const b = parseInt(hex.substr(4, 2), 16);
         const a = 255;
         return (a << 24) | (r << 16) | (g << 8) | b;
-    };
+    }
+
+    // Helper: Convert ARGB Int → Hex String
+    function argbIntToHex(argb) {
+        let unsigned = argb >>> 0;
+        let r = (unsigned >> 16) & 0xFF;
+        let g = (unsigned >> 8) & 0xFF;
+        let b = unsigned & 0xFF;
+        return "#" +
+            r.toString(16).padStart(2, '0') +
+            g.toString(16).padStart(2, '0') +
+            b.toString(16).padStart(2, '0');
+    }
+
+    // Helper: Tính độ sáng màu để chọn màu chữ (Đen/Trắng) cho dễ đọc
+    function getContrastColor(hexColor) {
+        const r = parseInt(hexColor.substr(1, 2), 16);
+        const g = parseInt(hexColor.substr(3, 2), 16);
+        const b = parseInt(hexColor.substr(5, 2), 16);
+        const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+        return (yiq >= 128) ? 'black' : 'white';
+    }
 
     // Color Picker
-    const inputColor = document.getElementById("colorPicker");
-    const inputDisplay = document.getElementById("colorDisplay");
+    $("#colorPicker").on("input", function() {
+        $("#colorDisplay").val(hexToArgbInt($(this).val()));
+    });
 
-    inputColor.oninput = () => {
-        inputDisplay.value = hexToArgbInt(inputColor.value);
-    };
-
-    document.getElementById("btnClearColor").onclick = () => {
-        inputDisplay.value = "";
-        inputColor.value = "#ffffff";
-    };
-
+    $("#btnClearColor").on("click", function() {
+        $("#colorDisplay").val("");
+        $("#colorPicker").val("#ffffff");
+    });
+ 
     function loadGrid(data) {
         $("#gridContainerRateCode").dxDataGrid({
             dataSource: data,
             height: 500,
             width: "100%",
-            columnAutoWidth: true,
+            columnAutoWidth: false,// Tắt auto width để tuân thủ width % bên dưới
             allowColumnResizing: true,
             columnResizingMode: "widget",
             selection: { mode: "single" },
-
+            hoverStateEnabled: true,
             columns: [
-                {
-                    caption: "STT",
-                    width: 60,
-                    alignment: "right",
-                    cellTemplate: function (container, options) {
-                            const grid = options.component;
-                            const pageIndex = grid.pageIndex();
-                            const pageSize = grid.pageSize();
-                            const stt = pageIndex * pageSize + options.rowIndex + 1;
-                            container.text(stt);
-                    }
-                },
-                { dataField: "id", caption: "ID" },
-                { dataField: "type", caption: "Type" },
-                { dataField: "occupancylevel", caption: "Occ. Level" },
-                { dataField: "title", caption: "Title" },
-                { dataField: "email", caption: "Email" },
-                { dataField: "description", caption: "Description" },
-                { dataField: "color", caption: "Color", visible: false },
-                { dataField: "createBy", caption: "CreateBy" },
-                { dataField: "createDate", caption: "CreateDate", dataType: "date", format: "dd/MM/yyyy" },
-                { dataField: "updateBy", caption: "UpdateBy" },
-                { dataField: "updateDate", caption: "UpdateDate", dataType: "date", format: "dd/MM/yyyy" },
+            {
+                caption: "STT",
+                width: "5%",
+                alignment: "right",
+                cellTemplate: function (container, options) {
+                    const grid = options.component;
+                    const pageIndex = grid.pageIndex();
+                    const pageSize = grid.pageSize();
+                    const stt = pageIndex * pageSize + options.rowIndex + 1;
+                    container.text(stt);
+                }
+            },
+            { dataField: "id", caption: "ID", visible: false }, 
+            { dataField: "type", caption: "Type", width: "10%" },
+            { dataField: "occupancylevel", caption: "Occ. Level", width: "8%"},
+            { dataField: "title", caption: "Title", width: "12%" },
+            { dataField: "email", caption: "Email", width: "15%" },
+            { dataField: "description", caption: "Description", width: "20%" },
+            { dataField: "color", caption: "Color", visible: false }, 
+            { dataField: "createBy", caption: "CreateBy", width: "5%" },
+            { dataField: "createDate", caption: "CreateDate", dataType: "date", format: "dd/MM/yyyy", width: "10%" },
+            { dataField: "updateBy", caption: "UpdateBy", width: "5%" },
+            { dataField: "updateDate", caption: "UpdateDate", dataType: "date", format: "dd/MM/yyyy", width: "10%" },
             ],
+
+            onRowPrepared: function(e) {
+                if (e.rowType === "data" && e.data.color) {
+                    const colorHex = argbIntToHex(e.data.color);
+                    e.rowElement.css("background-color", colorHex);
+                    const textColor = getContrastColor(colorHex);
+                    e.rowElement.css("color", textColor);
+                }
+            },
 
             filterRow: { visible: true, applyFilter: "auto" },
             paging: { pageSize: 20 },
@@ -198,10 +223,18 @@
     function reloadGrid() {
         $("#loadingSpinnerRateCode").show();
 
-        $.get("/Administration/GetOccupancy")
-            .done(data => loadGrid(data))
-            .fail(() => showToast("Error", "Không thể tải dữ liệu", false))
-            .always(() => $("#loadingSpinnerRateCode").hide());
+        $.ajax({
+            url: "/Administration/GetOccupancy",
+            type: 'GET',
+            success: function(data){
+                loadGrid(data);
+                $("#loadingSpinnerRateCode").hide();
+            },
+            error: function(xhr, status, error){
+                alert("Không thể tải dữ liệu");
+                $("#loadingSpinnerRateCode").hide();
+            }
+        });
     }
 
     @*JS handle button new edit*@

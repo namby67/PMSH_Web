@@ -103,7 +103,7 @@
 
 <script>
     DevExpress.localization.locale("vi");
-       let selectedRowData = null;
+       var selectedRowData = null;
 
         $(document).ready(function () {
          reloadGrid();
@@ -115,7 +115,7 @@
 
         $("#btnNew").click(function () {
         $("#itemForm")[0].reset();
-        $("#id").val("0");   // 🔥 reset về 0 để phân biệt Insert
+        $("#id").val("0");   
         $("#itemModal").modal("show");
     });
 
@@ -125,7 +125,7 @@
          console.log("FormData:", formData);
         let url = "/Administration/InsertDepartment";
         if ($("#id").val() && $("#id").val() !== "0") {
-            url = "/Administration/UpdateDepartment"; // nếu có id thì update
+            url = "/Administration/UpdateDepartment"; 
         }
 
         $.ajax({

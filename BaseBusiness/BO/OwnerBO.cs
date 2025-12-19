@@ -24,10 +24,5 @@ namespace BaseBusiness.BO
         {
             get { return instance; }
         }
-        public OwnerModel GetById(int id, SqlConnection conn, SqlTransaction tx)
-        {
-            const string sql = "SELECT ID, Code, Name, Description, CreatedBy, CreatedDate,  UpdatedBy, UpdatedDate FROM Owner WHERE ID = @id";
-            return conn.QuerySingleOrDefault<OwnerModel>(sql, new { id }, tx);
-        }
     }
 }

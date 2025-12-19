@@ -49,9 +49,6 @@
                 <button type="button" id="btnSaveItem" class="mui-button mui-button-export">
                     <i class="fa-solid fa-floppy-disk"></i> Save
                 </button>
-                <button type="button" class="mui-button button-report-delete" data-bs-dismiss="modal">
-                    <i class="fa-solid fa-xmark"></i> Close
-                </button>
             </div>
             <div class="modal-body">
                 <form id="itemForm">
@@ -71,8 +68,8 @@
                             <div class="col-md-4">
                                 <label for="txtDescription" class="form-label">Description</label>
                             </div>
-                            <div class="col-md-4">
-                                <textarea id="txtDescription" name="txtDescription" class="form-control" rows="4"></textarea>
+                            <div class="col-md-8">
+                                <textarea id="txtDescription" name="txtDescription" class="form-control" rows="4" style="height:100px"></textarea>
                             </div>
                         </div>
 
@@ -130,7 +127,7 @@
                                     </div>
                                     <div class="col-md-7">
                                         <select id="currencyID" class="form-select form-select-sm">
-                                            <option value="">--All--</option>
+                                            <option value="">--Select--</option>
                                             @foreach (var item in listCurr)
                                             {
                                                 <option value="@item.ID">@item.ID</option>
@@ -213,7 +210,7 @@
         });
     });
 
-    let selectedRowData = null;
+    var selectedRowData = null;
 
     function toggleCurrency() {
         let typeVal = $("input[name='type']:checked").val();
@@ -292,59 +289,58 @@
            var listUser = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.UsersList ?? new List<object>()));
           $("#gridContainer").dxDataGrid({
               dataSource: data,
-              showBorders: true,
-              selection: { mode: "single" },
-              paging: { pageSize: 20 },
               height: 500,
               width: "100%",
-              pager: {
-                  visible: true,
-                  showPageSizeSelector: true,
-                  allowedPageSizes: [20, 50, 100],
-                  showInfo: true,
-                  showNavigationButtons:true
-              },
-              filterRow: { visible: true },
-             columns: [
+              columnAutoWidth: false,// Tắt auto width để tuân thủ width % bên dưới
+              allowColumnResizing: true,
+              columnResizingMode: "widget",
+              selection: { mode: "single" },
+              hoverStateEnabled: true,
+              columns: [
                          { dataField: "id", caption: "ID", visible: false },
-                         { dataField: "code", caption: "Code" , width: 130 },
-                         { dataField: "description", caption: "Description", width: 270 },
-                         { dataField: "type", caption: "Type", width: 120 },
-                         { dataField: "amountValue", caption: "Amount", width: 70 },
-                         { dataField: "currencyID", caption: "$", width: 50 },
-                         { dataField: "daysBeforeArrival", caption: "Days Before Arrival", width: 120 }, 
-                         { dataField: "cancelBeforeTime", caption: "Cancel Before Time", width: 120 },
+                         { dataField: "code", caption: "Code" , width: "10%" },
+                         { dataField: "description", caption: "Description", width: "17%" },
+                         { dataField: "type", caption: "Type", width: "8%" },
+                         { dataField: "amountValue", caption: "Amount", format: "#,##0", width: "6%" },
+                         { dataField: "currencyID", caption: "$", width: "4%" },
+                         { dataField: "daysBeforeArrival", caption: "Days Before Arrival", width: "9%" },
+                         { dataField: "cancelBeforeTime", caption: "Cancel Before Time", dataType: "date", format:"HH:mm", width: "9%" },
                          {
                             dataField: "userInsertID",
                             caption: "Create By",
-                            width: 70,
+                            width: "9%",
                             lookup: {
                                 dataSource: listUser,
                                 valueExpr: "ID",
                                 displayExpr: "LoginName"
                             }
                          },
-                         { dataField: "createDate", caption: "Create Date", dataType: "date", format: "dd/MM/yyyy", width: 90 },
+                         { dataField: "createDate", caption: "Create Date", dataType: "date", format: "dd/MM/yyyy", width: "9%" },
                          {
                             dataField: "userUpdateID",
                             caption: "Update By",
-                            width: 70,
+                            width: "9%",
                             lookup: {
                                 dataSource: listUser,
-                                valueExpr: "ID",
+                                valueExpr: "ID",    
                                 displayExpr: "LoginName"
                             }
                          },
-                         { dataField: "updateDate", caption: "Update Date", dataType: "date", format: "dd/MM/yyyy", width: 90 },
-                     ],
-              scrolling: {
-                      mode: "standard",
-                      showScrollbar: "always",
-                      scrollByContent: true
-                  },
-               onSelectionChanged: function(e){
+                         { dataField: "updateDate", caption: "Update Date", dataType: "date", format: "dd/MM/yyyy", width: "10%" },
+              ],
+              filterRow: { visible: true, applyFilter: "auto" },
+              paging: { pageSize: 20 },
+              pager: {
+                visible: true,
+                allowedPageSizes: [20, 50, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true
+              },
+              scrolling: { mode: "standard", showScrollbar: "always" },
+
+              onSelectionChanged: function(e){
                   selectedRowData = e.selectedRowsData.length > 0 ? e.selectedRowsData[0] : null;
-                  console.log("Selected Row Data:", selectedRowData);
               }
          });
      }

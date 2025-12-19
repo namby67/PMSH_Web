@@ -3,7 +3,6 @@
 @{
     var listCurr = ViewBag.CurrencyList;
 }
-
 <div class="text-center" id="reportTitle" style="font-size: 20px">Deposit Rules Search</div>
 
 <div class="sticky-header bg-white p-2 shadow-sm z-3">
@@ -48,9 +47,6 @@
                 <button type="button" id="btnSaveItem" class="mui-button mui-button-export">
                     <i class="fa-solid fa-floppy-disk"></i> Save
                 </button>
-                <button type="button" class="mui-button button-report-delete" data-bs-dismiss="modal">
-                    <i class="fa-solid fa-xmark"></i> Close
-                </button>
             </div>
             <div class="modal-body">
                 <form id="itemForm">
@@ -60,7 +56,7 @@
                             <div class="col-md-4">
                                 <label for="txtCode" class="form-label mb-0">Deposit Rule Code</label>
                             </div>
-                            <div class="col-md-8">
+                            <div class="col-md-4">
                                 <input type="text" id="txtCode" name="txtCode" class="form-control form-control-sm" />
                                 <div class="invalid-feedback">Code is required.</div>
                             </div>
@@ -71,7 +67,7 @@
                                 <label for="txtDescription" class="form-label">Description</label>
                             </div>
                             <div class="col-md-8">
-                                <textarea id="txtDescription" name="txtDescription" class="form-control" rows="4"></textarea>
+                                <textarea id="txtDescription" name="txtDescription" class="form-control" rows="4" style="height:100px"></textarea>
                             </div>
                         </div>
 
@@ -119,7 +115,7 @@
                                     </div>
                                     <div class="col-md-7">
                                         <select id="currencyID" class="form-select form-select-sm">
-                                            <option value="">--All--</option>
+                                            <option value="">--Select--</option>
                                             @foreach (var item in listCurr)
                                             {
                                                 <option value="@item.ID">@item.ID</option>
@@ -179,6 +175,7 @@
 </div>
 
 <script>
+     DevExpress.localization.locale("vi");
     $(document).ready(function () {
          $("#btnSearch").trigger("click");
 
@@ -195,7 +192,7 @@
         });
     });
         
-    let selectedRowData = null;
+    var selectedRowData = null;
 
     function toggleCurrency() {
         let typeVal = $("input[name='type']:checked").val();
@@ -203,9 +200,9 @@
 
         if (typeVal == "0") {
         $div.removeClass("d-none").addClass("d-flex");
-    } else {
-        $div.addClass("d-none").removeClass("d-flex");
-    }
+        } else {
+            $div.addClass("d-none").removeClass("d-flex");
+        }
     }
 
         function validateForm() {
@@ -270,57 +267,57 @@
            var listUser = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.UsersList ?? new List<object>()));
           $("#gridContainer").dxDataGrid({
               dataSource: data,
-              showBorders: true,
-              selection: { mode: "single" },
-              paging: { pageSize: 20 },
               height: 500,
               width: "100%",
-              pager: {
-                  visible: true,
-                  showPageSizeSelector: true,
-                  allowedPageSizes: [20, 50, 100],
-                  showInfo: true,
-                  showNavigationButtons:true
-              },
-              filterRow: { visible: true },
-             columns: [
-                         { dataField: "id", caption: "ID", width: 80, visible: false },
-                         { dataField: "code", caption: "Code" , width: 130 },
-                         { dataField: "description", caption: "Description", width: 250 },
-                         { dataField: "type", caption: "Type", width: 100 },
-                         { dataField: "amountValue", caption: "Amount", width: 70 },
-                         { dataField: "currencyID", caption: "$", width: 50 },
-                         { dataField: "daysBeforeArrival", caption: "Days Before Arrival", width: 120 },
-                         { dataField: "daysAfterBooking", caption: "Days After Booking", width: 120 },
+              columnAutoWidth: false,// Tắt auto width để tuân thủ width % bên dưới
+              allowColumnResizing: true,
+              columnResizingMode: "widget",
+              selection: { mode: "single" },
+              hoverStateEnabled: true,
+              columns: [
+                         { dataField: "id", caption: "ID", visible: false },
+                         { dataField: "code", caption: "Code" , width: "8%" },
+                         { dataField: "description", caption: "Description", width: "20%" },
+                         { dataField: "type", caption: "Type", width: "5%" },
+                         { dataField: "amountValue", caption: "Amount", format:"#,##0" , width: "8%" },
+                         { dataField: "currencyID", caption: "$", width: "4%" },
+                         { dataField: "daysBeforeArrival", caption: "Days Before Arrival", width: "9%" },
+                         { dataField: "daysAfterBooking", caption: "Days After Booking", width: "9%" },
                          {
                             dataField: "userInsertID",
                             caption: "Create By",
-                            width: 70,
+                            width: "8%",
                             lookup: {
                                 dataSource: listUser,
                                 valueExpr: "ID",
                                 displayExpr: "LoginName"
                             }
                          },
-                         { dataField: "createDate", caption: "Create Date", dataType: "date", format: "dd/MM/yyyy", width: 150 },
+                         { dataField: "createDate", caption: "Create Date", dataType: "date", format: "dd/MM/yyyy", width: 10%"" },
                          {
                             dataField: "userUpdateID",
                             caption: "Update By",
-                            width: 70,
+                            width: "8%",
                             lookup: {
                                 dataSource: listUser,
                                 valueExpr: "ID",
                                 displayExpr: "LoginName"
                             }
                          },
-                         { dataField: "updateDate", caption: "Update Date", dataType: "date", format: "dd/MM/yyyy", width: 150 },
-                     ],
-              scrolling: {
-                      mode: "standard",
-                      showScrollbar: "always",
-                      scrollByContent: true
-                  },
-               onSelectionChanged: function(e){
+                         { dataField: "updateDate", caption: "Update Date", dataType: "date", format: "dd/MM/yyyy", width: "11%" },
+              ],
+              filterRow: { visible: true, applyFilter: "auto" },
+              paging: { pageSize: 20 },
+              pager: {
+                visible: true,
+                allowedPageSizes: [20, 50, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true
+              },
+              scrolling: { mode: "standard", showScrollbar: "always" },
+
+              onSelectionChanged: function(e){
                   selectedRowData = e.selectedRowsData.length > 0 ? e.selectedRowsData[0] : null;
               }
          });
@@ -331,6 +328,7 @@
           $.ajax({
               url: "/Administration/GetDepositRule/",
               type: "GET",
+              cache: false,
               data: {
                  code: $("#codeInput").val(),
                  description: $("#descriptionInput").val(),
@@ -424,25 +422,25 @@
           $("#loadingSpinner").show();
 
           $.ajax({
-               url: url,
+              url: url,
               type: "POST",
               contentType: "application/json",
               data: JSON.stringify(model),
               traditional: true,
-                   crossDomain: false,
-                     headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+              crossDomain: false,
+              headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
               success: function (res) {
                   if (res.success) {
                     showToast("Success", res.message, true);
                     $("#itemModal").modal("hide");
                 } else {
-                    showToast("Error", res.message, false);
+                    showToast("Error", res.message || "Request failed", false);
                 }
                   $("#btnSearch").click();
               },
               error: function (xhr, status, error) {
                   $("#loadingSpinner").hide();
-                      showToast("Error",error.message, false);
+                      showToast("Error",error.message ||"Request failed", false);
               }
           });
       });
@@ -452,7 +450,7 @@
 
                return;
            }
-           if (!confirm("Are you sure you want to delete this record?")) {
+           if (!confirm("Are you sure you want to delete this record? This action cannot be undone.")) {
                 return;
             }
            $.ajax({

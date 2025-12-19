@@ -1,5 +1,4 @@
-﻿@using DevExpress.XtraReports.UI
-
+﻿
 @{
     //
 }
@@ -13,9 +12,6 @@
             <div class="">
                 <button type="button" id="btnSave" class="mui-button mui-button-export">
                     <i class="fa-solid fa-floppy-disk"></i> Save
-                </button>
-                <button type="button" class="mui-button button-report-delete" data-bs-dismiss="modal">
-                    <i class="fa-solid fa-xmark"></i> Close
                 </button>
             </div>
             <div class="col-md-4">
@@ -84,8 +80,6 @@
     });
 
     function loadForm(config){
-            console.log("form "+ config.id)
-
          $("#id").val(config.id);
          $("#emailAdressInput").val(config.emailAddress);
          $("#mailUserInput").val(config.mailUser);
@@ -136,6 +130,9 @@
                 mailBodyENG: $("#bodyEInput").val(),
                 updatedBy: loginName,
             };
+            if (!confirm("Are you sure you want to save confirmation config?")) {
+                return;
+            }
             $.ajax({
                 url: "/Administration/ConfirmationConfigSave",
                 type: "POST",
