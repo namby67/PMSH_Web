@@ -24,10 +24,5 @@ namespace BaseBusiness.BO
         {
             get { return instance; }
         }
-        public PickupDropPlaceModel GetById(int id, SqlConnection conn, SqlTransaction tx)
-        {
-            const string sql = "SELECT ID, Code, Name, Description, CreatedBy, CreatedDate,  UpdatedBy, UpdatedDate FROM PickupDropPlace WHERE ID = @id";
-            return conn.QuerySingleOrDefault<PickupDropPlaceModel>(sql, new { id }, tx);
-        }
     }
 }

@@ -24,11 +24,6 @@ namespace BaseBusiness.BO
         {
             get { return instance; }
         }
-        public PropertyTypeModel GetById(int id, SqlConnection conn, SqlTransaction tx)
-        {
-            const string sql = "SELECT ID, PropertyTypeID ,PropertyCode, PropertyName, Telephone, Fax, Email, Website, Address, ServerName, DatabaseName, Login, Password, Inactive, CreatedBy, CreatedDate,  UpdatedBy, UpdatedDate FROM Property WHERE ID = @id";
-            return conn.QuerySingleOrDefault<PropertyTypeModel>(sql, new { id }, tx);
-        }
     }
    
 }
