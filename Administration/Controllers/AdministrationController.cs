@@ -1632,8 +1632,6 @@ namespace Administration.Controllers
         {
             try
             {
-
-
                 DataTable dataTable = _iAdministrationService.Country(code, name, inactive);
                 var result = (from d in dataTable.AsEnumerable()
                               select new
@@ -2228,8 +2226,6 @@ namespace Administration.Controllers
         {
             try
             {
-
-
                 DataTable dataTable = _iAdministrationService.VIP(code, name, inactive);
                 var result = (from d in dataTable.AsEnumerable()
                               select new
@@ -2349,21 +2345,18 @@ namespace Administration.Controllers
             {
                 return Json(ex.Message);
             }
-            //  report.DataSource = dataTable;
-
-            // Không cần gán parameter
-            // report.RequestParameters = false;
-
-            // return PartialView("_ReportViewerPartial", report);
         }
         [HttpGet]
-        public IActionResult GetById(int id)
+        public IActionResult GetMarketById(int id)
         {
-            var market = MarketBO.Instance.GetById(id);
-            if (market == null)
-                return NotFound();
+            var data = (MarketModel)MarketBO.Instance.FindByPrimaryKey(id);
 
-            return Json(market);
+            if (data == null)
+            {
+                return Json(new { regional = "",groupType = 0 });
+            }
+
+            return Json(new { regional = data.Regional, groupType = data.GroupType });
         }
         public IActionResult Market()
         {
@@ -2372,146 +2365,69 @@ namespace Administration.Controllers
             return PartialView("ItemCategory/Market");
         }
         [HttpPost]
-        public ActionResult InsertMarket()
+        public IActionResult MarketSave([FromBody] MarketModel model)
         {
-            ProcessTransactions pt = new ProcessTransactions();
+            string message = "";
+
             try
             {
-                pt.OpenConnection();
-                pt.BeginTransaction();
+                if (model == null)
+                    return Json(new { success = false, message = "Invalid data." });
 
-                MarketModel member = new MarketModel();
-
-                // Lấy dữ liệu từ form
-                member.Code = Request.Form["txtcode"].ToString();
-                member.Name = Request.Form["txtname"].ToString();
-                member.Description = Request.Form["txtdescription"].ToString();
-                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
-                                  && Request.Form["inactive"].ToString() == "on";
-
-                string marketTypeValue = Request.Form["marketTypeID"];
-                member.MarketTypeID = int.TryParse(marketTypeValue, out int mId) ? mId : 0;
-
-                string groupTypeValue = Request.Form["groupType"];
-                member.GroupType = int.TryParse(groupTypeValue, out int sId) ? sId : 0;
-
-                member.Regional = Request.Form["txtregional"].ToString();
-                // Thông tin người dùng
-                member.CreatedBy = HttpContext.Session.GetString("LoginName") ?? "";
-                member.UpdatedBy = member.CreatedBy;
-                member.CreatedDate = DateTime.Now;
-                member.UpdatedDate = DateTime.Now;
-
-                // Gọi BO để lưu
-                long memberId = MarketBO.Instance.Insert(member);
-
-                pt.CommitTransaction();
-
-                return Json(new { success = true, id = memberId });
-            }
-            catch (Exception ex)
-            {
-                pt.RollBack();
-                return Json(new { success = false, message = ex.Message });
-            }
-            finally
-            {
-                pt.CloseConnection();
-            }
-        }
-        [HttpPost]
-        public ActionResult UpdateMarket()
-        {
-            ProcessTransactions pt = new ProcessTransactions();
-            try
-            {
-                pt.OpenConnection();
-                pt.BeginTransaction();
-
-                MarketModel member = new MarketModel();
-
-                // Lấy ID từ form (có khi edit)
-                member.ID = !string.IsNullOrEmpty(Request.Form["id"])
-                             ? int.Parse(Request.Form["id"])
-                             : 0;
-
-                // Lấy dữ liệu từ form
-                member.Code = Request.Form["txtcode"].ToString();
-                member.Name = Request.Form["txtname"].ToString();
-                member.Description = Request.Form["txtdescription"].ToString();
-                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
-                                  && Request.Form["inactive"].ToString() == "on";
-                string marketTypeValue = Request.Form["marketTypeID"];
-                member.MarketTypeID = int.TryParse(marketTypeValue, out int mId) ? mId : 0;
-
-                string groupTypeValue = Request.Form["groupType"];
-                member.GroupType = int.TryParse(groupTypeValue, out int sId) ? sId : 0;
-                member.Regional = Request.Form["txtregional"].ToString();
-                string loginName = HttpContext.Session.GetString("LoginName") ?? "";
-
-                if (member.ID == 0) // Insert mới
+                if (model.ID == 0)
                 {
-                    member.CreatedBy = loginName;
-                    member.CreatedDate = DateTime.Now;
-                    member.UpdatedBy = loginName;
-                    member.UpdatedDate = DateTime.Now;
+                    model.CreateDate = DateTime.Now;
+                    model.CreatedDate = DateTime.Now;
+                    model.UpdateDate = DateTime.Now;
+                    model.UpdatedDate = DateTime.Now;
 
-                    MarketBO.Instance.Insert(member);
+                    MarketBO.Instance.Insert(model);
+                    message = "Insert successfully!";
                 }
-                else // Update
+                else
                 {
-                    // Trước khi update, lấy lại bản ghi cũ từ DB để giữ CreatedBy, CreatedDate
-                    var oldData = MarketBO.Instance.GetById(member.ID, pt.Connection, pt.Transaction);
+                    var oldData = (MarketModel)MarketBO.Instance.FindByPrimaryKey(model.ID);
 
                     if (oldData != null)
                     {
-                        member.CreatedBy = oldData.CreatedBy;
-                        member.CreatedDate = oldData.CreatedDate;
+                        model.UserInsertID = oldData.UserInsertID;
+                        model.CreatedBy = oldData.CreatedBy;
+                        model.CreateDate = oldData.CreatedDate;
+                        model.CreatedDate = oldData.CreatedDate;
                     }
 
-                    member.UpdatedBy = loginName;
-                    member.UpdatedDate = DateTime.Now;
+                    model.UpdateDate = DateTime.Now;
+                    model.UpdatedDate = DateTime.Now;
 
-                    MarketBO.Instance.Update(member);
+                    MarketBO.Instance.Update(model);
+                    message = "Update successfully!";
                 }
 
-                pt.CommitTransaction();
-                return Json(new { success = true });
             }
             catch (Exception ex)
             {
-                pt.RollBack();
-                return Json(new { success = false, message = ex.Message });
+                message = ex.Message;
+                return Json(new { success = false, message });
             }
-            finally
-            {
-                pt.CloseConnection();
-            }
+
+            return Json(new { success = true, message });
         }
         [HttpPost]
-        public ActionResult DeleteMarket()
+        public IActionResult DeleteMarket(int id)
         {
             try
             {
-
-                MarketModel memberModel = (MarketModel)MarketBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["id"].ToString()));
-                if (memberModel == null || memberModel.ID == 0)
-                {
-                    return Json(new { code = 1, msg = "Can not find Lost And Found" });
-
-                }
-                MarketBO.Instance.Delete(int.Parse(Request.Form["id"].ToString()));
-                return Json(new { code = 0, msg = "Delete Lost And Found was successfully" });
-
+                MarketBO.Instance.Delete(id);
             }
             catch (Exception ex)
             {
-                return Json(new { code = 1, msg = ex.Message });
+                return Json(new { success = false, ex.Message });
             }
 
+            return Json(new { success = true });
         }
         #endregion
-        //chua fix
+
         #region ItemCategory/MarketType
         [HttpGet]
         public IActionResult GetMarketType(string code, string name, int inactive)
