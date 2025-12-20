@@ -42,6 +42,20 @@ namespace Administration.Services.Implements
                     CreateDate = businessDate
                 };
             }
+            if (!string.IsNullOrWhiteSpace(dto.Code))
+            {
+                var packagesList = PackageBO.Instance.FindByAttribute("Code", dto.Code);
+
+                bool duplicate = packagesList?
+                    .Cast<PackageModel>()
+                    .Any(p =>
+                        string.Equals(p.Code?.Trim(),dto.Code.Trim(),StringComparison.OrdinalIgnoreCase)
+                        && p.ID != dto.ID
+                    ) == true;
+
+                if (duplicate)
+                    throw new DuplicateNameException("Package Code already exists.");
+            }
 
             // ===== MAP DTO → ENTITY =====
             entity.Code = dto.Code?.Trim() ?? string.Empty;

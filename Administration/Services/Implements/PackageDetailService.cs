@@ -87,11 +87,14 @@ namespace Administration.Services.Implements
             else
             {
                 var businessDate = PropertyUtils.ConvertToList<BusinessDateModel>(BusinessDateBO.Instance.FindAll())![0].BusinessDate;
+                if (!dto.PackageID.HasValue)
+                    throw new ArgumentException("PackageID is required");
+
                 entity = new PackageDetailModel
                 {
                     UserInsertID = dto.UserInsertID,
                     CreateDate = businessDate,
-                    PackageID = dto.PackageID,
+                    PackageID = dto.PackageID.Value,
                     PostingDate = businessDate
                 };
             }
@@ -112,15 +115,14 @@ namespace Administration.Services.Implements
             entity.StartDate = dto.StartDate;
             entity.EndDate = dto.EndDate;
             entity.TransCode = dto.TransCode;
-            entity.Description = dto.Description;
-            entity.Price = dto.Price;
+            entity.Description = transaction.Description;
+            entity.Price = dto.Price ?? 0;
             entity.CurrencyID = dto.CurrencyID;
-            entity.AllowanceAmount = dto.AllowanceAmount;
             entity.RhythmPostingID = dto.RhythmPostingID;
-            entity.CalculationRuleID = dto.CalculationRuleID;
-            entity.PriceAfterTax = dto.PriceAfterTax;
+            entity.CalculationRuleID = dto.CalculationRuleID ?? 0;
+            entity.PriceAfterTax = dto.PriceAfterTax ?? 0;
             entity.IsTaxInclude = !transaction.TaxInclude;
-            entity.UserUpdateID = dto.UserUpdateID;
+            entity.UserUpdateID = dto.UserUpdateID ?? 0;
             entity.UpdateDate = dto.UpdateDate;
 
             //Save
@@ -132,7 +134,8 @@ namespace Administration.Services.Implements
             {
                 PackageDetailBO.Instance.Insert(entity);
             }
-            return entity.ID;
+            // Trả về Package để gọi Lại full cả package lẫn package detail
+            return entity.PackageID;
         }
     }
 

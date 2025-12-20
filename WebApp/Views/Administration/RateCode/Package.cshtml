@@ -166,7 +166,7 @@
 
                 <div class="col-12">
                     <label class="form-label me-2 mb-0">Trans. Code</label>
-                    <select class="form-control form-select form-control-sm " id="transactionCode">
+                    <select class="form-control form-select form-control-sm " id="transactionCodeDT">
                         <option value="0">-- Select Transaction Code -- </option>
                         @foreach (dynamic u in ViewBag.TransactionList)
                         {
@@ -233,9 +233,9 @@
 
             <!-- Buttons -->
             <div class="mt-3 d-flex gap-2">
-                <button class="btn btn-secondary">Clear</button>
-                <button class="btn btn-primary">Add</button>
-                <button class="btn btn-danger">Remove</button>
+                <button class="btn btn-secondary" id="btnClear">Clear</button>
+                <button class="btn btn-primary" id="addDetailPackage">Add</button>
+                <button class="btn btn-danger" id="btnRemove">Remove</button>
             </div>
         </div>
 
@@ -301,6 +301,12 @@
     txtDescription.addEventListener("input", function () {
         textInNightAudit.value = this.value;
     });
+    const txtCode = document.getElementById("txtCode");
+    const targetCode = document.getElementById("targetCode");
+
+    txtCode.addEventListener("input", function () {
+        targetCode.value = this.value;
+    });
     const tabsText = [
         { text: 'Package Header' },
         { text: 'Package Detail' },
@@ -316,12 +322,27 @@
         stylingMode: 'text',
 
         onSelectionChanged: function (e) {
+            // Lấy index tab hiện tại
+            const index = e.component.option('selectedIndex');
+
             // Ẩn tất cả form
             $('.dx-tab-form').hide();
 
             // Hiện form tương ứng
-            const formToShow = $('.dx-tab-form[data-tab="' + e.component.option('selectedIndex') + '"]');
-            formToShow.show();
+            $('.dx-tab-form[data-tab="' + index + '"]').show();
+
+            // ===== TOGGLE SAVE BUTTON =====
+            if (index === 1) {
+                $('#btnNew').hide();
+                $('#btnSave').hide();   // Detail → hide Save
+                $('#btnEdit').hide();
+                $('#btnDelete').hide();
+            } else {
+                $('#btnNew').show();
+                $('#btnSave').show();   // Header → show Save
+                $('#btnEdit').show();
+                $('#btnDelete').show()
+            }
         }
     }).dxTabs('instance');
 
@@ -384,6 +405,141 @@
         // (tuỳ chọn) đổi text / icon
         // $(this).text(isReadOnly ? 'Edit' : 'Lock');
     });
+    $('#btnSave').on('click', function () {
+        $("#loadingSpinner").show();
+        var dataPackage = getPackageDataToPost();
+        $.ajax({
+            url: "/Administration/RateCode/SavePackage",
+            type: "POST",
+            contentType: "application/json",   // gửi JSON
+            data: JSON.stringify(dataPackage),         // convert object -> JSON
+            success: function (res) {
+                $("#loadingSpinner").hide();
+                if (res.success) {
+                    showToast('Success', res.message, true);
+                    let data = res.data
+                    selectPackage(data.id)
+                } else {
+                    showToast('Error', res.errors || 'Validation failed.', false);
+                }
+            },
+            error: function (xhr, status, error) {
+                // Nếu có mảng errors thì hiển thị từng cái
+                if (Array.isArray(xhr.responseJSON?.errors)) {
+                    xhr.responseJSON.errors.forEach((err, index) => {
+                        setTimeout(() => {
+                            showToast("Error", err, false);
+                        }, index * 1000); // delay 300ms mỗi toast
+                    });
+                }
+
+                $("#loadingSpinner").hide();
+            }
+        });
+
+    });
+    $('#btnDelete').on('click', function () {
+        $("#loadingSpinner").show();
+        var dataPackage = parseInt($("#ID").val()) || 0;
+        $.ajax({
+            url: "/Administration/RateCode/PackageDelete",
+            type: "POST",
+            contentType: "application/json",   // gửi JSON
+            data: JSON.stringify({ ID: dataPackage }),         // convert object -> JSON
+            success: function (res) {
+                $("#loadingSpinner").hide();
+                if (res.success) {
+                    showToast('Success', res.message, true);
+                    clearFormData();
+                } else {
+                    showToast('Error', res.message || 'Validation failed.', false);
+                }
+            },
+            error: function (xhr, status, error) {
+                // Nếu có mảng errors thì hiển thị từng cái
+                if (Array.isArray(xhr.responseJSON?.errors)) {
+                    xhr.responseJSON.errors.forEach((err, index) => {
+                        setTimeout(() => {
+                            showToast("Error", err, false);
+                        }, index * 1000); // delay 300ms mỗi toast
+                    });
+                }
+
+                $("#loadingSpinner").hide();
+            }
+        });
+
+    });
+
+    $('#addDetailPackage').on('click', function () {
+        $("#loadingSpinner").show();
+        var dataPackageDetail = getPackageDetailDataToPost();
+        $.ajax({
+            url: "/Administration/RateCode/SaveDetailPackage",
+            type: "POST",
+            contentType: "application/json",   // gửi JSON
+            data: JSON.stringify(dataPackageDetail),         // convert object -> JSON
+            success: function (res) {
+                $("#loadingSpinner").hide();
+                if (res.success) {
+                    showToast('Success', res.message, true);
+                    let data = res.data
+                    selectPackage(data.id)
+                } else {
+                    showToast('Error', res.errors || 'Validation failed.', false);
+                }
+            },
+            error: function (xhr, status, error) {
+                // Nếu có mảng errors thì hiển thị từng cái
+                if (Array.isArray(xhr.responseJSON?.errors)) {
+                    xhr.responseJSON.errors.forEach((err, index) => {
+                        setTimeout(() => {
+                            showToast("Error", err, false);
+                        }, index * 1000); // delay 300ms mỗi toast
+                    });
+                }
+
+                $("#loadingSpinner").hide();
+            }
+        });
+
+    });
+    $('#btnClear').on('click', function () {
+        clearFormData();
+    });
+    $('#btnRemove').on('click', function () {
+        $("#loadingSpinner").show();
+        var id = parseInt($("#packageDetailID").val()) || 0;
+        $.ajax({
+            url: "/Administration/RateCode/PackageDetailDelete",
+            type: "POST",
+            contentType: "application/json",   // gửi JSON
+            data: JSON.stringify({ ID: id }),         // convert object -> JSON
+            success: function (res) {
+                $("#loadingSpinner").hide();
+                if (res.success) {
+                    showToast('Success', res.message, true);
+                    clearFormData();
+                } else {
+                    showToast('Error', res.message || 'Validation failed.', false);
+                }
+            },
+            error: function (xhr, status, error) {
+                // Nếu có mảng errors thì hiển thị từng cái
+                if (Array.isArray(xhr.responseJSON?.errors)) {
+                    xhr.responseJSON.errors.forEach((err, index) => {
+                        setTimeout(() => {
+                            showToast("Error", err, false);
+                        }, index * 1000); // delay 300ms mỗi toast
+                    });
+                }
+
+                $("#loadingSpinner").hide();
+            }
+        });
+
+    });
+
 
     // sử lý modal
     function openModalSearchUser() {
@@ -452,7 +608,7 @@
             $('#seasonCode').val(data.seasonID);
             $('#startDate').val(data.startDate.split('T')[0]);
             $('#endDate').val(data.endDate.split('T')[0]);
-            $('#transactionCode').val(data.transCode);
+            $('#transactionCodeDT').val(data.transCode);
             $('#currencyID').val(data.currencyID);
             $('#price').val(data.price);
 
@@ -472,6 +628,8 @@
     async function selectPackage(id) {
         try {
             $("#loadingSpinner").show();
+            console.log('ID', id);
+
 
             // ===== 1. Lấy Package =====
             const resPackage = await $.ajax({
@@ -527,9 +685,6 @@
             console.log('PackageDetail:', details);
             initializePackageDetailGrid(details);
 
-            // TODO: bind detail grid/table 
-            $('#seasonCode').val(details.idseasonID);
-
             $('#modalSearch').modal('hide');
 
         } catch (err) {
@@ -540,10 +695,6 @@
         }
     }
 
-
-
-
-
     function filterUserList() {
         let keyword = $('#packageSearch').val().toLowerCase();
 
@@ -551,6 +702,77 @@
             let text = $(this).text().toLowerCase();
             $(this).toggle(text.includes(keyword));
         });
+    }
+
+    function getPackageDataToPost() {
+        const data = {
+            ID: parseInt($("#ID").val()) || 0,
+
+            Code: $("#txtCode").val()?.trim() || "",
+
+            ForecastGroupID: parseInt($("#forecastGroup").val()) || 0,
+            Type: parseInt($("#type").val()) || 0,
+
+            TransCode: $("#transactionCode").val() || "",
+
+            Description: $("#txtDescription").val()?.trim() || "",
+            DisplayInFolio: $("#textInNightAudit").val()?.trim() || "",
+
+            // ===== Attributes =====
+            // radio attr: 1 or 0
+            DefaultDisplay: parseInt($("input[name='attr']:checked").val()),
+
+            // ===== Meal Info =====
+            Breakfast: $("#breakfast").is(":checked"),
+            Lunch: $("#lunch").is(":checked"),
+            Dinner: $("#dinner").is(":checked"),
+
+            // ===== Status =====
+            Active: $("#chkActive").is(":checked"),
+
+            // ===== Audit =====
+            UserInsertID: parseInt(localStorage.getItem("userID")) || 0,
+            UserUpdateID: parseInt(localStorage.getItem("userID")) || 0
+        };
+
+        return data;
+    }
+
+    function getPackageDetailDataToPost() {
+        const data = {
+            // ===== PK =====
+            ID: parseInt($("#packageDetailID").val()) || 0,
+
+            // ===== FK =====
+            PackageID: parseInt($("#packageID").val()) || null,
+            SeasonID: parseInt($("#seasonCode").val()) || null,
+
+            // ===== Date =====
+            StartDate: $("#startDate").val() || null,
+            EndDate: $("#endDate").val() || null,
+
+            // ===== Transaction =====
+            TransCode: $("#transactionCodeDT").val() || null,
+
+            // ===== Price =====
+            Price: parseFloat($("#price").val()) || null,
+            PriceAfterTax: parseFloat($("#priceAfterTax").val()) || null,
+
+            // ⚠ CurrencyID là string
+            CurrencyID: $("#currencyID").val() || null,
+
+            AllowanceAmount: parseFloat($("#allowanceAmount").val()) || null,
+
+            // ===== Rule =====
+            RhythmPostingID: parseInt($("#rhythmPostingID").val()) || 0,
+            CalculationRuleID: parseInt($("#calculationRuleID").val()) || null,
+
+            // ===== Audit =====
+            UserInsertID: parseInt(localStorage.getItem("userID")) || 0,
+            UserUpdateID: parseInt(localStorage.getItem("userID")) || 0
+        };
+
+        return data;
     }
 
 </script>

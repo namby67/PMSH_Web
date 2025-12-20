@@ -4,6 +4,7 @@ using BaseBusiness.BO;
 using BaseBusiness.Model;
 using BaseBusiness.util;
 using Microsoft.AspNetCore.Mvc;
+using static Administration.DTO.PackageDetailDTO;
 
 namespace Administration.Controllers
 {
@@ -82,7 +83,6 @@ namespace Administration.Controllers
                 }
 
                 List<string> errors = [];
-
                 //Basic Validation
                 if (dto.CalculationRuleID < 0)
                 {
@@ -103,13 +103,42 @@ namespace Administration.Controllers
                     errors.Add("Currency Code is required.");
 
                 //Business Validation
+
+                // User
+                if (dto.UserInsertID <= 0)
+                {
+                    errors.Add("UserInsertID is required.");
+                }
+                else
+                {
+                    var user = UsersBO.Instance.FindByPrimaryKey(dto.UserInsertID);
+                    if (user == null)
+                    {
+                        errors.Add("Invalid User Insert.");
+                    }
+                }
+
                 var businessDates = PropertyUtils
                     .ConvertToList<BusinessDateModel>(BusinessDateBO.Instance.FindAll());
 
                 if (businessDates == null || businessDates.Count == 0)
                     errors.Add("Business date not available. Contact system administrator.");
 
+                // PackageID Validation
+                if (!dto.PackageID.HasValue || dto.PackageID.Value <= 0)
+                {
+                    errors.Add("Package is required.");
+                }
+                else
+                {
+                    var package = PackageBO.Instance.FindByPrimaryKey(dto.PackageID.Value);
+                    if (package == null)
+                    {
+                        errors.Add("Invalid Package.");
+                    }
+                }
 
+                //RhythmPosting Validation
                 var RhythmPostingList = RhythmPostingBO.Instance.FindByPrimaryKey(dto.RhythmPostingID);
                 if (RhythmPostingList == null)
                     errors.Add("Business date not available. Contact system administrator.");
@@ -123,7 +152,7 @@ namespace Administration.Controllers
                 }
                 if (!string.IsNullOrWhiteSpace(dto.CurrencyID))
                 {
-                    var currencyList = CurrencyBO.Instance.FindByPrimaryKey(dto.CurrencyID);
+                    var currencyList = CurrencyBO.Instance.FindByAttribute("ID", dto.CurrencyID);
                     if (currencyList == null || currencyList.Count == 0)
                         errors.Add("Invalid Transaction Code.");
                 }
@@ -139,6 +168,7 @@ namespace Administration.Controllers
                 }
                 // ===== CALL SERVICE =====
                 int id = _packagedetail.Save(dto);
+
 
                 return Ok(new
                 {
@@ -165,6 +195,25 @@ namespace Administration.Controllers
                     innerException = ex.InnerException?.Message,
                     stackTrace = ex.StackTrace
                 });
+            }
+        }
+
+        [HttpPost("PackageDetailDelete")]
+        public IActionResult PackageDetailDelete([FromBody] DeleteRequest delete)
+        {
+            try
+            {
+                int id = delete.ID;
+                if (PackageDetailBO.Instance.FindByPrimaryKey(id) is not PackageDetailModel existing || existing.ID == 0)
+                {
+                    return Ok(new { success = false, message = $"Package Detail ID {id} not found." });
+                }
+                PackageDetailBO.Instance.Delete(id);
+                return Ok(new { success = true, message = $"Successfully deleted Package Detail ID {id}." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { success = false, message = ex.Message });
             }
         }
     }

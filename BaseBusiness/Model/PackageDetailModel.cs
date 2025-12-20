@@ -6,7 +6,7 @@ namespace BaseBusiness.Model
     {
         public int ID { get; set; }
 
-        public int? PackageID { get; set; }
+        public int PackageID { get; set; }
         public int? SeasonID { get; set; }
 
         public DateTime? StartDate { get; set; }
@@ -19,18 +19,18 @@ namespace BaseBusiness.Model
 
         public string? Description { get; set; }
 
-        public decimal? Price { get; set; }
-        public string? CurrencyID { get; set; }
+        public decimal? Price { get; set; } = 0;
+        public string? CurrencyID { get; set; } 
 
-        public decimal? AllowanceAmount { get; set; }
+        public decimal? AllowanceAmount { get; set; } = 0;
 
-        public int RhythmPostingID { get; set; }
-        public int? CalculationRuleID { get; set; }
+        public int RhythmPostingID { get; set; } 
+        public int? CalculationRuleID { get; set; } = 0 ;
 
         public DateTime? PostingDate { get; set; }
         public string? PostingDay { get; set; }
 
-        public decimal? PriceAfterTax { get; set; }
+        public decimal? PriceAfterTax { get; set; } = 0;
         public bool? IsTaxInclude { get; set; }
 
         public int UserInsertID { get; set; }

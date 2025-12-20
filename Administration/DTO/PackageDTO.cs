@@ -37,5 +37,10 @@ namespace Administration.DTO
         // ===== Audit =====
         public int UserInsertID { get; set; }
         public int UserUpdateID { get; set; }
+
+        public class DeleteRequest
+        {
+            public int ID { get; set; }
+        }
     }
 }

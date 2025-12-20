@@ -5,6 +5,7 @@ using BaseBusiness.BO;
 using BaseBusiness.Model;
 using BaseBusiness.util;
 using Microsoft.AspNetCore.Mvc;
+using static Administration.DTO.PackageDTO;
 
 namespace Administration.Controllers
 {
@@ -98,6 +99,9 @@ namespace Administration.Controllers
                 List<string> errors = [];
 
                 // ===== BASIC VALIDATION =====
+                if (string.IsNullOrWhiteSpace(dto.Code))
+                    errors.Add("Package Code is required.");
+
                 if (string.IsNullOrWhiteSpace(dto.TransCode))
                     errors.Add("Transaction Code is required.");
 
@@ -110,6 +114,20 @@ namespace Administration.Controllers
                     errors.Add("UserID is required.");
 
                 // ===== BUSINESS VALIDATION =====
+                // User
+                if (dto.UserInsertID <= 0)
+                {
+                    errors.Add("UserInsertID is required.");
+                }
+                else
+                {
+                    var user = UsersBO.Instance.FindByPrimaryKey(dto.UserInsertID);
+                    if (user == null)
+                    {
+                        errors.Add("Invalid User Insert.");
+                    }
+                }
+
 
                 // Business Date
                 var businessDates = PropertyUtils
@@ -154,6 +172,23 @@ namespace Administration.Controllers
                 // ===== CALL SERVICE =====
                 int id = _packageService.Save(dto);
 
+                // GIẢI PHÁP TẠM THỜI:
+                // PackageBO.Insert không trả về ID được tạo tự động
+                // Truy vấn bằng mã để lấy ID sau khi chèn
+                if (id == 0 && !string.IsNullOrWhiteSpace(dto.Code))
+                {
+                    var pkg = PackageBO.Instance
+                        .FindByAttribute("Code", dto.Code)?
+                        .Cast<PackageModel?>()
+                        .FirstOrDefault();
+
+                    if (pkg != null)
+                    {
+                        id = pkg.ID;
+                    }
+
+                }
+
                 return Ok(new
                 {
                     success = true,
@@ -166,18 +201,46 @@ namespace Administration.Controllers
                 return Json(new
                 {
                     success = false,
-                    message = ex.Message
+                    errors = ex.Message
                 });
             }
             catch (Exception ex)
             {
-                return Json( new
+                return Json(new
                 {
                     success = false,
-                    message = ex.Message,
+                    errors = ex.Message,
                     innerException = ex.InnerException?.Message,
                     stackTrace = ex.StackTrace
                 });
+            }
+        }
+        [HttpPost("PackageDelete")]
+        public IActionResult PackageDelete([FromBody] DeleteRequest delete)
+        {
+            try
+            {
+                int id = delete.ID;
+                if (PackageBO.Instance.FindByPrimaryKey(id) is not PackageModel existing || existing.ID == 0)
+                {
+                    return Ok(new { success = false, message = $"Package ID {id} not found." });
+                }
+
+                var arr = PropertyUtils.ConvertToList<PackageDetailModel>(
+                    PackageDetailBO.Instance.FindByAttribute("PackageID", id)
+                );
+
+                if (arr != null && arr.Count > 0)
+                {
+                    return Ok(new { success = false, message = "Package is being referenced in other modules.\nDelete failed!" });
+                }
+
+                PackageBO.Instance.Delete(id);
+                return Ok(new { success = true, message = $"Successfully deleted Package ID {id}." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { success = false, message = ex.Message });
             }
         }
     }

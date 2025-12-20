@@ -40,5 +40,10 @@ namespace Administration.DTO
 
         // property mới để chứa description từ transaction
         public string? TransactionDescription { get; set; } = string.Empty;
+
+        public class DeleteRequest
+        {
+            public int ID { get; set; }
+        }
     }
 }
