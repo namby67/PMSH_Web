@@ -2353,10 +2353,10 @@ namespace Administration.Controllers
 
             if (data == null)
             {
-                return Json(new { regional = "",groupType = 0 });
+                return Json(new { regional = "",groupType = 0, marketTypeID = 0 });
             }
 
-            return Json(new { regional = data.Regional, groupType = data.GroupType });
+            return Json(new { regional = data.Regional, groupType = data.GroupType, marketTypeID = data.MarketTypeID });
         }
         public IActionResult Market()
         {
