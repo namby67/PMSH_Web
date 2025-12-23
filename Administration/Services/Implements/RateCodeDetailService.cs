@@ -2,6 +2,7 @@ using System.Data;
 using Microsoft.Data.SqlClient;
 using BaseBusiness.util;
 using static Administration.DTO.RateCodeDetailDTO;
+using Administration.Services.Interfaces;
 
 namespace Administration.Services.Implements
 {
@@ -38,7 +39,7 @@ namespace Administration.Services.Implements
                     ];
                 DataTable myTable = DataTableHelper.getTableData("spGetRateCodeDetailByRateCodeIDGrouped", param);
                 return myTable;
-                
+
             }
             catch (Exception ex)
             {

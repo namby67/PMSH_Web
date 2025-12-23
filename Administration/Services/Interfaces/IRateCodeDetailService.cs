@@ -1,7 +1,7 @@
 using System.Data;
 using static Administration.DTO.RateCodeDetailDTO;
 
-namespace Administration.Services
+namespace Administration.Services.Interfaces
 {
     public interface IRateCodeDetailService
     {
