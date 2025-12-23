@@ -75,29 +75,29 @@ namespace Administration.Controllers
         {
             try
             {
-                List<string> errors = [];
+                var errors = new List<object>();
 
                 var userLogin = dto.UserLogin?.Trim().Trim('"') ?? string.Empty;
 
                 // ===== VALIDATION =====
                 if (dto.UserID <= 0)
-                    errors.Add("User is required.");
+                    errors.Add(new { field = "user", message = "User ID is required." });
 
                 if (string.IsNullOrWhiteSpace(dto.UserName))
-                    errors.Add("UserName is required.");
+                    errors.Add(new { field = "user", message = "User Name is required." });
                 else if (dto.UserName.Length > 50)
-                    errors.Add("UserName max length is 50.");
+                    errors.Add(new { field = "user", message = "User Name max length is 50." });
 
                 if (dto.RateCodeID <= 0)
-                    errors.Add("RateCode is required.");
+                    errors.Add(new { field = "rateCode", message = "Rate Code ID is required." });
 
                 if (string.IsNullOrWhiteSpace(dto.RateCode))
-                    errors.Add("RateCode is required.");
+                    errors.Add(new { field = "rateCode", message = "Rate Code Name is required." });
                 else if (dto.RateCode.Length > 20)
-                    errors.Add("RateCode max length is 20.");
+                    errors.Add(new { field = "rateCode", message = "Rate Code Name max length is 20." });
 
                 if (string.IsNullOrWhiteSpace(userLogin))
-                    errors.Add("Login user is required.");
+                    return NotFound(new { success = false, message = "Login user is required." });
 
                 // ===== CHECK ID =====
                 int parsedId = 0;
@@ -111,11 +111,9 @@ namespace Administration.Controllers
 
                 // ===== BUSINESS DATE =====
                 var businessDates = PropertyUtils.ConvertToList<BusinessDateModel>(
-                    BusinessDateBO.Instance.FindAll()
-                );
-
+                    BusinessDateBO.Instance.FindAll());
                 if (businessDates == null || businessDates.Count == 0)
-                    errors.Add("Business date not available.");
+                    return NotFound(new { success = false, message = "Business date not available. Contact system administrator." });
 
                 // ===== DUPLICATE CHECK (User + RateCode) =====
                 var allPermissions =
@@ -130,17 +128,12 @@ namespace Administration.Controllers
                 );
 
                 if (isDuplicate)
-                    errors.Add("This user already has permission for this RateCode.");
+                    errors.Add(new { field = "user", message ="This user already has permission for this RateCode."});
 
                 // ===== RETURN ERRORS =====
-                if (errors.Any())
+                if (errors.Count != 0)
                 {
-                    return BadRequest(new
-                    {
-                        success = false,
-                        message = "Validation failed",
-                        errors
-                    });
+                    return Json(new { success = false, message = "Validation failed.", errors });
                 }
 
                 // ===== PREPARE MODEL =====
@@ -177,6 +170,13 @@ namespace Administration.Controllers
                     model.UpdatedDate = businessDates![0].BusinessDate;
 
                     UserRateCodePermissionBO.Instance.Update(model);
+                    return Json(new
+                    {
+                        success = true,
+                        message = $"Changes saved successfully ID: {model.ID}.",
+                        data = new { id = model.ID }
+                    });
+
                 }
                 // ===== INSERT =====
                 else
@@ -187,14 +187,9 @@ namespace Administration.Controllers
                     model.UpdatedDate = model.CreatedDate;
 
                     UserRateCodePermissionBO.Instance.Insert(model);
-                }
+                    return Json(new { success = true, message = "Record has been created successfully.", data = new { id = model.ID } });
 
-                return Json(new
-                {
-                    success = true,
-                    message = "Save successful",
-                    data = new { id = model.ID }
-                });
+                }
             }
             catch (Exception ex)
             {
@@ -217,7 +212,7 @@ namespace Administration.Controllers
                 }
 
                 UserRateCodePermissionBO.Instance.Delete(id);
-                return Json(new { success = true, message = $"Successfully deleted RateCodeUserRight ID {id}." });
+                return Json(new { success = true, message = $"Record was removed successfully ID: {id}." });
             }
             catch (Exception ex)
             {

@@ -115,20 +115,17 @@
         grid-column: 1;
         /* cột 1 */
         background: #fff;
-        padding: 15px;
     }
 
     /* bảng hàng 1 phải */
     .grid-top-right {
         grid-column: 2;
-        padding: 15px;
         /* cột 2 */
     }
 
     /* bảng hàng 2 chiếm 2 cột */
     .grid-bottom {
         grid-column: 1 / span 2;
-        padding: 15px;
         /* trải rộng 2 cột */
 
     }
@@ -483,12 +480,15 @@
                 // Gọi initialize grids sau khi có dữ liệu
                 initializeGrids(result, groupData, detail);
             } else {
-                showToast('Warning', "Rate Code data not found.", false);
+                initializeGrids([]);
+                showToast('Warning', 'No Rate Code data not found.', false);
+                console.log(`Error: ${result.message}`);
             }
 
         } catch (error) {
             console.error(error);
             showToast('Error', "The report could not be loaded.", false);
+            initializeGrids([]);
         } finally {
             $("#loadingSpinner").hide(); // luôn hide spinner ở cuối
         }
@@ -505,6 +505,7 @@
             selection: { mode: "single" },
             paging: { pageSize: 20 },
             height: 350,
+            width: "100%",
             pager: {
                 showPageSizeSelector: true,
                 allowedPageSizes: [20, 50, 100],
@@ -513,10 +514,10 @@
             filterRow: { visible: true },
             columns: [
                 { dataField: "id", caption: "ID", width: 80, visible: false },
-                { dataField: "rateCode", caption: "Rate Code", width: "100" },
-                { dataField: "rateCategory", caption: "Rate Category", width: "130" },
-                { dataField: "beginDate", caption: "Begin Date", width: "130", dataType: "date", format: "dd/MM/yyyy  ", width: 160 },
-                { dataField: "endDate", caption: "End Date", width: "130", dataType: "date", format: "dd/MM/yyyy  ", width: 160 }
+                { dataField: "rateCode", caption: "Rate Code", width: "40%" },
+                { dataField: "rateCategory", caption: "Rate Category", width: "40%" },
+                { dataField: "beginDate", caption: "Begin Date", width: "10%", dataType: "date", format: "dd/MM/yyyy  ", width: 160 },
+                { dataField: "endDate", caption: "End Date", width: "10%", dataType: "date", format: "dd/MM/yyyy  ", width: 160 }
             ],
             scrolling: { mode: "standard" },
             paging: { pageSize: 20 },
@@ -551,15 +552,16 @@
                 allowedPageSizes: [20, 50, 100],
                 showInfo: true
             },
+            width: "100%",
             height: 350,
             columns: [
-                { dataField: "code", caption: "Code", width: "80px" },
-                { dataField: "roomType", caption: "Room Type", width: "100px" },
-                { dataField: "transaction", caption: "Transaction", width: "100px" },
-                { dataField: "package", caption: "Package", width: "100px" },
-                { dataField: "beginDate", caption: "Begin Date", width: "130", dataType: "date", format: "dd/MM/yyyy  " },
-                { dataField: "endDate", caption: "End Date", width: "130", dataType: "date", format: "dd/MM/yyyy  " },
-                { dataField: "curr", caption: "Curr.", width: "100px" }
+                { dataField: "code", caption: "Code", width: "20%" },
+                { dataField: "roomType", caption: "Room Type", width: "20%" },
+                { dataField: "transaction", caption: "Transaction", width: "10%" },
+                { dataField: "package", caption: "Package", width: "10%" },
+                { dataField: "beginDate", caption: "Begin Date", width: "15%", dataType: "date", format: "dd/MM/yyyy  " },
+                { dataField: "endDate", caption: "End Date", width: "15%", dataType: "date", format: "dd/MM/yyyy  " },
+                { dataField: "curr", caption: "Curr.", width: "10%" }
             ],
             scrolling: { mode: "standard" },
             paging: { pageSize: 20 },
@@ -580,6 +582,16 @@
             showBorders: true,
             selection: { mode: "single" },
             filterRow: { visible: true },
+            height: "350px",
+            paging: {
+                pageSize: 10,  // Shows the second page
+            },
+            pager: {
+                showPageSizeSelector: true,
+                allowedPageSizes: [10, 20, 50, 100],
+                showInfo: true
+            },
+            width: "100%",
             columns: [
                 { dataField: "id", caption: "ID", width: 80, visible: false },
                 { dataField: "roomTypeID", caption: "RoomTypeID", width: 80, visible: false },

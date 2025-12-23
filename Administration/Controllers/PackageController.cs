@@ -96,58 +96,53 @@ namespace Administration.Controllers
                     });
                 }
 
-                List<string> errors = [];
+                var errors = new List<object>();
 
                 // ===== BASIC VALIDATION =====
                 if (string.IsNullOrWhiteSpace(dto.Code))
-                    errors.Add("Package Code is required.");
+                    errors.Add(new { field = "code", message = "Package Code is required." });
 
                 if (string.IsNullOrWhiteSpace(dto.TransCode))
-                    errors.Add("Transaction Code is required.");
+                    errors.Add(new { field = "transCode", message = "Transaction Code is required." });
 
                 if (string.IsNullOrWhiteSpace(dto.Description))
-                    errors.Add("Description is required.");
+                    errors.Add(new { field = "description", message = "Description is required." });
                 else if (dto.Description.Length > 255)
-                    errors.Add("Description must be at most 255 characters.");
+                    errors.Add(new { field = "description", message = "Description must be at most 255 characters." });
 
-                if (dto.UserInsertID <= 0)
-                    errors.Add("UserID is required.");
-
-                // ===== BUSINESS VALIDATION =====
-                // User
                 if (dto.UserInsertID <= 0)
                 {
-                    errors.Add("UserInsertID is required.");
+                    return NotFound(new { success = false, message = "Rate Code not found UserID ." });
                 }
+                // ===== BUSINESS VALIDATION =====
+                // User
                 else
                 {
                     var user = UsersBO.Instance.FindByPrimaryKey(dto.UserInsertID);
                     if (user == null)
                     {
-                        errors.Add("Invalid User Insert.");
+                        return NotFound(new { success = false, message = "Invalid User Insert." });
                     }
                 }
 
 
                 // Business Date
-                var businessDates = PropertyUtils
-                    .ConvertToList<BusinessDateModel>(BusinessDateBO.Instance.FindAll());
-
+                List<BusinessDateModel> businessDates = PropertyUtils.ConvertToList<BusinessDateModel>(BusinessDateBO.Instance.FindAll());
                 if (businessDates == null || businessDates.Count == 0)
-                    errors.Add("Business date not available. Contact system administrator.");
+                    return NotFound(new { success = false, message = "Business date not available. Contact system administrator." });
 
                 // Transaction Code
                 if (!string.IsNullOrWhiteSpace(dto.TransCode))
                 {
                     var transList = TransactionsBO.Instance.FindByAttribute("Code", dto.TransCode);
                     if (transList == null || transList.Count == 0)
-                        errors.Add("Invalid Transaction Code.");
+                        errors.Add(new { field = "transCode", message = "Invalid Transaction Code." });
                 }
 
                 // Forecast Group
                 if (dto.ForecastGroupID <= 0)
                 {
-                    errors.Add("Forecast Group is required.");
+                    errors.Add(new { field = "forecastGroupID", message = "Forecast Group is required." });
                 }
                 else
                 {
@@ -155,19 +150,15 @@ namespace Administration.Controllers
                         .FindByPrimaryKey(dto.ForecastGroupID);
 
                     if (forecastGroup == null)
-                        errors.Add("Invalid Forecast Group.");
+                        errors.Add(new { field = "forecastGroupID", message = "Invalid Forecast Group." });
                 }
 
                 // ===== RETURN IF ERROR =====
                 if (errors.Count != 0)
                 {
-                    return Json(new
-                    {
-                        success = false,
-                        message = "Validation failed.",
-                        errors
-                    });
+                    return Json(new { success = false, message = "Validation failed.", errors });
                 }
+
 
                 // ===== CALL SERVICE =====
                 int id = _packageService.Save(dto);

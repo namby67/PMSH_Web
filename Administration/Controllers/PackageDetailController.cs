@@ -82,89 +82,86 @@ namespace Administration.Controllers
                     });
                 }
 
-                List<string> errors = [];
+                var errors = new List<object>();
                 //Basic Validation
                 if (dto.CalculationRuleID < 0)
                 {
-                    errors.Add("Calculation is required.");
+                    errors.Add(new { field = "calculationRuleID", message = "Calculation is required." });
                 }
                 if (dto.RhythmPostingID < 0)
                 {
-                    errors.Add("RhythmPosting is required.");
+                    errors.Add(new { field = "rhythmPostingID", message = "RhythmPosting is required." });
                 }
                 if (dto.SeasonID < 0)
                 {
-                    errors.Add("Season is required.");
+                    errors.Add(new { field = "seasonID", message = "Season is required." });
                 }
+                if (dto.Price < 0)
+                    errors.Add(new { field = "price", message = "Price must be greater than or equal to 0." });
+                if (dto.PriceAfterTax < 0)
+                    errors.Add(new { field = "priceAfterTax", message = "Price After Tax must be greater than or equal to 0." });
+
                 if (string.IsNullOrWhiteSpace(dto.TransCode))
-                    errors.Add("Transaction Code is required.");
+                    errors.Add(new { field = "transCode", message = "Transaction Code is required." });
 
                 if (string.IsNullOrWhiteSpace(dto.CurrencyID))
-                    errors.Add("Currency Code is required.");
-
+                    errors.Add(new { field = "currencyID", message = "Currency Code is required." });
                 //Business Validation
 
                 // User
                 if (dto.UserInsertID <= 0)
                 {
-                    errors.Add("UserInsertID is required.");
+                    return NotFound(new { success = false, message = "UserID not found." });
                 }
                 else
                 {
                     var user = UsersBO.Instance.FindByPrimaryKey(dto.UserInsertID);
                     if (user == null)
                     {
-                        errors.Add("Invalid User Insert.");
+                        return NotFound(new { success = false, message = "Invalid User Insert." });
                     }
                 }
 
-                var businessDates = PropertyUtils
-                    .ConvertToList<BusinessDateModel>(BusinessDateBO.Instance.FindAll());
-
+                List<BusinessDateModel> businessDates = PropertyUtils.ConvertToList<BusinessDateModel>(BusinessDateBO.Instance.FindAll());
                 if (businessDates == null || businessDates.Count == 0)
-                    errors.Add("Business date not available. Contact system administrator.");
+                    return NotFound(new { success = false, message = "Business date not available. Contact system administrator." });
 
                 // PackageID Validation
                 if (!dto.PackageID.HasValue || dto.PackageID.Value <= 0)
                 {
-                    errors.Add("Package is required.");
+                    errors.Add(new { field = "packageID", message = "Package is required." });
                 }
                 else
                 {
                     var package = PackageBO.Instance.FindByPrimaryKey(dto.PackageID.Value);
                     if (package == null)
                     {
-                        errors.Add("Invalid Package.");
+                        errors.Add(new { field = "packageID", message = "Invalid Package." });
                     }
                 }
 
                 //RhythmPosting Validation
                 var RhythmPostingList = RhythmPostingBO.Instance.FindByPrimaryKey(dto.RhythmPostingID);
                 if (RhythmPostingList == null)
-                    errors.Add("Business date not available. Contact system administrator.");
+                    errors.Add(new { field = "rhythmPostingID", message = "Business date not available. Contact system administrator." });
 
                 // Transaction Code
                 if (!string.IsNullOrWhiteSpace(dto.TransCode))
                 {
                     var transList = TransactionsBO.Instance.FindByAttribute("Code", dto.TransCode);
                     if (transList == null || transList.Count == 0)
-                        errors.Add("Invalid Transaction Code.");
+                        errors.Add(new { field = "transCode", message = "Invalid Transaction Code." });
                 }
                 if (!string.IsNullOrWhiteSpace(dto.CurrencyID))
                 {
                     var currencyList = CurrencyBO.Instance.FindByAttribute("ID", dto.CurrencyID);
                     if (currencyList == null || currencyList.Count == 0)
-                        errors.Add("Invalid Transaction Code.");
+                        errors.Add(new { field = "currencyID", message = "Invalid Transaction Code." });
                 }
                 // ===== RETURN IF ERROR =====
                 if (errors.Count != 0)
                 {
-                    return Json(new
-                    {
-                        success = false,
-                        message = "Validation failed.",
-                        errors
-                    });
+                    return Json(new { success = false, message = "Validation failed.", errors });
                 }
                 // ===== CALL SERVICE =====
                 int id = _packagedetail.Save(dto);

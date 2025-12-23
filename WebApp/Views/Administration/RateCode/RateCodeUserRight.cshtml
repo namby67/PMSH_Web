@@ -5,132 +5,14 @@
     dynamic? listUser = @ViewBag.UserList;
 }
 
-<style>
-    .dx-datagrid-headers .dx-header-row td {
-        white-space: pre-line !important;
-        text-align: center;
-        font-size: 11px;
-    }
-
-
-    .dx-datagrid .dx-editor-with-menu .dx-menu-item-content .dx-icon.dx-icon-filter-operation-default,
-    .dx-datagrid-container .dx-editor-with-menu .dx-menu-item-content .dx-icon.dx-icon-filter-operation-default {
-        display: none;
-    }
-
-    .filter_wrapper {
-        /*     ; */
-        /*   margin: 0px 8px 14px 8px; */
-        padding: 18px 0px 0px 14px;
-        border-radius: 8px;
-    }
-
-    .gridContainer {
-        margin: 0px 8px;
-    }
-
-    .button_wrapper {
-        display: flex;
-        column-gap: 12px;
-        margin: 0px 8px;
-    }
-
-    .button_wrapper .fa-solid {
-        margin-right: 5px;
-    }
-
-    .selected {
-        ;
-        /* Màu xanh */
-        color: white;
-    }
-
-    .sticky-header .form-control-sm {
-        padding: .1rem .35rem;
-        height: calc(1.1em + .2rem + 2px);
-    }
-
-    .sticky-header label[class*="me-"] {
-        margin-right: .5rem !important;
-    }
-
-    .sticky-header input[type="date"].form-control-sm {
-        font-size: 12px !important;
-        /* dúng 12?px */
-        height: calc(1.1em + .2rem + 2px);
-        /* gi? cùng chi?u cao */
-    }
-
-    .sticky-header label {
-        font-size: 12px !important;
-        line-height: 1.2;
-    }
-
-
-    .sort-select {
-        max-width: 130px;
-        /* ho?c 100px n?u mu?n nh? hon */
-        font-size: 12px;
-        padding: 0.15rem 0.5rem;
-    }
-
-    .sort-select {
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-        -image: none !important;
-        padding-right: 10px !important;
-    }
-
-    button:disabled {
-        pointer-events: none;
-        /* Không cho hover/click */
-        opacity: 0.6;
-        /* Cho nó mờ đi */
-        cursor: not-allowed;
-        /* Hiện con trỏ cấm */
-        important;
-        /* tuỳ chỉnh màu khi disable */
-    }
-
-    .tomselect-custom {
-        width: 100px;
-        min-height: 30px;
-        /* hoặc tùy theo chiều cao bạn muốn */
-        font-size: 12px !important;
-    }
-
-    .tomselect-custom .ts-control {
-        padding-left: 8px !important;
-        /* hoặc bất kỳ giá trị nào bạn muốn */
-    }
-
-    .hide-band .dx-datagrid-bands>tr:first-child {
-        display: none !important;
-    }
-
-    .ts-dropdown .ts-dropdown-content>div:first-child {
-        position: sticky;
-        top: 0;
-        : #f8f9fa;
-        z-index: 10;
-    }
-
-    .custom-modal-width {
-        max-width: 560px !important;
-        /* bạn chỉnh số px tuỳ ý */
-
-
-    }
-</style>
-
 <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
 
 <div class="text-center" id="reportTitle" style="font-size: 20px">Rate Code User Right </div>
 <div class="sticky-header bg-white p-2 shadow-sm z-3">
     <div class="d-flex flex-wrap align-items-center gap-2 mb-1"
-        style="border: 1px solid #ced4da; border-radius: 6px; padding: 8px;">
+        style="border: 1px solid #ccc; border-radius: 6px; padding: 8px;width: fit-content;">
+
         <div class="d-flex align-items-center me-2">
             <label class="me-2 mb-0">Rate Code User Right:</label>
 
@@ -155,15 +37,14 @@
         </div>
     </div>
 
-    <div class="">
-        <button style="border-radius: 4px;  margin-right: 6px;" id="btnView" class="mui-button mui-button-new"><i
-                class="fa-solid fa-eye"></i>View</button>
-        <button style="border-radius: 4px;  margin-right: 6px;" id="btnNew" class="mui-button mui-button-new"
-            type="button"> <i class="fa-solid fa-file-excel"></i> New</button>
-        <button style="border-radius: 4px;  margin-right: 6px;" id="btnEdit" class="mui-button mui-button-edit "
-            type="button"> <i class="fa-solid fa-file-excel"></i> Edit</button>
-        <button style="border-radius: 4px;  margin-right: 6px;" id="btnDelete" class="mui-button button-report-delete"
-            type="button"> <i class="fa-solid fa-file-excel"></i> Delete</button>
+    <div>
+        <button id="btnView" class="mui-button mui-button-new"><i class="fa-solid fa-eye"></i>View</button>
+        <button id="btnNew" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i>
+            New</button>
+        <button id="btnEdit" class="mui-button mui-button-edit " type="button"> <i class="fa-solid fa-file-excel"></i>
+            Edit</button>
+        <button id="btnDelete" class="mui-button button-report-delete" type="button"> <i
+                class="fa-solid fa-file-excel"></i> Delete</button>
     </div>
 </div>
 <div class="mui-card">
@@ -189,28 +70,25 @@
                             <div style="border: 1px solid #ced4da; border-radius: 6px; padding: 8px;">
                                 <div class="form-group-new-reservation col-md-6">
                                     <label>User Name <span style="color:red">*</span></label>
-                                    <div class="row" style="margin-left:1px;margin-right:2px">
+                                    <div class="row" style="margin-left:1px;margin-right:2px" name="user">
                                         <input id="idUserName" class="col-md-10" type="hidden" />
-                                        <input id="txtUserName" class="col-md-10" readonly />
+                                        <input id="txtUserName" class="col-md-10" readonly name="user" />
                                         <button onclick="openModalSearchUser()" class="col-md-2"><i
                                                 class="fa-solid fa-arrow-down"></i></button>
                                     </div>
-                                    <div id="errorMessage" style="color: red; margin-top: 5px; display: none;">
-                                        <strong>Typing format is not correct. Please typing as below: User Name</strong>
-                                    </div>
+                                    <div class="invalid-feedback"></div>
+
                                 </div>
                                 <div class="form-group-new-reservation col-md-6">
                                     <label>Rate Code <span style="color:red">*</span></label>
-                                    <div class="row" style="margin-left:1px;margin-right:2px">
+                                    <div class="row" style="margin-left:1px;margin-right:2px" name="rateCode">
                                         <input id="idRateCode" class="col-md-10" disabled type="hidden" />
-                                        <input id="txtRateCode" class="col-md-10" readonly />
+                                        <input id="txtRateCode" class="col-md-10" readonly name="rateCode" />
                                         <button onclick="openModalSearchRateCode()" class="col-md-2"><i
                                                 class="fa-solid fa-arrow-down"></i></button>
                                     </div>
-                                    <div id="errorMessage" style="color: red; margin-top: 5px; display: none;">
-                                        <strong>Typing format is not correct. Please typing as below: Rate Code
-                                        </strong>
-                                    </div>
+                                    <div class="invalid-feedback"></div>
+
                                 </div>
                             </div>
                         </div>
@@ -255,8 +133,16 @@
                 rateCode: $("#code").val() || ""
             },
             success: function (data) {
-                loadTelephoneGrid(data);
-                $("#loadingSpinner").hide();
+                if (data && data.length > 0) {
+                    let ids = data[0].idRateCode;
+                    loadTelephoneGrid(data);
+                    $("#loadingSpinner").hide();
+                } else {
+                    loadTelephoneGrid([]);
+                    showToast('Warning', 'No Rate Code data not found.', false);
+                    console.log(`Error: ${data.message}`);
+                    $("#loadingSpinner").hide();
+                }
             },
             error: function () {
                 alert("Không thể tải dữ liệu");
@@ -486,7 +372,7 @@
                     $("#itemModal").modal("hide");
                     reloadGrid();
                 } else {
-                    showToast('Error', res.message || 'Validation failed.', false);
+                    applyValidationErrors(res.errors, "#itemForm");
                 }
             },
             error: function (xhr, status, error) {

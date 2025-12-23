@@ -34,23 +34,34 @@ namespace Administration.Controllers
             try
             {
                 DataTable dataTable = _rateCodeSer.GetAllRateCode(rateCode, rateCategory);
-                var result = (from d in dataTable.AsEnumerable()
-                              select new
-                              {
-                                  ID = d.Field<int>("ID") == 0 ? "" : d.Field<int>("ID").ToString(),
-                                  Sequence = d.Field<int>("Sequence") == 0 ? "" : d.Field<int>("Sequence").ToString(),
-                                  RateCode = d.Field<string>("RateCode") ?? "",
-                                  Category = d.Field<string>("Category") ?? "",
-                                  Description = d.Field<string>("Description") ?? ""
-                              }).ToList();
 
-                return Json(result);
+                var data = (from d in dataTable.AsEnumerable()
+                            select new
+                            {
+                                ID = d.Field<int>("ID"),
+                                Sequence = d.Field<int>("Sequence"),
+                                RateCode = d.Field<string>("RateCode") ?? "",
+                                Category = d.Field<string>("Category") ?? "",
+                                Description = d.Field<string>("Description") ?? ""
+                            }).ToList();
+
+                return Json(new
+                {
+                    totalCount = data.Count, // 🔥 số bản ghi
+                    data
+                });
             }
             catch (Exception ex)
             {
-                return Json(ex.Message);
+                return Json(new
+                {
+                    totalCount = 0,
+                    data = new List<object>(),
+                    error = ex.Message
+                });
             }
         }
+
         [HttpGet("GetByID")]
         public async Task<IActionResult> GetByID(int id)
         {
@@ -98,78 +109,96 @@ namespace Administration.Controllers
         {
             try
             {
-                // Basic null check
                 if (model == null)
                 {
-                    return BadRequest(new { success = false, message = $"Payload is null" });
+                    return BadRequest(new { success = false, message = "Payload is null" });
                 }
 
-                // Collect validation errors
-                List<string> errors = new();
+                // Collect validation errors as field-message pairs
+                var errors = new List<object>();
 
                 if (string.IsNullOrWhiteSpace(model.RateCode))
-                    errors.Add("RateCode is required.");
+                    errors.Add(new { field = "txtRateCode", message = "RateCode is required." });
                 else if (model.RateCode.Length > 100)
-                    errors.Add("RateCode must be at most 100 characters.");
+                    errors.Add(new { field = "txtRateCode", message = "RateCode must be at most 100 characters." });
 
                 if (!string.IsNullOrEmpty(model.Description) && model.Description.Length > 500)
-                    errors.Add("Description must be at most 500 characters.");
+                    errors.Add(new { field = "txtDescription", message = "Description must be at most 500 characters." });
 
                 if (model.Sequence < 0)
-                    errors.Add("Sequence must be greater than or equal to 0.");
+                    errors.Add(new { field = "txtSequence", message = "Sequence must be greater than or equal to 0." });
 
-                if (model.Display < 0 || model.Display > 255)
-                    errors.Add("Display must be between 0 and 255.");
+                if (model.Display != 0 && model.Display != 1)
+                    errors.Add(new { field = "display", message = "Display must be .Net 0 or C++." });
 
                 if (model.DayUse != 0 && model.DayUse != 1)
-                    errors.Add("DayUse must be 0 or 1.");
+                    errors.Add(new { field = "chkDayUse", message = "Day Use must be checked or uncheked." });
 
                 if (model.UserID <= 0)
-                    errors.Add("UserID is required.");
+                    return NotFound(new { success = false, message = "Rate Code not found UserID ." });
 
                 if (model.RateClass <= 0)
-                    errors.Add("Rate Class is required.");
+                    errors.Add(new { field = "modalRateCodeSel", message = "Rate Class is required." });
 
-
-                if (model.RateCategory <= 0)
-                    errors.Add("Rate Category is required.");
-
-
-
-                // Validate business date availability early
-                List<BusinessDateModel> businessDates = PropertyUtils.ConvertToList<BusinessDateModel>(BusinessDateBO.Instance.FindAll());
-
-                // Check duplicate RateCode (case-insensitive) for insert/update
-                var allRateCodes = PropertyUtils.ConvertToList<RateCodeModel>(RateCodeBO.Instance.FindAll()) ?? new List<RateCodeModel>();
+                // Check duplicate RateCode (case-insensitive)
+                var allRateCodes = PropertyUtils.ConvertToList<RateCodeModel>(RateCodeBO.Instance.FindAll()) ?? [];
                 if (!string.IsNullOrWhiteSpace(model.RateCode))
                 {
                     bool duplicate = allRateCodes.Any(r => string.Equals(r.RateCode?.Trim(), model.RateCode.Trim(), StringComparison.OrdinalIgnoreCase) && r.ID != model.Id);
                     if (duplicate)
-                        errors.Add("RateCode already exists.");
+                        errors.Add(new { field = "modalRateCodeSel", message = "RateCode already exists." });
                 }
-                // If there are validation errors, return them
-                if (errors.Any())
+                var allRateCategorys = PropertyUtils.ConvertToList<RateCategoryModel>(RateCategoryBO.Instance.FindAll()) ?? [];
+
+                //Kiểm tra Category
+
+                if (model.RateCategory <= 0)
                 {
-                    return BadRequest(new { success = false, message = "Validation failed.", errors });
+                    errors.Add(new { field = "modalRateCategorySel", message = "Rate Category is required." });
+                }
+                else
+                {
+                    // Kiểm tra duplicate RateCategory (ví dụ nếu cần)
+                    bool duplicate = allRateCategorys.Any(r =>
+                        string.Equals(r.Code?.Trim(), model.RateCategory.ToString(), StringComparison.OrdinalIgnoreCase)
+                        && r.ID != model.Id);
+
+                    if (duplicate)
+                        errors.Add(new { field = "modalRateCategorySel", message = "Rate Category already exists." });
                 }
 
-                // Prepare entity (for update try to fetch existing)
+
+                // Return errors if any
+                if (errors.Count != 0)
+                {
+                    return Json(new { success = false, message = "Validation failed.", errors });
+                }
+
+                // Map entity for insert/update
                 RateCodeModel entity;
+                List<BusinessDateModel> businessDates = PropertyUtils.ConvertToList<BusinessDateModel>(BusinessDateBO.Instance.FindAll());
+                if (businessDates == null || businessDates.Count == 0)
+                    return NotFound(new { success = false, message = "Business date not available. Contact system administrator." });
+
                 if (model.Id > 0)
                 {
                     var existing = RateCodeBO.Instance.FindByPrimaryKey(model.Id) as RateCodeModel;
                     if (existing == null || existing.ID == 0)
-                    {
                         return NotFound(new { success = false, message = $"RateCode not found (ID = {model.Id})" });
-                    }
+
                     entity = existing;
+                    entity.UserUpdateID = model.UserID;
+                    entity.UpdateDate = businessDates![0].BusinessDate;
                 }
                 else
                 {
                     entity = new RateCodeModel();
+                    entity.UserUpdateID = model.UserID;
+                    entity.CreateDate = businessDates![0].BusinessDate;
+                    entity.UpdateDate = businessDates![0].BusinessDate;
                 }
 
-                // Map properties from DTO to entity
+                // Map properties
                 entity.RateCode = model.RateCode?.Trim() ?? string.Empty;
                 entity.Descripton = model.Description ?? string.Empty;
                 entity.RateCategoryID = model.RateCategory;
@@ -182,31 +211,23 @@ namespace Administration.Controllers
                 entity.IndividualOnly = model.IndividualOnly;
                 entity.IsModify = model.IsModifiable;
 
-                // Insert or Update with timestamps
-                var businessDate = businessDates![0].BusinessDate;
-
+                // Save entity
                 if (model.Id > 0)
                 {
-                    entity.UserUpdateID = model.UserID;
-                    entity.UpdateDate = businessDate;
                     RateCodeBO.Instance.Update(entity);
+                    return Json(new { success = true, message = $"Changes saved successfully ID: {model.Id}.", data = new { id = model.Id } });
                 }
                 else
                 {
-                    entity.UserUpdateID = model.UserID;
-                    entity.CreateDate = businessDate;
-                    entity.UpdateDate = entity.CreateDate;
                     RateCodeBO.Instance.Insert(entity);
+                    return Json(new { success = true, message = "Record has been created successfully.", data = new { id = entity.ID } });
                 }
-
-                return Json(new { success = true, message = "Success", data = new { id = entity.ID } });
             }
             catch (Exception ex)
             {
                 return BadRequest(new { success = false, message = ex.Message });
             }
         }
-
         [HttpPost("RateCodeDelete")]
         public IActionResult RateCodeDelete(int id)
         {
@@ -217,17 +238,37 @@ namespace Administration.Controllers
                     return Ok(new { success = false, message = $"RateCode ID {id} not found." });
                 }
 
-                var arr = PropertyUtils.ConvertToList<RateCodeDetailModel>(
+                // Lấy danh sách RateCodeDetail
+                var rateCodeDetails = PropertyUtils.ConvertToList<RateCodeDetailModel>(
                     RateCodeDetailBO.Instance.FindByAttribute("RateCodeID", id)
                 );
 
-                if (arr != null && arr.Count > 0)
+                // Lấy danh sách UserRateCodePermission liên quan
+                var userPermissions = PropertyUtils.ConvertToList<UserRateCodePermissionModel>(
+                    UserRateCodePermissionBO.Instance.FindByAttribute("RateCodeID", id)
+                );
+
+                // Kiểm tra tồn tại dữ liệu trước khi xóa
+                if (rateCodeDetails != null && rateCodeDetails.Count > 0)
+
                 {
-                    return Ok(new { success = false, message = "Rate Code is being referenced in other modules.\nDelete failed!" });
+                    return BadRequest(new
+                    {
+                        success = false,
+                        message = "Cannot delete this RateCode because it is used in details."
+                    });
+                }
+                if (userPermissions != null && userPermissions.Count > 0)
+                {
+                    return BadRequest(new
+                    {
+                        success = false,
+                        message = "Cannot delete this RateCode because it is used in user permissions.."
+                    });
                 }
 
                 RateCodeBO.Instance.Delete(id);
-                return Ok(new { success = true, message = $"Successfully deleted RateCode ID {id}." });
+                return Json(new { success = true, message = $"Record was removed successfully ID: {id}." });
             }
             catch (Exception ex)
             {
@@ -238,20 +279,24 @@ namespace Administration.Controllers
 
         public class RateCodeDto
         {
-            public int UserID { get; set; }
-            public int Id { get; set; }
-            public string RateCode { get; set; } = "";
-            public string Description { get; set; } = "";
-            public int RateClass { get; set; }
-            public int RateCategory { get; set; }
-            public int Sequence { get; set; }
-            public int Display { get; set; }
-            public int DayUse { get; set; }
-            public bool Active { get; set; }
-            public bool Negotiated { get; set; }
-            public bool IndividualOnly { get; set; }
-            public bool IsModifiable { get; set; }
+            public int UserID { get; set; } = 0;
+            public int Id { get; set; } = 0;
+
+            public string RateCode { get; set; } = string.Empty;
+            public string Description { get; set; } = string.Empty;
+
+            public int RateClass { get; set; } = 0;
+            public int RateCategory { get; set; } = 0;
+            public int Sequence { get; set; } = 0;
+            public int Display { get; set; } = 0;
+            public int DayUse { get; set; } = 0;
+
+            public bool Active { get; set; } = false;
+            public bool Negotiated { get; set; } = false;
+            public bool IndividualOnly { get; set; } = false;
+            public bool IsModifiable { get; set; } = false;
         }
+
 
 
     }

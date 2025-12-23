@@ -38,7 +38,7 @@
     </div>
 </div>
 <div class="mui-card"></div>
-<div class="dx-tab-form dx-visible" data-tab="0">
+<div class="dx-tab-form dx-visible" data-tab="0" id="packageForm">
     <div class="tabs-container border p-3 mt-3 mx-auto">
         <!-- Thông tin chính -->
         <div class="row g-3 mb-3">
@@ -46,18 +46,22 @@
 
             <div class="col-md-6">
                 <label class="form-label" id="code">Code</label>
-                <input type="text" id="txtCode" class="form-control mb-2">
+                <input type="text" id="txtCode" name="code" class="form-control mb-2">
+                <div class="invalid-feedback"></div>
+
             </div>
             <div class="col-md-6 d-flex align-items-end">
                 <div class="w-100">
                     <label class="form-label">Forecast Group</label>
-                    <select class="form-control form-select form-control-sm" id="forecastGroup">
+                    <select class="form-control form-select form-control-sm" name="forecastGroupID" id="forecastGroup">
                         <option value="0">-- Select Forecast Group -- </option>
                         @foreach (dynamic u in ViewBag.PackageForecastGroup)
                         {
                             <option value="@u.ID">@u.Code / @u.Name</option>
                         }
                     </select>
+                    <div class="invalid-feedback"></div>
+
                 </div>
             </div>
         </div>
@@ -72,19 +76,23 @@
             <div class="col-md-6 d-flex align-items-end">
                 <div class="w-100">
                     <label class="form-label">Transaction Code</label>
-                    <select class="form-control form-select form-control-sm" id="transactionCode">
+                    <select class="form-control form-select form-control-sm" name="transCode" id="transactionCode">
                         <option value="0">-- Select Transaction Code -- </option>
                         @foreach (dynamic u in ViewBag.TransactionList)
                         {
                             <option value="@u.Code">@u.Code / @u.Description</option>
                         }
                     </select>
+                    <div class="invalid-feedback"></div>
+
                 </div>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Description</label>
-                <input id="txtDescription" type="text" class="form-control">
+                <input id="txtDescription" name="description" type="text" class="form-control">
+                <div class="invalid-feedback"></div>
+
             </div>
 
             <div class="mb-3">
@@ -132,7 +140,7 @@
     </div>
 
 </div>
-<div class="dx-tab-form" data-tab="1">
+<div class="dx-tab-form" data-tab="1" id="packageDetailForm">
     <div class="row">
         <!-- LEFT FORM -->
         <div class="col-md-3 border border-2">
@@ -141,80 +149,94 @@
             <div class="row g-2">
                 <div class="col-12">
                     <label class="form-label me-2 mb-0">Header Code</label>
-                    <input id="targetCode" class="form-control mb-2 noReadOnly" disabled value="No target Package" />
+                    <input id="targetCode" class="form-control mb-2 noReadOnly" name="packageID" disabled
+                        value="No target Package" />
+                    <div class="invalid-feedback"></div>
                 </div>
                 <div class="col-12">
                     <label class="form-label me-2 mb-0">Season Code</label>
-                    <select class="form-control form-select form-control-sm " id="seasonCode">
+                    <select class="form-control form-select form-control-sm " name="seasonID" id="seasonCode">
                         <option value="0">-- Select Season Code -- </option>
                         @foreach (dynamic u in ViewBag.SeasonList)
                         {
                             <option value="@u.ID">@u.Code / @u.Name</option>
                         }
                     </select>
+                    <div class="invalid-feedback"></div>
                 </div>
 
                 <div class="col-6">
                     <label class="form-label me-2 mb-0">Start Date</label>
                     <input type="date" class="form-control mb-2" id="startDate" data-business-date>
+                    <div class="invalid-feedback"></div>
                 </div>
 
                 <div class="col-6">
                     <label class="form-label me-2 mb-0">End Date</label>
-                    <input type="date" class="form-control mb-2 " id="endDate" data-business-date>
+                    <input type="date" class="form-control mb-2" id="endDate" data-business-date>
+                    <div class="invalid-feedback"></div>
                 </div>
 
                 <div class="col-12">
                     <label class="form-label me-2 mb-0">Trans. Code</label>
-                    <select class="form-control form-select form-control-sm " id="transactionCodeDT">
+                    <select class="form-control form-select form-control-sm " name="transCode" id="transactionCodeDT">
                         <option value="0">-- Select Transaction Code -- </option>
                         @foreach (dynamic u in ViewBag.TransactionList)
                         {
                             <option value="@u.Code">@u.Code / @u.Description</option>
                         }
                     </select>
+                    <div class="invalid-feedback"></div>
                 </div>
 
                 <div class="col-12">
                     <label class="form-label me-2 mb-0">Currency</label>
-                    <select class="form-control form-select form-control-sm noReadOnly" disabled id="currencyID" mb-2>
+                    <select class="form-control form-select form-control-sm noReadOnly" name="currencyID" disabled
+                        id="currencyID" mb-2>
                         @foreach (dynamic u in ViewBag.CurrencyList)
                         {
                             <option value="@u.ID">@u.ID / @u.Description</option>
                         }
                     </select>
+                    <div class="invalid-feedback"></div>
                 </div>
 
                 <div class="col-12">
                     <label class="form-label me-2 mb-0 ">Price ++</label>
-                    <input type="number" class="form-control mb-2 " id="price">
+                    <input type="number" class="form-control mb-2 " name="price" id="price">
+                    <div class="invalid-feedback"></div>
                 </div>
 
                 <div class="col-12">
                     <label class="form-label me-2 mb-0">Price Net</label>
-                    <input type="number" class="form-control mb-2 " id="priceAfterTax">
+                    <input type="number" class="form-control mb-2 " name="priceAfterTax" id="priceAfterTax">
+                    <div class="invalid-feedback"></div>
                 </div>
 
                 <div class="col-12">
                     <label class="form-label me-2 mb-0">Allowance</label>
                     <input type="number" class="form-control mb-2 " id="allowanceAmount">
+                    <div class="invalid-feedback"></div>
                 </div>
 
                 <div class="col-12">
                     <label class="form-label me-2 mb-0 ">Posting Rhythm</label>
-                    <select class="form-control form-select form-control-sm " id="rhythmPostingID" mb-2>
+                    <select class="form-control form-select form-control-sm " name="rhythmPostingID"
+                        id="rhythmPostingID" mb-2>
                         @foreach (dynamic u in ViewBag.RhythmPostingList)
                         {
                             <option value="@u.ID">@u.Name</option>
                         }
                     </select>
+                    <div class="invalid-feedback"></div>
                 </div>
 
                 <div class="col-12">
                     <label
                         class="form-label me-2 mb-0                                                                                                                                                                                                        ">Calculation
                         Rule</label>
-                    <select class="form-control form-select form-control-sm" id="calculationRuleID" mb-2>
+                    <select class="form-control form-select form-control-sm" name="calculationRuleID"
+                        id="calculationRuleID" mb-2>
                         <option value="0">-- Calculation Rule --</option>
                         <option value="1">Per Person</option>
                         <option value="2">Per Adult</option>
@@ -228,14 +250,15 @@
                         <option value="10">Per Adutl + C1</option>
                         <option value="11">Per C + C1</option>
                     </select>
+                    <div class="invalid-feedback"></div>
                 </div>
             </div>
 
             <!-- Buttons -->
             <div class="mt-3 d-flex gap-2">
-                <button class="btn btn-secondary" id="btnClear">Clear</button>
-                <button class="btn btn-primary" id="addDetailPackage">Add</button>
-                <button class="btn btn-danger" id="btnRemove">Remove</button>
+                <button class="mui-button mui-button-clear" id="btnClear">Clear</button>
+                <button class="mui-button mui-button-new" id="addDetailPackage">Add</button>
+                <button class="mui-button button-report-delete" id="btnRemove">Remove</button>
             </div>
         </div>
 
@@ -335,12 +358,10 @@
             if (index === 1) {
                 $('#btnNew').hide();
                 $('#btnSave').hide();   // Detail → hide Save
-                $('#btnEdit').hide();
                 $('#btnDelete').hide();
             } else {
                 $('#btnNew').show();
                 $('#btnSave').show();   // Header → show Save
-                $('#btnEdit').show();
                 $('#btnDelete').show()
             }
         }
@@ -420,7 +441,7 @@
                     let data = res.data
                     selectPackage(data.id)
                 } else {
-                    showToast('Error', res.errors || 'Validation failed.', false);
+                    applyValidationErrors(res.errors, "#packageForm");
                 }
             },
             error: function (xhr, status, error) {
@@ -486,7 +507,7 @@
                     let data = res.data
                     selectPackage(data.id)
                 } else {
-                    showToast('Error', res.errors || 'Validation failed.', false);
+                    applyValidationErrors(res.errors, "#packageDetailForm");
                 }
             },
             error: function (xhr, status, error) {

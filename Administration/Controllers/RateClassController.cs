@@ -46,11 +46,14 @@ namespace Administration.Controllers
                                   Inactive = d["Inactive"] != DBNull.Value ? Convert.ToInt32(d["Inactive"]) : 0,
 
                               }).ToList();
-                return Json(result);
+                return Json(new
+                {
+                    totalCount = result.Count, // 🔥 số bản ghi
+                    data = result
+                });
             }
             catch (Exception ex)
             {
-
                 return BadRequest(new { success = false, message = ex.Message });
             }
         }
@@ -58,37 +61,37 @@ namespace Administration.Controllers
 
 
         [HttpPost("RateClassSave")]
-        public async Task<IActionResult> RateClassSave(string idRateClass, string codeClass,string nameClass, string descriptionaccty, string user, string inactive)
+        public async Task<IActionResult> RateClassSave(string idRateClass, string codeClass, string nameClass, string descriptionaccty, string user, string inactive)
         {
             try
             {
                 // Collect validation errors
-                List<string> errors = new();
+                var errors = new List<object>();
 
                 // Validate inputs
                 if (string.IsNullOrWhiteSpace(codeClass))
-                    errors.Add("Code is required.");
+                    errors.Add(new { field = "code", message = "Code is required." });
                 else if (codeClass.Length > 50)
-                    errors.Add("Code must be at most 50 characters.");
+                    errors.Add(new { field = "code", message = "Code must be at most 50 characters." });
                 if (string.IsNullOrWhiteSpace(nameClass))
-                    errors.Add("Name is required.");
+                    errors.Add(new { field = "name", message = "Name is required." });
                 else if (nameClass.Length > 50)
-                    errors.Add("Name must be at most 50 characters.");
+                    errors.Add(new { field = "name", message = "Name must be at most 50 characters." });
 
                 if (!string.IsNullOrEmpty(descriptionaccty) && descriptionaccty.Length > 500)
-                    errors.Add("Description must be at most 500 characters.");
+                    errors.Add(new { field = "description", message = "Description must be at most 500 characters." });
 
                 if (string.IsNullOrWhiteSpace(user))
-                    errors.Add("User is required.");
+                    return NotFound(new { success = false, message = "Rate Class not found UserID ." });
                 else
                 {
                     user = user.Trim().Trim('"');
                     if (user.Length > 100)
-                        errors.Add("User must be at most 100 characters.");
+                        return NotFound(new { success = false, message = "Rate Class must be at most 100 characters ." });
                 }
 
                 if (inactive != null && inactive != "0" && inactive != "1")
-                    errors.Add("Inactive must be 0 or 1.");
+                    errors.Add(new { field = "ckActive", message = "Active must be checked or uncheked." });
 
                 // Validate ID format for update
                 int parsedId = 0;
@@ -96,7 +99,7 @@ namespace Administration.Controllers
                 if (!string.IsNullOrWhiteSpace(idRateClass) && idRateClass != "0")
                 {
                     if (!int.TryParse(idRateClass, out parsedId) || parsedId <= 0)
-                        errors.Add("Invalid Rate Class ID format.");
+                        return NotFound(new { success = false, message = "Invalid Rate Class ID format." });
                     else
                         isUpdate = true;
                 }
@@ -104,7 +107,8 @@ namespace Administration.Controllers
                 // Get business dates
                 List<BusinessDateModel> businessDates = PropertyUtils.ConvertToList<BusinessDateModel>(BusinessDateBO.Instance.FindAll());
                 if (businessDates == null || businessDates.Count == 0)
-                    errors.Add("Business date not available. Contact system administrator.");
+                    return NotFound(new { success = false, message = "Business date not available. Contact system administrator." });
+
 
                 // Check for duplicate Code (case-insensitive) for insert/update
                 if (!string.IsNullOrWhiteSpace(codeClass))
@@ -112,13 +116,14 @@ namespace Administration.Controllers
                     var allRateClasses = PropertyUtils.ConvertToList<RateClassModel>(RateClassBO.Instance.FindAll()) ?? new List<RateClassModel>();
                     bool duplicate = allRateClasses.Any(r => string.Equals(r.Code?.Trim(), codeClass.Trim(), StringComparison.OrdinalIgnoreCase) && r.ID != parsedId);
                     if (duplicate)
-                        errors.Add("Code already exists.");
+                        errors.Add(new { field = "code", message = "Code already exists." });
+
                 }
 
                 // Return errors if any
-                if (errors.Any())
+                if (errors.Count != 0)
                 {
-                    return BadRequest(new { success = false, message = "Validation failed.", errors });
+                    return Json(new { success = false, message = "Validation failed.", errors });
                 }
 
                 // Prepare model
@@ -143,6 +148,12 @@ namespace Administration.Controllers
                     _Model.CreatedBy = existing.CreatedBy;
                     _Model.CreatedDate = existing.CreatedDate;
                     RateClassBO.Instance.Update(_Model);
+                    return Json(new
+                    {
+                        success = true,
+                        message = $"Changes saved successfully ID: {_Model.ID}.",
+                        data = new { id = _Model.ID }
+                    });
                 }
                 else
                 {
@@ -151,9 +162,10 @@ namespace Administration.Controllers
                     _Model.CreatedDate = businessDates![0].BusinessDate;
                     _Model.UpdatedDate = _Model.CreatedDate;
                     RateClassBO.Instance.Insert(_Model);
+                    return Json(new { success = true, message = "Record has been created successfully.", data = new { id = _Model.ID } });
+
                 }
 
-                return Json(new { success = true, message = "Success", data = new { id = _Model.ID } });
             }
             catch (Exception ex)
             {
@@ -172,7 +184,7 @@ namespace Administration.Controllers
                 }
                 RateClassBO.Instance.Delete(id);
 
-                return Json(new { success = true, message = $"Success Delete! {id}" });
+                return Json(new { success = true, message = $"Record was removed successfully ID: {id}." });
             }
             catch (Exception ex)
             {
