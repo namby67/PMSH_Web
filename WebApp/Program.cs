@@ -160,6 +160,7 @@ builder.Services.AddSingleton<IRateCodeDetailService, RateCodeDetailService>();
 builder.Services.AddSingleton<IRateCodeUserRightService, RateCodeUserRightService>();
 builder.Services.AddSingleton<IPackageDetailService, PackageDetailService>();
 builder.Services.AddSingleton<IPackageService, PackageService>();
+builder.Services.AddSingleton<ITransactionArticleLinkService, TransactionArticleLinkService>();
 
 builder.Services.AddAuthentication(options =>
 {
