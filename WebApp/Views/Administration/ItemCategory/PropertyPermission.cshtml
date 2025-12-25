@@ -98,9 +98,10 @@
         </div>
     </div>
     <div class="mt-2">
-        <button id="btnView" class="submit-button-clear-reservation"><i class="fa-solid fa-eye"></i> View</button>
-        <button id="btnNew" class="submit-button-clear-reservation"><i class="fa-solid fa-plus"></i> New</button>
-        <button id="btnDelete" class="submit-button-clear-reservation"> <i class="fa-solid fa-trash-can"></i> Delete</button>
+        <button id="btnView" class="mui-button mui-button-search"><i class="fa-solid fa-eye"></i> View</button>
+        <button id="btnNew" class="mui-button mui-button-new"><i class="fa-solid fa-plus"></i> New</button>
+        <button id="btnDelete" class="mui-button mui-button-delete"> <i class="fa-solid fa-trash-can"></i> Delete</button>
+        <button id="btnRefresh" class="mui-button mui-button-search" style="margin-left: 5px;"> <i class="fa-solid fa-arrows-rotate"></i> Refresh</button>
     </div>
 </div>
 
@@ -115,11 +116,11 @@
                 <h5 class="modal-title" id="itemModalLabel">New Item</h5>
             </div>
             <div class="modal-footer justify-content-start">
-                <button type="button" id="btnSaveItem" class="submit-button-clear-reservation"><i class="fa-solid fa-floppy-disk"></i> Save</button>
-                <button type="button" data-bs-dismiss="modal" class="submit-button-clear-reservation"><i class="fa-solid fa-xmark"></i> Close</button>
+                <button type="button" id="btnSaveItem" class="mui-button mui-button-save"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+                <button type="button" data-bs-dismiss="modal" class="mui-button mui-button-close"><i class="fa-solid fa-xmark"></i> Close</button>
             </div>
             <div class="modal-body">
-                <form id="itemForm">
+                <form id="formContainer">
                     <div class="container-fluid" style="border: 1px solid #ccc; border-radius: 6px; padding: 8px;"> 
                         <div class="row mb-3">
                             <div class="col-12">
@@ -165,7 +166,7 @@
 
     $(document).ready(function () {
         $("#btnView").trigger("click");
-        // Khi thay đổi giá trị TomSelect, tự động bỏ báo lỗi đỏ
+        
         $(".tomselect-custom").on("change", function() {
         const val = $(this).val();
         const wrapper = $(this).next(".ts-wrapper");
@@ -174,7 +175,31 @@
                 wrapper.parent().find(".invalid-feedback").hide();
             }
         });
+
+        $("#formContainer").on("input change", "input, select, textarea", function () {
+            if ($(this).hasClass("is-invalid")) {
+                $(this).removeClass("is-invalid");
+                $(this).next(".invalid-feedback").text("");
+            }
+        });
+
+        $('#itemModal').on('hidden.bs.modal', function () {
+             applyValidationErrors([], "#formContainer");
+             $(".ts-wrapper").removeClass("is-invalid");
+             $(".invalid-feedback").hide();
+        });
+
         initializeTomSelects();
+
+        $("#btnRefresh").click(function() {
+             // Clear the 'user' TomSelect
+             var userSelect = document.getElementById('user').tomselect;
+             if(userSelect) {
+                 userSelect.clear();
+             }
+
+             $("#btnView").trigger("click");
+        });
     });
 
     function initializeTomSelects() {
@@ -187,7 +212,7 @@
                         plugins: {
                         'remove_button': { title: 'Bỏ chọn mục này' },
                         'dropdown_input': {},
-                        'clear_button': { title: 'Xóa tất cả' } 
+                        'clear_button': { title: 'Clear all' },
                     },
                     create: false,
                     maxItems: null,
@@ -209,20 +234,23 @@
     }
 
     $("#btnNew").click(function () {
-        $("#itemForm")[0].reset();
+        $("#formContainer")[0].reset();
         $("#id").val("0");
-        document.querySelector("#chooseUser").tomselect.clear();
-        document.querySelector("#choosePropertyType").tomselect.clear();
+        const tsUser = document.querySelector("#chooseUser").tomselect;
+        const tsProp = document.querySelector("#choosePropertyType").tomselect;
+        if( tsUser){tsUser.clear()};
+        if( tsProp){tsProp.clear()};
 
-        $(".is-invalid").removeClass("is-invalid");
+        $(".ts-wrapper").removeClass("is-invalid");
+        $(".invalid-feedback").hide();
 
         $("#itemModalLabel").text("New Property Permission");
         $("#itemModal").modal("show");
     });
 
-        $("#btnSaveItem").click(function () {
+    $("#btnSaveItem").click(function () {
         $(".is-invalid").removeClass("is-invalid");
-
+        
         const id = parseInt($("#id").val()) || 0;
         let loginName = (localStorage.getItem("Loginname") || "").replace(/^"(.*)"$/, '$1');
         const loginUser = parseInt(localStorage.getItem("userID")) || 0;
@@ -231,7 +259,6 @@
         const selectedUsers = $("#chooseUser").val();      
         const selectedProperties = $("#choosePropertyType").val();
 
-        // --- VALIDATE ---
         let isValid = true;
         if (!selectedUsers || selectedUsers.length === 0) {
             $("#chooseUser").next(".ts-wrapper").addClass("is-invalid");
@@ -278,7 +305,12 @@
                     $("#itemModal").modal("hide");
                     $("#btnView").trigger("click");
                 } else {
-                    showToast("Error", res.message || "Save failed", false);
+                    if (res.errors && res.errors.length > 0) {
+                        applyValidationErrors(res.errors, "#formContainer");
+                        showToast("Warning", "Please check input fields.", false);
+                    } else {
+                        showToast("Error", res.message || "Save failed", false);
+                    }
                 }
             },
             error: function (xhr) {

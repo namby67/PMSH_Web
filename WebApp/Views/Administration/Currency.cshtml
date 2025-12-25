@@ -89,7 +89,7 @@
 
                 <div class="sticky-header bg-white p-2 shadow-sm z-3">
                     <div class="d-flex align-items-center gap-3 p-2" style="border: 1px solid #ccc; border-radius: 6px; padding: 8px;">
-                        <form id="itemForm">
+                        <form id="formContainer">
                             <div class="d-flex align-items-center">
                                 <div class="d-flex align-items-center me-3">
                                     <label for="code" class="me-2 mb-0">Code</label>
@@ -173,7 +173,7 @@
         });
 
         $("#btnNew").click(function () {
-        $("#itemForm")[0].reset();
+        $("#formContainer")[0].reset();
         $("#id").val("");
 
         $("#btnEdit").hide();
@@ -184,7 +184,7 @@
 
 
     $("#btnSaveItem").click(function () {
-        const formData = $("#itemForm").serialize();
+        const formData = $("#formContainer").serialize();
         console.log("FormData:", formData);
 
         let url = "/Administration/InsertCurrency";
@@ -201,7 +201,7 @@
             success: function (res) {
                 if (res.success) {
                     showToast("Success", url.includes("Update") ? "Update success" : "Insert success", true);
-                    $("#itemForm").trigger("reset");
+                    $("#formContainer").trigger("reset");
                     selectedRowData = null;
 
                     $("#btnEdit").show();
@@ -262,7 +262,7 @@
 
 
      $("#btnCancel").click(function () {
-        $("#itemForm")[0].reset();
+        $("#formContainer")[0].reset();
         $("#id").val("0");
 
         $("#btnEdit").show();

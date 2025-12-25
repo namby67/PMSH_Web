@@ -10,55 +10,63 @@
     <div id="formContainer" class="d-flex align-items-center gap-3 p-2 " style="border: 1px solid #ccc; border-radius: 6px; padding: 8px;">
         <div class="row g-3">
             <div class="">
-                <button type="button" id="btnSave" class="submit-button-clear-reservation">
+                <button type="button" id="btnSave" class="mui-button mui-button-save">
                     <i class="fa-solid fa-floppy-disk"></i> Save
                 </button>
             </div>
             <div class="col-md-4">
-                <label class="form-label mb-1">Email address:</label>
-                <input type="text" id="emailAdressInput"
-                       class="form-control form-control-sm">
+                <label for="emailAddress" class="form-label mb-1">Email address:</label>
+                <input type="text" id="emailAdressInput" name="emailAddress"
+                       class="form-control form-control-sm"><div class="invalid-feedback"></div>
             </div>
 
             <div class="col-md-4">
-                <label class="form-label mb-1">Mail user:</label>
-                <input type="text" id="mailUserInput" class="form-control form-control-sm">
+                <label for="userMail" class="form-label mb-1">Mail user:</label>
+                <input type="text" id="mailUserInput" name="userMail"
+                       class="form-control form-control-sm"><div class="invalid-feedback"></div>
             </div>
 
             <div class="col-md-4">
-                <label class="form-label mb-1 fw-bold">Password:</label>
+                <label for="passMail" class="form-label mb-1 fw-bold">Password:</label>
 
-                <input type="password" id="passInput" class="form-control form-control-sm">
+                <input type="password" id="passInput" name="passMail"
+                       class="form-control form-control-sm"><div class="invalid-feedback"></div>
             </div>
 
             <div class="col-md-4">
-                <label class="form-label mb-1">Server Name:</label>
-                <input type="text" id="serverNameInput" class="form-control form-control-sm">
+                <label for="serverName" class="form-label mb-1">Server Name:</label>
+                <input type="text" id="serverNameInput" name="serverName"
+                       class="form-control form-control-sm"><div class="invalid-feedback"></div>
             </div>
 
             <div class="col-md-4">
-                <label class="form-label mb-1">Server Port:</label>
-                <input type="email" id="serverPortInput" class="form-control form-control-sm">
+                <label for="serverPort" class="form-label mb-1">Server Port:</label>
+                <input type="email" id="serverPortInput" name="serverPort"
+                       class="form-control form-control-sm"><div class="invalid-feedback"></div>
             </div>
 
             <div class="col-md-4">
-                <label class="form-label mb-1">Subject:</label>
-                <input type="text" id="subjectInput" rows="2" class="form-control form-control-sm" />
+                <label for="subMail" class="form-label mb-1">Subject:</label>
+                <input type="text" id="subjectInput" rows="2" name="subMail"
+                       class="form-control form-control-sm" /><div class="invalid-feedback"></div>
             </div>
 
             <div class="col-md-4">
-                <label class="form-label mb-1">Body:</label>
-                <textarea id="bodyInput" rows="2" class="form-control form-control-sm"></textarea>
+                <label for="bodyMail" class="form-label mb-1">Body:</label>
+                <textarea id="bodyInput" rows="2" name="bodyMail"
+                          class="form-control form-control-sm"></textarea><div class="invalid-feedback"></div>
             </div>
 
             <div class="col-md-4">
                 <label class="form-label mb-1">Subject ENG:</label>
-                <input type="text" id="subjectEInput" rows="2" class="form-control form-control-sm" />
+                <input type="text" id="subjectEInput" rows="2" name="subEngMail"
+                       class="form-control form-control-sm" /><div class="invalid-feedback"></div>
             </div>
 
             <div class="col-md-4">
                 <label class="form-label mb-1">Body ENG:</label>
-                <textarea id="bodyEInput" rows="2" class="form-control form-control-sm"></textarea>
+                <textarea id="bodyEInput" rows="2" name="bodyEngMail"
+                    class="form-control form-control-sm"></textarea><div class="invalid-feedback"></div>
             </div>
             <input type="hidden" id="id" name="id" value="0" />
         </div>
@@ -76,6 +84,12 @@
     DevExpress.localization.locale("vi");
 
     $(document).ready(function () {
+        $("#formContainer").on("input change", "input, select, textarea", function () {
+            if ($(this).hasClass("is-invalid")) {
+                $(this).removeClass("is-invalid");
+                $(this).next(".invalid-feedback").text("");
+            }
+        });
        loadConfirmationConfig();
     });
 
@@ -114,6 +128,8 @@
         }
     
         $("#btnSave").click(function(){
+            applyValidationErrors([], "#formContainer");
+
             const id = parseInt($("#id").val()) || 0;
             let loginName = (localStorage.getItem("Loginname") || "").trim()
             .replace(/^"(.*)"$/, '$1');
@@ -123,7 +139,7 @@
                 mailUser: $("#mailUserInput").val(),
                 mailPassword:$("#passInput").val(),
                 serverName: $("#serverNameInput").val(),
-                serverPort: $("#serverPortInput").val(),
+                serverPort: $("#serverPortInput").val() || 0,
                 mailSubject: $("#subjectInput").val(),
                 mailBody: $("#bodyInput").val(),
                 mailSubjectENG: $("#subjectEInput").val(),
@@ -139,14 +155,19 @@
                 contentType: "application/json",
                 data: JSON.stringify(model),
                 traditional: true,
-                   crossDomain: false,
-                     headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+                crossDomain: false,
+                headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
                 success: function (res) {
                   if (res.success) {
                     showToast("Success", res.message, true);
                     loadConfirmationConfig();
                   } else {
-                    showToast("Error", "Error undefined", false);
+                    if (res.errors && res.errors.length > 0) {
+                        applyValidationErrors(res.errors, "#formContainer");
+                        showToast("Warning", "Please check input fields.", false);
+                    } else {
+                        showToast("Error", res.message || "Save failed", false);
+                    }
                   }
                 },
                 error: function (xhr, status, error) {

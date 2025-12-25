@@ -27,8 +27,8 @@
         <div class="row g-3">
             
             <div class="col-md-2">
-                <label class="form-label mb-1">Code:</label>
-                <input type="text" id="code" class="form-control form-control-sm">
+                <label for="code" class="form-label mb-1">Code:</label>
+                <input type="text" id="code" name="code" class="form-control form-control-sm">
                 <div class="invalid-feedback" id="codeError"></div>
             </div>
             <div class="col-md-4">
@@ -36,8 +36,9 @@
                 <input type="text" id="description" class="form-control form-control-sm">
             </div>
             <div class="col-md-2">
-                <label class="form-label mb-1">Sequence:</label>
-                <input type="text" id="sequence" class="form-control form-control-sm">
+                <label for="seq" class="form-label mb-1">Sequence:</label>
+                <input type="number" id="sequence" name="seq" class="form-control form-control-sm">
+                <div class="invalid-feedback"></div>
             </div>
             
             <input type="hidden" id="id" name="id" value="0" />
@@ -45,11 +46,11 @@
     </div>
 
     <div class="mt-2">
-        <button id="btnNew" class="submit-button-clear-reservation"><i class="fa-solid fa-plus"></i> New</button>
-        <button id="btnUpdate" class="submit-button-clear-reservation"><i class="fa-solid fa-pen"></i> Edit</button>
-        <button id="btnDelete" class="submit-button-clear-reservation"><i class="fa-solid fa-trash-can"></i> Delete</button>
-        <button id="btnSave" class="submit-button-clear-reservation d-none"><i class="fa-solid fa-check"></i> Save</button>
-        <button id="btnCancel" class="submit-button-clear-reservation d-none"><i class="fa-solid fa-xmark"></i> Cancel</button>
+        <button id="btnNew" class="mui-button mui-button-new"><i class="fa-solid fa-plus"></i> New</button>
+        <button id="btnUpdate" class="mui-button mui-button-edit"><i class="fa-solid fa-pen"></i> Edit</button>
+        <button id="btnDelete" class="mui-button mui-button-delete"><i class="fa-solid fa-trash-can"></i> Delete</button>
+        <button id="btnSave" class="mui-button mui-button-save d-none"><i class="fa-solid fa-check"></i> Save</button>
+        <button id="btnCancel" class="mui-button mui-button-cancel d-none"><i class="fa-solid fa-xmark"></i> Cancel</button>
     </div>
 </div>
 
@@ -68,9 +69,10 @@
     var selectedRowData = null;
 
     $(document).ready(function () {
-        $("input").on("input change", function () {
+        $("#formContainer").on("input change", "input, select, textarea", function () {
             if ($(this).hasClass("is-invalid")) {
                 $(this).removeClass("is-invalid");
+                $(this).next(".invalid-feedback").text("");
             }
         });
         reloadGrid();
@@ -149,7 +151,7 @@
         $("#id").val("0");
         $("#code").val("");
         $("#description").val("");
-        $("#sequence").val("");
+        $("#sequence").val("0");
     }
 
     // --- NEW ---
@@ -185,6 +187,7 @@
 
     // --- SAVE ---
     $("#btnSave").click(function () {
+        applyValidationErrors([], "#formContainer");
         $("#code").removeClass("is-invalid");
         const id = parseInt($("#id").val()) || 0;
         let loginName = (localStorage.getItem("Loginname") || "").trim()
@@ -199,11 +202,6 @@
             updatedBy: loginName,
         };
 
-        if (!model.code) {
-            $("#code").addClass("is-invalid");
-            $("#codeError").text("Code cannot be left blank.");
-            return;
-        }
 
         $.ajax({
             url: "/Administration/PropertyTypeSave",
@@ -215,10 +213,14 @@
                 if (res.success) {
                     showToast("Success", res.message, true);
                     reloadGrid();
-                    switchToNormalMode();
-                    clearForm();
+                    $("#btnCancel").trigger("click");
                 } else {
-                    showToast("Error", "Save failed", false);
+                    if (res.errors && res.errors.length > 0) {
+                        applyValidationErrors(res.errors, "#formContainer");
+                        showToast("Warning", "Please check input fields.", false);
+                    } else {
+                        showToast("Error", res.message || "Save failed", false);
+                    }
                 }
             },
             error: function (err) {
@@ -242,7 +244,7 @@
                 if (res.success) {
                     showToast("Success", "Deleted successfully", true);
                     reloadGrid();
-                    clearForm();
+                    $("#btnCancel").trigger("click");
                 } else {
                     showToast("Error", res.message, false);
                 }

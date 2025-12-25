@@ -1,5 +1,4 @@
-﻿@using DevExpress.XtraReports.UI
-
+﻿
 @{
     var listCurr = ViewBag.CurrencyList;
 }
@@ -24,13 +23,12 @@
         </div>
     </div>
     <div class="mt-2">
-        <button id="btnSearch" class="mui-button button-report-view"><i class="fa-solid fa-eye"></i> View</button>
+        <button id="btnSearch" class="mui-button mui-button-search"><i class="fa-solid fa-eye"></i> View</button>
         <button id="btnNew" class="mui-button mui-button-new"><i class="fa-solid fa-plus"></i> New</button>
         <button id="btnUpdate" class="mui-button mui-button-edit"> <i class="fa-solid fa-pen"></i> Edit</button>
-        <button id="btnDelete" class="mui-button button-report-delete"> <i class="fa-solid fa-trash-can"></i> Delete</button>
-        <button id="btnExportExcel" class="mui-button mui-button-export" type="button"> <i class="fa-solid fa-file-excel"></i> Excel</button>
+        <button id="btnDelete" class="mui-button mui-button-delete"> <i class="fa-solid fa-trash-can"></i> Delete</button>
+        <button id="btnExportExcel" class="mui-button mui-button-export"> <i class="fa-solid fa-file-excel"></i> Excel</button>
     </div>
-
 </div>
 <div class="mui-card">
     <div id="gridContainer" class="gridContainer mt-2"></div>
@@ -41,124 +39,136 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="itemModalLabel">New/Edit Item</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-footer justify-content-start">
-                <button type="button" id="btnSaveItem" class="mui-button mui-button-export">
-                    <i class="fa-solid fa-floppy-disk"></i> Save
-                </button>
+                <button type="button" id="btnSaveItem" class="mui-button mui-button-save"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+                <button type="button" data-bs-dismiss="modal" class="mui-button mui-button-close"><i class="fa-solid fa-xmark"></i> Close</button>
             </div>
             <div class="modal-body">
-                <form id="itemForm">
-                    <div class="container-fluid" style="border: 1px solid #ccc; border-radius: 6px; padding: 8px;">
+                <form id="formContainer">
+                    <div class="container-fluid border rounded p-3">
 
-                        <div class="row mb-1 align-items-center">
+                        <!-- Deposit Rule Code -->
+                        <div class="row mb-3">
                             <div class="col-md-4">
-                                <label for="txtCode" class="form-label mb-0">Deposit Rule Code</label>
+                                <label class="form-label mb-0">Deposit Rule Code</label>
                             </div>
-                            <div class="col-md-4">
-                                <input type="text" id="txtCode" name="txtCode" class="form-control form-control-sm" />
+                            <div class="col-md-8">
+                                <input type="text" id="txtCode" name="code"
+                                       class="form-control form-control-sm" />
                                 <div class="invalid-feedback">Code is required.</div>
                             </div>
                         </div>
 
-                        <div class="row mb-1">
+                        <!-- Description -->
+                        <div class="row mb-3">
                             <div class="col-md-4">
-                                <label for="txtDescription" class="form-label">Description</label>
+                                <label class="form-label mb-0">Description</label>
                             </div>
                             <div class="col-md-8">
-                                <textarea id="txtDescription" name="txtDescription" class="form-control" rows="4" style="height:100px"></textarea>
+                                <textarea id="txtDescription" name="des"
+                                          class="form-control" style="height:100px"
+                                          rows="4"></textarea>
+                                <div class="invalid-feedback"></div>
                             </div>
                         </div>
 
-                        <div class="row mb-2 align-items-center">
+                        <!-- Type -->
+                        <div class="row mb-3">
                             <div class="col-md-4">
-                                <label class="col-sm-2 col-form-label">Type</label>
+                                <label class="form-label mb-0">Type</label>
                             </div>
                             <div class="col-md-8">
-                                <div class="row">
-                                    <div class="col-md-4 form-check">
-                                        <input class="form-check-input" type="radio" name="type" id="typeFlat" value="0" checked>
+                                <div class="d-flex gap-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio"
+                                               name="type" id="typeFlat" value="0" checked>
                                         <label class="form-check-label" for="typeFlat">Flat</label>
                                     </div>
-
-                                    <div class="col-md-4 form-check">
-                                        <input class="form-check-input" type="radio" name="type" id="typePercentage" value="1">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio"
+                                               name="type" id="typePercentage" value="1">
                                         <label class="form-check-label" for="typePercentage">Percentage</label>
                                     </div>
-
-                                    <div class="col-md-4 form-check">
-                                        <input class="form-check-input" type="radio" name="type" id="typeNights" value="2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio"
+                                               name="type" id="typeNights" value="2">
                                         <label class="form-check-label" for="typeNights">Nights</label>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="row mb-1 align-items-center">
-                            <div class="col-md-6">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label class="form-label">Deposit Amount</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="text" class="form-control" id="depositAmount">
-                                        <div class="invalid-feedback">Amount must be valid number > 0.</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6" id="divCurrency">
-                                <div class="row mb-3">
-                                    <div class="col-md-5">
-                                        <label class="col-form-label text-md-end w-100">Currency:</label>
-                                    </div>
-                                    <div class="col-md-7">
-                                        <select id="currencyID" class="form-select form-select-sm">
-                                            <option value="">--Select--</option>
-                                            @foreach (var item in listCurr)
-                                            {
-                                                <option value="@item.ID">@item.ID</option>
-                                            }
-                                        </select>
-                                        <div class="invalid-feedback">Please select currency for Flat type.</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row mb-2 align-items-center">
-
+                        <!-- Amount + Currency -->
+                        <div class="row mb-3">
                             <div class="col-md-4">
-                                <label class="me-2 mb-0" style="white-space: nowrap;">Days before Arrival</label>
-                                <input type="text" id="daysBeforeArrival"
-                                       class="form-control form-control-sm"
-                                       style="width: 80px;">
-                                <div class="invalid-feedback">Must be number >= 0.</div>
+                                <label class="form-label mb-0">Deposit Amount</label>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" id="depositAmount" name="amountValue"
+                                       class="form-control form-control-sm">
+                                <div class="invalid-feedback">Amount must be valid number &gt; 0.</div>
                             </div>
 
-                            <div class="col-auto">
-                                <label class="me-2 mb-0" style="white-space: nowrap;">Days after Booking</label>
-                                <input type="text" id="daysAfterBooking"
-                                       class="form-control form-control-sm"
-                                       style="width: 80px;">
-                                <div class="invalid-feedback">Must be number >= 0.</div>
+                            <div class="col-md-4" id="divCurrency">
+                                <div class="form-group">
+                                    <select id="currencyID" name="currencyID"
+                                            class="form-select form-select-sm">
+                                        <option value="">-- Currency --</option>
+                                        @foreach (var item in listCurr)
+                                        {
+                                            <option value="@item.ID">@item.ID</option>
+                                        }
+                                    </select>
+
+                                    <div class="invalid-feedback"></div>
+                                </div>
                             </div>
 
-                            <div class="col-auto">
-                                <label class="me-2 mb-0" style="white-space: nowrap;">Sequence</label>
-                                <input type="text" id="sequence"
-                                       class="form-control form-control-sm"
-                                       style="width: 80px;">
-                                <div class="invalid-feedback">Invalid number.</div>
+                        </div>
+
+                        <!-- Days & Sequence -->
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label mb-0">Conditions</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="d-flex flex-wrap gap-3">
+                                    <div>
+                                        <label class="form-label mb-1 small">Days before Arrival</label>
+                                        <input type="text" id="daysBeforeArrival" name="dayBA"
+                                               class="form-control form-control-sm" style="width:90px">
+                                        <div class="invalid-feedback">Must be number ≥ 0.</div>
+                                    </div>
+
+                                    <div>
+                                        <label class="form-label mb-1 small">Days after Booking</label>
+                                        <input type="text" id="daysAfterBooking" name="dayAB"
+                                               class="form-control form-control-sm" style="width:90px">
+                                        <div class="invalid-feedback">Must be number ≥ 0.</div>
+                                    </div>
+
+                                    <div>
+                                        <label class="form-label mb-1 small">Sequence</label>
+                                        <input type="text" id="sequence" name="seq"
+                                               class="form-control form-control-sm" style="width:90px">
+                                        <div class="invalid-feedback">Invalid number.</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="row mb-1 align-items-center">
-                            <div class="col-auto">
-                                <input type="checkbox" id="inActive" name="inActive"
-                                       class="form-check-input me-2" />
-                                <label for="inActive" class="form-check-label text-danger mb-0">Inactive</label>
+                        <!-- Inactive -->
+                        <div class="row">
+                            <div class="col-md-8 offset-md-4">
+                                <div class="form-check">
+                                    <input type="checkbox" id="inActive" name="inActive"
+                                           class="form-check-input">
+                                    <label for="inActive"
+                                           class="form-check-label text-danger">
+                                        Inactive
+                                    </label>
+                                </div>
                             </div>
                         </div>
 
@@ -167,24 +177,26 @@
                     </div>
                 </form>
             </div>
+
         </div>
     </div>
 </div>
+
 <div id="loadingSpinner" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
     <i class="fa-solid fa-spinner fa-spin"></i>
 </div>
 
 <script>
-     DevExpress.localization.locale("vi");
+    DevExpress.localization.locale("vi");
     $(document).ready(function () {
-         $("#btnSearch").trigger("click");
-
-         // Remove is-invalid class on input/change
-         $("#itemForm input, #itemForm select, #itemForm textarea").on("input change", function () {
-            if ($(this).hasClass("is-invalid")) {
-                $(this).removeClass("is-invalid");
-            }
-        });
+        $("#btnSearch").trigger("click");
+            $("#formContainer").on("input change", "input, select, textarea", function () {
+                if ($(this).hasClass("is-invalid")) {
+                    $(this).removeClass("is-invalid");
+                    $(this).next(".invalid-feedback").text("");
+                }
+            });
+         
         $("input[name='type']").change(function() {
             toggleCurrency();
 
@@ -199,62 +211,15 @@
         let $div = $("#divCurrency");
 
         if (typeVal == "0") {
-        $div.removeClass("d-none").addClass("d-flex");
+            $div.removeClass("d-none");
         } else {
-            $div.addClass("d-none").removeClass("d-flex");
+            $div.addClass("d-none");
         }
     }
 
-        function validateForm() {
-        let isValid = true;
-
-        $("#itemForm .form-control, #itemForm .form-select").removeClass("is-invalid");
-
-        let code = $("#txtCode").val().trim();
-        if (code === "") {
-            $("#txtCode").addClass("is-invalid");
-            isValid = false;
-        }
-
-        let amount = $("#depositAmount").val();
-        if (amount === "" || isNaN(amount) || parseFloat(amount) < 0) {
-            $("#depositAmount").addClass("is-invalid");
-            isValid = false;
-        }
-
-        let typeVal = $("input[name='type']:checked").val();
-        if (typeVal == "0") {
-            if ($("#currencyID").val() === "") {
-                $("#currencyID").addClass("is-invalid");
-                isValid = false;
-            }
-        }
-
-        const isNonNegativeNumber = (val) => val === "" || (!isNaN(val) && parseFloat(val) >= 0);
-
-        if (!isNonNegativeNumber($("#daysBeforeArrival").val())) {
-            $("#daysBeforeArrival").addClass("is-invalid");
-            isValid = false;
-        }
-        if (!isNonNegativeNumber($("#daysAfterBooking").val())) {
-            $("#daysAfterBooking").addClass("is-invalid");
-            isValid = false;
-        }
-        if ($("#sequence").val() !== "" && isNaN($("#sequence").val())) {
-            $("#sequence").addClass("is-invalid");
-            isValid = false;
-        }
-
-        return isValid;
-    }
-
-    $("input[name='type']").change(function() {
-        toggleCurrency();
-    });
-
-      $("#btnNew").click(function () {
-           $("#itemForm")[0].reset();
-           $("#itemForm .form-control, #itemForm .form-select").removeClass("is-invalid");
+    $("#btnNew").click(function () {
+           $("#formContainer")[0].reset();
+           $("#formContainer .form-control, #formContainer .form-select").removeClass("is-invalid");
            $("#id").val("0");
            $("#txtCode").prop("disabled", false);
            $("#typeFlat").prop("checked", true);
@@ -263,7 +228,8 @@
            $("#itemModalLabel").text("Add Deposit Rules Search");
            $("#itemModal").modal("show");
       });
-         function getData(data){
+         
+    function getData(data){
            var listUser = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.UsersList ?? new List<object>()));
           $("#gridContainer").dxDataGrid({
               dataSource: data,
@@ -323,7 +289,7 @@
          });
      }
 
-       $(document).off("click", "#btnSearch").on("click", "#btnSearch", function () {
+    $(document).off("click", "#btnSearch").on("click", "#btnSearch", function () {
           $("#loadingSpinner").show();
           $.ajax({
               url: "/Administration/GetDepositRule/",
@@ -346,7 +312,8 @@
               }
         });
     });
-        function mapTypeStringToInt(typeStr) {
+        
+    function mapTypeStringToInt(typeStr) {
         switch (typeStr) {
             case "Flat": return 0;
             case "Percentage": return 1;
@@ -354,8 +321,9 @@
             default: return 0;
         }
     }
+    
     function editItem(data) {
-          $("#itemForm .form-control, #itemForm .form-select").removeClass("is-invalid");
+          $("#formContainer .form-control, #formContainer .form-select").removeClass("is-invalid");
           $("#id").val(data.id);
           $("#txtCode").val(data.code);
           $("#txtCode").prop("disabled", true);
@@ -378,7 +346,8 @@
           });
           $("#itemModal").modal("show");
       }
-      $("#btnUpdate").click(function () {
+      
+    $("#btnUpdate").click(function () {
             if (!selectedRowData || selectedRowData.id === 0) {
               showToast('Warning', "Select 1 row, please!", true);
               return;
@@ -386,15 +355,11 @@
            $("#itemModalLabel").text("Edit Deposit Rules Search");
               editItem(selectedRowData);
       });
-      $("#btnSaveItem").click(function () {
-          if (!validateForm()) {
-            showToast("Warning", "Please check input fields marked in red.", false);
-            return;
-          }
+      
+    $("#btnSaveItem").click(function () {
+          applyValidationErrors([], "#formContainer");
+
           const id = parseInt($("#id").val()) || 0;
-          // let loginName = (localStorage.getItem("Loginname") || "")
-          //   .trim()
-          //   .replace(/^"(.*)"$/, '$1');
           const loginUser = parseInt(localStorage.getItem("userID")) || 0;
 
           const currentType = $("input[name='type']:checked").val();
@@ -434,17 +399,26 @@
                     showToast("Success", res.message, true);
                     $("#itemModal").modal("hide");
                 } else {
-                    showToast("Error", res.message || "Request failed", false);
+                    if (res.errors && res.errors.length > 0) {
+                        applyValidationErrors(res.errors, "#formContainer");
+                        let generalError = res.errors.find(x => x.field === "general");
+                        let toastMessage = generalError ? generalError.message : "Please check input fields.";
+
+                        showToast("Warning", toastMessage, false);
+                    } else {
+                        showToast("Error", res.message || "Save failed", false);
+                    }
                 }
                   $("#btnSearch").click();
               },
               error: function (xhr, status, error) {
                   $("#loadingSpinner").hide();
-                      showToast("Error",error.message ||"Request failed", false);
+                  showToast("Error",error.message ||"Request failed", false);
               }
           });
       });
-         $("#btnDelete").click(function () {
+        
+    $("#btnDelete").click(function () {
            if (!selectedRowData || selectedRowData.id === 0) {
                showToast('Warning', "Select 1 row, please!", true);
 
@@ -474,7 +448,7 @@
            });
        });
 
-      $("#btnExportExcel").click(function () {
+    $("#btnExportExcel").click(function () {
          const grid = $("#gridContainer").dxDataGrid("instance");
 
          const workbook = new ExcelJS.Workbook();
@@ -499,7 +473,7 @@
          worksheet.addRow([]);
 
          // === Dòng 5: Tiêu đề báo cáo (ở giữa) ===
-         const reportRow = worksheet.addRow(['Reason']);
+         const reportRow = worksheet.addRow(['Deposit Rules Search']);
          worksheet.mergeCells('A5:D5');
          reportRow.font = { bold: true, size: 14 };
          reportRow.alignment = { vertical: 'middle', horizontal: 'center' };

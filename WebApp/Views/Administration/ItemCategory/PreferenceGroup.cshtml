@@ -2,7 +2,7 @@
     //
 }
 <div class="header">
-    <h3 id="content-title">MarketType</h3>
+    <h3 id="content-title">Preference Group</h3>
 </div>
 
 <div class="sticky-header bg-white p-2 shadow-sm z-3">
@@ -14,6 +14,7 @@
                     <label for="tracetime" class="me-2 mb-0">Code:</label>
                     <input type="text" id="codeInput"
                            class="form-control form-control-sm w-auto" />
+                    <div class="invalid-feedback"></div>
                 </div>
                 <div class="d-flex align-items-center me-4">
                     <label for="tracetime" class="me-2 mb-0">Name:</label>
@@ -77,8 +78,7 @@
                         <div class="row mb-1">
                             <div class="col">
                                 <label for="txtdescription" class="form-label">Description</label>
-                                <textarea id="txtdescription" name="txtdescription" class="form-control" rows="4"
-                                          style="background-color:#ffffe6; height:100px"></textarea>
+                                <textarea id="txtdescription" name="txtdescription" class="form-control" rows="4"></textarea>
                             </div>
                         </div>
                         <input type="hidden" id="id" name="id" value="0" />
@@ -100,25 +100,31 @@
     var selectedRowData = null;
 
     $(document).ready(function () {
-            $("#formContainer").on("input change", "input, select, textarea", function () {
-        if ($(this).hasClass("is-invalid")) {
-            $(this).removeClass("is-invalid");
-            $(this).next(".invalid-feedback").text("");
-        }
-    });
+        $("#formContainer").on("input change", "input, select, textarea", function () {
+            if ($(this).hasClass("is-invalid")) {
+                $(this).removeClass("is-invalid");
+                $(this).next(".invalid-feedback").text("");
+            }
+        });
+
+        $('#itemModal').on('hidden.bs.modal', function () {
+             applyValidationErrors([], "#formContainer");
+        });
+
         $("#btnView").trigger("click");
 
     });
 
     $("#btnNew").click(function () {
         $("#formContainer")[0].reset();
+        
         $("#id").val("0");
-        $("#itemModalLabel").text("Add MarketType");
+        $("#itemModalLabel").text("Add Preference Group");
         $("#itemModal").modal("show");
     });
 
     $("#btnSaveItem").click(function () {
-        applyValidationErrors([], "#formContainer");
+        
         const id = parseInt($("#id").val()) || 0;
         let loginName = (localStorage.getItem("Loginname") || "")
             .trim()
@@ -137,7 +143,7 @@
         };
 
         $.ajax({
-            url: "/Administration/MarketTypeSave",
+            url: "/Administration/PreferenceGroupSave",
             type: "POST",
             contentType: "application/json",
             cache: false,
@@ -153,7 +159,10 @@
                 } else {
                     if (res.errors && res.errors.length > 0) {
                         applyValidationErrors(res.errors, "#formContainer");
-                        showToast("Warning", "Please check input fields.", false);
+                        let generalError = res.errors.find(x => x.field === "general");
+                        let toastMessage = generalError ? generalError.message : "Please check input fields.";
+
+                        showToast("Warning", toastMessage, false);
                     } else {
                         showToast("Error", res.message || "Save failed", false);
                     }
@@ -173,7 +182,7 @@
         $("#txtdescription").val(data.description);
         $("#inactive").prop("checked", data.inactive);
 
-        $("#itemModalLabel").text("Update MarketType");
+        $("#itemModalLabel").text("Update Preference Group");
         $("#itemModal").modal("show");
     }
 
@@ -182,6 +191,7 @@
             showToast("Warning","Please select a row first!", true);
             return;
         }
+
         editMember(selectedRowData);
     });
 
@@ -224,7 +234,7 @@
     $(document).off("click", "#btnView").on("click", "#btnView", function () {
           $("#loadingSpinnerRateCode").show();
           $.ajax({
-              url: "/Administration/GetMarketType",
+              url: "/Administration/GetPreferenceGroup",
               type: "GET",
               cache: false,
               data: {
@@ -255,7 +265,7 @@
                 return;
             }
            $.ajax({
-               url: `/Administration/DeleteMarketType/`+ selectedRowData.id,
+               url: `/Administration/DeletePreferenceGroup/`+ selectedRowData.id,
                type: "POST",
                traditional: true,
                crossDomain: false,
@@ -269,7 +279,6 @@
                     }
                },
                error: function(){
-                   console.log("delete "+ selectedRowData.id);
                     showToast("Error","Delete failed!" ,false);
                     $("#loadingSpinner").hide();
                },
@@ -301,7 +310,7 @@
         worksheet.addRow([]);
 
         // === Dòng 5: Tiêu đề báo cáo (ở giữa) ===
-        const reportRow = worksheet.addRow(['Market Type']);
+        const reportRow = worksheet.addRow(['Preference Group']);
         worksheet.mergeCells('A5:D5');
         reportRow.font = { bold: true, size: 14 };
         reportRow.alignment = { vertical: 'middle', horizontal: 'center' };
@@ -323,7 +332,7 @@
             worksheet.getCell(`A${lastRow}`).font = { italic: true };
 
             // Ghi file
-            let fileName = "MarketType.xlsx";
+            let fileName = "PreferenceGroup.xlsx";
             workbook.xlsx.writeBuffer().then(function (buffer) {
                 saveAs(new Blob([buffer], { type: "application/octet-stream" }), fileName);
             });

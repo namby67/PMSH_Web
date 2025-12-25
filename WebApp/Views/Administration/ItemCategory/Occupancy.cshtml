@@ -1,6 +1,4 @@
-﻿@using DevExpress.XtraReports.UI
-
-@{
+﻿@{
     //
 }
 <style>
@@ -35,8 +33,9 @@
             </div>
 
             <div class="col-lg-1 col-md-2">
-                <label class="form-label mb-1" style="font-size: 12px;">Occ. Level:</label>
-                <input type="text" id="occLevelInput" class="form-control form-control-sm">
+                <label for="occLevel" class="form-label mb-1" style="font-size: 12px;">Occ. Level:</label>
+                <input type="text" id="occLevelInput" name="occLevel"
+                       class="form-control form-control-sm">
                 <div class="invalid-feedback" id="occLevelError"></div>
             </div>
 
@@ -78,11 +77,11 @@
         </div>
     </div>
     <div class="mt-2">
-        <button id="btnNew" class="submit-button-clear-reservation"><i class="fa-solid fa-plus"></i> New</button>
-        <button id="btnUpdate" class="submit-button-clear-reservation"> <i class="fa-solid fa-pen"></i> Edit</button>
-        <button id="btnDelete" class="submit-button-clear-reservation"> <i class="fa-solid fa-trash-can"></i> Delete</button>
-        <button id="btnSave" class="submit-button-clear-reservation d-none"><i class="fa-solid fa-check"></i> Save</button>
-        <button id="btnCancel" class="submit-button-clear-reservation d-none"><i class="fa-solid fa-xmark"></i> Cancel</button>
+        <button id="btnNew" class="mui-button mui-button-new"><i class="fa-solid fa-plus"></i> New</button>
+        <button id="btnUpdate" class="mui-button mui-button-edit"> <i class="fa-solid fa-pen"></i> Edit</button>
+        <button id="btnDelete" class="mui-button mui-button-delete"> <i class="fa-solid fa-trash-can"></i> Delete</button>
+        <button id="btnSave" class="mui-button mui-button-save d-none"><i class="fa-solid fa-check"></i> Save</button>
+        <button id="btnCancel" class="mui-button mui-button-cancel d-none"><i class="fa-solid fa-xmark"></i> Cancel</button>
     </div>
 
 </div>
@@ -102,11 +101,12 @@
     $(document).ready(function () {
         reloadGrid();
 
-        $("input").on("input change", function () {
-            if ($(this).hasClass("is-invalid")) {
-                $(this).removeClass("is-invalid");
-            }
-        });
+            $("#formContainer").on("input change", "input, select, textarea", function () {
+        if ($(this).hasClass("is-invalid")) {
+            $(this).removeClass("is-invalid");
+            $(this).next(".invalid-feedback").text("");
+        }
+    });
         lockForm();
     });
 
@@ -157,13 +157,13 @@
         $("#colorDisplay").val("");
         $("#colorPicker").val("#ffffff");
     });
- 
+
     function loadGrid(data) {
         $("#gridContainerRateCode").dxDataGrid({
             dataSource: data,
-            height: 500,
+            height: 450,
             width: "100%",
-            columnAutoWidth: false,// Tắt auto width để tuân thủ width % bên dưới
+            columnAutoWidth: false,
             allowColumnResizing: true,
             columnResizingMode: "widget",
             selection: { mode: "single" },
@@ -181,13 +181,13 @@
                     container.text(stt);
                 }
             },
-            { dataField: "id", caption: "ID", visible: false }, 
+            { dataField: "id", caption: "ID", visible: false },
             { dataField: "type", caption: "Type", width: "10%" },
             { dataField: "occupancylevel", caption: "Occ. Level", width: "8%"},
             { dataField: "title", caption: "Title", width: "12%" },
             { dataField: "email", caption: "Email", width: "15%" },
             { dataField: "description", caption: "Description", width: "20%" },
-            { dataField: "color", caption: "Color", visible: false }, 
+            { dataField: "color", caption: "Color", visible: false },
             { dataField: "createBy", caption: "CreateBy", width: "5%" },
             { dataField: "createDate", caption: "CreateDate", dataType: "date", format: "dd/MM/yyyy", width: "10%" },
             { dataField: "updateBy", caption: "UpdateBy", width: "5%" },
@@ -289,49 +289,22 @@
     // --- NÚT CANCEL ---
     $("#btnCancel").click(function () {
         $(".form-control").removeClass("is-invalid is-valid");
-
+        $("#content-title").text("Occupancy Config");
         clearForm();
         switchToNormalMode();
     });
 
     // --- NÚT SAVE ---
     $("#btnSave").click(function(){
-        let isValid = true;
-
-        let occLevelRaw = $("#occLevelInput").val().trim();
-        let occLevel = occLevelRaw === "" ? null : Number(occLevelRaw);
-
-        $("#occLevelInput").removeClass("is-invalid");
-
-           // check trống
-        if (occLevelRaw === "") {
-            $("#occLevelInput").addClass("is-invalid");
-            $("#occLevelError").text("Occ. Level must not be blank.");
-            isValid = false;
-        }
-        // check không phải số
-        else if (isNaN(occLevel)) {
-            $("#occLevelInput").addClass("is-invalid");
-            $("#occLevelError").text("Occ. Level must be a number.");
-            isValid = false;
-        }
-        // check số âm
-        else if (occLevel < 0) {
-            $("#occLevelInput").addClass("is-invalid");
-            $("#occLevelError").text("Occ. Level must be greater than or equal to 0.");
-            isValid = false;
-        }
-
-        if(!isValid) {
-            return;
-        } else {
-            const id = parseInt($("#id").val()) || 0;
+        applyValidationErrors([], "#formContainer");
+       
+        const id = parseInt($("#id").val()) || 0;
             let loginName = (localStorage.getItem("Loginname") || "").trim()
             .replace(/^"(.*)"$/, '$1');
             const model = {
                 id: id,
                 type: 0, // Hotel
-                occupancylevel: occLevel,
+                occupancylevel: parseFloat($("#occLevelInput").val()) || 0,
                 title: $("#titleInput").val(),
                 email: $("#emailInput").val(),
                 description: $("#descriptionInput").val(),
@@ -346,16 +319,20 @@
               contentType: "application/json",
               data: JSON.stringify(model),
               traditional: true,
-                   crossDomain: false,
-                     headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+              crossDomain: false,
+              headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
               success: function (res) {
                   if (res.success) {
                     showToast("Success", res.message, true);
                     reloadGrid();
-                    switchToNormalMode();
-                    clearForm();
+                    $("#btnCancel").trigger("click");
                 } else {
-                    showToast("Error", res.message, false);
+                    if (res.errors && res.errors.length > 0) {
+                    applyValidationErrors(res.errors, "#formContainer");
+                    showToast("Warning", "Please check input fields.", false);
+                    } else {
+                        showToast("Error", res.message, false);
+                    }
                 }
               },
               error: function (xhr, status, error) {
@@ -363,7 +340,6 @@
                       showToast("Error",error.message, false);
               }
           });
-        }
     });
 
     function clearForm() {
@@ -389,6 +365,7 @@
             g.toString(16).padStart(2, '0') +
             b.toString(16).padStart(2, '0');
     }
+
     $("#btnDelete").click(function () {
            if (!selectedRowData || selectedRowData.id === 0) {
                showToast('Warning', "Select one row to delete, please!", true);
@@ -408,6 +385,7 @@
                     if(result.success){
                         reloadGrid();
                         showToast("Success","Delete Successfully!",true);
+                        $("#btnCancel").trigger("click");
                     } else {
                         showToast("Error",result.message,false);
                     }

@@ -31,11 +31,11 @@
         </div>
     </div>
     <div class="mt-2">
-        <button id="btnView" class="submit-button-clear-reservation"><i class="fa-solid fa-eye"></i> View</button>
-        <button id="btnNew" class="submit-button-clear-reservation"><i class="fa-solid fa-plus"></i> New</button>
-        <button id="btnEdit" class="submit-button-clear-reservation"> <i class="fa-solid fa-pen"></i> Edit</button>
-        <button id="btnDelete" class="submit-button-clear-reservation"> <i class="fa-solid fa-trash-can"></i> Delete</button>
-        <button id="btnExportExcel" class="submit-button-clear-reservation" type="button"> <i class="fa-solid fa-file-excel"></i> Excel</button>
+        <button id="btnView" class="mui-button mui-button-search"><i class="fa-solid fa-eye"></i> View</button>
+        <button id="btnNew" class="mui-button mui-button-new"><i class="fa-solid fa-plus"></i> New</button>
+        <button id="btnEdit" class="mui-button mui-button-edit"> <i class="fa-solid fa-pen"></i> Edit</button>
+        <button id="btnDelete" class="mui-button mui-button-delete"> <i class="fa-solid fa-trash-can"></i> Delete</button>
+        <button id="btnExportExcel" class="mui-button mui-button-export"> <i class="fa-solid fa-file-excel"></i> Excel</button>
     </div>
 </div>
 
@@ -50,16 +50,17 @@
                 <h5 class="modal-title" id="itemModalLabel">New Item</h5>
             </div>
             <div class="modal-footer justify-content-start">
-                <button type="button" id="btnSaveItem" class="submit-button-clear-reservation"><i class="fa-solid fa-floppy-disk"></i> Save</button>
-                <button type="button" data-bs-dismiss="modal" class="submit-button-clear-reservation"><i class="fa-solid fa-xmark"></i> Close</button>
+                <button type="button" id="btnSaveItem" class="mui-button mui-button-save"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+                <button type="button" data-bs-dismiss="modal" class="mui-button mui-button-close"><i class="fa-solid fa-xmark"></i> Close</button>
             </div>
             <div class="modal-body">
-                <form id="itemForm">
+                <form id="formContainer">
                     <div class="container-fluid" style="border: 1px solid #ccc; border-radius: 6px; padding: 8px;">
                         <div class="row mb-1 align-items-center">
                             <div class="col-auto">
-                                <label for="txtcode" class="form-label mb-0">Code</label>
-                                <input type="text" id="txtcode" name="txtcode" class="form-control form-control-sm" />
+                                <label for="code" class="form-label mb-0">Code</label>
+                                <input type="text" id="txtcode" name="code" class="form-control form-control-sm" />
+                                <div class="invalid-feedback"></div>
                             </div>
                             <div class="col-auto d-flex align-items-center">
                                 <input type="checkbox" id="inactive" name="inactive" class="form-check-input me-2" />
@@ -68,8 +69,9 @@
                         </div>
                         <div class="row mb-1">
                             <div class="col">
-                                <label for="txtname" class="form-label">Name</label>
-                                <input type="text" id="txtname" name="txtname" class="form-control" />
+                                <label for="name" class="form-label">Name</label>
+                                <input type="text" id="txtname" name="name" class="form-control" />
+                                <div class="invalid-feedback"></div>
                             </div>
                         </div>
                         <div class="row mb-1">
@@ -98,18 +100,25 @@
     var selectedRowData = null;
 
     $(document).ready(function () {
+            $("#formContainer").on("input change", "input, select, textarea", function () {
+        if ($(this).hasClass("is-invalid")) {
+            $(this).removeClass("is-invalid");
+            $(this).next(".invalid-feedback").text("");
+        }
+    });
         $("#btnView").trigger("click");
 
     });
 
     $("#btnNew").click(function () {
-        $("#itemForm")[0].reset();
+        $("#formContainer")[0].reset();
         $("#id").val("0");
         $("#itemModalLabel").text("Add Territory");
         $("#itemModal").modal("show");
     });
 
     $("#btnSaveItem").click(function () {
+        applyValidationErrors([], "#formContainer");
         const id = parseInt($("#id").val()) || 0;
         let loginName = (localStorage.getItem("Loginname") || "")
             .trim()
@@ -142,8 +151,12 @@
                     $("#itemModal").modal("hide");
                     $("#btnView").trigger("click");
                 } else {
-                    $("#itemModal").modal("hide");
-                    showToast("Error", res.message || "Action Failed!", false);
+                    if (res.errors && res.errors.length > 0) {
+                        applyValidationErrors(res.errors, "#formContainer");
+                        showToast("Warning", "Please check input fields.", false);
+                    } else {
+                        showToast("Error", res.message || "Save failed", false);
+                    }
                 }
             },
             error: function (xhr) {

@@ -12,7 +12,7 @@ namespace BaseBusiness.Model
         public int ID { get; set; }
         public int Type { get; set; }
         public int RoomTypeID { get; set; }
-        public decimal? Occupancylevel { get; set; }
+        public decimal Occupancylevel { get; set; }
         public string Title { get; set; }
         public string Email { get; set; }
         public string Description { get; set; }

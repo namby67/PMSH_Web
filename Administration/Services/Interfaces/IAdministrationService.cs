@@ -38,6 +38,8 @@ namespace Administration.Services.Interfaces
         public DataTable Owner(string code, string name, int inactive);
         public DataTable PropertyType(string code, string description, int sequence);
         public DataTable ReservationType();
+        public DataTable PackageForecastGroup(string code, string name, int inactive);
+        public DataTable PreferenceGroup(string code, string name, int inactive);
         public DataTable Currency();
         public List<CurrencyModel> GetAllCurrency();
         public DataTable hkpEmployee(string code, string name, int inactive);

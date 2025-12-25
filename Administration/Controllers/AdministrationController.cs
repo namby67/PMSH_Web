@@ -2,6 +2,7 @@
 using BaseBusiness.BO;
 using BaseBusiness.Model;
 using BaseBusiness.util;
+using DocumentFormat.OpenXml.EMMA;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Data;
 using System.Text;
+using static BaseBusiness.util.ValidationUtils;
 namespace Administration.Controllers
 {
     public class AdministrationController : Controller
@@ -1185,103 +1187,7 @@ namespace Administration.Controllers
             }
         }
         #endregion
-
-        #region RateCategory
-        public IActionResult RateCategory()
-        {
-            return View();
-        }
-        [HttpGet]
-        public IActionResult GetRateCategory(string code, string name, int inactive)
-        {
-            try
-            {
-                DataTable dt = _iAdministrationService.RateCategory(code, name, inactive);
-                var result = (from r in dt.AsEnumerable()
-                              select new
-                              {
-                                  Code = !string.IsNullOrEmpty(r["Code"].ToString()) ? r["Code"] : "",
-                                  Name = !string.IsNullOrEmpty(r["Name"].ToString()) ? r["Name"] : "",
-                                  Description = !string.IsNullOrEmpty(r["Description"].ToString()) ? r["Description"] : "",
-                                  InactiveText = !string.IsNullOrEmpty(r["InactiveText"].ToString()) ? r["InactiveText"] : "",
-                                  CreatedBy = !string.IsNullOrEmpty(r["CreatedBy"].ToString()) ? r["CreatedBy"] : "",
-                                  CreatedDate = !string.IsNullOrEmpty(r["CreatedDate"].ToString()) ? r["CreatedDate"] : "",
-                                  UpdatedBy = !string.IsNullOrEmpty(r["UpdatedBy"].ToString()) ? r["UpdatedBy"] : "",
-                                  UpdatedDate = !string.IsNullOrEmpty(r["UpdatedDate"].ToString()) ? r["UpdatedDate"] : "",
-                                  ID = !string.IsNullOrEmpty(r["ID"].ToString()) ? r["ID"] : "",
-                                  Inactive = !string.IsNullOrEmpty(r["Inactive"].ToString()) ? r["Inactive"] : "",
-                              }).ToList();
-                return Json(result);
-            }
-            catch (Exception ex)
-            {
-                return Json(ex.Message);
-            }
-        }
-        [HttpPost]
-        public IActionResult RateCategorySave([FromBody] RateCategoryModel model)
-        {
-            string message = "";
-
-            try
-            {
-                if (model.Code == null || model.Code == "")
-                    throw new Exception(" Code cannot be left blank");
-
-                if (model.Name == null || model.Name == "")
-                    throw new Exception(" Name cannot be left blank");
-
-                if (model.ID == 0)
-                {
-                    model.CreatedDate = DateTime.Now;
-                    model.UpdatedDate = DateTime.Now;
-
-                    RateCategoryBO.Instance.Insert(model);
-                    message = "Insert successfully!";
-                }
-                else
-                {
-                    var oldData = (RateCategoryModel)RateCategoryBO.Instance.FindByPrimaryKey(model.ID);
-
-                    if (oldData != null)
-                    {
-                        model.CreatedBy = oldData.CreatedBy;
-                        model.CreatedDate = oldData.CreatedDate;
-
-                        model.UserInsertID = oldData.UserInsertID;
-                    }
-
-                    model.UpdatedDate = DateTime.Now;
-
-                    RateCategoryBO.Instance.Update(model);
-                    message = "Update successfully!";
-                }
-
-            }
-            catch (Exception ex)
-            {
-                message = ex.Message;
-                return Json(new { success = false, message });
-            }
-
-            return Json(new { success = true, message });
-        }
-        [HttpPost]
-        public IActionResult RateCategoryDelete(long id)
-        {
-            try
-            {
-                RateCategoryBO.Instance.Delete(id);
-            }
-            catch (Exception ex)
-            {
-                return Json(new { success = false, ex.Message });
-            }
-
-            return Json(new { success = true });
-        }
-        #endregion
-
+        
         #region Deposit/Cancellation Rules Search 
         public IActionResult DepositRule()
         {
@@ -1340,50 +1246,52 @@ namespace Administration.Controllers
         [HttpPost]
         public IActionResult DepositRuleSave([FromBody] DepositRuleModel model)
         {
-            if (model == null)
-            {
-                return Json(new { success = false, message = "Invalid data." });
-            }
+            var listErrors = GetErrors(
+                Check(model, "general", "Invalid data"),
+                Check(model?.AmountValue < 0, "amountValue", "Deposit Amount cannot be negative."),
+                Check(model?.Type == 0 && string.IsNullOrWhiteSpace(model?.CurrencyID), "currencyID", "Currency is required for Flat type."),
+                Check((model?.DaysBeforeArrival ?? 0) < 0, "dayBA", "Days Before Arrival cannot be negative."),
+                Check((model?.DaysAfterBooking ?? 0) < 0, "dayAB", "Days After Booking cannot be negative."),
+                Check((model?.Sequence ?? 0) < 0, "seq", "Sequence cannot be negative."),
+                Check(model?.Code, "code", "Code is not blank."),
+                Check(model?.Description, "des", "Description is not blank.")
+            );
 
-            if (string.IsNullOrWhiteSpace(model.Code))
+            if (listErrors.Count > 0)
             {
-                return Json(new { success = false, message = "Code is required." });
+                return Json(new { success = false, errors = listErrors });
             }
+            string message = "";
 
-            if (model.AmountValue < 0)
+            try
             {
-                return Json(new { success = false, message = "Deposit Amount cannot be negative." });
-            }
-
-            if (model.Type == 0 && string.IsNullOrWhiteSpace(model.CurrencyID))
-            {
-                return Json(new { success = false, message = "Currency is required for Flat type." });
-            }
-
-            string message;
-
-            if (model.ID == 0)
-            {
-                model.CreateDate = DateTime.Now;
-                model.UpdateDate = DateTime.Now;
-                DepositRuleBO.Instance.Insert(model);
-                message = "Insert successfully!";
-            }
-            else
-            {
-                var old = (DepositRuleModel)DepositRuleBO.Instance.FindByPrimaryKey(model.ID);
-                if (old != null)
+                if (model.ID == 0)
                 {
-                    model.Code = old.Code;
-                    model.CreateDate = old.CreateDate;
-                    model.UserInsertID = old.UserInsertID;
+                    model.CreateDate = DateTime.Now;
+                    model.UpdateDate = DateTime.Now;
+                    DepositRuleBO.Instance.Insert(model);
+                    message = "Insert successfully!";
                 }
+                else
+                {
+                    var old = (DepositRuleModel)DepositRuleBO.Instance.FindByPrimaryKey(model.ID);
+                    if (old != null)
+                    {
+                        model.Code = old.Code;
+                        model.CreateDate = old.CreateDate;
+                        model.UserInsertID = old.UserInsertID;
+                    }
 
-                model.UpdateDate = DateTime.Now;
-                DepositRuleBO.Instance.Update(model);
-                message = "Update successfully!";
+                    model.UpdateDate = DateTime.Now;
+                    DepositRuleBO.Instance.Update(model);
+                    message = "Update successfully!";
+                }
             }
-
+            catch (Exception ex)
+            {
+                message = ex.Message;
+                return Json(new { success = false, message });
+            }
             return Json(new { success = true, message });
         }
         [HttpPost]
@@ -1459,48 +1367,56 @@ namespace Administration.Controllers
         [HttpPost]
         public IActionResult CancellationRuleSave([FromBody] CancellationRuleModel model)
         {
-            if (model == null)
+            var listErrors = GetErrors(
+                Check(model, "general", "Invalid data"),
+
+                Check(model?.Code, "code", "Code is not blank."),
+                Check(model?.Description, "des", "Description is not blank."),
+                Check((model?.AmountValue ?? 0) < 0, "amountValue", "Cancellation Amount cannot be negative."),
+                // type =1 Percent
+                Check(model?.Type == 1 && (model?.AmountValue ?? 0) > 100, "amountValue", "Percent cannot exceed 100%."),
+                Check(model?.Type == 0 && string.IsNullOrWhiteSpace(model?.CurrencyID), "currencys", "Currency is required for Flat type."),
+                
+                Check((model?.DaysBeforeArrival ?? 0) < 0, "dayBA", "Days Before Arrival cannot be negative."),
+
+                Check((model?.Sequence ?? 0) < 0, "seq", "Sequence cannot be negative.")
+            );
+
+            if (listErrors.Count > 0)
             {
-                return Json(new { success = false, message = "Invalid data." });
+                return Json(new { success = false, errors = listErrors });
             }
 
-            if (string.IsNullOrWhiteSpace(model.Code))
-            {
-                return Json(new { success = false, message = "Code is required." });
-            }
+            string message="";
 
-            if (model.AmountValue < 0)
+            try
             {
-                return Json(new { success = false, message = "Cancel Amount cannot be negative." });
-            }
-
-            if (model.Type == 0 && string.IsNullOrWhiteSpace(model.CurrencyID))
-            {
-                return Json(new { success = false, message = "Currency is required for Flat type." });
-            }
-
-            string message;
-
-            if (model.ID == 0)
-            {
-                model.CreateDate = DateTime.Now;
-                model.UpdateDate = DateTime.Now;
-                CancellationRuleBO.Instance.Insert(model);
-                message = "Insert successfully!";
-            }
-            else
-            {
-                var old = (CancellationRuleModel)CancellationRuleBO.Instance.FindByPrimaryKey(model.ID);
-                if (old != null)
+                if (model.ID == 0)
                 {
-                    model.Code = old.Code;
-                    model.CreateDate = old.CreateDate;
-                    model.UserInsertID = old.UserInsertID;
+                    model.CreateDate = DateTime.Now;
+                    model.UpdateDate = DateTime.Now;
+                    CancellationRuleBO.Instance.Insert(model);
+                    message = "Insert successfully!";
                 }
+                else
+                {
+                    var old = (CancellationRuleModel)CancellationRuleBO.Instance.FindByPrimaryKey(model.ID);
+                    if (old != null)
+                    {
+                        model.Code = old.Code;
+                        model.CreateDate = old.CreateDate;
+                        model.UserInsertID = old.UserInsertID;
+                    }
 
-                model.UpdateDate = DateTime.Now;
-                CancellationRuleBO.Instance.Update(model);
-                message = "Update successfully!";
+                    model.UpdateDate = DateTime.Now;
+                    CancellationRuleBO.Instance.Update(model);
+                    message = "Update successfully!";
+                }
+            }
+            catch(Exception ex)
+            {
+                message = ex.Message;
+                return Json(new { success = false, message });
             }
 
             return Json(new { success = true, message });
@@ -1565,12 +1481,20 @@ namespace Administration.Controllers
         public IActionResult CitySave([FromBody] CityModel model)
         {
             string message = "";
+            var listErrors = GetErrors(
+                Check(model, "general", "Invalid data"),
 
+                Check(model?.Code, "code", "Code is not blank."),
+                Check(model?.Name, "name", "Name is not blank."),
+                Check(model?.CountryID, "countryID", "Please select a country. ")
+            );
+
+            if (listErrors.Count > 0)
+            {
+                return Json(new { success = false, errors = listErrors });
+            }
             try
             {
-                if (model == null)
-                    return Json(new { success = false, message = "Invalid data." });
-                //if (model.Code)
 
                 if (model.ID == 0)
                 {
@@ -1662,14 +1586,19 @@ namespace Administration.Controllers
         public IActionResult CountrySave([FromBody] CountryModel model)
         {
             string message = "";
+            var listErrors = GetErrors(
+                Check(model, "general", "Invalid data"),
 
+                Check(model?.Code, "code", "Code is not blank."),
+                Check(model?.Name, "name", "Name is not blank.")
+            );
+
+            if (listErrors.Count > 0)
+            {
+                return Json(new { success = false, errors = listErrors });
+            }
             try
             {
-                if (model == null)
-                {
-                    return Json(new { success = false, message = "Invalid data." });
-                }
-
                 if (model.ID == 0)
                 {
                     model.CreateDate = DateTime.Now;
@@ -1730,8 +1659,6 @@ namespace Administration.Controllers
         {
             try
             {
-
-
                 DataTable dataTable = _iAdministrationService.Language(code, name, inactive);
                 var result = (from d in dataTable.AsEnumerable()
                               select new
@@ -1762,14 +1689,19 @@ namespace Administration.Controllers
         public IActionResult LanguageSave([FromBody] LanguageModel model)
         {
             string message = "";
+            var listErrors = GetErrors(
+                Check(model, "general", "Invalid data"),
 
+                Check(model?.Code, "code", "Code is not blank."),
+                Check(model?.Name, "name", "Name is not blank.")
+            );
+
+            if (listErrors.Count > 0)
+            {
+                return Json(new { success = false, errors = listErrors });
+            }
             try
             {
-                if (model == null)
-                {
-                    return Json(new { success = false, message = "Invalid data." });
-                }
-
                 if (model.ID == 0)
                 {
                     model.CreateDate = DateTime.Now;
@@ -1862,14 +1794,19 @@ namespace Administration.Controllers
         public IActionResult NationalitySave([FromBody] NationalityModel model)
         {
             string message = "";
+            var listErrors = GetErrors(
+                Check(model, "general", "Invalid data"),
 
+                Check(model?.Code, "code", "Code is not blank."),
+                Check(model?.Name, "name", "Name is not blank.")
+            );
+
+            if (listErrors.Count > 0)
+            {
+                return Json(new { success = false, errors = listErrors });
+            }
             try
             {
-                if (model == null)
-                {
-                    return Json(new { success = false, message = "Invalid data." });
-                }
-
                 if (model.ID == 0)
                 {
                     model.CreateDate = DateTime.Now;
@@ -1960,14 +1897,19 @@ namespace Administration.Controllers
         public IActionResult TitleSave([FromBody] TitleModel model)
         {
             string message = "";
+            var listErrors = GetErrors(
+                Check(model, "general", "Invalid data"),
 
+                Check(model?.Code, "code", "Code is not blank."),
+                Check(model?.Name, "name", "Name is not blank.")
+            );
+
+            if (listErrors.Count > 0)
+            {
+                return Json(new { success = false, errors = listErrors });
+            }
             try
             {
-                if (model == null)
-                {
-                    return Json(new { success = false, message = "Invalid data." });
-                }
-
                 if (model.ID == 0)
                 {
                     model.CreateDate = DateTime.Now;
@@ -2058,14 +2000,19 @@ namespace Administration.Controllers
         public IActionResult TerritorySave([FromBody] TerritoryModel model)
         {
             string message = "";
+            var listErrors = GetErrors(
+                Check(model, "general", "Invalid data"),
 
+                Check(model?.Code, "code", "Code is not blank."),
+                Check(model?.Name, "name", "Name is not blank.")
+            );
+
+            if (listErrors.Count > 0)
+            {
+                return Json(new { success = false, errors = listErrors });
+            }
             try
             {
-                if (model == null)
-                {
-                    return Json(new { success = false, message = "Invalid data." });
-                }
-
                 if (model.ID == 0)
                 {
                     model.CreateDate = DateTime.Now;
@@ -2158,13 +2105,19 @@ namespace Administration.Controllers
         public IActionResult StateSave([FromBody] StateModel model)
         {
             string message = "";
+            var listErrors = GetErrors(
+                Check(model, "general", "Invalid data"),
 
+                Check(model?.ZipCode, "code", "Code is not blank."),
+                Check(model?.StateName, "name", "Name is not blank.")
+            );
+
+            if (listErrors.Count > 0)
+            {
+                return Json(new { success = false, errors = listErrors });
+            }
             try
             {
-                if (model == null)
-                {
-                    return Json(new { success = false, message = "Invalid data." });
-                }
 
                 if (model.ID == 0)
                 {
@@ -2256,14 +2209,19 @@ namespace Administration.Controllers
         public IActionResult VIPSave([FromBody] VIPModel model)
         {
             string message = "";
+            var listErrors = GetErrors(
+                Check(model, "general", "Invalid data"),
 
+                Check(model?.Code, "code", "Code is not blank."),
+                Check(model?.Name, "name", "Name is not blank.")
+            );
+
+            if (listErrors.Count > 0)
+            {
+                return Json(new { success = false, errors = listErrors });
+            }
             try
             {
-                if (model == null)
-                {
-                    return Json(new { success = false, message = "Invalid data." });
-                }
-
                 if (model.ID == 0)
                 {
                     model.CreateDate = DateTime.Now;
@@ -2299,7 +2257,7 @@ namespace Administration.Controllers
                 message = ex.Message;
                 return Json(new { success = false, message });
             }
-            
+
             return Json(new { success = true, message });
         }
         [HttpPost]
@@ -2353,7 +2311,7 @@ namespace Administration.Controllers
 
             if (data == null)
             {
-                return Json(new { regional = "",groupType = 0, marketTypeID = 0 });
+                return Json(new { regional = "", groupType = 0, marketTypeID = 0 });
             }
 
             return Json(new { regional = data.Regional, groupType = data.GroupType, marketTypeID = data.MarketTypeID });
@@ -2368,12 +2326,20 @@ namespace Administration.Controllers
         public IActionResult MarketSave([FromBody] MarketModel model)
         {
             string message = "";
+            var listErrors = GetErrors(
+                Check(model, "general", "Invalid data"),
 
+                Check(model?.Code, "code", "Code is not blank."),
+                Check(model?.Name, "name", "Name is not blank."),
+                Check(model?.MarketTypeID, "marketTypeID", "Please choose market type.")
+            );
+
+            if (listErrors.Count > 0)
+            {
+                return Json(new { success = false, errors = listErrors });
+            }
             try
             {
-                if (model == null)
-                    return Json(new { success = false, message = "Invalid data." });
-
                 if (model.ID == 0)
                 {
                     model.CreateDate = DateTime.Now;
@@ -2464,14 +2430,19 @@ namespace Administration.Controllers
         public IActionResult MarketTypeSave([FromBody] MarketTypeModel model)
         {
             string message = "";
+            var listErrors = GetErrors(
+                Check(model, "general", "Invalid data"),
 
+                Check(model?.Code, "code", "Code is not blank."),
+                Check(model?.Name, "name", "Name is not blank.")
+            );
+
+            if (listErrors.Count > 0)
+            {
+                return Json(new { success = false, errors = listErrors });
+            }
             try
             {
-                if (model == null)
-                {
-                    return Json(new { success = false, message = "Invalid data." });
-                }
-
                 if (model.ID == 0)
                 {
                     model.CreateDate = DateTime.Now;
@@ -2563,14 +2534,19 @@ namespace Administration.Controllers
         public IActionResult PickupDropPlaceSave([FromBody] PickupDropPlaceModel model)
         {
             string message = "";
+            var listErrors = GetErrors(
+                Check(model, "general", "Invalid data"),
 
+                Check(model?.Code, "code", "Code is not blank."),
+                Check(model?.Name, "name", "Name is not blank.")
+            );
+
+            if (listErrors.Count > 0)
+            {
+                return Json(new { success = false, errors = listErrors });
+            }
             try
             {
-                if (model == null)
-                {
-                    return Json(new { success = false, message = "Invalid data." });
-                }
-
                 if (model.ID == 0)
                 {
                     model.CreateDate = DateTime.Now;
@@ -2661,14 +2637,19 @@ namespace Administration.Controllers
         public IActionResult TransportTypeSave([FromBody] TransportTypeModel model)
         {
             string message = "";
+            var listErrors = GetErrors(
+                Check(model, "general", "Invalid data"),
 
+                Check(model?.Code, "code", "Code is not blank."),
+                Check(model?.Name, "name", "Name is not blank.")
+            );
+
+            if (listErrors.Count > 0)
+            {
+                return Json(new { success = false, errors = listErrors });
+            }
             try
             {
-                if (model == null)
-                {
-                    return Json(new { success = false, message = "Invalid data." });
-                }
-
                 if (model.ID == 0)
                 {
                     model.CreateDate = DateTime.Now;
@@ -2722,7 +2703,7 @@ namespace Administration.Controllers
             return Json(new { success = true });
         }
         #endregion
-        //chua fix
+
         #region ItemCategory/ReservationType
         [HttpGet]
         public IActionResult GetReservationType()
@@ -2756,163 +2737,70 @@ namespace Administration.Controllers
             return PartialView("ItemCategory/ReservationType");
         }
         [HttpPost]
-        public ActionResult InsertReservationType()
+        public IActionResult ReservationTypeSave([FromBody] ReservationTypeModel model)
         {
-            ProcessTransactions pt = new ProcessTransactions();
+            string message = "";
+
+            var listErrors = GetErrors(
+                Check(model, "general", "Invalid data"),
+
+                Check(model?.Code, "code", "Code is not blank."),
+                Check(model?.Name, "name", "Description is not blank."),
+                Check(model.Sequence, "seq", "Sequence cannot be negative.")
+            );
+
+            if (listErrors.Count > 0)
+            {
+                return Json(new { success = false, errors = listErrors });
+            }
             try
             {
-                pt.OpenConnection();
-                pt.BeginTransaction();
-
-                ReservationTypeModel member = new ReservationTypeModel();
-
-                // Lấy dữ liệu từ form
-                member.Code = Request.Form["code"].ToString();
-                member.Name = Request.Form["name"].ToString();
-                member.Deduct = !string.IsNullOrEmpty(Request.Form["deduct"])
-                                 && Request.Form["deduct"].ToString() == "on";
-                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
-                                 && Request.Form["inactive"].ToString() == "on";
-                member.ArrivalTimeRequired = !string.IsNullOrEmpty(Request.Form["arrivalTimeRequired"])
-                                 && Request.Form["arrivalTimeRequired"].ToString() == "on";
-                member.CreditCardRequired = !string.IsNullOrEmpty(Request.Form["creditCardRequired"])
-                                 && Request.Form["creditCardRequired"].ToString() == "on";
-                member.DepositRequired = !string.IsNullOrEmpty(Request.Form["depositRequired"])
-                                 && Request.Form["depositRequired"].ToString() == "on";
-                int seqValue;
-                if (int.TryParse(Request.Form["seq"], out seqValue))
+                if (model.ID == 0)
                 {
-                    member.Sequence = seqValue;
+                    model.CreateDate = DateTime.Now;
+                    model.UpdateDate = DateTime.Now;
+
+                    ReservationTypeBO.Instance.Insert(model);
+                    message = "Insert successfully!";
                 }
                 else
                 {
-                    member.Sequence = 0; // hoặc giá trị mặc định
-                }
-                member.UserInsertID = HttpContext.Session.GetInt32("UserID") ?? 0;
-                member.UserUpdateID = member.UserInsertID;
-                member.CreateDate = DateTime.Now;
-                member.UpdateDate = DateTime.Now;
-                if (string.IsNullOrWhiteSpace(member.Code))
-                    return Json(new { success = false, message = "Code không được để trống." });
-
-                long memberId = ReservationTypeBO.Instance.Insert(member);
-
-                pt.CommitTransaction();
-
-                return Json(new { success = true, id = memberId });
-            }
-            catch (Exception ex)
-            {
-                pt.RollBack();
-                return Json(new { success = false, message = ex.Message });
-            }
-            finally
-            {
-                pt.CloseConnection();
-            }
-        }
-        [HttpPost]
-        public ActionResult UpdateReservationType()
-        {
-            ProcessTransactions pt = new ProcessTransactions();
-            try
-            {
-                pt.OpenConnection();
-                pt.BeginTransaction();
-
-                ReservationTypeModel member = new ReservationTypeModel();
-
-                // Lấy ID từ form
-                member.ID = !string.IsNullOrEmpty(Request.Form["id"])
-                             ? int.Parse(Request.Form["id"])
-                             : 0;
-                member.Deduct = !string.IsNullOrEmpty(Request.Form["deduct"])
-                                 && Request.Form["deduct"].ToString() == "on";
-                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
-                                 && Request.Form["inactive"].ToString() == "on";
-                member.ArrivalTimeRequired = !string.IsNullOrEmpty(Request.Form["arrivalTimeRequired"])
-                                 && Request.Form["arrivalTimeRequired"].ToString() == "on";
-                member.CreditCardRequired = !string.IsNullOrEmpty(Request.Form["creditCardRequired"])
-                                 && Request.Form["creditCardRequired"].ToString() == "on";
-                member.DepositRequired = !string.IsNullOrEmpty(Request.Form["depositRequired"])
-                                 && Request.Form["depositRequired"].ToString() == "on";
-                // Lấy dữ liệu từ form
-                member.Code = Request.Form["code"].ToString();
-                member.Name = Request.Form["name"].ToString();
-                int seqValue;
-                if (int.TryParse(Request.Form["seq"], out seqValue))
-                {
-                    member.Sequence = seqValue;
-                }
-                else
-                {
-                    member.Sequence = 0; // hoặc giá trị mặc định
-                }
-
-                int loginName = HttpContext.Session.GetInt32("UserID") ?? 0;
-                if (string.IsNullOrWhiteSpace(member.Code))
-                    return Json(new { success = false, message = "Code không được để trống." });
-
-                if (member.ID == 0) // Insert mới
-                {
-                    member.UserInsertID = loginName;
-                    member.CreateDate = DateTime.Now;
-                    member.UserUpdateID = loginName;
-                    member.UpdateDate = DateTime.Now;
-
-                    ReservationTypeBO.Instance.Insert(member);
-                }
-                else // Update
-                {
-                    // Trước khi update, lấy lại bản ghi cũ từ DB để giữ CreatedBy, CreatedDate
-                    var oldData = ReservationTypeBO.Instance.GetById(member.ID, pt.Connection, pt.Transaction);
+                    var oldData = (ReservationTypeModel)ReservationTypeBO.Instance.FindByPrimaryKey(model.ID);
 
                     if (oldData != null)
                     {
-                        member.UserInsertID = oldData.UserInsertID;
-                        member.CreateDate = oldData.CreateDate;
+                        model.UserInsertID = oldData.UserInsertID;
+                        model.CreateDate = oldData.CreateDate;
                     }
 
-                    member.UserUpdateID = loginName;
-                    member.UpdateDate = DateTime.Now;
+                    model.UpdateDate = DateTime.Now;
 
-                    ReservationTypeBO.Instance.Update(member);
+                    ReservationTypeBO.Instance.Update(model);
+                    message = "Update successfully!";
                 }
 
-                pt.CommitTransaction();
-                return Json(new { success = true });
             }
             catch (Exception ex)
             {
-                pt.RollBack();
-                return Json(new { success = false, message = ex.Message });
+                message = ex.Message;
+                return Json(new { success = false, message });
             }
-            finally
-            {
-                pt.CloseConnection();
-            }
+
+            return Json(new { success = true, message });
         }
         [HttpPost]
-        public ActionResult DeleteReservationType()
+        public IActionResult DeleteReservationType(int id)
         {
             try
             {
-
-                ReservationTypeModel memberModel = (ReservationTypeModel)ReservationTypeBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["id"].ToString()));
-                if (memberModel == null || memberModel.ID == 0)
-                {
-                    return Json(new { code = 1, msg = "Can not find Lost And Found" });
-
-                }
-                ReservationTypeBO.Instance.Delete(int.Parse(Request.Form["id"].ToString()));
-                return Json(new { code = 0, msg = "Delete Lost And Found was successfully" });
-
+                ReservationTypeBO.Instance.Delete(id);
             }
             catch (Exception ex)
             {
-                return Json(new { code = 1, msg = ex.Message });
+                return Json(new { success = false, ex.Message });
             }
 
+            return Json(new { success = true });
         }
         #endregion
 
@@ -2952,14 +2840,19 @@ namespace Administration.Controllers
         public IActionResult ReasonSave([FromBody] ReasonModel model)
         {
             string message = "";
+            var listErrors = GetErrors(
+                Check(model, "general", "Invalid data"),
 
+                Check(model?.Code, "code", "Code is not blank."),
+                Check(model?.Name, "name", "Name is not blank.")
+            );
+
+            if (listErrors.Count > 0)
+            {
+                return Json(new { success = false, errors = listErrors });
+            }
             try
             {
-                if (model == null)
-                {
-                    return Json(new { success = false, message = "Invalid data." });
-                }
-
                 if (model.ID == 0)
                 {
                     model.CreateDate = DateTime.Now;
@@ -3050,14 +2943,19 @@ namespace Administration.Controllers
         public IActionResult OriginSave([FromBody] OriginModel model)
         {
             string message = "";
+            var listErrors = GetErrors(
+                Check(model, "general", "Invalid data"),
 
+                Check(model?.Code, "code", "Code is not blank."),
+                Check(model?.Name, "name", "Name is not blank.")
+            );
+
+            if (listErrors.Count > 0)
+            {
+                return Json(new { success = false, errors = listErrors });
+            }
             try
             {
-                if (model == null)
-                {
-                    return Json(new { success = false, message = "Invalid data." });
-                }
-
                 if (model.ID == 0)
                 {
                     model.CreateDate = DateTime.Now;
@@ -3150,13 +3048,19 @@ namespace Administration.Controllers
         public IActionResult SourceSave([FromBody] SourceModel model)
         {
             string message = "";
+            var listErrors = GetErrors(
+                Check(model, "general", "Invalid data"),
 
+                Check(model?.Code, "code", "Code is not blank."),
+                Check(model?.Name, "name", "Name is not blank.")
+            );
+
+            if (listErrors.Count > 0)
+            {
+                return Json(new { success = false, errors = listErrors });
+            }
             try
             {
-                if (model == null)
-                {
-                    return Json(new { success = false, message = "Invalid data." });
-                }
 
                 if (model.ID == 0)
                 {
@@ -3248,13 +3152,19 @@ namespace Administration.Controllers
         public IActionResult AlertsSetupSave([FromBody] AlertsSetupModel model)
         {
             string message = "";
+            var listErrors = GetErrors(
+                Check(model, "general", "Invalid data"),
 
+                Check(model?.Code, "code", "Code is not blank."),
+                Check(model?.Description, "name", "Name is not blank.")
+            );
+
+            if (listErrors.Count > 0)
+            {
+                return Json(new { success = false, errors = listErrors });
+            }
             try
             {
-                if (model == null)
-                {
-                    return Json(new { success = false, message = "Invalid data." });
-                }
 
                 if (model.ID == 0)
                 {
@@ -3348,13 +3258,19 @@ namespace Administration.Controllers
         public IActionResult CommentSave([FromBody] CommentModel model)
         {
             string message = "";
+            var listErrors = GetErrors(
+                Check(model, "general", "Invalid data"),
 
+                Check(model?.Code, "code", "Code is not blank."),
+                Check(model?.CommentTypeID ?? 0, "commentTypeID", "Comment type must be choose")
+            );
+
+            if (listErrors.Count > 0)
+            {
+                return Json(new { success = false, errors = listErrors });
+            }
             try
             {
-                if (model == null)
-                {
-                    return Json(new { success = false, message = "Invalid data." });
-                }
 
                 if (model.ID == 0)
                 {
@@ -3438,7 +3354,6 @@ namespace Administration.Controllers
                 return Json(ex.Message);
             }
         }
-
         public IActionResult CommentType()
         {
             return PartialView("ItemCategory/CommentType");
@@ -3448,14 +3363,19 @@ namespace Administration.Controllers
         public IActionResult CommentTypeSave([FromBody] CommentTypeModel model)
         {
             string message = "";
+            var listErrors = GetErrors(
+                Check(model, "general", "Invalid data"),
 
+                Check(model?.Code, "code", "Code is not blank."),
+                Check(model?.Name, "name", "Name is not blank.")
+            );
+
+            if (listErrors.Count > 0)
+            {
+                return Json(new { success = false, errors = listErrors });
+            }
             try
             {
-                if (model == null)
-                {
-                    return Json(new { success = false, message = "Invalid data." });
-                }
-
                 if (model.ID == 0)
                 {
                     model.CreateDate = DateTime.Now;
@@ -3546,14 +3466,19 @@ namespace Administration.Controllers
         public IActionResult SeasonSave([FromBody] SeasonModel model)
         {
             string message = "";
+            var listErrors = GetErrors(
+                Check(model, "general", "Invalid data"),
 
+                Check(model?.Code, "code", "Code is not blank."),
+                Check(model?.Name, "name", "Name is not blank.")
+            );
+
+            if (listErrors.Count > 0)
+            {
+                return Json(new { success = false, errors = listErrors });
+            }
             try
             {
-                if (model == null)
-                {
-                    return Json(new { success = false, message = "Invalid data." });
-                }
-
                 if (model.ID == 0)
                 {
                     model.CreateDate = DateTime.Now;
@@ -3644,13 +3569,19 @@ namespace Administration.Controllers
         public IActionResult ZoneSave([FromBody] ZoneModel model)
         {
             string message = "";
+            var listErrors = GetErrors(
+                Check(model, "general", "Invalid data"),
 
+                Check(model?.Code, "code", "Code is not blank."),
+                Check(model?.Name, "name", "Name is not blank.")
+            );
+
+            if (listErrors.Count > 0)
+            {
+                return Json(new { success = false, errors = listErrors });
+            }
             try
             {
-                if (model == null)
-                {
-                    return Json(new { success = false, message = "Invalid data." });
-                }
 
                 if (model.ID == 0)
                 {
@@ -3742,14 +3673,19 @@ namespace Administration.Controllers
         public IActionResult DepartmentSave([FromBody] DepartmentModel model)
         {
             string message = "";
+            var listErrors = GetErrors(
+                Check(model, "general", "Invalid data"),
 
+                Check(model?.Code, "code", "Code is not blank."),
+                Check(model?.Name, "name", "Name is not blank.")
+            );
+
+            if (listErrors.Count > 0)
+            {
+                return Json(new { success = false, errors = listErrors });
+            }
             try
             {
-                if (model == null)
-                {
-                    return Json(new { success = false, message = "Invalid data." });
-                }
-
                 if (model.ID == 0)
                 {
                     model.CreateDate = DateTime.Now;
@@ -3845,13 +3781,16 @@ namespace Administration.Controllers
         [HttpPost]
         public IActionResult OccupancySave([FromBody] OccupancyModel model)
         {
-            if (model == null)
-                return Json(new { success = false, message = "Invalid data." });
-            if (!model.Occupancylevel.HasValue)
-                return Json(new { success = false, message = "Occupancy level is not blank." });
-            if (model.Occupancylevel.Value < 0)
-                return Json(new { success = false, message = "Occupancy level must be >= 0." });
+            var listErrors = GetErrors(
+                Check(model, "general", "Invalid data"),
+                Check((model?.Occupancylevel ?? 0) < 0 || (model?.Occupancylevel ?? 0) > 100, "occLevel", "Must be between 0 and 100"),
+                Check(model?.Occupancylevel < 0, "occLevel", "Occupancy Level cannot be negative.")
+            );
 
+            if (listErrors.Count > 0)
+            {
+                return Json(new { success = false, errors = listErrors });
+            }
             string message;
             try
             {
@@ -3937,9 +3876,24 @@ namespace Administration.Controllers
         [HttpPost]
         public IActionResult ConfirmationConfigSave([FromBody] ConfirmationConfigModel model)
         {
-            if (model == null)
-                return Json(new { success = false, message = "Invalid data." });
+            var listErrors = GetErrors(
+                Check(model, "general", "Invalid data"),
 
+                Check(model?.EmailAddress, "emailAddress", "Email address is not blank."),
+                Check(model?.MailUser, "userMail", "Mail user is not blank."),
+                Check(model?.MailPassword, "passMail", "Mail password is not blank."),
+                Check(model?.ServerName, "serverName", "Server name is not blank."),
+                Check(model?.ServerPort ?? 0, "serverPort", "Port must be greater than 0."),
+                Check(model?.MailSubject, "subMail", "Mail Subject is not blank."),
+                Check(model?.MailBody, "bodyMail", "Mail body is not blank."),
+                Check(model?.MailSubjectENG, "subEngMail", "Mail Subject english is not blank."),
+                Check(model?.MailBodyENG, "bodyEngMail", "Mail body english is not blank.")
+            );
+
+            if (listErrors.Count > 0)
+            {
+                return Json(new { success = false, errors = listErrors });
+            }
             string message;
             try
             {
@@ -4002,9 +3956,16 @@ namespace Administration.Controllers
         [HttpPost]
         public IActionResult ConfirmationTempSave([FromBody] ConfirmationTempModel model)
         {
-            if (model == null)
-                return Json(new { success = false, message = "Invalid data." });
+            var listErrors = GetErrors(
+               Check(model, "general", "Invalid data"),
 
+               Check(model?.LetterName, "letterNameInput", "Letter name is not blank.")
+            );
+
+            if (listErrors.Count > 0)
+            {
+                return Json(new { success = false, errors = listErrors });
+            }
             string message;
             try
             {
@@ -4093,13 +4054,19 @@ namespace Administration.Controllers
         {
             string message = "";
 
+            var listErrors = GetErrors(
+                Check(model, "general", "Invalid data"),
+
+                Check(model?.Code, "code", "Code is not blank."),
+                Check(model?.Name, "name", "Description is not blank.")
+            );
+
+            if (listErrors.Count > 0)
+            {
+                return Json(new { success = false, errors = listErrors });
+            }
             try
             {
-                if (model == null)
-                {
-                    return Json(new { success = false, message = "Invalid data." });
-                }
-
                 if (model.ID == 0)
                 {
                     model.CreateDate = DateTime.Now;
@@ -4187,8 +4154,18 @@ namespace Administration.Controllers
         [HttpPost]
         public IActionResult PropertyTypeSave([FromBody] PropertyTypeModel model)
         {
-            if (model == null)
-                return Json(new { success = false, message = "Invalid data." });
+            var listErrors = GetErrors(
+                Check(model, "general", "Invalid data"),
+
+                Check(model?.Code, "code", "Code is not blank."),
+                Check(model.Sequence < 0, "seq", "Sequence must be >= 0")
+
+            );
+
+            if (listErrors.Count > 0)
+            {
+                return Json(new { success = false, errors = listErrors });
+            }
 
             string message;
             try
@@ -4280,9 +4257,22 @@ namespace Administration.Controllers
         [HttpPost]
         public IActionResult PropertySave([FromBody] PropertyModel model)
         {
-            if (model == null)
-                return Json(new { success = false, message = "Invalid data." });
+            var listErrors = GetErrors(
+                Check(model, "general", "Invalid data"),
+                Check(model?.PropertyCode, "code", "Code is not blank."),
+                Check(model?.PropertyName, "propertyName", "Name is not blank."),
+                Check(model?.PropertyTypeID, "propertyType", "Property type is not blank."),
+                Check(model?.ServerName, "serverName", "Server name is not blank."),
+                Check(model?.DatabaseName, "databaseName", "Database name is not blank."),
+                Check(model?.Login, "login", "Login account is not blank."),
+                Check(model?.Password, "password", "Password is not blank."),
+                Check(model?.Password?.Length < 6, "password", "Password must be at least 6 characters.")
+            );
 
+            if (listErrors.Count > 0)
+            {
+                return Json(new { success = false, errors = listErrors });
+            }
             string message;
             try
             {
@@ -4357,7 +4347,7 @@ namespace Administration.Controllers
         }
         public IActionResult PropertyPermission()
         {
-            List<PropertyModel> listProperty= PropertyUtils.ConvertToList<PropertyModel>(PropertyBO.Instance.FindAll());
+            List<PropertyModel> listProperty = PropertyUtils.ConvertToList<PropertyModel>(PropertyBO.Instance.FindAll());
             ViewBag.PropertyList = listProperty;
             List<UsersModel> listuser = PropertyUtils.ConvertToList<UsersModel>(UsersBO.Instance.FindAll());
             ViewBag.UsersList = listuser;
@@ -4366,50 +4356,66 @@ namespace Administration.Controllers
         [HttpPost]
         public IActionResult PropertyPermissionSave([FromBody] List<PropertyPermissionModel> listModels)
         {
-            string message = "";
-            int successCount = 0;
+            var listErrors = GetErrors(
+                Check(listModels, "general", "No data received."),
+                Check(listModels != null && listModels.Count == 0, "general", "No data received.")
+            );
+
+            if (listErrors.Count > 0)
+            {
+                return Json(new { success = false, errors = listErrors });
+            }
 
             try
             {
-                if (listModels == null || listModels.Count == 0)
-                {
-                    return Json(new { success = false, message = "No data received." });
-                }
+                int rowIndex = 1;
+                int successCount = 0;
 
                 foreach (var model in listModels)
                 {
+                    var rowErrors = GetErrors(
+                        Check(model.UserID, "chooseUser", $"Row {rowIndex}: User is not blank."),
+                        Check(model.PropertyID, "choosePropertyType", $"Row {rowIndex}: Property is not blank.")
+                    );
+
+                    if (rowErrors.Count > 0)
+                    {
+                        return Json(new
+                        {
+                            success = false,
+                            message = rowErrors[0].Message,
+                            errors = rowErrors
+                        });
+                    }
+
                     if (model.ID == 0)
                     {
                         model.CreatedDate = DateTime.Now;
                         model.UpdatedDate = DateTime.Now;
-
                         PropertyPermissionBO.Instance.Insert(model);
                     }
                     else
                     {
                         var oldData = (PropertyPermissionModel)PropertyPermissionBO.Instance.FindByPrimaryKey(model.ID);
-
                         if (oldData != null)
                         {
                             model.CreatedBy = oldData.CreatedBy;
                             model.CreatedDate = oldData.CreatedDate;
                         }
-
                         model.UpdatedDate = DateTime.Now;
                         PropertyPermissionBO.Instance.Update(model);
                     }
 
                     successCount++;
+                    rowIndex++;
                 }
 
-                message = $"Successfully saved {successCount} permissions!";
+                return Json(new { success = true, message = $"Successfully saved {successCount} permissions!" });
             }
             catch (Exception ex)
             {
                 return Json(new { success = false, message = "Error: " + ex.Message });
             }
-
-            return Json(new { success = true, message });
         }
         [HttpPost]
         public IActionResult DeletePropertyPermission([FromBody] List<int> ids)
@@ -4444,8 +4450,211 @@ namespace Administration.Controllers
         }
         #endregion
 
+        #region ItemCategory/PackageForecastGroup
+        [HttpGet]
+        public IActionResult GetPackageForecastGroup(string code, string name, int inactive)
+        {
+            try
+            {
+                DataTable dataTable = _iAdministrationService.PackageForecastGroup(code, name, inactive);
+                var result = (from d in dataTable.AsEnumerable()
+                              select new
+                              {
+                                  Code = !string.IsNullOrEmpty(d["Code"].ToString()) ? d["Code"] : "",
+                                  Name = !string.IsNullOrEmpty(d["Name"].ToString()) ? d["Name"] : "",
+                                  Description = !string.IsNullOrEmpty(d["Description"].ToString()) ? d["Description"] : "",
+                                  InactiveText = !string.IsNullOrEmpty(d["InactiveText"].ToString()) ? d["InactiveText"] : "",
+                                  CreatedBy = !string.IsNullOrEmpty(d["CreatedBy"].ToString()) ? d["CreatedBy"] : "",
+                                  CreatedDate = !string.IsNullOrEmpty(d["CreatedDate"].ToString()) ? d["CreatedDate"] : "",
+                                  UpdatedBy = !string.IsNullOrEmpty(d["UpdatedBy"].ToString()) ? d["UpdatedBy"] : "",
+                                  UpdatedDate = !string.IsNullOrEmpty(d["UpdatedDate"].ToString()) ? d["UpdatedDate"] : "",
+                                  ID = !string.IsNullOrEmpty(d["ID"].ToString()) ? d["ID"] : "",
+                                  Inactive = !string.IsNullOrEmpty(d["Inactive"].ToString()) ? d["Inactive"] : "",
+                              }).ToList();
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message);
+            }
+        }
+        public IActionResult PackageForecastGroup()
+        {
+            return PartialView("ItemCategory/PackageForecastGroup");
+        }
+        [HttpPost]
+        public IActionResult PackageForecastGroupSave([FromBody] PackageForecastGroupModel model)
+        {
+            string message = "";
+            var listErrors = GetErrors(
+                Check(model, "general", "Invalid data"),
 
+                Check(model?.Code, "code", "Code is not blank."),
+                Check(model?.Name, "name", "Description is not blank.")
+            );
 
+            if (listErrors.Count > 0)
+            {
+                return Json(new { success = false, errors = listErrors });
+            }
+            try
+            {
+                if (model.ID == 0)
+                {
+                    model.CreateDate = DateTime.Now;
+                    model.CreatedDate = DateTime.Now;
+                    model.UpdateDate = DateTime.Now;
+                    model.UpdatedDate = DateTime.Now;
+
+                    PackageForecastGroupBO.Instance.Insert(model);
+                    message = "Insert successfully!";
+                }
+                else
+                {
+                    var oldData = (PackageForecastGroupModel)PackageForecastGroupBO.Instance.FindByPrimaryKey(model.ID);
+
+                    if (oldData != null)
+                    {
+                        model.UserInsertID = oldData.UserInsertID;
+                        model.CreatedBy = oldData.CreatedBy;
+                        model.CreateDate = oldData.CreatedDate;
+                        model.CreatedDate = oldData.CreatedDate;
+                    }
+
+                    model.UpdateDate = DateTime.Now;
+                    model.UpdatedDate = DateTime.Now;
+
+                    PackageForecastGroupBO.Instance.Update(model);
+                    message = "Update successfully!";
+                }
+
+            }
+            catch (Exception ex)
+            {
+                message = ex.Message;
+                return Json(new { success = false, message });
+            }
+
+            return Json(new { success = true, message });
+        }
+        [HttpPost]
+        public IActionResult DeletePackageForecastGroup(int id)
+        {
+            try
+            {
+                PackageForecastGroupBO.Instance.Delete(id);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, ex.Message });
+            }
+
+            return Json(new { success = true });
+        }
+        #endregion
+
+        #region ItemCategory/PreferenceGroup
+        [HttpGet]
+        public IActionResult GetPreferenceGroup(string code, string name, int inactive)
+        {
+            try
+            {
+                DataTable dataTable = _iAdministrationService.PreferenceGroup(code, name, inactive);
+                var result = (from d in dataTable.AsEnumerable()
+                              select new
+                              {
+                                  Code = !string.IsNullOrEmpty(d["Code"].ToString()) ? d["Code"] : "",
+                                  Name = !string.IsNullOrEmpty(d["Name"].ToString()) ? d["Name"] : "",
+                                  Description = !string.IsNullOrEmpty(d["Description"].ToString()) ? d["Description"] : "",
+                                  InactiveText = !string.IsNullOrEmpty(d["InactiveText"].ToString()) ? d["InactiveText"] : "",
+                                  CreatedBy = !string.IsNullOrEmpty(d["CreatedBy"].ToString()) ? d["CreatedBy"] : "",
+                                  CreatedDate = !string.IsNullOrEmpty(d["CreatedDate"].ToString()) ? d["CreatedDate"] : "",
+                                  UpdatedBy = !string.IsNullOrEmpty(d["UpdatedBy"].ToString()) ? d["UpdatedBy"] : "",
+                                  UpdatedDate = !string.IsNullOrEmpty(d["UpdatedDate"].ToString()) ? d["UpdatedDate"] : "",
+                                  ID = !string.IsNullOrEmpty(d["ID"].ToString()) ? d["ID"] : "",
+                                  Inactive = !string.IsNullOrEmpty(d["Inactive"].ToString()) ? d["Inactive"] : "",
+                              }).ToList();
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message);
+            }
+        }
+        public IActionResult PreferenceGroup()
+        {
+            return PartialView("ItemCategory/PreferenceGroup");
+        }
+        [HttpPost]
+        public IActionResult PreferenceGroupSave([FromBody] PreferenceGroupModel model)
+        {
+            string message = "";
+            var listErrors = GetErrors(
+                Check(model, "general", "Invalid data"),
+
+                Check(model?.Code, "code", "Code is not blank."),
+                Check(model?.Name, "name", "Description is not blank.")
+            );
+
+            if (listErrors.Count > 0)
+            {
+                return Json(new { success = false, errors = listErrors });
+            }
+            try
+            {
+                if (model.ID == 0)
+                {
+                    model.CreateDate = DateTime.Now;
+                    model.CreatedDate = DateTime.Now;
+                    model.UpdateDate = DateTime.Now;
+                    model.UpdatedDate = DateTime.Now;
+
+                    PreferenceGroupBO.Instance.Insert(model);
+                    message = "Insert successfully!";
+                }
+                else
+                {
+                    var oldData = (PreferenceGroupModel)PreferenceGroupBO.Instance.FindByPrimaryKey(model.ID);
+
+                    if (oldData != null)
+                    {
+                        model.UserInsertID = oldData.UserInsertID;
+                        model.CreatedBy = oldData.CreatedBy;
+                        model.CreateDate = oldData.CreatedDate;
+                        model.CreatedDate = oldData.CreatedDate;
+                    }
+
+                    model.UpdateDate = DateTime.Now;
+                    model.UpdatedDate = DateTime.Now;
+
+                    PreferenceGroupBO.Instance.Update(model);
+                    message = "Update successfully!";
+                }
+
+            }
+            catch (Exception ex)
+            {
+                message = ex.Message;
+                return Json(new { success = false, message });
+            }
+
+            return Json(new { success = true, message });
+        }
+        [HttpPost]
+        public IActionResult DeletePreferenceGroup(int id)
+        {
+            try
+            {
+                PreferenceGroupBO.Instance.Delete(id);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, ex.Message });
+            }
+
+            return Json(new { success = true });
+        }
+        #endregion
 
     }
 }

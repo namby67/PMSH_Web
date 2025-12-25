@@ -72,7 +72,7 @@
             </div>
         </div>
     </div>
-
+        <hr class="my-3 text-secondary" style="opacity: 0.3;" />
     <div class="row g-2 mb-3"> 
     <div class="col-md-3">
         <label for="address" class="form-label mb-1">Address</label>
@@ -99,7 +99,7 @@
         <input type="text" id="fax" name="fax" class="form-control form-control-sm" placeholder="Enter fax..." />
     </div>
     </div>
-
+        <hr class="my-3 text-secondary" style="opacity: 0.3;" />
     <div class="row g-3">
         <div class="col-md-3">
             <label for="serverName" class="form-label mb-1 fw-bold">Server Name <span class="text-danger">*</span></label>
@@ -126,11 +126,11 @@
     <input type="hidden" id="id" name="id" value="0" />
 </div>
     <div class="mt-2">
-        <button id="btnNew" class="submit-button-clear-reservation"><i class="fa-solid fa-plus"></i> New</button>
-        <button id="btnUpdate" class="submit-button-clear-reservation"><i class="fa-solid fa-pen"></i> Edit</button>
-        <button id="btnDelete" class="submit-button-clear-reservation"><i class="fa-solid fa-trash-can"></i> Delete</button>
-        <button id="btnSave" class="submit-button-clear-reservation d-none"><i class="fa-solid fa-check"></i> Save</button>
-        <button id="btnCancel" class="submit-button-clear-reservation d-none"><i class="fa-solid fa-xmark"></i> Cancel</button>
+        <button id="btnNew" class="mui-button mui-button-new"><i class="fa-solid fa-plus"></i> New</button>
+        <button id="btnUpdate" class="mui-button mui-button-edit"><i class="fa-solid fa-pen"></i> Edit</button>
+        <button id="btnDelete" class="mui-button mui-button-delete"><i class="fa-solid fa-trash-can"></i> Delete</button>
+        <button id="btnSave" class="mui-button mui-button-save d-none"><i class="fa-solid fa-check"></i> Save</button>
+        <button id="btnCancel" class="mui-button mui-button-cancel d-none"><i class="fa-solid fa-xmark"></i> Cancel</button>
     </div>
 </div>
 
@@ -149,9 +149,10 @@
     var selectedRowData = null;
 
     $(document).ready(function () {
-        $("#formContainer").on("input change", "input, select", function () {
+        $("#formContainer").on("input change", "input, select, textarea", function () {
             if ($(this).hasClass("is-invalid")) {
                 $(this).removeClass("is-invalid");
+                $(this).next(".invalid-feedback").text("");
             }
         });
         reloadGrid();
@@ -303,7 +304,7 @@
 
     // --- SAVE ---
     $("#btnSave").click(function () {
-        $(".is-invalid").removeClass("is-invalid");
+        applyValidationErrors([], "#formContainer");
 
         const id = parseInt($("#id").val()) || 0;
         let loginName = (localStorage.getItem("Loginname") || "").trim()
@@ -331,31 +332,6 @@
             updatedBy: loginName,
         };
 
-        let isValid = true;
-
-        const requiredFields = [
-            "#code", 
-            "#propertyName", 
-            "#propertyType", 
-            "#serverName", 
-            "#databaseName", 
-            "#login", 
-            "#password"
-        ];
-
-        requiredFields.forEach(function(fieldId) {
-            const val = $(fieldId).val();
-            if (!val || val.toString().trim() === "") {
-                $(fieldId).addClass("is-invalid");
-                isValid = false;
-            }
-        });
-
-        if (!isValid) {
-            showToast("Warning", "Please fill in all required fields (*).", false);
-            return; 
-        }
-
         $.ajax({
             url: "/Administration/PropertySave",
             type: "POST",
@@ -366,10 +342,14 @@
                 if (res.success) {
                     showToast("Success", res.message, true);
                     reloadGrid();
-                    switchToNormalMode();
-                    clearForm();
+                    $("#btnCancel").trigger("click");
                 } else {
-                    showToast("Error", "Save failed", false);
+                    if (res.errors && res.errors.length > 0) {
+                        applyValidationErrors(res.errors, "#formContainer");
+                        showToast("Warning", "Please check input fields.", false);
+                    } else {
+                        showToast("Error", res.message || "Save failed", false);
+                    }
                 }
             },
             error: function (err) {
@@ -393,7 +373,7 @@
                 if (res.success) {
                     showToast("Success", "Deleted successfully", true);
                     reloadGrid();
-                    clearForm();
+                    $("#btnCancel").trigger("click");
                 } else {
                     showToast("Error", res.message, false);
                 }

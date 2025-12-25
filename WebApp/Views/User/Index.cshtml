@@ -159,6 +159,31 @@
         
     }
 
+    .btn-ones-gradient {
+        padding: 12px 40px; 
+        font-size: 16px; 
+        font-weight: 600; 
+        border-radius: 6px;
+        border: none; 
+        cursor: pointer; 
+        color: #ffffff;
+        outline: none;
+        background-image: linear-gradient(to right, #D62831 0%, #005699 51%, #D62831 100%);
+        background-size: 200% auto; 
+        transition: 0.5s;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    }
+
+        .btn-ones-gradient:hover {
+            background-position: right center;
+            box-shadow: 0 8px 15px rgba(0, 86, 153, 0.3);
+            transform: translateY(-1px); 
+        }
+
+        .btn-ones-gradient:active {
+            transform: translateY(1px);
+            box-shadow: none;
+        }
     
 </style>
 <div style="height:100vh; background: linear-gradient(to right, #994040, #00509f); display: flex; justify-content: center; align-items: center; text-align: center;">
@@ -187,7 +212,7 @@
             </div>
             <div class="row mb-3 px-3 mt-4">
           
-                <button type="submit" class="mui-button mui-button-new" onclick="login();">Login</button>
+                <button type="submit" class="btn-ones-gradient" onclick="login();">Login</button>
             </div>
         </div>
     </div>
