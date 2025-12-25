@@ -1475,7 +1475,7 @@ namespace Administration.Controllers
         {
             List<CountryModel> listctry = PropertyUtils.ConvertToList<CountryModel>(CountryBO.Instance.FindAll());
             ViewBag.CountryList = listctry;
-            return PartialView("ItemCategory/City");
+            return View("ItemCategory/City");
         }
         [HttpPost]
         public IActionResult CitySave([FromBody] CityModel model)
@@ -1580,7 +1580,7 @@ namespace Administration.Controllers
         }
         public IActionResult Country()
         {
-            return PartialView("ItemCategory/Country");
+            return View("ItemCategory/Country");
         }
         [HttpPost]
         public IActionResult CountrySave([FromBody] CountryModel model)
@@ -1683,7 +1683,7 @@ namespace Administration.Controllers
         }
         public IActionResult Language()
         {
-            return PartialView("ItemCategory/Language");
+            return View("ItemCategory/Language");
         }
         [HttpPost]
         public IActionResult LanguageSave([FromBody] LanguageModel model)
@@ -1788,7 +1788,7 @@ namespace Administration.Controllers
         }
         public IActionResult Nationality()
         {
-            return PartialView("ItemCategory/Nationality");
+            return View("ItemCategory/Nationality");
         }
         [HttpPost]
         public IActionResult NationalitySave([FromBody] NationalityModel model)
@@ -1891,7 +1891,7 @@ namespace Administration.Controllers
         }
         public IActionResult Title()
         {
-            return PartialView("ItemCategory/Title");
+            return View("ItemCategory/Title");
         }
         [HttpPost]
         public IActionResult TitleSave([FromBody] TitleModel model)
@@ -1994,7 +1994,7 @@ namespace Administration.Controllers
         }
         public IActionResult Territory()
         {
-            return PartialView("ItemCategory/Territory");
+            return View("ItemCategory/Territory");
         }
         [HttpPost]
         public IActionResult TerritorySave([FromBody] TerritoryModel model)
@@ -2099,7 +2099,7 @@ namespace Administration.Controllers
         {
             //List<CountryModel> listctry = PropertyUtils.ConvertToList<CountryModel>(CountryBO.Instance.FindAll());
             //ViewBag.CountryList = listctry;
-            return PartialView("ItemCategory/State");
+            return View("ItemCategory/State");
         }
         [HttpPost]
         public IActionResult StateSave([FromBody] StateModel model)
@@ -2203,7 +2203,7 @@ namespace Administration.Controllers
         }
         public IActionResult VIP()
         {
-            return PartialView("ItemCategory/VIP");
+            return View("ItemCategory/VIP");
         }
         [HttpPost]
         public IActionResult VIPSave([FromBody] VIPModel model)
@@ -2320,7 +2320,7 @@ namespace Administration.Controllers
         {
             List<MarketTypeModel> listmktype = PropertyUtils.ConvertToList<MarketTypeModel>(MarketTypeBO.Instance.FindAll());
             ViewBag.MarketTypeList = listmktype;
-            return PartialView("ItemCategory/Market");
+            return View("ItemCategory/Market");
         }
         [HttpPost]
         public IActionResult MarketSave([FromBody] MarketModel model)
@@ -2424,7 +2424,7 @@ namespace Administration.Controllers
         }
         public IActionResult MarketType()
         {
-            return PartialView("ItemCategory/MarketType");
+            return View("ItemCategory/MarketType");
         }
         [HttpPost]
         public IActionResult MarketTypeSave([FromBody] MarketTypeModel model)
@@ -2528,7 +2528,7 @@ namespace Administration.Controllers
 
         public IActionResult PickupDropPlace()
         {
-            return PartialView("ItemCategory/PickupDropPlace");
+            return View("ItemCategory/PickupDropPlace");
         }
         [HttpPost]
         public IActionResult PickupDropPlaceSave([FromBody] PickupDropPlaceModel model)
@@ -2631,7 +2631,7 @@ namespace Administration.Controllers
         }
         public IActionResult TransportType()
         {
-            return PartialView("ItemCategory/TransportType");
+            return View("ItemCategory/TransportType");
         }
         [HttpPost]
         public IActionResult TransportTypeSave([FromBody] TransportTypeModel model)
@@ -2734,7 +2734,7 @@ namespace Administration.Controllers
         }
         public IActionResult ReservationType()
         {
-            return PartialView("ItemCategory/ReservationType");
+            return View("ItemCategory/ReservationType");
         }
         [HttpPost]
         public IActionResult ReservationTypeSave([FromBody] ReservationTypeModel model)
@@ -2834,7 +2834,7 @@ namespace Administration.Controllers
         }
         public IActionResult Reason()
         {
-            return PartialView("ItemCategory/Reason");
+            return View("ItemCategory/Reason");
         }
         [HttpPost]
         public IActionResult ReasonSave([FromBody] ReasonModel model)
@@ -2937,7 +2937,7 @@ namespace Administration.Controllers
         }
         public IActionResult Origin()
         {
-            return PartialView("ItemCategory/Origin");
+            return View("ItemCategory/Origin");
         }
         [HttpPost]
         public IActionResult OriginSave([FromBody] OriginModel model)
@@ -3041,7 +3041,7 @@ namespace Administration.Controllers
 
         public IActionResult Source()
         {
-            return PartialView("ItemCategory/Source");
+            return View("ItemCategory/Source");
         }
 
         [HttpPost]
@@ -3146,7 +3146,7 @@ namespace Administration.Controllers
         }
         public IActionResult AlertsSetup()
         {
-            return PartialView("ItemCategory/AlertsSetup");
+            return View("ItemCategory/AlertsSetup");
         }
         [HttpPost]
         public IActionResult AlertsSetupSave([FromBody] AlertsSetupModel model)
@@ -3252,7 +3252,7 @@ namespace Administration.Controllers
         {
             List<CommentTypeModel> listctry = PropertyUtils.ConvertToList<CommentTypeModel>(CommentTypeBO.Instance.FindAll());
             ViewBag.CommentTypeList = listctry;
-            return PartialView("ItemCategory/Comment");
+            return View("ItemCategory/Comment");
         }
         [HttpPost]
         public IActionResult CommentSave([FromBody] CommentModel model)
@@ -3356,7 +3356,7 @@ namespace Administration.Controllers
         }
         public IActionResult CommentType()
         {
-            return PartialView("ItemCategory/CommentType");
+            return View("ItemCategory/CommentType");
         }
 
         [HttpPost]
@@ -3460,7 +3460,7 @@ namespace Administration.Controllers
         }
         public IActionResult Season()
         {
-            return PartialView("ItemCategory/Season");
+            return View("ItemCategory/Season");
         }
         [HttpPost]
         public IActionResult SeasonSave([FromBody] SeasonModel model)
@@ -3563,7 +3563,7 @@ namespace Administration.Controllers
         }
         public IActionResult Zone()
         {
-            return PartialView("ItemCategory/Zone");
+            return View("ItemCategory/Zone");
         }
         [HttpPost]
         public IActionResult ZoneSave([FromBody] ZoneModel model)
@@ -3667,7 +3667,7 @@ namespace Administration.Controllers
         }
         public IActionResult Department()
         {
-            return PartialView("ItemCategory/Department");
+            return View("ItemCategory/Department");
         }
         [HttpPost]
         public IActionResult DepartmentSave([FromBody] DepartmentModel model)
@@ -3744,7 +3744,7 @@ namespace Administration.Controllers
 
         public IActionResult Occupancy()
         {
-            return PartialView("ItemCategory/Occupancy");
+            return View("ItemCategory/Occupancy");
         }
         [HttpGet]
         public IActionResult GetOccupancy()
@@ -3840,7 +3840,7 @@ namespace Administration.Controllers
 
         public IActionResult ConfirmationConfig()
         {
-            return PartialView("ItemCategory/ConfirmationConfig");
+            return View("ItemCategory/ConfirmationConfig");
         }
         [HttpGet]
         public IActionResult GetConfirmationConfig()
@@ -3924,7 +3924,7 @@ namespace Administration.Controllers
             ViewBag.RateCodeList = listRateCode;
             List<LanguageModel> listLanguage = PropertyUtils.ConvertToList<LanguageModel>(LanguageBO.Instance.FindAll());
             ViewBag.LanguageList = listLanguage;
-            return PartialView("ItemCategory/ConfirmationTemp");
+            return View("ItemCategory/ConfirmationTemp");
         }
         [HttpGet]
         public IActionResult GetConfirmationTemp()
@@ -4047,7 +4047,7 @@ namespace Administration.Controllers
         }
         public IActionResult Owner()
         {
-            return PartialView("ItemCategory/Owner");
+            return View("ItemCategory/Owner");
         }
         [HttpPost]
         public IActionResult OwnerSave([FromBody] OwnerModel model)
@@ -4149,7 +4149,7 @@ namespace Administration.Controllers
         }
         public IActionResult PropertyType()
         {
-            return PartialView("ItemCategory/PropertyType");
+            return View("ItemCategory/PropertyType");
         }
         [HttpPost]
         public IActionResult PropertyTypeSave([FromBody] PropertyTypeModel model)
@@ -4252,7 +4252,7 @@ namespace Administration.Controllers
         {
             List<PropertyTypeModel> listPropertyType = PropertyUtils.ConvertToList<PropertyTypeModel>(PropertyTypeBO.Instance.FindAll());
             ViewBag.PropertyTypeList = listPropertyType;
-            return PartialView("ItemCategory/Property");
+            return View("ItemCategory/Property");
         }
         [HttpPost]
         public IActionResult PropertySave([FromBody] PropertyModel model)
@@ -4351,7 +4351,7 @@ namespace Administration.Controllers
             ViewBag.PropertyList = listProperty;
             List<UsersModel> listuser = PropertyUtils.ConvertToList<UsersModel>(UsersBO.Instance.FindAll());
             ViewBag.UsersList = listuser;
-            return PartialView("ItemCategory/PropertyPermission");
+            return View("ItemCategory/PropertyPermission");
         }
         [HttpPost]
         public IActionResult PropertyPermissionSave([FromBody] List<PropertyPermissionModel> listModels)
@@ -4480,7 +4480,7 @@ namespace Administration.Controllers
         }
         public IActionResult PackageForecastGroup()
         {
-            return PartialView("ItemCategory/PackageForecastGroup");
+            return View("ItemCategory/PackageForecastGroup");
         }
         [HttpPost]
         public IActionResult PackageForecastGroupSave([FromBody] PackageForecastGroupModel model)
@@ -4583,7 +4583,7 @@ namespace Administration.Controllers
         }
         public IActionResult PreferenceGroup()
         {
-            return PartialView("ItemCategory/PreferenceGroup");
+            return View("ItemCategory/PreferenceGroup");
         }
         [HttpPost]
         public IActionResult PreferenceGroupSave([FromBody] PreferenceGroupModel model)

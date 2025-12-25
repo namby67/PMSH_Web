@@ -246,17 +246,102 @@
                                 <div class="dropdown-submenu">
                                     <a class="dropdown-submenu-toggle">Deposit & Cancellation Rule</a>
                                     <div class="dropdown-submenu-content">
-                                        @* <a asp-area="" asp-controller="Administration" asp-action="RateCategory">Rate
-                                            Category</a> *@
-                                        <a asp-area="" asp-controller="Administration" asp-action="DepositRule">
-                                            Deposit
-                                            Rule
-                                        </a>
-                                        <a asp-area="" asp-controller="Administration"
-                                           asp-action="CancellationRule">Cancellation Rule</a>
+                                        <a asp-area="" asp-controller="Administration" asp-action="DepositRule"> Deposit Rule </a>
+                                        <a asp-area="" asp-controller="Administration" asp-action="CancellationRule">Cancellation Rule</a>
                                     </div>
                                 </div>
                                 <a asp-area="" asp-controller="Administration" asp-action="IndexItemCategory">Item Category</a>
+                                
+                                <div class="dropdown-submenu">
+                                    <a class="dropdown-submenu-toggle">
+                                        Item Category
+                                    </a>
+                                    <div class="dropdown-submenu-content">
+
+                                        <div class="dropdown-submenu">
+                                            <a class="dropdown-submenu-toggle">
+                                                Profile 
+                                            </a>
+                                            <div class="dropdown-submenu-content">
+                                                <a asp-area="" asp-controller="Administration" asp-action="City">City</a>
+                                                <a asp-area="" asp-controller="Administration" asp-action="Country">Country</a>
+                                                <a asp-area="" asp-controller="Administration" asp-action="Language">Language</a>
+                                                <a asp-area="" asp-controller="Administration" asp-action="Nationality">Nationality</a>
+                                                <a asp-area="" asp-controller="Administration" asp-action="Title">Title</a>
+                                                <a asp-area="" asp-controller="Administration" asp-action="Territory">Territory</a>
+                                                <a asp-area="" asp-controller="Administration" asp-action="State">State</a>
+                                                <a asp-area="" asp-controller="Administration" asp-action="VIP">Vip</a>
+                                            </div>
+                                        </div>
+
+                                        <div class="dropdown-submenu">  
+                                            <a class="dropdown-submenu-toggle">
+                                                Reservation
+                                            </a>
+                                            <div class="dropdown-submenu-content">
+                                                <a asp-area="" asp-controller="Administration" asp-action="Market">Market</a>
+                                                <a asp-area="" asp-controller="Administration" asp-action="MarketType">Market Type</a>
+                                                <a asp-area="" asp-controller="Administration" asp-action="PickupDropPlace">Pickup & Drop</a>
+                                                <a asp-area="" asp-controller="Administration" asp-action="TransportType">Transport Type</a>
+                                                <a asp-area="" asp-controller="Administration" asp-action="ReservationType">Reservation Type</a>
+                                                <a asp-area="" asp-controller="Administration" asp-action="Reason">Reason</a>
+                                                <a asp-area="" asp-controller="Administration" asp-action="Origin">Origin</a>
+                                                <a asp-area="" asp-controller="Administration" asp-action="Source">Source</a>
+                                                <a asp-area="" asp-controller="Administration" asp-action="PackageForecastGroup">Package Forecast Group</a>
+                                                <a asp-area="" asp-controller="Administration" asp-action="PreferenceGroup">Preference Group</a>
+                                            </div>
+                                        </div>
+
+                                        <div class="dropdown-submenu">
+                                            <a class="dropdown-submenu-toggle">
+                                                Other
+                                            </a>
+                                            <div class="dropdown-submenu-content">
+                                                <a asp-area="" asp-controller="Administration" asp-action="AlertsSetup">Alerts Setup</a>
+                                                <a asp-area="" asp-controller="Administration" asp-action="Comment">Comments</a>
+                                                <a asp-area="" asp-controller="Administration" asp-action="CommentType">Comment Type</a>
+                                                <a asp-area="" asp-controller="Administration" asp-action="Season">Season</a>
+                                                <a asp-area="" asp-controller="Administration" asp-action="Zone">Zone</a>
+                                                <a asp-area="" asp-controller="Administration" asp-action="Department">Department</a>
+                                            </div>
+                                        </div>
+
+                                        <div class="dropdown-submenu">
+                                            <a class="dropdown-submenu-toggle">
+                                                Config
+                                            </a>
+                                            <div class="dropdown-submenu-content">
+                                                <a asp-area="" asp-controller="Administration" asp-action="Occupancy">Occupancy Config</a>
+                                                <a asp-area="" asp-controller="Administration" asp-action="ConfirmationConfig">Confirmation Config</a>
+                                                <a asp-area="" asp-controller="Administration" asp-action="ConfirmationTemp">Confirmation Temp</a>
+                                            </div>
+                                        </div>
+
+                                        <div class="dropdown-submenu">
+                                            <a class="dropdown-submenu-toggle">
+                                                Owner
+                                            </a>
+                                            <div class="dropdown-submenu-content">
+                                                <a asp-area="" asp-controller="Administration" asp-action="Owner">Owner</a>
+                                                <a asp-area="" asp-controller="Administration" asp-action="Owner">Group Owner</a>
+                                                <a asp-area="" asp-controller="Administration" asp-action="Owner">Room Owner</a>
+                                                <a asp-area="" asp-controller="Administration" asp-action="Owner">Group And Room</a>
+                                            </div>
+                                        </div>
+
+                                        <div class="dropdown-submenu">
+                                            <a class="dropdown-submenu-toggle">
+                                                Property Type
+                                            </a>
+                                            <div class="dropdown-submenu-content">
+                                                <a asp-area="" asp-controller="Administration" asp-action="PropertyType">Property Type</a>
+                                                <a asp-area="" asp-controller="Administration" asp-action="Property">Property</a>
+                                                <a asp-area="" asp-controller="Administration" asp-action="PropertyPermission">Property Permission</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="dropdown-submenu">
                                     <a class="dropdown-submenu-toggle">House Keeping</a>
                                     <div class="dropdown-submenu-content">
@@ -373,59 +458,6 @@
 <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    // $(document).ready(function () {
-    //     // Lấy tên đăng nhập từ localStorage
-    //     const loginName = JSON.parse(localStorage.getItem("Loginname"));
-
-    //     // Nếu có tên đăng nhập, gán vào giao diện
-    //     if (loginName) {
-    //         $("#user-display").text(`${loginName}`);
-    //     } else {
-    //         $("#user-display").text("NOT LOGGED IN ");
-    //     }
-
-    //     const permissionData = JSON.parse(localStorage.getItem("PermissionNames")) || [];
-
-    //     // Bước 2: Chuyển tất cả tên quyền thành chữ thường
-    //     const lowerPermissionNames = permissionData.map(x => x.name?.trim().toLowerCase());
-
-    //     // Bước 3: Duyệt tất cả các thẻ <a> trong dropdown có href chứa '?name='
-    //     $('a[href*="/Report/OtherReport?name="]').each(function () {
-    //         const href = $(this).attr('href');
-    //         const urlParams = new URLSearchParams(href.split('?')[1]);
-    //         const reportName = urlParams.get('name')?.trim().toLowerCase();
-
-    //         // Nếu reportName không có trong quyền thì ẩn hoặc disable
-    //         if (!lowerPermissionNames.includes(reportName)) {
-    //             $(this).css({
-    //                 "pointer-events": "none",
-    //                 "opacity": "0.5",
-    //                 "color": "gray"
-    //             });
-
-    //         }
-    //     });
-
-    //     // lấy businessDate
-    //     const businessDate = JSON.parse(localStorage.getItem("businessDate"));
-    //     $("#businessDate").text(`Business Date : ${businessDate.split(' ')[0]}`);
-
-    //     const currentPath = window.location.pathname.toLowerCase();
-    //     $('.navbar-nav .nav-link').each(function () {
-    //         const linkPath = $(this).attr('href')?.toLowerCase();
-    //         $(this).removeClass('active'); // Xóa lớp active khỏi tất cả các liên kết
-    //         if (linkPath && currentPath.includes(linkPath)) {
-    //             $(this).addClass('active'); // Thêm lớp active cho liên kết tương ứng
-    //         }
-    //     });
-
-    //     // Xử lý sự kiện nhấp chuột
-    //     $('.navbar-nav .nav-link').on('click', function () {
-    //         $('.navbar-nav .nav-link').removeClass('active');
-    //         $(this).addClass('active');
-    //     });
-
-    // });
     DevExpress.localization.locale("vi");
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -434,26 +466,34 @@
 
         submenuToggles.forEach(toggle => {
             toggle.addEventListener('click', function (e) {
+
                 if (window.innerWidth <= 991.98) {
                     e.preventDefault();
+                    e.stopPropagation(); // Ngăn sự kiện nổi bọt lên cha (quan trọng cho đa cấp)
                     const submenu = this.nextElementSibling;
                     const parent = this.parentElement;
-
                     // Toggle active class
                     if (parent.classList.contains('active')) {
                         parent.classList.remove('active');
-                        submenu.style.display = 'none';
+                        if (submenu) submenu.style.display = 'none';
                     } else {
-                        // Close other open submenus
+                        // Đóng các menu khác ĐANG MỞ, TRỪ menu cha của nút hiện tại
                         document.querySelectorAll('.dropdown-submenu.active').forEach(item => {
-                            item.classList.remove('active');
-                            item.querySelector('.dropdown-submenu-content').style.display = 'none';
+                            // Kiểm tra: Nếu item đang active KHÔNG chứa nút vừa bấm -> Đóng nó
+                            if (!item.contains(this)) {
+                                item.classList.remove('active');
+                                const sub = item.querySelector('.dropdown-submenu-content');
+                                if (sub) sub.style.display = 'none';
+                            }
                         });
 
+                        // Mở menu hiện tại
                         parent.classList.add('active');
-                        submenu.style.display = 'block';
+                        if (submenu) submenu.style.display = 'block';
                     }
+
                 }
+
             });
         });
     });

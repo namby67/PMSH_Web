@@ -438,12 +438,17 @@
     }
 
     .login-wrapper {
-        height: 100vh;
-        background: linear-gradient(to right, #994040, #00509f);
+        min-height: 100vh;
+        width: 100%;
+
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 16px;
+
+        background-image: url("/images/background-login.png");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
     }
 
     /* ===== CARD ===== */
@@ -461,7 +466,7 @@
 
     /* ===== HEADER ===== */
     .login-header {
-        background: #ECEBFF url('data:image/svg+xml;base64,...') no-repeat 100% 70%;
+        background: #f3f6f3 url('data:image/svg+xml;base64,...') no-repeat 100% 70%;
         padding: 28px 20px;
         text-align: center;
     }
@@ -476,7 +481,11 @@
     .login-title {
         font-size: 20px;
         font-weight: 700;
+        background: linear-gradient(90deg, #44593d, #65805b);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
+
 
     .login-subtitle {
         font-size: 16px;
@@ -499,6 +508,7 @@
     }
 
     .form-group label {
+        color: 425044;
         font-size: 15px;
         font-weight: 600;
         display: block;
@@ -523,7 +533,9 @@
         padding: 12px;
         border: none;
         border-radius: 8px;
-        background: #4ba3c7;
+        background: linear-gradient(90deg,
+                #4f7f3a 0%,
+                #6fa84d 100%);
         color: #fff;
         font-size: 15px;
         font-weight: 600;
@@ -531,7 +543,7 @@
     }
 
     .btn-login:hover {
-        background: #3b8fb1;
+        background: #4f7f3a;
     }
 </style>
 <div class="login-wrapper">
