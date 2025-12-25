@@ -187,7 +187,6 @@ body {
     align-items: center;
     justify-content: space-between;
     overflow: hidden;
-    padding: 0 40px; /* Thêm padding 2 bên để logo không sát mép màn hình */
 }
 
 .banner-text {
@@ -211,15 +210,19 @@ body {
 }
 
 .banner-icon-left {
-    height: 150px;
-    width: 60%;
+    height: 130px;
+    width: auto%;
+    max-width: 100%;
     object-fit: contain;
+    filter: drop-shadow(0px 0px 8px rgba(255, 255, 255, 2));
 }
 
 .banner-icon-right {
     height: 150px;
-    width: 60%;
+    width: auto;
+    max-width: 100%;
     object-fit: contain;
+    filter: drop-shadow(0px 0px 8px rgba(255, 255, 255, 2));
 }
 
 .banner-col-center {
@@ -236,8 +239,8 @@ body {
     justify-content: center;
     align-items: center;
 }
-
 /* end css banner*/
+
 .contact-user-section {
     display: flex;
     justify-content: space-between;
@@ -332,7 +335,7 @@ body {
     }
 
     .banner {
-        flex-direction: column; /* Xếp chồng dọc */
+        flex-direction: column;
         height: auto;
         padding: 20px 10px;
         text-align: center;
@@ -351,7 +354,7 @@ body {
         display: none; /* Ẩn cột trống trên mobile cho đỡ tốn chỗ */
     }
 
-    .banner-icon {
+    .banner-icon-left {
         height: 90px;
     }
 
