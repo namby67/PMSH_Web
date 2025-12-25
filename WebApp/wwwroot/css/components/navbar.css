@@ -119,7 +119,7 @@ body {
     z-index: 1000;
 }
 
-.dropdown-submenu:hover .dropdown-submenu-content {
+.dropdown-submenu:hover > .dropdown-submenu-content {
     display: block;
 }
 
@@ -137,44 +137,78 @@ body {
         background-color: var(--secondary-color);
     }
 
+/* Desktop */
+@media (min-width: 992px) {
+    .dropdown-submenu {
+        position: relative;
+    }
+
+        .dropdown-submenu:hover > .dropdown-submenu-content {
+            display: block;
+        }
+
+        .dropdown-submenu .dropdown-submenu-content {
+            top: 0;
+            left: 100%; 
+            margin-top: -5px; 
+            margin-left: -1px; 
+            border-radius: 4px;
+        }
+
+    /* Đảm bảo menu không bị mất khi di chuột nhanh qua khe hở */
+    .dropdown-submenu-content::before {
+        content: "";
+        position: absolute;
+        right: 100%;
+        top: 0;
+        height: 100%;
+        width: 10px; 
+    }
+}
+
+/* Mobile: Menu hiển thị dạng accordion (thụt dòng) */
 @media (max-width: 991.98px) {
     .navbar-nav {
         flex-direction: column;
         align-items: flex-start;
     }
 
-        .navbar-nav .nav-item::after {
-            display: none;
-        }
-
-    .dropdown-menu-custom {
-        position: static;
-        display: block;
-        box-shadow: none;
-        border: none;
-        padding-left: 15px;
-    }
-
-        .dropdown-menu-custom a {
-            color: #000000 !important;
-            padding: 8px 0;
-            border: none;
-        }
-
-    .dropdown-submenu-toggle::after {
-        content: '\25BC';
-    }
-
-    .dropdown-submenu-content {
-        position: static;
-        box-shadow: none;
-        border: none;
-        padding-left: 25px;
+    .navbar-nav .nav-item::after {
         display: none;
     }
 
-    .dropdown-submenu.active .dropdown-submenu-content {
-        display: block;
+    .dropdown-menu-custom,
+    .dropdown-submenu-content {
+        position: static !important; /* Quan trọng: Để menu đẩy nội dung xuống */
+        display: none; /* Mặc định ẩn, JS sẽ bật thành block */
+        float: none;
+        width: 100%;
+        box-shadow: none;
+        border: none;
+        background-color: transparent;
+        padding-left: 20px; /* Thụt đầu dòng cho mỗi cấp con */
+        margin: 0;
+    }
+
+    /* Màu nền nhẹ cho menu con để phân biệt */
+    .dropdown-submenu-content {
+        background-color: #f8f9fa;
+        border-left: 2px solid #e9ecef; /* Đường kẻ chỉ dẫn bên trái */
+    }
+
+    /* Mũi tên: Mặc định hướng sang phải */
+    .dropdown-submenu-toggle i {
+        transition: transform 0.3s ease;
+    }
+
+    /* Mũi tên: Xoay xuống dưới khi menu đang mở (class active được JS thêm vào) */
+    .dropdown-submenu.active > .dropdown-submenu-toggle i {
+        transform: rotate(90deg);
+    }
+
+    /* Đảm bảo text không bị tràn */
+    .dropdown-menu-custom a {
+        white-space: normal;
     }
 }
 
