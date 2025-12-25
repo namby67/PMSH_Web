@@ -210,10 +210,16 @@ body {
     align-items: center;
 }
 
-.banner-icon {
+.banner-icon-left {
     height: 150px;
     width: 60%;
     object-fit: cover;
+}
+
+.banner-icon-right {
+    height: 150px;
+    width: 60%;
+    object-fit: contain;
 }
 
 .banner-col-center {
@@ -225,7 +231,10 @@ body {
 }
 
 .banner-col-right {
-    flex: 1; 
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* end css banner*/
