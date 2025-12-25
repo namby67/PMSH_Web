@@ -259,6 +259,7 @@
     // =======================
     $("#btnNew").click(function () {
         clearItemForm();
+        applyValidationErrors([], "#itemModal");
         $("#itemModalLabel").text("New Rate Code");
         $("#itemModal").modal("show");
     });
@@ -271,7 +272,7 @@
             showToast("Error", "Please select 1 row to update.", false);
             return;
         }
-
+        applyValidationErrors([], "#itemModal");
         $.ajax({
             url: '/Administration/RateCode/GetByID',
             type: 'GET',

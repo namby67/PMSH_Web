@@ -227,6 +227,8 @@
     // =======================
     $("#btnNew").on("click", function () {
         clearRateCategoryForm();
+        applyValidationErrors([], "#popupNewRateCategory");
+
         $("#popupNewRateCategory").modal("show");
     });
 
@@ -238,6 +240,7 @@
             showToast("Error", "Please select 1 row to update.", false);
             return;
         }
+        applyValidationErrors([], "#popupNewRateCategory");
 
         $("#idRateCategory").val(selectedRowData.id);
         $("#codeClass").val(selectedRowData.code);

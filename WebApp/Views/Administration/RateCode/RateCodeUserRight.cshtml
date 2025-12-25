@@ -62,6 +62,15 @@
                     <h5 class="modal-title" id="itemModalLabel">New Item</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <!-- Modal Footer (nút Save & Close) -->
+                <div class="modal-footer justify-content-start">
+                    <button type="button" id="btnSave" class="mui-button mui-button-save">
+                        <i class="fa-solid fa-floppy-disk"></i> Save
+                    </button>
+                    <button type="button" data-bs-dismiss="modal" class="mui-button mui-button-close">
+                        <i class="fa-solid fa-xmark"></i> Close
+                    </button>
+                </div>
                 <div class="modal-body">
 
                     <div id="itemForm">
@@ -93,10 +102,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" id="btnSave" class="btn btn-primary">Save</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
 
@@ -261,6 +266,7 @@
 
 
     $("#btnNew").click(function () {
+        applyValidationErrors([], "#itemModal");
         $("#modalItemId").val(0);
         $("#idUserName").val("");
         $("#txtUserName").val("");
@@ -276,7 +282,7 @@
             showToast('Error', 'Please select 1 row to update.', false);
             return;
         }
-
+        applyValidationErrors([], "#itemModal");
         let id = selectedRowData.id;
 
         // 🔥 dùng trực tiếp selectedRowData

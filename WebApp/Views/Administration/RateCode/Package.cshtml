@@ -415,6 +415,8 @@
     setFormReadOnly(true);
     $('#btnNew').on('click', function () {
         clearFormData();
+        applyValidationErrors([], "#packageForm");
+
         setFormReadOnly(false);  // Bỏ disabled
     });
     let isReadOnly = true;
@@ -527,6 +529,8 @@
     });
     $('#btnClear').on('click', function () {
         clearFormData();
+        applyValidationErrors([], "#packageDetailForm");
+
     });
     $('#btnRemove').on('click', function () {
         $("#loadingSpinner").show();
