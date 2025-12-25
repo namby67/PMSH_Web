@@ -547,7 +547,7 @@
             this.ReportHeader});
             this.Margins = new DevExpress.Drawing.DXMargins(25F, 29F, 100F, 100F);
             this.PageWidth = 1147;
-            this.PaperKind = System.Drawing.Printing.PaperKind.Custom;
+            this.PaperKind = (DevExpress.Drawing.Printing.DXPaperKind)System.Drawing.Printing.PaperKind.Custom;
             this.ParameterPanelLayoutItems.AddRange(new DevExpress.XtraReports.Parameters.ParameterPanelLayoutItem[] {
             new DevExpress.XtraReports.Parameters.ParameterLayoutItem(this.ConfirmationNo, DevExpress.XtraReports.Parameters.Orientation.Horizontal),
             new DevExpress.XtraReports.Parameters.ParameterLayoutItem(this.Title, DevExpress.XtraReports.Parameters.Orientation.Horizontal),
