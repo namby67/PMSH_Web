@@ -362,12 +362,11 @@ namespace Administration.Services.Implements
             DataTable myTable = DataTableHelper.getTableData("spFrmPreferenceGroupSearch", param);
             return myTable;
         }
-        public DataTable Currency()
         public List<CurrencyModel> Currency(
-    string? ID,
-    bool IsShow = false,
-    bool Inactive = false,
-    bool IsMaster = false)
+            string? ID,
+            bool IsShow = false,
+            bool Inactive = false,
+            bool IsMaster = false)
         {
             try
             {

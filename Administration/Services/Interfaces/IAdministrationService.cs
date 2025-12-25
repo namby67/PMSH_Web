@@ -40,7 +40,6 @@ namespace Administration.Services.Interfaces
         public DataTable ReservationType();
         public DataTable PackageForecastGroup(string code, string name, int inactive);
         public DataTable PreferenceGroup(string code, string name, int inactive);
-        public DataTable Currency();
         public List<CurrencyModel> Currency(string ID, bool IsShow = false, bool Inactive = false, bool IsMaster = false);
         public List<CurrencyModel> GetAllCurrency();
         public DataTable hkpEmployee(string code, string name, int inactive);
