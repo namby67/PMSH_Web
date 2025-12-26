@@ -1,4 +1,4 @@
-﻿@using DevExpress.XtraReports.UI
+﻿﻿@using DevExpress.XtraReports.UI
 
 
 @{
@@ -7,8 +7,6 @@
     var listPersonInChargeZone = ViewBag.PersonInChargeZoneList;
 }
 <style>
-
-
     .dx-datagrid-headers .dx-header-row td {
         white-space: pre-line !important;
         text-align: center;
@@ -16,7 +14,8 @@
     }
 
 
-    .dx-datagrid .dx-editor-with-menu .dx-menu-item-content .dx-icon.dx-icon-filter-operation-default, .dx-datagrid-container .dx-editor-with-menu .dx-menu-item-content .dx-icon.dx-icon-filter-operation-default {
+    .dx-datagrid .dx-editor-with-menu .dx-menu-item-content .dx-icon.dx-icon-filter-operation-default,
+    .dx-datagrid-container .dx-editor-with-menu .dx-menu-item-content .dx-icon.dx-icon-filter-operation-default {
         display: none;
     }
 
@@ -38,12 +37,13 @@
         margin: 0px 8px;
     }
 
-        .button_wrapper .fa-solid {
-            margin-right: 5px;
-        }
+    .button_wrapper .fa-solid {
+        margin-right: 5px;
+    }
 
     .selected {
-        background-color: #4CAF50; /* Màu xanh */
+        background-color: #4CAF50;
+        /* Màu xanh */
         color: white;
     }
 
@@ -60,8 +60,10 @@
 
 
     .sticky-header input[type="date"].form-control-sm {
-        font-size: 12px !important; /* dúng 12?px */
-        height: calc(1.1em + .2rem + 2px); /* gi? cùng chi?u cao */
+        font-size: 12px !important;
+        /* dúng 12?px */
+        height: calc(1.1em + .2rem + 2px);
+        /* gi? cùng chi?u cao */
     }
 
     .sticky-header label {
@@ -69,26 +71,55 @@
         line-height: 1.2;
     }
 
-    .tomselect-custom {
-        width: 250px;
-        min-height: 30px; /* ho?c tùy theo chi?u cao b?n mu?n */
-        font-size: 0.65rem;
+    .ts-wrapper {
+        width: 300px !important;
+        /* CHIỀU RỘNG CỐ ĐỊNH - điều chỉnh theo ý */
+        display: inline-block !important;
+        /* Không chiếm full width */
+        max-width: 250px !important;
+        padding-left: 5px !important;
     }
 
-    .sort-select {
-        max-width: 130px; /* ho?c 100px n?u mu?n nh? hon */
-        font-size: 12px;
-        padding: 0.15rem 0.5rem;
+    /* ===== TOMSELECT - FOCUS KHÔNG KÉO GIÃN + CUỘN NGANG TAG + CUỘN DỌC DROPDOWN ===== */
+
+    /* Ô chọn chính - cố định kích thước, không giãn khi focus */
+    .ts-control {
+        min-height: calc(1.5em + .5rem + 2px) !important;
+        /* giống form-control-sm */
+        height: calc(1.5em + .5rem + 2px) !important;
+        /* FIX CAO ĐỘ CỐ ĐỊNH */
+        max-height: calc(1.5em + .5rem + 2px) !important;
+        /* Không cho cao hơn */
+
+        padding: .25rem .5rem !important;
+        font-size: .875rem !important;
+        line-height: 1.5 !important;
+
+        border: 1px solid #ced4da !important;
+        border-radius: .25rem !important;
+        background: #fff !important;
+
+        display: flex !important;
+        align-items: center !important;
+        /* Tag không xuống dòng */
+        overflow-x: hidden !important;
+        /* CUỘN NGANG khi nhiều tag */
+        overflow-y: auto !important;
+        /* Không cuộn dọc ô chọn */
+        gap: 4px;
+
+        scrollbar-width: thin;
+        -webkit-overflow-scrolling: touch;
     }
 
-    .sort-select {
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-        background-image: none !important;
-        padding-right: 10px !important;
+    .ts-control::-webkit-scrollbar {
+        height: 6px;
     }
 
+    .ts-control::-webkit-scrollbar-thumb {
+        background: #adb5bd;
+        border-radius: 3px;
+    }
 </style>
 
 <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet" />
@@ -96,66 +127,70 @@
 <div class="text-center" id="reportTitle" style="font-size: 20px">Person In Charge</div>
 <div class="sticky-header bg-white p-2 shadow-sm z-3">
     <div class="d-flex flex-wrap align-items-center gap-2 mb-1 filter-panel">
-        <!-- From Date -->
 
-        <div class="d-flex flex-column ">
+        <div class="d-flex flex-column">
 
-            <div class="d-flex align-items-center">
-                <input type="text" id="idattendant" name="idattendant" style="display:none !important" class="form-control form-control-sm w-auto" />
+            <!-- Row 1 -->
+            <div class="d-flex align-items-center flex-wrap">
+
+                <input type="hidden" id="idattendant" name="idattendant" />
+
+                <div class="d-flex align-items-center me-4 ">
+                    <label class="me-2 mb-0 small fw-medium">Code:</label>
+                    <input type="text" id="code" name="code" class="form-control form-control-sm w-auto" />
+                </div>
+
+                <div class="d-flex align-items-center me-4 " style="padding-left: 80px;">
+                    <label class="me-2 mb-0 small fw-medium">Name:</label>
+                    <input type="text" id="description" name="description"
+                        class="form-control form-control-sm w-auto" />
+                </div>
+
+                <div class="form-check d-flex align-items-center me-3 ps-2">
+                    <input class="form-check-input me-1" type="checkbox" id="isActive" name="includeOptions" value="1"
+                        checked>
+                    <label class="form-check-label small">
+                        Show Inactive
+                    </label>
+                </div>
+
+            </div>
+
+            <!-- Row 2 -->
+            <div class="d-flex align-items-center flex-wrap mt-2">
+
                 <div class="d-flex align-items-center me-4">
-                    <label for="tracetime" class="me-2 mb-0">Code:</label>
-                    <input type="text" id="code" name="code"
-                           class="form-control form-control-sm w-auto" />
-                </div>
-                <div class="d-flex align-items-center me-4">
-                    <label for="tracetime" class="me-2 mb-0">Name:</label>
-                    <input type="text" id="description" name="description" class="form-control form-control-sm w-auto" />
-                </div>
-
-                <div class="d-flex align-items-center me-3">
-
-
-                    <!-- Clean Uncheck -->
-                    <div class="form-check me-3">
-                        <span class="status-color-box color-clean-uncheck"></span>
-                        <input class="form-check-input" type="checkbox" id="isActive" name="includeOptions" value="1" checked>
-                        <label class="form-check-label" for="cleanUncheck">Show Inactive</label>
-                    </div>
-
-                </div>
-                <div class="d-flex align-items-center me-3">
-                    <label class="me-2 mb-0">Group:</label>
-                    <select id="group" name="group" class="tomselect-custom" style="width: 200px" multiple>
-                        <option value=""></option>
-                        @foreach (var item in listPersonInChargeGroup)
+                    <label class="me-2 mb-0 small fw-medium">Group:</label>
+                    <select id="group" name="group" class="tomselect-custom" multiple>
+                        @foreach (var u in listPersonInChargeGroup)
                         {
-                            <option value="@item.ID">@item.Name</option>
+                            <option value="@u.ID">@u.Name</option>
                         }
                     </select>
                 </div>
-                <div class="d-flex align-items-center me-3">
-                    <label class="me-2 mb-0">Zone:</label>
-                    <select id="zone" name="zone" class="tomselect-custom" style="width: 200px" multiple>
-                        <option value=""></option>
+
+                <div class="d-flex align-items-center me-4">
+                    <label class="me-2 mb-0 small fw-medium">Zone:</label>
+                    <select id="zone" name="zone" class="tomselect-custom" multiple>
                         @foreach (var item in listPersonInChargeZone)
                         {
                             <option value="@item.ID">@item.Name</option>
                         }
                     </select>
                 </div>
+
             </div>
+
         </div>
-
-
-
-
     </div>
     <div class="">
         <button id="btnPrint" class="mui-button button-report-view"><i class="fa-solid fa-eye"></i> View</button>
         <button id="btnNew" class="mui-button mui-button-new"><i class="fa-solid fa-plus"></i> New</button>
         <button id="btnUpdate" class="mui-button mui-button-edit"> <i class="fa-solid fa-pen"></i> Edit</button>
-        <button id="btnDelete" class="mui-button button-report-delete"> <i class="fa-solid fa-trash-can"></i> Delete</button>
-        <button id="btnExportExcel" class="mui-button mui-button-export" type="button"> <i class="fa-solid fa-file-excel"></i> Excel</button>
+        <button id="btnDelete" class="mui-button button-report-delete"> <i class="fa-solid fa-trash-can"></i>
+            Delete</button>
+        <button id="btnExportExcel" class="mui-button mui-button-export" type="button"> <i
+                class="fa-solid fa-file-excel"></i> Excel</button>
 
     </div>
 
@@ -165,119 +200,117 @@
     <div id="gridContainer" class="gridContainer mt-2"></div>
 </div>
 <div id="overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 999;"></div>
-<div id="popupNewPersonInCharge" style="display: none; position: fixed; top: 50%; left: 50%;
-    transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 10px;
-    z-index: 1050; box-shadow: 0 0 10px rgba(0,0,0,0.3); min-width: 400px; max-height: 600px; overflow-y: auto;">
+<div id="popupNewPersonInCharge" style="display: none; position: fixed; top: 50%; left: 50%; 
+    transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 10px; 
+    z-index: 1050; box-shadow: 0 0 10px rgba(0,0,0,0.3); min-width: 500px; max-height: 80vh; overflow-y: auto;">
 
-    <div class="d-flex justify-content-between mb-2">
-        <h5 class="mb-0">Facility Code Screen</h5>
-
+    <div class="d-flex justify-content-between mb-3">
+        <h5 class="mb-0">Person In Charge Screen</h5>
     </div>
-    <div class="d-flex justify-content-start mb-3 gap-2">
 
-        <button style="border-radius: 4px;  margin-right: 6px;" id="btnOkAuto" class="mui-button mui-button-advance" type="button"><i class="fa-solid fa-floppy-disk"></i> Ok</button>
-
-        <button onclick="$('#popupNewPersonInCharge').hide()" id="btnClosePopup" class="btn btn-sm mui-button-close" style=" border-radius: 4px;">
+    <div class="d-flex justify-content-start mb-4 gap-2">
+        <button id="btnOkAuto" class="mui-button mui-button-advance" type="button">
+            <i class="fa-solid fa-floppy-disk"></i> Save
+        </button>
+        <button onclick="$('#popupNewPersonInCharge').hide()" id="btnClosePopup" class="mui-button mui-button-close">
             <i class="fa-solid fa-xmark me-1"></i> Close
         </button>
     </div>
-    <div class="sticky-header bg-white p-2 shadow-sm z-3">
-        <div class="d-flex flex-wrap align-items-center gap-2 mb-1 filter-panel">
-            <div class="d-flex align-items-center flex-wrap mb-2">
-                <div class="d-flex align-items-start mb-3">
-                    <!-- Trace Time -->
-                    <input type="text" id="idselectedRowDatasa" name="hkpFacilityCode" style="display:none !important" class="form-control form-control-sm w-auto" />
-                    <div class="d-flex align-items-center me-4">
-                        <label for="tracetime" class="me-2 mb-0">Code:</label>
-                        <input type="text" id="codenew" name="codenew"
-                               class="form-control form-control-sm w-auto" />
-                    </div>
 
-                    <div class="d-flex align-items-start">
-                        <label for="tracetext" class="me-2 mt-1">Name:</label>
-                        <input type="text" id="namenew" name="namenew"
-                               class="form-control form-control-sm w-auto" />
-                      
-                    </div>
-                    <div class="d-flex align-items-start">
-                        <label for="tracetext" class="me-2 mt-1">Telephone:</label>
-                        <input type="text" id="telephonenew" name="telephonenew"
-                               class="form-control form-control-sm w-auto" />
+    <div class="container-fluid px-0">
+        <div class="row g-3">
 
-                    </div>
-                    <div class="d-flex align-items-start">
-                        <label for="tracetext" class="me-2 mt-1">Hand Phone:</label>
-                        <input type="text" id="handphonenew" name="handphonenew"
-                               class="form-control form-control-sm w-auto" />
-
-                    </div>
-                    
-                </div>
-                <div class="d-flex align-items-start mb-3">
-                    <div class="d-flex align-items-center me-4">
-                        <label for="tracetime" class="me-2 mb-0">Email:</label>
-                        <input type="text" id="emailnew" name="emailnew"
-                               class="form-control form-control-sm w-auto" />
-                    </div>
-
-                    <div class="d-flex align-items-start">
-                        <label for="tracetext" class="me-2 mt-1">Description:</label>
-                        <input type="text" id="descriptionnew" name="descriptionnew"
-                               class="form-control form-control-sm w-auto" />
-
-                    </div>
-                    <div class="d-flex align-items-center me-3">
-                        <label class="me-2 mb-0">Group:</label>
-                        <select id="groupnew" name="groupnew" class="form-control form-control-sm w-auto" style="width: 200px" >
-                            <option value=""></option>
-                            @foreach (var item in listPersonInChargeGroup)
-                            {
-                                <option value="@item.ID">@item.Name</option>
-                            }
-                        </select>
-                    </div>
-                    <div class="d-flex align-items-center me-3">
-                        <label class="me-2 mb-0">Zone:</label>
-                        <select id="zonenew" name="zonenew" class="form-control form-control-sm w-auto" style="width: 200px" >
-                            <option value=""></option>
-                            @foreach (var item in listPersonInChargeZone)
-                            {
-                                <option value="@item.ID">@item.Name</option>
-                            }
-                        </select>
-                    </div>
-                    <div class="form-check me-3">
-                        <span class="status-color-box color-clean-uncheck"></span>
-                        <input class="form-check-input" type="checkbox" id="isActivenew" name="includeOptions" value="1" checked>
-                        <label class="form-check-label" for="cleanUncheck"> Inactive</label>
-                    </div>
-                </div>
-
+            <!-- Dòng 1: Code + Name -->
+            <div class="col-md-4">
+                <label class="form-label mb-1 small fw-medium">Code:</label>
+                <input type="text" id="codenew" name="codenew" class="form-control form-control-sm w-100" />
+            </div>
+            <div class="col-md-8">
+                <label class="form-label mb-1 small fw-medium">Name:</label>
+                <input type="text" id="namenew" name="namenew" class="form-control form-control-sm w-100" />
             </div>
 
+            <!-- Dòng 2: Telephone + Hand Phone -->
+            <div class="col-md-6">
+                <label class="form-label mb-1 small fw-medium">Telephone:</label>
+                <input type="text" id="telephonenew" name="telephonenew" class="form-control form-control-sm w-100" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label mb-1 small fw-medium">Hand Phone:</label>
+                <input type="text" id="handphonenew" name="handphonenew" class="form-control form-control-sm w-100" />
+            </div>
 
+            <!-- Dòng 3: Email -->
+            <div class="col-md-12">
+                <label class="form-label mb-1 small fw-medium">Email:</label>
+                <input type="text" id="emailnew" name="emailnew" class="form-control form-control-sm w-100" />
+            </div>
 
+            <!-- Dòng 4: Description -->
+            <div class="col-md-12">
+                <label class="form-label mb-1 small fw-medium">Description:</label>
+                <textarea type="text" id="descriptionnew" name="descriptionnew"
+                    class="form-control form-control-sm w-100"></textarea>
+            </div>
+
+            <!-- Dòng 5: Group + Zone -->
+            <div class="col-md-6">
+                <label class="form-label mb-1 small fw-medium">Group:</label>
+                <select id="groupnew" name="groupnew" class="form-control form-control-sm w-100">
+                    <option value=""></option>
+                    @foreach (var item in listPersonInChargeGroup)
+                    {
+                        <option value="@item.ID">@item.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label mb-1 small fw-medium">Zone:</label>
+                <select id="zonenew" name="zonenew" class="form-control form-control-sm w-100">
+                    <option value=""></option>
+                    @foreach (var item in listPersonInChargeZone)
+                    {
+                        <option value="@item.ID">@item.Name</option>
+                    }
+                </select>
+            </div>
+
+            <!-- Dòng 6: Inactive checkbox -->
+            <div class="col-md-12">
+                <div class="form-check mt-3">
+                    <input class="form-check-input" type="checkbox" id="isActivenew" name="includeOptions" value="1"
+                        checked>
+                    <label class="form-check-label" for="isActivenew">
+                        Inactive
+                    </label>
+                </div>
+            </div>
 
         </div>
     </div>
+
+    <!-- Hidden field -->
+    <input type="text" id="idselectedRowDatasa" name="hkpFacilityCode" style="display:none !important"
+        class="form-control form-control-sm w-auto" />
 
 </div>
 
 
 
-<div id="loadingSpinner" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
+<div id="loadingSpinner"
+    style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
     <i class="fa-solid fa-spinner fa-spin"></i>
 </div>
 
 <script>
 
-       $(document).ready(function () {
+    $(document).ready(function () {
 
         $("#btnPrint").trigger("click");
         initializeTomSelects();
 
     });
-         function initializeTomSelects() {
+    function initializeTomSelects() {
         const selectors = ["#group", "#zone"];
 
         for (const id of selectors) {
@@ -306,37 +339,37 @@
 
 
 
-     $(document).off("click", "#btnPrint").on("click", "#btnPrint", function () {
-              let isActive  = $("#isActive").is(":checked") ? 1 : 0;
-            $("#loadingSpinner").show();
-            $.ajax({
-                url: '/Administration/PersonInChargeData',
-                type: 'GET',
-                data: {
-                          code: $("#code").val(),
-                           description: $("#description").val(),
-                           group: $("#group").val().join(","),
-                           zone: $("#zone").val().join(","),
-                           isActive: isActive
-                },
-                traditional: true,
-                  crossDomain: false,
-                    headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
-                success: function (result) {
+    $(document).off("click", "#btnPrint").on("click", "#btnPrint", function () {
+        let isActive = $("#isActive").is(":checked") ? 1 : 0;
+        $("#loadingSpinner").show();
+        $.ajax({
+            url: '/Administration/PersonInChargeData',
+            type: 'GET',
+            data: {
+                code: $("#code").val(),
+                description: $("#description").val(),
+                group: $("#group").val().join(","),
+                zone: $("#zone").val().join(","),
+                isActive: isActive
+            },
+            traditional: true,
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
 
                 console.log(result);
-            initializePersonInChargeGrid(result);
-                        $("#loadingSpinner").hide();
-                },
-                error: function () {
-                    alert("Không th? t?i báo cáo.");
-                    $("#loadingSpinner").hide();
-                }
-            });
+                initializePersonInChargeGrid(result);
+                $("#loadingSpinner").hide();
+            },
+            error: function () {
+                alert("Không th? t?i báo cáo.");
+                $("#loadingSpinner").hide();
+            }
         });
-        var selectedRowData=null;
-     function initializePersonInChargeGrid(data) {
-                     var listPersonInChargeGroup = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.PersonInChargeGroupList ?? new List<object>()));
+    });
+    var selectedRowData = null;
+    function initializePersonInChargeGrid(data) {
+        var listPersonInChargeGroup = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.PersonInChargeGroupList ?? new List<object>()));
         $("#gridContainer").dxDataGrid({
             dataSource: data,
             showBorders: true,
@@ -366,7 +399,7 @@
                         displayExpr: "Code" // hiển thị code từ danh sách
                     }
                 },
-                { dataField: "zoneID", caption: "Zone", width: 120, groupIndex: 0, visible: false  }, 
+                { dataField: "zoneID", caption: "Zone", width: 120, groupIndex: 0, visible: false },
                 { dataField: "description", caption: "Description", width: 120 },
                 { dataField: "updatedBy", caption: "Updated By", width: 120 },
                 { dataField: "updatedDate", caption: "Updated Date", dataType: "date", format: "dd/MM/yyyy HH:mm", width: 160 },
@@ -378,153 +411,153 @@
                 visible: false // ✅ Cho phép người dùng kéo thả để group thêm
             },
             scrolling: {
-                    mode: "standard", // Không dùng virtual để footer hiển thị đúng
-                    showScrollbar: "always",
-                    scrollByContent: true
-                },
-                paging: {
-                    pageSize: 50
-                },
-                pager: {
-                    visible: true,
-                    allowedPageSizes: [50, 100, 'all'],
-                    showPageSizeSelector: true,
-                    showInfo: true,
-                    showNavigationButtons: true
-                },
-                    filterRow: {
+                mode: "standard", // Không dùng virtual để footer hiển thị đúng
+                showScrollbar: "always",
+                scrollByContent: true
+            },
+            paging: {
+                pageSize: 50
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [50, 100, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true
+            },
+            filterRow: {
                 visible: true,
                 applyFilter: "auto"
             },
             // 🔥 Quan trọng: gán selectedRowData khi click chọn
-             onRowClick: function (e) {
+            onRowClick: function (e) {
                 selectedRowData = e.data; // 🔥 lấy data của row vừa click
                 console.log("Selected Row (RowClick):", selectedRowData);
 
             }
         });
-     }
+    }
     $("#btnNew").on("click", function () {
 
-       clearPersonInCharge();
-            $('#overlay').fadeIn(200);
-            $('#popupNewPersonInCharge').fadeIn(200);
+        clearPersonInCharge();
+        $('#overlay').fadeIn(200);
+        $('#popupNewPersonInCharge').fadeIn(200);
 
     });
 
-     
-         $("#btnOkAuto").on("click", function () {
 
-            let isActive  = $("#isActivenew").is(":checked") ? 1 : 0;
-            let telephoneNew = $("#telephonenew").val().trim();
-             let handphoneNew = $("#handphonenew").val().trim();
+    $("#btnOkAuto").on("click", function () {
 
-            // Lấy giá trị các input
-            let codeNew = $("#codenew").val().trim();
-            let nameNew = $("#namenew").val().trim();
+        let isActive = $("#isActivenew").is(":checked") ? 1 : 0;
+        let telephoneNew = $("#telephonenew").val().trim();
+        let handphoneNew = $("#handphonenew").val().trim();
 
-            // ✅ Kiểm tra rỗng
-            if (codeNew === "") {
-                showToast('Error', "Code cannot be blank.", false);
-                $("#codenew").focus();
-                return;
-            }
-            if (nameNew === "") {
-                showToast('Error', "Facility Category cannot be blank.", false);
-                $("#facilityCategory").focus();
-                return;
-            }
+        // Lấy giá trị các input
+        let codeNew = $("#codenew").val().trim();
+        let nameNew = $("#namenew").val().trim();
+
+        // ✅ Kiểm tra rỗng
+        if (codeNew === "") {
+            showToast('Error', "Code cannot be blank.", false);
+            $("#codenew").focus();
+            return;
+        }
+        if (nameNew === "") {
+            showToast('Error', "Facility Category cannot be blank.", false);
+            $("#facilityCategory").focus();
+            return;
+        }
 
 
 
-   
-            const phoneRegex = /^[+]?[0-9]{8,15}$/;
-            if (telephoneNew !== "" && !phoneRegex.test(telephoneNew)) {
-                showToast('Error', "Invalid telephone number.", false);
-                $("#telephonenew").focus();
-                return;
-            }
-            if (handphoneNew !== "" && !phoneRegex.test(handphoneNew)) {
-                showToast('Error', "Invalid mobile number.", false);
-                $("#handphonenew").focus();
-                return;
-            }
-          $("#loadingSpinner").show();
-            $.ajax({
-                url: '/Administration/PersonInChargeSave',
-                type: 'POST',
-                 data: {
-                      id: $("#idselectedRowDatasa").val(),
-                    codenew: $("#codenew").val(),
-                    telephonenew: $("#telephonenew").val(),
-                     handphonenew: $("#handphonenew").val(),
-                      emailnew: $("#emailnew").val(),
-                    namenew: $("#namenew").val(),
-                    descriptionnew: $("#descriptionnew").val(),
-                    group: $("#groupnew").val(),
-                      zone: $("#zonenew").val(),
-                    user: localStorage.getItem("Loginname"),
-                    isActive: isActive
-                },
-                traditional: true,
-                  crossDomain: false,
-                    headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
-                success: function (result) {
-                        if (result.success) {
-                                showToast('Success', result.message, true);
-                                $('#popupNewPersonInCharge').fadeOut(200);
-                                 $('#overlay').fadeOut(200);
-                                   $("#btnPrint").trigger("click");
-                                    clearPersonInCharge();
-                       } else {
-                                showToast('Error', 'Please select before saving.', false);
-                       }
+
+        const phoneRegex = /^[+]?[0-9]{8,15}$/;
+        if (telephoneNew !== "" && !phoneRegex.test(telephoneNew)) {
+            showToast('Error', "Invalid telephone number.", false);
+            $("#telephonenew").focus();
+            return;
+        }
+        if (handphoneNew !== "" && !phoneRegex.test(handphoneNew)) {
+            showToast('Error', "Invalid mobile number.", false);
+            $("#handphonenew").focus();
+            return;
+        }
+        $("#loadingSpinner").show();
+        $.ajax({
+            url: '/Administration/PersonInChargeSave',
+            type: 'POST',
+            data: {
+                id: $("#idselectedRowDatasa").val(),
+                codenew: $("#codenew").val(),
+                telephonenew: $("#telephonenew").val(),
+                handphonenew: $("#handphonenew").val(),
+                emailnew: $("#emailnew").val(),
+                namenew: $("#namenew").val(),
+                descriptionnew: $("#descriptionnew").val(),
+                group: $("#groupnew").val(),
+                zone: $("#zonenew").val(),
+                user: localStorage.getItem("Loginname"),
+                isActive: isActive
+            },
+            traditional: true,
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                if (result.success) {
+                    showToast('Success', result.message, true);
+                    $('#popupNewPersonInCharge').fadeOut(200);
+                    $('#overlay').fadeOut(200);
+                    $("#btnPrint").trigger("click");
+                    clearPersonInCharge();
+                } else {
+                    showToast('Error', 'Please select before saving.', false);
+                }
                 console.log(result);
 
-                        $("#loadingSpinner").hide();
-                },
-                error: function () {
-                    alert("Không th? t?i báo cáo.");
-                    $("#loadingSpinner").hide();
-                }
-            });
-     });
+                $("#loadingSpinner").hide();
+            },
+            error: function () {
+                alert("Không th? t?i báo cáo.");
+                $("#loadingSpinner").hide();
+            }
+        });
+    });
 
 
     $("#btnUpdate").on("click", function () {
 
-            if (selectedRowData.length === 0) {
-                    showToast('Error', "Please select !", false);
-                return;
-            }
+        if (selectedRowData.length === 0) {
+            showToast('Error', "Please select !", false);
+            return;
+        }
 
 
-            $("#idselectedRowDatasa").val(selectedRowData.id);
-              $("#codenew").val(selectedRowData.code || "");
-              $("#telephonenew").val(selectedRowData.telePhone || "");
-              $("#handphonenew").val(selectedRowData.mobile || "");
-              $("#descriptionnew").val(selectedRowData.description || "");
-               $("#groupnew").val(selectedRowData.groupID || "");
-                 $("#zonenew").val(selectedRowData.zoneID || "");
-                 $("#emailnew").val(selectedRowData.email || "");
-              // Checkbox Inactive
-              if (selectedRowData.inactive === "True") {
-                  $("#isActivenew").prop("checked", true);
-              } else {
-                  $("#isActivenew").prop("checked", false);
-              }
-                  $("#popupNewPersonInCharge").fadeIn(200);
-                     $('#overlay').fadeIn(200);
+        $("#idselectedRowDatasa").val(selectedRowData.id);
+        $("#codenew").val(selectedRowData.code || "");
+        $("#telephonenew").val(selectedRowData.telePhone || "");
+        $("#handphonenew").val(selectedRowData.mobile || "");
+        $("#descriptionnew").val(selectedRowData.description || "");
+        $("#groupnew").val(selectedRowData.groupID || "");
+        $("#zonenew").val(selectedRowData.zoneID || "");
+        $("#emailnew").val(selectedRowData.email || "");
+        // Checkbox Inactive
+        if (selectedRowData.inactive === "True") {
+            $("#isActivenew").prop("checked", true);
+        } else {
+            $("#isActivenew").prop("checked", false);
+        }
+        $("#popupNewPersonInCharge").fadeIn(200);
+        $('#overlay').fadeIn(200);
     });
 
 
 
     $('#btnClosePopup, #overlay').click(function () {
-            $('#popupNewPersonInCharge').fadeOut(200);
-                         $("#btnOkAuto").show();
-            $('#overlay').fadeOut(200);
+        $('#popupNewPersonInCharge').fadeOut(200);
+        $("#btnOkAuto").show();
+        $('#overlay').fadeOut(200);
     });
-           function clearPersonInCharge() {
+    function clearPersonInCharge() {
         $("#idselectedRowDatasa").val("");
         $("#codenew").val("");
         $("#telephonenew").val("");
@@ -540,46 +573,46 @@
 
 
 
-         $(document).off("click", "#btnDelete").on("click", "#btnDelete", function () {
-            if (!selectedRowData) {
-                    showToast('Error', 'Please select 1 row to delete.', false);
-                return;
-            }
-            if (!confirm("Are you sure you want to delete item?")) {
-                return; // Nếu chọn Cancel thì dừng
-            }
-            $.ajax({
-                url: '/Administration/PersonInChargelete',
-                type: 'POST',
-                data: {
-                       id:selectedRowData.id
+    $(document).off("click", "#btnDelete").on("click", "#btnDelete", function () {
+        if (!selectedRowData) {
+            showToast('Error', 'Please select 1 row to delete.', false);
+            return;
+        }
+        if (!confirm("Are you sure you want to delete item?")) {
+            return; // Nếu chọn Cancel thì dừng
+        }
+        $.ajax({
+            url: '/Administration/PersonInChargelete',
+            type: 'POST',
+            data: {
+                id: selectedRowData.id
 
 
-                },
-                traditional: true,
-                  crossDomain: false,
-                    headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
-                success: function (result) {
-                     if (result.success) {
+            },
+            traditional: true,
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                if (result.success) {
 
-                              $("#btnPrint").trigger("click");
-                     } else {
-                              showToast('Error', result.message, false);
-                     }
-
-                },
-                error: function () {
-                    alert("Không th? t?i báo cáo.");
-                    $("#loadingSpinner").hide();
+                    $("#btnPrint").trigger("click");
+                } else {
+                    showToast('Error', result.message, false);
                 }
-            });
 
-
+            },
+            error: function () {
+                alert("Không th? t?i báo cáo.");
+                $("#loadingSpinner").hide();
+            }
         });
 
 
+    });
 
-       $("#btnExportExcel").click(function () {
+
+
+    $("#btnExportExcel").click(function () {
         const grid = $("#gridContainer").dxDataGrid("instance");   // 🔥 khai báo grid
 
         const workbook = new ExcelJS.Workbook();

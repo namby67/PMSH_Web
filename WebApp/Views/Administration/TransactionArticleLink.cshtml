@@ -123,6 +123,9 @@
             Edit</button>
         <button id="btnDelete" class="mui-button button-report-delete" type="button"> <i
                 class="fa-solid fa-trash-can"></i> Delete</button>
+        <button id="btnExportExcel" class="mui-button mui-button-export" type="button"> <i
+                class="fa-solid fa-file-excel"></i> Excel</button>
+
     </div>
 </div>
 
@@ -146,6 +149,7 @@
                         <button type="button" id="btnRefreshPopup" class="mui-button mui-button-close">
                             <i class="fa-solid fa-arrows-rotate"></i> Refresh
                         </button>
+
                     </div>
                     <div id="itemForm">
                         <input type="hidden" id="modalItemId" name="id" value="0" />
@@ -288,7 +292,9 @@
             } else {
                 console.warn(`⚠ Không tìm thấy element với selector: ${selector}`);
             }
+            console.groupEnd();
         });
+
     }
     // === HÀM MỚI: Đồng bộ lỗi từ <select> gốc sang TomSelect wrapper ===
     function syncTomSelectValidation(errors = null) {
@@ -349,7 +355,6 @@
             groupPanel: { visible: true },
             columns: [
                 { dataField: "id", caption: "ID", allowGrouping: false, visible: false },
-                { dataField: "infor", caption: "Infor", allowGrouping: false, width: "6%" },
                 { dataField: "transactionCode", caption: "Transaction Code", width: "6%" },
                 { dataField: "transactionDescription", caption: "Transaction Description", allowGrouping: false },
                 { dataField: "articleCode", caption: "Article Code", width: "6%" },
@@ -400,7 +405,7 @@
             showToast("Error", "Please select 1 row to update.", false);
             return;
         }
-        
+
         $("#ID").val(selectedRowData.id);
 
         $("#transactionEdit").val(selectedRowData.transactionCode)
@@ -518,6 +523,61 @@
 
     $("#btnDelete").on("click", function () {
         showToast("Error", "No information available regarding the dependent table. The functionality has not yet been implemented.")
+    });
+
+
+    $("#btnExportExcel").click(function () {
+        const grid = $("#gridTransactionArticleLink").dxDataGrid("instance");
+
+        const workbook = new ExcelJS.Workbook();
+        const companyName = localStorage.getItem("CompanyName") || "Tên công ty chưa xác định";
+        const worksheet = workbook.addWorksheet("Sheet 1");
+
+        // === Dòng 1: Tên công ty (merge theo 4 cột) ===
+        worksheet.addRow([companyName]);
+        worksheet.mergeCells('A1:D1');
+        worksheet.getRow(1).font = { bold: true };
+        worksheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'left' };
+
+        // === Dòng 2: Ngày giờ xuất (bên phải) ===
+        const now = new Date();
+        const exportDate = now.toLocaleString("vi-VN");
+        worksheet.addRow(['', '', '', exportDate]);
+        worksheet.mergeCells('D2:D2');  // cột D thôi
+        worksheet.getRow(2).alignment = { vertical: 'middle', horizontal: 'right' };
+
+        // === Dòng 3–4: trống
+        worksheet.addRow([]);
+        worksheet.addRow([]);
+
+        // === Dòng 5: Tiêu đề báo cáo (ở giữa) ===
+        const reportRow = worksheet.addRow(['Transaction&ArticleLink']);
+        worksheet.mergeCells('A5:D5');
+        reportRow.font = { bold: true, size: 14 };
+        reportRow.alignment = { vertical: 'middle', horizontal: 'center' };
+
+        // === Dòng 6: trống
+        worksheet.addRow([]);
+
+        // === Xuất dữ liệu grid bắt đầu từ dòng 7 ===
+        DevExpress.excelExporter.exportDataGrid({
+            component: grid,
+            worksheet: worksheet,
+            autoFilterEnabled: true,
+            topLeftCell: { row: 7, column: 1 }
+        }).then(function () {
+            // Footer (sau cùng)
+            const lastRow = worksheet.lastRow.number + 2;
+            worksheet.mergeCells(`A${lastRow}:D${lastRow}`);
+            worksheet.getCell(`A${lastRow}`).alignment = { horizontal: 'center' };
+            worksheet.getCell(`A${lastRow}`).font = { italic: true };
+
+            // Ghi file
+            let fileName = "Transaction&ArticleLink.xlsx";
+            workbook.xlsx.writeBuffer().then(function (buffer) {
+                saveAs(new Blob([buffer], { type: "application/octet-stream" }), fileName);
+            });
+        });
     });
 
 </script>

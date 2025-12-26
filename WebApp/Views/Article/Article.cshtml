@@ -7,22 +7,22 @@
         border-bottom: 2px solid #ececec;
     }
 
-        .header h3 {
-            margin: 0;
-            font-size: 18px;
-            font-weight: 600;
-            color: #000000;
-        }
+    .header h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+        color: #000000;
+    }
 
-        .header .info-icon {
-            color: #6b7280;
-            cursor: pointer;
-            transition: color 0.3s ease;
-        }
+    .header .info-icon {
+        color: #6b7280;
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
 
-            .header .info-icon:hover {
-                color: var(--main-color);
-            }
+    .header .info-icon:hover {
+        color: var(--main-color);
+    }
 </style>
 <div>
     <div class="header mt-2" style="border-bottom:none;justify-content:center">
@@ -149,7 +149,7 @@
                 showCheckBoxesMode: "always" // Always show checkboxes
             },
             columns: [
-                { dataField: "ID", caption: "ID",visible: false },
+                { dataField: "ID", caption: "ID", visible: false },
 
                 { dataField: "Code", caption: "Code" },
                 { dataField: "Description", caption: "Description" },
@@ -159,16 +159,16 @@
                 { dataField: "Currency", caption: "Currency" },
 
             ],
-            onRowClick: function(e) {
+            onRowClick: function (e) {
                 const grid = $("#gridContainer").dxDataGrid("instance");
                 grid.selectRows([e.key], false);
             },
         });
     }
-    $(document).ready(function() {
+    $(document).ready(function () {
         getInforServices();
     });
 
 
-    
+
 </script>
