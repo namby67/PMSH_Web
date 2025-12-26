@@ -75,7 +75,7 @@
                             <div class="col">
                                 <label for="txtdescription" class="form-label">Description</label>
                                 <textarea id="txtdescription" name="txtdescription" class="form-control" rows="4"
-                                          style="background-color:#ffffe6; height:100px"></textarea>
+                                          style="height:100px"></textarea>
                             </div>
                         </div>
                         <input type="hidden" id="id" name="id" value="0" />
@@ -97,6 +97,16 @@
     var selectedRowData = null;
 
     $(document).ready(function () {
+        $("#formContainer").on("input change", "input, select, textarea", function () {
+            if ($(this).hasClass("is-invalid")) {
+                $(this).removeClass("is-invalid");
+                $(this).next(".invalid-feedback").text("");
+            }
+        });
+
+        $('#itemModal').on('hidden.bs.modal', function () {
+             applyValidationErrors([], "#formContainer");
+        });
         $("#btnView").trigger("click");
 
     });
@@ -141,8 +151,15 @@
                     $("#itemModal").modal("hide");
                     $("#btnView").trigger("click");
                 } else {
-                    $("#itemModal").modal("hide");
-                    showToast("Error", res.message || "Action Failed!", false);
+                    if (res.errors && res.errors.length > 0) {
+                        applyValidationErrors(res.errors, "#formContainer");
+                        let generalError = res.errors.find(x => x.field === "general");
+                        let toastMessage = generalError ? generalError.message : "Please check input fields.";
+
+                        showToast("Warning", toastMessage, false);
+                    } else {
+                        showToast("Error", res.message || "Save failed", false);
+                    }
                 }
             },
             error: function (xhr) {

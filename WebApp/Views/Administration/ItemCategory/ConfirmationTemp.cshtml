@@ -91,11 +91,17 @@
     var selectedRowData = null;
 
     $(document).ready(function () {
-        $("input").on("input change", function () {
+        $("#formContainer").on("input change", "input, select, textarea", function () {
             if ($(this).hasClass("is-invalid")) {
                 $(this).removeClass("is-invalid");
+                $(this).next(".invalid-feedback").text("");
             }
         });
+
+        $('#itemModal').on('hidden.bs.modal', function () {
+             applyValidationErrors([], "#formContainer");
+        });
+
         reloadGrid();
         lockForm();
     });
@@ -210,7 +216,7 @@
 
     // --- SAVE ---
     $("#btnSave").click(function () {
-        $("#letterNameInput").removeClass("is-invalid");
+        
         const id = parseInt($("#id").val()) || 0;
         let loginName = (localStorage.getItem("Loginname") || "").trim()
             .replace(/^"(.*)"$/, '$1');
@@ -243,7 +249,23 @@
                     reloadGrid();
                     $("#btnCancel").trigger("click");
                 } else {
-                    showToast("Error", "Save failed", false);
+                    if (res.errors && res.errors.length > 0) {
+                        applyValidationErrors(res.errors, "#formContainer");
+                        let generalError = res.errors.find(x => x.field === "general");
+                        let toastMessage = generalError ? generalError.message : "Please check input fields.";
+
+                        showToast("Warning", toastMessage, false);
+                    } else {
+                        if (res.errors && res.errors.length > 0) {
+                            applyValidationErrors(res.errors, "#formContainer");
+                            let generalError = res.errors.find(x => x.field === "general");
+                            let toastMessage = generalError ? generalError.message : "Please check input fields.";
+
+                            showToast("Warning", toastMessage, false);
+                        } else {
+                            showToast("Error", res.message || "Save failed", false);
+                        }
+                    }
                 }
             },
             error: function (err) {

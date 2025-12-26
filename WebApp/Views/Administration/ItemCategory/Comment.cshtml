@@ -104,12 +104,16 @@
     var selectedRowData = null;
 
     $(document).ready(function () {
-            $("#formContainer").on("input change", "input, select, textarea", function () {
+        $("#formContainer").on("input change", "input, select, textarea", function () {
             if ($(this).hasClass("is-invalid")) {
-            $(this).removeClass("is-invalid");
-            $(this).next(".invalid-feedback").text("");
-        }
-    });
+                $(this).removeClass("is-invalid");
+                $(this).next(".invalid-feedback").text("");
+            }
+        });
+
+        $('#itemModal').on('hidden.bs.modal', function () {
+             applyValidationErrors([], "#formContainer");
+        });
         $("#btnView").trigger("click");
 
     });
@@ -122,7 +126,6 @@
     });
 
     $("#btnSaveItem").click(function () {
-        applyValidationErrors([], "#formContainer");
 
         const id = parseInt($("#id").val()) || 0;
         let loginName = (localStorage.getItem("Loginname") || "")
@@ -158,7 +161,10 @@
                 } else {
                     if (res.errors && res.errors.length > 0) {
                         applyValidationErrors(res.errors, "#formContainer");
-                        showToast("Warning", "Please check input fields.", false);
+                        let generalError = res.errors.find(x => x.field === "general");
+                        let toastMessage = generalError ? generalError.message : "Please check input fields.";
+
+                        showToast("Warning", toastMessage, false);
                     } else {
                         showToast("Error", res.message || "Save failed", false);
                     }

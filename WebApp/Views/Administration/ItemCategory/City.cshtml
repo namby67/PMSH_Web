@@ -118,6 +118,10 @@
                 $(this).next(".invalid-feedback").text("");
             }
         });
+
+        $('#itemModal').on('hidden.bs.modal', function () {
+             applyValidationErrors([], "#formContainer");
+        });
         $("#btnView").trigger("click");
 
     });
@@ -130,7 +134,7 @@
     });
 
     $("#btnSaveItem").click(function () {
-        applyValidationErrors([], "#formContainer");
+
         const id = parseInt($("#id").val()) || 0;
         let loginName = (localStorage.getItem("Loginname") || "")
             .trim()

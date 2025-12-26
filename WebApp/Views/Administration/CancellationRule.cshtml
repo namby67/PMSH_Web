@@ -132,7 +132,7 @@
                                 <div class="form-group">
                                     <select id="currencyID" name="currencys"
                                             class="form-select form-select-sm">
-                                        <option value="">-- Select currency --</option>
+                                        <option value="">-- Select Currency --</option>
                                         @foreach (var item in listCurr)
                                         {
                                             <option value="@item.ID">@item.ID</option>
@@ -218,6 +218,10 @@
                     $(this).removeClass("is-invalid");
                     $(this).next(".invalid-feedback").text("");
                 }
+        });
+
+        $('#itemModal').on('hidden.bs.modal', function () {
+             applyValidationErrors([], "#formContainer");
         });
         $("input[name='type']").change(function() {
             toggleCurrency();
@@ -392,7 +396,6 @@
       });
 
     $("#btnSaveItem").click(function () {
-          applyValidationErrors([], "#formContainer");
 
           const id = parseInt($("#id").val()) || 0;
           const loginUser = parseInt(localStorage.getItem("userID")) || 0;

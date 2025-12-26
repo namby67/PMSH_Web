@@ -72,6 +72,10 @@
                 $(this).next(".invalid-feedback").text("");
             }
         });
+
+        $('#itemModal').on('hidden.bs.modal', function () {
+             applyValidationErrors([], "#formContainer");
+        });
         reloadGrid();
         lockForm();
     });
@@ -184,8 +188,8 @@
 
     // --- SAVE ---
     $("#btnSave").click(function () {
-        applyValidationErrors([], "#formContainer");
-        $("#code").removeClass("is-invalid");
+        
+       
         const id = parseInt($("#id").val()) || 0;
         let loginName = (localStorage.getItem("Loginname") || "").trim()
             .replace(/^"(.*)"$/, '$1');

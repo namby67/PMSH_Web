@@ -100,12 +100,15 @@
     $(document).ready(function () {
         reloadGrid();
 
-            $("#formContainer").on("input change", "input, select, textarea", function () {
-        if ($(this).hasClass("is-invalid")) {
-            $(this).removeClass("is-invalid");
-            $(this).next(".invalid-feedback").text("");
-        }
-    });
+        $("#formContainer").on("input change", "input, select, textarea", function () {
+            if ($(this).hasClass("is-invalid")) {
+                $(this).removeClass("is-invalid");
+                $(this).next(".invalid-feedback").text("");
+            }
+        });
+        $('#itemModal').on('hidden.bs.modal', function () {
+             applyValidationErrors([], "#formContainer");
+        });
         lockForm();
     });
 
@@ -230,7 +233,7 @@
                 $("#loadingSpinnerRateCode").hide();
             },
             error: function(xhr, status, error){
-                alert("Không thể tải dữ liệu");
+                alert("Unable to load data");
                 $("#loadingSpinnerRateCode").hide();
             }
         });
@@ -261,12 +264,12 @@
     // --- NÚT EDIT ---
     $("#btnUpdate").click(function () {
         if (!selectedRowData) {
-            showToast("Warning", "Select 1 row to edit please.", false);
+            showToast("Warning", "Select one row to edit please.", false);
             return;
         }
 
         switchToEditMode();
-         $("#content-title").text("Edit Occupancy Config");
+        $("#content-title").text("Edit Occupancy Config");
         // fill dữ liệu vào form
         $("#occLevelInput").val(selectedRowData.occupancylevel);
         $("#titleInput").val(selectedRowData.title);
@@ -295,7 +298,6 @@
 
     // --- NÚT SAVE ---
     $("#btnSave").click(function(){
-        applyValidationErrors([], "#formContainer");
        
         const id = parseInt($("#id").val()) || 0;
             let loginName = (localStorage.getItem("Loginname") || "").trim()
@@ -324,13 +326,15 @@
                   if (res.success) {
                     showToast("Success", res.message, true);
                     reloadGrid();
-                    $("#btnCancel").trigger("click");
                 } else {
                     if (res.errors && res.errors.length > 0) {
-                    applyValidationErrors(res.errors, "#formContainer");
-                    showToast("Warning", "Please check input fields.", false);
+                        applyValidationErrors(res.errors, "#formContainer");
+                        let generalError = res.errors.find(x => x.field === "general");
+                        let toastMessage = generalError ? generalError.message : "Please check input fields.";
+
+                        showToast("Warning", toastMessage, false);
                     } else {
-                        showToast("Error", res.message, false);
+                        showToast("Error", res.message || "Save failed", false);
                     }
                 }
               },

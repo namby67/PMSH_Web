@@ -35,7 +35,7 @@
 </div>
 <!-- Modal Popup for New Item -->
 <div class="modal fade" id="itemModal" tabindex="-1" aria-labelledby="itemModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-md">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="itemModalLabel">New/Edit Item</h5>
@@ -114,7 +114,7 @@
                                 <div class="form-group">
                                     <select id="currencyID" name="currencyID"
                                             class="form-select form-select-sm">
-                                        <option value="">-- Currency --</option>
+                                        <option value="">-- Select Currency --</option>
                                         @foreach (var item in listCurr)
                                         {
                                             <option value="@item.ID">@item.ID</option>
@@ -190,13 +190,17 @@
     DevExpress.localization.locale("vi");
     $(document).ready(function () {
         $("#btnSearch").trigger("click");
-            $("#formContainer").on("input change", "input, select, textarea", function () {
+            
+        $("#formContainer").on("input change", "input, select, textarea", function () {
                 if ($(this).hasClass("is-invalid")) {
                     $(this).removeClass("is-invalid");
                     $(this).next(".invalid-feedback").text("");
                 }
-            });
-         
+        });
+
+        $('#itemModal').on('hidden.bs.modal', function () {
+             applyValidationErrors([], "#formContainer");
+        });
         $("input[name='type']").change(function() {
             toggleCurrency();
 
@@ -357,8 +361,6 @@
       });
       
     $("#btnSaveItem").click(function () {
-          applyValidationErrors([], "#formContainer");
-
           const id = parseInt($("#id").val()) || 0;
           const loginUser = parseInt(localStorage.getItem("userID")) || 0;
 

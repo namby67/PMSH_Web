@@ -75,7 +75,7 @@
                             <div class="col">
                                 <label class="">Market Type:</label>
                                 <select id="marketTypeID" name="marketTypeID" class="form-control form-control-sm ">
-                                    <option value="">-- Martket Type --</option>
+                                    <option value="">-- Select Martket Type --</option>
                                     @foreach (var sg in listctry)
                                     {
                                         <option value="@sg.ID">@sg.Code</option>
@@ -88,7 +88,7 @@
                             <div class="col">
                                 <label class="">Group Type:</label>
                                 <select id="groupType" name="groupType" class="form-control form-control-sm ">
-                                    <option value="">-- Group Type --</option>
+                                    <option value="">-- Select Group Type --</option>
                                     <option value="0">Individual</option>
                                     <option value="1">Group</option>
                                     <option value="2">Complimentery</option>
@@ -108,7 +108,7 @@
                             <div class="col">
                                 <label for="txtdescription" class="form-label">Description</label>
                                 <textarea id="txtdescription" name="txtdescription" class="form-control" rows="4"
-                                          style="background-color:#ffffe6; height:10px"></textarea>
+                                          style="height:100px"></textarea>
                             </div>
                         </div>
                         <input type="hidden" id="id" name="id" value="0" />
@@ -136,6 +136,10 @@
                 $(this).next(".invalid-feedback").text("");
             }
         });
+
+        $('#itemModal').on('hidden.bs.modal', function () {
+             applyValidationErrors([], "#formContainer");
+        });
         $("#btnView").trigger("click");
 
     });
@@ -148,7 +152,7 @@
     });
 
     $("#btnSaveItem").click(function () {
-        applyValidationErrors([], "#formContainer");
+
         const id = parseInt($("#id").val()) || 0;
         let loginName = (localStorage.getItem("Loginname") || "")
             .trim()
@@ -186,7 +190,10 @@
                 } else {
                     if (res.errors && res.errors.length > 0) {
                         applyValidationErrors(res.errors, "#formContainer");
-                        showToast("Warning", "Please check input fields.", false);
+                        let generalError = res.errors.find(x => x.field === "general");
+                        let toastMessage = generalError ? generalError.message : "Please check input fields.";
+
+                        showToast("Warning", toastMessage, false);
                     } else {
                         showToast("Error", res.message || "Save failed", false);
                     }

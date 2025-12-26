@@ -218,8 +218,6 @@ namespace Administration.Controllers
         {
             try
             {
-
-
                 DataTable dataTable = _iAdministrationService.MemberCategory(code, name, inactive);
                 var result = (from d in dataTable.AsEnumerable()
                               select new
@@ -240,12 +238,6 @@ namespace Administration.Controllers
             {
                 return Json(ex.Message);
             }
-            //  report.DataSource = dataTable;
-
-            // Không cần gán parameter
-            // report.RequestParameters = false;
-
-            // return PartialView("_ReportViewerPartial", report);
         }
         public IActionResult MemberCategory()
         {
@@ -1436,11 +1428,6 @@ namespace Administration.Controllers
             return Json(new { success = true });
         }
         #endregion
-
-        public IActionResult IndexItemCategory()
-        {
-            return View("ItemCategory/IndexItemCategory");
-        }
 
         #region ItemCategory/City
         [HttpGet]
@@ -2746,7 +2733,7 @@ namespace Administration.Controllers
 
                 Check(model?.Code, "code", "Code is not blank."),
                 Check(model?.Name, "name", "Description is not blank."),
-                Check(model.Sequence, "seq", "Sequence cannot be negative.")
+                Check(model?.Sequence < 0, "seq", "Sequence cannot be negative.")
             );
 
             if (listErrors.Count > 0)
@@ -4210,7 +4197,7 @@ namespace Administration.Controllers
             return Json(new { success = true });
         }
         #endregion
-
+        
         #region ItemCategory/Property
         [HttpGet]
         public IActionResult GetProperty()
@@ -4316,7 +4303,7 @@ namespace Administration.Controllers
             return Json(new { success = true });
         }
         #endregion
-
+        
         #region ItemCategory/PropertyPermission
         [HttpGet]
         public IActionResult GetPropertyPermission(string userID)
@@ -4448,8 +4435,8 @@ namespace Administration.Controllers
 
             return Json(new { success = true, message });
         }
-        #endregion
-
+        #endregion //
+        
         #region ItemCategory/PackageForecastGroup
         [HttpGet]
         public IActionResult GetPackageForecastGroup(string code, string name, int inactive)
@@ -4551,7 +4538,7 @@ namespace Administration.Controllers
 
             return Json(new { success = true });
         }
-        #endregion
+        #endregion //
 
         #region ItemCategory/PreferenceGroup
         [HttpGet]
