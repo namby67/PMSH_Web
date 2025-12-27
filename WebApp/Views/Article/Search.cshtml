@@ -1,0 +1,231 @@
+﻿<style>
+    .header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 5px 0px;
+        border-bottom: 2px solid #ececec;
+    }
+
+        .header h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: #000000;
+        }
+
+        .header .info-icon {
+            color: #6b7280;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+            .header .info-icon:hover {
+                color: var(--main-color);
+            }
+</style>
+<div>
+    <div class="header mt-2" style="border-bottom:none;justify-content:center">
+        <h3 id="content-title">
+            Article Search
+        </h3>
+    </div>
+    <div class="mb-2">
+        <button   onclick="searchTransactionGroup();" class="mui-button mui-button-new"><i class="fa-solid fa-eye"></i>Search</button>
+        <button id="btnNew" class="mui-button mui-button-new"><i class="fa-solid fa-plus"></i> New</button>
+    </div>
+    <div class="row">
+        <div class="col-md-3" style="display:flex">
+            <label>Trans Code</label>
+            <select id="tranCodeID"></select>
+
+        </div>
+        <div class="col-md-3">
+            <label>Code</label>
+            <input type="text" id="code">
+        </div>
+        <div class="col-md-3">
+            <label>Description</label>
+            <input type="text" id="description">
+        </div>
+        <div class="col-md-3">
+            <label>Supplement</label>
+            <input type="text" id="supplement">
+        </div>
+    </div>
+    <div class="mui-card mt-2">
+        <div id="gridContainer" class="gridContainer mt-2"></div>
+    </div>
+</div>
+<div id="overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 999;"></div>
+<div id="popupNewPApproveList" style="display: none; position: fixed; top: 50%; left: 50%;
+    transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 10px;
+    z-index: 1050; box-shadow: 0 0 10px rgba(0,0,0,0.3); min-width: 400px; max-height: 600px; overflow-y: auto;">
+
+    <div class="d-flex justify-content-between mb-2">
+        <h5 class="mb-0">Approved by Screen</h5>
+
+    </div>
+    <div class="d-flex justify-content-start mb-3 gap-2">
+
+        <button style="border-radius: 4px;  margin-right: 6px;" id="btnOkAuto" class="mui-button mui-button-advance" type="button"><i class="fa-solid fa-floppy-disk"></i> Ok</button>
+
+        <button onclick="$('#popupNewPApproveList').hide()" id="btnClosePopup" class="btn btn-sm mui-button-close" style=" border-radius: 4px;">
+            <i class="fa-solid fa-xmark me-1"></i> Close
+        </button>
+    </div>
+    <div class="sticky-header bg-white p-2 shadow-sm z-3">
+        <div class="d-flex flex-wrap align-items-center gap-2 mb-1 filter-panel">
+            <div class="d-flex align-items-center flex-wrap mb-2">
+                <div class="d-flex align-items-start mb-3">
+                    <!-- Trace Time -->
+                    <input type="text" id="idselectedRowDatasa" name="idselectedRowDatasa" style="display:none !important" class="form-control form-control-sm w-auto" />
+                    <div class="d-flex align-items-center me-4">
+                        <label for="tracetime" class="me-2 mb-0">Code:</label>
+                        <input type="text" id="codenew" name="codenew"
+                               class="form-control form-control-sm w-auto" />
+                    </div>
+
+                    <div class="d-flex align-items-center me-4">
+                        <label for="tracetext" class="me-2 mt-1">Name:</label>
+                        <input type="text" id="namenew" name="namenew"
+                               class="form-control form-control-sm w-auto" />
+
+                    </div>
+                    <div class="d-flex align-items-center me-4">
+                        <label for="tracetext" class="me-2 mt-1">Description:</label>
+                        <input type="text" id="descriptionnew" name="descriptionnew"
+                               class="form-control form-control-sm w-auto" />
+
+                    </div>
+
+                    <div class="form-check me-3">
+                        <span class="status-color-box color-clean-uncheck"></span>
+                        <input class="form-check-input" type="checkbox" id="isActivenew" name="includeOptions" value="1" checked>
+                        <label class="form-check-label" for="cleanUncheck"> Inactive</label>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+
+
+        </div>
+    </div>
+
+</div>
+
+<script>
+
+    function getInforServices() {
+        $.ajax({
+            url: '/Billing/GetInforService',
+            type: 'get',
+            dataType: 'json',
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                $('#tranCodeID').empty();
+                var html = `<option value='' selected> Transaction</option>`;
+                if (result.transactions.length > 0) {
+                    for (var i = 0; i < result.transactions.length; i++) {
+                        html += `<option value='${result.transactions[i].code}'>${result.transactions[i].description}</option>`;
+                    }
+                }
+                $('#tranCodeID').append(html);
+                searchTransactionGroup();
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                }
+                // Optionally handle error case, e.g., decide whether to call searchTransactionGroup
+            }
+        });
+    }
+
+
+    function searchTransactionGroup() {
+
+        $.ajax({
+            url: '/Article/SearchArticle',
+            type: 'get',
+            dataType: 'json',
+            data: {
+                tranCode: $('#tranCodeID').val(),
+                articleCode: $('#code').val(),
+                articleDescription: $('#description').val(),
+                articleSupplement: $('#supplement').val()
+            },
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+
+                initializeDataGridSearch(result);
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                }
+            },
+
+        });
+
+    }
+    function initializeDataGridSearch(data) {
+        const limitedData = data.slice(0, 100);
+
+        $("#gridContainer").dxDataGrid({
+            dataSource: limitedData,
+            allowColumnResizing: true,
+            columnMinWidth: 90,
+            paging: {
+                enabled: true, // Enable paging
+                pageSize: 15 // 15 records per page
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [15, 20, 30], // Fixed page sizes
+                showPageSizeSelector: true,
+                showInfo: true, // Show paging info
+                showNavigationButtons: true
+            },
+            scrolling: {
+                mode: 'standard', // Standard scrolling mode
+                showScrollbar: 'always',
+                useNative: false
+            },
+            filterRow: {
+                visible: true,
+                applyFilter: "auto"
+            },
+            selection: {
+                mode: "multiple", // Enable multiple row selection
+                showCheckBoxesMode: "always" // Always show checkboxes
+            },
+            columns: [
+                { dataField: "ID", caption: "ID",visible: false },
+
+                { dataField: "Code", caption: "Code" },
+                { dataField: "Description", caption: "Description" },
+                { dataField: "Supplement", caption: "Supplement" },
+                { dataField: "TransactionCode", caption: "Transaction Code" },
+                { dataField: "Price", caption: "Price" },
+                { dataField: "Currency", caption: "Currency" },
+
+            ],
+            onRowClick: function(e) {
+                const grid = $("#gridContainer").dxDataGrid("instance");
+                grid.selectRows([e.key], false);
+            },
+        });
+    }
+    $(document).ready(function() {
+        getInforServices();
+    });
+
+
+    
+</script>

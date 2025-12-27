@@ -1,0 +1,907 @@
+﻿<style>
+    select{
+        padding-top:2px;
+    }
+</style>
+<div class="modal fade modal-xl" id="modalViewProfile" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">View Profile</h5>
+                <button type="button" class="btn-close" onclick="closeModalViewProfile();"></button>
+            </div>
+            <div class="modal-body">
+
+                <!-- Profile Individual -->
+                <div class="main-infor row" id="profile_individual">
+                    <!-- Left Column: Address Information -->
+                    <div class="col-md-6">
+                        <div class="section-box">
+                            <div class="section-title">Address Information</div>
+                            <div class="row">
+                                <!-- Image Section -->
+                                <div class="col-md-4" id="image_wrapper">
+                                    <div class="fw-bold">Image</div>
+                                    <div class="image-placeholder mt-2"></div>
+                                </div>
+                                <!-- Form Fields -->
+                                <div class="col-md-8 row">
+                                    <div class="form-group-new-reservation col-md-6">
+                                        <label>Code</label>
+                                        <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                            <input type="text" id="txtCodeIndividual">
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group-new-reservation col-md-6">
+                                        <label>Full Name</label>
+                                        <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                            <input type="text" id="txtFullNameIndividual">
+                                            <div id="errorMessage" class="text-danger mt-1 d-none">
+                                                <strong>Typing format is not correct. Please type as: FirstName Middle, LastName</strong>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group-new-reservation col-md-6 ">
+                                        <label>First</label>
+                                        <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                            <input type="text" id="txtFirstNameIndividual" >
+                                        </div>
+                                    </div>
+                                    <div class="form-group-new-reservation col-md-6 ">
+                                        <label>Last Name</label>
+                                        <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                            <input type="text" id="txtLastNameIndividual">
+                                        </div>
+                                    </div>
+                                    <div class="form-group-new-reservation col-md-6 ">
+                                        <label>Middle Name</label>
+                                        <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                            <input type="text" id="txtMiddleNameIndividual">
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group-new-reservation col-md-6 ">
+                                        <label>City</label>
+                                        <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                            <select type="text" id="txtCityIndividual"></select>
+
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group-new-reservation col-md-6 ">
+                                        <label>Language</label>
+                                        <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                            <select type="text" id="txtLanguageIndividual"></select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group-new-reservation col-md-6 ">
+                                        <label>Title</label>
+                                        <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                            <select type="text" id="txtTitleIndividual" ></select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group-new-reservation col-md-6">
+                                        <label>Nationality</label>
+                                        <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                            <select type="text" id="txtNationalityIndividual" ></select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group-new-reservation col-md-6 ">
+                                        <label>Country</label>
+                                        <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                            <select type="text" id="txtCountryIndividual" ></select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group-new-reservation col-md-6 ">
+                                        <label>Postal</label>
+                                        <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                            <input type="text" id="txtPostalIndividual">
+                                        </div>
+                                    </div>
+                                    <div class="form-group-new-reservation col-md-6 ">
+                                        <label>State</label>
+                                        <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                            <select type="text" id="txtStateIndividual"></select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group-new-reservation col-md-6 ">
+                                        <label>Religion</label>
+                                        <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                            <input type="text" id="txtReligionIndividual">
+                                        </div>
+                                    </div>
+                                    <div class="form-group-new-reservation col-md-6 ">
+                                        <label>Nation</label>
+                                        <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                            <input type="text" id="txtNationIndividual">
+                                        </div>
+                                    </div>
+                                    <div class="form-group-new-reservation col-md-12 ">
+                                        <label>Purpose of Stay</label>
+                                        <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                            <input type="text" id="txtPurposeIndividual">
+                                        </div>
+                                    </div>
+                                    <div class="form-group-new-reservation col-md-12 ">
+                                        <label>Address</label>
+                                        <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                            <textarea id="txtAddressIndividual" rows="4"></textarea>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- Attributes and History -->
+                        <div class="row ">
+                            <div class="col-md-6">
+                                <div class="section-box">
+                                    <div class="section-title">Attributes</div>
+                                    <div class="row">
+                                        <div class="form-group-new-reservation col-md-12">
+                                            <label>Rate Code</label>
+                                            <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                                <input type="text" id="rateCodeIndividual">
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group-new-reservation col-md-12">
+                                            <label>A/R No</label>
+                                            <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                                <input type="text"  id="aRNoIndividual">
+                                            </div>
+                                        </div>
+                                        <div class="form-group-new-reservation col-md-12">
+                                            <label>Member No</label>
+                                            <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                                <input type="text"  id="memberNoIndividual">
+                                            </div>
+                                        </div>
+                                    </div>
+
+   
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="section-box">
+                                    <div class="section-title">History Information</div>
+                                    <div class="row">
+                                        <div class="form-group-new-reservation col-md-6">
+                                            <label>Last Room</label>
+                                            <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                                <input type="text" id="lastRoomIndividual">
+                                            </div>
+                                        </div>
+                                        <div class="form-group-new-reservation col-md-6">
+                                            <label>On</label>
+                                            <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                                <input type="text" id="onIndividual">
+                                            </div>
+                                        </div>
+                                        <div class="form-group-new-reservation col-md-12">
+                                            <label>Last Rate</label>
+                                            <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                                <input type="text"  id="lastRateIndivdual">
+                                            </div>
+                                        </div>
+                                        <div class="form-group-new-reservation col-md-12">
+                                            <label>Stay</label>
+                                            <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                                <input type="text"  id="stayIndividual">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Internal Information, Tax, Communications, etc. -->
+                    <div class="col-md-6 row">
+
+                            <!-- Internal Information -->
+                            <div class="col-md-6">
+                                <div class="section-box position-relative">
+                                    <div class="section-title">Internal Information</div>
+                                    <div class="row">
+                                        <div class="form-group-new-reservation col-md-12 ">
+                                            <label>Salutation</label>
+                                            <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                                <input type="text"  id="txtSalutationIndividual">
+                                            </div>
+                                        </div>
+                                        <div class="form-group-new-reservation col-md-12 ">
+                                            <label>VIP</label>
+                                            <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                                <select type="text"  id="txtVIPIndividual"></select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group-new-reservation col-md-12 ">
+                                            <label>VIP Reason</label>
+                                            <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                                <input type="text" id="txtReasonIndividual">
+                                            </div>
+                                        </div>
+                                        <div class="form-group-new-reservation col-md-12 ">
+                                            <label>Pref Room</label>
+                                            <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                                <input type="text" id="txtPrefRoomIndividual">
+                                            </div>
+                                        </div>
+                                        <div class="form-group-new-reservation col-md-12 ">
+                                            <label>Other</label>
+                                            <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                                <input type="text" id="txtOtherIndividual">
+                                            </div>
+                                        </div>
+                                        <div class="form-group-new-reservation col-md-12 ">
+                                            <label>Passport</label>
+                                            <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                                <input type="text"  id="txtPassportIndividual">
+                                            </div>
+                                        </div>
+                                        <div class="form-group-new-reservation col-md-12 ">
+                                            <label>Identity Card</label>
+                                            <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                                <input type="text"  id="txtCardIndividual">
+                                            </div>
+                                        </div>
+                                        <div class="form-group-new-reservation col-md-12 ">
+                                            <label>Date of Birth</label>
+                                            <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                                <input type="date" class="col-md-10" id="txtDobIndividual" disabled>
+                                                <input type="checkbox"  id="txtCheckboxDobIndividual" checked class="col-md-2">
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group-new-reservation col-md-12 ">
+                                            <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                                <div class="col-sm-6">
+                                                    <div class="form-check">
+                                                        <input type="checkbox" id="txtActiveIndividual" checked>
+                                                        <label class="form-check-label">Active</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="form-check">
+                                                        <input type="checkbox" id="txtContactIndividual">
+                                                        <label class="form-check-label">Contact</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group-new-reservation col-md-12 ">
+                                            <label>Keyword</label>
+                                            <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                                <input type="text"  id="txtKeywordIndividual">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tax and Communications -->
+                            <div class="col-md-6">
+                                <!-- Tax -->
+                                <div class="section-box position-relative">
+                                    <div class="section-title">Tax</div>
+                                    <div class="row">
+                                        <div class="form-group-new-reservation col-md-12 ">
+                                            <label>Company</label>
+                                            <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                                <input type="text" id="txtCompanyIndividual">
+                                            </div>
+                                        </div>
+                                        <div class="form-group-new-reservation col-md-12 ">
+                                            <label>Tax Code</label>
+                                            <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                                <input type="text" id="txtTaxIndividual">
+                                            </div>
+                                        </div>
+                                        <div class="form-group-new-reservation col-md-12 ">
+                                            <label>Bus. Address</label>
+                                            <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                                <input type="text" id="txtBusAddressIndividual">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Communications -->
+                                <div class="section-box position-relative mt-3">
+                                    <div class="section-title">Communications</div>
+                                    <div class="row">
+                                        <div class="form-group-new-reservation col-md-12 ">
+                                            <label>Bus. Telephone</label>
+                                            <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                                <input type="text"  id="txtTelephoneIndividual">
+                                            </div>
+                                        </div>
+                                        <div class="form-group-new-reservation col-md-12 ">
+                                            <label>Hand Phone</label>
+                                            <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                                <input type="text" id="txtHandPhoneIndividual">
+                                            </div>
+                                        </div>
+                                        <div class="form-group-new-reservation col-md-12 ">
+                                            <label>Fax</label>
+                                            <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                                <input type="text"  id="txtFaxIndividual">
+                                            </div>
+                                        </div>
+                                        <div class="form-group-new-reservation col-md-12 ">
+                                            <label>Email</label>
+                                            <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                                <input type="text" id="txtEmailIndividual">
+                                            </div>
+                                        </div>
+                                        <div class="form-group-new-reservation col-md-12 ">
+                                            <label>Website</label>
+                                            <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                                <input type="text" id="txtWebsiteIndividual">
+                                            </div>
+                                        </div>
+                                        <div class="form-group-new-reservation col-md-12 ">
+                                            <label>Company</label>
+                                            <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                                <input type="text"  id="txtCompany2Individual">
+                                            </div>
+                                        </div>
+                                        <div class="form-group-new-reservation col-md-12 ">
+                                        <label>Business Title</label>
+                                            <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
+                                                <input type="text"  id="txtBusinessTitleIndividual">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        <!-- Blacklist and Notes -->
+                        <div class="col-md-12">
+                            <div class="row g-2 mt-3">
+                                <label class="col-sm-2 col-form-label text-end text-danger">Blacklist</label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="blackListIndividual">
+                                </div>
+                                <div class="col-sm-2 d-flex align-items-center">
+                                    <input type="checkbox" id="txtBlackListIndividual">
+                                </div>
+                            </div>
+                            <div class="row g-2 mt-3">
+                                <label class="col-sm-2 col-form-label text-end text-danger">Notes</label>
+                                <div class="col-sm-10">
+                                    <textarea  rows="4" id="txtNoteIndividual"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                       
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* General Modal Styling */
+    .modal-content {
+        border-radius: 12px;
+        border: none;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        background-color: #f9fafb;
+    }
+
+    /* Modal Header */
+    .modal-header {
+        background-color: #ffffff;
+        border-bottom: 1px solid #e5e7eb;
+        padding: 16px 24px;
+    }
+
+    .modal-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #1f2937;
+    }
+
+    .btn-close {
+        background-size: 12px;
+        opacity: 0.6;
+        transition: opacity 0.2s ease;
+    }
+
+        .btn-close:hover {
+            opacity: 1;
+        }
+
+    /* Modal Body */
+    .modal-body {
+        padding: 24px;
+    }
+
+    /* Section Box */
+    .section-box {
+        padding: 20px;
+        background-color: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        position: relative;
+        margin-bottom: 24px;
+        transition: box-shadow 0.2s ease;
+    }
+
+        .section-box:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+    /* Section Title */
+    .section-title {
+        position: absolute;
+        top: -12px;
+        left: 16px;
+        background-color: #ffffff;
+        padding: 0 12px;
+        color: #b91c1c;
+        font-weight: 600;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    /* Image Placeholder */
+    .image-placeholder {
+        height: 180px;
+        background-color: #f3f4f6;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+        color: #6b7280;
+        transition: background-color 0.2s ease;
+    }
+
+        .image-placeholder:hover {
+            background-color: #e5e7eb;
+        }
+
+    /* Form Styling */
+    .form-control {
+        border-radius: 6px;
+        border: 1px solid #d1d5db;
+        font-size: 0.9rem;
+        padding: 8px 0px;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+        .form-control:focus {
+            border-color: #b91c1c;
+            box-shadow: 0 0 0 3px rgba(185, 28, 28, 0.1);
+            outline: none;
+        }
+
+    .form-check-input {
+        width: 1.25em;
+        height: 1.25em;
+        border: 1px solid #d1d5db;
+        border-radius: 4px;
+        transition: border-color 0.2s ease;
+    }
+
+        .form-check-input:checked {
+            background-color: #b91c1c;
+            border-color: #b91c1c;
+        }
+
+    .form-check-label {
+        font-size: 0.9rem;
+        color: #374151;
+    }
+
+    /* Form Group */
+    .form-group.row {
+        align-items: center;
+        margin-bottom: 12px;
+    }
+
+        .form-group.row .col-sm-4 {
+            text-align: right;
+            font-weight: 500;
+            color: #374151;
+            font-size: 0.9rem;
+        }
+
+        .form-group.row .col-sm-8 {
+            padding-left: 8px;
+        }
+
+
+
+    /* Blacklist and Notes */
+    .text-danger {
+        color: #dc2626 !important;
+    }
+
+    textarea.form-control {
+        resize: vertical;
+        min-height: 80px;
+    }
+
+    /* Input Groups */
+    .d-flex.gap-2 {
+        gap: 12px !important;
+    }
+
+    /* Hover Effects */
+    .form-group.row:hover .form-control {
+        border-color: #b91c1c;
+    }
+
+    /* Error Message */
+    #errorMessage {
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+</style>
+
+
+
+<script>
+
+    function closeModalViewProfile(){
+        $('#modalViewProfile').modal('hide');
+    }
+    async function openModalViewProfile() {
+        $('#modalViewProfile').modal('show');
+
+        // Đợi setSelect2 hoàn thành
+        await setSelect2();
+
+        // Tạo mảng các Promise cho tất cả các cuộc gọi AJAX
+        const promises = [
+            new Promise((resolve, reject) => {
+                $.ajax({
+                    url: '/Profile/GetAllLanguage',
+                    type: 'get',
+                    dataType: 'json',
+                    crossDomain: false,
+                    headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+                    success: function (result) {
+                        if (result.length > 0) {
+                            let select = $('#txtLanguageIndividual')[0].tomselect;
+                            select.clear();
+                            select.clearOptions();
+                            select.addOption({ value: '0', text: 'Vui lòng chọn ngôn ngữ' });
+                            result.forEach(item => {
+                                select.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
+                            });
+                            select.setValue('0');
+                        }
+                        resolve();
+                    },
+                    error: function (xhr, statusText, err) {
+                        if (xhr.status == 401) {
+                            sessionTimeout();
+                        } else {
+                            informBox(TOAST_STATUS.DANGER, "Lỗi tải danh sách ngôn ngữ hoặc bạn không có quyền tải");
+                        }
+                        reject();
+                    }
+                });
+            }),
+            new Promise((resolve, reject) => {
+                $.ajax({
+                    url: '/Profile/GetAllTitle',
+                    type: 'get',
+                    dataType: 'json',
+                    crossDomain: false,
+                    headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+                    success: function (result) {
+                        if (result.length > 0) {
+                            let select = $('#txtTitleIndividual')[0].tomselect;
+                            select.clear();
+                            select.clearOptions();
+                            select.addOption({ value: '0', text: 'Vui lòng chọn danh xưng' });
+                            result.forEach(item => {
+                                select.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
+                            });
+                            select.setValue('0');
+                        }
+                        resolve();
+                    },
+                    error: function (xhr, statusText, err) {
+                        if (xhr.status == 401) {
+                            sessionTimeout();
+                        } else {
+                            informBox(TOAST_STATUS.DANGER, "Lỗi tải danh sách danh xưng hoặc bạn không có quyền tải");
+                        }
+                        reject();
+                    }
+                });
+            }),
+            new Promise((resolve, reject) => {
+                $.ajax({
+                    url: '/Profile/GetAllNationality',
+                    type: 'get',
+                    dataType: 'json',
+                    crossDomain: false,
+                    headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+                    success: function (result) {
+                        if (result.length > 0) {
+                            let select = $('#txtNationalityIndividual')[0].tomselect;
+                            select.clear();
+                            select.clearOptions();
+                            select.addOption({ value: '0', text: 'Vui lòng chọn quốc tịch' });
+                            result.forEach(item => {
+                                select.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
+                            });
+                            select.setValue('0');
+                        }
+                        resolve();
+                    },
+                    error: function (xhr, statusText, err) {
+                        if (xhr.status == 401) {
+                            sessionTimeout();
+                        } else {
+                            informBox(TOAST_STATUS.DANGER, "Lỗi tải danh sách quốc tịch hoặc bạn không có quyền tải");
+                        }
+                        reject();
+                    }
+                });
+            }),
+            new Promise((resolve, reject) => {
+                $.ajax({
+                    url: '/Profile/GetAllCountry',
+                    type: 'get',
+                    dataType: 'json',
+                    crossDomain: false,
+                    headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+                    success: function (result) {
+                        if (result.length > 0) {
+                            let select = $('#txtCountryIndividual')[0].tomselect;
+                            select.clear();
+                            select.clearOptions();
+                            select.addOption({ value: '0', text: 'Vui lòng chọn quốc gia' });
+                            result.forEach(item => {
+                                select.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
+                            });
+                            select.setValue('0');
+                        }
+                        resolve();
+                    },
+                    error: function (xhr, statusText, err) {
+                        if (xhr.status == 401) {
+                            sessionTimeout();
+                         } else {
+                            informBox(TOAST_STATUS.DANGER, "Lỗi tải danh sách quốc gia hoặc bạn không có quyền tải");
+                        }
+                        reject();
+                    }
+                });
+            }),
+            new Promise((resolve, reject) => {
+                $.ajax({
+                    url: '/Profile/GetAllState',
+                    type: 'get',
+                    dataType: 'json',
+                    crossDomain: false,
+                    headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+                    success: function (result) {
+                        let select = $('#txtStateIndividual')[0].tomselect;
+                        select.clear();
+                        select.clearOptions();
+                        select.addOption({ value: '0', text: 'Vui lòng chọn bang' });
+                        if (result.length > 0) {
+                            result.forEach(item => {
+                                select.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
+                            });
+                        }
+                        select.setValue('0');
+                        resolve();
+                    },
+                    error: function (xhr, statusText, err) {
+                        if (xhr.status == 401) {
+                            sessionTimeout();
+                        } else {
+                            informBox(TOAST_STATUS.DANGER, "Lỗi tải danh sách bang hoặc bạn không có quyền tải");
+                        }
+                        reject();
+                    }
+                });
+            }),
+            new Promise((resolve, reject) => {
+                $.ajax({
+                    url: '/Profile/GetAllCity',
+                    type: 'get',
+                    dataType: 'json',
+                    crossDomain: false,
+                    headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+                    success: function (result) {
+                        if (result.length > 0) {
+                            let select = $('#txtCityIndividual')[0].tomselect;
+                            select.clear();
+                            select.clearOptions();
+                            select.addOption({ value: '0', text: 'Vui lòng chọn thành phố' });
+                            result.forEach(item => {
+                                select.addOption({ value: item.code, text: `${item.code} - ${item.name}` });
+                            });
+                            select.setValue('0');
+                        }
+                        resolve();
+                    },
+                    error: function (xhr, statusText, err) {
+                        if (xhr.status == 401) {
+                            sessionTimeout();
+                        } else {
+                            informBox(TOAST_STATUS.DANGER, "Lỗi tải danh sách thành phố hoặc bạn không có quyền tải");
+                        }
+                        reject();
+                    }
+                });
+            }),
+            new Promise((resolve, reject) => {
+                $.ajax({
+                    url: '/Profile/GetAllVIP',
+                    type: 'get',
+                    dataType: 'json',
+                    crossDomain: false,
+                    headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+                    success: function (result) {
+                        if (result.length > 0) {
+                            let select = $('#txtVIPIndividual')[0].tomselect;
+                            select.clear();
+                            select.clearOptions();
+                            select.addOption({ value: '0', text: 'Vui lòng chọn VIP' });
+                            result.forEach(item => {
+                                select.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
+                            });
+                            select.setValue('0');
+                        }
+                        resolve();
+                    },
+                    error: function (xhr, statusText, err) {
+                        if (xhr.status == 401) {
+                            sessionTimeout();
+                        } else {
+                            informBox(TOAST_STATUS.DANGER, "Lỗi tải danh sách VIP hoặc bạn không có quyền tải");
+                        }
+                        reject();
+                    }
+                });
+            })
+        ];
+
+        // Đợi tất cả các Promise hoàn thành
+        try {
+            await Promise.all(promises);
+            // Gọi getProfile sau khi tất cả các hàm trên hoàn thành
+            getProfile();
+        } catch (error) {
+            console.error("Có lỗi xảy ra khi tải dữ liệu:", error);
+        }
+    }
+   
+
+     async function setSelect2(){
+        const ids = [
+            "#select-beast-empty", "#txtLanguageIndividual", "#txtTitleIndividual",
+            "#txtNationalityIndividual", "#txtCountryIndividual", "#txtStateIndividual",
+            "#txtCityIndividual", "#txtVIPIndividual"
+        ];
+
+        for (const id of ids) {
+            if ($(id).length) {
+                new TomSelect(id, {
+                    allowEmptyOption: true,
+                    create: true,
+
+                });
+            }
+        }
+    }
+    function getProfile(){
+            $.ajax({
+                url: '/Reservation/ViewProfileByID',
+                type: 'get',
+                dataType: 'json',
+                data:{
+                    profileID: profileID
+                },
+                crossDomain: false,
+                headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+                success: function (result) {
+                    // $('#txtID').val(result.id);
+                    console.log(result);
+                    $("#txtCodeIndividual").val(result.code);
+                    $("#txtFullNameIndividual").val(result.account);
+                    $("#txtFirstNameIndividual").val(result.firstname);
+                    $("#txtLastNameIndividual").val(result.lastName);
+                    $("#txtMiddleNameIndividual").val(result.middleName);
+                    let selectLanguage = document.querySelector('#txtLanguageIndividual')?.tomselect;
+                    if (selectLanguage) {
+                        selectLanguage.setValue(result.languageID);
+                    }
+                    let selectTitle = document.querySelector('#txtTitleIndividual')?.tomselect;
+                    if (selectTitle) {
+                        selectTitle.setValue(result.titleID);
+                    }
+                    let selectNationality = document.querySelector('#txtNationalityIndividual')?.tomselect;
+                    if (selectNationality) {
+                        selectNationality.setValue(result.nationalityID);
+                    }
+                    // $("#txtCountryIndividual").val();
+                    let selectCity = document.querySelector('#txtCityIndividual')?.tomselect;
+                    if (selectCity) {
+                        selectCity.setValue(result.city);
+                    }
+                    $("#txtPostalIndividual").val(result.postalCode);
+                    let selectState = document.querySelector('#txtStateIndividual')?.tomselect;
+                    if (selectState) {
+                        selectState.setValue(result.stateID);
+                    }
+                    $("#txtReligionIndividual").val(result.religion);
+                    $("#txtNationIndividual").val(result.nation);
+                    $("#txtPurposeIndividual").val(result.purposeOfStay);
+                    $("#txtAddressIndividual").val(result.address);
+                    $("#txtSalutationIndividual").val(result.salutation);
+                    let selectVIP = document.querySelector('#txtVIPIndividual')?.tomselect;
+                    if (selectVIP) {
+                        selectVIP.setValue(result.vipid);
+                    }
+                    $("#txtReasonIndividual").val(result.vipReason);
+                    $("#txtPrefRoomIndividual").val(result.prefRoom);
+                    $("#txtOtherIndividual").val(result.other);
+                    $("#txtPassportIndividual").val(result.passPort);
+                    $("#txtCardIndividual").val(result.creditCard);
+                    $("#txtDobIndividual").val(result.dateOfBirth.split('T')[0]);
+                    $("#txtKeywordIndividual").val(result.keyword);
+                    $("#txtCompanyIndividual").val(result.company);
+                    $("#txtTaxIndividual").val(result.taxCode);
+                    $("#txtTelephoneIndividual").val(result.telephone);
+                    $("#txtHandPhoneIndividual").val(result.handPhone);
+                    $("#txtFaxIndividual").val(result.fax);
+                    $("#txtEmailIndividual").val(result.email);
+                    $("#txtWebsiteIndividual").val(result.website);
+                    $("#txtCompany2Individual").val(result.company);
+                    $("#txtBusinessTitleIndividual").val(result.businessTitle);
+                    $("#blackListIndividual").val(result.blackListReason);
+                    $('#rateCodeIndividual').val(result.rateCode);
+                    $('#aRNoIndividual').val(result.arNo);
+                    $('#memberNoIndividual').val(result.memberNo);
+                    $('#lastRoomIndividual').val(result.lastRoom);
+                    $('#onIndividual').val(result.lastvisit);
+                    $('#lastRateIndivdual').val(result.lastRate);
+                    $('#stayIndividual').val(result.stayNo);
+                    // Assign values to checkboxes
+                    if(result.active == true){
+                                            $("#txtActiveIndividual").prop("checked", true);
+
+                    }
+                    if(result.contact == true){
+                                            $("#txtContactIndividual").prop("checked", false);
+
+                    }
+                    $("#txtBlackListIndividual").prop("checked", false);
+
+
+                },
+                error: function (xhr, statusText, err) {
+                    if (xhr.status == 401) {
+                        sessionTimeout();
+                    } else {
+                    }
+                }
+            });
+        }
+</script>

@@ -1,0 +1,577 @@
+﻿@using DevExpress.XtraReports.UI
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewBag.Title = ViewBag.ReportHeader;
+    var zoneList = ViewBag.ZoneList;
+    var report = ViewBag.ReportName as XtraReport;
+}
+
+<style>
+    .filter_wrapper {
+/*         background-color: #ececec;
+        margin: 0px 8px 14px 8px; */
+        padding: 18px 0px 0px 14px;
+        border-radius: 8px;
+    }
+
+    .gridContainer {
+        margin: 0px 8px;
+    }
+
+    .button_wrapper {
+        display: flex;
+        column-gap: 12px;
+        margin: 0px 8px;
+    }
+
+        .button_wrapper .fa-solid {
+            margin-right: 5px;
+        }
+
+    .selected {
+        background-color: #4CAF50; /* Màu xanh */
+        color: white;
+    }
+
+    #gridContainer .dx-datagrid-rowsview .dx-selection {
+        background-color: #01579b !important; /* màu xanh ngọc */
+        color: white !important; /* chữ trắng */
+    }
+
+        #gridContainer .dx-datagrid-rowsview .dx-selection * {
+            color: white !important;
+        }
+
+    .sticky-header label,
+    .sticky-header .form-control-sm {
+        font-size: 0.75rem;
+        line-height: 1.2;
+    }
+
+
+    .sticky-header .form-control-sm {
+        padding: .1rem .35rem;
+        height: calc(1.1em + .2rem + 2px);
+    }
+
+    .sticky-header label[class*="me-"] {
+        margin-right: .5rem !important;
+    }
+
+    #gridContainer .dx-datagrid-headers .dx-header-row > td {
+        padding: 5px !important;
+        height: 24px !important;
+        font-size: 12px !important;
+        line-height: 1.1 !important;
+    }
+
+    .tomselect-custom {
+        width: 70px;
+        min-height: 30px; /* hoặc tùy theo chiều cao bạn muốn */
+        font-size: 0.65rem;
+    }
+
+        .tomselect-custom .ts-control {
+            padding-left: 8px !important; /* hoặc bất kỳ giá trị nào bạn muốn */
+        }
+
+
+
+</style>
+<link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+<div class="text-center" id="reportTitle" style="font-size: 20px">Guest Market Report</div>
+<div class="sticky-header bg-white p-2 shadow-sm z-3">
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-1" style="border: 1px solid #ced4da; border-radius: 6px; padding: 8px;">
+        <!-- From Date -->
+        <div class="d-flex align-items-center me-3">
+            <label class="mb-0">From Date:</label>
+            <input type="date" id="fromDate" name="fromDate" class="form-control form-control-sm w-auto" />
+        </div>
+
+        <div class="d-flex align-items-center me-3">
+            <label class="mb-0">To Date:</label>
+            <input type="date" id="toDate" name="toDate" class="form-control form-control-sm w-auto" />
+        </div>
+
+        <div class="d-flex align-items-center me-3">
+            <label class="mb-0">Zone:</label>
+            <select id="zonecode" name="zonecode" class="tomselect-custom " multiple>
+                @foreach (var item in zoneList)
+                {
+                    <option value="@item.ID">@item.Code</option>
+                }
+            </select>
+
+        </div>
+
+        <div style="display:none!important" class="d-flex align-items-center me-3">
+            <label class="me-2 mb-0">View By:</label>
+            <select id="viewBy" name="viewBy" class="form-control form-control-sm w-auto">
+
+                <option value="VND">VND</option>
+                <option value="USD">USD</option>
+            </select>
+        </div>
+
+    </div>
+    <div class="">
+        <button style="border-radius: 4px;  margin-right: 6px;background-color: #3b9ac6;" id="btnPrint" class="mui-button mui-button-new"><i class="fa-solid fa-eye"></i>View</button>
+        <button style="border-radius: 4px;  margin-right: 6px;background-color: green;" id="btnExportExcel" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Excel</button>
+        <button style="border-radius: 4px;  margin-right: 6px;background-color: darkorange;" id="btnExportPdf" class="mui-button mui-button-new" type="button"><i class="fas fa-eraser"></i> PDF</button>
+    </div>
+</div>
+<div class="mui-card">
+@*     <div style="font-size: 20px;" class="mt-1" id="reportTitle"></div> *@
+    <div id="gridWrapper" class="mt-2" style="max-height: 500px;">
+        <div class="gridContainer mt-2" id="gridContainer"></div>
+    </div>
+</div>
+<div id="loadingSpinner" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
+    <i class="fa-solid fa-spinner fa-spin"></i>
+</div>
+<script>
+    function formatDate(date) {
+        let year = date.getFullYear();
+        let month = (date.getMonth() + 1).toString().padStart(2, '0'); // Đảm bảo có 2 chữ số
+        let day = date.getDate().toString().padStart(2, '0'); // Đảm bảo có 2 chữ số
+        return `${year}-${month}-${day}`;
+    }
+
+    $(document).ready(function () {
+        const today = new Date();
+
+        const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+        // Lấy ngày cuối cùng của tháng
+        const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+        // Định dạng theo local time
+        const formattedFirstDay = formatDate(firstDayOfMonth);
+        const formattedLastDay = formatDate(lastDayOfMonth);
+
+        console.log(formattedFirstDay); // Kiểm tra giá trị đúng chưa
+        console.log(formattedLastDay); // Kiểm tra giá trị đúng chưa
+        // Gán giá trị cho input date
+        document.getElementById('fromDate').value = formattedFirstDay;
+        document.getElementById('toDate').value = formattedLastDay;
+        initializeTomSelects();
+
+
+    });
+    function initializeTomSelects() {
+        const selectors = ["#zonecode"];
+
+            for (const id of selectors) {
+                const el = document.querySelector(id);
+                if (!el) continue;
+
+                // Nếu đã khởi tạo rồi thì destroy
+                if (el.tomselect) el.tomselect.destroy();
+
+                const ts = new TomSelect(el, {
+                    plugins: ['remove_button'],
+                    create: false,
+                    maxItems: null,
+                    allowEmptyOption: true,
+                    placeholder: '',
+                    persist: false,
+                    render: {
+                        option: function (data, escape) {
+                            return `<div>${escape(data.text)}</div>`;
+                        }
+                    }
+                });
+
+            }
+        }
+         $(document).off("click", "#btnPrint").on("click", "#btnPrint", function () {
+            $("#loadingSpinner").show();
+            $.ajax({
+                 url: '/Report/GuestMarket',
+                type: 'GET',
+                data: {
+                  fromDate: $("#fromDate").val(),
+                  toDate: $("#toDate").val(),
+                  zonecode: $("#zonecode").val(),
+                  currency: $("#currency").val(),
+                },
+                success: function (result) {
+                                     console.log(result);
+    const processed = preparGuestMarketData(result);
+    initializGuestMarkeGrid(processed.data, processed.grandTotal);
+                    $("#loadingSpinner").hide();
+                },
+                error: function () {
+                    alert("Không thể tải báo cáo.");
+                    $("#loadingSpinner").hide();
+                }
+            });
+        });
+
+                  function preparGuestMarketData(data) {
+        const groupedData = {};
+        const finalData = [];
+
+        // Tổng toàn bộ (chỉ tính các record, không tính title/total dòng nhóm)
+        const grandTotal = {
+            d_Persons: 0, d_Room: 0, _D_Occ: 0, d_Accom: 0, d_TotalAccom: 0,
+            m_Persons: 0, m_Room: 0, _M_Occ: 0, m_Accom: 0, m_TotalAccom: 0,
+            y_Persons: 0, y_Room: 0, _Y_Occ: 0, y_Accom: 0, y_TotalAccom: 0
+        };
+
+        data.forEach(item => {
+            const key = item.marketType;
+            if (!groupedData[key]) groupedData[key] = [];
+            groupedData[key].push(item);
+
+            // Cộng luôn Grand Total (chỉ cộng dữ liệu thực tế)
+            grandTotal.d_Persons += item.d_Persons || 0;
+            grandTotal.d_Room += item.d_Room || 0;
+            grandTotal._D_Occ += item._D_Occ || 0;
+            grandTotal.d_Accom += item.d_Accom || 0;
+            grandTotal.d_TotalAccom += item.d_TotalAccom || 0;
+
+            grandTotal.m_Persons += item.m_Persons || 0;
+            grandTotal.m_Room += item.m_Room || 0;
+            grandTotal._M_Occ += item._M_Occ || 0;
+            grandTotal.m_Accom += item.m_Accom || 0;
+            grandTotal.m_TotalAccom += item.m_TotalAccom || 0;
+
+            grandTotal.y_Persons += item.y_Persons || 0;
+            grandTotal.y_Room += item.y_Room || 0;
+            grandTotal._Y_Occ += item._Y_Occ || 0;
+            grandTotal.y_Accom += item.y_Accom || 0;
+            grandTotal.y_TotalAccom += item.y_TotalAccom || 0;
+        });
+
+        Object.entries(groupedData).forEach(([marketType, records]) => {
+            finalData.push({
+                code: `${marketType}`,
+                isTitle: true,
+                cssClass: "custom"
+            });
+
+            finalData.push(...records);
+
+            finalData.push({
+                code: "TOTAL",
+                description: records[0].description,
+                d_Persons: sum(records, 'd_Persons'),
+                d_Room: sum(records, 'd_Room'),
+                _D_Occ: sum(records, '_D_Occ'),
+                d_Accom: sum(records, 'd_Accom'),
+                d_TotalAccom: sum(records, 'd_TotalAccom'),
+
+                m_Persons: sum(records, 'm_Persons'),
+                m_Room: sum(records, 'm_Room'),
+                _M_Occ: sum(records, '_M_Occ'),
+                m_Accom: sum(records, 'm_Accom'),
+                m_TotalAccom: sum(records, 'm_TotalAccom'),
+
+                y_Persons: sum(records, 'y_Persons'),
+                y_Room: sum(records, 'y_Room'),
+                _Y_Occ: sum(records, '_Y_Occ'),
+                y_Accom: sum(records, 'y_Accom'),
+                y_TotalAccom: sum(records, 'y_TotalAccom'),
+
+                isTotal: true,
+                cssClass: "custom"
+            });
+        });
+
+        return { data: finalData, grandTotal };
+    }
+
+
+         function sum(arr, field) {
+            return arr.reduce((total, item) => total + (item[field] || 0), 0);
+        }
+
+        function average(arr, field) {
+            const valid = arr.filter(x => x[field] != null);
+            if (valid.length === 0) return 0;
+            return valid.reduce((sum, x) => sum + x[field], 0) / valid.length;
+        }
+    function initializGuestMarkeGrid(data, grandTotal) {
+        const columnWidth = 180;
+
+        // Lấy ngày từ input
+        const fromdate = $("#fromDate").val() || "FromDate";
+        const todate = $("#toDate").val() || "ToDate";
+
+            let year = "";
+
+            if (todate) {
+                const parts = todate.split('-');
+                if (parts.length === 3) {
+                    year = parts[0]; // lấy phần năm
+                    console.log(year);
+                }
+            }
+        $("#gridContainer").dxDataGrid({
+    dataSource: data,         height: 500, allowColumnResizing: true,
+            columns: [
+                { dataField: "code", caption: "Code", width: columnWidth },
+                { dataField: "description", caption: "Description", width: columnWidth },
+
+                {
+                    caption: `DAY - ${todate}`,
+                    alignment: "center",
+                    columns: [
+                        { dataField: "d_Persons", caption: "Person", width: columnWidth - 90, dataType: "number", format: "#,##0" },
+                        { dataField: "d_Room", caption: "Room", width: columnWidth - 90, dataType: "number", format: "#,##0" },
+                        { dataField: "_D_Occ", caption: "Occ%", width: columnWidth - 90, dataType: "number", format: { type: "fixedPoint", precision: 2 } },
+                        { dataField: "d_Accom", caption: "0-Accom", width: columnWidth - 60, dataType: "number", format: { type: "fixedPoint", precision: 2 } },
+                        { dataField: "d_TotalAccom", caption: "Total Accom", width: columnWidth - 60, dataType: "number", format: { type: "fixedPoint", precision: 2 } }
+                    ]
+                },
+                {
+                    caption: `${fromdate} - ${todate}`,
+                    alignment: "center",
+                    columns: [
+                        { dataField: "m_Persons", caption: "Person", width: columnWidth - 90, dataType: "number", format: "#,##0" },
+                        { dataField: "m_Room", caption: "Room", width: columnWidth - 90, dataType: "number", format: "#,##0" },
+                        { dataField: "_M_Occ", caption: "Occ%", width: columnWidth - 90, dataType: "number", format: { type: "fixedPoint", precision: 2 } },
+                        { dataField: "m_Accom", caption: "0-Accom", width: columnWidth - 60, dataType: "number", format: { type: "fixedPoint", precision: 2 } },
+                        { dataField: "m_TotalAccom", caption: "Total Accom", width: columnWidth - 60, dataType: "number", format: { type: "fixedPoint", precision: 2 } }
+                    ]
+                },
+                {
+                    caption: `Year - ${year}`,
+                    alignment: "center",
+                    columns: [
+                        { dataField: "y_Persons", caption: "Person", width: columnWidth - 90, dataType: "number", format: "#,##0" },
+                        { dataField: "y_Room", caption: "Room", width: columnWidth - 90, dataType: "number", format: "#,##0" },
+                        { dataField: "_Y_Occ", caption: "Occ%", width: columnWidth - 90, dataType: "number", format: { type: "fixedPoint", precision: 2 } },
+                        { dataField: "y_Accom", caption: "0-Accom", width: columnWidth - 60, dataType: "number", format: { type: "fixedPoint", precision: 2 } },
+                        { dataField: "y_TotalAccom", caption: "Total Accom", width: columnWidth - 70, dataType: "number", format: { type: "fixedPoint", precision: 2 } }
+                    ]
+                }
+            ],
+            paging: { pageSize: 25 },
+            scrolling: {
+                
+                useNative: true,
+                showScrollbar: "always"
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [25, 50, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true,
+            },
+            filterRow: {
+                visible: true,
+                applyFilter: "auto"
+            },
+            headerFilter: {
+                visible: true
+            },
+            selection: { mode: "multiple", showCheckBoxesMode: "none" },
+            showBorders: true,
+          summary: {
+            totalItems: [
+                {
+                    column: "description",
+                    summaryType: "custom",
+                    displayFormat: "Grand Total"
+                },
+                {
+                    column: "d_Persons",
+                    summaryType: "custom",
+                    name: "d_Persons",
+                    customizeText: () => grandTotal.d_Persons.toLocaleString("vi-VN")
+                },
+                {
+                    column: "d_Room",
+                    summaryType: "custom",
+                    name: "d_Room",
+                    customizeText: () => grandTotal.d_Room.toLocaleString("vi-VN")
+                },
+                 {
+                    column: "_D_Occ",
+                    summaryType: "custom",
+                    name: "_D_Occ",
+                    customizeText: () => grandTotal._D_Occ.toLocaleString("vi-VN")
+                },
+                {
+                    column: "d_Accom",
+                    summaryType: "custom",
+                    name: "d_Accom",
+                    customizeText: () => grandTotal.d_Accom.toLocaleString("vi-VN", { minimumFractionDigits: 2 })
+                },
+                {
+                    column: "d_TotalAccom",
+                    summaryType: "custom",
+                    name: "d_TotalAccom",
+                    customizeText: () => grandTotal.d_TotalAccom.toLocaleString("vi-VN", { minimumFractionDigits: 2 })
+                },
+                {
+                    column: "m_Persons",
+                    summaryType: "custom",
+                    name: "m_Persons",
+                    customizeText: () => grandTotal.m_Persons.toLocaleString("vi-VN")
+                },
+                {
+                    column: "m_Room",
+                    summaryType: "custom",
+                    name: "m_Room",
+                    customizeText: () => grandTotal.m_Room.toLocaleString("vi-VN")
+                },
+                {
+                    column: "m_Accom",
+                    summaryType: "custom",
+                    name: "m_Accom",
+                    customizeText: () => grandTotal.m_Accom.toLocaleString("vi-VN", { minimumFractionDigits: 2 })
+                },
+                {
+                    column: "m_TotalAccom",
+                    summaryType: "custom",
+                    name: "m_TotalAccom",
+                    customizeText: () => grandTotal.m_TotalAccom.toLocaleString("vi-VN", { minimumFractionDigits: 2 })
+                },
+                {
+                    column: "y_Persons",
+                    summaryType: "custom",
+                    name: "y_Persons",
+                    customizeText: () => grandTotal.y_Persons.toLocaleString("vi-VN")
+                },
+                {
+                    column: "y_Room",
+                    summaryType: "custom",
+                    name: "y_Room",
+                    customizeText: () => grandTotal.y_Room.toLocaleString("vi-VN")
+                },
+                {
+                    column: "y_Accom",
+                    summaryType: "custom",
+                    name: "y_Accom",
+                    customizeText: () => grandTotal.y_Accom.toLocaleString("vi-VN", { minimumFractionDigits: 2 })
+                },
+                {
+                    column: "y_TotalAccom",
+                    summaryType: "custom",
+                    name: "y_TotalAccom",
+                    customizeText: () => grandTotal.y_TotalAccom.toLocaleString("vi-VN", { minimumFractionDigits: 2 })
+                }
+            ]
+        },
+            onRowPrepared: function (e) {
+                if (e.rowType === "data" && e.data?.cssClass) {
+                    e.rowElement.addClass(e.data.cssClass);
+                }
+            }
+        });
+    }
+
+
+
+
+
+    $("#btnExportExcel").click(function () {
+               const grid = $("#gridContainer").dxDataGrid("instance"); var selectedReport2 = '@ViewBag.ReportTitle';
+        var selectedReport = '@ViewBag.ReportTitle';
+        if (!selectedReport) {
+            alert("Vui lòng chọn báo cáo trước khi xuất Excel.");
+            return;
+        }
+
+                     const workbook = new ExcelJS.Workbook();const companyName = localStorage.getItem("CompanyName") || "Tên công ty chưa xác định";
+        const worksheet = workbook.addWorksheet("Sheet 1");
+
+        // === Tạo header công ty (dòng 1) ===
+       worksheet.addRow([companyName]);
+        worksheet.mergeCells('A1:E1');
+        worksheet.getRow(1).font = { bold: true };
+        worksheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'left' };
+
+        // === Dòng 2: Thời gian xuất (phải) ===
+        const now = new Date();
+        const exportDate = now.toLocaleString("vi-VN");
+        worksheet.addRow(['', '', '', '', ' ' + exportDate]);
+        worksheet.mergeCells('E2:H2');
+        worksheet.getRow(2).alignment = { vertical: 'middle', horizontal: 'right' };
+
+        // === Dòng 3–4: Trống
+        worksheet.addRow([]);
+        worksheet.addRow([]);
+
+        // === Dòng 5: Tên báo cáo ở giữa ===
+        const reportRow = worksheet.addRow(['', '', selectedReport]);
+        worksheet.mergeCells('C5:F5');
+        reportRow.font = { bold: true, size: 14 };
+        reportRow.alignment = { vertical: 'middle', horizontal: 'center' };
+
+        // === Dòng 6: Trống trước khi xuất dữ liệu
+        worksheet.addRow([]);
+
+        // === Export dữ liệu từ DevExtreme (bắt đầu từ dòng 7)
+        DevExpress.excelExporter.exportDataGrid({
+            component: grid,
+            worksheet: worksheet,
+            autoFilterEnabled: true,
+            topLeftCell: { row: 7, column: 1 } // dữ liệu bắt đầu từ dòng 7
+        }).then(function () {
+            // Footer
+            const lastRow = worksheet.lastRow.number + 2;
+ 
+            worksheet.mergeCells(`A${lastRow}:F${lastRow}`);
+            worksheet.getCell(`A${lastRow}`).alignment = { horizontal: 'center' };
+            worksheet.getCell(`A${lastRow}`).font = { italic: true };
+
+            // Ghi file
+            let fileName = selectedReport + ".xlsx";
+            workbook.xlsx.writeBuffer().then(function (buffer) {
+                saveAs(new Blob([buffer], { type: "application/octet-stream" }), fileName);
+            });
+        });
+    });
+
+
+        // Nút xuất PDF
+             $("#btnExportPdf").click(function () {
+        const grid = $("#gridContainer").dxDataGrid("instance");
+
+        // Lấy đối tượng jsPDF từ window
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({ orientation: "landscape", unit: "pt", format: "A4" });
+
+        const selectedReport = '@ViewBag.ReportTitle';
+        const companyName = localStorage.getItem("CompanyName") || "Tên công ty chưa xác định";
+
+        grid.getDataSource().load().then(data => {
+            const columns = grid.getVisibleColumns();
+
+            const head = [columns.map(col => col.caption)];
+            const body = data.map(row =>
+                columns.map(col =>
+                    col.calculateCellValue ? col.calculateCellValue(row) : row[col.dataField]
+                )
+            );
+
+            doc.setFontSize(14);
+            doc.setFont("Helvetica", "bold");
+            doc.text(companyName, doc.internal.pageSize.getWidth() / 2, 40, { align: "center" });
+
+            doc.setFontSize(12);
+            doc.setFont("Helvetica", "normal");
+            doc.text(selectedReport, doc.internal.pageSize.getWidth() / 2, 60, { align: "center" });
+
+            // AutoTable
+            doc.autoTable({
+                startY: 80,
+                head: head,
+                body: body,
+                 styles: { fontSize: 9, cellPadding: 4 , lineWidth: 0.5, lineColor: [0, 0, 0]    },
+                headStyles: { fillColor: [41, 128, 185], textColor: 255, fontStyle: 'bold' },
+                alternateRowStyles: { fillColor: [240, 240, 240] },
+                margin: { left: 20, right: 20 }
+            });
+
+            doc.save(selectedReport + ".pdf");
+        });
+    });
+</script>

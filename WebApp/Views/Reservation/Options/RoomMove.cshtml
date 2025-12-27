@@ -1,0 +1,315 @@
+﻿<!-- Modal room move-->
+<div class="modal fade modal" id="modalRoomMove" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Room Move</h5>
+                <button type="button" class="btn-close" onclick="closeRoomMove()"></button>
+            </div>
+            <div style="margin: 4px;">
+                <div>
+                    <button class="submit-button-clear-reservation" onclick="SaveRoomMove();">Save</button>
+                    <button class="submit-button-new-reservation" onclick="closeRoomMove();">Close</button>
+                </div>
+                <div  class="bg-light border rounded row" style="margin:2px">
+                    <div class="col-md-12 row mt-2">
+                        <label class="col-md-4" style="text-align:left">Guest Name</label>
+                        <input id="guestNameRoomMove" class="col-md-8" disabled>
+                    </div>
+                    <div class="col-md-12 row mt-2">
+                        <label class="col-md-4" style="text-align:left">Room Current</label>
+                        <input id="roomCurrentRoomMove" class="col-md-8" disabled>
+                    </div>
+                    <div class="col-md-12 row mt-2">
+                        <label class="col-md-4" style="text-align:left">Move to Room</label>
+                        <input id="moveRoomMove" class="col-md-6" disabled>
+                        <button class="col-md-1" onclick="openRoomMoveAdd();" id="btnRoomMove"><i class="fa-solid fa-ellipsis"></i></button>
+
+                    </div>
+                    <div class="col-md-12 row mt-2">
+                        <label class="col-md-4" style="text-align:left">Extensions</label>
+                        <input id="extensionRoomMove" class="col-md-8 " value="0" disabled>
+                    </div>
+                    <div class="col-md-12 row mt-2">
+                        <label class="col-md-4" style="text-align:left">Move date</label>
+                        <input id="moveDateRoomMove" class="col-md-8 " disabled type="date">
+                    </div>
+                    <div class="col-md-12 row mt-2 mb-2">
+                        <label class="col-md-4" style="text-align:left">Reason</label>
+                        <select id="reasonRoomMove" class="col-md-8" asp-items="ViewBag.cboReason"></select>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal search room-->
+<div class="modal fade modal-xl" id="modalRoomMoveAdd" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Available Room Search</h5>
+                <button type="button" class="btn-close" onclick="closeRoomMoveAdd();"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-2">
+                    <button class="mui-button mui-button-search" onclick="getAllRooms2();"><i class="fas fa-search"></i> Search</button>
+                    <button class="mui-button mui-button-clear" onclick="closeRoomMoveAdd();"><i class="fas fa-eraser"></i> Clear</button>
+                </div>
+                <div class="row mui-card mb-2">
+                    <div class="row">
+                        <div class="col-md-2 mb-2">
+                            <label for="input1" class="form-label">RoomType</label>
+                            <select type="text"  id="roomTypeSearch2" asp-items="ViewBag.cboRoomType">
+                            </select>
+                        </div>
+                        <div class="col-md-2 mb-2">
+                            <label for="input2" class="form-label">Smoking</label>
+                            <select type="text"  id="smokingSearch2">
+                                <option value="2">---Select all ---</option>
+                                <option value="1">Smoking</option>
+                                <option value="0">No Smoking</option>
+
+                            </select>
+                        </div>
+                        <div class="col-md-2 mb-2">
+                            <label for="input3" class="form-label">RoomNo</label>
+                            <input type="text" id="roomNoSearch2" />
+                        </div>
+                        <div class="col-md-2 mb-2">
+                            <label for="input4" class="form-label">Floor</label>
+                            <input type="text"  id="floorSearch2">
+                        </div>
+                        <div class="col-md-2 mb-2">
+                            <label for="input5" class="form-label">From</label>
+                            <input type="date"  id="fromSearch2">
+                        </div>
+                        <div class="col-md-2 mb-2">
+                            <label for="input6" class="form-label">To</label>
+                            <input type="date"  id="toSearch2">
+                        </div>
+                    </div>
+                    <div  style="display:flex">
+                        <label>FO Status</label>
+                        <div class="form-check">
+                            <input  type="radio" name="foStatus2" checked value="0">
+                            <label class="form-check-label" for="foActive">Vacant</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" name="foStatus2" value="1">
+                            <label class="form-check-label" for="foInactive">Occupied</label>
+                        </div>
+                    </div>
+                    <div  style="display:flex">
+                        <label>HK Status</label>
+                        <div class="form-check">
+                            <input  type="checkbox" name="hkStatus2" value="1">
+                            <label class="form-check-label" for="hkClean">Clean Non-checked Rooms</label>
+                        </div>
+                        <div class="form-check">
+                            <input  type="checkbox" name="hkStatus2" value="2">
+                            <label class="form-check-label" for="hkDirty">Dirty Rooms</label>
+                        </div>
+                        <div class="form-check">
+                            <input  type="checkbox" name="hkStatus2" value="4">
+                            <label class="form-check-label" for="hkInProgress">Clean Rooms</label>
+                        </div>
+                        <div class="form-check">
+                            <input  type="checkbox" name="hkStatus2" value="5">
+                            <label class="form-check-label" for="hkOutOfService">OOC Rooms</label>
+                        </div>
+                        <div class="form-check">
+                            <input  type="checkbox" name="hkStatus2" value="6">
+                            <label class="form-check-label" for="hkInspected">OOS Rooms</label>
+                        </div>
+                        <div class="form-check">
+                            <input  type="checkbox" name="hkDummy2">
+                            <label class="form-check-label" for="hkOccupied">Pseudo (Dummy) Rooms</label>
+                        </div>
+                    </div>
+                </div>
+                <div id="loadingSpinnerRoom2" style="display: none; text-align: center; padding: 20px;">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+                <div class="mui-card">
+                    <div id="gridContainerSearchRoom2" class="mt-2 gridContainer"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    function openRoomMove(){
+        if (idReservation === 0) {
+            showToast('Error', 'Please choose booking', false);
+            return;
+        }
+        if(status != "CHECKED IN"){
+            showToast('Error', 'Select guest checked in to room move', false);
+            return;
+        }
+
+        formatDateOpen();
+        $('#modalRoomMove').modal('show');
+    }
+    function formatDateOpen(){
+        const arrivalFormatted = formatDateForInput(arivalDate);
+        const departureFormatted = formatDateForInput(departureDate);
+        var businessDate = '@ViewBag.businesDate';
+         var parsedBusinessDate = formatDateForInput(businessDate);
+        $('#moveDateRoomMove').val(parsedBusinessDate);
+        $('#fromSearch2').val(arrivalFormatted);
+        $('#toSearch2').val(departureFormatted);
+                $('#guestNameRoomMove').val(lastname);
+        $('#roomCurrentRoomMove').val(roomNo);
+    }
+    function clearRoomMove(){
+        idReservation = 0;
+        
+
+        $('#moveRoomMove').val('');
+        $('#extensionRoomMove').val('0');
+        $('#reasonRoomMove').val(0);
+    }
+    function closeRoomMove(){
+        clearRoomMove();
+        $('#modalRoomMove').modal('hide');
+    }
+    function openRoomMoveAdd(){
+        
+        getAllRooms2();
+
+        $('#modalRoomMoveAdd').modal('show');
+    }
+    function closeRoomMoveAdd(){
+        $('#modalRoomMoveAdd').modal('hide');
+    }
+    var hkStatus = 0;
+    function getAllRooms2() {
+        $("#loadingSpinnerRoom2").show();
+        const selectedHKStatus = getSelectedCheckboxes('hkStatus2');
+        const selectedFOStatus = getSelectedRadio('foStatus2');
+        var check =  $('#hkDummy2').is(':checked') ? 1 : 0;
+        $.ajax({
+            url: '/Reservation/GetAllRooms',
+            type: 'get',
+            dataType: 'json',
+            data:{
+                fromDate : $('#fromSearch2').val(),
+                toDate: $('#toSearch2').val(),
+                floor: $('#floorSearch2').val(),
+                roomTypeID: $('#roomTypeSearch2').val(),
+                smoking: $('#smokingSearch2').val(),
+                foStatus:selectedFOStatus,
+                hkStatus: selectedHKStatus,
+                isDummy:check,
+                roomNo:$('#roomNoSearch2').val()
+            },
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                initializeDataGridSearchRoom2(result);
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                } else {
+                    informBox(TOAST_STATUS.DANGER, "Lỗi tải chi tiết danh sách danh mục dịch vụ hoặc bạn không có quyền tải");
+                }
+            },
+            complete: function () {
+                $("#loadingSpinnerRoom2").hide();
+            }
+        });
+    }
+    function initializeDataGridSearchRoom2(data) {
+        var columnWidth = 150;
+
+        $("#gridContainerSearchRoom2").dxDataGrid({
+
+        dataSource: data, allowColumnResizing: true,
+            columns: [
+
+
+                { dataField: "roomID", caption: "Room ID", width: columnWidth - 80, visible: false},
+                { dataField: "roomNo", caption: "Ro.No", width: columnWidth - 80 },
+                { dataField: "roomType", caption: "Room Type", width: columnWidth * 2 },
+                { dataField: "hkStatus", caption: "HK Status", width: columnWidth },
+                { dataField: "fo", caption: "FO", width: columnWidth },
+                { dataField: "floor", caption: "Floor", width: columnWidth },
+                { dataField: "guestCheckOut", caption: "Back-to-Back", width: columnWidth },
+                { dataField: "connecting", caption: "Connecting", width: columnWidth },
+                { dataField: "balcony", caption: "Balcony", width: columnWidth },
+
+            ],
+            paging: { pageSize: 15 },
+            scrolling: {
+                rowRenderingMode: 'virtual',
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [15, 20, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true,
+            },
+            filterRow: {
+                    visible: true,
+                    applyFilter: "auto"
+            },
+            selection: {
+                mode: "single" // Allows only one row to be selected at a time
+            },
+            onRowDblClick: function(e) {
+                $('#moveRoomMove').val(e.data.roomNo);
+                hkStatus = getSelectedCheckboxes('hkStatus2');
+                $('#modalRoomMoveAdd').modal('hide');
+            }
+        });
+    }
+
+    function SaveRoomMove() {
+        const userName = JSON.parse(localStorage.getItem("Loginname"));
+        const userID = JSON.parse(localStorage.getItem("userID"));
+        var formData = new FormData();
+        console.log('reason: ' + $('#reasonRoomMove').val());
+        formData.append('rsvID', idReservation);
+        formData.append('roomCurrent', $('#roomCurrentRoomMove').val());
+        formData.append('moveRoomMove', $('#moveRoomMove').val());
+        formData.append('moveDate', $('#moveDateRoomMove').val());
+        formData.append('reason', $('#reasonRoomMove').val());
+        formData.append('hkStatus', hkStatus);
+        formData.append('userName', userName);
+        formData.append('userID',userID);
+
+        $.ajax({
+            url: '/Reservation/RoomMove',
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            // headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            data: formData,
+            success: function (data) {
+                if (data.code == 0) {
+                    closeRoomMove();
+                    searchReservation();
+                    showToast('Success', data.msg, true);
+                } else {
+                    showToast('Error', data.msg, false);
+                }
+
+            },
+            error: function (xhr, statusText, err) {
+
+            }
+        });
+
+    }
+</script>

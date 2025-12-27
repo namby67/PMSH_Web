@@ -1,0 +1,232 @@
+﻿<div class="modal fade" id="modalSelectOption" tabindex="-1" aria-labelledby="transactionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="border: 1px solid #bcbcbc">
+            <div class="modal-header">
+                <h5 class="modal-title">Select Options</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="button-group">
+                <button type="button" class="mui-button mui-button-search" onclick="GetTransactionBySelectOption();">Ok</button>
+                <button type="button" class="mui-button mui-button-clear" data-bs-dismiss="modal">Close</button>
+            </div>
+            <div class="modal-body">
+                <span>Posting Date</span>
+                <div class="row mb-2">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label  class="form-label">From</label>
+                            <input type="date" class="form-control medium-input" id="fromDateSelectOption">
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label class="form-label">To</label>
+                            <input type="date" class="form-control medium-input" id="toDateSelectOption">
+                        </div>
+                    </div>
+                </div>
+                <hr class="hr">
+                Transaction Code
+                <div class="form-group">
+                    <label  class="form-label">Group</label>
+                    <select class="form-control" id="groupTransactionSelectOption" style="padding:3px"></select>
+                </div>
+                <hr class="hr">
+                <div class="form-group">
+                    <label class="form-label">Sub Group</label>
+                    <select class="form-control" id="subGroupTransactionSelectOption" style="padding:3px"></select>
+                </div>
+                <div class="form-group">
+                    <label  class="form-label">Code</label>
+                    <select type="text" class="form-control" id="transactionSelectOption" style="padding:3px"></select>
+                </div>
+
+                <hr class="hr">
+                Posting Users
+                <div class="form-group-new-reservation">
+                    <label for="reference" class="form-label">Users</label>
+                    <select   id="userSelectOption" multiple></select>
+                </div>
+
+                <hr class="hr">
+                Shift Information
+                <div class="form-group">
+                    <label for="reference" class="form-label">Shift.No</label>
+                    <input class="form-control" id="shiftNoSelectOption"/>
+                </div>
+
+                <hr class="hr">
+                Interface
+                <div class="form-group">
+                    <label for="reference" class="form-label">Check.No</label>
+                    <input class="form-control" id="checkNoSelectOption"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openModalSelectOption(){
+        GetallUsers();
+        setGroupTransactionSelectOption();
+        setSubGroupTransactionSelectOption($('#groupTransactionSelectOption').val());
+        getTransactionSelectOption($('#groupTransactionSelectOption').val(), $('#subGroupTransactionSelectOption').val());
+        $('#modalSelectOption').modal('show');
+    }
+    function closeModelSelectOption(){
+        $('#modalSelectOption').modal('close');
+
+    }
+
+    function setGroupTransactionSelectOption() {
+        $('#groupTransactionSelectOption').empty();
+        var html = `<option value='0' selected>Group Transaction</option>`;
+
+        if (groupTransactionSelectOption.length > 0) {
+
+            for (var i = 0; i < groupTransactionSelectOption.length; i++) {
+                html += `<option value='${groupTransactionSelectOption[i].id}'>${groupTransactionSelectOption[i].code} - ${groupTransactionSelectOption[i].description}</option>`
+            }
+
+        }
+        $('#groupTransactionSelectOption').append(html);
+    }
+
+    function setSubGroupTransactionSelectOption(transactionGroupID) {
+        $('#subGroupTransactionSelectOption').empty();
+        var html = `<option value='0' selected>Sub Group Transaction</option>`;
+        var filteredSubGroupTransaction = subGroupTransactionSelectOption;
+        if (transactionGroupID != 0) {
+            filteredSubGroupTransaction = subGroupTransactionSelectOption.filter(function (item) {
+                return item.transactionGroupID == transactionGroupID;
+            });
+        }
+
+        if (filteredSubGroupTransaction.length > 0) {
+
+            for (var i = 0; i < filteredSubGroupTransaction.length; i++) {
+                html += `<option value='${filteredSubGroupTransaction[i].id}'>${filteredSubGroupTransaction[i].code} - ${filteredSubGroupTransaction[i].description}</option>`
+            }
+
+        }
+        $('#subGroupTransactionSelectOption').append(html);
+    }
+
+    function getTransactionSelectOption(groupTransactionID, subGroupTransactionID) {
+         filteredSubGroupTransaction = transactionListSelectOption.filter(function (item) {
+            // Case 1: If both IDs are 0, return all transactions
+            if (groupTransactionID == 0 && subGroupTransactionID == 0) {
+                return true; // This returns every item in transactionList
+            }
+            // Case 2: If groupTransactionID is not 0 and subGroupTransactionID is 0,
+            // return all transactions matching groupTransactionID
+            if (groupTransactionID != 0 && subGroupTransactionID == 0) {
+                return item.transactionGroupID == groupTransactionID;
+            }
+            // Case 3: If both IDs are provided, filter by both
+            return item.transactionSubGroupID == subGroupTransactionID &&
+                item.transactionGroupID == groupTransactionID;
+         });
+
+        if (filteredSubGroupTransaction.length > 0) {
+            $('#transactionSelectOption').empty();
+            var html = '';
+                for (var i = 0; i < filteredSubGroupTransaction.length; i++) {
+                html += `<option value='${filteredSubGroupTransaction[i].code}'>${filteredSubGroupTransaction[i].code} - ${filteredSubGroupTransaction[i].description}</option>`
+            }
+            $('#transactionSelectOption').append(html);
+        }
+
+    }
+
+    $('#groupTransactionSelectOption').change(function () {
+        let selectedValue = $(this).val();
+        setSubGroupTransactionSelectOption(selectedValue);
+        getTransactionSelectOption(selectedValue, $('#subGroupTransactionSelectOption').val());
+    });
+    $('#subGroupTransactionSelectOption').change(function () {
+        let selectedValue = $(this).val();
+        getTransactionSelectOption($('#groupTransactionSelectOption').val(),selectedValue);
+    });
+
+    
+    function GetallUsers(){
+        $.ajax({
+                url: '/Billing/GetAllUser',
+            type: 'get',
+            dataType: 'json',
+                crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                if (result.length > 0) {
+                    let select = $('#userSelectOption')[0].tomselect; // Lấy instance của TomSelect
+                    // select.clear(); // Xóa giá trị hiện tại
+                    select.clearOptions(); // Xóa tất cả option cũ
+
+                    select.addOption({ value: '0', text: '' });
+                    result.forEach(item => {
+                        select.addOption({ value: item.id, text: `${item.lastName}` });
+                    });
+
+
+                }
+                else{
+                    let select = $('#userSelectOption')[0].tomselect; // Lấy instance của TomSelect
+                    select.clear(); // Xóa giá trị hiện tại
+                    select.clearOptions(); // Xóa tất cả option cũ
+                    select.addOption({ value: '0', text: '' });
+                    select.setValue('0');
+
+                }
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                } else {
+                }
+            }
+        });
+    }
+    // Biến toàn cục để lưu danh sách TransactionCode từ result
+    let selectedCodesFromResult = [];
+
+    function GetTransactionBySelectOption() {
+        var formData = new FormData();
+        const selectedValues = $("#userSelectOption").val();
+        selectedValues.forEach(value => {
+            formData.append('users', value);
+        });
+        formData.append('fromDate', $('#fromDateSelectOption').val());
+        formData.append('toDate', $('#toDateSelectOption').val());
+        formData.append('group', $('#groupTransactionSelectOption').val());
+        formData.append('subGroup', $('#subGroupTransactionSelectOption').val());
+        formData.append('code', $('#transactionSelectOption').val());
+        formData.append('shiftNo', $('#shiftNoSelectOption').val());
+        formData.append('checkNo', $('#checkNoSelectOption').val());
+        formData.append('rsvID', idReservation);
+
+        $.ajax({
+            url: '/Billing/GetTransactionBySelectOption',
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            data: formData,
+            success: function (result) {
+                closeModelSelectOption();
+                // Lưu danh sách TransactionCode từ result vào biến toàn cục
+                selectedCodesFromResult = result
+                    ? result.filter(code => code !== undefined && code !== null)
+                    : [];
+                // Giả sử grid đã được khởi tạo với dữ liệu đầy đủ trước đó
+                const grid = $("#gridContainerBilling").dxDataGrid("instance");
+                const currentData = grid ? grid.option("dataSource") : [];
+                // Gọi hàm khởi tạo grid với dữ liệu hiện tại
+                initializeDataGridBilling(currentData);
+            },
+            error: function (xhr, statusText, err) {
+                console.error('Lỗi khi lấy giao dịch:', err);
+            }
+        });
+    }
+</script>

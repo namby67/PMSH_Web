@@ -1,0 +1,227 @@
+﻿@* <link href="~/css/pages/reservation.css" rel="stylesheet" asp-append-version="true" /> *@
+
+<div class="header mt-2" style="border-bottom:none;justify-content:center">
+    <h3 id="content-title">
+        Cashiering Manager
+    </h3>
+</div>
+<div class="header">
+    <button class="submit-button-clear-reservation" onclick="searchReservation()">Search</button>
+
+    <button class="submit-button-new-reservation" onclick="resetForm()">Clear</button>
+</div>
+<div class="mb-2">
+    <div class="mui-card row" style="column-gap:25px;margin:0 4px">
+        <div class="col-md-1 row">
+            <label>Room</label>
+            <input type="text" id="room">
+        </div>
+        <div class="col-md-1 row">
+            <label>Conf .No</label>
+            <input type="text" id="confirmationNo">
+        </div>
+        <div class="col-md-1 row">
+            <label>Name</label>
+            <input type="text" id="name">
+        </div>
+        <div class="col-md-1 row">
+            <label>CRS .No</label>
+            <input type="text" id="crsNo">
+        </div>
+        <div class="col-md-1 row">
+            <label>Group</label>
+            <input type="text" id="group">
+        </div>
+        <div class="col-md-1 row">
+            <label>Package</label>
+            <input type="text" id="package">
+        </div>
+        <div class="col-md-1 row">
+            <label>Company</label>
+            <input type="text" id="company">
+        </div>
+        <div class="col-md-1 row">
+            <label>Block</label>
+            <input type="text" id="block">
+        </div>
+        <div class="col-md-1 row">
+            <label>Zone</label>
+            <select id="zone" asp-items="ViewBag.cboZone">
+   
+            </select>
+        </div>
+        <div class="col-md-1 row">
+            <label>Guest Type</label>
+            <select id="guestType">
+                <option value="0" selected>All</option>
+                <option value="1">Main Guest</option>
+
+                <option value="2">RoomSharer</option>
+            </select>
+        </div>
+        <div class="col-md-2 row">
+            <label>Arrival From</label>
+            <div class="row">
+                <input type="date" class="col-md-11" id="arrivalForm" disabled>
+                <input type="checkbox" class="col-md-1" id="chooseArrivalForm">
+            </div>
+        </div>
+        <div class="col-md-2 row">
+            <label>Arrival To</label>
+            <div class="row">
+                <input type="date" class="col-md-11" id="arrivalTo" disabled>
+                <input type="checkbox" id="chooseArrivalTo" class="col-md-1" >
+            </div>
+            
+        </div>
+        <div class="col-md-2 row">
+            <label>Departure</label>
+            <div class="row">
+                <input type="date" id="departure" class="col-md-11" disabled>
+                <input type="checkbox" id="chooseDeparture" class="col-md-1" >
+            </div>
+            
+        </div>
+        <div class="col-md-10 row" >
+            <label>Search Type</label>
+            <div style="display:flex;column-gap:4px">
+                <div class="form-group-new-reservation">
+                    <input type="radio" name="searchType" checked value="0" style="height:auto">
+                    <label>GuestInHouse</label>
+                </div>
+                <div class="form-group-new-reservation">
+                    <input type="radio" name="searchType" value="1" style="height:auto">
+                    <label>Checked out</label>
+                </div>
+                <div class="form-group-new-reservation">
+                    <input type="radio" name="searchType" value="3" style="height:auto">
+                    <label>Due Out</label>
+                </div>
+                <div class="form-group-new-reservation">
+                    <input type="radio" name="searchType" value="4" style="height:auto">
+                    <label>Checked Out ToDay</label>
+                </div>
+                <div class="form-group-new-reservation">
+                    <input type="radio" name="searchType" value="5" style="height:auto">
+                    <label>Check Out Today</label>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div id="gridContainer" class="gridContainer mt-2"></div>
+<script>
+    $(document).ready( function () {
+        searchReservation();
+    });
+    function searchReservation() {
+        getBusinessDate().then(function () {
+            $.ajax({
+                url: '/Cashiering/GuestInHouse',
+                type: 'get',
+                dataType: 'json',
+                data: {
+                    room : $('#room').val(),
+                    name:$('#name').val(),
+                    block: $('#block').val(),
+                    group:$('#group').val(),
+                    company:$('#company').val(),
+                    confirmationNo:$('#confirmationNo').val(),
+                    arrivalDate:$('#arrivalForm').val(),
+                    arrivalTo:$('#arrivalTo').val(),
+                    departure:$('#departure').val(),
+                    crsNo:$('#crsNo').val(),
+                    package:$('#package').val(),
+                    guestName:$('#guestType').val(),
+                    zone:$('#zone').val(),
+                    typeSearch:$('input[name="searchType"]:checked').val(),
+                    chooseArrivalFrom:$('#chooseArrivalForm').is(':checked') ? 1 : 0,
+                    chooseArrivalTo:$('#chooseArrivalTo').is(':checked') ? 1 : 0,
+                    chooseDeparture:$('#chooseDeparture').is(':checked') ? 1 : 0,
+
+                },
+                crossDomain: false,
+                headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+                success: function (result) {
+                    initializeDataGridBilling(result);
+                },
+                error: function (xhr, statusText, err) {
+                    if (xhr.status == 401) {
+                        sessionTimeout();
+                    }
+                },
+
+            });
+        }).catch(function (xhr, statusText, err) {
+            if (xhr.status == 401) {
+                sessionTimeout();
+            }
+        });
+    }
+    function getBusinessDate() {
+        return $.ajax({
+            url: '/Reservation/GetBusinessDate',
+            type: 'get',
+            dataType: 'json',
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                $('#arrivalForm').val(result.split('T')[0]);
+                $('#arrivalTo').val(result.split('T')[0]);
+                $('#departure').val(result.split('T')[0]);
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                }
+            }
+        });
+    }
+    function initializeDataGridBilling(data) {
+        $("#gridContainer").dxDataGrid({
+            dataSource: data,
+            allowColumnResizing: true,
+            columnResizingMode: "widget", // cho phép kéo giãn cột mượt mà
+            columnAutoWidth: true,        // <<< Đây là dòng quan trọng nhất để cột tự động fit nội dung
+
+            paging: { pageSize: 15 },
+            scrolling: {
+                rowRenderingMode: 'virtual'
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [15, 20, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true
+            },
+            filterRow: {
+                visible: true,
+                applyFilter: "auto"
+            },
+            selection: {
+                mode: "single"
+            },
+
+
+        });
+    }
+
+    function toggleDateInput(checkboxId, inputId) {
+        const $checkbox = $('#' + checkboxId);
+        const $input    = $('#' + inputId);
+
+        // Khi thay đổi trạng thái checkbox
+        $checkbox.on('change', function () {
+            if (this.checked) {
+                $input.prop('disabled', false);   // bật input
+            } else {
+                $input.prop('disabled', true);    // tắt input
+            }
+        });
+    }
+    toggleDateInput('chooseArrivalForm', 'arrivalForm');
+    toggleDateInput('chooseArrivalTo',   'arrivalTo');
+    toggleDateInput('chooseDeparture',  'departure');
+</script>

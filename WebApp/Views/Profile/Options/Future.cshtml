@@ -1,0 +1,126 @@
+﻿<div class="modal fade modal-xl" id="modalFuture" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Future</h5>
+                <button type="button" class="btn-close" onclick="closeModalFuture()"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mt-2">
+                    <button class="submit-button-clear-reservation" id="btnNewGrid"> New</button>
+                    <button class="submit-button-clear-reservation" onclick="closeModalFuture();">Close</button>
+                </div>
+
+
+
+                <div class="mui-card mt-2">
+                    <div id="gridContainerSearchFuture" class="mt-2 gridContainer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openModalFuture(){
+        GetFuture();
+        $('#modalFuture').modal('show');
+    }
+    function closeModalFuture(){
+        $('#memberName').val('');
+        $('#modalFuture').modal('hide');
+    }
+    function GetFuture(){
+        $.ajax({
+            url: '/Profile/SearchProfileFuture',
+            type: 'GET',
+            data: {
+                profileID: profileID,
+                profileType: profileType
+            },
+            success: function (data) {
+                initializeDataGridFuture(data);
+            },
+            error: function () {
+                alert('Error retrieving Future data.');
+            }
+        });
+
+    }
+    $("#btnNewGrid").on("click", function () {
+        window.location.href = "/Reservation/NewReservation";
+    });
+       
+    function initializeDataGridFuture(data) {
+
+        $("#gridContainerSearchFuture").dxDataGrid({
+
+        dataSource: data,
+        allowColumnResizing: true,  // Dữ liệu từ server
+            columns: [
+                { dataField: "_ConfirmationNo", caption: "Conf.No", width: 90 },
+                { dataField: "_CRSNo", caption: "CRSNo", width: 90 },
+                { dataField: "GroupCode", caption: "Group Code", width: 120 },
+
+                { dataField: "FirstArrival", caption: "First Arr", width: 100, dataType: "date", format: "dd/MM/yyyy" },
+                { dataField: "LastDeparture", caption: "Last Dep", width: 100 , dataType: "date", format: "dd/MM/yyyy"},
+
+                { dataField: "AgentName", caption: "Agent", width: 200 },
+
+                {
+                    dataField: "AmountAfterTax",
+                    caption: "Total Amount",
+                    dataType: "number",
+                    format: "#,##0",
+                    width: 130
+                },
+
+                { dataField: "TotalRoom", caption: "Total Rms", width: 90  ,dataType: "number"},
+                { dataField: "TotalAdult", caption: "Total A", width: 80,dataType: "number" },
+                { dataField: "TotalChild", caption: "Total C", width: 80 ,dataType: "number"},
+                { dataField: "TotalChild1", caption: "Total C1", width: 80 ,dataType: "number"},
+                { dataField: "TotalChild2", caption: "Total C2", width: 80 ,dataType: "number"},
+
+                { dataField: "_Status", caption: "Status", width: 100 },
+                { dataField: "_Comment", caption: "Comment", width: 250 },
+
+                { dataField: "CreateBy", caption: "Create By", width: 120 },
+                { dataField: "CreateOn", caption: "Create On", dataType: "date", format: "dd/MM/yyyy", width: 110 },
+
+                { dataField: "UpdateBy", caption: "Update By", width: 120 },
+                { dataField: "UpdateOn", caption: "Update On", dataType: "date", format: "dd/MM/yyyy", width: 110 }
+            ],
+            paging: { pageSize: 15 },
+            scrolling: {
+                mode: "standard",          // BẮT BUỘC để scroll ngang
+                rowRenderingMode: "virtual",
+                columnRenderingMode: "virtual"
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [15, 20, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true,
+            },
+
+            selection: {
+                mode: "multiple",
+                showCheckBoxesMode: "none"
+            },
+
+            showBorders: false,
+            onRowClick: function(e) {
+            }
+
+        });
+    }
+
+    function openModalNewFuture(){
+
+        resetFormFutureAdd();
+        $('#modalNewFuture').modal('show');
+    }
+  
+</script>

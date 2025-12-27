@@ -1,0 +1,702 @@
+﻿@* <link href="~/css/new_reservation.css" rel="stylesheet" asp-append-version="true" /> *@
+
+@* Model option *@
+<div class="modal fade modal-xl" id="modalOption" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Option</h5>
+                <button type="button" class="btn-close" onclick="closeModalOption()"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Tab Navigation -->
+                <ul class="nav nav-tabs  rounded-top mui-card" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active fw-medium px-3 py-2" id="tab1-tab" type="button" role="tab" aria-controls="accompanying" aria-selected="true">Accompanying</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link fw-medium px-3 py-2" id="tab2-tab" type="button" role="tab" aria-controls="addOn" aria-selected="false">Add On</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link fw-medium px-3 py-2" id="tab3-tab" type="button" role="tab" aria-controls="alerts" aria-selected="false">Alerts</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link fw-medium px-3 py-2" id="tab4-tab" data-bs-toggle="tab" data-bs-target="#tab4" type="button" role="tab" aria-controls="tab4" aria-selected="false">Billing</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link fw-medium px-3 py-2" id="tab5-tab" data-bs-toggle="tab" data-bs-target="#tab5" type="button" role="tab" aria-controls="tab5" aria-selected="false">Change</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link fw-medium px-3 py-2" id="tab6-tab" data-bs-toggle="tab" data-bs-target="#tab6" type="button" role="tab" aria-controls="tab6" aria-selected="false">Deposit/DXL</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link fw-medium px-3 py-2" id="tab7-tab" type="button" role="tab" aria-controls="fixedCharges" aria-selected="false">Fixed Charges</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link fw-medium px-3 py-2" id="tab8-tab" data-bs-toggle="tab" data-bs-target="#tab8" type="button" role="tab" aria-controls="tab8" aria-selected="false">History</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link fw-medium px-3 py-2" id="tab9-tab" data-bs-toggle="tab" data-bs-target="#tab9" type="button" role="tab" aria-controls="tab9" aria-selected="false">New Message</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link fw-medium px-3 py-2" id="tab10-tab" data-bs-toggle="tab" data-bs-target="#tab10" type="button" role="tab" aria-controls="tab10" aria-selected="false">Messages</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link fw-medium px-3 py-2" id="tab11-tab" data-bs-toggle="tab" data-bs-target="#tab11" type="button" role="tab" aria-controls="tab11" aria-selected="false">Room Move</button>
+                    </li>
+                </ul>
+                
+                <!-- Tab Content -->
+                <div class="tab-content mt-1" id="myTabContent">
+                    <div class="tab-pane fade show active" id="accompanying" role="tabpanel" aria-labelledby="tab1-tab">
+                        <div class="p-3">
+                            <div class="mb-1 mt-2">
+                                <button class="mui-button mui-button-search" id="attach" onclick="AttachAccompanying();"><i class="fa-solid fa-paperclip"></i> Attach</button>
+                                <button class="mui-button mui-button-delete" id="detach" onclick="detach()"><i class="fa-solid fa-xmark"></i>Detach</button>
+                                <button class="mui-button mui-button-clear" onclick="closeModalOption();"><i class="fa-solid fa-circle-xmark"></i> Close</button>
+                            </div>
+                            <div>
+                                <select id="txtNameAccompanying"></select>
+                            </div>
+                            <div class="mui-card mt-2">
+                                <div id="gridContainerAccompanying" class="mt-2 gridContainer"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="addOn" role="tabpanel" aria-labelledby="tab2-tab">
+                        <div class="p-3">
+                            <div class="mb-1 mt-1">
+                                <button class="mui-button mui-button-search"><i class="fa-solid fa-magnifying-glass"></i> OK</button>
+                                <button class="mui-button mui-button-clear"><i class="fa-solid fa-circle-xmark"></i> Close</button>
+                            </div>
+                            <div class="bg-light border rounded col-md-6 row">
+                                <p class="mt-2">Which of these reservation attributes do you want to coppy?</p>
+
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="col1[]"> Payment Method
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="col1[]"> Specials
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="col1[]"> Windown/Room Routing Instructions
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="col2[]"> Comment
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="col2[]"> Packages
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="col2[]"> Item Inventory
+                                </label>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="alerts" role="tabpanel" aria-labelledby="tab3-tab">
+                        <div class="p-3">
+                            <div class="mb-1 mt-2">
+                                <button class="mui-button mui-button-new" id="attach"><i class="fa-solid fa-paperclip"></i> Save</button>
+                                <button class="mui-button mui-button-edit" id="detach"><i class="fa-solid fa-pen-to-square"></i>Edit</button>
+                                <button class="mui-button mui-button-delete" id="detach"><i class="fa-solid fa-xmark"></i>Delete</button>
+                                <button class="mui-button mui-button-clear"><i class="fa-solid fa-circle-xmark"></i> Close</button>
+                            </div>
+                            <div class="bg-light rounded-top shadow-sm row">
+                                @*                               <div class="col-md-2 mb-1">
+                                    <label for="zone" class="form-label">Code</label>
+                                    <select id="codeAlerts" class="form-select"></select>
+                                </div>
+                                <div class="col-md-2 mb-1">
+                                    <label for="roomShare" class="form-label">Include Roomsharer</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" checked type="checkbox" id="roomShareAlerts" name="roomShareAlerts" value="IncludeRS">
+                                    </div>
+                                </div>
+                                <div class="col-md-2 mb-1">
+                                    <label for="zone" class="form-label">Area</label>
+                                    <select id="areaAlerts" class="form-select"></select>
+                                </div>
+                                 <div class="col-md-2 mb-1">
+                                    <label for="name" class="form-label">Warning Day</label>
+                                    <input id="name" type="text" class="form-control" />
+                                </div>
+                                <div class="col-md-2 mb-1">
+                                    <label for="roomShare" class="form-label">Is Active</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" checked type="checkbox" id="activeAlerts" name="activeAlerts" value="IncludeRS">
+                                    </div>
+                                </div>
+                                <div class="col-md-1 mb-1">
+                                    <label for="name" class="form-label">Description</label>
+                                    <textarea id="name" type="text" class="form-control" />
+                                </div> *@
+                            </div>
+                            <div class="mui-card mt-2">
+                                <div id="gridContainerAlerts" class="mt-2 gridContainer"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="fixedCharges" role="tabpanel" aria-labelledby="tab4-tab">
+                        <div class="mui-divider"></div>
+                        <div >
+                            <button class="mui-button mui-button-search" onclick="openNewFixedCharges();"><i class="fa-solid fa-plus"></i> New</button>
+                            <button class="mui-button mui-button-edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
+                            <button class="mui-button mui-button-delete"><i class="fa-solid fa-trash"></i> Delete</button>
+                            <button class="mui-button mui-button-clear"><i class="fa-solid fa-arrows-rotate"></i> Refresh</button>
+                            <button class="mui-button mui-button-export" onclick="AddReservationFixedChargeDefault('fc1');"><i class="fa-solid fa-file"></i> EB-TA</button>
+                            <button class="mui-button mui-button-export" onclick="AddReservationFixedChargeDefault('fc2');"><i class="fa-solid fa-file"></i> EB-IND</button>
+                            <button class="mui-button mui-button-export" onclick="AddReservationFixedChargeDefault('fc3');"><i class="fa-solid fa-file"></i> CS-TA</button>
+                            <button class="mui-button mui-button-export" onclick="AddReservationFixedChargeDefault('fc4');"><i class="fa-solid fa-file"></i> CS-IND</button>
+                            <button class="mui-button mui-button-close"><i class="fas fa-times"></i> Close</button>
+                        </div>
+                        <div class="mui-divider"></div>
+                        <div class="bg-light border rounded" style="display:none;padding: 0 12px 12px 12px" id="filterFixedChargeWrapper">
+                            <div class="row">
+                                <div class="col-md-5 mb-2 row">
+                                    <label for="input1" class="form-label col-md-2" style="min-width:0;text-align:left">Name</label>
+                                    <input type="text" class="form-control col-md-10" id="nameProfileFixedcharge" disabled>
+                                </div>
+                                <div class="col-md-2 mb-2 row">
+
+                                    <label for="input1" class="form-label col-md-5" style="min-width:0;text-align:left">Arrival</label>
+                                    <input type="text" class="form-control col-md-5" id="arrivalProfileFixedCharge" disabled>
+                                </div>
+                                <div class="col-md-2 mb-2 row">
+                                    <label for="input1" class="form-label col-md-5" style="min-width:0;text-align:left">Departure</label>
+                                    <input type="text" class="form-control col-md-5" id="departureFixedCharge" disabled>
+                                </div>
+                                <div class="col-md-2 mb-2 row">
+                                    <label for="input1" class="form-label col-md-4" style="min-width:0;text-align:left">Nights</label>
+                                    <input type="text" class="form-control col-md-8" id="nightFixedCharge" disabled>
+                                </div>
+                            </div>
+                           @*  <div class="form-group row" style="display:flex">
+                                <div class="form-check col-md-2">
+                                    <input class="form-check-input" type="radio" name="typeDate" value="1">
+                                    <label class="form-check-label" for="hkClean">Everyday</label>
+                                </div>
+                                <div class="form-check col-md-2">
+                                    <input class="form-check-input" type="radio" name="typeDate" value="2">
+                                    <label class="form-check-label" for="hkDirty">Date</label>
+                                </div>
+                                <div class="form-check col-md-2">
+                                    <input class="form-check-input" type="radio" name="typeDate" value="4">
+                                    <label class="form-check-label" for="hkInProgress">Day</label>
+                                </div>
+                                <div class="form-check col-md-2">
+                                    <input class="form-check-input" type="radio" name="typeDate" value="5">
+                                    <label class="form-check-label" for="hkOutOfService">At Check In</label>
+                                </div>
+                                <div class="form-check col-md-2">
+                                    <input class="form-check-input" type="radio" name="typeDate" value="6">
+                                    <label class="form-check-label" for="hkInspected">At Check Out</label>
+                                </div>
+
+                            </div> *@
+                            <div class="row">
+                                <div class="radio-group col-md-2">
+                                    <input type="radio" id="everyday" name="optionFixedCharge" checked value="1">
+                                    <label for="everyday" style="text-align:left">Everyday</label>
+                                </div>
+                                <div class="radio-group col-md-2 row">
+                                    <input type="radio" id="date" name="optionFixedCharge" class="col-md-1" style="flex:0" value="2">
+                                    <label for="date" style="text-align:left;min-width:0px"  class="col-md-3">Date</label>
+                                    <input type="date" id="dateInput" value="30/08/24" class="col-md-7" disabled>
+                                </div>
+                                <div class="radio-group col-md-2 row">
+                                    <input type="radio" id="day" name="optionFixedCharge" class="col-md-1" style="flex:0" value="3">
+                                    <label for="day" style="text-align:left;min-width:0px" class="col-md-3">Day</label>
+                                    <input type="date" id="dayInput" class="col-md-7" disabled>
+                                </div>
+                                <div class="radio-group col-md-2">
+                                    <input type="radio" id="atCheckIn" name="optionFixedCharge" value="4">
+                                    <label for="atCheckIn" style="text-align:left">At Check In</label>
+                                </div>
+                                <div class="radio-group col-md-2">
+                                    <input type="radio" id="atCheckOut" name="optionFixedCharge" value="5">
+                                    <label for="atCheckOut" style="text-align:left">At Check Out</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 row">
+                                    <div class="col-md-12 mb-2 row">
+                                        <label for="input1" class="form-label col-md-5" style="min-width:0;text-align:left">Begin Date</label>
+                                        <input type="date" class="form-control col-md-7" id="beginDateFixedCharge" alt="">
+                                    </div>
+                                    <div class="col-md-12 mb-2 row">
+                                        <label for="input1" class="form-label col-md-5" style="min-width:0;text-align:left">Nights</label>
+                                        <input type="text" class="form-control col-md-7" id="nightFixedChargeAdd" disabled>
+                                    </div>
+                                    <div class="col-md-12 mb-2 row">
+                                        <label for="input1" class="form-label col-md-5" style="min-width:0;text-align:left">End Date</label>
+                                        <input type="date" class="form-control col-md-7" id="endDateFixedCharge">
+                                    </div>
+                                </div>
+                                <div class="col-md-8 row">
+                                    <div class="col-md-6 mb-2 row">
+                                        <label for="input1" class="form-label col-md-5" style="min-width:0;text-align:left">Trans. Code</label>
+                                        <select type="text" class="form-control col-md-7" id="transCodeFixedCharge" asp-items="ViewBag.cboTransaction"></select>
+
+                                    </div>
+                                    <div class="col-md-2 mb-2 row">
+                                        <label for="input1" class="form-label col-md-7" style="min-width:0;text-align:left">Quantity</label>
+                                        <input type="text" class="form-control col-md-5" id="quantityFixedCharge" value="1">
+                                    </div>
+                                    <div class="col-md-6 mb-2 row">
+                                        <label for="input1" class="form-label col-md-5" style="min-width:0;text-align:left">Price</label>
+                                        <input type="text" class="form-control col-md-7" id="priceFixedCharge" value="0">
+                                    </div>
+                                    <div class="col-md-4 mb-2 row">
+                                        <label for="input1" class="form-label col-md-5" style="min-width:0;text-align:left">++net</label>
+                                        <input type="text" class="form-control col-md-7" id="netFixedCharge" value="0">
+                                    </div>
+                                    <div class="col-md-3 mb-2 row">
+                                        <label for="input1" class="form-label col-md-5" style="min-width:0;text-align:left">Currency</label>
+                                        <input type="text" class="form-control col-md-7" id="currencyFixedChargeAdd" disabled value="VND">
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <button class="mui-button mui-button-new" onclick="SaveReservationFixedCharge();"><i class="fa-solid fa-plus"></i> Save</button>
+                                <button class="mui-button mui-button-cancel" onclick="cancelFixedCharges();"><i class="fa-solid fa-pen-to-square"></i> Cancel</button>
+                            </div>
+                        </div>
+                        <div class="mui-card mt-2">
+                            <div id="gridContainerFixedCharge" class="mt-2 gridContainer"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('.nav-link').click(function(e) {
+        e.preventDefault();
+        $('.nav-link').removeClass('active').attr('aria-selected', 'false');
+        $('.tab-pane').removeClass('show active');
+        $(this).addClass('active').attr('aria-selected', 'true');
+        const targetTab = $(this).attr('aria-controls');
+        if(targetTab == 'accompanying'){
+            getInfoByProfileIDAccompanying(idReservation);
+        }
+        if(targetTab == 'alerts'){
+            initializeDataGridAlerts(listAlerts);
+        }
+        if(targetTab == 'fixedCharges'){
+            document.getElementById('filterFixedChargeWrapper').style.display = 'none';
+
+            GetFixedChargesByReservationID(idReservation);
+        }
+        $('#' + targetTab).addClass('show active');
+    });
+
+    function openModalOption() {
+        if (idReservation === 0) {
+            showToast('Error', 'Please choose Booking', false);
+            return;
+        }
+
+        // Reset all tabs and tab panes
+        $('.nav-link').removeClass('active').attr('aria-selected', 'false');
+        $('.tab-pane').removeClass('show active');
+
+        // Optionally set a default tab (e.g., 'accompanying') as active
+        const defaultTab = 'accompanying'; // You can change this to any default tab ID
+        $(`.nav-link[aria-controls="${defaultTab}"]`).addClass('active').attr('aria-selected', 'true');
+        $(`#${defaultTab}`).addClass('show active');
+
+        // Call the function associated with the default tab
+        if (defaultTab === 'accompanying') {
+            getInfoByProfileIDAccompanying(idReservation);
+        } else if (defaultTab === 'alerts') {
+            initializeDataGridAlerts(listAlerts);
+        } else if (defaultTab === 'fixedCharges') {
+            document.getElementById('filterFixedChargeWrapper').style.display = 'none';
+            GetFixedChargesByReservationID(idReservation);
+        }
+
+        // Hide detach and show modal
+        $('#detach').hide();
+        $('#modalOption').modal('show');
+    }
+    function closeModalOption(){
+        $('#modalOption').modal('hide');
+    }
+    //begin accompanying option
+    function getInfoByProfileIDAccompanying(id) {
+        $.ajax({
+            url: '/Reservation/GetReservationAccompanyingByReservationID',
+            type: 'get',
+            dataType: 'json',
+            data: {
+                reservationID: id
+            },
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                console.log(result);
+                initializeDataGridAccompanying(result);
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                }
+            }
+        });
+    }
+    var profileID = 0;
+    function detach(){
+        $.ajax({
+            url: '/Reservation/DettachAccompanying',
+            type: 'POST',
+            // headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            data: {id:profileID},
+            success: function (data) {
+                if (data.code == 0) {
+                    getInfoByProfileIDAccompanying(idReservation);
+                    showToast('Success', data.msg, true);
+                } else {
+                    showToast('Error', data.msg, false);
+                }
+
+            },
+            error: function (xhr, statusText, err) {
+
+            }
+        });
+
+    }
+
+    function AttachAccompanying() {
+        const userName = JSON.parse(localStorage.getItem("Loginname"));
+        const userID = JSON.parse(localStorage.getItem("userID"));
+        var formData = new FormData();
+        formData.append('rsvID', idReservation);
+        formData.append('profileAgentID', $('#txtNameAccompanying').val());
+        formData.append('userName', userName);
+        formData.append('userID', userID);
+        $.ajax({
+            url: '/Reservation/AttachAccompanying',
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            // headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            data: formData,
+            success: function (data) {
+                if (data.code == 0) {
+                    var value = $('#txtNameAccompanying').val();
+                    getInfoByProfileIDAccompanying(idReservation);
+                    const tomSelectInstance = $('#txtNameAccompanying')[0].tomselect;
+                    tomSelectInstance.setValue(0);
+                    showToast('Success', data.msg, true);
+                } else {
+                    showToast('Error', data.msg, false);
+                }
+
+            },
+            error: function (xhr, statusText, err) {
+
+            }
+        });
+
+    }
+
+    function initializeDataGridAccompanying(data) {
+
+        $("#gridContainerAccompanying").dxDataGrid({
+
+        dataSource: data,   allowColumnResizing: true,
+            columns: [
+
+
+                { dataField: "ID", caption: "ID",  visible: false},
+                { dataField: "Account", caption: "Name"  },
+                { dataField: "City", caption: "City"},
+                { dataField: "DateOfBirth", caption: "Birthday"},
+            ],
+            paging: { pageSize: 15 },
+            scrolling: {
+                rowRenderingMode: 'virtual',
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [15, 20, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true,
+            },
+            filterRow: {
+                    visible: true,
+                    applyFilter: "auto"
+            },
+            selection: {
+                mode: "single" // Allows only one row to be selected at a time
+            },
+            onRowClick: function(e) {
+                profileID = e.data.ID;
+                $('#detach').show();
+            }
+        });
+    }
+    // end acccompanying option
+
+
+    //begin alerts option
+    function getAlerts(){
+
+        initializeDataGridAlerts(listAlerts);
+    }
+    var listAlerts = [];
+    function initializeDataGridAlerts(data) {
+        $("#gridContainerAlerts").dxDataGrid({
+
+        dataSource: data,   allowColumnResizing: true,
+            columns: [
+
+
+                { dataField: "id", caption: "ID",  visible: false},
+                { dataField: "code", caption: "Code",},
+
+                { dataField: "account", caption: "Area"  },
+                { dataField: "city", caption: "Description"},
+            ],
+            paging: { pageSize: 15 },
+            scrolling: {
+                rowRenderingMode: 'virtual',
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [15, 20, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true,
+            },
+            filterRow: {
+                    visible: true,
+                    applyFilter: "auto"
+            },
+            selection: {
+                mode: "single" // Allows only one row to be selected at a time
+            },
+            onRowClick: function(e) {
+            }
+        });
+    }
+    // end alerts option
+
+
+    //begin fixed charges option
+    function openNewFixedCharges(){
+        document.getElementById('filterFixedChargeWrapper').style.display = 'block';
+
+    }
+    function cancelFixedCharges(){
+        document.getElementById('filterFixedChargeWrapper').style.display = 'none';
+    }
+    function GetFixedChargesByReservationID(id) {
+        $.ajax({
+            url: '/Reservation/GetFixedChargesByReservationID',
+            type: 'get',
+            dataType: 'json',
+            data: {
+                reservationID: id
+            },
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                initializeDataGridFixedCharges(result.reservationFixedCharge);
+                setInfoNewFixedCharges(result.reservation);
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                }
+            }
+        });
+    }
+    function initializeDataGridFixedCharges(data) {
+        var columnWidth = 150;
+        $("#gridContainerFixedCharge").dxDataGrid({
+
+        dataSource: data,   allowColumnResizing: true,
+            columns: [
+                { dataField: "id", caption: "ID",  visible: false},
+                { dataField: "transactionCode", caption: "Code",width:columnWidth-70},
+                { dataField: "description", caption: "Description",width:columnWidth + 70  },
+                { dataField: "quantity", caption: "Qty",width:columnWidth- 100},
+                { dataField: "amount", caption: "Amount",width:columnWidth- 50},
+                { dataField: "amountAfterTax", caption: "Amount Net",width:columnWidth- 50},
+                { dataField: "currencyID", caption: "Currency",width:columnWidth- 50},
+                { dataField: "beginDate", caption: "Begin Date",width:columnWidth- 20,},
+                { dataField: "endDate", caption: "End Date",width:columnWidth- 20},
+                { dataField: "postingDate", caption: "Posting Date",width:columnWidth- 20},
+                { dataField: "postingDay", caption: "Posting Day",width:columnWidth- 20},
+                { dataField: "articlesCode", caption: "Article Code",width:columnWidth- 50},
+            ],
+            paging: { pageSize: 15 },
+            scrolling: {
+                rowRenderingMode: 'virtual',
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [15, 20, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true,
+            },
+            filterRow: {
+                    visible: true,
+                    applyFilter: "auto"
+            },
+            selection: {
+                mode: "single" 
+            },
+            onRowClick: function(e) {
+            }
+        });
+    }
+    function setInfoNewFixedCharges(reservation){
+        console.log(reservation);
+        $('#nameProfileFixedcharge').val(reservation.lastName);
+        var arrivalDate = reservation.arrivalDate.split('T')[0];
+        $('#arrivalProfileFixedCharge').val(arrivalDate.split('-')[2] + '/' + arrivalDate.split('-')[1] + '/' + arrivalDate.split('-')[0]);
+        var departureDate = reservation.departureDate.split('T')[0];
+        $('#departureFixedCharge').val(departureDate.split('-')[2] + '/' + departureDate.split('-')[1] + '/' + departureDate.split('-')[0]);
+        $('#nightFixedCharge').val(reservation.noOfNight);
+        $('#beginDateFixedCharge').val(reservation.arrivalDate.slice(0, 10));
+        $('#endDateFixedCharge').val(reservation.departureDate.slice(0, 10));
+        $('#nightFixedChargeAdd').val(reservation.noOfNight);                                    
+        $('#nameProfileFixedcharge').val('');
+        $('#arrivalProfileFixedCharge').val('');
+        $('#departureFixedCharge').val('');
+        $('#nightFixedCharge').val('');
+        $('#priceFixedCharge').val('0');
+        $('#netFixedCharge').val('0');
+        $('#quantityFixedCharge').val('1');
+    }
+    $('#transCodeFixedCharge').on('change', function() {
+        $('#priceFixedCharge').val('0');
+        $('#netFixedCharge').val('0');
+    });
+    $('#priceFixedCharge').blur(function() {
+        CaculateNetFixedCharge($('#transCodeFixedCharge').val(),$('#priceFixedCharge').val());
+    });
+    
+    function CaculateNetFixedCharge(transactionCode, price) {
+        $.ajax({
+            url: '/Reservation/CaculateNetFixedCharge',
+            type: 'get',
+            dataType: 'json',
+            data: {
+                transactionCode: transactionCode,
+                price: price
+            },
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                $('#netFixedCharge').val(result);
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                }
+            }
+        });
+    }
+    const $radioButtons = $('input[name="optionFixedCharge"]');
+    const $dateInput = $('#dateInput');
+    const $dayInput = $('#dayInput');
+    const $beginDateFixedCharge = $('#beginDateFixedCharge');
+    const $endDateFixedCharge = $('#endDateFixedCharge');
+
+    function handleRadioChange() {
+        const selectedValue = $('input[name="optionFixedCharge"]:checked').val();
+
+        // Bật/tắt disabled dựa trên giá trị
+        $dateInput.prop('disabled', selectedValue !== '2');
+        $dayInput.prop('disabled', selectedValue !== '3');
+        $beginDateFixedCharge.prop('disabled', selectedValue !== '1');
+        $endDateFixedCharge.prop('disabled', selectedValue !== '1');
+    }
+
+    $radioButtons.on('change', handleRadioChange);
+
+    handleRadioChange();
+
+    function SaveReservationFixedCharge() {
+        const userID = JSON.parse(localStorage.getItem("userID"));
+        var postingRhythmlID = $('input[name="optionFixedCharge"]:checked').val();
+        var beginDate = $('#beginDateFixedCharge').val();
+        var endDate = $('#endDateFixedCharge').val();
+        if(postingRhythmlID == '2'){
+            beginDate = $('#dateInput').val();
+            endDate = $('#dateInput').val();
+        }
+        if(postingRhythmlID == '3'){
+            beginDate = $('#dayInput').val();
+            endDate = $('#dayInput').val();
+        }
+        var formData = new FormData();
+        formData.append('rsvID', idReservation);
+        formData.append('transCode', $('#transCodeFixedCharge').val());
+        formData.append('quantity', $('#quantityFixedCharge').val());
+        formData.append('currency', $('#currencyFixedChargeAdd').val());
+        formData.append('amount', $('#priceFixedCharge').val());
+        formData.append('net', $('#netFixedCharge').val());
+        formData.append('postingRhythmlID',postingRhythmlID);
+        formData.append('beignDate',beginDate);
+        formData.append('endDate',endDate);
+
+        formData.append('userID',userID);
+
+        $.ajax({
+            url: '/Reservation/SaveReservationFixedCharge',
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            // headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            data: formData,
+            success: function (data) {
+                if (data.code == 0) {
+                    GetFixedChargesByReservationID(idReservation);
+                    showToast('Success', data.msg, true);
+                } else {
+                        showToast('Error', data.msg, false);
+                }
+
+            },
+            error: function (xhr, statusText, err) {
+
+            }
+        });
+
+    }
+    function AddReservationFixedChargeDefault(keyName){
+        $.ajax({
+            url: '/Reservation/SaveReservationFixedChargeDefault',
+            type: 'POST',
+ 
+            // headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            data: {
+                keyName: keyName,
+                reservationID : idReservation
+            },
+            success: function (data) {
+                if (data.code == 0) {
+                    GetFixedChargesByReservationID(idReservation);
+                    showToast('Success', data.msg, true);
+                } else {
+                        showToast('Error', data.msg, false);
+                }
+
+            },
+            error: function (xhr, statusText, err) {
+
+            }
+        });
+    }
+
+    //end fixed charges option
+</script>

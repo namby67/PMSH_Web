@@ -1,0 +1,352 @@
+﻿@{
+    Layout = null;
+}
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<link rel="icon" type="image/png" href="~/images/logo.png" />
+
+<link href="~/css/assets/button.css" rel="stylesheet" />
+
+<style>
+    body {
+        color: #000;
+        overflow-x: hidden;
+        height: 100%;
+        
+        background-repeat: no-repeat;
+    }
+
+    .card0 {
+        box-shadow: 0px 4px 8px 0px #757575;
+        border-radius: 0px;
+    }
+
+    .card2 {
+        margin: 0px 40px;
+    }
+
+    .logo {
+        width: 200px;
+        height: 100px;
+        margin-top: 20px;
+        margin-left: 35px;
+    }
+
+    .image {
+        width: 360px;
+        height: 280px;
+    }
+
+    .border-line {
+        border-right: 1px solid #EEEEEE;
+    }
+
+    .facebook {
+        background-color: #3b5998;
+        color: #fff;
+        font-size: 18px;
+        padding-top: 5px;
+        border-radius: 50%;
+        width: 35px;
+        height: 35px;
+        cursor: pointer;
+    }
+
+    .twitter {
+        background-color: #1DA1F2;
+        color: #fff;
+        font-size: 18px;
+        padding-top: 5px;
+        border-radius: 50%;
+        width: 35px;
+        height: 35px;
+        cursor: pointer;
+    }
+
+    .linkedin {
+        background-color: #2867B2;
+        color: #fff;
+        font-size: 18px;
+        padding-top: 5px;
+        border-radius: 50%;
+        width: 35px;
+        height: 35px;
+        cursor: pointer;
+    }
+
+    .line {
+        height: 1px;
+        width: 45%;
+        background-color: #E0E0E0;
+        margin-top: 10px;
+    }
+
+    .or {
+        width: 10%;
+        font-weight: bold;
+    }
+
+    .text-sm {
+        font-size: 14px !important;
+    }
+
+    ::placeholder {
+        color: #BDBDBD;
+        opacity: 1;
+        font-weight: 300
+    }
+
+    :-ms-input-placeholder {
+        color: #BDBDBD;
+        font-weight: 300
+    }
+
+    ::-ms-input-placeholder {
+        color: #BDBDBD;
+        font-weight: 300
+    }
+
+    input, textarea {
+        padding: 10px 12px 10px 12px;
+        border: 1px solid lightgrey;
+        border-radius: 2px;
+        margin-bottom: 5px;
+        margin-top: 2px;
+        width: 100%;
+        box-sizing: border-box;
+        color: #2C3E50;
+        font-size: 14px;
+        letter-spacing: 1px;
+    }
+
+        input:focus, textarea:focus {
+            -moz-box-shadow: none !important;
+            -webkit-box-shadow: none !important;
+            box-shadow: none !important;
+            border: 1px solid #304FFE;
+            outline-width: 0;
+        }
+
+    button:focus {
+        -moz-box-shadow: none !important;
+        -webkit-box-shadow: none !important;
+        box-shadow: none !important;
+        outline-width: 0;
+    }
+
+    a {
+        color: inherit;
+        cursor: pointer;
+    }
+
+    .btn-blue {
+        background-color: #3b9ac6;
+
+        color: #fff;
+        border-radius: 2px;
+    }
+
+        .btn-blue:hover {
+            background-color: #005f87;
+            cursor: pointer;
+            color: #fff;
+        }
+
+    .bg-blue {
+        color: #fff;
+        background-color: #3b9ac6;
+        
+    }
+
+    .login-wrapper {
+        height: 100vh;
+        background: linear-gradient(to right, #994040, #00509f);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 16px;
+    }
+
+    /* ===== CARD ===== */
+    .login-card {
+        background: #ffffff;
+        border-radius: 24px;
+        width: 100%;
+        max-width: 420px;
+        max-height: 99vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    /* ===== HEADER ===== */
+    .login-header {
+        background: #ECEBFF url('data:image/svg+xml;base64,...') no-repeat 100% 70%;
+        padding: 28px 20px;
+        text-align: center;
+    }
+
+    .login-logo {
+        max-width: 180px;
+        width: 100%;
+        height: auto;
+   
+    }
+
+    .login-title {
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    .login-subtitle {
+        font-size: 16px;
+        color: #555;
+        margin-top: 4px;
+    }
+
+    /* ===== BODY ===== */
+    .login-body {
+        padding: 24px;
+    }
+
+        .login-body h3 {
+            margin: 0 0 20px;
+            font-size: 22px;
+        }
+
+    .form-group {
+        margin-bottom: 16px;
+    }
+
+        .form-group label {
+            font-size: 15px;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+    .form-control {
+        width: 100%;
+        padding: 10px 12px;
+        border-radius: 8px;
+        border: 1px solid #dcdcdc;
+        font-size: 14px;
+        outline: none;
+    }
+
+        .form-control:focus {
+            border-color: #00509f;
+        }
+
+    .btn-login {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 8px;
+        background: #4ba3c7;
+        color: #fff;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+        .btn-login:hover {
+            background: #3b8fb1;
+        }
+
+
+    
+</style>
+<div class="login-wrapper">
+    <div class="login-card">
+
+        <!-- HEADER -->
+        <div class="login-header">
+            <img src="/images/logo.png" alt="Logo" class="login-logo">
+
+            <div class="login-title">
+                PROPERTY MANAGEMENT SYSTEM FOR HOTEL AND RESORT
+            </div>
+            <div class="login-subtitle">
+                Our profession, value in your success
+            </div>
+        </div>
+
+        <!-- BODY -->
+        <div class="login-body">
+
+            <div class="form-group">
+                <label>Login Name</label>
+                <input type="text" class="form-control" placeholder="Enter username" id="txtLoginName">
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" class="form-control" placeholder="Enter password" id="txtPassword">
+            </div>
+
+            <button class="btn-login" onclick="login()">Login</button>
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+    function login() {
+        var formData = new FormData();
+        formData.append('LoginName', $('#txtLoginName').val());
+        formData.append('Password', $('#txtPassword').val());
+
+        $.ajax({
+            url: '/User/Login',
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            // headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            data: formData,
+            success: function (data) {
+                $('#alert').empty();
+                if (data.code == -1) {
+                    $('#alert').append(`<div class="alert alert-danger" role="alert">
+                       ${data.msg}
+                    </div>`)
+                    $('#txtLoginName').val('');
+                    $('#txtPassword').val('');
+                } 
+                else{
+                    localStorage.removeItem("PermissionNames");
+
+                    // Gán dữ liệu mới vào localStorage (dưới dạng chuỗi JSON)
+                    localStorage.setItem("PermissionNames", JSON.stringify(data.data));
+                    localStorage.setItem("crashierLogin", "NotYet");
+
+                        localStorage.removeItem("Loginname");
+
+                    // Gán dữ liệu mới vào localStorage (dưới dạng chuỗi JSON)
+                    localStorage.setItem("Loginname", JSON.stringify(data.namelogin));
+
+                    localStorage.setItem("userID", JSON.stringify(data.userID));
+                    console.log(JSON.stringify(data.businessDate));
+                    localStorage.setItem("businessDate",JSON.stringify(data.businessDate));
+                    window.location.href = "/Home/Index";
+                }
+
+            },
+            error: function (xhr, statusText, err) {
+
+            }
+        });
+
+    }
+    $(document).ready(function () {
+
+        $('#txtLoginName, #txtPassword').on('keypress', function (e) {
+            if (e.which === 13) { // phím Enter
+                login();
+            }
+        });
+    });
+</script>

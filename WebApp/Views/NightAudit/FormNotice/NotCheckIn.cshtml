@@ -1,0 +1,56 @@
+﻿<div class="modal fade modal-xl" id="modalNotCheckIn" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Not Check In</h5>
+                <button type="button" class="btn-close" onclick="closeModalNotCheckIn()"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mui-card mt-2">
+                    <div id="grinContainerNotCheckIn" class="mt-2 gridContainer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function openModalNotCheckIn(data) {
+        initializeDataGridNotCheckIn(data);
+        $('#modalNotCheckIn').modal('show');
+    }
+    function initializeDataGridNotCheckIn(data) {
+        $("#grinContainerNotCheckIn").dxDataGrid({
+            dataSource: data,
+            allowColumnResizing: true,
+            columnResizingMode: "widget", // cho phép kéo giãn cột mượt mà
+            columnAutoWidth: true,        // <<< Đây là dòng quan trọng nhất để cột tự động fit nội dung
+
+            paging: { pageSize: 15 },
+            scrolling: {
+                rowRenderingMode: 'virtual'
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [15, 20, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true
+            },
+            filterRow: {
+                visible: true,
+                applyFilter: "auto"
+            },
+            selection: {
+                mode: "single"
+            },
+
+
+        });
+    }
+    function closeModalNotCheckIn() {
+        $('#modalNotCheckIn').modal('hide');
+        setProcess('process2', '<i class="fa-solid fa-circle-xmark"></i>');
+        setStatus('status2', 'Fail');
+    }
+</script>

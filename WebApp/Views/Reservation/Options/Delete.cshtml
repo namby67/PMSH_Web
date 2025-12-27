@@ -1,0 +1,62 @@
+﻿<style>
+    
+
+</style>
+<div id="confirmBox" class="confirm-overlay">
+    <div class="confirm-box">
+        <h2>Confirmation Action</h2>
+        <p>Are you sure delete reservation?</p>
+        <div class="confirm-buttons">
+            <button class="mui-button mui-button-search" onclick="onConfirm()">OK</button>
+            <button class="mui-button mui-button-clear" onclick="closeConfirm()">Cancel</button>
+        </div>
+    </div>
+</div>
+<script>
+    function openConfirm() {
+        if(idReservation == 0){
+            showToast('Error', 'Please choose booking', false);
+            return;
+        }
+        if(status != 'CANCEL'){
+            showToast('Error', 'Booking Status is not Cancel', false);
+            return;
+        }
+       document.getElementById("confirmBox").style.display = "flex";
+    }
+
+    function closeConfirm() {
+       document.getElementById("confirmBox").style.display = "none";
+    }
+
+    function onConfirm() {
+      closeConfirm();
+      DeleteReservation();
+    }
+    function DeleteReservation() {
+        var formData = new FormData();
+        formData.append('reservationID',idReservation);
+        $.ajax({
+            url: '/Reservation/DeleteReservation',
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            // headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            data: formData,
+            success: function (data) {
+                if (data.code == 0) {
+                        searchReservation();          
+                        showToast('Success', data.msg, true);
+                } else {
+                        showToast('Error', data.msg, false);
+                }
+
+            },
+            error: function (xhr, statusText, err) {
+                 showToast('Error', err, false);
+
+            }
+        });
+
+    }
+</script>

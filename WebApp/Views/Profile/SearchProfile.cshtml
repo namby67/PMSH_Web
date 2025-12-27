@@ -1,0 +1,2676 @@
+﻿@{
+    ViewData["Title"] = "Search Profile";
+}
+
+@* <link href="~/css/pages/reservation.css" rel="stylesheet" asp-append-version="true" /> *@
+<style>
+    .form-control,
+    .form-control-sm {
+        position: relative;
+        right: 10px; /* thử -1px hoặc -2px nếu còn lệch */
+    }
+
+</style>
+<div id="loadingSpinner" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
+    <i class="fa-solid fa-spinner fa-spin"></i>
+</div>
+
+<div class="mt-1">
+    <div class="header" style="justify-content:center;border:none">
+        <h3 id="content-title">Search Profile</h3>
+    </div>
+    <div class="functions-pane mb-2 row" style="background-color: var(--accent-color);border-radius: 8px; border: 1px solid #e5e7eb;box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);padding:0px">
+        <div class="function-menu col-md-10">
+            <a href="#" onclick="getAllProfiles();">Search</a>
+
+            <a href="#" onclick="editProfile('NEW');">New</a>
+            <a href="#" onclick="editProfile('EDIT');">Edit</a>
+            <a href="#" onclick="clearSearchForm();">Clear</a>
+            <a href="#" onclick="openModalOption();">Option</a>
+            <a href="#" onclick="openModalFuture();">Future</a>
+            <a href="#"  onclick="window.location.href='@Url.Action("Index", "Home")'">Close</a>
+        </div>
+        
+    </div>
+    <div class="row">
+        <div class="form-group-new-reservation col-md-2">
+            <label for="txtTitle">View By</label>
+            <div class="row" style="margin-left:1px;margin-right:2px">
+                <select id="txtType">
+                    <option value="0">Travel Agent</option>
+                    <option value="1">Company</option>
+                    <option value="2">Source</option>
+                    <option value="3">Individual</option>
+                    <option value="4">Group</option>
+                    <option value="5">Contact</option>
+                    <option value="" selected>View by All</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group-new-reservation col-md-2">
+            <label for="txtTitle">Name</label>
+            <div class="row" style="margin-left:1px;margin-right:2px">
+                <input type="text" id="txtAccount">
+
+            </div>
+        </div>
+        <div class="form-group-new-reservation col-md-2">
+            <label for="txtTitle">Keyword</label>
+            <div class="row" style="margin-left:1px;margin-right:2px">
+                <input type="text" id="txtKeyword" >
+
+            </div>
+        </div>
+        <div class="form-group-new-reservation col-md-2">
+            <label for="txtTitle">First Name</label>
+            <div class="row" style="margin-left:1px;margin-right:2px">
+                <input type="text" id="txtFirstName" >
+
+            </div>
+        </div>
+
+        <div class="form-group-new-reservation col-md-2">
+            <label for="txtTitle">Code</label>
+            <div class="row" style="margin-left:1px;margin-right:2px">
+                <input type="text" id="txtCode" >
+
+            </div>
+        </div>
+        <div class="form-group-new-reservation col-md-2">
+            <label for="txtTitle">City</label>
+            <div class="row" style="margin-left:1px;margin-right:2px">
+                <select id="txtCity">
+                </select>
+            </div>
+        </div>
+        <div class="form-group-new-reservation col-md-2">
+            <label for="txtTitle">Area</label>
+            <div class="row" style="margin-left:1px;margin-right:2px">
+                <select id="txtType" disabled>
+                    <option value="value">PMSh The Arena</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group-new-reservation col-md-2">
+            <div class="row" style="margin-left:1px;margin-right:2px">
+                <input type="checkbox" class="form-check-input" id="txtShowSaleInCharge" >
+                <label class="form-check-label" for="termsCheckbox">Show Sale In Charge</label>
+            </div>
+        </div>
+    </div>
+    <div class="mui-card mt-2">
+        <div id="gridContainer" class="gridContainer"></div>
+
+    </div>
+</div>
+
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="modalEdit">
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="profileTypeModalLabel">Edit Profile</h5>
+
+            </div>
+            <div class="modal-body">
+                <div class="main-infor mt-4 row" style="justify-content:space-between" id="profile_individual">
+                    <div class="col-md-6" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative;">
+                        <div style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
+                            <b>Address Information</b>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-md-4" id="image_wrapper">
+                                <div style="margin:0px">Image</div>
+                                <div class="mt-2" style="height: 240px;box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;background-color:#ececec"></div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="form-group row">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Code</b></label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="txtCodeIndividual">
+                                    </div>
+                                </div>
+                                <div class="form-group row mt-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Full Name</b></label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="txtFullNameIndividual">
+                                        <div id="errorMessage" style="color: red; margin-top: 5px; display: none;">
+                                            <strong>Typing format is not correct. Please typing as below: FirstName Middle, LastName </strong>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row mt-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">First/Last Name</label>
+                                    <div class="col-sm-8" style="display:flex;column-gap:8px">
+                                        <input type="text" class="form-control" id="txtFirstNameIndividual">
+                                        <input type="text" class="form-control" id="txtLastNameIndividual">
+                                    </div>
+                                </div>
+                                <div class="form-group row mt-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Middle Name</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="txtMiddleNameIndividual">
+                                    </div>
+                                </div>
+                                <div class="form-group row mt-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Language/Title</label>
+                                    <div class="col-sm-8 row" style="justify-content:space-between">
+                                        <select type="text" id="txtLanguageIndividual" class="col-md-6">
+                                        </select>
+
+                                        <select type="text" id="txtTitleIndividual" class="col-md-6">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row mt-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right" style="white-space: normal; word-break: break-word;">Nationality/Country</label>
+                                    <div class="col-sm-8  row" style="justify-content:space-between">
+                                        <select type="text" id="txtNationalityIndividual" class="col-md-6">
+                                        </select>
+                                        <select type="text" id="txtCountryIndividual" class="col-md-6">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row mt-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">City</label>
+                                    <div class="col-sm-8">
+
+                                        <select id="txtCityIndividual">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row mt-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Postal/State</label>
+                                    <div class="col-sm-8 " style="display:flex;column-gap:8px">
+                                        <input type="text" class="form-control" style="width:50%;" id="txtPostalIndividual">
+                                        <select type="text" id="txtStateIndividual" style="width:50%;">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row mt-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Religion/Nation</label>
+                                    <div class="col-sm-8" style="display:flex;column-gap:8px">
+                                        <input type="text" class="form-control" id="txtReligionIndividual">
+                                        <input type="text" class="form-control" id="txtNationIndividual">
+                                    </div>
+                                </div>
+                                <div class="form-group row mt-1 mb-4">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Purpose Of Stay</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="txtPurposeIndividual">
+                                    </div>
+                                </div>
+                                <div class="form-group row mt-1 mb-4">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Address</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="txtAddressIndividual">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+  
+                    </div>
+                    <div class="col-md-6 row" style="justify-content:space-between;display: flex;
+                align-items: flex-start;">
+                        <div class="col-md-5" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
+                            <div style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
+                                <b>Internal Information</b>
+                            </div>
+                            <div class="form-group row mt-4">
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Salutation</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="txtSalutationIndividual">
+                                </div>
+                            </div>
+                            <div class="form-group row mt-1">
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">VIP</label>
+                                <div class="col-sm-8">
+                                    <select type="text" id="txtVIPIndividual">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row mt-1">
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">VIP Reason</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="txtReasonIndividual">
+                                </div>
+                            </div>
+                            <div class="form-group row mt-1">
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Pref Room</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="txtPrefRoomIndividual">
+                                </div>
+                            </div>
+                            <div class="form-group row mt-1">
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Other</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="txtOtherIndividual">
+                                </div>
+                            </div>
+                            <div class="form-group row mt-1">
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Passport</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="txtPassportIndividual">
+                                </div>
+                            </div>
+                            <div class="form-group row mt-1">
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Identity Card</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="txtCardIndividual">
+                                </div>
+                            </div>
+                            <div class="form-group row mt-1">
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Date of birth</label>
+                                <div class="col-sm-8">
+                                    <input type="date" class="form-control" id="txtDobIndividual">
+                                </div>
+                                @* <div class="col-sm-1" style="padding:4px 0px 4px 14px">
+                                    <input type="checkbox" class="form-check-input" checked id="txtCheckboxDobIndividual">
+                                </div> *@
+                            </div>
+                            <div class="form-group row mb0-1" style="justify-content:center">
+                                <div class="col-sm-6 text-end">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="txtActiveIndividual" checked>
+                                        <label class="form-check-label" for="termsCheckbox">Active</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="txtContactIndividual">
+                                        <label class="form-check-label" for="termsCheckbox">Contact</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row mt-1 mb-4">
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Key word</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="txtKeywordIndividual">
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-7 row">
+                            <div class="col-md-12" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
+                                <div class="mb-4" style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
+                                    <b>Tax</b>
+                                </div>
+                                <div class="form-group mt-4 row">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Company</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="txtCompanyIndividual">
+                                    </div>
+                                </div>
+                                <div class="form-group row mt-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Tax code</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="txtTaxIndividual">
+                                    </div>
+                                </div>
+                                <div class="form-group row mt-1 mb-4">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Bus .Address</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="txtBusAddressIndividual">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mt-4" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
+                                <div class="mb-4" style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
+                                    <b>Communications</b>
+                                </div>
+                                <div class="form-group mt-4 row">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Telephone</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="txtTelephoneIndividual">
+                                    </div>
+                                </div>
+                                <div class="form-group row mt-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Hand Phone</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="txtHandPhoneIndividual">
+                                    </div>
+                                </div>
+
+                                <div class="form-group mt-1 row">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Fax</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="txtFaxIndividual">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row ">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Email</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="txtEmailIndividual">
+                                    </div>
+                                </div>
+                                <div class="form-group row mt-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Website</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="txtWebsiteIndividual">
+                                    </div>
+                                </div>
+                                <div class="form-group row mt-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Company</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="txtCompany2Individual">
+                                    </div>
+                                </div>
+                                <div class="form-group row mt-1 mb-4">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Business Title</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="txtBusinessTitleIndividual">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-4" style="justify-content:space-between">
+                                <div class="col-sm-3">Black list</div>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="blackListIndividual">
+                                </div>
+                                <div class="col-sm-1 text-end" style="padding: 4px 0px">
+                                    <input type="checkbox" class="form-check-input" id="txtBlackListIndividual">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-4" style="justify-content:space-between">
+                            <div class="col-sm-2" style="color:red">Notes</div>
+                            <div class="col-sm-10">
+                                <textarea  class="form-control" rows="4" id="txtNoteIndividual"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-12 row mt-4" style="justify-content:space-between">
+                            <div class="col-md-12 mt-4" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
+                                <div class="mb-4" style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
+                                    <b>Attributes</b>
+                                </div>
+                                <div class="form-group row mt-4">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Rate code</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group row mt-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">A/R No</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group row mt-1 mb-4">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Member No</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-7" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
+                                <div class="mb-4" style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
+                                    <b>History Information</b>
+                                </div>
+                                <div class="row mt-4">
+                                    <div class="col-md-4 text-right">Last Room</div>
+                                    <div class="col-md-3">
+                                        <input type="text" class="form-control">
+
+                                    </div>
+                                    <div class="col-md-1">On</div>
+                                    <div class="col-md-3">
+                                        <input type="text" class="form-control">
+
+                                    </div>
+                                </div>
+                                <div class="form-group row mt-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Last Rate</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group row mt-1 mb-4">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Stay</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#modalEdit').modal('hide');">Close</button>
+                <button type="button" class="btn btn-primary" onclick="SaveProfile();" style="background-color:#01579b">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel2" aria-hidden="true" id="modalEditCOM">
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="profileTypeModalLabelCOM">Edit Profile</h5>
+              @*   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> *@
+            </div>
+            <div class="modal-body">
+                <div class="main-infor mt-4 row" style="justify-content:space-between;" id="profile_com_ta_source">
+                    <div class="col-md-6 row">
+                        <div style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative;">
+                            <div style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
+                                <b>Address Information</b>
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col-md-12">
+                                    <div class="form-group row">
+                                        <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Code</b></label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="txtCodeCOM">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Account</b></label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="txtAccountCOM">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Address</b></label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="txtAddressCOM">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">City/Country</label>
+                                        <div class="col-sm-8" style="display:flex;column-gap:8px">
+                                            <select type="text" id="txtCityCOM">
+                                                <option value="value">text</option>
+                                            </select>
+
+                                            <select type="text" id="txtCountryCOM">
+                                                <option value="value">text</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Postal/State</label>
+                                        <div class="col-sm-8" style="display:flex;column-gap:8px">
+                                            <input type="text" class="form-control" style="width:50%" id="txtPostalCOM">
+                                            <select type="text" id="txtStateCOM" style="width:50%">
+                                                <option value="value">text</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
+                            <div class="mb-4" style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
+                                <b>Tax</b>
+                            </div>
+                            <div class="form-group mt-4 row">
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Company</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="txtCompanyCOM">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Tax code</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="txtTaxCOM">
+                                </div>
+                            </div>
+                            <div class="form-group row ">
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Bus .Address</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="txtBusAddressCOM">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mt-4" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
+                            <div class="mb-4" style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
+                                <b>Communications</b>
+                            </div>
+                            <div class="form-group mt-4 row">
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Telephone</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="txtTelephoneCOM">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Contract Name</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="txtContractName">
+                                </div>
+                            </div>
+
+                            <div class="form-group mt-4 row">
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Email</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="txtEmailCOM">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Website</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="txtWebsiteCOM">
+                                </div>
+                            </div>
+                            <div class="form-group row ">
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Hand Phone</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="txtHandPhoneCOM">
+                                </div>
+                            </div>
+                            <div class="form-group row ">
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Company</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="txtCompany2COM">
+                                </div>
+                            </div>
+                            <div class="form-group row ">
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Business Title</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="txtBusTitleCOM">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 row" style="justify-content:space-between;display: flex;
+                align-items: flex-start;">
+                        <div class="col-md-12" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
+                            <div style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
+                                <b>Internal Information</b>
+                            </div>
+                            <div class="form-group row mt-4">
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Owner</label>
+                                <div class="col-sm-8">
+                                    <select type="text" id="txtOwnerCOM">
+                                        <option value="value">text</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Territory</label>
+                                <div class="col-sm-8">
+                                    <select type="text" id="txtTerritoryCOM">
+                                        <option value="value">text</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row mt-4">
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Keyword</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="txtKeywordCOM">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Type</label>
+                                <div class="col-sm-8">
+                                    <select id="txtCompanyTypeCOM">
+                                        <option value="value">text</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row mt-4">
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">A/R No</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="txtARCOM">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Rref .Curr</label>
+                                <div class="col-sm-8">
+                                    <select type="text" id="txtCurrencyCOM">
+                                        <option value="value">text</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Sale In Charge</label>
+                                <div class="col-sm-8">
+                                    <select type="text"  id="txtSaleInChargeCOM">
+                                        <option value="value">text</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div style="display:none" class="form-group row">
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Market Type</label>
+                                <div class="col-sm-8">
+                                    <select type="text" id="txtMarketTypeCOM">
+                                        <option value="value">text</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Market</label>
+                                <div class="col-sm-8">
+                                    <select type="text" id="txtMarketCOM">
+                                        <option value="value">text</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 text-end mt-4">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="txtActiveCOM">
+                                <label class="form-check-label" for="termsCheckbox">Active</label>
+                            </div>
+                        </div>
+                        <div class="row mt-4" style="justify-content:space-between">
+                            <div class="col-sm-3">Black list</div>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="blackListCOM">
+                            </div>
+                            <div class="col-sm-1 text-end" style="padding: 4px 0px">
+                                <input type="checkbox" class="form-check-input" id="txtBlackListCOM">
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-sm-12">Notes</div>
+                            <div class="col-sm-12">
+                                <textarea class="form-control" rows="4" id="txtNoteCOM"></textarea>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#modalEditCOM').modal('hide');">Close</button>
+                <button type="button" class="btn btn-primary" onclick="SaveProfile();" style="background-color:#01579b">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel2" aria-hidden="true" id="modalEditGroup">
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="profileTypeModalLabelGroup">Edit Profile</h5>
+                @*   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> *@
+            </div>
+            <div class="modal-body">
+                <div class="main-infor mt-4 row" style="justify-content:space-between;" id="profile_com_ta_source">
+                    <div class="col-md-6 row">
+                        <div style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative;">
+                            <div style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
+                                <b>Address Information</b>
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col-md-12">
+                                    <div class="form-group row">
+                                        <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Code</b></label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="txtCodeGroup">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Group Name</b></label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="txtGroupName">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row mt-1">
+                                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Language</label>
+                                        <div class="col-sm-8 row" style="justify-content:space-between">
+                                            <select type="text" id="txtLanguageGroup" class="col-md-6">
+                                                <option value="value">text</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Address</b></label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="txtAddressGroup">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Home Address</b></label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="txtHomeAddressGroup">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">City</label>
+                                        <div class="col-sm-8" style="display:flex;column-gap:8px">
+                                            <input type="text" class="form-control" id="txtCityGroup">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Postal Code</label>
+                                        <div class="col-sm-8" style="display:flex;column-gap:8px">
+                                            <input type="text" class="form-control" style="width:50%" id="txtPostalGroup">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row mt-1">
+                                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Country/State</label>
+                                        <div class="col-sm-8 row" style="justify-content:space-between">
+                                            <select type="text" id="txtCountryGroup" class="col-md-6">
+                                            </select>
+                                            <select type="text" id="txtStateGroup" class="col-md-6">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                 
+                        <div class="col-md-12 mt-4" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
+                            <div class="mb-4" style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
+                                <b>Communications</b>
+                            </div>
+                            <div class="form-group mt-4 row">
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Telephone</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="txtTelephoneGroup">
+                                </div>
+                            </div>
+                   @*          <div class="form-group row">
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Contract Name</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="txtContractNameGroup">
+                                </div>
+                            </div> *@
+
+                            <div class="form-group mt-4 row">
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Email</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="txtEmailGroup">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Website</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="txtWebsiteGroup">
+                                </div>
+                            </div>
+                            <div class="form-group row ">
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Hand Phone</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="txtHandPhoneGroup">
+                                </div>
+                            </div>
+                            <div class="form-group row ">
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Fax</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="txtFax">
+                                </div>
+                            </div>
+                          
+                        </div>
+                       
+                    </div>
+                    <div class="col-md-6 row" style="justify-content:space-between;display: flex;
+                align-items: flex-start;">
+                        <div class="col-md-12" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
+                            <div style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
+                                <b>Internal Information</b>
+                            </div>
+                            <div class="form-group row mt-4">
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Acct.Contact</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="txtAcctContact">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Rref.Curr</label>
+                                <div class="col-sm-8">
+                                    <select type="text" id="txtCurrGroup" class="col-md-6">
+                                        <option value="value">text</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row mt-4">
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Account Type</label>
+                                <div class="col-sm-8">
+                                    <select id="txtAccountGroup">
+                                   
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Vip</label>
+                                <div class="col-sm-8">
+                                    <select id="txtVipGroup">
+                                        <option value="value">text</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row mt-4">
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Vip Reason</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="txtVipReasonGroup">
+                                </div>
+                            </div>
+                            <div class="form-group row mt-4">
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Notes</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="txtNotesGroup">
+                                </div>
+                            </div>
+                            <div class="form-group row mt-4">
+             
+                                <div class="col-sm-6">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="txtHistoryGroup">
+                                        <label class="form-check-label" for="termsCheckbox">History</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 row mt-4" style="justify-content:space-between">
+                            <div class="col-md-5" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
+                                <div class="mb-4" style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
+                                    <b>Attributes</b>
+                                </div>
+                                <div class="form-group row mt-4">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Rate code</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group row mt-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">A/R No</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" readonly>
+                                    </div>
+                                </div>
+                             
+                            </div>
+
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#modalEditGroup').modal('hide');">Close</button>
+                <button type="button" class="btn btn-primary" onclick="SaveProfile();" style="background-color:#01579b">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel2" aria-hidden="true" id="modelReservation">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="profileTypeModalLabel">Reservation New</h5>
+
+            </div>
+            <div class="modal-body">
+                <div style="height:1px;background-color:#ececec" class="mt-3"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#modelReservation').modal('hide');">
+                    Close
+                </button>
+                <button type="button" class="btn btn-primary" style="background-color:#01579b">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modalOption" tabindex="-1" aria-labelledby="transactionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="border: 1px solid #bcbcbc">
+            <div class="modal-header">
+                <h5 class="modal-title">Profile Options</h5>
+                <button type="button" class="btn-close" aria-label="Close" onclick="closeModalOption();"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="toolbar-menu mt-2 row" id="functionAndOption">
+
+                    <a href="#" class="font-semibold col-md-4 mb-1" onclick="openModalChanges();">Changes</a>
+                    <a href="#" class="font-semibold col-md-4 mb-1" onclick="openModalCheckOutAll(2);">Delete</a>
+                    <a href="#" class="font-semibold col-md-4 mb-1" onclick="openModalFuture();">Future</a>
+                    <a href="#" class="font-semibold col-md-4 mb-1" onclick="GetProfileHistory();">History</a>
+                    <a href="#" class="font-semibold col-md-4 mb-1" onclick="openModalMembership();">Memberships</a>
+                    <a href="#" class="font-semibold col-md-4 mb-1" onclick="openConfirmRoomUnAssign();">Merge</a>
+                    <a href="#" class="font-semibold col-md-4 mb-1" onclick="openConfirmRoomUnAssign();">Neg.Rates</a>
+                    <a href="#" class="font-semibold col-md-4 mb-1" onclick="openConfirmRoomUnAssign();">Profile Update</a>
+                    <a href="#" class="font-semibold col-md-4 mb-1" onclick="openConfirmRoomUnAssign();">Relationships</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade modal-xl" id="modalHistory" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">History</h5>
+                <button type="button" class="btn-close" onclick="closeModalHistory()"></button>
+            </div>
+            <div class="modal-body">
+                <div class="">
+                    <button class="submit-button-clear-reservation" id="attach" onclick="AttachAccompanying();"> Attach</button>
+                    <button class="submit-button-clear-reservation" id="detach" onclick="detach()">Detach</button>
+                    <button class="submit-button-clear-reservation" id="detach" onclick="openModalViewProfile()">Profile</button>
+
+                    <button class="submit-button-clear-reservation" onclick="closeModalHistory();"> Close</button>
+                    <button class="submit-button-clear-reservation" onclick="closeModalHistory();"> Close</button>
+                </div>
+
+
+                <div class="mui-card mt-2">
+                    <div id="gridContainerHistory" class="mt-2 gridContainer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@await Html.PartialAsync("Options/Membership")
+@await Html.PartialAsync("Options/Changes")
+@await Html.PartialAsync("Options/Future")
+<script>
+    $(document).ready(async function () {
+        await setSelect2();
+        getAllCity();
+        getAllProfiles();
+         getAllLanguage2();
+         getAllTitle2();
+         getAllNationality2();
+         getAllCountry2();
+         getAllState2();
+         getAllCity2();
+         getAllVIP2();
+         getAllOwner2();
+         getAllTerritory2();
+         getCompanyType2();
+         getCurrency2();
+         getMarketType2();
+         getPersonInCharge2();
+    });
+    function openModalOption(){
+        $('#modalOption').modal('show');
+    }
+    function closeModalOption(){
+        $('#modalOption').modal('hide');
+    }
+    function getAllCity() {
+        $.ajax({
+            url: '/Profile/GetAllCity',
+            type: 'get',
+            dataType: 'json',
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+
+                if(result.length > 0){
+                    $('#txtCity').empty();
+                    var html = `<option value=''>Select city</option>`;
+                    for(var i = 0;i < result.length;i++){
+                        html += `<option value='${result[i].name}'>${result[i].code} - ${result[i].name}</option>`
+                    }
+                    $('#txtCity').append(html);
+                }
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                } else {
+                    informBox(TOAST_STATUS.DANGER, "Lỗi tải chi tiết danh sách danh mục dịch vụ hoặc bạn không có quyền tải");
+                }
+            }
+        });
+    }
+    function getAllProfiles() {
+        $("#loadingSpinner").show(); // 👉 Show spinner
+
+        $.ajax({
+            url: '/Profile/GetAllProfiles',
+            type: 'get',
+            dataType: 'json',
+            data:{
+                code: $('#txtCode').val(),
+                account: $('#txtAccount').val(),
+                firstName: $('#txtFirstName').val(),
+                keyWord: $('#txtKeyword').val(),
+                city: $('#txtCity').val(),
+                type: $('#txtType').val(),
+                showSaleInCharge: $("#txtShowSaleInCharge").is(":checked"),
+            },
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                listProfiles = result;
+                console.log(result);
+                initializeDataGrid(result);
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                } else {
+                    informBox(TOAST_STATUS.DANGER, "Lỗi tải chi tiết danh sách danh mục dịch vụ hoặc bạn không có quyền tải");
+                }
+            },
+            complete: function () {
+                $("#loadingSpinner").hide(); // 👉 Hide spinner sau khi hoàn tất
+            }
+        });
+    }
+        function clearSearchForm() {
+
+        /* ========================= */
+        /* Clear input text */
+        /* ========================= */
+        $('#txtAccount').val('');
+        $('#txtKeyword').val('');
+        $('#txtFirstName').val('');
+        $('#txtCode').val('');
+
+        /* ========================= */
+        /* Clear select */
+        /* ========================= */
+        $('#txtType').val('');      // View by All
+        $('#txtCity').val(null);
+
+        /* Nếu dùng TomSelect */
+        if ($('#txtCity')[0]?.tomselect) {
+            $('#txtCity')[0].tomselect.clear();
+        }
+
+        /* ========================= */
+        /* Optional: reload grid */
+        /* ========================= */
+        // getAllProfiles();
+    }
+
+    var profileID = 0;
+    
+    var profileType = 0;
+    var profileName = "";
+    function initializeDataGrid(data) {
+        var columnWidth = 150;
+        var typeValue = $("#txtType").val();
+
+        // 👉 Khai báo cột Tax Code riêng
+        var taxCodeColumn = {
+            dataField: "taxCode",
+            caption: "Tax Code",
+            width: columnWidth - 30
+        };
+
+        // 👉 Khởi tạo mảng columns ban đầu
+        var columns = [
+            { dataField: "id", caption: "ID", width: columnWidth - 80, visible: false },
+            { dataField: "code", caption: "Code", width: columnWidth - 50 },
+             {
+                dataField: "vip",
+                caption: "Vip",
+                width: columnWidth - 80,
+                visible: typeValue != "1"
+            },
+            { dataField: "account", caption: "Account", width: columnWidth * 2 },
+        ];
+
+        // 👉 Nếu type = 1 → Tax Code đứng vị trí thứ 3
+        if (typeValue === "1") {
+            columns.push(taxCodeColumn);
+        }
+
+        // 👉 Các cột còn lại
+        columns = columns.concat([
+
+     {
+    dataField: "dateOfBirth",
+    caption: "DateOfBirth",
+    width: columnWidth,
+    dataType: "date",
+    format: "dd/MM/yyyy",
+    visible: typeValue != "1",
+    calculateCellValue: function (data) {
+        if (!data.dateOfBirth) return null;
+
+        // value: "22.12.2025"
+        const parts = data.dateOfBirth.split(".");
+        return new Date(parts[2], parts[1] - 1, parts[0]);
+    }
+},
+
+            { dataField: "passPort", caption: "PassPort", width: columnWidth, visible: typeValue != "1" },
+            { dataField: "identityCard", caption: "IdentityCard", width: columnWidth, visible: typeValue != "1" },
+
+           
+            { dataField: "city", caption: "City", width: columnWidth },
+            { dataField: "nationality", caption: "Nat", width: columnWidth - 60 },
+             { dataField: "address", caption: "Address", width: columnWidth + 50 },
+            { dataField: "handPhone", caption: "HandPhone", width: columnWidth },
+            { dataField: "telephone", caption: "Telephone", width: columnWidth },
+            { dataField: "email", caption: "Email", width: columnWidth },
+            { dataField: "website", caption: "Website", width: columnWidth }
+        ]);
+
+        // 👉 Nếu type ≠ 1 → Tax Code giữ vị trí cũ (sau Website)
+        if (typeValue !== "1") {
+            columns.push(taxCodeColumn);
+        }
+
+        columns = columns.concat([
+
+            { dataField: "fullAccount", caption: "Company", width: columnWidth },
+            { dataField: "homeAddress", caption: "Business Address", width: columnWidth + 30 },
+
+            { dataField: "arNo", caption: "ARNo", width: columnWidth, visible: typeValue == "1" },
+            { dataField: "postalCode", caption: "Postal Code", width: columnWidth },
+            { dataField: "keyword", caption: "Keyword", width: columnWidth },
+            { dataField: "acctContact", caption: "Acct.Contact", width: columnWidth, visible: typeValue == "1" },
+            { dataField: "description", caption: "Description", width: columnWidth },
+
+            { dataField: "returnGuest", caption: "Return", width: columnWidth - 60, visible: typeValue != "1" },
+            { dataField: "stayNo", caption: "Stay No", width: columnWidth - 60, visible: typeValue != "1" },
+
+            {
+                dataField: "personInChargeID",
+                caption: "Sale In Charge",
+                width: columnWidth,
+                lookup: {
+                    dataSource: saleInChargeData,
+                    valueExpr: "id",
+                    displayExpr: function (item) {
+                        return item ? item.name : "";
+                    }
+                }
+            }
+        ]);
+
+        // 👉 Init grid
+        $("#gridContainer").dxDataGrid({
+            dataSource: data,
+            columns: columns,
+            allowColumnResizing: true,
+            paging: { pageSize: 15 },
+            scrolling: { rowRenderingMode: 'virtual' },
+            pager: {
+                visible: true,
+                allowedPageSizes: [15, 20, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true
+            },
+            selection: {
+                mode: "multiple",
+                showCheckBoxesMode: "none"
+            },
+            showBorders: false,
+            onRowClick: function (e) {
+                profileID = e.data.id;
+                profileType = e.data.type;
+                profileName = e.data.account;
+            }
+        });
+    }
+
+      $('#txtFullNameIndividual').on('blur', function () {
+        var input = $(this).val().trim();
+
+        if (input === '') return;
+
+        $.ajax({
+            url: '/Profile/FullNameChange',
+            type: 'POST',
+            dataType: 'json',
+            crossDomain: false,
+            headers: {
+                "X-CSRF-TOKEN-HEADERNAME": $('input[name="__RequestVerificationToken"]').val()
+            },
+            data: {
+                fullName: input
+            },
+            success: function (res) {
+                console.log(res);
+                if (res && res.success) {
+
+                    // Full name đã chuẩn hóa
+                    if (res.FullName) {
+                        $('#txtFullNameIndividual').val(res.fullName);
+                    }
+
+                    // Các field khác (nếu có)
+                    if ($('#txtFirstNameIndividual').length)
+                        $('#txtFirstNameIndividual').val(res.firstName);
+
+                    if ($('#txtMiddleNameIndividual').length)
+                        $('#txtMiddleNameIndividual').val(res.middleName);
+
+                    if ($('#txtLastNameIndividual').length)
+                        $('#txtLastNameIndividual').val(res.lastName);
+
+                    if ($('#txtSalutationIndividual').length)
+                        $('#txtSalutationIndividual').val(res.salutation);
+
+                         
+                    // Title (nếu có dropdown)
+                    if (res.titleID) {
+                       let selectTitle= $('#txtTitleIndividual')[0].tomselect;
+                            selectTitle.setValue(res.titleID);
+                    }
+                }
+            },
+            error: function (xhr) {
+                console.error('FullNameChange API error', xhr);
+            }
+        });
+    });
+
+    function reserveProfile(){
+        $('#modelReservation').modal('show');
+    }
+
+
+    function editProfile(mode){
+        var grid = $("#gridContainer").dxDataGrid("instance");
+        var selectedRowsData = grid.getSelectedRowsData();
+        console.log(mode);
+        if (mode === 'NEW') {
+
+            clearProfileForm();          // clear toàn bộ form
+                console.log($('#txtType').val());
+             if($('#txtType').val() == 3  || $('#txtType').val() === ''){
+                $('#modalEdit').modal('show');
+                    $("#profileTypeModalLabel").text("New Profile");
+             }else if($('#txtType').val() == 5){
+                   $('#modalEditGroup').modal('show');
+                    $("#profileTypeModalLabelGroup").text("New Profile");
+             }
+             else {
+                  $('#modalEditCOM').modal('show');
+                      $("#profileTypeModalLabelCOM").text("New Profile");
+             }
+
+           
+             selectedRowsData = null;
+            return;
+        }
+  
+        if (mode === 'EDIT') {
+             if(selectedRowsData.length < 1){
+                informBox(TOAST_STATUS.DANGER, "Please choose 1 profile to edit");
+                return;
+            }
+            $("#profileTypeModalLabel").text("Edit  Profile");
+            $.ajax({
+                url: '/Profile/GetProfileByID',
+                type: 'get',
+                dataType: 'json',
+                crossDomain: false,
+                headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+                data:{
+                    id: selectedRowsData[0].id
+                },
+                success: function (result) {
+                    console.log(result);
+                   if(result.code != 0){
+                        informBox(TOAST_STATUS.DANGER, result.msg);
+                        return;
+                   }
+                   else{
+                       if(result.profile.type == 0){
+                            $("#txtCodeIndividual").val(result.profile.code);
+                            $("#txtFullNameIndividual").val(result.profile.account);
+                            $("#txtLastNameIndividual").val(result.profile.lastName);
+                            $("#txtFirstNameIndividual").val(result.profile.firstname);
+                            $("#txtMiddleNameIndividual").val(result.profile.middleName);
+                           // $("#txtCityIndividual").val(result.profile.city);
+                            $("#txtReasonIndividual").val(result.profile.vipReason);
+                            let selectCity = $('#txtCityIndividual')[0].tomselect;
+                            selectCity.setValue(result.profile.city);
+
+                            let selectLanguage = $('#txtLanguageIndividual')[0].tomselect;
+                            selectLanguage.setValue(result.profile.languageID);
+                            let selectTitle= $('#txtTitleIndividual')[0].tomselect;
+                            selectTitle.setValue(result.profile.titleID);
+                            let selectNationality = $('#txtNationalityIndividual')[0].tomselect;
+                            selectNationality.setValue(result.profile.nationalityID);
+                            let selectCountry = $('#txtCountryIndividual')[0].tomselect;
+                            selectCountry.setValue(result.profile.countryID);
+                            $("#txtPostalIndividual").val(result.profile.postalCode);
+                            $("#txtReligionIndividual").val(result.profile.religion);
+                            $("#txtNationIndividual").val(result.profile.nation);
+                            let selectState = $('#txtStateIndividual')[0].tomselect;
+                            selectState.setValue(result.profile.stateID);
+                            $("#txtPurposeIndividual").val(result.profile.purposeOfStay);
+                            $("#txtAddressIndividual").val(result.profile.address);
+                            $("#txtSalutationIndividual").val(result.profile.salutation);
+                            let selectVIP = $('#txtVIPIndividual')[0].tomselect;
+                            selectVIP.setValue(result.profile.vipid);
+                            //$("#ReasonIndividual").val(result.profile.vipReason);
+                            $("#txtPrefRoomIndividual").val(result.profile.prefRoom);
+                            $("#txtOtherIndividual").val(result.profile.other);
+                            $("#txtPassportIndividual").val(result.profile.passPort);
+                            $("#txtCardIndividual").val(result.profile.identityCard);
+                            $("#txtDobIndividual").val(formatDateForInputISO(result.profile.dateOfBirth));
+                            if (result.profile.active) {
+                                $("#txtActiveIndividual").prop("checked", true);
+                            } else {
+                                $("#txtActiveIndividual").prop("checked", false);
+                            }
+                            if (result.profile.contact) {
+                                $("#txtContactIndividual").prop("checked", true);
+                            } else {
+                                $("#txtContactIndividual").prop("checked", false);
+                            }
+                            $("#txtKeywordIndividual").val(result.profile.keyword);
+                            $("#txtCompanyIndividual").val(result.profile.fullAccount);
+                            $("#txtCompany2Individual").val(result.profile.company);
+                            $("#txtAddressIndividual").val(result.profile.address);
+                            $("#txtTaxIndividual").val(result.profile.taxCode);
+                            $("#txtBusAddressIndividual").val(result.profile.homeAddress);
+                            $("#txtTelephoneIndividual").val(result.profile.telephone);
+                            $("#txtHandPhoneIndividual").val(result.profile.handPhone);
+                            $("#txtFaxIndividual").val(result.profile.fax);
+                            $("#txtEmailIndividual").val(result.profile.email);
+                            $("#txtWebsiteIndividual").val(result.profile.website);
+                            $("#txtBusinessTitleIndividual").val(result.profile.businessTitle);
+                            if (result.profile.isBlackList) {
+                                $("#txtBlackListIndividual").prop("checked", true);
+                            } else {
+                                $("#txtBlackListIndividual").prop("checked", false);
+                            }
+                            $("#blackListIndividual").val(result.profile.blackListReason);
+                            $("#txtNoteIndividual").val(result.profile.description);
+                            $('#modalEdit').modal('show');
+                       }
+                       else if(result.profile.type == 1 || result.profile.type == 2 || result.profile.type == 3){
+                           $("#txtCodeCOM").val(result.profile.code);
+                            //$("#txtCityCOM").val(result.profile.city);
+                            $("#txtAccountCOM").val(result.profile.account);
+                            $("#txtAddressCOM").val(result.profile.address);
+                            // $("#txtCountryCOM").val(result.profile.countryID);
+                            // $("#txtCityCOM").val(result.profile.city);
+                                let selectCountryCOM = $('#txtCountryCOM')[0].tomselect;
+                            selectCountryCOM.setValue(result.profile.countryID);
+
+                                let selectCityCOM = $('#txtCityCOM')[0].tomselect;
+                            selectCityCOM.setValue(result.profile.city);
+
+                        
+                                let selectStateCOM = $('#txtStateCOM')[0].tomselect;
+                            selectStateCOM.setValue(result.profile.stateID);
+
+                                            let selectOwnerCOM = $('#txtOwnerCOM')[0].tomselect;
+                            selectOwnerCOM.setValue(result.profile.ownerID);
+
+                                let selectTerritoryCOM = $('#txtTerritoryCOM')[0].tomselect;
+                            selectTerritoryCOM.setValue(result.profile.territoryID);
+
+                                   let selectCompanyTypeCOM = $('#txtCompanyTypeCOM')[0].tomselect;
+                            selectCompanyTypeCOM.setValue(result.profile.memberType);
+
+                                     let selectCurrencyCOM = $('#txtCurrencyCOM')[0].tomselect;
+                            selectCurrencyCOM.setValue(result.profile.currencyID);
+
+                               let selectMarketCOM = $('#txtMarketCOM')[0].tomselect;
+                            selectMarketCOM.setValue(result.profile.marketID);
+                        
+                             let selectSaleInChargeCOM = $('#txtSaleInChargeCOM')[0].tomselect;
+                            selectSaleInChargeCOM.setValue(result.profile.personInChargeID);
+                        
+                            $("#txtPostalCOM").val(result.profile.postalCode);
+                           // $("#txtStateCOM").val(result.profilestateID);
+                            $("#txtCompanyCOM").val(result.profile.fullAccount);
+                            $("#txtTaxCOM").val(result.profile.taxCode);
+                            $("#txtBusAddressCOM").val(result.profile.homeAddress);
+                            $("#txtContractName").val(result.profile.acctContact);
+                            $("#txtTelephoneCOM").val(result.profile.telephone);
+                            $("#txtContactNameCOM").val(result.profile.acctContact);
+                            $("#txtEmailCOM").val(result.profile.email);
+                            $("#txtWebsiteCOM").val(result.profile.website);
+                            $("#txtHandPhoneCOM").val(result.profile.handPhone);
+                            $("#txtCompany2COM").val(result.profile.company);
+                            $("#txtBusTitleCOM").val(result.profile.businessTitle);
+                        //    $("#txtOwnerCOM").val(result.profile.ownerID);
+                           // $("#txtTerritoryCOM").val(result.profile.territoryID);
+                            $("#txtKeywordCOM").val(result.profile.keyword);
+                           // $("#txtCompanyTypeCOM").val(0);
+                            $("#txtARCOM").val(result.profile.arNo);
+                            //$("#txtCurrencyCOM").val(result.profile.currencyID);
+                           // $("#txtSaleInChargeCOM").val(result.profile.personInChargeID);
+                          //  $("#txtMarketCOM").val(result.profile.marketID);
+                            if (result.profile.active === true) {
+                                $("#txtActiveCOM").prop("checked", true);
+                            }else{
+                                $("#txtActiveCOM").prop("checked", false);
+                            }
+
+                             if (result.profile.isBlackList === true) {
+                                $("#txtBlackListCOM").prop("checked", true);
+                            }else{
+                                $("#txtBlackListCOM").prop("checked", false);
+                            }
+                           //$("#txtBlackListCOM").is(":checked");
+                            $("#blackListCOM").val(result.profile.blackListReason);
+                                      console.log(result.profile.description);
+                            $("#txtNoteCOM").val(result.profile.description);
+                            $('#modalEditCOM').modal('show');
+                       }
+                       else if(result.profile.type == 4){
+                           $("#txtCodeGroup").val(result.profile.code);
+                            //$("#txtCityCOM").val(result.profile.city);
+                            $("#txtGroupName").val(result.profile.account);
+                            $("#txtAddressGroup").val(result.profile.address);
+                            // $("#txtCountryCOM").val(result.profile.countryID);
+                            // $("#txtCityCOM").val(result.profile.city);
+                                let selectCountryGroup = $('#txtCountryGroup')[0].tomselect;
+                            selectCountryGroup.setValue(result.profile.countryID);
+
+                
+                                $("#txtCityGroup").val(result.profile.city)
+
+
+                                let selectStateGroup = $('#txtStateGroup')[0].tomselect;
+                            selectStateGroup.setValue(result.profile.stateID);
+
+                                   let selectLanguageGroup = $('#txtLanguageGroup')[0].tomselect;
+                            selectLanguageGroup.setValue(result.profile.languageID);
+
+                                     let selectCurrencyGroup = $('#txtCurrGroup')[0].tomselect;
+                            selectCurrencyGroup.setValue(result.profile.currencyID);
+
+
+                            $("#txtPostalGroup").val(result.profile.postalCode);
+                            $("#txtFax").val(result.profile.fax);
+                            $("#txtHomeAddressGroup").val(result.profile.homeAddress);
+                            $("#txtContractNameGroup").val(result.profile.acctContact);
+                            $("#txtTelephoneGroup").val(result.profile.telephone);
+                            $("#txtEmailGroup").val(result.profile.email);
+                            $("#txtWebsiteGroup").val(result.profile.website);
+                            $("#txtHandPhoneGroup").val(result.profile.handPhone);
+                            $("#txtCityGroup").val(result.profile.city);
+                            $("#txtVipReasonGroup").val(result.profile.vipReason);
+                       
+                          let selectVIP = $('#txtVipGroup')[0].tomselect;
+                            selectVIP.setValue(result.profile.vipid);
+                           // $("#txtCompanyTypeCOM").val(0);
+                            $("#txtAcctContact").val(result.profile.acctContact);
+                           // $("#txtSaleInChargeCOM").val(result.profile.personInChargeID);
+                          //  $("#txtMarketCOM").val(result.profile.marketID);
+                            if (result.profile.history === true) {
+                                $("#txtHistoryGroup").prop("checked", true);
+                            }else{
+                                $("#txtHistoryGroup").prop("checked", false);
+                            }
+
+                           //$("#txtBlackListCOM").is(":checked");
+                   
+                            $("#txtNotesGroup").val(result.profile.description);
+                            $('#modalEditGroup').modal('show');
+                       }
+                       else{
+
+                       }
+                   }
+                },
+                error: function (xhr, statusText, err) {
+
+                }
+            });
+        }
+    }
+    function clearProfileForm() {
+
+
+        const individualInputs = [
+            "#txtCodeIndividual", "#txtFullNameIndividual",
+            "#txtLastNameIndividual", "#txtFirstNameIndividual",
+            "#txtMiddleNameIndividual", "#txtReasonIndividual",
+            "#txtPostalIndividual", "#txtReligionIndividual",
+            "#txtNationIndividual", "#txtPurposeIndividual",
+            "#txtAddressIndividual", "#txtSalutationIndividual",
+            "#txtPrefRoomIndividual", "#txtOtherIndividual",
+            "#txtPassportIndividual", "#txtCardIndividual",
+            "#txtDobIndividual", "#txtKeywordIndividual",
+            "#txtCompanyIndividual", "#txtCompany2Individual",
+            "#txtTaxIndividual", "#txtBusAddressIndividual",
+            "#txtTelephoneIndividual", "#txtHandPhoneIndividual",
+            "#txtFaxIndividual", "#txtEmailIndividual",
+            "#txtWebsiteIndividual", "#txtBusinessTitleIndividual",
+            "#blackListIndividual", "#txtNoteIndividual"
+        ];
+
+        individualInputs.forEach(id => {
+            if ($(id).length) {
+                $(id).val("");
+            }
+        });
+
+        const individualCheckboxes = [
+            "#txtActiveIndividual", "#txtContactIndividual",
+            "#txtBlackListIndividual"
+        ];
+
+        individualCheckboxes.forEach(id => {
+            if ($(id).length) {
+                $(id).prop("checked", false);
+            }
+        });
+
+        const individualTomSelects = [
+            "#txtCityIndividual", "#txtLanguageIndividual",
+            "#txtTitleIndividual", "#txtNationalityIndividual",
+            "#txtCountryIndividual", "#txtStateIndividual",
+            "#txtVIPIndividual"
+        ];
+
+        individualTomSelects.forEach(id => {
+            if ($(id).length && $(id)[0].tomselect) {
+                $(id)[0].tomselect.clear();
+            }
+        });
+
+        /* ===================== */
+        /* COMPANY (TYPE = 1–3)  */
+        /* ===================== */
+
+        const companyInputs = [
+            "#txtCodeCOM", "#txtAccountCOM", "#txtAddressCOM",
+            "#txtPostalCOM", "#txtCompanyCOM", "#txtTaxCOM",
+            "#txtBusAddressCOM", "#txtContractName",
+            "#txtContactNameCOM", "#txtTelephoneCOM",
+            "#txtEmailCOM", "#txtWebsiteCOM",
+            "#txtHandPhoneCOM", "#txtCompany2COM",
+            "#txtBusTitleCOM", "#txtKeywordCOM",
+            "#txtARCOM", "#blackListCOM", "#txtNoteCOM"
+        ];
+
+        companyInputs.forEach(id => {
+            if ($(id).length) {
+                $(id).val("");
+            }
+        });
+
+        const companyCheckboxes = [
+            "#txtActiveCOM", "#txtBlackListCOM"
+        ];
+
+        companyCheckboxes.forEach(id => {
+            if ($(id).length) {
+                $(id).prop("checked", false);
+            }
+        });
+
+        const companyTomSelects = [
+            "#txtCountryCOM", "#txtCityCOM", "#txtStateCOM",
+            "#txtOwnerCOM", "#txtTerritoryCOM", "#txtCompanyTypeCOM",
+            "#txtCurrencyCOM", "#txtMarketCOM", "#txtSaleInChargeCOM"
+        ];
+
+        companyTomSelects.forEach(id => {
+            if ($(id).length && $(id)[0].tomselect) {
+                $(id)[0].tomselect.clear();
+            }
+        });
+
+        /* ===================== */
+        /* Group (TYPE = 4)  */
+        /* ===================== */
+               const groupInputs = [
+                   "#txtCodeGroup", "#txtGroupName", "#txtAddressGroup",
+            "#txtHomeAddressGroup", "#txtCityGroup", "#txtPostalGroup",
+            "#txtTelephoneGroup", "#txtContractNameGroup",
+            "#txtEmailGroup", "#txtWebsiteGroup",
+            "#txtHandPhoneGroup", "#txtAcctContact","#txtFax",
+            "#txtCurrGroup", "#txtAccountGroup",
+            "#txtVipGroup", "#txtVipReasonGroup",
+            "#txtNotesGroup"
+        ];
+
+        groupInputs.forEach(id => {
+            if ($(id).length) {
+                $(id).val("");
+            }
+        });
+
+        const groupCheckboxes = [
+            "#txtHistoryGroup"
+        ];
+
+        groupCheckboxes.forEach(id => {
+            if ($(id).length) {
+                $(id).prop("checked", false);
+            }
+        });
+
+        const groupTomSelects = [
+            "#txtLanguageGroup", "#txtCountryGroup", "#txtStateGroup",
+            "#txtCurrGroup", "#txtAccountGroup", "#txtVipGroup"
+        ];
+
+        groupTomSelects.forEach(id => {
+            if ($(id).length && $(id)[0].tomselect) {
+                $(id)[0].tomselect.clear();
+            }
+        });
+    }
+
+    async function setSelect2(){
+        const ids = [
+            "#txtLanguageIndividual", "#txtTitleIndividual", "#txtNationalityIndividual",
+            "#txtCountryIndividual", "#txtStateIndividual", "#txtCityIndividual",
+                "#txtVIPIndividual", "#txtCityCOM", "#txtCountryCOM",
+            "#txtStateCOM"
+            , "#txtOwnerCOM", "#txtTerritoryCOM", "#txtCompanyTypeCOM",
+            "#txtCurrencyCOM", "#txtMarketTypeCOM", "#txtMarketCOM","#txtSaleInChargeCOM", 
+            "#txtLanguageGroup", "#txtCountryGroup", "#txtStateGroup",
+            "#txtCurrGroup", "#txtAccountGroup", "#txtVipGroup"
+            //,
+            //"#txtStateGroup",
+            // "#txtCountryGroup", "#txtCityGroup", "#txtLanguageGroup", "#txtCurrencyGroup",
+            // "#txtVIPGroup", "#txtLanguageContact", "#txtTitleContact", "#txtCityContact",
+            // "#txtStateContact", "#txtCountryContact", "#txtOwnerContact", "#txtTerritoryContact"
+        ];
+
+        for (const id of ids) {
+            if ($(id).length) {
+                new TomSelect(id, {
+                    allowEmptyOption: true,
+                    create: true
+                });
+            }
+        }
+    }
+
+    function getAllLanguage2() {
+        $.ajax({
+            url: '/Profile/GetAllLanguage',
+            type: 'get',
+            dataType: 'json',
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                if (result.length > 0) {
+                    let select = $('#txtLanguageIndividual')[0].tomselect; // Lấy instance của TomSelect
+                    select.clear(); // Xóa giá trị hiện tại
+                    select.clearOptions(); // Xóa danh sách options cũ
+                    select.addOption({ value: '0', text: 'Please select language' });
+
+                    result.forEach(item => {
+                        select.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
+                    });
+
+                    select.setValue('0'); // Chọn option mặc định
+
+                     let select2 = $('#txtLanguageGroup')[0].tomselect; // Lấy instance của TomSelect
+                    select2.clear(); // Xóa giá trị hiện tại
+                    select2.clearOptions(); // Xóa danh sách options cũ
+                    select2.addOption({ value: '0', text: 'Please select language' });
+
+                    result.forEach(item => {
+                        select2.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
+                    });
+
+                    select2.setValue('0'); // Chọn option mặc định
+                }
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                } else {
+                    informBox(TOAST_STATUS.DANGER, "Lỗi tải danh sách ngôn ngữ hoặc bạn không có quyền tải");
+                }
+            }
+        });
+    }
+    function getAllTitle2() {
+        $.ajax({
+            url: '/Profile/GetAllTitle',
+            type: 'get',
+            dataType: 'json',
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                if (result.length > 0) {
+                    let select = $('#txtTitleIndividual')[0].tomselect; // Lấy instance của TomSelect
+                    select.clear(); // Xóa giá trị hiện tại
+                    select.clearOptions(); // Xóa tất cả option cũ
+
+                    result.forEach(item => {
+                        select.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
+                    });
+
+                    select.setValue('0'); // Chọn giá trị mặc định
+                }
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                } else {
+                    informBox(TOAST_STATUS.DANGER, "Lỗi tải danh sách tiêu đề hoặc bạn không có quyền tải");
+                }
+            }
+        });
+    }
+    function getAllNationality2() {
+        $.ajax({
+            url: '/Profile/GetAllNationality',
+            type: 'get',
+            dataType: 'json',
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                if (result.length > 0) {
+                    let select = $('#txtNationalityIndividual')[0].tomselect; // Lấy instance của TomSelect
+                    select.clear(); // Xóa giá trị hiện tại
+                    select.clearOptions(); // Xóa tất cả option cũ
+
+                    result.forEach(item => {
+                        select.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
+                    });
+
+                    select.setValue('0'); // Chọn giá trị mặc định
+                }
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                } else {
+                    informBox(TOAST_STATUS.DANGER, "Lỗi tải danh sách tiêu đề hoặc bạn không có quyền tải");
+                }
+            }
+        });
+    }
+    function getAllCountry2() {
+        $.ajax({
+            url: '/Profile/GetAllCountry',
+            type: 'get',
+            dataType: 'json',
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                if (result.length > 0) {
+                    let select = $('#txtCountryIndividual')[0].tomselect; // Lấy instance của TomSelect
+                    select.clear(); // Xóa giá trị hiện tại
+                    select.clearOptions(); // Xóa tất cả option cũ
+                    select.addOption({ value: '0', text: 'Please select country' });
+
+                    result.forEach(item => {
+                        select.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
+                    });
+
+                    select.setValue('0'); // Chọn giá trị mặc định
+
+                    let select2 = $('#txtCountryCOM')[0].tomselect; // Lấy instance của TomSelect
+                    select2.clear(); // Xóa giá trị hiện tại
+                    select2.clearOptions(); // Xóa tất cả option cũ
+
+                    select2.addOption({ value: '0', text: 'Please select country' });
+                    result.forEach(item => {
+                        select2.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
+                    });
+                    select2.setValue('0'); // Chọn giá trị mặc định
+
+                     let select3 = $('#txtCountryGroup')[0].tomselect; // Lấy instance của TomSelect
+                    select3.clear(); // Xóa giá trị hiện tại
+                    select3.clearOptions(); // Xóa tất cả option cũ
+
+                    select3.addOption({ value: '0', text: 'Please select country' });
+                    result.forEach(item => {
+                        select3.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
+                    });
+                    select3.setValue('0'); // Chọn giá trị mặc định
+                }
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                } else {
+                    informBox(TOAST_STATUS.DANGER, "Lỗi tải danh sách tiêu đề hoặc bạn không có quyền tải");
+                }
+            }
+        });
+    }
+    function getAllState2() {
+        $.ajax({
+            url: '/Profile/GetAllState',
+            type: 'get',
+            dataType: 'json',
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                console.log(result);
+                if (result.length > 0) {
+                    let select = $('#txtStateIndividual')[0].tomselect; // Lấy instance của TomSelect
+                    select.clear(); // Xóa giá trị hiện tại
+                    select.clearOptions(); // Xóa tất cả option cũ
+
+                    select.addOption({ value: '0', text: 'Please select state' });
+                    result.forEach(item => {
+                       // select.addOption({ value: item.id, text: `${item.StateName} - ${item.name}` });
+                                    select.addOption({ value: item.id, text: `${item.stateName}` });
+                    });
+
+                    select.setValue('0'); // Chọn giá trị mặc định
+
+                    let select2 = $('#txtStateCOM')[0].tomselect; // Lấy instance của TomSelect
+                    select2.clear(); // Xóa giá trị hiện tại
+                    select2.clearOptions(); // Xóa tất cả option cũ
+                    select2.addOption({ value: '0', text: 'Please select state' });
+                    result.forEach(item => {
+                      //  select2.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
+                         select2.addOption({ value: item.id, text: `${item.stateName}` });
+                    });
+                    select2.setValue('0'); // Chọn giá trị mặc định
+
+
+                     let select3 = $('#txtStateGroup')[0].tomselect; // Lấy instance của TomSelect
+                    select3.clear(); // Xóa giá trị hiện tại
+                    select3.clearOptions(); // Xóa tất cả option cũ
+                    select3.addOption({ value: '0', text: 'Please select state' });
+                    result.forEach(item => {
+                      //  select2.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
+                         select3.addOption({ value: item.id, text: `${item.stateName}` });
+                    });
+                    select3.setValue('0'); // Chọn giá trị mặc định
+                }
+                else{
+                    let select = $('#txtStateIndividual')[0].tomselect; // Lấy instance của TomSelect
+                    select.clear(); // Xóa giá trị hiện tại
+                    select.clearOptions(); // Xóa tất cả option cũ
+                    select.addOption({ value: '0', text: 'Please select state' });
+                    select.setValue('0');
+
+                     let select2 = $('#txtStateCOM')[0].tomselect; // Lấy instance của TomSelect
+                    select2.clear(); // Xóa giá trị hiện tại
+                    select2.clearOptions(); // Xóa tất cả option cũ
+                    select2.addOption({ value: '0', text: 'Please select state' });
+                    select2.setValue('0');
+
+                         let select3 = $('#txtStateGroup')[0].tomselect; // Lấy instance của TomSelect
+                    select3.clear(); // Xóa giá trị hiện tại
+                    select3.clearOptions(); // Xóa tất cả option cũ
+                    select3.addOption({ value: '0', text: 'Please select state' });
+                    select3.setValue('0');
+                }
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                } else {
+                    informBox(TOAST_STATUS.DANGER, "Lỗi tải danh sách tiêu đề hoặc bạn không có quyền tải");
+                }
+            }
+        });
+    }
+    function getAllCity2() {
+        $.ajax({
+            url: '/Profile/GetAllCity',
+            type: 'get',
+            dataType: 'json',
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                if (result.length > 0) {
+                    let select = $('#txtCityIndividual')[0].tomselect; // Lấy instance của TomSelect
+                    select.clear(); // Xóa giá trị hiện tại
+                    select.clearOptions(); // Xóa tất cả option cũ
+
+                    select.addOption({ value: '0', text: 'Please select city' });
+                    result.forEach(item => {
+                        select.addOption({ value: item.code, text: `${item.code} - ${item.name}` });
+                    });
+
+                    select.setValue('0'); // Chọn giá trị mặc định
+                    let select2 = $('#txtCityCOM')[0].tomselect; // Lấy instance của TomSelect
+                    select2.clear(); // Xóa giá trị hiện tại
+                    select2.clearOptions(); // Xóa tất cả option cũ
+
+                    select2.addOption({ value: '0', text: 'Please select city' });
+                    result.forEach(item => {
+                        select2.addOption({ value: item.code, text: `${item.code} - ${item.name}` });
+                    });
+
+                    select2.setValue('0'); // Chọn giá trị mặc định
+
+                }
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                } else {
+                    informBox(TOAST_STATUS.DANGER, "Lỗi tải danh sách tiêu đề hoặc bạn không có quyền tải");
+                }
+            }
+        });
+    }
+    function getAllVIP2() {
+        $.ajax({
+            url: '/Profile/GetAllVIP',
+            type: 'get',
+            dataType: 'json',
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                if (result.length > 0) {
+                    let select = $('#txtVIPIndividual')[0].tomselect; // Lấy instance của TomSelect
+                    select.clear(); // Xóa giá trị hiện tại
+                    select.clearOptions(); // Xóa tất cả option cũ
+
+                    select.addOption({ value: '0', text: 'Please select VIP' });
+                    result.forEach(item => {
+                        select.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
+                    });
+
+                    select.setValue('0'); // Chọn giá trị mặc định
+                              select.on('change', function (value) {
+                        if (!value || value === '0') {
+                            $('#txtReasonIndividual').val('');
+                            return;
+                        }
+
+                        // Lấy option đang chọn
+                        let option = select.options[value];
+
+                        if (option) {
+                            // option.text = "CODE - NAME"
+                            // Nếu chỉ muốn lấy NAME
+                            let name = option.text.split(' - ').slice(1).join(' - ');
+
+                            $('#txtReasonIndividual').val(name);
+                        }
+                    });
+
+                             let select2 = $('#txtVipGroup')[0].tomselect; // Lấy instance của TomSelect
+                    select2.clear(); // Xóa giá trị hiện tại
+                    select2.clearOptions(); // Xóa tất cả option cũ
+
+                    select2.addOption({ value: '0', text: 'Please select VIP' });
+                    result.forEach(item => {
+                        select2.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
+                    });
+
+                    select2.setValue('0'); // Chọn giá trị mặc định
+                }
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                } else {
+                    informBox(TOAST_STATUS.DANGER, "Lỗi tải danh sách tiêu đề hoặc bạn không có quyền tải");
+                }
+            }
+        });
+    }
+    function getAllOwner2() {
+        $.ajax({
+            url: '/Profile/GetAllOwner',
+            type: 'get',
+            dataType: 'json',
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                if (result.length > 0) {
+                    let select = $('#txtOwnerCOM')[0].tomselect; // Lấy instance của TomSelect
+                    select.clear(); // Xóa giá trị hiện tại
+                    select.clearOptions(); // Xóa tất cả option cũ
+
+                    select.addOption({ value: '0', text: 'Please select Owner' });
+                    result.forEach(item => {
+                        select.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
+                    });
+
+                    // select.setValue('0'); // Chọn giá trị mặc định
+
+                    //  let select2 = $('#txtOwnerContact')[0].tomselect; // Lấy instance của TomSelect
+                    // select2.clear(); // Xóa giá trị hiện tại
+                    // select2.clearOptions(); // Xóa tất cả option cũ
+
+                    // select2.addOption({ value: '0', text: 'Please select Owner' });
+                    // result.forEach(item => {
+                    //     select2.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
+                    // });
+
+                    // select2.setValue('0'); // Chọn giá trị mặc định
+                }
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                } else {
+                    informBox(TOAST_STATUS.DANGER, "Lỗi tải danh sách tiêu đề hoặc bạn không có quyền tải");
+                }
+            }
+        });
+    }
+    function getAllTerritory2() {
+        $.ajax({
+            url: '/Profile/GetAllTerritory',
+            type: 'get',
+            dataType: 'json',
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                if (result.length > 0) {
+                    let select = $('#txtTerritoryCOM')[0].tomselect; // Lấy instance của TomSelect
+                    select.clear(); // Xóa giá trị hiện tại
+                    select.clearOptions(); // Xóa tất cả option cũ
+
+                    select.addOption({ value: '0', text: 'Please select Territory' });
+                    result.forEach(item => {
+                        select.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
+                    });
+
+                    select.setValue('0'); // Chọn giá trị mặc định
+
+                    // let select2 = $('#txtTerritoryContact')[0].tomselect; // Lấy instance của TomSelect
+                    // select2.clear(); // Xóa giá trị hiện tại
+                    // select2.clearOptions(); // Xóa tất cả option cũ
+
+                    // select2.addOption({ value: '0', text: 'Please select Territory' });
+                    // result.forEach(item => {
+                    //     select2.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
+                    // });
+
+                    // select2.setValue('0'); // Chọn giá trị mặc định
+                }
+                else{
+                    let select = $('#txtTerritoryCOM')[0].tomselect; // Lấy instance của TomSelect
+                    select.clear(); // Xóa giá trị hiện tại
+                    select.clearOptions(); // Xóa tất cả option cũ
+                    select.addOption({ value: '0', text: 'Please select Territory' });
+                    select.setValue('0');
+
+                    //  let select2 = $('#txtTerritoryContact')[0].tomselect; // Lấy instance của TomSelect
+                    // select2.clear(); // Xóa giá trị hiện tại
+                    // select2.clearOptions(); // Xóa tất cả option cũ
+                    // select2.addOption({ value: '0', text: 'Please select Territory' });
+                    // select2.setValue('0');
+                }
+
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                } else {
+                    informBox(TOAST_STATUS.DANGER, "Lỗi tải danh sách tiêu đề hoặc bạn không có quyền tải");
+                }
+            }
+        });
+    }
+    function getCompanyType2() {
+        $.ajax({
+            url: '/Profile/GetAllCompanyType',
+            type: 'get',
+            dataType: 'json',
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                if (result.length > 0) {
+                    let select = $('#txtCompanyTypeCOM')[0].tomselect; // Lấy instance của TomSelect
+                    select.clear(); // Xóa giá trị hiện tại
+                    select.clearOptions(); // Xóa tất cả option cũ
+
+                    select.addOption({ value: '0', text: 'Please select Company Type' });
+                    result.forEach(item => {
+                        select.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
+                    });
+
+                    select.setValue('0'); // Chọn giá trị mặc định
+                }
+                else{
+                    let select = $('#txtCompanyTypeCOM')[0].tomselect; // Lấy instance của TomSelect
+                    select.clear(); // Xóa giá trị hiện tại
+                    select.clearOptions(); // Xóa tất cả option cũ
+                    select.addOption({ value: '0', text: 'Please select Company Type' });
+                    select.setValue('0');
+                }
+
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                } else {
+                    informBox(TOAST_STATUS.DANGER, "Lỗi tải danh sách tiêu đề hoặc bạn không có quyền tải");
+                }
+            }
+        });
+    }
+    function getCurrency2() {
+        $.ajax({
+            url: '/Profile/GetAllCurrency',
+            type: 'get',
+            dataType: 'json',
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                if (result.length > 0) {
+                    let select = $('#txtCurrencyCOM')[0].tomselect; // Lấy instance của TomSelect
+                    select.clear(); // Xóa giá trị hiện tại
+                    select.clearOptions(); // Xóa tất cả option cũ
+
+                    select.addOption({ value: '0', text: 'Please select Currency' });
+                    result.forEach(item => {
+                        select.addOption({ value: item.id, text: `${item.description}` });
+                    });
+
+                    select.setValue('0'); // Chọn giá trị mặc định
+
+
+                    // let select2 = $('#txtCurrencyGroup')[0].tomselect; // Lấy instance của TomSelect
+                    // select2.clear(); // Xóa giá trị hiện tại
+                    // select2.clearOptions(); // Xóa tất cả option cũ
+
+                    // select2.addOption({ value: '0', text: 'Please select Currency' });
+                    // result.forEach(item => {
+                    //     select2.addOption({ value: item.id, text: `${item.description}` });
+                    // });
+
+                    // select2.setValue('0'); // Chọn giá trị mặc định
+                       let select2 = $('#txtCurrGroup')[0].tomselect; // Lấy instance của TomSelect
+                    select2.clear(); // Xóa giá trị hiện tại
+                    select2.clearOptions(); // Xóa tất cả option cũ
+
+                    select2.addOption({ value: '0', text: 'Please select Currency' });
+                    result.forEach(item => {
+                        select2.addOption({ value: item.id, text: `${item.description}` });
+                    });
+
+                    select2.setValue('0'); // Chọn giá trị mặc định
+
+                }
+                else{
+                    let select = $('#txtCurrencyCOM')[0].tomselect; // Lấy instance của TomSelect
+                    select.clear(); // Xóa giá trị hiện tại
+                    select.clearOptions(); // Xóa tất cả option cũ
+                    select.addOption({ value: '0', text: 'Please select Currency' });
+                    select.setValue('0');
+
+                    let select2 = $('#txtCurrGroup')[0].tomselect; // lấy instance của tomselect
+                    select2.clear(); // xóa giá trị hiện tại
+                    select2.clearoptions(); // xóa tất cả option cũ
+                    select2.addoption({ value: '0', text: 'please select currency' });
+                    select2.setvalue('0');
+                }
+
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                } else {
+                    informBox(TOAST_STATUS.DANGER, "Lỗi tải danh sách tiêu đề hoặc bạn không có quyền tải");
+                }
+            }
+        });
+    }
+    var saleInChargeData = [];
+    function getPersonInCharge2() {
+        $.ajax({
+            url: '/Administration/PersonInChargeData',
+            type: 'get',
+            dataType: 'json',
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                console.log(result);
+                if (result.length > 0) {
+                     saleInChargeData = result || [];
+                    let select = $('#txtSaleInChargeCOM')[0].tomselect; // Lấy instance của TomSelect
+                    select.clear(); // Xóa giá trị hiện tại
+                    select.clearOptions(); // Xóa tất cả option cũ
+
+                    select.addOption({ value: '0', text: 'Please select SaleInCharge' });
+                    result.forEach(item => {
+                        select.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
+                    });
+
+                    select.setValue('0'); // Chọn giá trị mặc định
+
+
+                    // let select2 = $('#txtCurrencyGroup')[0].tomselect; // Lấy instance của TomSelect
+                    // select2.clear(); // Xóa giá trị hiện tại
+                    // select2.clearOptions(); // Xóa tất cả option cũ
+
+                    // select2.addOption({ value: '0', text: 'Please select Currency' });
+                    // result.forEach(item => {
+                    //     select2.addOption({ value: item.id, text: `${item.description}` });
+                    // });
+
+                    // select2.setValue('0'); // Chọn giá trị mặc định
+                }
+                else{
+                    let select = $('#txtSaleInChargeCOM')[0].tomselect; // Lấy instance của TomSelect
+                    select.clear(); // Xóa giá trị hiện tại
+                    select.clearOptions(); // Xóa tất cả option cũ
+                    select.addOption({ value: '0', text: 'Please select SaleInCharge' });
+                    select.setValue('0');
+
+                    // let select2 = $('#txtCurrencyGroup')[0].tomselect; // Lấy instance của TomSelect
+                    // select2.clear(); // Xóa giá trị hiện tại
+                    // select2.clearOptions(); // Xóa tất cả option cũ
+                    // select2.addOption({ value: '0', text: 'Please select Currency' });
+                    // select2.setValue('0');
+                }
+
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                } else {
+                    informBox(TOAST_STATUS.DANGER, "Lỗi tải danh sách tiêu đề hoặc bạn không có quyền tải");
+                }
+            }
+        });
+    }
+
+    function getMarketType2() {
+        $.ajax({
+            url: '/Profile/GetMarketType',
+            type: 'get',
+            dataType: 'json',
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                if (result.length > 0) {
+                    let select = $('#txtMarketTypeCOM')[0].tomselect; // Lấy instance của TomSelect
+                    select.clear(); // Xóa giá trị hiện tại
+                    select.clearOptions(); // Xóa tất cả option cũ
+
+                    select.addOption({ value: '0', text: 'Please select Market Type' });
+                    result.forEach(item => {
+                        select.addOption({ value: item.id, text: `${item.description}` });
+                    });
+
+                    select.setValue('0'); // Chọn giá trị mặc định
+                }
+                else{
+                    let select = $('#txtMarketTypeCOM')[0].tomselect; // Lấy instance của TomSelect
+                    select.clear(); // Xóa giá trị hiện tại
+                    select.clearOptions(); // Xóa tất cả option cũ
+                    select.addOption({ value: '0', text: 'Please select Currency' });
+                    select.setValue('0');
+                }
+
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                } else {
+                    informBox(TOAST_STATUS.DANGER, "Lỗi tải danh sách tiêu đề hoặc bạn không có quyền tải");
+                }
+            }
+        });
+    }
+    $('#txtMarketTypeCOM').on('change', function() {
+
+        getMarket2();
+    });
+    function getMarket2() {
+        $.ajax({
+            url: '/Profile/GetMarketByFK',
+            type: 'get',
+            dataType: 'json',
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            data:{marketTypeID : $('#txtMarketTypeCOM').val()},
+            success: function (result) {
+                if (result.length > 0) {
+                    let select = $('#txtMarketCOM')[0].tomselect; // Lấy instance của TomSelect
+                    select.clear(); // Xóa giá trị hiện tại
+                    select.clearOptions(); // Xóa tất cả option cũ
+
+                    select.addOption({ value: '0', text: 'Please select Market' });
+                    result.forEach(item => {
+                        select.addOption({ value: item.id, text: `${item.description}` });
+                    });
+
+                    select.setValue('0'); // Chọn giá trị mặc định
+                }
+                else{
+                    let select = $('#txtMarketCOM')[0].tomselect; // Lấy instance của TomSelect
+                    select.clear(); // Xóa giá trị hiện tại
+                    select.clearOptions(); // Xóa tất cả option cũ
+                    select.addOption({ value: '0', text: 'Please select Market' });
+                    select.setValue('0');
+                }
+
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                } else {
+                    informBox(TOAST_STATUS.DANGER, "Lỗi tải danh sách tiêu đề hoặc bạn không có quyền tải");
+                }
+            }
+        });
+    }
+    function SaveProfile(){
+        var formData = new FormData();
+          var grid = $("#gridContainer").dxDataGrid("instance");
+        var selectedRowsData = grid.getSelectedRowsData();
+        console.log(selectedRowsData);
+        if (selectedRowsData[0]?.type === 0 || $('#txtType').val() === ""|| $('#txtType').val() === "3") {
+            formData.append('ID', selectedRowsData[0]?.id);
+             formData.append('CodeIndividual', $("#txtCodeIndividual").val());
+            formData.append('AccountIndividual', $("#txtFullNameIndividual").val());
+            formData.append('LastNameIndivdual', $("#txtLastNameIndividual").val());
+            formData.append('FirstNameIndividual', $("#txtFirstNameIndividual").val());
+            formData.append('MiddleNameIndividual', $("#txtMiddleNameIndividual").val());
+            formData.append('LanguageIndividual', $("#txtLanguageIndividual").val());
+            formData.append('TitleIndividual', $("#txtTitleIndividual").val());
+            formData.append('NationalityIndividual', $("#txtNationalityIndividual").val());
+            formData.append('CountryIndividual', $("#txtCountryIndividual").val());
+            formData.append('CityIndividual', $("#txtCityIndividual").val());
+            formData.append('PostalIndividual', $("#txtPostalIndividual").val());
+            formData.append('ReligionIndividual', $("#txtReligionIndividual").val());
+            formData.append('NationIndividual', $("#txtNationIndividual").val());
+            formData.append('StateIndividual', $("#txtStateIndividual").val());
+            formData.append('PurposeIndividual', $("#txtPurposeIndividual").val());
+            formData.append('AddressIndividual', $("#txtAddressIndividual").val());
+            formData.append('SalutationIndividual', $("#txtSalutationIndividual").val());
+            formData.append('VIPIndividual', $("#txtVIPIndividual").val());
+            formData.append('ReasonIndividual', $("#txtReasonIndividual").val());
+            formData.append('PrefRoomIndividual', $("#txtPrefRoomIndividual").val());
+            formData.append('OtherIndividual', $("#txtOtherIndividual").val());
+            formData.append('PassportIndividual', $("#txtPassportIndividual").val());
+            formData.append('CardIndividual', $("#txtCardIndividual").val());
+            formData.append('DobIndividual', $("#txtDobIndividual").val());
+            formData.append('ActiveIndividual', $("#txtActiveIndividual").is(":checked"));
+            formData.append('ContactIndividual', $("#txtContactIndividual").is(":checked"));
+            formData.append('KeywordIndividual', $("#txtKeywordIndividual").val());
+          //  formData.append('CompanyIndividual', $("#txtCompanyIndividual").val());
+               formData.append('FullAccount', $("#txtCompanyIndividual").val());
+            formData.append('TaxIndividual', $("#txtTaxIndividual").val());
+            formData.append('BusAddressIndividual', $("#txtBusAddressIndividual").val());
+            formData.append('TelephoneIndividual', $("#txtTelephoneIndividual").val());
+            formData.append('HandPhoneIndividual', $("#txtHandPhoneIndividual").val());
+            formData.append('FaxIndividual', $("#txtFaxIndividual").val());
+            formData.append('EmailIndividual', $("#txtEmailIndividual").val());
+            formData.append('WebsiteIndividual', $("#txtWebsiteIndividual").val());
+            formData.append('Company2Individual', $("#txtCompany2Individual").val());
+            formData.append('BusinessTitleIndividual', $("#txtBusinessTitleIndividual").val());
+            formData.append('BlackListIndividual', $("#txtBlackListIndividual").is(":checked"));
+            formData.append('BlackListReasonIndividual', $("#blackListIndividual").val());
+            formData.append('NoteIndividual', $("#txtNoteIndividual").val());
+                        formData.append('Type', 0);
+        }
+         else if (selectedRowsData[0].type === 2 || selectedRowsData[0].type === 3 || selectedRowsData[0].type === 1|| $('#txtType').val() === "0"|| $('#txtType').val() === "2"|| $('#txtType').val() === "4"|| $('#txtType').val() === "1") {
+            formData.append('ID', selectedRowsData[0].id);
+             formData.append('CodeCOM', $("#txtCodeCOM").val());
+            formData.append('AccountCOM', $("#txtAccountCOM").val());         
+            formData.append('CountryCOM', $("#txtCountryCOM").val());
+            formData.append('CityCOM', $("#txtCityCOM").val());
+            formData.append('PostalCOM', $("#txtPostalCOM").val());
+          
+            formData.append('StateCOM', $("#txtStateCOM").val());
+         
+            formData.append('AddressCOM', $("#txtAddressCOM").val());
+          
+            formData.append('ActiveCOM', $("#txtActiveCOM").is(":checked"));
+            formData.append('KeywordCOM', $("#txtKeywordCOM").val());
+          //  formData.append('CompanyIndividual', $("#txtCompanyIndividual").val());
+               formData.append('FullAccount', $("#txtCompanyCOM").val());
+            formData.append('TaxCOM', $("#txtTaxCOM").val());
+            formData.append('BusAddressCOM', $("#txtBusAddressCOM").val());
+            formData.append('TelephoneCOM', $("#txtTelephoneCOM").val());
+            formData.append('HandPhoneCOM', $("#txtHandPhoneCOM").val());
+            formData.append('ContractName', $("#txtContractName").val());
+            formData.append('EmailCOM', $("#txtEmailCOM").val());
+            formData.append('WebsiteCOM', $("#txtWebsiteCOM").val());
+            formData.append('Company2COM', $("#txtCompany2COM").val());
+            formData.append('BusTitleCOM', $("#txtBusTitleCOM").val());
+            formData.append('BlackListCOMchecked', $("#txtBlackListCOM").is(":checked"));
+            formData.append('BlackListCOM', $("#blackListCOM").val());
+            formData.append('NoteCOM', $("#txtNoteCOM").val());
+            formData.append('OwnerCOM', $("#txtOwnerCOM").val());
+            formData.append('TerritoryCOM', $("#txtTerritoryCOM").val());
+            formData.append('CompanyTypeCOM', $("#txtCompanyTypeCOM").val());
+            formData.append('ARCOM', $("#txtARCOM").val());
+            formData.append('CurrencyCOM', $("#txtCurrencyCOM").val());
+            formData.append('SaleInChargeCOM', $("#txtSaleInChargeCOM").val());
+            formData.append('MarketCOM', $("#txtMarketCOM").val());
+                var uiType = $("#txtType").val(); // "0", "1", "2", hoặc ""
+
+                var typeMap = {
+                    "0": 1, // Travel Agent → Agent
+                    "1": 2, // Company
+                    "2": 3  // Source
+                };
+
+                var finalType = typeMap[uiType] ?? ""; // hoặc "0" nếu backend cần default
+
+                formData.append('Type', finalType);
+        }   
+        else if (selectedRowsData[0].type === 4 || $('#txtType').val() === "5") {
+            formData.append('ID', selectedRowsData[0].id);
+             formData.append('CodeGroup', $("#txtCodeGroup").val());
+            formData.append('GroupName', $("#txtGroupName").val());
+            formData.append('LanguageGroup', $("#txtLanguageGroup").val());
+            formData.append('AddressGroup', $("#txtAddressGroup").val());
+            formData.append('HomeAddressGroup', $("#txtHomeAddressGroup").val());
+
+            formData.append('CityGroup', $("#txtCityGroup").val());
+
+            formData.append('PostalGroup', $("#txtPostalGroup").val());
+            formData.append('CountryGroup', $("#txtCountryGroup").val());
+          //  formData.append('CompanyIndividual', $("#txtCompanyIndividual").val());
+               formData.append('StateGroup', $("#txtStateGroup").val());
+            formData.append('TelephoneGroup', $("#txtTelephoneGroup").val());
+            formData.append('ContractNameGroup', $("#txtContractNameGroup").val());
+            formData.append('EmailGroup', $("#txtEmailGroup").val());
+            formData.append('WebsiteGroup', $("#txtWebsiteGroup").val());
+            formData.append('HandPhoneGroup', $("#txtHandPhoneGroup").val());
+            formData.append('AcctContact', $("#txtAcctContact").val());
+            formData.append('CurrGroup', $("#txtCurrGroup").val());
+            formData.append('VipReasonGroup', $("#txtVipReasonGroup").val());
+            formData.append('HistoryGroup', $("#txtHistoryGroup").is(":checked"));
+            formData.append('VipGroup', $("#txtVipGroup").val());
+            formData.append('NotesGroup', $("#txtNotesGroup").val());
+            formData.append('Fax', $("#txtFax").val());
+            formData.append('Type', 4);
+        }
+            $.ajax({
+            url: '/Profile/EditProfile',
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            // headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            data: formData,
+            success: function (data) {
+                if (data.code == 0) {
+                    $('#modalEdit').modal('hide');
+                    getAllProfiles();
+                    clearProfileForm();
+                    showToast("Success",data.msg,true);
+                } else {
+                    showToast("Error",data.msg,false);
+                }
+
+            },
+            error: function (xhr, statusText, err) {
+
+            }
+        });
+    }
+
+    function ReservationProfile(){
+        var grid = $("#gridContainer").dxDataGrid("instance");
+        var selectedRowsData = grid.getSelectedRowsData();
+        if(selectedRowsData.length < 1){
+            informBox(TOAST_STATUS.DANGER, "Please choose 1 profile to reservation");
+            return;
+        }
+        $.ajax({
+            url: '/Profile/GetProfileByID',
+            type: 'get',
+            dataType: 'json',
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            data:{
+                id: selectedRowsData[0].id
+            },
+            success: function (result) {
+               if(result.code != 0){
+                    informBox(TOAST_STATUS.DANGER, result.msg);
+                    return;
+               }
+               else{
+                      console.log('click');
+                   $('#modelReservation').modal('show');
+               }
+            },
+            error: function (xhr, statusText, err) {
+
+            }
+        });
+    }
+
+    function DeleteProfile(){
+        var grid = $("#gridContainer").dxDataGrid("instance");
+        var selectedRowsData = grid.getSelectedRowsData();
+         if (selectedRowsData.length > 0) {
+             $.confirm({
+            title: 'Cảnh báo',
+            content: 'Are you sure you want to delete profile??',
+            buttons: {
+                'Hủy bỏ': function () { },
+                confirm: {
+                    text: 'Xác nhận',
+                    action: function () {
+                            var defer = $.Deferred();
+                            $.ajax({
+                                url: '/Profile/DeleteProfile',
+                                type: 'POST',
+                                dataType: 'json',
+                                crossDomain: false,
+                                headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+                                data: { ID:  selectedRowsData[0].id },
+                                success: function (data) {
+                                    if (data.code == 0) {
+                                        getAllProfiles();
+                                        informBox(TOAST_STATUS.INFO, data.msg);
+                                    } else {
+                                        informBox(TOAST_STATUS.WARNING, data.msg);
+                                    }
+                                    defer.resolve();
+                                },
+                                error: function (xhr, statusText, err) {
+                                    if (xhr.status == 401) {
+                                        sessionTimeout();
+                                    } else {
+                                        informBox(TOAST_STATUS.DANGER, "Error deleting profile type or you do not have permission to delete");
+                                    }
+                                }
+
+                            });
+                            return defer.promise();
+
+                    }
+                }
+            }
+            });
+         }
+         else {
+           informBox(TOAST_STATUS.WARNING, "Please select the product type you want to delete");
+        }
+
+    }
+
+    function GetProfileHistory() {
+        if(profileID == 0){
+            showToast("Error","Please chooe at least 1 profile",false);
+            return;
+        }
+        $.ajax({
+            url: '/Profile/SearchProfileHistory',
+            type: 'get',
+            dataType: 'json',
+            data:{
+                profileID: profileID
+            },
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                $('#modalHistory').modal('show');
+                initializeDataGridHistory(result);
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                } else {
+                }
+            },
+
+        });
+    }
+    function closeModalHistory(){
+        $('#modalHistory').modal('hide');
+
+    }
+    function initializeDataGridHistory(data) {
+        const columnWidth = 150;
+
+        const columns = [
+            { dataField: 'ConfirmationNo', caption: 'Conf.No', visible: true,width:columnWidth  },
+            { dataField: 'CRSNo', caption: 'CRSNo', visible: true,width:columnWidth },
+            { dataField: 'ArrivalDate', caption: 'ArrivalDate', visible: true,width:columnWidth  ,dataType: "date", format: "dd/MM/yyyy" },
+            { dataField: 'DepartureDate', caption: 'DepartureDate', visible: true,width:columnWidth  ,dataType: "date", format: "dd/MM/yyyy" },
+            { dataField: 'RoomNo', caption: 'Room', visible: true,width:columnWidth },
+            { dataField: 'RoomType', caption: 'Room Type', visible: true ,width:columnWidth},
+            { dataField: 'Rate', caption: 'Rate', visible: true,width:columnWidth },
+            { dataField: 'CurrencyID', caption: 'Currency', visible: true,width:columnWidth },
+            { dataField: 'RateCode', caption: 'Rate Code', visible: true ,width:columnWidth},
+            { dataField: 'NoOfAdult', caption: 'A', visible: true ,width:columnWidth},
+            { dataField: 'NoOfChild', caption: 'C', visible: true,width:columnWidth },
+            { dataField: 'NoOfChild1', caption: 'C1', visible: true,width:columnWidth },
+            { dataField: 'NoOfChild2', caption: 'C2', visible: true,width:columnWidth },
+            { dataField: 'LastName', caption: 'Guest Name', visible: true,width:columnWidth },
+            { dataField: 'BusinessBlockCode', caption: 'Block', visible: true,width:columnWidth },
+            { dataField: 'MarketCode', caption: 'Market', visible: true ,width:columnWidth},
+            { dataField: 'SourceCode', caption: 'Source', visible: true,width:columnWidth },
+            { dataField: 'ReservationHolder', caption: 'Reservation Holder', visible: true ,width:columnWidth},
+            { dataField: 'Status', caption: 'Status', visible: true,width:columnWidth },
+            { dataField: 'TotalRevenue', caption: 'Total Rev', visible: true,width:columnWidth },
+            { dataField: 'RoomRevenue', caption: 'Room Rev', visible: true ,width:columnWidth},
+            { dataField: 'FBRevenue', caption: 'F&B Rev', visible: true,width:columnWidth },
+            { dataField: 'ExtraRevenue', caption: 'Extra Rev', visible: true,width:columnWidth },
+            { dataField: 'NonRevenue', caption: 'Non Rev', visible: true,width:columnWidth },
+            { dataField: 'UserInsert', caption: 'Created By', visible: true,width:columnWidth },
+            { dataField: 'CreateDate', caption: 'Created On', visible: true ,width:columnWidth},
+            { dataField: 'UserUpdate', caption: 'Updated By', visible: true,width:columnWidth },
+            { dataField: 'UpdateDate', caption: 'Update On', visible: true,width:columnWidth },
+
+            
+        ];
+        $("#gridContainerHistory").dxDataGrid({
+
+            dataSource: data,    
+            allowColumnResizing: true,  // Dữ liệu từ server
+
+            paging: { pageSize: 15 },
+            scrolling: {
+                rowRenderingMode: 'virtual',
+            },
+            allowColumnResizing: true,
+            columnAutoWidth: true,
+            pager: {
+                visible: true,
+                allowedPageSizes: [15, 20, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true,
+            },
+
+            selection: {
+                mode: "multiple",
+                showCheckBoxesMode: "none"
+            },
+            columns: columns,
+
+            showBorders: false,
+            onRowClick: function(e) {
+                console.log("ID được click:", e.data.id);
+            }
+
+        });
+    }
+</script>

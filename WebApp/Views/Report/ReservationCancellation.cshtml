@@ -1,0 +1,497 @@
+﻿@using DevExpress.XtraReports.UI
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewBag.Title = ViewBag.ReportHeader;
+    var comList = ViewBag.ComList;
+    var lzone = ViewBag.ZoneList;
+}
+
+
+<style>
+    .filter_wrapper {
+        /*     background-color: #ececec; */
+        /*   margin: 0px 8px 14px 8px; */
+        padding: 18px 0px 0px 14px;
+        border-radius: 8px;
+    }
+
+    .gridContainer {
+        margin: 0px 8px;
+    }
+
+    .button_wrapper {
+        display: flex;
+        column-gap: 12px;
+        margin: 0px 8px;
+    }
+
+        .button_wrapper .fa-solid {
+            margin-right: 5px;
+        }
+
+    .selected {
+        background-color: #4CAF50; /* Màu xanh */
+        color: white;
+    }
+
+    #gridContainer .dx-datagrid-rowsview .dx-selection {
+        background-color: #01579b !important; /* màu xanh ngọc */
+        color: white !important; /* chữ trắng */
+    }
+
+        #gridContainer .dx-datagrid-rowsview .dx-selection * {
+            color: white !important;
+        }
+
+    .sticky-header label,
+    .sticky-header .form-control-sm {
+        font-size: 0.75rem;
+        line-height: 1.2;
+    }
+
+
+    .sticky-header .form-control-sm {
+        padding: .1rem .35rem;
+        height: calc(1.1em + .2rem + 2px);
+    }
+
+    .sticky-header label[class*="me-"] {
+        margin-right: .5rem !important;
+    }
+
+    #gridContainer .dx-datagrid-headers .dx-header-row > td {
+        padding: 5px !important;
+        height: 24px !important;
+        font-size: 12px !important;
+        line-height: 1.1 !important;
+    }
+
+    #gridContainer .dx-datagrid-rowsview .dx-row > td, /* data & group rows */
+    #gridContainer .dx-datagrid .dx-summary-row > td, /* summary trong group */
+    #gridContainer .dx-datagrid .dx-total-footer td, /* total footer */
+    #gridContainer .dx-datagrid .dx-footer-row td { /* custom footer */
+        font-size: 11px !important;
+    }
+
+    .report-bar {
+        position: relative;
+        margin-bottom: 1rem; /* = mb-3 của bạn */
+    }
+
+        /* Tiêu đề ở giữa, full width để text-center hoạt động */
+        .report-bar #reportTitle {
+            font-size: 20px;
+            margin: 0; /* bỏ margin dưới h4/h5 mặc định */
+            text-align: center;
+        }
+
+        /* Nhóm nút cố định góc phải, canh theo chiều dọc */
+        .report-bar .action-buttons {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+    .tomselect-custom {
+        width: 200px;
+        min-height: 30px; /* hoặc tùy theo chiều cao bạn muốn */
+        font-size: 0.75rem !important;
+    }
+
+        /* Áp dụng font-size nhỏ cho TomSelect dựa vào class gốc .tomselect-custom */
+        .tomselect-custom + .ts-wrapper .ts-control,
+        .tomselect-custom + .ts-wrapper .ts-dropdown,
+        .tomselect-custom + .ts-wrapper .ts-dropdown .option {
+            font-size: 0.65rem !important;
+            min-height: 30px !important;
+        }
+
+    /* Nhỏ input khi đã khởi tạo TomSelect */
+    .ts-wrapper.single .ts-control {
+        font-size: 0.75rem !important;
+        min-height: 30px !important;
+        padding: 4px 4px !important;
+    }
+
+        /* Ẩn mũi tên dropdown */
+        .ts-wrapper.single .ts-control::after {
+            display: none !important;
+        }
+
+</style>
+<link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+<div class="text-center" id="reportTitle" style="font-size: 20px"></div>
+<div class="sticky-header bg-white p-2 shadow-sm z-3">
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-1" style="border: 1px solid #ced4da; border-radius: 6px; padding: 8px;">
+        <label class="me-2 mb-0 fw-bold me-1">Date Range:</label>
+        <div class="d-flex align-items-center me-1">
+            <label id="fromDateLabel" class="me-2 mb-0">From Arrival Date:</label>
+            <input type="date" id="fromDate" name="fromDate" class="form-control form-control-sm w-auto" />
+        </div>
+        <div class="d-flex align-items-center me-1">
+            <label id="toDateLabel" class="me-2 mb-0">To Arrival Date:</label>
+            <input type="date" id="toDate" name="toDate" class="form-control form-control-sm w-auto" />
+        </div>
+        <label class="me-2 mb-0 fw-bold me-1">Filter:</label>
+        <div class="d-flex align-items-center me-1">
+            <label class="me-2 mb-0">Cancel Reason:</label>
+            <select id="commnet" name="commnet" class="form-control form-control-sm" style="width: 150px">
+                <option value="" disabled selected hidden>Select reason...</option>
+                @foreach (var item in comList)
+                {
+                    <option value="@item.Code">@item.Code - @item.Description</option>
+                }
+            </select>
+        </div>
+        <div class="d-flex align-items-center me-1">
+            <label class="me-2 mb-0">Zone:</label>
+            <select id="zone" name="zone" class="tomselect-custom" style="width: 100px" multiple>
+          
+                @foreach (var item in lzone)
+                {
+                    <option value="@item.ID">@item.Code - @item.Description</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-check me-3">
+            <input class="form-check-input include-option" type="checkbox" id="arrivalDateChk" name="includeOptions" value="0" checked>
+            <label class="form-check-label" for="arrivalDateChk">Arrival</label>
+        </div>
+        <div class="form-check me-3">
+            <input class="form-check-input include-option" type="checkbox" id="cancelDateChk" name="includeOptions" value="1">
+            <label class="form-check-label" for="cancelDateChk">Cancel Date</label>
+        </div>
+       
+      @*   <div class="d-flex flex-column">
+  
+            <div class="d-flex flex-wrap gap-2">
+                <label class="mb-1">Include</label>
+                <!-- Row 1 -->
+                <div class="form-check me-3">
+                    <input class="form-check-input include-option" type="checkbox" id="arrival" name="includeOptions" value="0" checked>
+                    <label class="form-check-label" for="arrival">Arrival</label>
+                </div>
+                <div class="form-check me-3">
+                    <input class="form-check-input include-option" type="checkbox" id="cancel" name="includeOptions" value="1">
+                    <label class="form-check-label" for="cancel">Cancel Date</label>
+                </div>
+            </div>
+        </div>
+ *@
+    </div>
+    <div class="">
+        <button style="border-radius: 4px;  margin-right: 6px;background-color: #3b9ac6;" id="btnPrint" class="mui-button mui-button-new"><i class="fa-solid fa-eye"></i>View</button>
+        <button style="border-radius: 4px;  margin-right: 6px;background-color: green;" id="btnExportExcel" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Excel</button>
+        <button style="border-radius: 4px;  margin-right: 6px;background-color: darkorange;" id="btnExportPdf" class="mui-button mui-button-new" type="button"><i class="fas fa-eraser"></i> PDF</button>
+    </div>
+</div>
+
+<div class="mui-card">
+@*     <div style="font-size: 20px;" class="mt-1" id="reportTitle"></div> *@
+    <div id="gridWrapper" class="mt-2" style="max-height: 500px;">
+        <div class="gridContainer mt-2" id="gridContainer"></div>
+    </div>
+</div>
+<div id="loadingSpinner" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
+    <i class="fa-solid fa-spinner fa-spin"></i>
+</div>
+<script>
+    function formatDate(date) {
+        let year = date.getFullYear();
+        let month = (date.getMonth() + 1).toString().padStart(2, '0'); // Đảm bảo có 2 chữ số
+        let day = date.getDate().toString().padStart(2, '0'); // Đảm bảo có 2 chữ số
+        return `${year}-${month}-${day}`;
+    }
+     $(document).ready(function () {
+         document.getElementById("reportTitle").innerText = '@ViewBag.ReportTitle';
+        const today = new Date();
+
+        const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+        // Lấy ngày cuối cùng của tháng
+        const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+        // Định dạng theo local time
+        const formattedFirstDay = formatDate(firstDayOfMonth);
+        const formattedLastDay = formatDate(lastDayOfMonth);
+
+        console.log(formattedFirstDay); // Kiểm tra giá trị đúng chưa
+        console.log(formattedLastDay); // Kiểm tra giá trị đúng chưa
+        // Gán giá trị cho input date
+        document.getElementById('fromDate').value = formattedFirstDay;
+        document.getElementById('toDate').value = formattedLastDay;
+        initializeTomSelects();
+
+
+    });
+    function initializeTomSelects() {
+        const selectors = ["#zone"];
+
+        for (const id of selectors) {
+            const el = document.querySelector(id);
+            if (!el) continue;
+
+            // Nếu đã khởi tạo rồi thì destroy
+            if (el.tomselect) el.tomselect.destroy();
+
+            const ts = new TomSelect(el, {
+                plugins: ['remove_button'],
+                create: false,
+                maxItems: null,
+                allowEmptyOption: true,
+                placeholder: '',
+                persist: false,
+                render: {
+                    option: function (data, escape) {
+                        return `<div>${escape(data.text)}</div>`;
+                    }
+                }
+            });
+
+        }
+    }
+        $("#arrivalDateChk").on("change", function () {
+        if (this.checked) {
+            // Bỏ tick Cancel Date
+            $("#cancelDateChk").prop("checked", false);
+            // Cập nhật label
+            $("#fromDateLabel").text("From Arrival Date:");
+            $("#toDateLabel").text("To Arrival Date:");
+        } else {
+            // Nếu bỏ tick, kiểm tra nếu Cancel cũng không tick → trở lại mặc định
+            if (!$("#cancelDateChk").is(":checked")) {
+                $("#fromDateLabel").text("From Arrival Date:");
+                $("#toDateLabel").text("From Arrival Date:");
+            }
+        }
+    });
+
+    $("#cancelDateChk").on("change", function () {
+        if (this.checked) {
+            // Bỏ tick Arrival Date
+            $("#arrivalDateChk").prop("checked", false);
+            // Cập nhật label
+            $("#fromDateLabel").text("From Arrival Date:");
+            $("#toDateLabel").text("To Arrival Date:");
+        } else {
+            // Nếu bỏ tick, kiểm tra nếu Arrival cũng không tick → trở lại mặc định
+            if (!$("#arrivalDateChk").is(":checked")) {
+                $("#fromDateLabel").text("From Arrival Date:");
+                $("#toDateLabel").text("From Arrival Date:");
+            }
+        }
+    });
+
+
+   
+    
+    $(document).off("click", "#btnPrint").on("click", "#btnPrint", function () {
+        $("#loadingSpinner").show();
+            let typeDate = $("input[name='includeOptions']:checked").attr("id") === "arrivalDateChk" ? 0 : 1;
+        $.ajax({
+            url: '/Report/ReservationCancellationsReport',
+            type: 'GET',
+            data: {
+                fromDate: $("#fromDate").val(),
+                toDate: $("#toDate").val(),
+                commnet: $("#commnet").val(),
+                typeDate: typeDate,
+                zone: [].concat($("#zone").val() || []).join(",")
+
+            },
+            traditional: true,
+              crossDomain: false,
+                headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                // $("#reportViewerContainer").html(result);
+                // $("#loadingSpinner").hide();
+                    console.log(result);
+                    initializeReservationCancellationsGrid(result);
+                    $("#loadingSpinner").hide();
+            },
+            error: function () {
+                alert("Không thể tải báo cáo.");
+                $("#loadingSpinner").hide();
+            }
+        });
+    });
+
+    function initializeReservationCancellationsGrid(data) {
+        const columnWidth = 180;
+        $("#gridContainer").dxDataGrid({
+    dataSource: data,     height: 500, allowColumnResizing: true,
+     scrolling: {
+         mode: "standard",
+         useNative: true,
+         showScrollbar: "always"
+     },
+            columns: [
+            { dataField: "name", caption: "Name", width: columnWidth+20  },
+            { dataField: "group", caption: "Conf.No", width: columnWidth-80, dataType: "number", },
+            { dataField: "company", caption: "Reservation Holder",  width: columnWidth+120 },
+            { dataField: "arrivalDate", caption: "Arr.Date", width: columnWidth-80 , dataType: "date", format: "dd/MM/yyyy" },
+            { dataField: "noOfNight", caption: "Nts.",  width: columnWidth-100, dataType: "number", format: "#,##0" },
+            { dataField: "departureDate", caption: "Dep.Date",  width: columnWidth-80 , dataType: "date", format: "dd/MM/yyyy" },
+            { dataField: "roomType", caption: "Room Type",  width: columnWidth-60},
+            { dataField: "noOfRoom", caption: "No.of Rms.",  width: columnWidth-60, dataType: "number", format: "#,##0" },
+            { dataField: "reservationTypeCode", caption: "Resv.type",  width: columnWidth-40 },
+            { dataField: "reservationBy", caption: "Reserved By",  width: columnWidth-60 },
+            { dataField: "cancellationDate", caption: "Cancel Date",  width: columnWidth-60 ,dataType: "date", format: "dd/MM/yyyy" },
+            { dataField: "cancelBy", caption: "Cancel By",  width: columnWidth-60 },
+            { dataField: "description", caption: "Reason",  width: columnWidth+20 },
+            { dataField: "rate", caption: "Rate",  width: columnWidth-80 , dataType: "number", format: "#,##0" },
+            ],
+            paging: { pageSize: 25 },
+            scrolling:  {
+                 
+                  useNative: true,
+                 showScrollbar: "always"
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [25, 50, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true,
+            },
+                summary: {
+        totalItems: [
+            {
+                column: "roomType",
+                summaryType: "sum", // bất kỳ, chỉ để render dòng
+                customizeText: function() {
+                return "Grand Total";
+            }
+            },
+            {
+                column: "noOfRoom",
+                summaryType: "sum",
+                valueFormat: "#,##0",
+                displayFormat: "{0}"
+            }
+        ]
+    },
+
+             filterRow: {
+               visible: true,
+               applyFilter: "auto"
+             },
+             headerFilter: {
+                  visible: true
+              },
+            selection: { mode: "multiple", showCheckBoxesMode: "none" },
+            showBorders: true,
+              
+        });
+    }
+
+
+
+
+    $("#btnExportExcel").click(function () {
+               const grid = $("#gridContainer").dxDataGrid("instance"); var selectedReport2 = '@ViewBag.ReportTitle';
+        var selectedReport = '@ViewBag.ReportTitle';
+        if (!selectedReport) {
+            alert("Vui lòng chọn báo cáo trước khi xuất Excel.");
+            return;
+        }
+
+                     const workbook = new ExcelJS.Workbook();const companyName = localStorage.getItem("CompanyName") || "Tên công ty chưa xác định";
+        const worksheet = workbook.addWorksheet("Sheet 1");
+
+        // === Tạo header công ty (dòng 1) ===
+       worksheet.addRow([companyName]);
+        worksheet.mergeCells('A1:E1');
+        worksheet.getRow(1).font = { bold: true };
+        worksheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'left' };
+
+        // === Dòng 2: Thời gian xuất (phải) ===
+        const now = new Date();
+        const exportDate = now.toLocaleString("vi-VN");
+        worksheet.addRow(['', '', '', '', ' ' + exportDate]);
+        worksheet.mergeCells('E2:H2');
+        worksheet.getRow(2).alignment = { vertical: 'middle', horizontal: 'right' };
+
+        // === Dòng 3–4: Trống
+        worksheet.addRow([]);
+        worksheet.addRow([]);
+
+        // === Dòng 5: Tên báo cáo ở giữa ===
+        const reportRow = worksheet.addRow(['', '', selectedReport]);
+        worksheet.mergeCells('C5:F5');
+        reportRow.font = { bold: true, size: 14 };
+        reportRow.alignment = { vertical: 'middle', horizontal: 'center' };
+
+        // === Dòng 6: Trống trước khi xuất dữ liệu
+        worksheet.addRow([]);
+
+        // === Export dữ liệu từ DevExtreme (bắt đầu từ dòng 7)
+        DevExpress.excelExporter.exportDataGrid({
+            component: grid,
+            worksheet: worksheet,
+            autoFilterEnabled: true,
+            topLeftCell: { row: 7, column: 1 } // dữ liệu bắt đầu từ dòng 7
+        }).then(function () {
+            // Footer
+            const lastRow = worksheet.lastRow.number + 2;
+
+            worksheet.mergeCells(`A${lastRow}:F${lastRow}`);
+            worksheet.getCell(`A${lastRow}`).alignment = { horizontal: 'center' };
+            worksheet.getCell(`A${lastRow}`).font = { italic: true };
+
+            // Ghi file
+            let fileName = selectedReport + ".xlsx";
+            workbook.xlsx.writeBuffer().then(function (buffer) {
+                saveAs(new Blob([buffer], { type: "application/octet-stream" }), fileName);
+            });
+        });
+    });
+
+    // Nút xuất PDF
+         $("#btnExportPdf").click(function () {
+        const grid = $("#gridContainer").dxDataGrid("instance");
+
+        // Lấy đối tượng jsPDF từ window
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({ orientation: "landscape", unit: "pt", format: "A4" });
+
+        const selectedReport = '@ViewBag.ReportTitle';
+        const companyName = localStorage.getItem("CompanyName") || "Tên công ty chưa xác định";
+
+        grid.getDataSource().load().then(data => {
+            const columns = grid.getVisibleColumns();
+
+            const head = [columns.map(col => col.caption)];
+            const body = data.map(row =>
+                columns.map(col =>
+                    col.calculateCellValue ? col.calculateCellValue(row) : row[col.dataField]
+                )
+            );
+
+            doc.setFontSize(14);
+            doc.setFont("Helvetica", "bold");
+            doc.text(companyName, doc.internal.pageSize.getWidth() / 2, 40, { align: "center" });
+
+            doc.setFontSize(12);
+            doc.setFont("Helvetica", "normal");
+            doc.text(selectedReport, doc.internal.pageSize.getWidth() / 2, 60, { align: "center" });
+
+            // AutoTable
+            doc.autoTable({
+                startY: 80,
+                head: head,
+                body: body,
+                 styles: { fontSize: 9, cellPadding: 4 , lineWidth: 0.5, lineColor: [0, 0, 0]    },
+                headStyles: { fillColor: [41, 128, 185], textColor: 255, fontStyle: 'bold' },
+                alternateRowStyles: { fillColor: [240, 240, 240] },
+                margin: { left: 20, right: 20 }
+            });
+
+            doc.save(selectedReport + ".pdf");
+        });
+    });
+</script>

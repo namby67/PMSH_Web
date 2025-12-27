@@ -1,0 +1,850 @@
+﻿<link href="~/css/post-billing.css" rel="stylesheet" />
+<div class="modal fade" id="transactionModal-post-billing" tabindex="-1" aria-labelledby="transactionModalLabel-post-billing" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-post-billing modal-xl">
+        <div class="modal-content modal-content-post-billing" style="border:1px solid #bcbcbc">
+            <div class="modal-header modal-header-post-billing">
+                <h5 class="modal-title modal-title-post-billing" id="transactionModalLabel-post-billing" style="color:#ffffff">Posting Transaction</h5>
+                <button type="button" class="btn-close btn-close-white" aria-label="Close" onclick="closeModalBillingPost();"></button>
+            </div>
+            <div class="modal-body modal-body-post-billing">
+                <div class="row">
+                    <div class="mb-3">
+                        <button class="btn btn-primary btn-primary-post-billing" style="padding: 4px 8px;" onclick="PostingService();">Post</button>
+                    </div>
+                    <!-- Left Section -->
+                    <div class="col-md-6">
+                        <div class="row tight-row-post-billing">
+                            <!-- Group Transaction -->
+                            <div class="col-md-6">
+                                <div class="section-card section-card-post-billing">
+                                    <h8>Group Transaction</h8>
+                                    <input type="text" class="form-control form-control-post-billing search-input-post-billing" id="group-transaction-search-post-billing" placeholder="Search Group...">
+                                    <ul class="list-group list-group-post-billing" id="group-transaction-list-post-billing"></ul>
+                                </div>
+                            </div>
+                            <!-- Sub Group Transaction -->
+                            <div class="col-md-6">
+                                <div class="section-card section-card-post-billing">
+                                    <h8>Sub Group Transaction</h8>
+                                    <input type="text" class="form-control form-control-post-billing search-input-post-billing" id="sub-group-transaction-search-post-billing" placeholder="Search Sub Group...">
+                                    <ul class="list-group list-group-post-billing" id="sub-group-transaction-list-post-billing"></ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row tight-row-post-billing">
+                            <!-- Transaction List -->
+                            <div class="col-md-6">
+                                <div class="section-card section-card-post-billing">
+                                    <h8>Transaction List</h8>
+                                    <input type="text" class="form-control form-control-post-billing search-input-post-billing" id="transaction-list-search-post-billing" placeholder="Search Transaction...">
+                                    <ul class="list-group list-group-post-billing" id="transaction-list-post-billing"></ul>
+                                </div>
+                            </div>
+                            <!-- Article List -->
+                            <div class="col-md-6">
+                                <div class="section-card section-card-post-billing">
+                                    <h8>Article List</h8>
+                                    <input type="text" class="form-control form-control-post-billing search-input-post-billing" id="article-list-search-post-billing" placeholder="Search Article...">
+                                    <ul class="list-group list-group-post-billing" id="article-list-post-billing"></ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Transaction Details Card -->
+                        <div class="row tight-row-post-billing">
+                            <div class="col-md-12">
+                                <div class="section-card section-card-post-billing">
+                                    <h8>Transaction Details</h8>
+                                    <div class="row mb-1">
+                                        <div class="col">
+                                            <div class="input-group input-group-post-billing">
+                                                <label>T/A Code 1</label>
+                                                <input type="text" class="form-control form-control-post-billing" id="taCode1PostBilling">
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="input-group input-group-post-billing">
+                                                <input type="text" class="form-control form-control-post-billing" id="taCode2PostBilling" style="width:100%">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="row mb-1">
+                                        <span id="articleCodePostBilling"></span>
+
+                                    </div>
+                                    <div class="row mb-1">
+                                        <div class="col">
+                                            <div class="input-group input-group-post-billing">
+                                                <label>Quantity</label>
+                                                <input type="number" class="form-control form-control-post-billing" id="quantityPostBilling" style="text-align:right" value="1">
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="input-group input-group-post-billing">
+                                                <label>Bill No</label>
+                                                <input type="text" class="form-control form-control-post-billing" id="billNoPostBilling">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-1">
+                                        <div class="col">
+                                            <div class="input-group input-group-post-billing">
+                                                <label>Price++</label>
+                                                <input type="text" class="form-control form-control-post-billing" id="pricePostBilling" style="text-align:right" value="0">
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="input-group input-group-post-billing">
+                                                <label>Amount++</label>
+                                                <input type="text" class="form-control form-control-post-billing" id="amountPostBilling" style="text-align:right" value="0">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-1">
+                                        <div class="col">
+                                            <div class="input-group input-group-post-billing">
+                                                <label>Price.net</label>
+                                                <input type="text" class="form-control form-control-post-billing" id="priceNetPostBilling" style="text-align:right" value="0">
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="input-group input-group-post-billing">
+                                                <label>Amount.net</label>
+                                                <input type="text" class="form-control form-control-post-billing" id="amountNetPostBilling" style="text-align:right" value="0">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-1">
+                                        <div class="col">
+                                            <div class="input-group input-group-post-billing">
+                                                <label>Currency</label>
+                                                <input type="text" class="form-control form-control-post-billing" id="currencyPostBilling" value="VND" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="input-group input-group-post-billing">
+                                                <label>Win.No</label>
+                                                <input type="text" class="form-control form-control-post-billing" id="winNoPostBilling" style="text-align:right">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-1">
+                                        <div class="col">
+                                            <button class="btn btn-primary btn-primary-post-billing" style="padding: 4px 8px;" onclick="addItemToCart();">Push To List</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Right Section -->
+                    <div class="col-md-6">
+                        <!-- Selected Articles -->
+                        <div class="section-card section-card-post-billing has-overlap-post-billing">
+                            <h8 class="section-heading section-heading-post-billing">Selected Articles</h8>
+                            <ul class="list-group list-group-post-billing" id="selected-articles-list-post-billing"></ul>
+                            <div class="pagination pagination-post-billing" id="pagination-controls-post-billing"></div>
+                        </div>
+                        <!-- Express Service -->
+                        <div class="section-card section-card-post-billing has-overlap-post-billing">
+                            <h8 class="section-heading section-heading-post-billing">
+                                <input class="form-check-input form-check-input-post-billing me-1" type="checkbox" id="expressService-post-billing">
+                                Express Service
+                            </h8>
+                            <div class="row mt-1">
+                                <div class="col">
+                                    <div class="input-group input-group-post-billing">
+                                        <label>Percentage</label>
+                                        <input type="number" class="form-control form-control-post-billing" id="percentageInput-post-billing" step="0.01">
+                                    </div>
+                                </div>
+                                <div style="display: flex; column-gap: 8px;" class="col">
+                                    <div class="form-check">
+                                        <input class="form-check-input form-check-input-post-billing" type="radio" name="percentage-post-billing" id="percent10-post-billing" value="10">
+                                        <label class="form-check-label form-check-label-post-billing" for="percent10-post-billing">10%</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input form-check-input-post-billing" type="radio" name="percentage-post-billing" id="percent50-post-billing" value="50">
+                                        <label class="form-check-label form-check-label-post-billing" for="percent50-post-billing">50%</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input form-check-input-post-billing" type="radio" name="percentage-post-billing" id="percent100-post-billing" value="100">
+                                        <label class="form-check-label form-check-label-post-billing" for="percent100-post-billing">100%</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Section Toggle Links -->
+                        <div class="mb-3">
+                            <a href="#" class="section-toggle active" id="postDetailLink" onclick="toggleSection('post-detail')">Post Detail</a>
+                            <a href="#" class="section-toggle" id="postInvoiceLink" onclick="toggleSection('post-invoice')">Post Invoice</a>
+                        </div>
+                        <!-- Post Details Section -->
+                        <div class="section-card section-card-post-billing" id="post-detail" style="display: block;">
+                            <h8>Post Details</h8>
+
+                            <div class="input-group input-group-post-billing mb-1">
+                                <label>Rmt.Charge</label>
+                                <select class="form-select form-select-post-billing" aria-label="Rmt.Charge" id="rmtChargePostBilling"></select>
+                            </div>
+                            <div class="input-group input-group-post-billing mb-1">
+                                <label>Reference</label>
+                                <input type="text" class="form-control form-control-post-billing" id="referencePostBilling">
+                            </div>
+                            <div class="input-group input-group-post-billing mb-1">
+                                <label>Supplement</label>
+                                <input type="text" class="form-control form-control-post-billing" id="supplementPostBilling">
+                            </div>
+                            <div class="row mb-1">
+                                <div class="col">
+                                    <div class="input-group input-group-post-billing">
+                                        <label>Description</label>
+                                        <input type="text" class="form-control form-control-post-billing" id="desInvoicePostBilling">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="input-group input-group-post-billing">
+                                        <label>Check No</label>
+                                        <input type="text" class="form-control form-control-post-billing" id="checkNoInvoicePostBilling">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Invoice Details Section -->
+                        <div class="section-card section-card-post-billing" id="post-invoice" style="display: none;">
+                            <h8>Invoice Details</h8>
+                            <div class="row mb-1">
+                                <div class="col">
+                                    <div class="input-group input-group-post-billing">
+                                        <label>Invoice No</label>
+                                        <input type="text" class="form-control form-control-post-billing" id="invoiceNoPostBilling">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="input-group input-group-post-billing">
+                                        <label>Invoice Date</label>
+                                        <input type="date" class="form-control form-control-post-billing" id="invoiceDatePostBilling">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-1">
+                                <div class="col">
+                                    <div class="input-group input-group-post-billing">
+                                        <label>Total Amount</label>
+                                        <input type="text" class="form-control form-control-post-billing" id="totalAmountPostBilling" style="text-align:right" value="0">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="input-group input-group-post-billing">
+                                        <label>Tax Amount</label>
+                                        <input type="text" class="form-control form-control-post-billing" id="taxAmountPostBilling" style="text-align:right" value="0">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="input-group input-group-post-billing mb-1">
+                                <label>Customer Name</label>
+                                <input type="text" class="form-control form-control-post-billing" id="customerNamePostBilling">
+                            </div>
+                            <div class="input-group input-group-post-billing mb-1">
+                                <label>Customer Address</label>
+                                <input type="text" class="form-control form-control-post-billing" id="customerAddressPostBilling">
+                            </div>
+                            <div class="input-group input-group-post-billing mb-1">
+                                <label>Invoice Status</label>
+                                <select class="form-select form-select-post-billing" id="invoiceStatusPostBilling">
+                                    <option value="draft">Draft</option>
+                                    <option value="issued">Issued</option>
+                                    <option value="paid">Paid</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .section-toggle {
+        margin-right: 15px;
+        font-size: 16px;
+        text-decoration: none;
+        color: #007bff;
+        padding: 5px 10px;
+        border-radius: 4px;
+        transition: all 0.3s ease;
+    }
+
+        .section-toggle:hover {
+            background-color: #f8f9fa;
+        }
+
+        .section-toggle.active {
+            font-weight: bold;
+            color: #fff;
+            background-color: #007bff;
+            text-decoration: none;
+        }
+</style>
+<script>
+    var postType = 0;
+    $(document).ready(function () {
+        setUpGroupTransaction();
+        // Set default section to Post Detail
+        toggleSection('post-detail');
+        postType = 1;
+    });
+
+    function toggleSection(sectionId) {
+        listCart = [];
+        listSelected();
+        // Hide both sections
+        $('#post-detail, #post-invoice').hide();
+        // Remove active class from both links
+        $('#postDetailLink, #postInvoiceLink').removeClass('active');
+        // Show selected section and add active class to corresponding link
+        if(sectionId == 'post-detail'){
+            postType = 1;
+
+        }
+        else{
+            postType = 2;
+        }
+        $(`#${sectionId}`).show();
+        $(`#${sectionId}Link`).addClass('active');
+    }
+
+    function setUpGroupTransaction() {
+        var htmlGroupTran = '';
+        $('#group-transaction-list-post-billing').empty();
+        if (groupTransaction.length > 0) {
+            htmlGroupTran = `<li class="list-group-item list-group-item-post-billing active" data-id="${groupTransaction[0].id}">
+                               ${groupTransaction[0].description}
+                             </li>`;
+            for (var i = 1; i < groupTransaction.length; i++) {
+                htmlGroupTran += `<li class="list-group-item list-group-item-post-billing" data-id="${groupTransaction[i].id}">
+                                   ${groupTransaction[i].description}
+                                 </li>`;
+            }
+        }
+        $('#group-transaction-list-post-billing').append(htmlGroupTran);
+        var selectedID = $('#group-transaction-list-post-billing .list-group-item-post-billing.active').data('id');
+        filterSubGroupTransaction(selectedID);
+    }
+
+    function filterSubGroupTransaction(selectedId) {
+        $('#transaction-list-post-billing').empty();
+        $('#article-list-search-post-billing').empty();
+        var filteredSubGroupTransaction = subGroupTransaction.filter(function(item) {
+            return item.transactionGroupID === selectedId;
+        });
+        setUpSubGroupTransaction(filteredSubGroupTransaction);
+    }
+
+    $('#group-transaction-list-post-billing').on('click', '.list-group-item-post-billing', function() {
+        $('#group-transaction-list-post-billing .list-group-item-post-billing').removeClass('active');
+        $(this).addClass('active');
+        var selectedId = $(this).data('id');
+        filterSubGroupTransaction(selectedId);
+    });
+
+    function setUpSubGroupTransaction(list) {
+        var htmlGroupTran = '';
+        $('#sub-group-transaction-list-post-billing').empty();
+        if (list.length > 0) {
+            htmlGroupTran = `<li class="list-group-item list-group-item-post-billing active" data-id=${list[0].id}>
+                               ${list[0].description}
+                             </li>`;
+            for (var i = 1; i < list.length; i++) {
+                htmlGroupTran += `<li class="list-group-item list-group-item-post-billing" data-id=${list[i].id}>
+                                   ${list[i].description}
+                                 </li>`;
+            }
+        }
+        $('#sub-group-transaction-list-post-billing').append(htmlGroupTran);
+        var selectedID = $('#sub-group-transaction-list-post-billing .list-group-item-post-billing.active').data('id');
+        filterTransaction(selectedID);
+    }
+
+    function filterTransaction(selectedId) {
+        $('#article-list-search-post-billing').empty();
+        var selectedGroupId = $('#group-transaction-list-post-billing .list-group-item-post-billing.active').data('id');
+        var filteredSubGroupTransaction = transactionList.filter(function(item) {
+            return item.transactionSubGroupID === selectedId && item.transactionGroupID === selectedGroupId;
+        });
+        setTransaction(filteredSubGroupTransaction);
+    }
+
+    $('#sub-group-transaction-list-post-billing').on('click', '.list-group-item-post-billing', function() {
+        $('#sub-group-transaction-list-post-billing .list-group-item-post-billing').removeClass('active');
+        $(this).addClass('active');
+        var selectedId = $(this).data('id');
+        filterTransaction(selectedId);
+    });
+
+    function setTransaction(list) {
+        var htmlGroupTran = '';
+        $('#transaction-list-post-billing').empty();
+        if (list.length > 0) {
+            htmlGroupTran = `<li class="list-group-item list-group-item-post-billing active" style="display:flex;column-gap:12px" data-id=${list[0].code}>
+                               <span>${list[0].code}</span>
+                                <span>${list[0].description}</span>
+                                <button class="choose-btn choose-btn-post-billing" onclick="addItem(1,this)">+</button>
+                            </li>`;
+            for (var i = 1; i < list.length; i++) {
+                htmlGroupTran += `<li class="list-group-item list-group-item-post-billing" style="display:flex;column-gap:12px" data-id=${list[i].code}>
+                               <span>${list[i].code}</span>
+                                <span>${list[i].description}</span>
+                                <button class="choose-btn choose-btn-post-billing" onclick="addItem(1,this)">+</button>
+                </li>`;
+            }
+        }
+        $('#transaction-list-post-billing').append(htmlGroupTran);
+        var selectedID = $('#transaction-list-post-billing .list-group-item-post-billing.active').data('id');
+        filterArticle(selectedID);
+    }
+
+    function filterArticle(selectedId) {
+        var filteredSubGroupTransaction = articleList.filter(function(item) {
+            return item.transactionCode == selectedId;
+        });
+        setArticle(filteredSubGroupTransaction);
+    }
+
+    $('#transaction-list-post-billing').on('click', '.list-group-item-post-billing', function() {
+        $('#transaction-list-post-billing .list-group-item-post-billing').removeClass('active');
+        $(this).addClass('active');
+        var selectedId = $(this).data('id');
+        filterArticle(selectedId);
+    });
+
+    function setArticle(list) {
+        var htmlGroupTran = '';
+        $('#article-list-post-billing').empty();
+        if (list.length > 0) {
+            htmlGroupTran = `<li class="list-group-item list-group-item-post-billing active" style="display:flex;column-gap:12px" data-id=${list[0].id}>
+                               <span>${list[0].code}</span>
+                                <span>${list[0].description}</span>
+                                <span>${list[0].defaultPrice}</span>
+                                <button class="choose-btn choose-btn-post-billing" onclick="addItem(2,this)">+</button>
+                            </li>`;
+            for (var i = 1; i < list.length; i++) {
+                htmlGroupTran += `<li class="list-group-item list-group-item-post-billing" style="display:flex;column-gap:12px" data-id=${list[i].id}>
+                               <span>${list[i].code}</span>
+                                <span>${list[i].description}</span>
+                                <span>${list[i].defaultPrice}</span>
+                                <button class="choose-btn choose-btn-post-billing" onclick="addItem(2,this)">+</button>
+                </li>`;
+            }
+        }
+        $('#article-list-post-billing').append(htmlGroupTran);
+    }
+
+    $('#article-list-post-billing').on('click', '.list-group-item-post-billing', function() {
+        $('#article-list-post-billing .list-group-item-post-billing').removeClass('active');
+        $(this).addClass('active');
+    });
+
+    function openModalBillingPost() {
+        resetInfoPost();
+        listCart = [];
+        setUpGroupTransaction();
+        $('#transactionModal-post-billing').modal('show');
+    }
+
+    function closeModalBillingPost() {
+        listCart = [];
+        $('#transactionModal-post-billing').modal('hide');
+    }
+
+    // Search functionality for each list
+    function addSearchFilter(searchInputId, listId) {
+        const searchInput = document.getElementById(searchInputId);
+        const list = document.getElementById(listId);
+        const items = list.querySelectorAll('.list-group-item-post-billing');
+
+        searchInput.addEventListener('input', () => {
+            const filter = searchInput.value.toLowerCase();
+            items.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                item.style.display = text.includes(filter) ? '' : 'none';
+            });
+        });
+    }
+
+    addSearchFilter('group-transaction-search-post-billing', 'group-transaction-list-post-billing');
+    addSearchFilter('sub-group-transaction-search-post-billing', 'sub-group-transaction-list-post-billing');
+    addSearchFilter('transaction-list-search-post-billing', 'transaction-list-post-billing');
+    addSearchFilter('article-list-search-post-billing', 'article-list-post-billing');
+
+    // Pagination for Selected Articles
+    const articlesList = document.getElementById('selected-articles-list-post-billing');
+    const paginationControls = document.getElementById('pagination-controls-post-billing');
+    const itemsPerPage = 3;
+    let currentPage = 1;
+
+    function showPage(page) {
+        currentPage = page;
+        const articles = articlesList.querySelectorAll('.list-group-item-post-billing');
+        articles.forEach((item, index) => {
+            item.style.display = (index >= (page - 1) * itemsPerPage && index < page * itemsPerPage) ? '' : 'none';
+        });
+        updatePaginationControls();
+    }
+
+    function updatePaginationControls() {
+        paginationControls.innerHTML = '';
+        const totalPages = Math.ceil(listCart.length / itemsPerPage);
+        for (let i = 1; i <= totalPages; i++) {
+            const button = document.createElement('button');
+            button.className = 'pagination-btn pagination-btn-post-billing';
+            button.textContent = i;
+            if (i === currentPage) {
+                button.classList.add('active');
+            }
+            button.addEventListener('click', () => showPage(i));
+            paginationControls.appendChild(button);
+        }
+
+        const prevButton = document.createElement('button');
+        prevButton.className = 'pagination-btn pagination-btn-post-billing';
+        prevButton.textContent = 'Prev';
+        prevButton.disabled = currentPage === 1;
+        prevButton.addEventListener('click', () => {
+            if (currentPage > 1) showPage(currentPage - 1);
+        });
+        paginationControls.insertBefore(prevButton, paginationControls.firstChild);
+
+        const nextButton = document.createElement('button');
+        nextButton.className = 'pagination-btn pagination-btn-post-billing';
+        nextButton.textContent = 'Next';
+        nextButton.disabled = currentPage === totalPages;
+        nextButton.addEventListener('click', () => {
+            if (currentPage < totalPages) showPage(currentPage + 1);
+        });
+        paginationControls.appendChild(nextButton);
+    }
+
+    // Express Service checkbox and radio button functionality
+    const expressServiceCheckbox = document.getElementById('expressService-post-billing');
+    const percentageInput = document.getElementById('percentageInput-post-billing');
+    const radioButtons = document.querySelectorAll('input[name="percentage-post-billing"]');
+
+    expressServiceCheckbox.addEventListener('change', () => {
+        if (expressServiceCheckbox.checked) {
+            percentageInput.value = '50.00';
+            $('#referencePostBilling').val('Express Service: 50%');
+            document.getElementById('percent50-post-billing').checked = true;
+        } else {
+            percentageInput.value = '';
+            $('#referencePostBilling').val('');
+            radioButtons.forEach(radio => radio.checked = false);
+        }
+    });
+
+    radioButtons.forEach(radio => {
+        radio.addEventListener('change', () => {
+            if (radio.checked) {
+                percentageInput.value = parseFloat(radio.value).toFixed(2);
+                $('#referencePostBilling').val('Express Service: ' + $('#percentageInput-post-billing').val() + '%');
+            }
+        });
+    });
+
+    percentageInput.addEventListener('input', () => {
+        const value = parseFloat(percentageInput.value);
+        const radioValues = ['10', '50', '100'];
+        const matchingRadio = radioValues.find(radioValue => parseFloat(radioValue) === value);
+
+        radioButtons.forEach(radio => {
+            radio.checked = false;
+        });
+        $('#referencePostBilling').val('Express Service: ' + $('#percentageInput-post-billing').val() + '%');
+        if (matchingRadio) {
+            document.getElementById(`percent${matchingRadio}-post-billing`).checked = true;
+        }
+    });
+
+    // Hàm định dạng số thành tiền tệ
+    function formatNumber(number) {
+        return number.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    // Hàm loại bỏ dấu phẩy để lấy giá trị số
+    function parseNumber(value) {
+        return parseFloat(value.replace(/,/g, '')) || 0;
+    }
+
+    // Hàm xử lý định dạng input
+    function formatInput(inputElement) {
+        inputElement.addEventListener('input', function(e) {
+            let value = this.value.replace(/,/g, '');
+            let caretPos = this.selectionStart;
+            let originalLength = this.value.length;
+
+            if (!isNaN(value) && value !== '') {
+                let formattedValue = formatNumber(value);
+                let commasBeforeCaret = (this.value.substring(0, caretPos).match(/,/g) || []).length;
+                let commasInFormatted = (formattedValue.substring(0, caretPos).match(/,/g) || []).length;
+                let newCaretPos = caretPos + (commasInFormatted - commasBeforeCaret);
+
+                this.value = formattedValue;
+                this.setSelectionRange(newCaretPos, newCaretPos);
+            } else {
+                this.value = '';
+            }
+        });
+    }
+
+    // Áp dụng định dạng cho các ô input
+    const inputs = [
+        document.getElementById('pricePostBilling'),
+        document.getElementById('priceNetPostBilling'),
+        document.getElementById('amountPostBilling'),
+        document.getElementById('amountNetPostBilling'),
+        document.getElementById('totalAmountPostBilling'),
+        document.getElementById('taxAmountPostBilling')
+    ];
+
+    inputs.forEach(input => formatInput(input));
+
+    $("#pricePostBilling").blur(function() {
+        var price = parseFloat($('#pricePostBilling').val().replace(/,/g, ''));
+        calculateNetPost($('#taCode1PostBilling').val(), price);
+    });
+
+    $("#priceNetPostBilling").blur(function() {
+        var price = parseFloat($('#priceNetPostBilling').val().replace(/,/g, ''));
+        calculatePost($('#taCode1PostBilling').val(), price);
+    });
+
+    $("#amountPostBilling").blur(function() {
+        var price = parseFloat($('#amountPostBilling').val().replace(/,/g, ''));
+        calculateNetPost($('#taCode1PostBilling').val(), price / $('#quantityPostBilling').val());
+    });
+
+    $("#amountNetPostBilling").blur(function() {
+        var price = parseFloat($('#amountNetPostBilling').val().replace(/,/g, ''));
+        calculateNetPost($('#taCode1PostBilling').val(), price / $('#quantityPostBilling').val());
+    });
+
+    $("#quantityPostBilling").blur(function() {
+        var price = parseFloat($('#amountPostBilling').val().replace(/,/g, ''));
+        $('#amountPostBilling').val((price * $("#quantityPostBilling").val()).toLocaleString('en-US'));
+        var price2 = parseFloat($('#amountNetPostBilling').val().replace(/,/g, ''));
+        $('#amountNetPostBilling').val((price2 * $("#quantityPostBilling").val()).toLocaleString('en-US'));
+    });
+
+    function resetInfoPost() {
+        $('#taCode1PostBilling, #taCode2PostBilling, #billNoPostBilling, #winNoPostBilling, #referencePostBilling, #supplementPostBilling, #desInvoicePostBilling, #checkNoInvoicePostBilling, #invoiceNoPostBilling, #invoiceDatePostBilling, #customerNamePostBilling, #customerAddressPostBilling').val('');
+        $('#pricePostBilling, #amountPostBilling, #priceNetPostBilling, #amountNetPostBilling, #totalAmountPostBilling, #taxAmountPostBilling').val('0');
+        $('#quantityPostBilling').val('1');
+        $('#currencyPostBilling').val('VND');
+        $('#articleCodePostBilling').text('');
+        $('#rmtChargePostBilling').val('');
+        $('#expressService-post-billing').prop('checked', false);
+        $('#percentageInput-post-billing').val('');
+        $('#percent10-post-billing, #percent50-post-billing, #percent100-post-billing').prop('checked', false);
+        $('#invoiceStatusPostBilling').val('draft');
+    }
+
+    var cartArrticle;
+    function addItem(type, button) {
+        resetInfoPost();
+        var dataId = button.closest('li').getAttribute('data-id');
+        var filteredSubGroupTransaction = [];
+        var filteredSubGroupTransaction2 = [];
+        if (type == 2) {
+            filteredSubGroupTransaction = articleList.filter(function(item) {
+                return item.id == dataId;
+            });
+            filteredSubGroupTransaction2 = transactionList.filter(function(item) {
+                return item.code == filteredSubGroupTransaction[0].transactionCode;
+            });
+        } else {
+            filteredSubGroupTransaction2 = transactionList.filter(function(item) {
+                return item.code == dataId;
+            });
+        }
+        cartArrticle = filteredSubGroupTransaction[0];
+        setValueFormPostArticle(cartArrticle, filteredSubGroupTransaction2[0]);
+    }
+
+    function setValueFormPostArticle(cartArrticle, transaction) {
+        if (cartArrticle != undefined) {
+            $('#articleCodePostBilling').text(cartArrticle.code + ' - ' + cartArrticle.description);
+            $('#pricePostBilling, #amountPostBilling, #priceNetPostBilling, #amountNetPostBilling').val(cartArrticle.defaultPrice.toLocaleString('en-US'));
+        }
+        $('#taCode1PostBilling').val(transaction.code);
+        $('#taCode2PostBilling').val(transaction.description);
+        $('#quantityPostBilling').val('1');
+    }
+
+    function addItemToCart() {
+        if(postType == 1 && listCart.length == 1){
+            showToast('Error', "Posted transaction! Please create another post", false);
+            return;
+        }
+        listCart.push(new CartItem(
+            $('#taCode1PostBilling').val(),
+            $('#taCode2PostBilling').val(),
+            $('#articleCodePostBilling').text().split('-')[0],
+            $('#articleCodePostBilling').text().split('-')[1],
+            $('#quantityPostBilling').val(),
+            $('#priceNetPostBilling').val(),
+            $('#pricePostBilling').val(),
+            $('#amountPostBilling').val(),
+            $('#amountNetPostBilling').val()
+        ));
+        listSelected();
+        resetInfoPost();
+    }
+
+    function listSelected() {
+        const itemsPerPage = 3;
+        let currentPage = 1;
+
+        function renderPage(page) {
+            $('#selected-articles-list-post-billing').empty();
+            const start = (page - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const paginatedItems = listCart.slice(start, end);
+
+            let html = '';
+            if (paginatedItems.length > 0) {
+                for (let i = 0; i < paginatedItems.length; i++) {
+                    html += `<li class="list-group-item list-group-item-post-billing row" style="display:flex;justify-content:space-between">
+                        <span class="col-md-1" style="color:#dc3545">x</span>
+                        <span class="col-md-1">${paginatedItems[i].transCode}</span>
+                        <span class="col-md-7">${paginatedItems[i].transName} < A(${paginatedItems[i].articleCode})-${paginatedItems[i].articleName}</span>
+                        <span class="col-md-1">${paginatedItems[i].quantity}</span>
+                        <span class="col-md-2">${paginatedItems[i].amountNet}</span>
+                    </li>`;
+                }
+            } else {
+                html = '<li class="list-group-item list-group-item-post-billing">No items in list</li>';
+            }
+            $('#selected-articles-list-post-billing').append(html);
+            renderPagination(page);
+        }
+
+        function renderPagination(currentPage) {
+            const totalPages = Math.ceil(listCart.length / itemsPerPage);
+            let paginationHtml = '';
+            paginationHtml += `<button class="btn btn-sm btn-outline-secondary" ${currentPage === 1 ? 'disabled' : ''} onclick="changePage(${currentPage - 1})" style="padding: 4px 8px">Previous</button>`;
+            for (let i = 1; i <= totalPages; i++) {
+                paginationHtml += `<button class="btn btn-sm ${i === currentPage ? 'btn-primary' : 'btn-outline-secondary'}" onclick="changePage(${i})" style="padding: 4px 8px">${i}</button>`;
+            }
+            paginationHtml += `<button class="btn btn-sm btn-outline-secondary" ${currentPage === totalPages ? 'disabled' : ''} onclick="changePage(${currentPage + 1})" style="padding: 4px 8px">Next</button>`;
+            $('#pagination-controls-post-billing').html(paginationHtml);
+        }
+
+        window.changePage = function(page) {
+            if (page >= 1 && page <= Math.ceil(listCart.length / itemsPerPage)) {
+                currentPage = page;
+                renderPage(currentPage);
+            }
+        };
+
+        renderPage(currentPage);
+    }
+
+    var listCart = [];
+    class CartItem {
+        constructor(transCode, transName, articleCode, articleName, quantity, priceNet, price, amount, amountNet) {
+            this.transCode = transCode;
+            this.transName = transName;
+            this.articleCode = articleCode;
+            this.articleName = articleName;
+            this.quantity = quantity;
+            this.priceNet = priceNet;
+            this.price = price;
+            this.amount = amount;
+            this.amountNet = amountNet;
+        }
+    }
+
+    function PostingService() {
+        const userName = JSON.parse(localStorage.getItem("Loginname"));
+        const userID = JSON.parse(localStorage.getItem("userID"));
+        var formData = new FormData();
+        formData.append('rsvID', idReservation);
+        formData.append('description', $('#taCode2PostBilling').val());
+        formData.append('roomID', roomID);
+        formData.append('referencePost', $('#referencePostBilling').val());
+        formData.append('listItem', JSON.stringify(listCart));
+        formData.append('userName', userName);
+        formData.append('userID', userID);
+        formData.append('postType', postType);
+
+        $.ajax({
+            url: '/Billing/PostArticle',
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            data: formData,
+            success: function (data) {
+                if (data.code == 0) {
+                    resetInfoPost();
+                    listCart = [];
+                    listSelected();
+                    searchFolioDetail(0);
+                    showToast('Success', data.msg, true);
+                } else {
+                    showToast('Error', data.msg, false);
+                }
+            },
+            error: function (xhr, statusText, err) {}
+        });
+    }
+
+    function calculateNetPost(transactionCode, price) {
+        $.ajax({
+            url: '/Billing/CalculateNet',
+            type: 'get',
+            dataType: 'json',
+            data: {
+                transactionCode: transactionCode,
+                price: price
+            },
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                $('#pricePostBilling').val(price.toLocaleString('en-US'));
+                $('#priceNetPostBilling').val(result.toLocaleString('en-US'));
+                $('#amountNetPostBilling').val((result * $('#quantityPostBilling').val()).toLocaleString('en-US'));
+                $('#amountPostBilling').val((price * $('#quantityPostBilling').val()).toLocaleString('en-US'));
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                }
+            }
+        });
+    }
+
+    function calculatePost(transactionCode, price) {
+        $.ajax({
+            url: '/Billing/CalculatePrice',
+            type: 'get',
+            dataType: 'json',
+            data: {
+                transactionCode: transactionCode,
+                price: price
+            },
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                $('#pricePostBilling').val(result.toLocaleString('en-US'));
+                $('#priceNetPostBilling').val(price.toLocaleString('en-US'));
+                $('#amountNetPostBilling').val((price * $('#quantityPostBilling').val()).toLocaleString('en-US'));
+                $('#amountPostBilling').val((result * $('#quantityPostBilling').val()).toLocaleString('en-US'));
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                }
+            }
+        });
+    }
+</script>
