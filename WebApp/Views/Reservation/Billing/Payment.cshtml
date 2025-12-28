@@ -90,10 +90,17 @@
         });
     }
     function openModalPaymentBilling(){
-        getPaymentFO();
-        clearPaymentBilling();
+         localStorage.setItem("currentFromID", "modalPaymentBilling");
+         const crashierLogin = localStorage.getItem("crashierLogin");
+         getPaymentFO();
+         clearPaymentBilling();
         $('#amountPaymentBilling').val(totalAmountBilling.toLocaleString('en-US'));
-        $('#modalPaymentBilling').modal('show');
+        if (crashierLogin == "NotYet") {
+            openModalShilftLogin();
+        } else {
+        
+            $('#modalPaymentBilling').modal('show');
+        }
     }
     
     function closeModalPaymentBilling(){
