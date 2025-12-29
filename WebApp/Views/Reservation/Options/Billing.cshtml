@@ -536,6 +536,7 @@
                     getFolioNo();
                     closeModalConfirmTransaction();
                     showToast('Success', data.msg, true);
+                     GetBalanceVND(idReservation);
                 } else {
                     showToast('Error', data.msg, false);
                 }
@@ -800,6 +801,7 @@
                 if (data.code == 0) {
                     getFolioNo();
                     showToast('Success', data.msg, true);
+                   GetBalanceVND(idReservation);
                 } else {
                     showToast('Error', data.msg, false);
                 }

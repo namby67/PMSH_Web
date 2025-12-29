@@ -161,8 +161,7 @@
                     closeModalPaymentBilling();
                     searchFolioDetail(0);
                     showToast('Success', data.msg, true);
-                    $('#balanceBilling').text(formatNumberBilling(data.balanceVND));
-                    $('#totalBilling').text(formatNumberBilling(data.balanceVND));
+                   GetBalanceVND(idReservation);
                 } else {
                     showToast('Error', data.msg, false);
                 }
@@ -170,6 +169,6 @@
             error: function (xhr, statusText, err) { }
         });
     }
-
+   
 
 </script>

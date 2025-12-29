@@ -638,7 +638,19 @@ namespace Billing.Controllers
                 return Json(ex.Message);
             }
         }
-
+        [HttpGet]
+        public async Task<IActionResult> GetFolioDetailMasterEdit(string invoiceNoPosting)
+        {
+            try
+            {
+                var result = FolioDetailBO.GetFolioDetailMasterEdit(invoiceNoPosting);
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message);
+            }
+        }
 
         [HttpPost]
         public ActionResult EditPosting()
@@ -692,12 +704,20 @@ namespace Billing.Controllers
                 foreach (var item in trans)
                 {
                     FolioDetailModel folio = (FolioDetailModel)FolioDetailBO.Instance.FindByPrimaryKey(item.ID);
+
+                    folio.TransactionDate = DateTime.Parse(Request.Form["transactionDate"]);
                     if (folio.IsSplit == true)
                     {
                         folio.Price = decimal.Parse(Request.Form["price"].ToString());
                         folio.Quantity = int.Parse(Request.Form["quantity"].ToString());
                         folio.Amount = folio.AmountMaster = folio.AmountGross = folio.AmountMasterGross = folio.Price * folio.Quantity;
                         folio.AmountBeforeTax = folio.AmountMasterBeforeTax = folio.Amount - priceVat - priceSvc;
+                    }
+                    else if (folio.RowState == 1)
+                    {
+                        folio.Supplement = Request.Form["supplement"].ToString();
+
+                        folio.Reference = Request.Form["reference"].ToString();
                     }
                     else
                     {
@@ -724,7 +744,8 @@ namespace Billing.Controllers
                             folio.Amount = folio.AmountMaster = folio.AmountGross = folio.AmountMasterGross = folio.AmountBeforeTax = folio.AmountMasterBeforeTax = priceMain;
                         }
                     }
-                    FolioDetailBO.Instance.Update(folio);
+                   
+                        FolioDetailBO.Instance.Update(folio);
                 }
 
                 pt.CommitTransaction();
@@ -867,7 +888,25 @@ namespace Billing.Controllers
 
             }
         }
+        [HttpGet]
+        public async Task<IActionResult> GetBalanceVND(int rsvID)
+        {
+            try
+            {
+                List<ReservationModel> posting = new List<ReservationModel>();
+  
+                
+                   posting = ReservationBO.GetBalanceVND(rsvID);
+   
+                
 
+                return Json(posting);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message);
+            }
+        }
         #endregion
 
         #region DatVP __ Billing: Create Folio

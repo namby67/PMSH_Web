@@ -3288,9 +3288,13 @@ namespace NightAudit.Controllers
             {
                 _IsOK = true;
                 //Cap nhat trang thai phong cho khach NoShow -- Status = 7
-                string sqlUpdate_NO = "UPDATE Reservation SET Status = 7, NoShowStatus =1 " +
-                                      "WHERE (Status = 0 OR Status = 5) " +
-                                      "AND ArrivalDate = cast('" + TextUtils.GetBusinessDate().ToString("yyyy/MM/dd") + "' as date) ";
+                string sqlUpdate_NO =
+                    "UPDATE Reservation " +
+                    "SET Status = 7, NoShowStatus = 1 " +
+                    "WHERE (Status = 0 OR Status = 5) " +
+                    "AND CAST(ArrivalDate AS DATE) = '" +
+                    TextUtils.GetBusinessDate().ToString("yyyy-MM-dd") + "'";
+
                 SqlHelper.ExecuteNonQuery(DBUtils.GetDBConnectionString(), CommandType.Text, sqlUpdate_NO);
                 //TextUtils.DailyCutOff();
             }
