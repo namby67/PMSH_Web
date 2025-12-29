@@ -7,6 +7,8 @@
 }
 
 <style>
+ 
+
     .dx-datagrid-headers .dx-header-row td {
         white-space: pre-line !important;
         text-align: center;
@@ -14,8 +16,7 @@
     }
 
 
-    .dx-datagrid .dx-editor-with-menu .dx-menu-item-content .dx-icon.dx-icon-filter-operation-default,
-    .dx-datagrid-container .dx-editor-with-menu .dx-menu-item-content .dx-icon.dx-icon-filter-operation-default {
+    .dx-datagrid .dx-editor-with-menu .dx-menu-item-content .dx-icon.dx-icon-filter-operation-default, .dx-datagrid-container .dx-editor-with-menu .dx-menu-item-content .dx-icon.dx-icon-filter-operation-default {
         display: none;
     }
 
@@ -37,13 +38,12 @@
         margin: 0px 8px;
     }
 
-    .button_wrapper .fa-solid {
-        margin-right: 5px;
-    }
+        .button_wrapper .fa-solid {
+            margin-right: 5px;
+        }
 
     .selected {
-        background-color: #4CAF50;
-        /* Màu xanh */
+        background-color: #4CAF50; /* Màu xanh */
         color: white;
     }
 
@@ -59,10 +59,8 @@
 
 
     .sticky-header input[type="date"].form-control-sm {
-        font-size: 12px !important;
-        /* dúng 12?px */
-        height: calc(1.1em + .2rem + 2px);
-        /* gi? cùng chi?u cao */
+        font-size: 12px !important; /* dúng 12?px */
+        height: calc(1.1em + .2rem + 2px); /* gi? cùng chi?u cao */
     }
 
     .sticky-header label {
@@ -72,8 +70,7 @@
 
 
     .sort-select {
-        max-width: 130px;
-        /* ho?c 100px n?u mu?n nh? hon */
+        max-width: 130px; /* ho?c 100px n?u mu?n nh? hon */
         font-size: 12px;
         padding: 0.15rem 0.5rem;
     }
@@ -87,54 +84,40 @@
     }
 
     button:disabled {
-        pointer-events: none;
-        /* Không cho hover/click */
-        opacity: 0.6;
-        /* Cho nó mờ đi */
-        cursor: not-allowed;
-        /* Hiện con trỏ cấm */
-        background-color: #ccc !important;
-        /* tuỳ chỉnh màu khi disable */
+        pointer-events: none; /* Không cho hover/click */
+        opacity: 0.6; /* Cho nó mờ đi */
+        cursor: not-allowed; /* Hiện con trỏ cấm */
+        background-color: #ccc !important; /* tuỳ chỉnh màu khi disable */
     }
 
     .tomselect-custom {
         width: 100px;
-        min-height: 30px;
-        /* hoặc tùy theo chiều cao bạn muốn */
+        min-height: 30px; /* hoặc tùy theo chiều cao bạn muốn */
         font-size: 12px !important;
     }
 
-    .tomselect-custom .ts-control {
-        padding-left: 8px !important;
-        /* hoặc bất kỳ giá trị nào bạn muốn */
-    }
+        .tomselect-custom .ts-control {
+            padding-left: 8px !important; /* hoặc bất kỳ giá trị nào bạn muốn */
+        }
 
     #groupCode.form-control-sm,
     #subGroupCode.form-control-sm {
-        height: 26px !important;
-        /* chiều cao nhỏ */
-        font-size: 12px !important;
-        /* chữ nhỏ */
-        padding: 2px 6px !important;
-        /* padding nhỏ */
-        line-height: 1.2 !important;
-        /* căn giữa chữ */
-        max-width: 180px;
-        /* chiều rộng vừa phải */
+        height: 26px !important; /* chiều cao nhỏ */
+        font-size: 12px !important; /* chữ nhỏ */
+        padding: 2px 6px !important; /* padding nhỏ */
+        line-height: 1.2 !important; /* căn giữa chữ */
+        max-width: 180px; /* chiều rộng vừa phải */
     }
 
-    .hide-band .dx-datagrid-bands>tr:first-child {
+    .hide-band .dx-datagrid-bands > tr:first-child {
         display: none !important;
     }
 
     .btn-mini {
-        padding: 4px 10px;
-        /* cao hơn btn-sm */
-        font-size: 14px;
-        /* chữ lớn hơn một chút */
+        padding: 4px 10px; /* cao hơn btn-sm */
+        font-size: 14px; /* chữ lớn hơn một chút */
         line-height: 1.2;
     }
-
     .selected-cell {
         background-color: #d0eaff !important;
         border: 2px solid #007acc !important;
@@ -144,8 +127,7 @@
 <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
 <div class="text-center" id="reportTitle" style="font-size: 20px">Item Inventory Available</div>
 <div class="sticky-header bg-white p-2 shadow-sm z-3">
-    <div class="d-flex flex-wrap align-items-center gap-2 mb-1"
-        style="border: 1px solid #ced4da; border-radius: 6px; padding: 8px;">
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-1" style="border: 1px solid #ced4da; border-radius: 6px; padding: 8px;">
         <!-- From Date -->
         <div class="d-flex flex-column ">
 
@@ -174,10 +156,8 @@
 
     </div>
     <div class="">
-        <button style="border-radius: 4px;  margin-right: 6px; " id="btnPrint" class="mui-button mui-button-new"><i
-                class="fa-solid fa-eye"></i>View</button>
-        <button style="border-radius: 4px;  margin-right: 6px; " id="btnDetail" class="mui-button mui-button-new"
-            type="button"> <i class="fa-solid fa-file-excel"></i> Detail</button>
+        <button style="border-radius: 4px;  margin-right: 6px; " id="btnPrint" class="mui-button mui-button-new"><i class="fa-solid fa-eye"></i>View</button>
+        <button style="border-radius: 4px;  margin-right: 6px; " id="btnDetail" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Detail</button>
 
     </div>
 </div>
@@ -188,8 +168,7 @@
         <div class="gridContainer" id="gridContainer"></div>
     </div>
 </div>
-<div id="loadingSpinner"
-    style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
+<div id="loadingSpinner" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
     <i class="fa-solid fa-spinner fa-spin"></i>
 </div>
 <div id="popupShiftDetail">
@@ -326,7 +305,7 @@
                     { dataField: "name", caption: "Name" },
                     { dataField: "roomNo", caption: "Room No", dataType: "number" },
                     { dataField: "reservedFrom", caption: "Reserved From", dataType: "date", format: "dd/MM/yyyy" },
-                    { dataField: "reservedTo", caption: "Reserved To", dataType: "date", format: "dd/MM/yyyy" },
+                    { dataField: "reservedTo", caption: "Reserved To", dataType: "date", format: "dd/MM/yyyy"},
                     { dataField: "qty", caption: "Qty", dataType: "number", format: "#,##0.00" },
                 ],
                 scrolling: {

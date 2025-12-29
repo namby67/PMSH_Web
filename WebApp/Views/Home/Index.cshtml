@@ -3,7 +3,6 @@
 }
 <div class="layout-wrapper">
 
-
     <!-- Mục 1: Trên cùng -->
     <div class="section-top">
         <div class="card-box" onclick="window.location.href='/HouseKeeping/RoomAvailability'">
@@ -20,7 +19,6 @@
                 <div class="card-value" id="dueInCheckedInCount">0</div>
             </div>
         </div>
-
 
         <div class="card-box">
             <div class="card-icon"><i class="fas fa-users"></i></div>
@@ -44,60 +42,55 @@
             </div>
         </div>
 
-
-
     </div>
-
-    <!-- Mục 2 & 3: Chia đôi bên dưới -->
-    <div class="section-bottom">
-        <div class="section-left mui-card">
-            <div class="info-box">
-                <div class="info-icon"><i class="fas fa-chart-pie"></i></div>
-                <div class="info-content">
-                    <div class="info-title">% Occupancy</div>
-                    <div class="info-value" id="occupancyPercent">0%</div>
-                </div>
+    <div class="section-left mui-card">
+        <div class="info-box">
+            <div class="info-icon"><i class="fas fa-chart-pie"></i></div>
+            <div class="info-content">
+                <div class="info-title">% Occupancy</div>
+                <div class="info-value" id="occupancyPercent">0%</div>
             </div>
-            <div class="info-box">
-                <div class="info-icon"><i class="fas fa-male"></i></div>
-                <div class="info-content">
-                    <div class="info-title">Adults</div>
-                    <div class="info-value" id="totalA">0</div>
-                </div>
-            </div>
-
-            <div class="info-box">
-                <div class="info-icon"><i class="fas fa-child"></i></div>
-                <div class="info-content">
-                    <div class="info-title">Children</div>
-                    <div class="info-value" id="totalC">0</div>
-                </div>
-            </div>
-            <div class="info-box">
-                <div class="info-icon"><i class="fas fa-calendar-check"></i></div>
-                <div class="info-content">
-                    <div class="info-title">Assigned</div>
-                    <div class="info-value" id="rsvCount">0</div>
-                </div>
+        </div>
+        <div class="info-box">
+            <div class="info-icon"><i class="fas fa-male"></i></div>
+            <div class="info-content">
+                <div class="info-title">Adults</div>
+                <div class="info-value" id="totalA">0</div>
             </div>
         </div>
 
-
-        <div class="section-right mui-card">
-            <div class="form-group" id="checkchart" style="display:flex">
-                <label style="margin-left: 15px;">
-                    <input type="radio" name="chartType" value="pie" checked> Pie Chart
-                </label>
-                <label>
-                    <input type="radio" name="chartType" value="bar"> Bar Chart
-                </label>
-
+        <div class="info-box">
+            <div class="info-icon"><i class="fas fa-child"></i></div>
+            <div class="info-content">
+                <div class="info-title">Children</div>
+                <div class="info-value" id="totalC">0</div>
             </div>
-            <div id="highchartBar" class="chart-fixed-sizehigh" style="display:none;"></div>
-            <div id="highchartPie" class="chart-fixed-sizehigh"></div>
         </div>
-
+        <div class="info-box">
+            <div class="info-icon"><i class="fas fa-calendar-check"></i></div>
+            <div class="info-content">
+                <div class="info-title">Assigned</div>
+                <div class="info-value" id="rsvCount">0</div>
+            </div>
+        </div>
     </div>
+
+
+    <div class="section-right mui-card">
+        <div class="form-group" id="checkchart" style="display:flex">
+            <label style="margin-left: 15px;">
+                <input type="radio" name="chartType" value="pie" checked> Pie Chart
+            </label>
+            <label>
+                <input type="radio" name="chartType" value="bar"> Bar Chart
+            </label>
+
+        </div>
+        <div id="highchartBar" class="chart-fixed-sizehigh" style="display:none;"></div>
+        <div id="highchartPie" class="chart-fixed-sizehigh"></div>
+    </div>
+
+</div>
 </div>
 <div id="loadingSpinner"
     style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">

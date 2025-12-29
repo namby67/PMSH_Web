@@ -23,7 +23,7 @@ namespace Administration.Controllers
         private readonly IConfiguration _configuration;
         private readonly ILogger<ArticleController> _logger;
         private readonly IMemoryCache _cache;
-        private readonly IArticleService _iArticleService ;
+        private readonly IArticleService _iArticleService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         public ArticleController(ILogger<ArticleController> logger,
                 IMemoryCache cache, IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IArticleService iArticleService)
@@ -41,7 +41,7 @@ namespace Administration.Controllers
         }
         public IActionResult Article()
         {
-            List <TransactionsModel> listTransac = PropertyUtils.ConvertToList<TransactionsModel>(TransactionsBO.Instance.FindAll());
+            List<TransactionsModel> listTransac = PropertyUtils.ConvertToList<TransactionsModel>(TransactionsBO.Instance.FindAll());
             ViewBag.TransactionsList = listTransac;
 
             List<CurrencyModel> listCurr = PropertyUtils.ConvertToList<CurrencyModel>(CurrencyBO.Instance.FindAll());
@@ -49,7 +49,7 @@ namespace Administration.Controllers
             return View();
         }
         [HttpGet]
-        public IActionResult SearchArticle(string tranCode, string articleCode,string articleDescription,string articleSupplement)
+        public IActionResult SearchArticle(string tranCode, string articleCode, string articleDescription, string articleSupplement)
         {
             try
             {
@@ -72,7 +72,7 @@ namespace Administration.Controllers
 
         }
         [HttpPost]
-        public IActionResult ArticleListSave(int id, string codenew, decimal dfprice, string descriptionnew, string transactionsListnew, string currList, string supplementNew, string user, int userID, int  isActive)
+        public IActionResult ArticleListSave(int id, string codenew, decimal dfprice, string descriptionnew, string transactionsListnew, string currList, string supplementNew, string user, int userID, int isActive)
         {
             ProcessTransactions pt = new ProcessTransactions();
             pt.OpenConnection();

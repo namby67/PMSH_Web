@@ -1585,7 +1585,6 @@ namespace Billing.Controllers
                                   MainGuest = d["MainGuest"].ToString(),
 
 
-
                               }).ToList();
 
 
@@ -1775,7 +1774,6 @@ namespace Billing.Controllers
 
                 if (postType == 1)
                 {
-
                     price = decimal.Parse(Request.Form["adjustAmount"].ToString());
                     priceNet = decimal.Parse(Request.Form["adjustNet"].ToString());
                 }
@@ -1980,7 +1978,6 @@ namespace Billing.Controllers
 
                             folioSub.RowState = 2;
                             folioSub.PostType = 2;
-
                             folioSub.IsSplit = false;
                             folioSub.Quantity = 1;
                             if (item.GroupCode == "Tax" && item.GroupCode == "Tax")
@@ -2212,7 +2209,6 @@ namespace Billing.Controllers
             {
                 pt.OpenConnection();
                 pt.BeginTransaction();
-
                 #region lưu reservation item inventory
                 string itemInventoryString = Request.Form["users"].ToString();
                 List<int> userIDs = new List<int>();

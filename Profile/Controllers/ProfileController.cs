@@ -40,7 +40,6 @@ namespace Profile.Controllers
             _iMembershipService = iMembershipService;
             _iFutureService = iFutureService;
         }
-
         public IActionResult Index()
         {
             return View();
@@ -467,7 +466,6 @@ namespace Profile.Controllers
                 return Json(ex.Message);
             }
         }
-
         [HttpGet]
         public ActionResult GetProfileByID(int id)
         {
@@ -670,7 +668,6 @@ namespace Profile.Controllers
                     profile.PurposeOfStay = Request.Form["PurposeIndividual"].ToString();
                     profile.MarketID = 0;
                     profile.IsTransfer = false;
-
                 }
                 else if (int.Parse(Request.Form["Type"]) == 1 || int.Parse(Request.Form["Type"]) == 2 || int.Parse(Request.Form["Type"]) == 3)
                 {
@@ -949,7 +946,6 @@ namespace Profile.Controllers
                         Message += "Last name not blank\n";
                         return Json(new { code = 1, msg = Message });
                     }
-
                     if (Request.Form["FirstNameIndividual"].ToString() == "")
                     {
                         Message += "First name not blank\n";

@@ -36,7 +36,6 @@ namespace Reservation.Services.Implements
             }
         }
 
-
         public decimal CalculatePriceFromNet(decimal priceAfter, string transactionCode)
         {
             try

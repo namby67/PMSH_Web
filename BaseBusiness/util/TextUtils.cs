@@ -23,28 +23,28 @@ namespace BaseBusiness.util
 			// TODO: Add constructor logic here
 			//
 		}
-		public static DateTime dtNull=DateTime.Parse("01/01/1900");
+		public static DateTime dtNull = DateTime.Parse("01/01/1900");
 
 		public static string ToString(Object obj)
 		{
 			return (obj == null) ? "" : obj.ToString();
 		}
-        public static int CompareDate(DateTime date1, DateTime date2)
-        {
-            if (date1.Day == date2.Day && date1.Month == date2.Month && date1.Year == date2.Year)
-                return 0;
-            if (date1.Year < date2.Year || (date1.Year == date2.Year && date1.Month < date2.Month) || (date1.Year == date2.Year && date1.Month == date2.Month && date1.Day < date2.Day))
-                return -1;
-            else
-                return 1;
+		public static int CompareDate(DateTime date1, DateTime date2)
+		{
+			if (date1.Day == date2.Day && date1.Month == date2.Month && date1.Year == date2.Year)
+				return 0;
+			if (date1.Year < date2.Year || (date1.Year == date2.Year && date1.Month < date2.Month) || (date1.Year == date2.Year && date1.Month == date2.Month && date1.Day < date2.Day))
+				return -1;
+			else
+				return 1;
 
-        }
-        public static string GetHostName()
-        {
-            return System.Environment.MachineName; //System.Net.Dns.GetHostName();
+		}
+		public static string GetHostName()
+		{
+			return System.Environment.MachineName; //System.Net.Dns.GetHostName();
 
-        }
-        public static int ToInt(string x)
+		}
+		public static int ToInt(string x)
 		{
 			try
 			{
@@ -55,38 +55,38 @@ namespace BaseBusiness.util
 				return -1;
 			}
 		}
-        public static Decimal ToDecimal(string x)
-        {
-            try
-            {
-                return Decimal.Parse(x);
-            }
-            catch (Exception e)
-            {
-                return 0;
-            }
-        }
+		public static Decimal ToDecimal(string x)
+		{
+			try
+			{
+				return Decimal.Parse(x);
+			}
+			catch (Exception e)
+			{
+				return 0;
+			}
+		}
 
-        public static string DateFormatEnVi(DateTime dtDate,int EnVi,  string dtFormat)
-        {
-            //If Eng date, EnVi=1, if Vi date EnVi=0
-            //dtFormat: dd/MM/yyyy,....
-            CultureInfo culture;
-            try
-            {
-                if(EnVi==1)
-                    culture = new CultureInfo("en-us");
-                else
-                    culture = new CultureInfo("vi-VN");
+		public static string DateFormatEnVi(DateTime dtDate, int EnVi, string dtFormat)
+		{
+			//If Eng date, EnVi=1, if Vi date EnVi=0
+			//dtFormat: dd/MM/yyyy,....
+			CultureInfo culture;
+			try
+			{
+				if (EnVi == 1)
+					culture = new CultureInfo("en-us");
+				else
+					culture = new CultureInfo("vi-VN");
 
-                return dtDate.ToString(dtFormat, culture);
-                
-            }
-            catch (Exception e)
-            {
-                return "";
-            }
-        }
+				return dtDate.ToString(dtFormat, culture);
+
+			}
+			catch (Exception e)
+			{
+				return "";
+			}
+		}
 
 		public static long ToLong(string x)
 		{
@@ -101,13 +101,13 @@ namespace BaseBusiness.util
 		}
 
 		//TUANLA add this function
-		public static System.Boolean IsDate (string strDate)
+		public static System.Boolean IsDate(string strDate)
 		{
 			try
 			{
-				if(strDate.Length < 7)
+				if (strDate.Length < 7)
 					return false;
-				System.DateTime dt = System.DateTime.Parse(strDate,new CultureInfo("vi-VN", true));
+				System.DateTime dt = System.DateTime.Parse(strDate, new CultureInfo("vi-VN", true));
 				return true;
 			}
 			catch
@@ -115,23 +115,23 @@ namespace BaseBusiness.util
 				return false;
 			}
 		}
-		public static System.Boolean IsNumeric (System.Object Expression)
+		public static System.Boolean IsNumeric(System.Object Expression)
 		{
-			if(Expression == null || Expression is DateTime)
+			if (Expression == null || Expression is DateTime)
 				return false;
 
-			if(Expression is Int16 || Expression is Int32 || Expression is Int64 || Expression is Decimal || Expression is Single || Expression is Double || Expression is Boolean)
+			if (Expression is Int16 || Expression is Int32 || Expression is Int64 || Expression is Decimal || Expression is Single || Expression is Double || Expression is Boolean)
 				return true;
-  
+
 			try
 			{
-				if(Expression is string)
+				if (Expression is string)
 					Double.Parse(Expression as string);
 				else
 					Double.Parse(Expression.ToString());
-					return true;
-			} 
-			catch {} // just dismiss errors but return false
+				return true;
+			}
+			catch { } // just dismiss errors but return false
 			return false;
 		}
 
@@ -222,9 +222,9 @@ namespace BaseBusiness.util
 			//return date.ToString("MMM, dd yyyy", new CultureInfo("en-US", true));
 			return date.ToString("MM/dd/yyyy", new CultureInfo("en-US", true));
 		}
-		
+
 		public static string ToStringVN(DateTime date)
-		{			
+		{
 			return date.ToString("dd/MM/yyyy", new CultureInfo("vi-VN", true));
 		}
 
@@ -234,27 +234,27 @@ namespace BaseBusiness.util
 			return FormatDate(date, "MMMM");
 		}
 
-        public static string FormatDateToMonthNDay(DateTime date)
-        {
-            return FormatDate(date, "MMM dd");
-        }
+		public static string FormatDateToMonthNDay(DateTime date)
+		{
+			return FormatDate(date, "MMM dd");
+		}
 
-        public static string FormatDateToMonthNDayVN(DateTime date)
-        {            
-            return "ngày "+date.ToString("dd MMMMMMM", new CultureInfo("vi-VN", true));
-        }
+		public static string FormatDateToMonthNDayVN(DateTime date)
+		{
+			return "ngày " + date.ToString("dd MMMMMMM", new CultureInfo("vi-VN", true));
+		}
 
 		/// <summary>
 		/// ////////////////////////////////////////////////////////////////////////////
 		/// </summary>
 		private static string[] Number_Patterns =
-			new string[] {"{0:#,##0}", "{0:#,##0.0}", "{0:#,##0.00}", "{0:#,##0}.000", "{0:#,##0.0000}", "{0:#,##0.00000;#,##0.00000; }"};
+			new string[] { "{0:#,##0}", "{0:#,##0.0}", "{0:#,##0.00}", "{0:#,##0}.000", "{0:#,##0.0000}", "{0:#,##0.00000;#,##0.00000; }" };
 
 		private static string[] Currency_Patterns =
-			new string[] {"{0:$#,##0;($#,##0); }", "{0:$#,##0.0;($#,##0.0); }", "{0:$#,##0.00;($#,##0.00); }", "{0:$#,##0.000;($#,##0.000); }", "{0:$#,##0.0000;($#,##0.0000); }", "{0:$#,##0.00000;($#,##0.00000); }"};
+			new string[] { "{0:$#,##0;($#,##0); }", "{0:$#,##0.0;($#,##0.0); }", "{0:$#,##0.00;($#,##0.00); }", "{0:$#,##0.000;($#,##0.000); }", "{0:$#,##0.0000;($#,##0.0000); }", "{0:$#,##0.00000;($#,##0.00000); }" };
 
-        private static string[] VNCurrency_Patterns =
-            new string[] { "{0:#,##0;(#,##0); }", "{0:#,##0.0;(#,##0.0); }", "{0:#,##0.00;(#,##0.00); }", "{0:#,##0.000;(#,##0.000); }", "{0:#,##0.0000;(#,##0.0000); }", "{0:#,##0.00000;(#,##0.00000); }" };
+		private static string[] VNCurrency_Patterns =
+			new string[] { "{0:#,##0;(#,##0); }", "{0:#,##0.0;(#,##0.0); }", "{0:#,##0.00;(#,##0.00); }", "{0:#,##0.000;(#,##0.000); }", "{0:#,##0.0000;(#,##0.0000); }", "{0:#,##0.00000;(#,##0.00000); }" };
 
 
 		public static string FormatNumber(Decimal x, int digits)
@@ -265,8 +265,8 @@ namespace BaseBusiness.util
 		public static string FormatCurrency(Decimal x, int digits)
 		{
 			return String.Format(Currency_Patterns[digits], x);
-            //return String.Format(VNCurrency_Patterns[digits], x);
-             
+			//return String.Format(VNCurrency_Patterns[digits], x);
+
 		}
 
 		public static string FormatNumberZeroToDash(Decimal x)
@@ -279,94 +279,94 @@ namespace BaseBusiness.util
 			return String.Format("{0:#0.00}%", x);
 		}
 
-		
 
-        public static string SpaceIfEqualZero(Decimal x)
-        {
-            //return String.Format("{0:#0.00}%", x);
-            if (x == 0)
-                return "";
-            else
-                return x.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture);
-        }
-        public static DataTable Select(string strComm)
-        {
-            using (SqlConnection cnn = new SqlConnection(DBUtils.GetDBConnectionString()))
-            {
-                try
-                {
-                    using (SqlCommand cmd = new SqlCommand(strComm, cnn))
-                    {
-                        cmd.CommandType = CommandType.Text;
-                        cmd.CommandTimeout = 0;
 
-                        using (SqlDataAdapter da = new SqlDataAdapter(cmd))
-                        {
-                            DataSet ds = new DataSet();
-                            cnn.Open();
-                            da.Fill(ds);
-                            return ds.Tables.Count > 0 ? ds.Tables[0] : new DataTable();
-                        }
-                    }
-                }
-                catch (SqlException se)
-                {
-                    throw new Exception("Select error: " + se.Message);
-                }
-            }
-        }
-        public static string SalaryToString(Decimal x, params object[] optionalParamArray)
-        {
-            string displayType = "",strReturn="";
-            try
-            {
-                displayType = optionalParamArray.GetValue(0).ToString();
-            }
-            catch
-            {
-                displayType = "";
-            }
-            if(x==0)
-            {
-                if (displayType == "1")
-                    strReturn = "N/A";
-                else
-                    strReturn = "";
-
-            }
-            else
-            {
-                strReturn = TextUtils.FormatNumber(x, 0);
-            }
-            
-            return strReturn.Replace(".",",");
-        }
-
-        public static string SalaryList(string strx)
-        {
-            string displayType = "", strReturn = "";
-            if (strx.Trim() == "") strx = "0";
-            Decimal x = Decimal.Parse(strx);
-            if (x == 0)
-            {
-               
-                    strReturn = "";
-
-            }
-            else
-            {
-                strReturn = TextUtils.FormatNumber(x, 0);
-            }
-
-            return strReturn.Replace(".", ",");
-        }
-		public static Decimal RoundForPort(Decimal x,Decimal nRound)
+		public static string SpaceIfEqualZero(Decimal x)
 		{
-           if(Math.Abs(x)<= nRound)
+			//return String.Format("{0:#0.00}%", x);
+			if (x == 0)
+				return "";
+			else
+				return x.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture);
+		}
+		public static DataTable Select(string strComm)
+		{
+			using (SqlConnection cnn = new SqlConnection(DBUtils.GetDBConnectionString()))
+			{
+				try
+				{
+					using (SqlCommand cmd = new SqlCommand(strComm, cnn))
+					{
+						cmd.CommandType = CommandType.Text;
+						cmd.CommandTimeout = 0;
+
+						using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+						{
+							DataSet ds = new DataSet();
+							cnn.Open();
+							da.Fill(ds);
+							return ds.Tables.Count > 0 ? ds.Tables[0] : new DataTable();
+						}
+					}
+				}
+				catch (SqlException se)
+				{
+					throw new Exception("Select error: " + se.Message);
+				}
+			}
+		}
+		public static string SalaryToString(Decimal x, params object[] optionalParamArray)
+		{
+			string displayType = "", strReturn = "";
+			try
+			{
+				displayType = optionalParamArray.GetValue(0).ToString();
+			}
+			catch
+			{
+				displayType = "";
+			}
+			if (x == 0)
+			{
+				if (displayType == "1")
+					strReturn = "N/A";
+				else
+					strReturn = "";
+
+			}
+			else
+			{
+				strReturn = TextUtils.FormatNumber(x, 0);
+			}
+
+			return strReturn.Replace(".", ",");
+		}
+
+		public static string SalaryList(string strx)
+		{
+			string displayType = "", strReturn = "";
+			if (strx.Trim() == "") strx = "0";
+			Decimal x = Decimal.Parse(strx);
+			if (x == 0)
+			{
+
+				strReturn = "";
+
+			}
+			else
+			{
+				strReturn = TextUtils.FormatNumber(x, 0);
+			}
+
+			return strReturn.Replace(".", ",");
+		}
+		public static Decimal RoundForPort(Decimal x, Decimal nRound)
+		{
+			if (Math.Abs(x) <= nRound)
 				return 0;
 			else
 				return x;
-			
+
 		}
 		public static ArrayList SplitPrefixes(string rawPref)
 		{
@@ -387,7 +387,7 @@ namespace BaseBusiness.util
 						int noOfPrefs = int.Parse(temp[1]) - int.Parse(temp[0]);
 						for (int j = 0; j <= noOfPrefs; j++)
 						{
-							if (!prefList.Contains((int.Parse(temp[0]) + j).ToString().Trim())) 
+							if (!prefList.Contains((int.Parse(temp[0]) + j).ToString().Trim()))
 								prefList.Add((int.Parse(temp[0]) + j).ToString().Trim());
 						}
 					}
@@ -414,7 +414,7 @@ namespace BaseBusiness.util
 			{
 				if (!Double.TryParse(incrParts[i].ToString(), NumberStyles.Number, NumberFormatInfo.CurrentInfo, out result))
 					return incrParts;
-				if (result != int.Parse(result.ToString()) || result <= 0||result>60)
+				if (result != int.Parse(result.ToString()) || result <= 0 || result > 60)
 					return incrParts;
 			}
 			isValid = true;
@@ -434,22 +434,22 @@ namespace BaseBusiness.util
 		public static string ToHTML(NameValueCollection list)
 		{
 			StringBuilder r = new StringBuilder();
-			foreach(string key in list.AllKeys)
+			foreach (string key in list.AllKeys)
 			{
-				r.Append("<span class=subtitle2>" +key + "</span>: " + list.Get(key) + "<br>");
+				r.Append("<span class=subtitle2>" + key + "</span>: " + list.Get(key) + "<br>");
 			}
 			return r.ToString();
 		}
 
 		public static bool NotNull(object obj)
 		{
-			if(obj == null) return false;
-			if(obj is string & ((string)obj).Trim().Length == 0) return false;
+			if (obj == null) return false;
+			if (obj is string & ((string)obj).Trim().Length == 0) return false;
 			return true;
 		}
 		public static DateTime GetFirstDayOfWeek(DateTime day)
 		{
-			switch(day.DayOfWeek)
+			switch (day.DayOfWeek)
 			{
 				case DayOfWeek.Tuesday:
 					return day.AddDays(-1);
@@ -471,25 +471,25 @@ namespace BaseBusiness.util
 		{
 			//Create a StringBuilder object from the string input
 			//parameter
-			StringBuilder sb = new StringBuilder(text) ;
+			StringBuilder sb = new StringBuilder(text);
 			//Replace all double white spaces with a single white space
 			//and &nbsp;
-			sb.Replace("  "," &nbsp;");
+			sb.Replace("  ", " &nbsp;");
 			//Check if HTML tags are not allowed
-			if(!allow)
+			if (!allow)
 			{
 				//Convert the brackets into HTML equivalents
-				sb.Replace("<","&lt;") ;
-				sb.Replace(">","&gt;") ;
+				sb.Replace("<", "&lt;");
+				sb.Replace(">", "&gt;");
 				//Convert the double quote
-				sb.Replace("\"","&quot;");
+				sb.Replace("\"", "&quot;");
 			}
 			//Create a StringReader from the processed string of
 			//the StringBuilder object
 			StringReader sr = new StringReader(sb.ToString());
 			StringWriter sw = new StringWriter();
 			//Loop while next character exists
-			while(sr.Peek()>-1)
+			while (sr.Peek() > -1)
 			{
 				//Read a line from the string and store it to a temp
 				//variable
@@ -497,7 +497,7 @@ namespace BaseBusiness.util
 				//write the string with the HTML break tag
 				//Note here write method writes to a Internal StringBuilder
 				//object created automatically
-				sw.Write(temp+"<br>") ;
+				sw.Write(temp + "<br>");
 			}
 			//Return the final processed text
 			return sw.GetStringBuilder().ToString();
@@ -507,15 +507,16 @@ namespace BaseBusiness.util
 		{
 			try
 			{
-				if(cultureInput.ToUpper().Equals("US"))
+				if (cultureInput.ToUpper().Equals("US"))
 				{
-					CultureInfo culture = new CultureInfo("en-us"); 
-					return DateTime.Parse(dtInput).ToString("dd-MMMM-yyyy",culture) ;
-				}else
-				{
-					return DateTime.Parse(dtInput).ToString("dd/MM/yyyy") ;
+					CultureInfo culture = new CultureInfo("en-us");
+					return DateTime.Parse(dtInput).ToString("dd-MMMM-yyyy", culture);
 				}
-				
+				else
+				{
+					return DateTime.Parse(dtInput).ToString("dd/MM/yyyy");
+				}
+
 			}
 			catch (Exception e)
 			{
@@ -523,54 +524,54 @@ namespace BaseBusiness.util
 			}
 		}
 
-        public static string DecimalToStringNon(Decimal x)
-        {
-            //return String.Format("{0:#0.00}%", x);
-            return x.ToString("000", System.Globalization.CultureInfo.InvariantCulture);
-        }
-        public static string FormatCurrencyVND(Decimal x)
-        {
-            
-            //    return String.Format(CultureInfo.CreateSpecificCulture("en-us"),VNCurrency_Patterns[0], x);
-                //return (x.ToString("0,0.00", CultureInfo.InvariantCulture));
-                return (x.ToString("#,0.##", CultureInfo.InvariantCulture));
-                //
-                    // String.Format("{0:0.##}"
+		public static string DecimalToStringNon(Decimal x)
+		{
+			//return String.Format("{0:#0.00}%", x);
+			return x.ToString("000", System.Globalization.CultureInfo.InvariantCulture);
+		}
+		public static string FormatCurrencyVND(Decimal x)
+		{
 
-        }
-        public static string DecimalToString(Decimal x)
-        {
-            string outValue = "";
-            // return String.Format(CultureInfo.CreateSpecificCulture("en-us"), VNCurrency_Patterns[0], x);
-            //string specifier = "#,#.00#;(#,#.00#)";
-            //return (x*-1).ToString(specifier);
-           // return (x.ToString("0,0.00", CultureInfo.InvariantCulture));
-            if (x == 0)
-                outValue = "";
-            else
-                outValue = TextUtils.FormatCurrencyVND(x);
-            return outValue;
+			//    return String.Format(CultureInfo.CreateSpecificCulture("en-us"),VNCurrency_Patterns[0], x);
+			//return (x.ToString("0,0.00", CultureInfo.InvariantCulture));
+			return (x.ToString("#,0.##", CultureInfo.InvariantCulture));
+			//
+			// String.Format("{0:0.##}"
 
-        }
-        public static string DecimalToStringWithZero(Decimal x)
-        {
-            string outValue = "";
-            // return String.Format(CultureInfo.CreateSpecificCulture("en-us"), VNCurrency_Patterns[0], x);
-            //string specifier = "#,#.00#;(#,#.00#)";
-            //return (x*-1).ToString(specifier);
-            // return (x.ToString("0,0.00", CultureInfo.InvariantCulture));
-            if (x == 0)
-                outValue = "0";
-            else
-                outValue = TextUtils.FormatCurrencyVND(x);
-            return outValue;
+		}
+		public static string DecimalToString(Decimal x)
+		{
+			string outValue = "";
+			// return String.Format(CultureInfo.CreateSpecificCulture("en-us"), VNCurrency_Patterns[0], x);
+			//string specifier = "#,#.00#;(#,#.00#)";
+			//return (x*-1).ToString(specifier);
+			// return (x.ToString("0,0.00", CultureInfo.InvariantCulture));
+			if (x == 0)
+				outValue = "";
+			else
+				outValue = TextUtils.FormatCurrencyVND(x);
+			return outValue;
 
-        }
+		}
+		public static string DecimalToStringWithZero(Decimal x)
+		{
+			string outValue = "";
+			// return String.Format(CultureInfo.CreateSpecificCulture("en-us"), VNCurrency_Patterns[0], x);
+			//string specifier = "#,#.00#;(#,#.00#)";
+			//return (x*-1).ToString(specifier);
+			// return (x.ToString("0,0.00", CultureInfo.InvariantCulture));
+			if (x == 0)
+				outValue = "0";
+			else
+				outValue = TextUtils.FormatCurrencyVND(x);
+			return outValue;
 
-        public static string showDate(DateTime dt)
-        {
-            return dt.CompareTo(GlobalConstant.MIN_DATE) > 0 ? dt.ToString("dd/MM/yyyy") : string.Empty;
-        }
+		}
+
+		public static string showDate(DateTime dt)
+		{
+			return dt.CompareTo(GlobalConstant.MIN_DATE) > 0 ? dt.ToString("dd/MM/yyyy") : string.Empty;
+		}
 
 		public static string DataTableToJSON(DataTable table)
 		{
@@ -605,68 +606,68 @@ namespace BaseBusiness.util
 			}
 			return JSONString.ToString();
 		}
-        public static void ExcuteSQL(string strSQL)
-        {
-            SqlConnection cn = new SqlConnection(DBUtils.GetDBConnectionString());
-            SqlCommand cmd = new SqlCommand(strSQL, cn);
-            cmd.CommandType = CommandType.Text;
-            cmd.CommandTimeout = 0;
-            cn.Open();
-            cmd.CommandText = strSQL;
-            cmd.ExecuteNonQuery();
-            cn.Close();
-        }
-        public static DateTime GetBusinessDateTime()
-        {
-            try
-            {
-                #region Lay ra ngay he thong ,gio he thong
-                DateTime B_Date = GetBusinessDate();
-                DateTime S_Date = GetSystemDate();
-                #endregion
+		public static void ExcuteSQL(string strSQL)
+		{
+			SqlConnection cn = new SqlConnection(DBUtils.GetDBConnectionString());
+			SqlCommand cmd = new SqlCommand(strSQL, cn);
+			cmd.CommandType = CommandType.Text;
+			cmd.CommandTimeout = 0;
+			cn.Open();
+			cmd.CommandText = strSQL;
+			cmd.ExecuteNonQuery();
+			cn.Close();
+		}
+		public static DateTime GetBusinessDateTime()
+		{
+			try
+			{
+				#region Lay ra ngay he thong ,gio he thong
+				DateTime B_Date = GetBusinessDate();
+				DateTime S_Date = GetSystemDate();
+				#endregion
 
-                #region Gan Time
-                DateTime dt = new DateTime(B_Date.Year, B_Date.Month, B_Date.Day, S_Date.Hour, S_Date.Minute, S_Date.Second, S_Date.Millisecond);
-                #endregion
+				#region Gan Time
+				DateTime dt = new DateTime(B_Date.Year, B_Date.Month, B_Date.Day, S_Date.Hour, S_Date.Minute, S_Date.Second, S_Date.Millisecond);
+				#endregion
 
-                return dt;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-        public static DateTime GetSystemDate()
-        {
-            try
-            {
-                return Convert.ToDateTime(Select("SELECT GETDATE() AS SystemDate").Rows[0][0]);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-        public static  DateTime GetBusinessDate()
-        {
-            DateTime DateTimeValue = DateTime.Today;
-            DateTimeValue = ((BusinessDateModel)BusinessDateBO.Instance.FindAll()[0]).BusinessDate;
-            return DateTimeValue;
-            //return Global.GetBusinessDate;
-        }
-        public static string GetSystemTime()
-        {
-            try
-            {
-                DateTime S_Date = GetSystemDate();
-                string st = S_Date.Hour + ":" + S_Date.Minute + ":" + S_Date.Second;
-                return st;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+				return dt;
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
+		}
+		public static DateTime GetSystemDate()
+		{
+			try
+			{
+				return Convert.ToDateTime(Select("SELECT GETDATE() AS SystemDate").Rows[0][0]);
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
+		}
+		public static DateTime GetBusinessDate()
+		{
+			DateTime DateTimeValue = DateTime.Today;
+			DateTimeValue = ((BusinessDateModel)BusinessDateBO.Instance.FindAll()[0]).BusinessDate;
+			return DateTimeValue;
+			//return Global.GetBusinessDate;
+		}
+		public static string GetSystemTime()
+		{
+			try
+			{
+				DateTime S_Date = GetSystemDate();
+				string st = S_Date.Hour + ":" + S_Date.Minute + ":" + S_Date.Second;
+				return st;
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
 
-        }
-    }
+		}
+	}
 }

@@ -6,8 +6,6 @@
 
 }
 <style>
-
-
     .dx-datagrid-headers .dx-header-row td {
         white-space: pre-line !important;
         text-align: center;
@@ -15,7 +13,8 @@
     }
 
 
-    .dx-datagrid .dx-editor-with-menu .dx-menu-item-content .dx-icon.dx-icon-filter-operation-default, .dx-datagrid-container .dx-editor-with-menu .dx-menu-item-content .dx-icon.dx-icon-filter-operation-default {
+    .dx-datagrid .dx-editor-with-menu .dx-menu-item-content .dx-icon.dx-icon-filter-operation-default,
+    .dx-datagrid-container .dx-editor-with-menu .dx-menu-item-content .dx-icon.dx-icon-filter-operation-default {
         display: none;
     }
 
@@ -37,12 +36,13 @@
         margin: 0px 8px;
     }
 
-        .button_wrapper .fa-solid {
-            margin-right: 5px;
-        }
+    .button_wrapper .fa-solid {
+        margin-right: 5px;
+    }
 
     .selected {
-        background-color: #4CAF50; /* Màu xanh */
+        background-color: #4CAF50;
+        /* Màu xanh */
         color: white;
     }
 
@@ -59,8 +59,10 @@
 
 
     .sticky-header input[type="date"].form-control-sm {
-        font-size: 12px !important; /* dúng 12?px */
-        height: calc(1.1em + .2rem + 2px); /* gi? cùng chi?u cao */
+        font-size: 12px !important;
+        /* dúng 12?px */
+        height: calc(1.1em + .2rem + 2px);
+        /* gi? cùng chi?u cao */
     }
 
     .sticky-header label {
@@ -70,12 +72,14 @@
 
     .tomselect-custom {
         width: 250px;
-        min-height: 30px; /* ho?c tùy theo chi?u cao b?n mu?n */
+        min-height: 30px;
+        /* ho?c tùy theo chi?u cao b?n mu?n */
         font-size: 0.65rem;
     }
 
     .sort-select {
-        max-width: 130px; /* ho?c 100px n?u mu?n nh? hon */
+        max-width: 130px;
+        /* ho?c 100px n?u mu?n nh? hon */
         font-size: 12px;
         padding: 0.15rem 0.5rem;
     }
@@ -87,7 +91,6 @@
         background-image: none !important;
         padding-right: 10px !important;
     }
-
 </style>
 
 <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet" />
@@ -98,10 +101,13 @@
         <button id="btnPrint" class="mui-button button-report-view"><i class="fa-solid fa-eye"></i> View</button>
         <button id="btnNew" class="mui-button mui-button-new"><i class="fa-solid fa-plus"></i> New</button>
         <button id="btnUpdate" class="mui-button mui-button-edit"> <i class="fa-solid fa-pen"></i> Edit</button>
-        <button id="btnDelete" class="mui-button button-report-delete"> <i class="fa-solid fa-trash-can"></i> Delete</button>
+        <button id="btnDelete" class="mui-button button-report-delete"> <i class="fa-solid fa-trash-can"></i>
+            Delete</button>
         <button id="btnResolve" class="mui-button mui-button-resolve"> <i class="fa-solid fa-plus"></i> Resolve</button>
-        <button id="btnUnsolve" class="mui-button mui-button-unsolve"> <i class="fa-solid fa-xmark"></i> Unsolve</button>
-        <button id="btnExportExcel" class="mui-button mui-button-export" type="button"> <i class="fa-solid fa-file-excel"></i> Excel</button>
+        <button id="btnUnsolve" class="mui-button mui-button-unsolve"> <i class="fa-solid fa-xmark"></i>
+            Unsolve</button>
+        <button id="btnExportExcel" class="mui-button mui-button-export" type="button"> <i
+                class="fa-solid fa-file-excel"></i> Excel</button>
 
     </div>
 </div>
@@ -119,10 +125,18 @@
 
     </div>
     <div class="d-flex justify-content-start mb-3 gap-2">
-        <button style="border-radius: 4px;  margin-right: 6px;" id="btnSearchAuto" class="mui-button mui-button-advance" type="button"><i class="fa-solid fa-floppy-disk"></i> Search</button>
-        <button style="border-radius: 4px;  margin-right: 6px;" id="btnOkAuto" class="mui-button mui-button-advance" type="button"><i class="fa-solid fa-floppy-disk"></i> Ok</button>
-        <button style="border-radius: 4px;  margin-right: 6px;" id="btnOkAutoUpdate" class="mui-button mui-button-advance" type="button"><i class="fa-solid fa-floppy-disk"></i> Ok</button>
-        <button onclick="$('#popupNewArtraces').hide()" id="btnClosePopup" class="btn btn-sm mui-button-close" style=" border-radius: 4px;">
+        <button style="border-radius: 4px;  margin-right: 6px;" id="btnSearchAuto" class="mui-button mui-button-advance"
+            type="button"><i class="fa-solid fa-floppy-disk"></i> Search</button>
+        <button style="border-radius: 4px;  margin-right: 6px;" id="btnOkAuto" class="mui-button mui-button-advance"
+            type="button"><i class="fa-solid fa-floppy-disk"></i> Ok</button>
+        <button style="border-radius: 4px;  margin-right: 6px;" id="btnOkAutoUpdate"
+            class="mui-button mui-button-advance" type="button"><i class="fa-solid fa-floppy-disk"></i> Ok</button>
+        <button style="border-radius: 4px;  margin-right: 6px;" id="btnSaveAuto" class="mui-button mui-button-new"
+            type="button"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+        <button onclick="$('#popupNewArtraces').hide()" id="btnClosePopup" class="btn btn-sm mui-button-close"
+            style=" border-radius: 4px;">
+            <i class="fa-solid fa-xmark me-1"></i> Close
+        </button>
     </div>
     <div class="sticky-header bg-white p-2 shadow-sm z-3">
         <div class="d-flex flex-wrap align-items-center gap-2 mb-1 filter-panel">
@@ -131,42 +145,44 @@
                 <div class="d-flex align-items-start mb-3">
                     <!-- Trace Time -->
                     <div class="d-flex align-items-center me-4">
-              @*           <label for="tracetime" class="me-2 mb-0">Account name:</label> *@
+                        @*           <label for="tracetime" class="me-2 mb-0">Account name:</label> *@
                         <div id="gridSelectedAccount" class="gridContainer mt-2"></div>
                     </div>
 
                 </div>
                 <div class="d-flex align-items-start mb-3">
-                    <input type="text" id="idselectedRowData" name="idselectedRowData" style="display:none !important" class="form-control form-control-sm w-auto" />
+                    <input type="text" id="idselectedRowData" name="idselectedRowData" style="display:none !important"
+                        class="form-control form-control-sm w-auto" />
                     <div class="d-flex align-items-center me-4">
-                        <input readonly id="createdBy" name="tracetime"
-                               class="form-control form-control-sm w-auto" />
+                        <label for="tracetime" class="me-2 mb-0">Created By:</label>
+                        <input readonly id="createdBy" name="tracetime" class="form-control form-control-sm w-auto" />
                     </div>
                     <div class="d-flex align-items-center me-4">
                         <label for="tracetime" class="me-2 mb-0">Created At:</label>
                         <input readonly type="datetime-local" id="createdDate" name="tracetime"
-                               class="form-control form-control-sm w-auto" />
+                            class="form-control form-control-sm w-auto" />
                     </div>
                 </div>
                 <div class="d-flex align-items-start mb-3">
                     <!-- Trace Time -->
+                    <div class="d-flex align-items-center me-4">
+                        <label for="tracetime" class="me-2 mb-0">Trace Time:</label>
                         <input type="datetime-local" id="tracetime" name="tracetime"
-                               class="form-control form-control-sm w-auto" />
+                            class="form-control form-control-sm w-auto" />
                     </div>
 
                     <!-- Trace Text -->
                     <div class="d-flex align-items-start">
                         <label for="tracetext" class="me-2 mt-1">Trace Text:</label>
-                        <textarea id="tracetext" name="tracetext"
-                                  class="form-control form-control-sm"
-                                  rows="3" style="width:300px; height:200px;"></textarea>
+                        <textarea id="tracetext" name="tracetext" class="form-control form-control-sm" rows="3"
+                            style="width:300px; height:200px;"></textarea>
                     </div>
-                   
+
                 </div>
-          
 
 
-              
+
+
 
 
             </div>
@@ -184,28 +200,31 @@
 
     </div>
     <div class="d-flex justify-content-start mb-3 gap-2">
-        <button style="border-radius: 4px;  margin-right: 6px;" id="btnOkSelect" class="mui-button mui-button-advance" type="button"><i class="fa-solid fa-floppy-disk"></i> Ok</button>
-        <button onclick="$('#popupSearchArtraces').hide()" id="btnClosepSearchArtracesPopup" class="btn btn-sm mui-button-close" style=" border-radius: 4px;">
+        <button style="border-radius: 4px;  margin-right: 6px;" id="btnOkSelect" class="mui-button mui-button-advance"
+            type="button"><i class="fa-solid fa-floppy-disk"></i> Ok</button>
+        <button onclick="$('#popupSearchArtraces').hide()" id="btnClosepSearchArtracesPopup"
+            class="btn btn-sm mui-button-close" style=" border-radius: 4px;">
             <i class="fa-solid fa-xmark me-1"></i> Close
         </button>
     </div>
-          <div class="mui-card">
+    <div class="mui-card">
 
-          <div id="gridContainerSelectAccount" class="gridContainer mt-2"></div>
-     
+        <div id="gridContainerSelectAccount" class="gridContainer mt-2"></div>
+
 
     </div>
 </div>
 
-<div id="loadingSpinner" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
+<div id="loadingSpinner"
+    style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
     <i class="fa-solid fa-spinner fa-spin"></i>
 </div>
 
 <script>
 
-       $(document).ready(function () {
-            $("#btnResolve").hide();
-               $("#btnUnsolve").hide();
+    $(document).ready(function () {
+        $("#btnResolve").hide();
+        $("#btnUnsolve").hide();
         $("#btnPrint").trigger("click");
 
         var businessDateStr = '@ViewBag.BusinessDate'; // ví dụ: '8/29/2024 12:00:00 AM'
@@ -242,32 +261,32 @@
     });
 
 
-     
-     $(document).off("click", "#btnPrint").on("click", "#btnPrint", function () {
-            $("#loadingSpinner").show();
-            $.ajax({
-                url: '/Accounting/ARTracesData',
-                type: 'GET',
-                data: {
 
-                },
-                traditional: true,
-                  crossDomain: false,
-                    headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
-                success: function (result) {
-                
+    $(document).off("click", "#btnPrint").on("click", "#btnPrint", function () {
+        $("#loadingSpinner").show();
+        $.ajax({
+            url: '/Accounting/ARTracesData',
+            type: 'GET',
+            data: {
+
+            },
+            traditional: true,
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+
                 console.log(result);
-            initializeARTracesGrid(result);
-                        $("#loadingSpinner").hide();
-                },
-                error: function () {
-                    alert("Không th? t?i báo cáo.");
-                    $("#loadingSpinner").hide();
-                }
-            });
+                initializeARTracesGrid(result);
+                $("#loadingSpinner").hide();
+            },
+            error: function () {
+                alert("Không th? t?i báo cáo.");
+                $("#loadingSpinner").hide();
+            }
         });
-        var selectedRowData=null;
-     function initializeARTracesGrid(data) {
+    });
+    var selectedRowData = null;
+    function initializeARTracesGrid(data) {
         $("#gridContainer").dxDataGrid({
             dataSource: data,
             showBorders: true,
@@ -291,26 +310,26 @@
                 { dataField: "updatedDate", caption: "Updated Date", dataType: "date", format: "dd/MM/yyyy HH:mm", width: 160 },
             ],
             scrolling: {
-                    mode: "standard", // Không dùng virtual để footer hiển thị đúng
-                    showScrollbar: "always",
-                    scrollByContent: true
-                },
-                paging: {
-                    pageSize: 50
-                },
-                pager: {
-                    visible: true,
-                    allowedPageSizes: [50, 100, 'all'],
-                    showPageSizeSelector: true,
-                    showInfo: true,
-                    showNavigationButtons: true
-                },
-                    filterRow: {
+                mode: "standard", // Không dùng virtual để footer hiển thị đúng
+                showScrollbar: "always",
+                scrollByContent: true
+            },
+            paging: {
+                pageSize: 50
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [50, 100, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true
+            },
+            filterRow: {
                 visible: true,
                 applyFilter: "auto"
             },
             // 🔥 Quan trọng: gán selectedRowData khi click chọn
-             onRowClick: function (e) {
+            onRowClick: function (e) {
                 selectedRowData = e.data; // 🔥 lấy data của row vừa click
                 console.log("Selected Row (RowClick):", selectedRowData);
                 if (selectedRowData.resolvedBy === "Unresolved") {
@@ -324,76 +343,76 @@
                 }
             }
         });
-     }
+    }
     $("#btnNew").on("click", function () {
-       if (!selectedRowDatasa || selectedRowDatasa.length === 0) {
-        
-           $("#btnSearchAuto").trigger("click"); 
-           $("#gridSelectedAccount").show();
-             $("#btnSearchAuto").show();
-                                    $("#btnOkAuto").show();
-                                             $("#btnSaveAuto").show();
+        if (!selectedRowDatasa || selectedRowDatasa.length === 0) {
+
+            $("#btnSearchAuto").trigger("click");
+            $("#gridSelectedAccount").show();
+            $("#btnSearchAuto").show();
+            $("#btnOkAuto").show();
+            $("#btnSaveAuto").show();
         }
         else {
-             $("#gridSelectedAccount").show();
-     
-                           $("#btnSearchAuto").show();
-                                    $("#btnOkAuto").show();
-                                             $("#btnSaveAuto").show();
-                      $("#createdBy").hide();
-                       $("#createdDate").hide();
+            $("#gridSelectedAccount").show();
+
+            $("#btnSearchAuto").show();
+            $("#btnOkAuto").show();
+            $("#btnSaveAuto").show();
+            $("#createdBy").hide();
+            $("#createdDate").hide();
             $('#overlay').fadeIn(200);
             $('#popupNewArtraces').fadeIn(200);
         }
-            $("#textPopup").text("AR Trace New");
+        $("#textPopup").text("AR Trace New");
     });
     $("#btnUpdate").on("click", function () {
-            $("#textPopup").text("AR Trace Edit");
-                if (selectedRowData.length === 0) {
-                       showToast('Error', "Please select at least one account!", false);
-                   return;
-               }
-                  $("#gridSelectedAccount").hide();
-                           $("#btnSearchAuto").hide();
-                                    $("#btnOkAuto").hide();
-                                             $("#btnSaveAuto").hide();
-                     $("#idselectedRowData").val(selectedRowData.id);
-                $("#tracetime").val(selectedRowData.traceAt);
-               $("#tracetext").val(selectedRowData.traceText);
-                   $("#createdDate").val(selectedRowData.createdDate);
-                      $("#createdBy").val(selectedRowData.createdBy);
-                $('#overlay').fadeIn(200);
-                $('#popupNewArtraces').fadeIn(200);
-        
+        $("#textPopup").text("AR Trace Edit");
+        if (selectedRowData.length === 0) {
+            showToast('Error', "Please select at least one account!", false);
+            return;
+        }
+        $("#gridSelectedAccount").hide();
+        $("#btnSearchAuto").hide();
+        $("#btnOkAuto").hide();
+        $("#btnSaveAuto").hide();
+        $("#idselectedRowData").val(selectedRowData.id);
+        $("#tracetime").val(selectedRowData.traceAt);
+        $("#tracetext").val(selectedRowData.traceText);
+        $("#createdDate").val(selectedRowData.createdDate);
+        $("#createdBy").val(selectedRowData.createdBy);
+        $('#overlay').fadeIn(200);
+        $('#popupNewArtraces').fadeIn(200);
+
     });
 
-     $("#btnSearchAuto").on("click", function () {
+    $("#btnSearchAuto").on("click", function () {
 
 
         $('#overlay').fadeIn(200);
         $('#popupSearchArtraces').fadeIn(200);
-          $("#loadingSpinner").show();
-            $.ajax({
-                url: '/Accounting/ARAccountReceivableSearch',
-                type: 'GET',
-                data: {
+        $("#loadingSpinner").show();
+        $.ajax({
+            url: '/Accounting/ARAccountReceivableSearch',
+            type: 'GET',
+            data: {
 
-                },
-                traditional: true,
-                  crossDomain: false,
-                    headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
-                success: function (result) {
+            },
+            traditional: true,
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
 
                 console.log(result);
-            initializeARAccountReceivableSearchGrid(result);
-                        $("#loadingSpinner").hide();
-                },
-                error: function () {
-                    alert("Không th? t?i báo cáo.");
-                    $("#loadingSpinner").hide();
-                }
-            });
-     });
+                initializeARAccountReceivableSearchGrid(result);
+                $("#loadingSpinner").hide();
+            },
+            error: function () {
+                alert("Không th? t?i báo cáo.");
+                $("#loadingSpinner").hide();
+            }
+        });
+    });
     var selectedRowDatasa = [];
 
     function initializeARAccountReceivableSearchGrid(data) {
@@ -448,226 +467,226 @@
         });
     }
 
-       $("#btnOkAutoUpdate").on("click", function () {
+    $("#btnOkAutoUpdate").on("click", function () {
 
-           if (selectedRowData.length === 0) {
-                    showToast('Error', "Please select at least one account!", false);
-                return;
-            }
+        if (selectedRowData.length === 0) {
+            showToast('Error', "Please select at least one account!", false);
+            return;
+        }
 
-          $("#loadingSpinner").show();
-            $.ajax({
-                url: '/Accounting/ARTraceUpdate',
-                type: 'POST',             
-                data: {
-                     idselectedRowData: $("#idselectedRowData").val(),
-                    tracetime: $("#tracetime").val(),
-                    tracetext: $("#tracetext").val(),
-                     user: localStorage.getItem("Loginname")
-          
-                },
-                traditional: true,
-                  crossDomain: false,
-                    headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
-                success: function (result) {
-                        if (result.success) {
-                                showToast('Success', result.message, true);
-                                $('#popupNewArtraces').fadeOut(200);
-                                 $('#overlay').fadeOut(200);
-                                   $("#btnPrint").trigger("click");
-                                    clearNewArtraces();
-                       } else {
-                                showToast('Error', 'Please select before saving.', false);
-                       }
+        $("#loadingSpinner").show();
+        $.ajax({
+            url: '/Accounting/ARTraceUpdate',
+            type: 'POST',
+            data: {
+                idselectedRowData: $("#idselectedRowData").val(),
+                tracetime: $("#tracetime").val(),
+                tracetext: $("#tracetext").val(),
+                user: localStorage.getItem("Loginname")
+
+            },
+            traditional: true,
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                if (result.success) {
+                    showToast('Success', result.message, true);
+                    $('#popupNewArtraces').fadeOut(200);
+                    $('#overlay').fadeOut(200);
+                    $("#btnPrint").trigger("click");
+                    clearNewArtraces();
+                } else {
+                    showToast('Error', 'Please select before saving.', false);
+                }
                 console.log(result);
 
-                        $("#loadingSpinner").hide();
-                },
-                error: function () {
-                    alert("Không th? t?i báo cáo.");
-                    $("#loadingSpinner").hide();
-                }
-            });
-     });
-     $("#btnOkAuto").on("click", function () {
-
-           if (selectedRowDatasa.length === 0) {
-                    showToast('Error', "Please select at least one account!", false);
-                return;
+                $("#loadingSpinner").hide();
+            },
+            error: function () {
+                alert("Không th? t?i báo cáo.");
+                $("#loadingSpinner").hide();
             }
-      
-          $("#loadingSpinner").show();
-            $.ajax({
-                url: '/Accounting/ARTraceSave',
-                type: 'POST',
-                 contentType: "application/json; charset=utf-8", // ✅ gửi JSON chuẩn
-                data: JSON.stringify({
-                    tracetime: $("#tracetime").val(),
-                    tracetext: $("#tracetext").val(),
-                    user: localStorage.getItem("Loginname"),
-                    selectedAccounts: selectedRowDatasa // ✅ gửi mảng sang server
-                }),
-                traditional: true,
-                  crossDomain: false,
-                    headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
-                success: function (result) {
-                        if (result.success) {
-                                showToast('Success', result.message, true);
-                                $('#popupNewArtraces').fadeOut(200);
-                                 $('#overlay').fadeOut(200);
-                                   $("#btnPrint").trigger("click");
-                                    clearNewArtraces();
-                       } else {
-                                showToast('Error', 'Please select before saving.', false);
-                       }
-                console.log(result);
-      
-                        $("#loadingSpinner").hide();
-                },
-                error: function () {
-                    alert("Không th? t?i báo cáo.");
-                    $("#loadingSpinner").hide();
+        });
+    });
+    $("#btnOkAuto").on("click", function () {
+
+        if (selectedRowDatasa.length === 0) {
+            showToast('Error', "Please select at least one account!", false);
+            return;
+        }
+
+        $("#loadingSpinner").show();
+        $.ajax({
+            url: '/Accounting/ARTraceSave',
+            type: 'POST',
+            contentType: "application/json; charset=utf-8", // ✅ gửi JSON chuẩn
+            data: JSON.stringify({
+                tracetime: $("#tracetime").val(),
+                tracetext: $("#tracetext").val(),
+                user: localStorage.getItem("Loginname"),
+                selectedAccounts: selectedRowDatasa // ✅ gửi mảng sang server
+            }),
+            traditional: true,
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                if (result.success) {
+                    showToast('Success', result.message, true);
+                    $('#popupNewArtraces').fadeOut(200);
+                    $('#overlay').fadeOut(200);
+                    $("#btnPrint").trigger("click");
+                    clearNewArtraces();
+                } else {
+                    showToast('Error', 'Please select before saving.', false);
                 }
-            });
-     });
-     $("#btnSaveAuto").on("click", function () {
-
-           if (selectedRowDatasa.length === 0) {
-                    showToast('Error', "Please select at least one account!", false);
-                return;
-            }
-
-          $("#loadingSpinner").show();
-            $.ajax({
-                url: '/Accounting/ARTraceSave',
-                type: 'POST',
-                 contentType: "application/json; charset=utf-8", // ✅ gửi JSON chuẩn
-                data: JSON.stringify({
-                    tracetime: $("#tracetime").val(),
-                    tracetext: $("#tracetext").val(),
-                    user: localStorage.getItem("Loginname"),
-                    selectedAccounts: selectedRowDatasa // ✅ gửi mảng sang server
-                }),
-                traditional: true,
-                  crossDomain: false,
-                    headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
-                success: function (result) {
-                        if (result.success) {
-                                showToast('Success', result.message, true);                              
-                                    clearNewArtraces();
-                                         $("#btnPrint").trigger("click");
-                       } else {
-                                showToast('Error', 'Please select.', false);
-                       }
                 console.log(result);
 
-                        $("#loadingSpinner").hide();
-                },
-                error: function () {
-                    alert("Không th? t?i báo cáo.");
-                    $("#loadingSpinner").hide();
-                }
-            });
-     });
-      $("#btnResolve").on("click", function () {
-
-           if (selectedRowData.length === 0) {
-                    showToast('Error', "Please select at least one account!", false);
-                return;
+                $("#loadingSpinner").hide();
+            },
+            error: function () {
+                alert("Không th? t?i báo cáo.");
+                $("#loadingSpinner").hide();
             }
+        });
+    });
+    $("#btnSaveAuto").on("click", function () {
 
-          $("#loadingSpinner").show();
-            $.ajax({
-                url: '/Accounting/ARTraceResolve',
-                type: 'POST',
-              
-                 data: {
-                       id:selectedRowData.id,
-                       user: localStorage.getItem("Loginname"),
+        if (selectedRowDatasa.length === 0) {
+            showToast('Error', "Please select at least one account!", false);
+            return;
+        }
 
-                },
-                traditional: true,
-                  crossDomain: false,
-                    headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
-                success: function (result) {
-                        if (result.success) {
-
-                               $("#btnPrint").trigger("click");
-                       } else {
-                                showToast('Error', 'Please select.', false);
-                       }
+        $("#loadingSpinner").show();
+        $.ajax({
+            url: '/Accounting/ARTraceSave',
+            type: 'POST',
+            contentType: "application/json; charset=utf-8", // ✅ gửi JSON chuẩn
+            data: JSON.stringify({
+                tracetime: $("#tracetime").val(),
+                tracetext: $("#tracetext").val(),
+                user: localStorage.getItem("Loginname"),
+                selectedAccounts: selectedRowDatasa // ✅ gửi mảng sang server
+            }),
+            traditional: true,
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                if (result.success) {
+                    showToast('Success', result.message, true);
+                    clearNewArtraces();
+                    $("#btnPrint").trigger("click");
+                } else {
+                    showToast('Error', 'Please select.', false);
+                }
                 console.log(result);
 
-                        $("#loadingSpinner").hide();
-                },
-                error: function () {
-                    alert("Không th? t?i báo cáo.");
-                    $("#loadingSpinner").hide();
-                }
-            });
-     });
-        $("#btnUnsolve").on("click", function () {
-
-           if (selectedRowData.length === 0) {
-                    showToast('Error', "Please select at least one account!", false);
-                return;
+                $("#loadingSpinner").hide();
+            },
+            error: function () {
+                alert("Không th? t?i báo cáo.");
+                $("#loadingSpinner").hide();
             }
+        });
+    });
+    $("#btnResolve").on("click", function () {
 
-          $("#loadingSpinner").show();
-            $.ajax({
-                url: '/Accounting/ARTraceUnresolve',
-                type: 'POST',
+        if (selectedRowData.length === 0) {
+            showToast('Error', "Please select at least one account!", false);
+            return;
+        }
 
-                 data: {
-                       id:selectedRowData.id,
-                       user: localStorage.getItem("Loginname"),
+        $("#loadingSpinner").show();
+        $.ajax({
+            url: '/Accounting/ARTraceResolve',
+            type: 'POST',
 
-                },
-                traditional: true,
-                  crossDomain: false,
-                    headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
-                success: function (result) {
-                        if (result.success) {
+            data: {
+                id: selectedRowData.id,
+                user: localStorage.getItem("Loginname"),
 
-                               $("#btnPrint").trigger("click");
-                       } else {
-                                showToast('Error', 'Please select.', false);
-                       }
+            },
+            traditional: true,
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                if (result.success) {
+
+                    $("#btnPrint").trigger("click");
+                } else {
+                    showToast('Error', 'Please select.', false);
+                }
                 console.log(result);
 
-                        $("#loadingSpinner").hide();
-                },
-                error: function () {
-                    alert("Không th? t?i báo cáo.");
-                    $("#loadingSpinner").hide();
+                $("#loadingSpinner").hide();
+            },
+            error: function () {
+                alert("Không th? t?i báo cáo.");
+                $("#loadingSpinner").hide();
+            }
+        });
+    });
+    $("#btnUnsolve").on("click", function () {
+
+        if (selectedRowData.length === 0) {
+            showToast('Error', "Please select at least one account!", false);
+            return;
+        }
+
+        $("#loadingSpinner").show();
+        $.ajax({
+            url: '/Accounting/ARTraceUnresolve',
+            type: 'POST',
+
+            data: {
+                id: selectedRowData.id,
+                user: localStorage.getItem("Loginname"),
+
+            },
+            traditional: true,
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                if (result.success) {
+
+                    $("#btnPrint").trigger("click");
+                } else {
+                    showToast('Error', 'Please select.', false);
                 }
-            });
-     });
+                console.log(result);
+
+                $("#loadingSpinner").hide();
+            },
+            error: function () {
+                alert("Không th? t?i báo cáo.");
+                $("#loadingSpinner").hide();
+            }
+        });
+    });
     function clearNewArtraces() {
-     
+
         $("#tracetext").val("");
-      $("#createdBy").val("");
+        $("#createdBy").val("");
     }
     $('#btnClosePopup, #overlay').click(function () {
-            $('#popupNewArtraces').fadeOut(200);
-            $('#popupSearchArtraces').fadeOut(200);
-            $('#overlay').fadeOut(200);
+        $('#popupNewArtraces').fadeOut(200);
+        $('#popupSearchArtraces').fadeOut(200);
+        $('#overlay').fadeOut(200);
     });
 
     $('#btnClosepSearchArtracesPopup, #overlay').click(function () {
-              
-            $('#popupSearchArtraces').fadeOut(200);
-                 $('#overlay').fadeOut(200);
+
+        $('#popupSearchArtraces').fadeOut(200);
+        $('#overlay').fadeOut(200);
     });
 
-     $("#btnOkSelect").on("click", function () {
+    $("#btnOkSelect").on("click", function () {
 
         if (selectedRowDatasa.length === 0) {
-                showToast('Error', "Please select at least one account!", false);
+            showToast('Error', "Please select at least one account!", false);
             return;
         }
-               $('#popupSearchArtraces').fadeOut(200);
-             $('#popupNewArtraces').fadeIn(200);
+        $('#popupSearchArtraces').fadeOut(200);
+        $('#popupNewArtraces').fadeIn(200);
         // Tạo dữ liệu hiển thị cho bảng Selected
         const selectedAccounts = selectedRowDatasa.map(item => ({
             accountName: item.accountName
@@ -686,44 +705,44 @@
         console.log("Đã chọn:", selectedAccounts);
     });
 
-         $(document).off("click", "#btnDelete").on("click", "#btnDelete", function () {
-            if (!selectedRowData) {
-                    showToast('Error', 'Please select 1 row to delete.', false);
-                return;
-            }
+    $(document).off("click", "#btnDelete").on("click", "#btnDelete", function () {
+        if (!selectedRowData) {
+            showToast('Error', 'Please select 1 row to delete.', false);
+            return;
+        }
 
-             $.ajax({
-                url: '/Accounting/ARTraceDelete',
-                type: 'POST',
-                data: {
-                       id:selectedRowData.id
+        $.ajax({
+            url: '/Accounting/ARTraceDelete',
+            type: 'POST',
+            data: {
+                id: selectedRowData.id
 
 
-                },
-                traditional: true,
-                  crossDomain: false,
-                    headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
-                success: function (result) {
-                     if (result.success) {
-                             
-                                    $("#btnPrint").trigger("click");
-                     } else {
-                              showToast('Error', 'Please select .', false);
-                     }
+            },
+            traditional: true,
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                if (result.success) {
 
-                },
-                error: function () {
-                    alert("Không th? t?i báo cáo.");
-                    $("#loadingSpinner").hide();
+                    $("#btnPrint").trigger("click");
+                } else {
+                    showToast('Error', 'Please select .', false);
                 }
-            });
 
-
+            },
+            error: function () {
+                alert("Không th? t?i báo cáo.");
+                $("#loadingSpinner").hide();
+            }
         });
 
 
-      
-       $("#btnExportExcel").click(function () {
+    });
+
+
+
+    $("#btnExportExcel").click(function () {
         const grid = $("#gridContainer").dxDataGrid("instance");   // 🔥 khai báo grid
 
         const workbook = new ExcelJS.Workbook();

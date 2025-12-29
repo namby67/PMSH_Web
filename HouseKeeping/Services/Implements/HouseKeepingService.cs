@@ -20,7 +20,6 @@ namespace HouseKeeping.Services.Implements
                new SqlParameter("@FromDate", fromDate),
                 new SqlParameter("@ToDate", toDate),
                  new SqlParameter("@ZoneCode", zone),
-
             };
 
             DataTable myTable = DataTableHelper.getTableData("spRmgRoomControlPanelReport", param);
@@ -91,7 +90,6 @@ namespace HouseKeeping.Services.Implements
                 new SqlParameter("@UserName",username),
                  new SqlParameter("@FromDate", fromDate),
                         new SqlParameter("@ToDate", toDate),
-
 
             };
 
@@ -302,7 +300,6 @@ namespace HouseKeeping.Services.Implements
             {
                new SqlParameter("@SectionID", _ListSection),
                 new SqlParameter("@RoomNo",roomIDs) ,
-
             };
 
             DataTable myTable = DataTableHelper.getTableData("spTurndownTasksheets", param);
@@ -331,7 +328,6 @@ namespace HouseKeeping.Services.Implements
             {
                new SqlParameter("@taskID", taskid),
                 new SqlParameter("@status",status) ,
-
 
             };
 
@@ -472,7 +468,6 @@ namespace HouseKeeping.Services.Implements
             {
                new SqlParameter("@RoomTypeID", roomtype),
                 new SqlParameter("@ZoneID",zone) ,
-
 
 
             };
@@ -1085,7 +1080,6 @@ namespace HouseKeeping.Services.Implements
 
                          new SqlParameter("@Floor",floorauto) ,
                    new SqlParameter("@subZone",subzonecodeauto) ,
-
             };
 
             DataTable myTable = DataTableHelper.getTableData("spTasksheetAutomatically", param);
@@ -1097,7 +1091,6 @@ namespace HouseKeeping.Services.Implements
             {
                new SqlParameter("@FromDate", fromDate),
                new SqlParameter("@ToDate", toDate),
-
             };
 
             DataTable myTable = DataTableHelper.getTableData("spSearchLostAndFound", param);
@@ -1166,7 +1159,6 @@ namespace HouseKeeping.Services.Implements
             {
                new SqlParameter("@FromDate", fromDate),
                new SqlParameter("@ToDate", toDate)
-
             };
 
             DataTable myTable = DataTableHelper.getTableData("spSelectAvailibilityColor", param);

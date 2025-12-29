@@ -291,7 +291,6 @@ namespace Cashiering.Controllers
                                   AmountUSD = !string.IsNullOrEmpty(d["AmountUSD"].ToString()) ? d["AmountUSD"] : "",
                                   CountTransaction = !string.IsNullOrEmpty(d["CountTransaction"].ToString()) ? d["CountTransaction"] : "",
                                   Status = !string.IsNullOrEmpty(d["Status"].ToString()) ? d["Status"] : "",
-
                               }).ToList();
                 return Ok(result);
             }

@@ -143,7 +143,6 @@ namespace Cashiering.Services.Implements
                 SqlParameter[] param = new SqlParameter[]
                 {
 
-
                 };
 
                 DataTable myTable = DataTableHelper.getTableData("spSearchARAccountType", param);

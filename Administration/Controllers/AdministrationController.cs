@@ -71,7 +71,6 @@ namespace Administration.Controllers
         {
             return View(); // View này sẽ chứa DataGrid + script gọi API
         }
-
         [HttpPost]
         public ActionResult InsertMember()
         {
@@ -377,7 +376,6 @@ namespace Administration.Controllers
             }
 
         }
-
         [HttpPost]
         public ActionResult InsertCity()
         {
@@ -509,7 +507,6 @@ namespace Administration.Controllers
             }
 
         }
-
         [HttpPost]
         public ActionResult InsertCountry()
         {
@@ -886,7 +883,6 @@ namespace Administration.Controllers
             }
 
         }
-
         [HttpPost]
         public ActionResult InsertTitle()
         {
@@ -1011,7 +1007,6 @@ namespace Administration.Controllers
             }
 
         }
-
         [HttpPost]
         public ActionResult InsertTerritory()
         {
@@ -1262,7 +1257,6 @@ namespace Administration.Controllers
             }
 
         }
-
         [HttpPost]
         public ActionResult InsertVIP()
         {
@@ -1387,7 +1381,6 @@ namespace Administration.Controllers
             }
 
         }
-
         [HttpGet]
         public IActionResult GetById(int id)
         {
@@ -2425,7 +2418,6 @@ namespace Administration.Controllers
 
 
         }
-
         [HttpPost]
         public ActionResult InsertComment()
         {
@@ -3297,7 +3289,6 @@ namespace Administration.Controllers
                 string loginName = HttpContext.Session.GetString("LoginName") ?? "";
                 if (string.IsNullOrWhiteSpace(member.Code))
                     return Json(new { success = false, message = "Code không được để trống." });
-
                 if (member.ID == 0) // Insert mới
                 {
                     member.CreatedBy = loginName;
@@ -3372,7 +3363,6 @@ namespace Administration.Controllers
                 pt.BeginTransaction();
 
                 ReservationTypeModel member = new ReservationTypeModel();
-
                 // Lấy dữ liệu từ form
                 member.Code = Request.Form["code"].ToString();
                 member.Name = Request.Form["name"].ToString();
@@ -3956,7 +3946,6 @@ namespace Administration.Controllers
                 pt.CloseConnection();
             }
         }
-
         [HttpPost]
         public ActionResult InsertProperty()
         {
@@ -4120,7 +4109,6 @@ namespace Administration.Controllers
             }
 
         }
-
         [HttpPost]
         public ActionResult InsertPropertyPermission()
         {
@@ -4132,7 +4120,6 @@ namespace Administration.Controllers
                 pt.BeginTransaction();
 
                 PropertyPermissionModel member = new PropertyPermissionModel();
-
 
                 string propertyTypeValue = Request.Form["propertyType"];
                 member.PropertyID = int.TryParse(propertyTypeValue, out int cId) ? cId : 0;
@@ -4536,7 +4523,6 @@ namespace Administration.Controllers
             {
                 return Json(ex.Message);
             }
-
         }
         [HttpPost]
         public IActionResult PersonInChargeSave(int id, string codenew, string telephonenew, string handphonenew, string emailnew, string namenew, string descriptionnew, string group, string zone, int isActive, string user)
@@ -4639,7 +4625,6 @@ namespace Administration.Controllers
         public ActionResult PersonInChargeGroup()
         {
 
-
             return View();
         }
 
@@ -4648,7 +4633,6 @@ namespace Administration.Controllers
         {
             code = code ?? "";
             description = description ?? "";
-
 
             try
             {
@@ -4762,7 +4746,6 @@ namespace Administration.Controllers
                     model.Name = namenew?.Trim();
                     model.Description = descriptionnew?.Trim();
                     model.Inactive = (isActive == 1);
-
                     model.UpdatedBy = user;
                     model.UpdatedDate = businessDate;
 

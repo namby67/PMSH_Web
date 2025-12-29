@@ -1,5 +1,4 @@
-﻿<div class="modal fade modal-xl" id="modalCheckOutAll" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+﻿<div class="modal fade modal-xl" id="modalCheckOutAll" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
 
@@ -32,13 +31,13 @@
         var allData = dataSource.items();
 
         // Filter data based on type
-        filteredData = allData.filter(function (item) {
+        filteredData = allData.filter(function(item) {
             return item.ReservationStatus == 6;
         });
-
+        
 
         // Map the filtered data
-        filteredData = filteredData.map(function (item) {
+        filteredData = filteredData.map(function(item) {
             return {
                 roomNo: item.RoomNo,
                 mg: item.MG,
@@ -53,7 +52,7 @@
         initializeDataGridCheckOutAll(filteredData);
         $('#modalCheckOutAll').modal('show');
     }
-    function processCheckOutAll() {
+    function processCheckOutAll(){
         var grid = $("#gridContainerCheckOutAll").dxDataGrid("instance");
         const userName = JSON.parse(localStorage.getItem("Loginname"));
         const userID = JSON.parse(localStorage.getItem("userID"));
@@ -86,7 +85,7 @@
             }
         });
     }
-    function closeModalCheckOutAll() {
+    function closeModalCheckOutAll(){
         $('#modalCheckOutAll').modal('hide');
 
     }
@@ -135,12 +134,12 @@
             ]
         });
     }
-    function openModalCheckOut() {
-        if (idReservation == 0) {
+    function openModalCheckOut(){
+        if(idReservation == 0){
             showToast('Error', "Please choose booking", false);
             return;
         }
-        if (reservationStatus != 6) {
+        if(reservationStatus != 6){
             showToast('Error', "Please choose booking has status DUE OUT", false);
             return;
         }

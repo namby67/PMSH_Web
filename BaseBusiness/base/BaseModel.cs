@@ -33,7 +33,6 @@ namespace BaseBusiness.bc
 		}
 
 
-
 		/// <summary>
 		/// Clone the object, and returning a reference to a cloned object.
 		/// </summary>

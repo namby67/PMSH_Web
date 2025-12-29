@@ -1,5 +1,4 @@
-﻿<div class="modal fade modal-xl" id="modalTraces" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+﻿<div class="modal fade modal-xl" id="modalTraces" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
 
@@ -31,7 +30,7 @@
                     <div class="form-group-new-reservation col-md-3">
                         <label>Department</label>
                         <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
-                            <select id="departmentTraces"></select>
+                            <select id="departmentTraces"  ></select>
                         </div>
                     </div>
                     <div class="form-group-new-reservation col-md-3">
@@ -52,8 +51,7 @@
         </div>
     </div>
 </div>
-<div class="modal fade modal" id="modalNewTrace" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade modal" id="modalNewTrace" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content" style="border:1px solid #bcbcbc">
 
@@ -76,13 +74,13 @@
                     <div class="form-group-new-reservation col-md-4">
                         <label>To Date</label>
                         <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
-                            <input id="toDateAddNewTrace" type="date" />
+                            <input id="toDateAddNewTrace" type="date"  />
                         </div>
                     </div>
                     <div class="form-group-new-reservation col-md-3">
                         <label>Time</label>
                         <div class="row" style="margin-left:1px;margin-right:2px;justify-content:space-between">
-                            <input id="timeAddNewTrace" type="text" />
+                            <input id="timeAddNewTrace" type="text"  />
 
                         </div>
                     </div>
@@ -104,18 +102,18 @@
     </div>
 </div>
 <script>
-    function openModalTraces() {
-        if (!idReservation || idReservation <= 0) {
+    function openModalTraces(){
+        if(!idReservation || idReservation <=0){
             showToast('Error', 'Please select a reservation to manage traces.', false);
             return;
         }
         $('#modalTraces').modal('show');
         getDepartmentTrace();
     }
-    function closeModalTraces() {
+    function closeModalTraces(){
         $('#modalTraces').modal('hide');
     }
-    function getDepartmentTrace() {
+    function getDepartmentTrace(){
         $.ajax({
             url: '/Reservation/GetDepartmentTraces',
             type: 'get',
@@ -154,10 +152,10 @@
             type: 'get',
             dataType: 'json',
             data: {
-                departmentID: $('#departmentTraces').val(),
+                departmentID :$('#departmentTraces').val(),
                 resolved: $('#resolveTraces').val(),
                 date: $('#dateTraces').val(),
-                name: $('#nameTraces').val(),
+                name:$('#nameTraces').val(),
                 reservationID: idReservation
             },
             crossDomain: false,
@@ -175,31 +173,31 @@
     function initializeDataGridTraces(data) {
         $("#gridContainerTraces").dxDataGrid({
 
-            dataSource: data, allowColumnResizing: true,
+        dataSource: data, allowColumnResizing: true,
             columns: [
                 {
                     type: "selection",
                     width: 50,
                     allowFiltering: false,
                     allowSorting: false,
-                    headerCellTemplate: function () { return $("<div>"); }
+                    headerCellTemplate: function() { return $("<div>"); }
                 },
-                { dataField: "ID", caption: "ID", visible: false },
-                { dataField: "Account", caption: "Name" },
-                { dataField: "RoomNo", caption: "Room No" },
-                { dataField: "ConfirmationNo", caption: "Confirm.No" },
-                { dataField: "FromDate", caption: "From Date" },
-                { dataField: "ToDate", caption: "To Date" },
-                { dataField: "TracesTime", caption: "Time" },
-                { dataField: "Department", caption: "Department" },
-                { dataField: "Rsv", caption: "Resolved" },
-                { dataField: "RsvDate", caption: "Resolved Date" },
-                { dataField: "ResolvedBy", caption: "Resolved By" },
-                { dataField: "Status", caption: "Status" },
-                { dataField: "CreateBy", caption: "Create By" },
-                { dataField: "CreateDate", caption: "Create On" },
-                { dataField: "UpdateBy", caption: "Update By" },
-                { dataField: "UpdateDate", caption: "Update On" },
+                { dataField: "ID", caption: "ID",  visible: false},
+                { dataField: "Account", caption: "Name"},
+                { dataField: "RoomNo", caption: "Room No"},
+                { dataField: "ConfirmationNo", caption: "Confirm.No"},
+                { dataField: "FromDate", caption: "From Date"},
+                { dataField: "ToDate", caption: "To Date"},
+                { dataField: "TracesTime", caption: "Time"},
+                { dataField: "Department", caption: "Department"},
+                { dataField: "Rsv", caption: "Resolved"},
+                { dataField: "RsvDate", caption: "Resolved Date"},
+                { dataField: "ResolvedBy", caption: "Resolved By"},
+                { dataField: "Status", caption: "Status"},
+                { dataField: "CreateBy", caption: "Create By"},
+                { dataField: "CreateDate", caption: "Create On"},
+                { dataField: "UpdateBy", caption: "Update By"},
+                { dataField: "UpdateDate", caption: "Update On"},
             ],
             paging: { pageSize: 15 },
             scrolling: {
@@ -213,27 +211,27 @@
                 showNavigationButtons: true,
             },
             filterRow: {
-                visible: true,
-                applyFilter: "auto"
+                    visible: true,
+                    applyFilter: "auto"
             },
             selection: {
                 mode: "multiple",
                 showCheckBoxesMode: "always"
             },
-            onRowClick: function (e) {
+            onRowClick: function(e) {
                 setShowButtonAlerts();
             }
         });
     }
-    function openModalNewTrace() {
+    function openModalNewTrace(){
         clearNewTrace();
         $('#modalNewTrace').modal('show');
     }
-    function closeModalNewTrace() {
+    function closeModalNewTrace(){
         clearNewTrace();
         $('#modalNewTrace').modal('hide');
     }
-    function clearNewTrace() {
+    function clearNewTrace(){
         $('#timeAddNewTrace').val('00:00');
         $('#departmentAddNewTraces').val('');
         $('#textAddNewTrace').val('');
@@ -242,7 +240,7 @@
         const userName = JSON.parse(localStorage.getItem("Loginname"));
         const userID = JSON.parse(localStorage.getItem("userID"));
         var formData = new FormData();
-        formData.append('reservationID', idReservation);
+        formData.append('reservationID',idReservation);
         formData.append('fromDate', $('#fromDateAddNewTrace').val());
         formData.append('toDate', $('#toDateAddNewTrace').val());
         formData.append('time', $('#timeAddNewTrace').val());
@@ -251,7 +249,7 @@
         formData.append('profileID', profileID);
 
         formData.append('userName', userName);
-        formData.append('userID', userID);
+        formData.append('userID',userID);
         $.ajax({
             url: '/Reservation/SaveTrace',
             type: 'POST',
@@ -275,7 +273,7 @@
 
     }
 
-    function ResolveTrace() {
+    function ResolveTrace(){
         const userName = JSON.parse(localStorage.getItem("Loginname"));
         const userID = JSON.parse(localStorage.getItem("userID"));
         var grid = $("#gridContainerTraces").dxDataGrid("instance");
@@ -288,9 +286,9 @@
             type: 'POST',
 
             data: {
-                userID: userID,
-                userName: userName,
-                selectedIds: selectedIds
+               userID: userID,
+               userName: userName,
+               selectedIds: selectedIds
             },
             success: function (data) {
                 if (data.code == 0) {

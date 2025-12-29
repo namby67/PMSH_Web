@@ -96,7 +96,7 @@
             <div class="sticky-header bg-white p-2 shadow-sm z-3">
                 <div class="d-flex align-items-center gap-3 p-2"
                     style="border: 1px solid #ccc; border-radius: 6px; padding: 8px;">
-                    <form id="formContainer">
+                    <form id="itemForm">
                         <div class="d-flex align-items-center">
                             <div class="d-flex align-items-center me-3">
                                 <label for="name" class="me-2 mb-0">Name</label>
@@ -136,7 +136,7 @@
 
 <script>
     DevExpress.localization.locale("vi");
-    var selectedRowData = null;
+    let selectedRowData = null;
 
     $(document).ready(function () {
         $(".menu-group-title").on("click", function (event) {
@@ -181,7 +181,7 @@
         $("#backgroundColor").val(hexToArgb($("#bgColor").val()));
         $("#fontColorHidden").val(hexToArgb($("#fontColor").val()));
 
-        const formData = $("#formContainer").serialize();
+        const formData = $("#itemForm").serialize();
         if (!selectedRowData) {
             DevExpress.ui.notify("Please select a row first!", "warning", 2000);
             return;
@@ -198,7 +198,7 @@
             success: function (res) {
                 if (res.success) {
                     showToast("Success", url.includes("Update") ? "Update success" : "Insert success", true);
-                    $("#formContainer").trigger("reset");
+                    $("#itemForm").trigger("reset");
                     selectedRowData = null;
 
                     reloadGrid();
@@ -348,9 +348,4 @@
             }
         });
     }
-
-
-
-
-
 </script>

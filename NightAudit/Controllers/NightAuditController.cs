@@ -715,7 +715,6 @@ namespace NightAudit.Controllers
                 //Nếu chưa có thì tạo mới
                 else
                 {
-
                     ReservationModel mR = (ReservationModel)ReservationBO.Instance.FindByPrimaryKey(_FromRsvID);
                     mR.Status = 0;
                     mR.MainGuest = false;
@@ -1699,7 +1698,6 @@ namespace NightAudit.Controllers
                 _Message = ex.Message;
                 return false;
             }
-
         }
 
 
@@ -3982,7 +3980,6 @@ namespace NightAudit.Controllers
             ProcessTransactions pt = new ProcessTransactions();
             try
             {
-
                 pt.OpenConnection();
                 pt.BeginTransaction();
 
@@ -4039,7 +4036,6 @@ namespace NightAudit.Controllers
             ProcessTransactions pt = new ProcessTransactions();
             try
             {
-
                 pt.OpenConnection();
                 pt.BeginTransaction();
 
@@ -4108,7 +4104,6 @@ namespace NightAudit.Controllers
             ProcessTransactions pt = new ProcessTransactions();
             try
             {
-
                 pt.OpenConnection();
                 pt.BeginTransaction();
 
@@ -4213,17 +4208,14 @@ namespace NightAudit.Controllers
                 #endregion
 
 
-
                 return Json(new { code = 0, msg = "Check out was successfully" });
             }
             catch (Exception ex)
             {
-
                 return Json(new { code = 1, msg = ex.Message });
             }
             finally
             {
-
             }
         }
 
@@ -4233,7 +4225,6 @@ namespace NightAudit.Controllers
             ProcessTransactions pt = new ProcessTransactions();
             try
             {
-
                 pt.OpenConnection();
                 pt.BeginTransaction();
 
@@ -4280,7 +4271,6 @@ namespace NightAudit.Controllers
             ProcessTransactions pt = new ProcessTransactions();
             try
             {
-
                 pt.OpenConnection();
                 pt.BeginTransaction();
 
@@ -4387,7 +4377,6 @@ namespace NightAudit.Controllers
             ProcessTransactions pt = new ProcessTransactions();
             try
             {
-
                 pt.OpenConnection();
                 pt.BeginTransaction();
 
@@ -4488,7 +4477,6 @@ namespace NightAudit.Controllers
             ProcessTransactions pt = new ProcessTransactions();
             try
             {
-
                 pt.OpenConnection();
                 pt.BeginTransaction();
 
@@ -4579,7 +4567,6 @@ namespace NightAudit.Controllers
             ProcessTransactions pt = new ProcessTransactions();
             try
             {
-
                 pt.OpenConnection();
                 pt.BeginTransaction();
 
@@ -4644,7 +4631,6 @@ namespace NightAudit.Controllers
             ProcessTransactions pt = new ProcessTransactions();
             try
             {
-
                 pt.OpenConnection();
                 pt.BeginTransaction();
 

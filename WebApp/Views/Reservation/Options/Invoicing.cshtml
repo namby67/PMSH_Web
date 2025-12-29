@@ -1,41 +1,39 @@
-﻿<!-- Modal invoicing-->
-<div class="modal fade modal-xl" id="modalInvoicing" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabelBilling" aria-hidden="true">
+﻿
+<!-- Modal invoicing-->
+<div class="modal fade modal-xl" id="modalInvoicing" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabelBilling" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen">
         <div class="modal-content" style="border: 1px solid #bcbcbc">
             <div class="modal-header">
-                <h5 class="modal-title">Invoicing</h5>
+                <h5 class="modal-title" >Invoicing</h5>
                 <button type="button" class="btn-close" onclick="closeModalInvoicing()"></button>
             </div>
             <div style="margin:4px 8px">
                 <div class="mb-3">
-                    <button class="btn btn-primary btn-primary-post-billing" style="padding: 4px 8px;"
-                        onclick="searchFolioInvoicing();">Search</button>
-                    <button class="btn btn-primary btn-primary-post-billing"
-                        style="padding: 4px 8px;background-color:#006600" onclick="exportInvoicing();">Excel</button>
+                    <button class="btn btn-primary btn-primary-post-billing" style="padding: 4px 8px;" onclick="searchFolioInvoicing();">Search</button>
+                    <button class="btn btn-primary btn-primary-post-billing" style="padding: 4px 8px;background-color:#006600" onclick="exportInvoicing();">Excel</button>
 
                 </div>
 
                 <div class="col-md-12 row">
                     <div class="col-md-2 row">
-                        <label>Folio. No</label>
+                        <label >Folio. No</label>
                         <input type="text" id="folioNoInvoicing">
                     </div>
                     <div class="col-md-2 row">
-                        <label>Confirm. No</label>
-                        <input type="text" id="confirmationNoInvoicing">
+                        <label >Confirm. No</label>
+                        <input type="text"  id="confirmationNoInvoicing">
                     </div>
                     <div class="col-md-2 row">
-                        <label>Room</label>
-                        <input type="text" id="roomInvoicing">
+                        <label >Room</label>
+                        <input type="text"  id="roomInvoicing">
                     </div>
                     <div class="col-md-2 row">
-                        <label>Name</label>
-                        <input type="text" id="nameInvoicing">
+                        <label >Name</label>
+                        <input type="text"  id="nameInvoicing">
                     </div>
                     <div class="col-md-2 row">
-                        <label>Guest Status</label>
-                        <select id="guestStatusInvoicing">
+                        <label >Guest Status</label>
+                        <select  id="guestStatusInvoicing">
                             <option value="0"> All</option>
                             <option value="1"> Guest In House</option>
                             <option value="2"> Checked Out</option>
@@ -43,23 +41,23 @@
                         </select>
                     </div>
                     <div class="col-md-2 row">
-                        <label>Folio Status</label>
-                        <select id="folioStatusInvoicing">
+                        <label >Folio Status</label>
+                        <select  id="folioStatusInvoicing">
                             <option value="0"> All</option>
                             <option value="1"> Opened</option>
                             <option value="2"> Closed</option>
                         </select>
                     </div>
                     <div class="col-md-2 row">
-                        <label>Folio Type</label>
-                        <select id="folioTyoeInvoicing">
+                        <label >Folio Type</label>
+                        <select  id="folioTyoeInvoicing">
                             <option value="0"> All</option>
                             <option value="1"> Guest Folio</option>
                             <option value="2"> Master Folio</option>
                         </select>
                     </div>
                     <div class="col-md-2 ">
-                        <label>Date</label>
+                        <label >Date</label>
                         <div class="row">
                             <input type="date" id="dateInvoicing" class="col-md-11">
                             <input class="col-md-1" type="checkbox" value="" id="checkBoxInvoicing">
@@ -89,13 +87,13 @@
 
 <script>
 
-    function openModalInvoicing() {
+    function openModalInvoicing(){
         const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
-        $('#dateInvoicing').val(today);
+    $('#dateInvoicing').val(today);
         searchFolioInvoicing();
         $('#modalInvoicing').modal('show');
     }
-    function closeModalInvoicing() {
+    function closeModalInvoicing(){
         $('#modalInvoicing').modal('hide');
     }
 
@@ -107,9 +105,9 @@
         var name = $('#nameInvoicing').val();
         var guestStatus = $('#guestStatusInvoicing').val();
         var folioStatus = $('#folioStatusInvoicing').val();
-        var folioType = $('#folioTyoeInvoicing').val();
+        var folioType = $('#folioTyoeInvoicing').val(); 
         var isChecked = $('#checkBoxInvoicing').is(':checked');
-        var date = isChecked ? $('#dateInvoicing').val() : "";
+        var date = isChecked ? $('#dateInvoicing').val() : ""; 
 
         // Chuẩn bị dữ liệu gửi lên API
         var data = {
@@ -120,7 +118,7 @@
             guestStatus: guestStatus,
             folioStatus: folioStatus,
             folioType: folioType,
-            date: date
+            date: date 
         };
 
         $.ajax({
@@ -143,43 +141,43 @@
         });
     }
     function initializeDataGridInvoicing(data) {
-        // Kiểm tra dữ liệu đầu vào
+         // Kiểm tra dữ liệu đầu vào
 
-        // Nếu cần giới hạn tổng số bản ghi, ví dụ 100 bản ghi
-        const limitedData = data.slice(0, 100);
+         // Nếu cần giới hạn tổng số bản ghi, ví dụ 100 bản ghi
+         const limitedData = data.slice(0, 100);
 
-        $("#gridContainerInvoicing").dxDataGrid({
-            dataSource: limitedData, // Sử dụng dữ liệu đã giới hạn
-            allowColumnResizing: true,
-            columnAutoWidth: true,
-            columnMinWidth: 90,
-            paging: {
-                enabled: true, // Bật phân trang
-                pageSize: 15 // Mỗi trang 15 bản ghi
-            },
-            pager: {
-                visible: true,
-                allowedPageSizes: [15, 20, 30], // Chỉ các kích thước trang cố định
-                showPageSizeSelector: true,
-                showInfo: true, // Hiển thị thông tin phân trang
-                showNavigationButtons: true
-            },
-            scrolling: {
-                mode: 'standard', // Thay 'virtual' bằng 'standard' để kiểm tra
-                showScrollbar: 'always',
-                useNative: false
-            },
-            filterRow: {
-                visible: true,
-                applyFilter: "auto"
-            },
-            selection: {
-                mode: "single"
-            },
+         $("#gridContainerInvoicing").dxDataGrid({
+             dataSource: limitedData, // Sử dụng dữ liệu đã giới hạn
+             allowColumnResizing: true,
+             columnAutoWidth: true,
+             columnMinWidth: 90,
+             paging: {
+                 enabled: true, // Bật phân trang
+                 pageSize: 15 // Mỗi trang 15 bản ghi
+             },
+             pager: {
+                 visible: true,
+                 allowedPageSizes: [15, 20, 30], // Chỉ các kích thước trang cố định
+                 showPageSizeSelector: true,
+                 showInfo: true, // Hiển thị thông tin phân trang
+                 showNavigationButtons: true
+             },
+             scrolling: {
+                 mode: 'standard', // Thay 'virtual' bằng 'standard' để kiểm tra
+                 showScrollbar: 'always',
+                 useNative: false
+             },
+             filterRow: {
+                 visible: true,
+                 applyFilter: "auto"
+             },
+             selection: {
+                 mode: "single"
+             },
 
-        });
+         });
     }
-    // Function to export invoicing data to Excel
+        // Function to export invoicing data to Excel
     function exportInvoicing() {
         // Load required libraries dynamically
         const script1 = document.createElement('script');
@@ -190,15 +188,15 @@
         script2.src = 'https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js';
         document.head.appendChild(script2);
 
-        script1.onload = function () {
-            script2.onload = function () {
+        script1.onload = function() {
+            script2.onload = function() {
                 // Get the DataGrid instance
                 const dataGrid = $("#gridContainerInvoicing").dxDataGrid("instance");
 
                 // Get the data source from the grid
                 const dataSource = dataGrid.getDataSource();
                 // Load all data from the current view (including filters)
-                dataSource.load().done(function (data) {
+                dataSource.load().done(function(data) {
                     if (!data || data.length === 0) {
                         alert("No data available to export.");
                         return;
@@ -261,11 +259,11 @@
                     worksheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'center' };
 
                     // Generate Excel file
-                    workbook.xlsx.writeBuffer().then(function (buffer) {
+                    workbook.xlsx.writeBuffer().then(function(buffer) {
                         const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
                         saveAs(blob, 'InvoicingData.xlsx');
                     });
-                }).fail(function (error) {
+                }).fail(function(error) {
                     alert("Error retrieving grid data: " + error);
                 });
             };

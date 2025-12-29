@@ -1,5 +1,5 @@
-﻿<div class="modal fade" id="modalPaymentBilling" tabindex="-1" aria-labelledby="transactionModalLabel"
-    aria-hidden="true">
+﻿
+<div class="modal fade" id="modalPaymentBilling" tabindex="-1" aria-labelledby="transactionModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content" style="border: 1px solid #bcbcbc">
             <div class="modal-header">
@@ -14,21 +14,18 @@
                 <div class="row mb-2">
                     <div class="form-group">
                         <label for="code" class="form-label">Payment Code</label>
-                        <select type="text" class="form-control" id="paymentCodePaymentBilling"
-                            style="margin-left:20px;padding-top:3px"></select>
+                        <select type="text" class="form-control" id="paymentCodePaymentBilling" style="margin-left:20px;padding-top:3px"></select>
 
                     </div>
                     <div class="form-group">
                         <label for="code" class="form-label">Currency</label>
-                        <input type="text" class="form-control small-input" id="currencyPaymentBilling" value="VND"
-                            readonly>
+                        <input type="text" class="form-control small-input" id="currencyPaymentBilling" value="VND" readonly>
                     </div>
                 </div>
                 <hr class="hr">
                 <div class="form-group">
                     <label for="code" class="form-label">Amount</label>
-                    <input type="text" class="form-control small-input" id="amountPaymentBilling"
-                        style="text-align:right">
+                    <input type="text" class="form-control small-input" id="amountPaymentBilling" style="text-align:right">
                 </div>
                 <hr class="hr">
                 <div class="form-group">
@@ -49,7 +46,7 @@
                     <div class="col-6">
                         <div class="form-group">
                             <label for="crashier" class="form-label">Exp Date</label>
-                            <input type="date" class="form-control medium-input" id="expDatePaymentBilling">
+                            <input type="date" class="form-control medium-input" id="expDatePaymentBilling" >
                         </div>
                     </div>
                     <div class="col-6">
@@ -75,9 +72,9 @@
             headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
             success: function (result) {
                 $('#paymentCodePaymentBilling').empty();
-                var html = `<option value='0' selected>Select payment code</option>`;
-                if (result.length > 0) {
-                    for (var i = 0; i < result.length; i++) {
+                var html = `<option value='0' selected>Select payment code</option>` ;
+                if(result.length > 0){
+                    for(var i = 0; i< result.length;i++){
                         html += `<option value='${result[i].id}'>${result[i].code} - ${result[i].description}</option>`;
                     }
                 }
@@ -92,25 +89,25 @@
 
         });
     }
-    function openModalPaymentBilling() {
-        localStorage.setItem("currentFromID", "modalPaymentBilling");
-        const crashierLogin = localStorage.getItem("crashierLogin");
-        getPaymentFO();
-        clearPaymentBilling();
+    function openModalPaymentBilling(){
+         localStorage.setItem("currentFromID", "modalPaymentBilling");
+         const crashierLogin = localStorage.getItem("crashierLogin");
+         getPaymentFO();
+         clearPaymentBilling();
         $('#amountPaymentBilling').val(totalAmountBilling.toLocaleString('en-US'));
         if (crashierLogin == "NotYet") {
             openModalShilftLogin();
         } else {
-
+        
             $('#modalPaymentBilling').modal('show');
         }
     }
-
-    function closeModalPaymentBilling() {
+    
+    function closeModalPaymentBilling(){
         $('#modalPaymentBilling').modal('hide');
 
     }
-    function clearPaymentBilling() {
+    function clearPaymentBilling(){
         $('#supplementPaymentBilling').val('');
         $('#referencePaymentBilling').val('');
         $('#creditCardNoPaymentBilling').val('');

@@ -1,6 +1,5 @@
 ﻿<!-- Modal search profile-->
-<div class="modal fade modal-xl" id="modalProfile" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade modal-xl" id="modalProfile" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
 
@@ -10,40 +9,38 @@
             </div>
             <div class="modal-body">
                 <div class="mb-2" style="margin-top:0px">
-                    <button class="submit-button-clear-reservation" onclick="getAllProfiles(3);"><i
-                            class="fas fa-search"></i> Search</button>
+                    <button class="submit-button-clear-reservation" onclick="getAllProfiles(3);"><i class="fas fa-search"></i> Search</button>
                 </div>
-                <div class="row mui-card mb-2 mx-1">
+                <div class="row mui-card mb-2 mx-1" >
                     <div class="col-md-2 mb-2">
-                        <label for="input1">Full Name</label>
-                        <input type="text" id="nameProfileSearch" placeholder="Enter name">
+                        <label for="input1" >Full Name</label>
+                        <input type="text"  id="nameProfileSearch" placeholder="Enter name">
                     </div>
                     <div class="col-md-2 mb-2">
-                        <label for="input2">First Name</label>
-                        <input type="text" id="firstNameProfileSearch" placeholder="Enter first name">
+                        <label for="input2" >First Name</label>
+                        <input type="text"  id="firstNameProfileSearch" placeholder="Enter first name">
                     </div>
                     <div class="col-md-2 mb-2">
-                        <label for="input3">View By</label>
-                        <select type="text" id="viewByProfileSearch" disabled style="line-height:1.28">
+                        <label for="input3" >View By</label>
+                        <select type="text"  id="viewByProfileSearch" disabled style="line-height:1.28">
                             <option selected value="3">Individual</option>
                         </select>
                     </div>
                     <div class="col-md-2 mb-2">
-                        <label for="input4">City</label>
-                        <select type="text" id="cityProfileSearch" placeholder="Enter value" asp-items="ViewBag.cboCity"
-                            style="line-height:1.28"></select>
+                        <label for="input4" >City</label>
+                        <select type="text"  id="cityProfileSearch" placeholder="Enter value" asp-items="ViewBag.cboCity" style="line-height:1.28"></select>
                     </div>
                     <div class="col-md-2 mb-2">
-                        <label for="input5">Key word</label>
-                        <input type="text" id="keywordProfileSearch" placeholder="Enter value">
+                        <label for="input5" >Key word</label>
+                        <input type="text"  id="keywordProfileSearch" placeholder="Enter value">
                     </div>
                     <div class="col-md-2 mb-2">
-                        <label for="input6">Code</label>
-                        <input type="text" id="codeProfileSearch" placeholder="Enter value">
+                        <label for="input6" >Code</label>
+                        <input type="text"  id="codeProfileSearch" placeholder="Enter value">
                     </div>
                     <div class="col-md-2 mb-2">
-                        <label for="input4">Property</label>
-                        <select type="text" id="propertyProfileSearch" disabled style="line-height:1.28">
+                        <label for="input4" >Property</label>
+                        <select type="text"  id="propertyProfileSearch" disabled style="line-height:1.28">
                             <option selected>PMSh TheArena</option>
                         </select>
                     </div>
@@ -65,11 +62,11 @@
 </div>
 <script>
 
-    function openModalSearchProfile() {
+    function openModalSearchProfile(){
         getAllProfiles(3);
         $('#modalProfile').modal('show');
     }
-    function closeModalSearchProfle() {
+    function closeModalSearchProfle(){
         $('#nameProfileSearch').val('');
         $('#firstNameProfileSearch').val('');
         $('#cityProfileSearch').val(0);
@@ -170,12 +167,12 @@
             }
         });
     }
-    function getInfoByProfileID(id) {
+    function getInfoByProfileID(id){
         $.ajax({
             url: '/Reservation/GetInfoProfile',
             type: 'get',
             dataType: 'json',
-            data: {
+            data:{
                 profileID: id
             },
             crossDomain: false,
@@ -204,7 +201,7 @@
                 $('#txtPrefRoom').val(result.prefRoom);
 
 
-            },
+          },
             error: function (xhr, statusText, err) {
                 if (xhr.status == 401) {
                     sessionTimeout();

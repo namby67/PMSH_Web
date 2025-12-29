@@ -1,5 +1,4 @@
-﻿<div class="modal fade modal" id="modalSplitTransaction" data-bs-backdrop="static" data-bs-keyboard="false"
-    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+﻿<div class="modal fade modal" id="modalSplitTransaction" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
 
@@ -13,9 +12,9 @@
                     <button class="mui-button mui-button-clear" onclick="closeModalSplitTransaction();">Close</button>
                 </div>
                 <div class=" row mt-2">
-                    <label class="col-md-3">Transaction.Infor:</label>
+                    <label class="col-md-3" >Transaction.Infor:</label>
 
-                    <span class="col-md-9" id="transactionInfoSplit"></span>
+                    <span class="col-md-9" id="transactionInfoSplit" ></span>
 
                 </div>
                 <div class=" row mt-2">
@@ -25,21 +24,21 @@
 
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="typeDiscountSplit" value="0" checked>
-                    <label class="form-check-label">
+                    <input class="form-check-input" type="radio" name="typeDiscountSplit"  value="0" checked>
+                    <label class="form-check-label" >
                         Amount
                     </label>
                 </div>
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="typeDiscountSplit" value="1">
-                    <label class="form-check-label">
+                    <label class="form-check-label" >
                         Percentage
                     </label>
                 </div>
 
                 <div class="row mt-2">
                     <label class="col-md-2">Value</label>
-                    <input id="valueSplitTransaction" class="col-md-10" style="text-align:right" />
+                    <input id="valueSplitTransaction" class="col-md-10" style="text-align:right"/>
                 </div>
             </div>
         </div>
@@ -47,7 +46,7 @@
 </div>
 
 <script>
-    function openModalSplitTransaction() {
+    function openModalSplitTransaction(){
         $('input[name="typeDiscountSplit"][value="0"]').prop('checked', true);
 
         // Alternatively, if selecting by order:
@@ -79,12 +78,12 @@
         $("#transactionInfoSplit").text(selectedRows[0].code + ' - ' + selectedRows[0].description);
         $('#modalSplitTransaction').modal('show');
     }
-    function closeModalSplitTransaction() {
+    function closeModalSplitTransaction(){
         $('#modalSplitTransaction').modal('hide');
     }
 
-    // Validate input: chỉ cho phép số, và theo điều kiện type
-    $('#valueSplitTransaction').on('input', function () {
+        // Validate input: chỉ cho phép số, và theo điều kiện type
+    $('#valueSplitTransaction').on('input', function() {
 
 
         const numValue = parseFloat(value);
@@ -105,7 +104,7 @@
     });
 
     // Khi thay đổi type, reset giá trị phù hợp
-    $('input[name="typeDiscountSplit"]').on('change', function () {
+    $('input[name="typeDiscountSplit"]').on('change', function() {
         const selectedValue = $(this).val();
         const amountTotal = $('#amountTtoalSplit').text().replace(/,/g, '');
         if (selectedValue == 1) {
@@ -116,7 +115,7 @@
     });
 
     // Cập nhật hàm SplitTransaction để kiểm tra kỹ hơn
-    function SplitTransaction() {
+    function SplitTransaction(){
         const selectedValue = $('input[name="typeDiscountSplit"]:checked').val();
         let inputVal = $('#valueSplitTransaction').val();
         const amountTotal = parseFloat($('#amountTtoalSplit').text()) || 0;

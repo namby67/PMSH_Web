@@ -27,23 +27,26 @@
         margin: 0px 8px;
     }
 
-        .button_wrapper .fa-solid {
-            margin-right: 5px;
-        }
+    .button_wrapper .fa-solid {
+        margin-right: 5px;
+    }
 
     .selected {
-        background-color: #4CAF50; /* Màu xanh */
+        background-color: #4CAF50;
+        /* Màu xanh */
         color: white;
     }
 
     #gridContainer .dx-datagrid-rowsview .dx-selection {
-        background-color: #01579b !important; /* màu xanh ngọc */
-        color: white !important; /* chữ trắng */
+        background-color: #01579b !important;
+        /* màu xanh ngọc */
+        color: white !important;
+        /* chữ trắng */
     }
 
-        #gridContainer .dx-datagrid-rowsview .dx-selection * {
-            color: white !important;
-        }
+    #gridContainer .dx-datagrid-rowsview .dx-selection * {
+        color: white !important;
+    }
 
     .sticky-header label,
     .sticky-header .form-control-sm {
@@ -61,7 +64,7 @@
         margin-right: .5rem !important;
     }
 
-    #gridContainer .dx-datagrid-headers .dx-header-row > td {
+    #gridContainer .dx-datagrid-headers .dx-header-row>td {
         padding: 5px !important;
         height: 24px !important;
         font-size: 12px !important;
@@ -70,20 +73,22 @@
 
     .tomselect-custom {
         width: 70px;
-        min-height: 30px; /* hoặc tùy theo chiều cao bạn muốn */
+        min-height: 30px;
+        /* hoặc tùy theo chiều cao bạn muốn */
         font-size: 0.65rem;
     }
 
-        .tomselect-custom .ts-control {
-            padding-left: 8px !important; /* hoặc bất kỳ giá trị nào bạn muốn */
-        }
-
+    .tomselect-custom .ts-control {
+        padding-left: 8px !important;
+        /* hoặc bất kỳ giá trị nào bạn muốn */
+    }
 </style>
 <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
 <div class="text-center" id="pageTitle" style="font-size: 20px">Annual Room Occupancy</div>
 <div class="sticky-header bg-white p-2 shadow-sm z-3">
-    <div class="d-flex flex-wrap align-items-center gap-2 mb-1" style="border: 1px solid #ced4da; border-radius: 6px; padding: 8px;">
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-1"
+        style="border: 1px solid #ced4da; border-radius: 6px; padding: 8px;">
         <!-- From Date -->
         <div class="d-flex align-items-center me-3">
             <label class="me-2 mb-0">Month:</label>
@@ -101,24 +106,27 @@
             </select>
 
         </div>
-       
+
 
 
     </div>
     <div class="">
-        <button   id="btnPrint" class="mui-button mui-button-new"><i class="fa-solid fa-eye"></i>View</button>
-        <button   id="btnExportExcel" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Excel</button>
-        <button   id="btnExportPdf" class="mui-button mui-button-new" type="button"><i class="fas fa-eraser"></i> PDF</button>
+        <button id="btnPrint" class="mui-button mui-button-new"><i class="fa-solid fa-eye"></i>View</button>
+        <button id="btnExportExcel" class="mui-button mui-button-new" type="button"> <i
+                class="fa-solid fa-file-excel"></i> Excel</button>
+        <button id="btnExportPdf" class="mui-button mui-button-new" type="button"><i class="fas fa-eraser"></i>
+            PDF</button>
     </div>
 </div>
 
 <div class="mui-card">
-@*     <div style="font-size: 20px;" class="mt-1" id="reportTitle"></div> *@
+    @*     <div style="font-size: 20px;" class="mt-1" id="reportTitle"></div> *@
     <div id="gridWrapper" class="mt-2" style="max-height: 500px;">
-        <div class="gridContainer mt-2"  id="gridContainer"></div>
+        <div class="gridContainer mt-2" id="gridContainer"></div>
     </div>
 </div>
-<div id="loadingSpinner" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
+<div id="loadingSpinner"
+    style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
     <i class="fa-solid fa-spinner fa-spin"></i>
 </div>
 <script>
@@ -131,7 +139,7 @@
     }
 
     $(document).ready(function () {
-    $("#reportTitle").text('@ViewBag.ReportTitle');
+        $("#reportTitle").text('@ViewBag.ReportTitle');
         const today = new Date();
 
         const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
@@ -145,32 +153,32 @@
 
 
     });
-     function initializeTomSelects() {
+    function initializeTomSelects() {
         const selectors = ["#zone"];
 
-            for (const id of selectors) {
-                const el = document.querySelector(id);
-                if (!el) continue;
+        for (const id of selectors) {
+            const el = document.querySelector(id);
+            if (!el) continue;
 
-                // Nếu đã khởi tạo rồi thì destroy
-                if (el.tomselect) el.tomselect.destroy();
+            // Nếu đã khởi tạo rồi thì destroy
+            if (el.tomselect) el.tomselect.destroy();
 
-                const ts = new TomSelect(el, {
-                    plugins: ['remove_button'],
-                    create: false,
-                    maxItems: null,
-                    allowEmptyOption: true,
-                    placeholder: '',
-                    persist: false,
-                    render: {
-                        option: function (data, escape) {
-                            return `<div>${escape(data.text)}</div>`;
-                        }
+            const ts = new TomSelect(el, {
+                plugins: ['remove_button'],
+                create: false,
+                maxItems: null,
+                allowEmptyOption: true,
+                placeholder: '',
+                persist: false,
+                render: {
+                    option: function (data, escape) {
+                        return `<div>${escape(data.text)}</div>`;
                     }
-                });
+                }
+            });
 
-            }
         }
+    }
 
     $(document).off("click", "#btnPrint").on("click", "#btnPrint", function () {
         $("#loadingSpinner").show();
@@ -179,19 +187,19 @@
             type: 'GET',
             data: {
                 fromDate: $("#fromDate").val(),
-                zone: $("#zone").val().map(r => r.replace( "''")).join("','") + "",
+                zone: $("#zone").val().map(r => r.replace("''")).join("','") + "",
             },
             traditional: true,
-              crossDomain: false,
-                headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
             success: function (result) {
                 // $("#reportViewerContainer").html(result);
                 // $("#loadingSpinner").hide();
-                     console.log(result);
+                console.log(result);
 
-           initializeAnnualRoomOccupancyDataGrid(result);
+                initializeAnnualRoomOccupancyDataGrid(result);
 
-                    $("#loadingSpinner").hide();
+                $("#loadingSpinner").hide();
             },
             error: function () {
                 alert("Không thể tải báo cáo.");
@@ -199,7 +207,7 @@
             }
         });
     });
-        function initializeAnnualRoomOccupancyDataGrid(data) {
+    function initializeAnnualRoomOccupancyDataGrid(data) {
         const columnWidth = 180;
 
         const weekdayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -237,7 +245,7 @@
                 dataField: fieldName,
                 caption: caption,
                 width: columnWidth - 90,
-                    encodeHtml: false,
+                encodeHtml: false,
                 calculateCellValue: function (rowData) {
                     const day = parseInt(rowData.day);
                     if (!day || isNaN(day)) return "";
@@ -246,9 +254,9 @@
                     const weekday = weekdayNames[date.getDay()];
                     const value = rowData[fieldName];
 
-                     if (value === undefined || value === null || value === "") return "";
+                    if (value === undefined || value === null || value === "") return "";
 
-                return `<div style="display: flex; justify-content: space-between;">
+                    return `<div style="display: flex; justify-content: space-between;">
                             <span>${weekday}</span>
                             <span>${value}</span>
                         </div>`;
@@ -279,11 +287,11 @@
         }
 
         $("#gridContainer").dxDataGrid({
-    dataSource: data,         height: 500, allowColumnResizing: true,
+            dataSource: data, height: 500, allowColumnResizing: true,
             columns: columns,
             paging: { pageSize: 25 },
             scrolling: {
-                
+
                 useNative: true,
                 showScrollbar: "always"
             },
@@ -316,19 +324,19 @@
 
 
 
-     $("#btnExportExcel").click(function () {
-               const grid = $("#gridContainer").dxDataGrid("instance"); var selectedReport2 = '@ViewBag.ReportTitle';
+    $("#btnExportExcel").click(function () {
+        const grid = $("#gridContainer").dxDataGrid("instance"); var selectedReport2 = '@ViewBag.ReportTitle';
         var selectedReport = '@ViewBag.ReportTitle';
         if (!selectedReport) {
             alert("Vui lòng chọn báo cáo trước khi xuất Excel.");
             return;
         }
 
-        const workbook = new ExcelJS.Workbook();const companyName = localStorage.getItem("CompanyName") || "Tên công ty chưa xác định";
+        const workbook = new ExcelJS.Workbook(); const companyName = localStorage.getItem("CompanyName") || "Tên công ty chưa xác định";
         const worksheet = workbook.addWorksheet("Sheet 1");
 
         // === Tạo header công ty (dòng 1) ===
-       worksheet.addRow([companyName]);
+        worksheet.addRow([companyName]);
         worksheet.mergeCells('A1:E1');
         worksheet.getRow(1).font = { bold: true };
         worksheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'left' };
@@ -377,46 +385,46 @@
 
 
     // Nút xuất PDF
-          $("#btnExportPdf").click(function () {
-         const grid = $("#gridContainer").dxDataGrid("instance");
+    $("#btnExportPdf").click(function () {
+        const grid = $("#gridContainer").dxDataGrid("instance");
 
-         // Lấy đối tượng jsPDF từ window
-         const { jsPDF } = window.jspdf;
-         const doc = new jsPDF({ orientation: "landscape", unit: "pt", format: "A4" });
+        // Lấy đối tượng jsPDF từ window
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({ orientation: "landscape", unit: "pt", format: "A4" });
 
-         const selectedReport = '@ViewBag.ReportTitle';
-         const companyName = localStorage.getItem("CompanyName") || "Tên công ty chưa xác định";
+        const selectedReport = '@ViewBag.ReportTitle';
+        const companyName = localStorage.getItem("CompanyName") || "Tên công ty chưa xác định";
 
-         grid.getDataSource().load().then(data => {
-             const columns = grid.getVisibleColumns();
+        grid.getDataSource().load().then(data => {
+            const columns = grid.getVisibleColumns();
 
-             const head = [columns.map(col => col.caption)];
-             const body = data.map(row =>
-                 columns.map(col =>
-                     col.calculateCellValue ? col.calculateCellValue(row) : row[col.dataField]
-                 )
-             );
+            const head = [columns.map(col => col.caption)];
+            const body = data.map(row =>
+                columns.map(col =>
+                    col.calculateCellValue ? col.calculateCellValue(row) : row[col.dataField]
+                )
+            );
 
-             doc.setFontSize(14);
-             doc.setFont("Helvetica", "bold");
-             doc.text(companyName, doc.internal.pageSize.getWidth() / 2, 40, { align: "center" });
+            doc.setFontSize(14);
+            doc.setFont("Helvetica", "bold");
+            doc.text(companyName, doc.internal.pageSize.getWidth() / 2, 40, { align: "center" });
 
-             doc.setFontSize(12);
-             doc.setFont("Helvetica", "normal");
-             doc.text(selectedReport, doc.internal.pageSize.getWidth() / 2, 60, { align: "center" });
+            doc.setFontSize(12);
+            doc.setFont("Helvetica", "normal");
+            doc.text(selectedReport, doc.internal.pageSize.getWidth() / 2, 60, { align: "center" });
 
-             // AutoTable
-             doc.autoTable({
-                 startY: 80,
-                 head: head,
-                 body: body,
-                  styles: { fontSize: 9, cellPadding: 4 , lineWidth: 0.5, lineColor: [0, 0, 0]    },
-                 headStyles: { fillColor: [41, 128, 185], textColor: 255, fontStyle: 'bold' },
-                 alternateRowStyles: { fillColor: [240, 240, 240] },
-                 margin: { left: 20, right: 20 }
-             });
+            // AutoTable
+            doc.autoTable({
+                startY: 80,
+                head: head,
+                body: body,
+                styles: { fontSize: 9, cellPadding: 4, lineWidth: 0.5, lineColor: [0, 0, 0] },
+                headStyles: { fillColor: [41, 128, 185], textColor: 255, fontStyle: 'bold' },
+                alternateRowStyles: { fillColor: [240, 240, 240] },
+                margin: { left: 20, right: 20 }
+            });
 
-             doc.save(selectedReport + ".pdf");
-         });
-     });
+            doc.save(selectedReport + ".pdf");
+        });
+    });
 </script>

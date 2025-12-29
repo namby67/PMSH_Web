@@ -17,41 +17,41 @@
                     <input type="text" id="roomEditPosting" readonly>
                 </div>
                 <div class="col-6">
-                    <label for="name">Name</label>
+                    <label for="name" >Name</label>
                     <input type="text" id="nameEditPosting" readonly>
                 </div>
                 <hr class="hr">
                 <div class="col-md-12 row">
                     <label for="code" class="col-md-1">Code</label>
-                    <input type="text" id="codeEditPosting" readonly class="col-md-2">
+                    <input type="text"  id="codeEditPosting" readonly class="col-md-2">
                     <span class="input-span col-md-8" id="nameTransactionEditPosting"></span>
                 </div>
                 <hr class="hr">
                 <div class="col-md-3">
-                    <label>Price</label>
-                    <input type="text" id="priceEditPosting" style="text-align:right">
+                        <label>Price</label>
+                        <input type="text" id="priceEditPosting" style="text-align:right">
                 </div>
                 <div class="col-md-3">
-                    <label>Quantity</label>
-                    <input type="number" id="quantityEditPosting" style="text-align:right">
+                        <label >Quantity</label>
+                        <input type="number" id="quantityEditPosting" style="text-align:right">
                 </div>
                 <div class="col-md-3">
-                    <label>Amount</label>
-                    <input type="text" id="amountEditPosing" readonly style="text-align:right">
+                        <label >Amount</label>
+                        <input type="text"  id="amountEditPosing" readonly style="text-align:right">
                 </div>
 
                 <div class="col-md-3">
-                    <label>Currency</label>
-                    <input type="text" id="currency" value="VND">
+                        <label >Currency</label>
+                        <input type="text" id="currency" value="VND">
                 </div>
                 <hr class="hr">
                 <div class="col-md-4">
                     <label class="form-label">Crashier</label>
-                    <input type="text" id="crashierEditPosting" readonly>
+                    <input type="text"  id="crashierEditPosting" readonly>
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Win.No</label>
-                    <input type="text" id="winNoEditPosting" value="1" readonly style="text-align:right">
+                    <input type="text"  id="winNoEditPosting" value="1" readonly style="text-align:right">
                 </div>
                 <div class="col-md-4">
                     <label for="postingDate" class="form-label">Posting Date</label>
@@ -59,20 +59,20 @@
                 </div>
                 <hr class="hr">
                 <div class="col-md-3">
-                    <label>Article Code</label>
-                    <input type="text" id="articleCodeEditPosting" readonly>
+                    <label  >Article Code</label>
+                    <input type="text"  id="articleCodeEditPosting" readonly>
                 </div>
                 <div class="col-md-3">
-                    <label>Supplement</label>
-                    <input type="text" id="supplementEditPosting">
+                    <label  >Supplement</label>
+                    <input type="text"  id="supplementEditPosting">
                 </div>
                 <div class="col-md-6 row">
-                    <label>Reference</label>
-                    <input type="text" id="referenceEditPosting">
+                    <label  >Reference</label>
+                    <input type="text"  id="referenceEditPosting">
                 </div>
                 <div class="col-md-2">
-                    <label>Check No</label>
-                    <input type="text" id="checkNoEditPosting" readonly>
+                    <label  >Check No</label>
+                    <input type="text"  id="checkNoEditPosting" readonly>
                 </div>
             </div>
         </div>
@@ -80,14 +80,14 @@
 </div>
 <script>
     var checkEditOpen = false;
-    function openModalEditPosting() {
+    function openModalEditPosting(){
         getFolioDetailMaster();
-        if (checkEditOpen == true) {
+        if(checkEditOpen == true){
             $('#modalEditPosting').modal('show');
 
         }
     }
-    function closeModalEditPosting() {
+    function closeModalEditPosting(){
         $('#modalEditPosting').modal('hide');
     }
 
@@ -95,7 +95,7 @@
         var grid = $("#gridContainerBilling").dxDataGrid("instance");
         var selectedRows = grid.getSelectedRowsData();
         var selectedIds = selectedRows.map(row => row.transactionNo);
-        if (selectedIds.length == 0) {
+        if(selectedIds.length == 0){
             checkEditOpen = false;
             showToast('Error', 'Please choose service', false);
             return;
@@ -181,17 +181,17 @@
             }
         });
     }
-    $("#priceEditPosting").blur(function () {
+    $("#priceEditPosting").blur(function() {
         var price = parseFloat($('#priceEditPosting').val().replace(/,/g, ''));
         calculateNetPostEdit($('#codeEditPosting').val(), price);
     });
 
-    $("#amountEditPosing").blur(function () {
+    $("#amountEditPosing").blur(function() {
         var price = parseFloat($('#amountEditPosing').val().replace(/,/g, ''));
         calculateNetPostEdit($('#codeEditPosting').val(), price / $('#quantityEditPosting').val());
     });
 
-    $("#quantityPostBilling").blur(function () {
+    $("#quantityPostBilling").blur(function() {
         var price = parseFloat($('#amountEditPosing').val().replace(/,/g, ''));
         $('#amountEditPosing').val((price * $("#quantityEditPosting").val()).toLocaleString('en-US'));
     });
@@ -204,8 +204,8 @@
         formData.append('transactionNo', transactionNoPost);
         formData.append('userID', userID);
         formData.append('quantity', $('#quantityEditPosting').val());
-        formData.append('price', $('#priceEditPosting').val());
-        formData.append('amount', $('#amountEditPosing').val());
+        formData.append('price',  $('#priceEditPosting').val());
+        formData.append('amount',  $('#amountEditPosing').val());
         $.ajax({
             url: '/Billing/EditPosting',
             type: 'POST',
@@ -221,7 +221,7 @@
                     showToast('Error', data.msg, false);
                 }
             },
-            error: function (xhr, statusText, err) { }
+            error: function (xhr, statusText, err) {}
         });
     }
 </script>

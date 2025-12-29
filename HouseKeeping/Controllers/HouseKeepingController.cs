@@ -1601,7 +1601,6 @@ namespace HouseKeeping.Controllers
         }
 
 
-
         #endregion
 
         #region RoomPlan
@@ -3164,7 +3163,6 @@ namespace HouseKeeping.Controllers
             _SectionID = _ListSection.Split(',');
         }
 
-
         private string FormatIdList(string ids)
         {
             if (string.IsNullOrWhiteSpace(ids))
@@ -3175,7 +3173,6 @@ namespace HouseKeeping.Controllers
 
             return string.Join("','", parts);
         }
-
 
         [HttpGet]
         public IActionResult ViewTaskAddUserGrid()
@@ -3207,7 +3204,6 @@ namespace HouseKeeping.Controllers
                 return Json(ex.Message);
             }
         }
-
 
 
 
@@ -4092,7 +4088,6 @@ namespace HouseKeeping.Controllers
             return paraName;
         }
 
-
         public static void InsertHistory(string roomNo, string oldValue, string newValue, DateTime systemDate, string computerName, string action, int objectID, string tableName, string loginName)
         {
             RoomStatusHistoryModel modelH = new RoomStatusHistoryModel();
@@ -4320,7 +4315,6 @@ namespace HouseKeeping.Controllers
         public ActionResult UpdateRoomStatus()
         {
             ProcessTransactions pt = new ProcessTransactions();
-
             try
             {
                 pt.OpenConnection();

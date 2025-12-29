@@ -2,6 +2,7 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
+<<<<<<< HEAD
 
 // Hàm gọi để lấy business-date
 
@@ -53,3 +54,5 @@ function applyValidationErrors(errors, formSelector) {
 $(document).ready(function () {
   getBusinessDate();
 });
+=======
+>>>>>>> origin/master

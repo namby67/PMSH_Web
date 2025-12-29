@@ -1,5 +1,4 @@
-﻿<div class="modal fade modal-xl" id="modalDeposit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+﻿<div class="modal fade modal-xl" id="modalDeposit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -31,8 +30,7 @@
     </div>
 </div>
 <!-- Modal request-->
-<div class="modal fade modal" id="modalDepositRequest" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade modal" id="modalDepositRequest" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
 
@@ -48,7 +46,7 @@
 
                 <div class="mt-2 row">
                     <div class="col-md-6 form-group-new-reservation row">
-                        <label>Type</label>
+                        <label >Type</label>
                         <select id="typeDepositRequest">
                             <option value="0">Room</option>
                             <option value="1">Package</option>
@@ -57,37 +55,37 @@
                         </select>
                     </div>
                     <div class="col-md-6 form-group-new-reservation row">
-                        <label>Deposit Rule</label>
-                        <select id="ruleDepositRequest">
+                        <label >Deposit Rule</label>
+                        <select  id="ruleDepositRequest">
 
                         </select>
                     </div>
                     <div class="col-md-6 form-group-new-reservation row">
-
-                        <label>Description</label>
+                        
+                        <label >Description</label>
                         <input type="text" id="descriptionDepositRequest">
                     </div>
                     <div class="col-md-6 form-group-new-reservation row">
-                        <label>Percentage</label>
+                        <label >Percentage</label>
                         <input type="text" id="percentageDepositRequest" value="0">
                     </div>
                     <div class="col-md-6 form-group-new-reservation row">
-                        <label>Deposit Amount</label>
-                        <input type="text" id="amountDepositRequest">
+                        <label >Deposit Amount</label>
+                        <input type="text"  id="amountDepositRequest">
                     </div>
                     <div class="col-md-6 form-group-new-reservation row">
-                        <label>Due Date</label>
+                        <label >Due Date</label>
                         <input type="date" id="dueDateDepositRequest">
                     </div>
                     <div class="col-md-6 form-group-new-reservation row">
-                        <label>Currency</label>
-                        <select id="currencyDepositRequest">
+                        <label >Currency</label>
+                        <select  id="currencyDepositRequest">
                             <option value="VND">VND</option>
 
                         </select>
                     </div>
                     <div class="col-md-6 form-group-new-reservation row">
-                        <label>Comment</label>
+                        <label >Comment</label>
                         <input type="text" id="commentDepositRequest">
                     </div>
                 </div>
@@ -97,8 +95,7 @@
 </div>
 
 <!-- Modal payment-->
-<div class="modal fade modal" id="modalDepositPayment" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade modal" id="modalDepositPayment" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
 
@@ -112,42 +109,42 @@
                     <button class="submit-button-clear-reservation" onclick="closeModalDepositPayment();">Close</button>
                 </div>
 
-                <div class="mt-2 row" style="justify-content:space-between">
+                <div class="mt-2 row"  style="justify-content:space-between">
                     <div class="col-md-5 form-group-new-reservation row">
-                        <label>Trans Type</label>
+                        <label  >Trans Type</label>
                         <select id="transactionDepositPayment">
 
                         </select>
                     </div>
                     <div class="col-md-5 form-group-new-reservation row">
-                        <label>Currency</label>
-                        <select id="currencyDepositPayment">
+                        <label   >Currency</label>
+                        <select   id="currencyDepositPayment">
                             <option value="VND">VND</option>
                         </select>
                     </div>
                     <div class="col-md-5 form-group-new-reservation row">
-                        <label>Amount</label>
-                        <input id="amountDepositPayment" style="text-align:right" value="0">
+                        <label >Amount</label>
+                        <input  id="amountDepositPayment" style="text-align:right" value="0">
                     </div>
                     <div class="col-md-5 form-group-new-reservation row">
-                        <label>Reference</label>
-                        <input id="referenceDepositPayment">
+                        <label >Reference</label>
+                        <input  id="referenceDepositPayment">
                     </div>
                     <div class="col-md-5 form-group-new-reservation row">
-                        <label>Supplement</label>
-                        <input id="supplementDepositPayment">
+                        <label >Supplement</label>
+                        <input  id="supplementDepositPayment">
                     </div>
                     <div class="col-md-5 form-group-new-reservation row">
-                        <label>Credit Card No</label>
-                        <input id="creditCardNoDepositPayment">
+                        <label >Credit Card No</label>
+                        <input  id="creditCardNoDepositPayment">
                     </div>
                     <div class="col-md-5 form-group-new-reservation row">
-                        <label>Exp Date</label>
-                        <input type="date" id="dateDepositPayment">
+                        <label >Exp Date</label>
+                        <input type="date"  id="dateDepositPayment">
                     </div>
                     <div class="col-md-5 form-group-new-reservation row">
-                        <label>Reservation Type</label>
-                        <select id="reservationTypeDepositPayment" asp-items="ViewBag.cboReservationType">
+                        <label >Reservation Type</label>
+                        <select  id="reservationTypeDepositPayment" asp-items="ViewBag.cboReservationType">
                         </select>
                     </div>
                 </div>
@@ -156,7 +153,7 @@
     </div>
 </div>
 <script>
-    function openModalDeposit() {
+    function openModalDeposit(){
         if (idReservation === 0) {
             showToast('Error', 'Please choose booking', false);
             return;
@@ -164,16 +161,16 @@
         GetDepositRequestByReservationID(idReservation);
         localStorage.setItem("currentFromID", "modalDeposit");
         const crashierLogin = localStorage.getItem("crashierLogin");
-        if (crashierLogin == "NotYet") {
+        if(crashierLogin == "NotYet"){
             openModalShilftLogin();
 
         }
-        else {
+        else{
             $('#modalDeposit').modal('show');
         }
     }
-    function closeModalDeposit() {
-        clearDepositRequest();
+    function closeModalDeposit(){
+        clearDepositRequest(); 
         $('#modalDeposit').modal('hide');
     }
     function GetDepositRequestByReservationID(id) {
@@ -201,17 +198,17 @@
         var columnWidth = 150;
         $("#gridContainerDepositRequest").dxDataGrid({
 
-            dataSource: data, allowColumnResizing: true,
+        dataSource: data, allowColumnResizing: true,
             columns: [
-                { dataField: "rsqID", caption: "ID", visible: false },
-                { dataField: "type", caption: "Type" },
-                { dataField: "request", caption: "Request" },
-                { dataField: "dueDate", caption: "Due Date" },
-                { dataField: "paidAmount", caption: "Paid", format: "#,##0", dataType: "number" },
-                { dataField: "dueAmount", caption: "Due", format: "#,##0", dataType: "number" },
-                { dataField: "currency", caption: "Currency" },
-                { dataField: "comment", caption: "Description" },
-                { dataField: "ruleCode", caption: "Rule Code" },
+                { dataField: "rsqID", caption: "ID",  visible: false},
+                { dataField: "type", caption: "Type"},
+                { dataField: "request", caption: "Request"},
+                { dataField: "dueDate", caption: "Due Date"},
+                { dataField: "paidAmount", caption: "Paid", format: "#,##0", dataType: "number"},
+                { dataField: "dueAmount", caption: "Due", format: "#,##0", dataType: "number"},
+                { dataField: "currency", caption: "Currency"},
+                { dataField: "comment", caption: "Description"},
+                { dataField: "ruleCode", caption: "Rule Code"},
 
             ],
             paging: { pageSize: 5 },
@@ -226,13 +223,13 @@
                 showNavigationButtons: true,
             },
             filterRow: {
-                visible: true,
-                applyFilter: "auto"
+                    visible: true,
+                    applyFilter: "auto"
             },
             selection: {
                 mode: "single"
             },
-            onRowClick: function (e) {
+            onRowClick: function(e) {
             }
         });
     }
@@ -241,16 +238,16 @@
         var columnWidth = 150;
         $("#gridContainerDepositPayment").dxDataGrid({
 
-            dataSource: data, allowColumnResizing: true,
+        dataSource: data, allowColumnResizing: true,
             columns: [
-                { dataField: "paymentID", caption: "ID", visible: false },
-                { dataField: "transactionDate", caption: "Date" },
-                { dataField: "description", caption: "Payment Method" },
-                { dataField: "amount", caption: "Amount", format: "#,##0", dataType: "number" },
-                { dataField: "reference", caption: "Reference" },
-                { dataField: "receiptNo", caption: "Receipt.No" },
-                { dataField: "createBy", caption: "Created By" },
-                { dataField: "createDate", caption: "Created Date" },
+                { dataField: "paymentID", caption: "ID",  visible: false},
+                { dataField: "transactionDate", caption: "Date"},
+                { dataField: "description", caption: "Payment Method"},
+                { dataField: "amount", caption: "Amount", format: "#,##0", dataType: "number"},
+                { dataField: "reference", caption: "Reference"},
+                { dataField: "receiptNo", caption: "Receipt.No"},
+                { dataField: "createBy", caption: "Created By"},
+                { dataField: "createDate", caption: "Created Date"},
 
             ],
             paging: { pageSize: 5 },
@@ -265,8 +262,8 @@
                 showNavigationButtons: true,
             },
             filterRow: {
-                visible: true,
-                applyFilter: "auto"
+                    visible: true,
+                    applyFilter: "auto"
             },
             selection: {
                 mode: "single"
@@ -281,12 +278,12 @@
                     depoistPaymentID = items[0].paymentID;
                 }
             },
-            onRowClick: function (e) {
+            onRowClick: function(e) {
                 depoistPaymentID = e.data.paymentID;
             }
         });
     }
-    function openModalDepositRequest() {
+    function openModalDepositRequest(){
         $('#typeDepositRequest').prop('disabled', false);
         $('#ruleDepositRequest').prop('disabled', false);
         $('#descriptionDepositRequest').prop('disabled', true);
@@ -299,19 +296,19 @@
         getDepositRule();
         let formattedDate = arivalDate.split(" ")[0].split("/").reverse().join("-"); // Chuyển thành 2024-08-30
         $('#dueDateDepositRequest').val(formattedDate);
-        if (reservationStatus == 0 || reservationStatus == 5) {
+        if(reservationStatus == 0 || reservationStatus == 5){
             $('#modalDepositRequest').modal('show');
 
         }
-        else {
-            showToast("Error", "Please choose booking has status Reservation or Due In", false);
+        else{
+            showToast("Error","Please choose booking has status Reservation or Due In",false);
         }
     }
-    function closeDepositRequest() {
-        clearDepositRequest();
+    function closeDepositRequest(){
+        clearDepositRequest(); 
         $('#modalDepositRequest').modal('hide');
     }
-    function clearDepositRequest() {
+    function clearDepositRequest(){
         $('#typeDepositRequest').val(2);
         $('#ruleDepositRequest').val(0);
         $('#descriptionDepositRequest').val('');
@@ -341,8 +338,8 @@
             success: function (result) {
                 $('#ruleDepositRequest').empty();
                 var html = `<option value='0'></option>`;
-                if (result.length > 0) {
-                    for (var i = 0; i < result.length; i++) {
+                if(result.length > 0){
+                    for(var i=0;i<result.length;i++){
                         html += `<option value='${result[i].id}'>${result[i].code}</option>`
                     }
                 }
@@ -360,12 +357,12 @@
             url: '/Reservation/GetDepositRuleByID',
             type: 'get',
             dataType: 'json',
-            data: { id: id },
+            data:{id:id},
             crossDomain: false,
             headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
             success: function (result) {
                 $('#descriptionDepositRequest').val(result.description);
-                if (result.type == 0) {
+                if(result.type == 0){
                     $('#dueDateDepositRequest').prop('disabled', true);
                     $('#descriptionDepositRequest').prop('disabled', true);
                     $('#percentageDepositRequest').prop('disabled', true);
@@ -380,15 +377,15 @@
                     $('#dueDateDepositRequest').val(dueDate.toISOString().split('T')[0]); // Cập
                     $('#amountDepositRequest').val(result.amountValue);
                 }
-                else if (result.type == 1) {
+                else if(result.type == 1){
                     $('#percentageDepositRequest').prop('disabled', true);
                     $('#amountDepositRequest').prop('disabled', true);
-                    var rate = parseFloat(rateAmount) * parseFloat(result.amountValue) / 100;
+                    var rate = parseFloat(rateAmount) * parseFloat(result.amountValue)/100;
                     $('#amountDepositRequest').val(rate);
                     $('#dueDateDepositRequest').prop('disabled', true);
                     $('#descriptionDepositRequest').prop('disabled', true);
                 }
-                else {
+                else{
                     $('#percentageDepositRequest').prop('disabled', true);
                     $('#amountDepositRequest').prop('disabled', true);
                     var rate = parseFloat(rateAmount) * parseFloat(result.amountValue);
@@ -404,16 +401,16 @@
             }
         });
     }
-    $('#ruleDepositRequest').on('change', function () {
-        if (parseFloat($(this).val()) > 0) {
+    $('#ruleDepositRequest').on('change', function() {
+        if(parseFloat($(this).val()) > 0){
             getDepositRuleByID($(this).val());
 
         }
-        else {
+        else{
             $('#descriptionDepositRequest').val('0');
             $('#descriptionDepositRequest').prop('disabled', true);
-            $('#amountDepositRequest').prop('disabled', false);
-            $('#dueDateDepositRequest').prop('disabled', false);
+            $('#amountDepositRequest').prop('disabled', false); 
+            $('#dueDateDepositRequest').prop('disabled', false); 
 
         }
     });
@@ -423,15 +420,15 @@
         var formData = new FormData();
 
         formData.append('rsvID', idReservation);
-        formData.append('description', $('#descriptionDepositRequest').val());
+        formData.append('description',  $('#descriptionDepositRequest').val());
         formData.append('chargeType', $('#typeDepositRequest').val());
         formData.append('depositeRuleID', $('#ruleDepositRequest').val());
-        formData.append('dueDate', $('#dueDateDepositRequest').val());
+        formData.append('dueDate',  $('#dueDateDepositRequest').val());
         formData.append('amount', $('#amountDepositRequest').val());
         formData.append('curencyID', $('#currencyDepositRequest').val());
         formData.append('requestType', 1);
 
-        formData.append('userID', userID);
+        formData.append('userID',userID);
 
         $.ajax({
             url: '/Reservation/SaveDepositRequest',
@@ -455,27 +452,27 @@
         });
 
     }
-    function openModalDepositPayment() {
+    function openModalDepositPayment(){
         $('#referenceDepositPayment').val(`DEPOSIT - Conf.No: ${confirmationNo}`);
         getTransactionPayment();
         let formattedDate = arivalDate.split(" ")[0].split("/").reverse().join("-"); // Chuyển thành 2024-08-30
         $('#dateDepositPayment').val(formattedDate);
-        if (reservationStatus == 0 || reservationStatus == 5) {
+        if(reservationStatus == 0 || reservationStatus == 5){
             $('#modalDepositPayment').modal('show');
 
         }
-        else {
-            showToast("Error", "Please choose booking has status Reservation or Due In", false);
+        else{
+            showToast("Error","Please choose booking has status Reservation or Due In",false);
         }
     }
-    function closeModalDepositPayment() {
+    function closeModalDepositPayment(){
         let formattedDate = arivalDate.split(" ")[0].split("/").reverse().join("-"); // Chuyển thành 2024-08-30
         $('#dateDepositPayment').val(formattedDate);
         $('#modalDepositPayment').modal('hide');
         clearDepositPayment();
 
     }
-    function clearDepositPayment() {
+    function clearDepositPayment(){
         $('#transactionDepositPayment').val(0);
         $('#amountDepositPayment').val('');
         $('#referenceDepositPayment').val('');
@@ -484,7 +481,7 @@
         $('#reservationTypeDepositPayment').val(0);
 
     }
-    function getTransactionPayment() {
+    function getTransactionPayment(){
         $.ajax({
             url: '/Reservation/GetTransactionPayment',
             type: 'get',
@@ -495,8 +492,8 @@
             success: function (result) {
                 $('#transactionDepositPayment').empty();
                 var html = `<option value='0'></option>`;
-                if (result.length > 0) {
-                    for (var i = 0; i < result.length; i++) {
+                if(result.length > 0){
+                    for(var i=0;i<result.length;i++){
                         html += `<option value='${result[i].id}'>${result[i].description}</option>`
                     }
                 }
@@ -519,18 +516,18 @@
         var formData = new FormData();
 
         formData.append('rsvID', idReservation);
-        formData.append('dueDate', $('#dateDepositPayment').val());
-        formData.append('transCode', $('#transactionDepositPayment').val());
+        formData.append('dueDate',  $('#dateDepositPayment').val());
+        formData.append('transCode',  $('#transactionDepositPayment').val());
         formData.append('reference', $('#referenceDepositPayment').val());
         formData.append('supplement', $('#supplementDepositPayment').val());
         formData.append('creditCard', $('#creditCardNoDepositPayment').val());
         formData.append('amount', $('#amountDepositPayment').val());
         formData.append('curencyID', $('#currencyDepositPayment').val());
-        formData.append('reservationType', $('#reservationTypeDepositPayment').val());
-        formData.append('shiftID', shiftID);
+        formData.append('reservationType',  $('#reservationTypeDepositPayment').val());
+        formData.append('shiftID',  shiftID);
 
-        formData.append('userName', userName);
-        formData.append('userID', userID);
+        formData.append('userName',userName);
+        formData.append('userID',userID);
 
         $.ajax({
             url: '/Reservation/SaveDepositPayment',
@@ -563,13 +560,13 @@
             return;
         }
 
-        const userName = localStorage.getItem("shiftName");
+        const userName =localStorage.getItem("shiftName");
         $.ajax({
             url: '/Reservation/PrintReceipt',
             type: 'POST',
-            data: {
+            data:{
                 id: depoistPaymentID,
-                userName: userName
+                userName:userName
             },
             success: function (data) {
                 try {

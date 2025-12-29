@@ -1,4 +1,6 @@
-﻿<style>
+﻿
+<style>
+
     .folio-container {
 
         padding: 0;
@@ -22,7 +24,8 @@
         cursor: pointer;
     }
 
-    .add-icon:hover {}
+        .add-icon:hover {
+        }
 
     .folio-list {
         list-style: none;
@@ -53,18 +56,18 @@
         text-align: center;
     }
 
-    .folio-item:hover {
-        background-color: #0055b8;
-        border-color: #003087;
-        color: white;
-    }
+        .folio-item:hover {
+            background-color: #0055b8;
+            border-color: #003087;
+            color: white;
+        }
 
-    .folio-item.active {
-        background-color: #0055b8;
-        border-color: #003087;
-        color: white;
-        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
-    }
+        .folio-item.active {
+            background-color: #0055b8;
+            border-color: #003087;
+            color: white;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
 
     .delete-icon {
         cursor: pointer;
@@ -72,28 +75,25 @@
         font-size: 12px;
     }
 
-    .delete-icon:hover {
-        color: #ff0000;
-    }
+        .delete-icon:hover {
+            color: #ff0000;
+        }
 
     .overlay-menu {
         position: absolute;
         right: 25px;
-        top: 180px;
-        /* Điều chỉnh để menu xuất hiện dưới tiêu đề */
+        top: 180px; /* Điều chỉnh để menu xuất hiện dưới tiêu đề */
         background-color: #fff;
         border: 1px solid #ccc;
         padding: 10px;
-        z-index: 1000;
-        /* Đảm bảo menu nằm trên bảng */
+        z-index: 1000; /* Đảm bảo menu nằm trên bảng */
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         border-radius: 5px;
-        width: 200px
+        width:200px
     }
 </style>
 <!-- Modal billimg-->
-<div class="modal fade modal-xl" id="modalBilling" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabelBilling" aria-hidden="true">
+<div class="modal fade modal-xl" id="modalBilling" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabelBilling" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen">
         <div class="modal-content" style="border: 1px solid #bcbcbc">
             <div class="modal-header">
@@ -104,8 +104,7 @@
                 @* <div class="mb-2">
                     <button class="mui-button mui-button-search" >Post</button>
                 </div> *@
-                <div class="functions-pane mb-2 row"
-                    style="background-color: var(--accent-color);border-radius: 8px; border: 1px solid #e5e7eb;box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);padding:0px">
+                <div class="functions-pane mb-2 row" style="background-color: var(--accent-color);border-radius: 8px; border: 1px solid #e5e7eb;box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);padding:0px">
                     <div class="function-menu col-md-10">
                         <div class="dropdown">
 
@@ -122,8 +121,7 @@
                             <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">Preview && Print</a>
                             <div class="dropdown-menu-custom">
                                 <a href="#" onclick="PrintAndPreview(1);">Style: Billing Information</a>
-                                <a href="#" onclick="PrintAndPreview(2);">Style: Billing Information (selected
-                                    transaction)</></a>
+                                <a href="#" onclick="PrintAndPreview(2);">Style: Billing Information (selected transaction)</></a>
                             </div>
                         </div>
                         <div class="dropdown">
@@ -147,10 +145,10 @@
                     </div>
                 </div>
 
-                <div class="mui-card">
+                <div class="mui-card" >
 
                     <div class="col-md-12 row ">
-
+    
                         <label class="form-label col-md-4">RSV Status: <span id="rsvStatusBilling"></span></label>
                         <label class="form-label col-md-4">Conf.No: <span id="conNoBilling"></span></label>
                         <label class="form-label col-md-4">Group: <span id="groupBilling"></span></label>
@@ -159,7 +157,7 @@
                         <label class="form-label col-md-4">Departure: <span id="departureBilling"></span></label>
                         <label class="form-label col-md-4">Balance: <span id="balanceBilling"></span></label>
                         <label class="form-label col-md-4">Total: <span id="totalBilling"></span></label>
-
+  
                     </div>
                 </div>
 
@@ -185,8 +183,7 @@
                                 <!-- Thêm nút toggle -->
                             </div>
                             <!-- Menu chức năng với lớp overlay -->
-                            <div class="function-menu col-md-2 overlay-menu mt-2" id="functionMenu"
-                                style="display: none;">
+                            <div class="function-menu col-md-2 overlay-menu mt-2" id="functionMenu" style="display: none;">
                                 <div class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">Lock Folio</a>
                                     <div class="dropdown-menu-custom">
@@ -220,7 +217,7 @@
                                 <a href="#" onclick="openModalSelectOption();">Option</a>
                             </div>
                         </div>
-                        <div class="mui-card mt-2">
+                        <div class="mui-card mt-2" >
                             <div id="gridContainerBilling" class="mt-2 gridContainer"></div>
                         </div>
                     </div>
@@ -232,8 +229,7 @@
 </div>
 
 <!-- Modal confirm delete transaction-->
-<div class="modal fade modal" id="modalConfirmDeleteTransaction" data-bs-backdrop="static" data-bs-keyboard="false"
-    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade modal" id="modalConfirmDeleteTransaction" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
 
@@ -244,12 +240,11 @@
             <div class="modal-body">
                 <div>
                     <button class="submit-button-clear-reservation" onclick="confirmDelete();"> OK</button>
-                    <button class="submit-button-clear-reservation"
-                        onclick="closeModalConfirmTransaction();">Close</button>
+                    <button class="submit-button-clear-reservation" onclick="closeModalConfirmTransaction();">Close</button>
                 </div>
                 <div class="row mt-2">
-                    <label>Reason</label>
-                    <select id="codeDeletionReason"></select>
+                    <label >Reason</label>
+                    <select id="codeDeletionReason" ></select>
                 </div>
                 <div class="mt-2">
                     <textarea class="form-control" id="descriptionDeletionReason" rows="3"></textarea>
@@ -271,27 +266,27 @@
 @await Html.PartialAsync("Billing/SelectOption")
 
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         // Gắn sự kiện cho nút toggle
-        $("#toggleFunctionMenu").on("click", function () {
+        $("#toggleFunctionMenu").on("click", function() {
             $("#functionMenu").toggle();
         });
         getDeletionReason();
-
+          
     });
-
+  
     var folioPosting = 1;
     var transactionNoPost = "0";
     var totalAmountBilling = 0;
 
-    function openBilling0() {
+    function openBilling0(){
 
         searchFolioDetail(0);
     }
-    function openBilling1() {
+    function openBilling1(){
         searchFolioDetail(1);
     }
-    function openBilling2() {
+     function openBilling2(){
         searchFolioDetail(0);
     }
     function searchFolioDetail(type) {
@@ -299,7 +294,7 @@
             url: '/Reservation/GetFolioDetailByFolioID',
             type: 'get',
             dataType: 'json',
-            data: {
+            data:{
                 mode: type,
                 folioNo: folioNoID
             },
@@ -320,7 +315,7 @@
     invoiceNoPosting = 0;
     var listFolioNoID = [];
     function getFolioNo() {
-        $('#infoBillingName').text('[1]  ' + lastname + '(' + idReservation + ')');
+        $('#infoBillingName').text('[1]  ' +  lastname + '(' + idReservation + ')');
 
         $.ajax({
             url: '/Billing/GetFolioNo',
@@ -338,15 +333,15 @@
                 $('#listTransferToWindow').empty();
                 var html = '';
                 var htmlWindow = '';
-                if (result.length > 0) {
+                if(result.length > 0){
                     html = `<li class="folio-row">
                                 ${result[0].status ? '<i class="fas fa-lock lock-icon"></i>' : ''}
                                <div class="folio-item active" onclick="filterByFolioNo(${result[0].id},0)">${result[0].folioNo}</div>
                                <i class="fas fa-trash delete-icon ${result[0].status ? 'disabled' : ''}" ${result[0].status ? '' : `onclick="deleteFolioNo(${result[0].id})"`}></i>
                             </li>`;
                     listFolioNoID.push(result[0].id);
-                    for (var i = 0; i < result.length; i++) {
-                        htmlWindow += `<a href="#" onclick="transferToWindow(${result[i].id});">${i + 1}</a>`;
+                    for(var i = 0; i < result.length; i++){
+                        htmlWindow += `<a href="#" onclick="transferToWindow(${result[i].id});">${i+1}</a>`;
                         if (i == 0) continue;
                         html += `<li class="folio-row">
                                 ${result[i].status ? '<i class="fas fa-lock lock-icon"></i>' : ''}
@@ -390,14 +385,14 @@
                     width: 50,
                     allowFiltering: false,
                     allowSorting: false,
-                    headerCellTemplate: function () { return $("<div>"); }
+                    headerCellTemplate: function() { return $("<div>"); }
                 },
                 { dataField: "id", caption: "ID", visible: false },
                 {
                     dataField: 'date',
                     caption: 'Date',
                     visible: true,
-                    customizeText: function (cellInfo) {
+                    customizeText: function(cellInfo) {
                         return cellInfo.value ? cellInfo.value.split(" ")[0] : '';
                     }
                 },
@@ -414,7 +409,7 @@
                         thousandsSeparator: ".",
                         // decimalSeparator không cần nữa vì không có thập phân
                     },
-                    cellTemplate: function (container, options) {
+                    cellTemplate: function(container, options) {
                         const value = options.value;
                         if (value == null || value === '') {
                             container.text('0');
@@ -457,7 +452,7 @@
                 mode: "multiple",
                 showCheckBoxesMode: "always"
             },
-            onRowClick: function (e) {
+            onRowClick: function(e) {
 
                 // Cập nhật các biến toàn cục
                 invoiceNoPosting = e.data.invoiceNo;
@@ -470,7 +465,7 @@
                 const grid = $("#gridContainerBilling").dxDataGrid("instance");
                 grid.selectRows([e.key], false);
             },
-            onContentReady: function (e) {
+            onContentReady: function(e) {
                 // Tìm các dòng có code trùng với selectedCodesFromResult
                 const keysToSelect = data
                     .filter(item => selectedCodesFromResult.includes(item.code))
@@ -498,33 +493,33 @@
             $("#functionMenu").hide();
         }
     }
-    $("#deleteTransactionBilling").on("click", function () {
+    $("#deleteTransactionBilling").on("click", function() {
         var grid = $("#gridContainerBilling").dxDataGrid("instance");
 
         var selectedRows = grid.getSelectedRowsData();
 
         var selectedIds = selectedRows.map(row => row.id);
-        if (selectedIds.length == 0) {
+        if(selectedIds.length == 0){
             showToast('Error', "Please choose at least 1 Transaction", false);
             return;
-        }
+         }
         localStorage.setItem("currentFromID", "modalConfirmDeleteTransaction");
         const crashierLogin = localStorage.getItem("crashierLogin");
-        if (crashierLogin == "NotYet") {
+        if(crashierLogin == "NotYet"){
             openModalShilftLogin();
         }
-        else {
+        else{
             openModalConfirmTransaction();
         }
 
     });
-    function confirmDelete() {
+    function confirmDelete(){
         var grid = $("#gridContainerBilling").dxDataGrid("instance");
 
         var selectedRows = grid.getSelectedRowsData();
 
         var selectedIds = selectedRows.map(row => row.id);
-        if ($('#codeDeletionReason').val() == "") {
+        if($('#codeDeletionReason').val() == ""){
             showToast('Error', "Please choose Reason", false);
             return;
         }
@@ -532,7 +527,7 @@
             url: '/Billing/DeleteTransaction',
             type: 'POST',
             data: {
-                folioDetailID: selectedIds,
+                folioDetailID :  selectedIds,
                 reasonCode: $('#codeDeletionReason').val(),
                 reasonText: $('#descriptionDeletionReason').val(),
             },
@@ -548,20 +543,20 @@
             error: function (xhr, statusText, err) { }
         });
     }
-    function openModalBilling() {
-        if (reservationStatus == 0 || reservationStatus == 3) {
+    function openModalBilling(){
+        if(reservationStatus == 0 || reservationStatus == 3){
             showToast('Error', 'Booking status must not be Reservation or Cancel', false);
             return;
         }
         getInforServices();
         getFolioNo();
         // searchFolioDetail(0);
-        // $('#infoBillingName').text('[1]  ' +  lastname + '(' + idReservation + ')');
+                // $('#infoBillingName').text('[1]  ' +  lastname + '(' + idReservation + ')');
 
         $('#staticBackdropLabelBilling').text('Billing [' + lastname + ' - ' + 'RoomNo: ' + roomNo + ']');
         $('#modalBilling').modal('show');
     }
-    function closeModalBilling() {
+    function closeModalBilling(){
         $('#modalBilling').modal('hide');
     }
 
@@ -569,11 +564,11 @@
     var subGroupTransaction = [];
     var transactionList = [];
     var articleList = [];
-    var groupTransactionSelectOption = [];
+        var groupTransactionSelectOption = [];
     var subGroupTransactionSelectOption = [];
     var transactionListSelectOption = [];
     // hàm lấy transaction group, transaction sub group, transactions, articles
-    function getInforServices() {
+    function getInforServices(){
         $.ajax({
             url: '/Billing/GetInforService',
             type: 'get',
@@ -598,8 +593,8 @@
             }
         });
     }
-    function filterByFolioNo(folioNo, i) {
-        $('#infoBillingName').text('[' + (i + 1) + ']  ' + lastname + '(' + idReservation + ')');
+    function filterByFolioNo(folioNo,i){
+                        $('#infoBillingName').text('[' + (i + 1) + ']  ' +  lastname + '(' + idReservation + ')');
 
         folioNoID = folioNo;
         $('.folio-item').removeClass('active');
@@ -608,7 +603,7 @@
         folioPosting = i + 1;
         searchFolioDetail(0);
     }
-    function deleteFolioNo(folioID) {
+    function deleteFolioNo(folioID){
         var formData = new FormData();
         formData.append('folioNo', folioID);
         $.ajax({
@@ -630,7 +625,7 @@
         });
     }
 
-    function LockFolioOnly(folioID) {
+    function LockFolioOnly(folioID){
         var formData = new FormData();
         formData.append('folioNo', folioID);
         $.ajax({
@@ -651,7 +646,7 @@
             error: function (xhr, statusText, err) { }
         });
     }
-    function LockFolio() {
+    function LockFolio(){
         var formData = new FormData();
         formData.append('folioNo', listFolioNoID);
         $.ajax({
@@ -672,7 +667,7 @@
             error: function (xhr, statusText, err) { }
         });
     }
-    function UnLockFolioOnly(folioID) {
+    function UnLockFolioOnly(folioID){
         var formData = new FormData();
         formData.append('folioNo', folioID);
         $.ajax({
@@ -693,7 +688,7 @@
             error: function (xhr, statusText, err) { }
         });
     }
-    function UnLockFolio() {
+    function UnLockFolio(){
         var formData = new FormData();
         formData.append('folioNo', listFolioNoID);
         $.ajax({
@@ -724,8 +719,8 @@
         script2.src = 'https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js';
         document.head.appendChild(script2);
 
-        script1.onload = function () {
-            script2.onload = function () {
+        script1.onload = function() {
+            script2.onload = function() {
                 // Get the DataGrid instance
                 const dataGrid = $("#gridContainerBilling").dxDataGrid("instance");
                 const data = dataGrid.option("dataSource");
@@ -777,7 +772,7 @@
                 worksheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'center' };
 
                 // Generate Excel file
-                workbook.xlsx.writeBuffer().then(function (buffer) {
+                workbook.xlsx.writeBuffer().then(function(buffer) {
                     const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
                     saveAs(blob, 'BillingData.xlsx');
                 });
@@ -785,7 +780,7 @@
         };
     }
 
-    function transferToWindow(folioID) {
+    function transferToWindow(folioID){
         const userName = JSON.parse(localStorage.getItem("Loginname"));
         const userID = JSON.parse(localStorage.getItem("userID"));
         var grid = $("#gridContainerBilling").dxDataGrid("instance");
@@ -796,7 +791,7 @@
             type: 'POST',
             data: {
                 userName: userName,
-                userID: userID,
+                userID:userID,
                 folioDetailID: selectedIds,
                 folioMasterID: folioNoID,
                 folioID: folioID,
@@ -826,10 +821,10 @@
         $.ajax({
             url: '/Billing/PrintBilling',
             type: 'POST',
-            data: {
-                arrivalDate: arivalDate.split(' ')[0],
-                departureDate: departureDate.split(' ')[0],
-                folioNo: folioNoID,
+            data:{
+                arrivalDate:arivalDate.split(' ')[0],
+                departureDate:departureDate.split(' ')[0],
+                folioNo:folioNoID,
                 confirmationNo: confirmationNo,
                 roomNo: roomNo,
                 dataBilling: data,
@@ -867,17 +862,17 @@
         });
     }
 
-    function openModalConfirmTransaction() {
+    function openModalConfirmTransaction(){
         $('#modalConfirmDeleteTransaction').modal('show');
     }
-    function closeModalConfirmTransaction() {
+    function closeModalConfirmTransaction(){
         $('#codeDeletionReason').val("");
         $('#descriptionDeletionReason').val("");
 
         $('#modalConfirmDeleteTransaction').modal('hide');
 
     }
-    function getDeletionReason() {
+    function getDeletionReason(){
         $.ajax({
             url: '/Billing/GetDeletionReason',
             type: 'get',
@@ -886,8 +881,8 @@
             headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
             success: function (result) {
                 var html = '<option value="">Please choose reason</option>';
-                if (result.length > 0) {
-                    for (var i = 0; i < result.length; i++) {
+                if(result.length > 0){
+                    for(var i = 0;i < result.length;i++){
                         html += `<option value='${result[i].code}'>${result[i].code}</option>`;
                     }
                 }
@@ -903,15 +898,15 @@
             }
         });
     }
-    $('#codeDeletionReason').change(function () {
+    $('#codeDeletionReason').change(function() {
         getDeletionReasonByCode();
     });
-    function getDeletionReasonByCode() {
-        if ($('#codeDeletionReason').val() != "") {
+    function getDeletionReasonByCode(){
+        if($('#codeDeletionReason').val() != ""){
             $.ajax({
                 url: '/Billing/GetDeletionReasonByCode',
                 type: 'get',
-                data: {
+                data:{
                     code: $('#codeDeletionReason').val()
                 },
                 dataType: 'json',

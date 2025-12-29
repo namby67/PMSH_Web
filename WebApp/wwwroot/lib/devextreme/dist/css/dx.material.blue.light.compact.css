@@ -146,7 +146,11 @@
   font-size: 12px;
 }
 .dx-theme-material-typography a {
+<<<<<<< HEAD
   color: rgba(0,0,0,.87);
+=======
+  color: #03a9f4;
+>>>>>>> origin/master
 }
 .dx-icon-add,
 .dx-icon-addcolumnleft,
@@ -26382,4 +26386,8 @@ input.dx-hidden {
   left: 0;
   background: rgba(0,0,0,.01);
   opacity: .01;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/master

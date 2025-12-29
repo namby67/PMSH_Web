@@ -292,7 +292,6 @@ namespace Cashiering.Controllers
                                       col => d[col.ColumnName]?.ToString()
                                   )).ToList();
 
-
                 return Json(new
                 {
                     result1 = result,
@@ -837,7 +836,6 @@ namespace Cashiering.Controllers
                     _Model.UpdatedDate = businessDateModel[0].BusinessDate;
                     _Model.ID = int.Parse(id);
                     ARAccountTypeBO.Instance.Update(_Model);
-
                 }
                 else
                 {
@@ -871,7 +869,6 @@ namespace Cashiering.Controllers
             }
         }
         #endregion
-
 
         #region ARAgingLevels
 
@@ -1136,7 +1133,6 @@ namespace Cashiering.Controllers
                 ARTraceBO.Instance.Update(model);
 
 
-
                 return Json(new { success = true, message = "Update success!" });
             }
             catch (Exception ex)
@@ -1232,7 +1228,6 @@ namespace Cashiering.Controllers
             user = user?.Replace("\"", "").Trim();
             try
             {
-
                 ARTraceModel model = (ARTraceModel)ARTraceBO.Instance.FindByPrimaryKey(id);
                 model.ResolvedAt = resolvedAt;
                 model.ResolvedBy = user;

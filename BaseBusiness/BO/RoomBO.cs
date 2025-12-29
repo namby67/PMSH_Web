@@ -47,7 +47,6 @@ namespace BaseBusiness.BO
         }
         public static List<RoomModel> GetRoomCountPlan()
         {
-
             string query = $@"Select * from Room WITH (NOLOCK) where RoomTypeCode<>'XXX'";
 
             return instance.GetList<RoomModel>(query);
@@ -92,7 +91,6 @@ namespace BaseBusiness.BO
 
         public static List<RoomModel> GetRoom(string query)
         {
-
 
 
             return instance.GetList<RoomModel>(query);

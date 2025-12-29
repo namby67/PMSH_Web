@@ -24,7 +24,6 @@ namespace BaseBusiness.BO
         public static ZoneBO Instance
         {
             get { return instance; }
-
         }
         public ZoneModel GetById(int id, SqlConnection conn, SqlTransaction tx)
         {
