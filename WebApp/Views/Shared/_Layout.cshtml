@@ -28,7 +28,7 @@
     <link rel="icon" type="image/png" href="~/images/logo.png" />
 
     @* js *@
-    @* <script src="~/js/commons/formatdate.js" asp-append-version="true"></script> *@
+    <script src="~/js/commons/formatdate.js" asp-append-version="true"></script>
 
     @* jquery *@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -41,11 +41,11 @@
     <link asp-append-version="true" href="~/node_modules/devextreme/dist/css/dx.common.css" rel="stylesheet" />
     <link asp-append-version="true" href="~/node_modules/devextreme/dist/css/dx.light.css" rel="stylesheet" />
     <link asp-append-version="true" href="~/node_modules/@@devexpress/analytics-core/dist/css/dx-analytics.common.css"
-          rel="stylesheet" />
+        rel="stylesheet" />
     <link asp-append-version="true" href="~/node_modules/@@devexpress/analytics-core/dist/css/dx-analytics.light.css"
-          rel="stylesheet" />
+        rel="stylesheet" />
     <link asp-append-version="true" href="~/node_modules/devexpress-reporting/dist/css/dx-webdocumentviewer.css"
-          rel="stylesheet" />
+        rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
@@ -71,9 +71,9 @@
     <script asp-append-version="true" src="~/node_modules/knockout/build/output/knockout-latest.js"></script>
     <script src="~/lib/devextreme/dist/js/dx.all.js"></script>
     <script asp-append-version="true"
-            src="~/node_modules/@@devexpress/analytics-core/dist/js/dx-analytics-core.min.js"></script>
+        src="~/node_modules/@@devexpress/analytics-core/dist/js/dx-analytics-core.min.js"></script>
     <script asp-append-version="true"
-            src="~/node_modules/devexpress-reporting/dist/js/dx-webdocumentviewer.min.js"></script>
+        src="~/node_modules/devexpress-reporting/dist/js/dx-webdocumentviewer.min.js"></script>
     <!-- jsPDF core -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
@@ -143,7 +143,7 @@
                     <span class="notification-badge">3</span>
                 </div>
                 <i class="fas fa-sign-out-alt logout-icon" title="Logout"
-                   onclick="window.location.href='/User/Index'"></i>
+                    onclick="window.location.href='/User/Index'"></i>
             </div>
         </div>
         <!-- Navbar -->
@@ -160,23 +160,27 @@
                             <div class="dropdown-menu-custom">
                                 <a asp-area="" asp-controller="Profile" asp-action="Index">New Profile</a>
                                 <a asp-area="" asp-controller="Profile" asp-action="SearchProfile">Search Profile</a>
-                                <a asp-area="" asp-controller="Profile" asp-action="ProfileExport">Export profile to excel</a>
+                                <a asp-area="" asp-controller="Profile" asp-action="ProfileExport">Export profile to
+                                    excel</a>
 
 
                             </div>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Reservation"
-                               asp-action="SearchReservation">RESERVATION</a>
+                                asp-action="SearchReservation">RESERVATION</a>
                             <div class="dropdown-menu-custom">
                                 <a asp-area="" asp-controller="Home" asp-action="">Room Availability</a>
-                                <a asp-area="" asp-controller="Reservation" asp-action="NewReservation">New reservation</a>
-                                <a asp-area="" asp-controller="Reservation" asp-action="SearchReservation">Search reservation</a>
+                                <a asp-area="" asp-controller="Reservation" asp-action="NewReservation">New
+                                    reservation</a>
+                                <a asp-area="" asp-controller="Reservation" asp-action="SearchReservation">Search
+                                    reservation</a>
                                 <a asp-area="" asp-controller="Home" asp-action="">Room assigment</a>
                                 <a asp-area="" asp-controller="Home" asp-action="">Allotment</a>
                                 <a asp-area="" asp-controller="Home" asp-action="">Allotment search</a>
                                 <a asp-area="" asp-controller="Home" asp-action="">Account management</a>
-                                <a asp-area="" asp-controller="Reservation" asp-action="GroupReservation">Group reservation</a>
+                                <a asp-area="" asp-controller="Reservation" asp-action="GroupReservation">Group
+                                    reservation</a>
                                 <a asp-area="" asp-controller="Reservation" asp-action="OverBooking">Over Booking</a>
                                 <a asp-area="" asp-controller="Reservation" asp-action="WaitList">Waiting List</a>
                                 <a asp-area="" asp-controller="Reservation" asp-action="RateCodeAuthor">Rate Query</a>
@@ -238,8 +242,10 @@
                             <a class="nav-link" href="#">ROOM MANAGEMENT</a>
                             <div class="dropdown-menu-custom">
                                 <a asp-area="" asp-controller="HouseKeeping" asp-action="HouseStatus">House Status</a>
-                                <a asp-area="" asp-controller="HouseKeeping" asp-action="RoomControlPanel">Room control panel</a>
-                                <a asp-area="" asp-controller="HouseKeeping" asp-action="RoomFacilityForecast">Room Facility</a>
+                                <a asp-area="" asp-controller="HouseKeeping" asp-action="RoomControlPanel">Room control
+                                    panel</a>
+                                <a asp-area="" asp-controller="HouseKeeping" asp-action="RoomFacilityForecast">Room
+                                    Facility</a>
                                 <a asp-area="" asp-controller="HouseKeeping" asp-action="RoomPlan">Room Plan</a>
                                 <a asp-area="" asp-controller="HouseKeeping" asp-action="FloorPlan">Floor Plan</a>
                                 <a asp-area="" asp-controller="HouseKeeping" asp-action="RoomStatus">Room Status</a>
@@ -248,8 +254,10 @@
                                 @* <a asp-area="" asp-controller="RoomManagement" asp-action="OOOSload">Out Of Order/Service</a> *@
                                 <a asp-area="" asp-controller="Home" asp-action="">Out of order</a>
                                 <a asp-area="" asp-controller="Home" asp-action="">Out of service</a>
-                                <a asp-area="" asp-controller="RoomManagement" asp-action="ItemDailyInventory">Item Inventory</a>
-                                <a asp-area="" asp-controller="RoomManagement" asp-action="ItemInventoryAvailable">Item Availability</a>
+                                <a asp-area="" asp-controller="RoomManagement" asp-action="ItemDailyInventory">Item
+                                    Inventory</a>
+                                <a asp-area="" asp-controller="RoomManagement" asp-action="ItemInventoryAvailable">Item
+                                    Availability</a>
                                 @* <a asp-area="" asp-controller="RoomManagement" asp-action="ItemSearch">Item Search</a> *@
                             </div>
                         </li>
@@ -285,37 +293,45 @@
                                     <a class="dropdown-submenu-toggle">Cashier functions</a>
                                     <div class="dropdown-submenu-content">
 
-                                        <a asp-area="" asp-controller="Cashiering" asp-action="PostingJournal">Posting journal</a>
-                                        <a asp-area="" asp-controller="Home" asp-action="">Deposit and Cancellation charge</a>
+                                        <a asp-area="" asp-controller="Cashiering" asp-action="PostingJournal">Posting
+                                            journal</a>
+                                        <a asp-area="" asp-controller="Home" asp-action="">Deposit and Cancellation
+                                            charge</a>
                                         <a asp-area="" asp-controller="Home" asp-action="">Deposit transfering</a>
                                         <a asp-area="" asp-controller="Home" asp-action="">E Profile upload</a>
                                         <a asp-area="" asp-controller="Home" asp-action="">E invoice management</a>
                                     </div>
                                 </div>
                                 <a asp-area="" asp-controller="Cashiering" asp-action="CashierAudit">Cashier audit</a>
-                                <a asp-area="" asp-controller="Cashiering" asp-action="FolioHistoryView">Folio history</a>
+                                <a asp-area="" asp-controller="Cashiering" asp-action="FolioHistoryView">Folio
+                                    history</a>
                                 <a asp-area="" asp-controller="Home" asp-action="">Cashier login</a>
                                 <a asp-area="" asp-controller="Cashiering" asp-action="CloseShift">Close shift</a>
                                 <a asp-area="" asp-controller="Home" asp-action="">Search VAT invoice</a>
                                 <a asp-area="" asp-controller="Home" asp-action="">Exchange rate</a>
-                                <a asp-area="" asp-controller="Cashiering" asp-action="ExchangeCurrency">Exchange currency</a>
-                                <a asp-area="" asp-controller="Cashiering" asp-action="ExchangeCurrencyReport">Exchange Report</a>
+                                <a asp-area="" asp-controller="Cashiering" asp-action="ExchangeCurrency">Exchange
+                                    currency</a>
+                                <a asp-area="" asp-controller="Cashiering" asp-action="ExchangeCurrencyReport">Exchange
+                                    Report</a>
                                 <div class="dropdown-submenu">
                                     <a class="dropdown-submenu-toggle">Account Receivable</a>
                                     <div class="dropdown-submenu-content">
                                         <a asp-area="" asp-controller="Home" asp-action="">AR search</a>
                                         @* <a asp-area="" asp-controller="Accounting" asp-action="AccountType">Account Type</a> *@
                                         @* <a asp-area="" asp-controller="Accounting" asp-action="ARAgingLevels">AR Aging Levels</a> *@
-                                        <a asp-area="" asp-controller="Accounting" asp-action="AROpening">AR opening balance</a>
+                                        <a asp-area="" asp-controller="Accounting" asp-action="AROpening">AR opening
+                                            balance</a>
                                         <a asp-area="" asp-controller="Home" asp-action="">Aging level</a>
                                         <a asp-area="" asp-controller="Home" asp-action="">AR Type</a>
                                         @* <a asp-area="" asp-controller="Accounting" asp-action="AccountingSearch">Search account receivable</a> *@
                                         <a asp-area="" asp-controller="Accounting" asp-action="ARTraces">AR Traces</a>
                                     </div>
                                 </div>
-                                <a asp-area="" asp-controller="Home" asp-action="">Update status not run in night audit</a>
+                                <a asp-area="" asp-controller="Home" asp-action="">Update status not run in night
+                                    audit</a>
                                 <a asp-area="" asp-controller="Home" asp-action="">Run night manual</a>
-                                <a asp-area="" asp-controller="Home" asp-action="">Remove the rate code detail with the same date</a>
+                                <a asp-area="" asp-controller="Home" asp-action="">Remove the rate code detail with the
+                                    same date</a>
                                 @* 
                                 <a asp-area="" asp-controller="Cashiering" asp-action="ExchangeRate">Exchange Rate</a>
                                 <a asp-area="" asp-controller="Cashiering" asp-action="CashieringManager">Cashiering Manager</a>
@@ -368,10 +384,13 @@
                                     <a class="dropdown-submenu-toggle">Rate Code & Package</a>
                                     <div class="dropdown-submenu-content">
                                         <a asp-area="" asp-controller="RateClass" asp-action="RateClass">Rate class</a>
-                                        <a asp-area="" asp-controller="RateCategory" asp-action="RateCategory">Rate Category</a>
+                                        <a asp-area="" asp-controller="RateCategory" asp-action="RateCategory">Rate
+                                            Category</a>
                                         <a asp-area="" asp-controller="RateCode" asp-action="RateCode">Rate Code</a>
-                                        <a asp-area="" asp-controller="RateCodeDetail" asp-action="RateCodeDetail">Rate Code Detail</a>
-                                        <a asp-area="" asp-controller="RateCodeUserRight" asp-action="RateCodeUserRight">Rate Code User Right</a>
+                                        <a asp-area="" asp-controller="RateCodeDetail" asp-action="RateCodeDetail">Rate
+                                            Code Detail</a>
+                                        <a asp-area="" asp-controller="RateCodeUserRight"
+                                            asp-action="RateCodeUserRight">Rate Code User Right</a>
                                         <a asp-area="" asp-controller="Package" asp-action="Package">Package</a>
                                     </div>
                                 </div>
@@ -381,13 +400,13 @@
                                     <div class="dropdown-submenu-content">
                                         <a asp-area="" asp-controller="Article" asp-action="Article">Article</a>
                                         <a asp-area="" asp-controller="Transaction"
-                                           asp-action="Transaction">Transaction</a>
+                                            asp-action="Transaction">Transaction</a>
                                         <a asp-area="" asp-controller="TransactionSubGroup"
-                                           asp-action="TransSubGroup">Transaction SubGroup</a>
+                                            asp-action="TransSubGroup">Transaction SubGroup</a>
                                         <a asp-area="" asp-controller="TransactionGroup"
-                                           asp-action="TransGroup">Transaction Group</a>
+                                            asp-action="TransGroup">Transaction Group</a>
                                         <a asp-area="" asp-controller="TransactionArticleLink"
-                                           asp-action="TransactionArticleLink">Transaction Article Link</a>
+                                            asp-action="TransactionArticleLink">Transaction Article Link</a>
                                     </div>
                                 </div>
 
@@ -396,23 +415,33 @@
                                 <div class="dropdown-submenu">
                                     <a class="dropdown-submenu-toggle">Deposit & Cancellation Rule</a>
                                     <div class="dropdown-submenu-content">
-                                        <a asp-area="" asp-controller="Administration" asp-action="DepositRule">Deposit Rule</a>
-                                        <a asp-area="" asp-controller="Administration" asp-action="CancellationRule">Cancellation Rule</a>
+                                        <a asp-area="" asp-controller="Administration" asp-action="DepositRule">Deposit
+                                            Rule</a>
+                                        <a asp-area="" asp-controller="Administration"
+                                            asp-action="CancellationRule">Cancellation Rule</a>
                                     </div>
                                 </div>
 
                                 <div class="dropdown-submenu">
                                     <a class="dropdown-submenu-toggle">House Keeping</a>
                                     <div class="dropdown-submenu-content">
-                                        <a asp-area="" asp-controller="HouseKeepingAdmin" asp-action="Attendants">Attendants</a>
-                                        <a asp-area="" asp-controller="HouseKeepingAdmin" asp-action="FacilityCategory">Facility Category</a>
-                                        <a asp-area="" asp-controller="HouseKeepingAdmin" asp-action="FacilityCode">Facility Code</a>
+                                        <a asp-area="" asp-controller="HouseKeepingAdmin"
+                                            asp-action="Attendants">Attendants</a>
+                                        <a asp-area="" asp-controller="HouseKeepingAdmin"
+                                            asp-action="FacilityCategory">Facility Category</a>
+                                        <a asp-area="" asp-controller="HouseKeepingAdmin"
+                                            asp-action="FacilityCode">Facility Code</a>
                                         <a asp-area="" asp-controller="Home" asp-action="">Facility Task</a>
-                                        <a asp-area="" asp-controller="HouseKeepingAdmin" asp-action="Section">Section</a>
-                                        <a asp-area="" asp-controller="HouseKeepingAdmin" asp-action="HouseKeepingEmployee">House Keeping Employee</a>
-                                        <a asp-area="" asp-controller="HouseKeepingAdmin" asp-action="LostAndFoundZone">Lost And Found Zone</a>
-                                        <a asp-area="" asp-controller="HouseKeepingAdmin" asp-action="LostAndFoundStatus">Lost And Found Status</a>
-                                        <a asp-area="" asp-controller="HouseKeepingAdmin" asp-action="LostAndFoundQuality">Lost And Found Quality</a>
+                                        <a asp-area="" asp-controller="HouseKeepingAdmin"
+                                            asp-action="Section">Section</a>
+                                        <a asp-area="" asp-controller="HouseKeepingAdmin"
+                                            asp-action="HouseKeepingEmployee">House Keeping Employee</a>
+                                        <a asp-area="" asp-controller="HouseKeepingAdmin"
+                                            asp-action="LostAndFoundZone">Lost And Found Zone</a>
+                                        <a asp-area="" asp-controller="HouseKeepingAdmin"
+                                            asp-action="LostAndFoundStatus">Lost And Found Status</a>
+                                        <a asp-area="" asp-controller="HouseKeepingAdmin"
+                                            asp-action="LostAndFoundQuality">Lost And Found Quality</a>
                                     </div>
                                 </div>
 
@@ -445,10 +474,14 @@
                                         <a asp-area="" asp-controller="Home" asp-action="">Load Room Inventory</a>
                                         <a asp-area="" asp-controller="Home" asp-action="">Change room type</a>
                                         <a asp-area="" asp-controller="Home" asp-action="">Setup email</a>
-                                        <a asp-area="" asp-controller="Home" asp-action="">Config Computer and Card reader</a>
-                                        <a asp-area="" asp-controller="Administration" asp-action="Occupancy">Config occupancy</a>
-                                        <a asp-area="" asp-controller="Administration" asp-action="ConfirmationConfig">Config confirmation</a>
-                                        <a asp-area="" asp-controller="Administration" asp-action="ConfirmationTemp">Confirmation template</a>
+                                        <a asp-area="" asp-controller="Home" asp-action="">Config Computer and Card
+                                            reader</a>
+                                        <a asp-area="" asp-controller="Administration" asp-action="Occupancy">Config
+                                            occupancy</a>
+                                        <a asp-area="" asp-controller="Administration"
+                                            asp-action="ConfirmationConfig">Config confirmation</a>
+                                        <a asp-area="" asp-controller="Administration"
+                                            asp-action="ConfirmationTemp">Confirmation template</a>
                                         <a asp-area="" asp-controller="Home" asp-action="#">Config Status Color</a>
                                     </div>
                                 </div>
@@ -458,13 +491,13 @@
                                     <div class="dropdown-submenu-content">
 
                                         <a asp-area="" asp-controller="Administration"
-                                           asp-action="PersonInCharge">Person In Charge</a>
+                                            asp-action="PersonInCharge">Person In Charge</a>
                                         <a asp-area="" asp-controller="Administration"
-                                           asp-action="PersonInChargeGroup">Person In Charge Group</a>
+                                            asp-action="PersonInChargeGroup">Person In Charge Group</a>
                                         <a asp-area="" asp-controller="Administration"
-                                           asp-action="PersonInChargeZone">Person In Charge Zone</a>
-                                        <a asp-area="" asp-controller="Administration"
-                                           asp-action="ApproveList">Approve List </a>
+                                            asp-action="PersonInChargeZone">Person In Charge Zone</a>
+                                        <a asp-area="" asp-controller="Administration" asp-action="ApproveList">Approve
+                                            List </a>
                                     </div>
                                 </div>
 
@@ -473,20 +506,16 @@
                                         Profile items
                                     </a>
                                     <div class="dropdown-submenu-content">
+                                        <a asp-area="" asp-controller="Administration" asp-action="City">City</a>
+                                        <a asp-area="" asp-controller="Administration" asp-action="Country">Country</a>
                                         <a asp-area="" asp-controller="Administration"
-                                           asp-action="City">City</a>
+                                            asp-action="Language">Language</a>
                                         <a asp-area="" asp-controller="Administration"
-                                           asp-action="Country">Country</a>
+                                            asp-action="Nationality">Nationality</a>
+                                        <a asp-area="" asp-controller="Administration" asp-action="Title">Title</a>
                                         <a asp-area="" asp-controller="Administration"
-                                           asp-action="Language">Language</a>
-                                        <a asp-area="" asp-controller="Administration"
-                                           asp-action="Nationality">Nationality</a>
-                                        <a asp-area="" asp-controller="Administration"
-                                           asp-action="Title">Title</a>
-                                        <a asp-area="" asp-controller="Administration"
-                                           asp-action="Territory">Territory</a>
-                                        <a asp-area="" asp-controller="Administration"
-                                           asp-action="State">State</a>
+                                            asp-action="Territory">Territory</a>
+                                        <a asp-area="" asp-controller="Administration" asp-action="State">State</a>
                                         <a asp-area="" asp-controller="Administration" asp-action="VIP">Vip</a>
                                     </div>
                                 </div>
@@ -497,15 +526,21 @@
                                     </a>
                                     <div class="dropdown-submenu-content">
                                         <a asp-area="" asp-controller="Administration" asp-action="Market">Market</a>
-                                        <a asp-area="" asp-controller="Administration" asp-action="MarketType">Market Type</a>
-                                        <a asp-area="" asp-controller="Administration" asp-action="PickupDropPlace">Pickup & Drop</a>
-                                        <a asp-area="" asp-controller="Administration" asp-action="TransportType">Transport Type</a>
-                                        <a asp-area="" asp-controller="Administration" asp-action="ReservationType">Reservation Type</a>
+                                        <a asp-area="" asp-controller="Administration" asp-action="MarketType">Market
+                                            Type</a>
+                                        <a asp-area="" asp-controller="Administration"
+                                            asp-action="PickupDropPlace">Pickup & Drop</a>
+                                        <a asp-area="" asp-controller="Administration"
+                                            asp-action="TransportType">Transport Type</a>
+                                        <a asp-area="" asp-controller="Administration"
+                                            asp-action="ReservationType">Reservation Type</a>
                                         <a asp-area="" asp-controller="Administration" asp-action="Reason">Reason</a>
                                         <a asp-area="" asp-controller="Administration" asp-action="Origin">Origin</a>
                                         <a asp-area="" asp-controller="Administration" asp-action="Source">Source</a>
-                                        <a asp-area="" asp-controller="Administration" asp-action="PackageForecastGroup">Package Forecast Group</a>
-                                        <a asp-area="" asp-controller="Administration" asp-action="PreferenceGroup">Preference Group</a>
+                                        <a asp-area="" asp-controller="Administration"
+                                            asp-action="PackageForecastGroup">Package Forecast Group</a>
+                                        <a asp-area="" asp-controller="Administration"
+                                            asp-action="PreferenceGroup">Preference Group</a>
                                         <a asp-area="" asp-controller="Home" asp-action="#">Priority</a>
                                         <a asp-area="" asp-controller="Home" asp-action="#">Promotions</a>
                                         <a asp-area="" asp-controller="Home" asp-action="#">Vouchers</a>
@@ -518,17 +553,17 @@
                                     </a>
                                     <div class="dropdown-submenu-content">
                                         <a asp-area="" asp-controller="Administration"
-                                           asp-action="AlertsSetup">Alerts</a>
+                                            asp-action="AlertsSetup">Alerts</a>
                                         <a asp-area="" asp-controller="#" asp-action="#">Map Language</a>
                                         <a asp-area="" asp-controller="Administration"
-                                           asp-action="Currency">Currency</a>
+                                            asp-action="Currency">Currency</a>
                                         <a asp-area="" asp-controller="Administration" asp-action="Comment">Comments</a>
                                         <a asp-area="" asp-controller="Administration" asp-action="CommentType">
                                             Comment
                                             Type
                                         </a>
                                         <a asp-area="" asp-controller="Administration"
-                                           asp-action="Department">Department</a>
+                                            asp-action="Department">Department</a>
                                         <a asp-area="" asp-controller="Administration" asp-action="Season">Season</a>
                                         <a asp-area="" asp-controller="Administration" asp-action="Zone">Zone</a>
                                         <a asp-area="" asp-controller="#" asp-action="">Sub Zone</a>
@@ -536,7 +571,8 @@
                                         <a asp-area="" asp-controller="Home" asp-action="">Telephone Book Category</a>
                                         <a asp-area="" asp-controller="Home" asp-action="">Computer Type</a>
                                         <a asp-area="" asp-controller="Home" asp-action="">Job Title</a>
-                                        <a asp-area="" asp-controller="Home" asp-action="">Billing Cancellation Reason</a>
+                                        <a asp-area="" asp-controller="Home" asp-action="">Billing Cancellation
+                                            Reason</a>
                                     </div>
                                 </div>
 
@@ -557,11 +593,11 @@
                                     </a>
                                     <div class="dropdown-submenu-content">
                                         <a asp-area="" asp-controller="Administration"
-                                           asp-action="PropertyType">Property Type</a>
+                                            asp-action="PropertyType">Property Type</a>
                                         <a asp-area="" asp-controller="Administration"
-                                           asp-action="Property">Property</a>
+                                            asp-action="Property">Property</a>
                                         <a asp-area="" asp-controller="Administration"
-                                           asp-action="PropertyPermission">Property Permission</a>
+                                            asp-action="PropertyPermission">Property Permission</a>
                                     </div>
                                 </div>
 
@@ -630,172 +666,172 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     DevExpress.localization.locale("vi");
-         document.addEventListener('DOMContentLoaded', function () {
-            const isDesktop = () => window.innerWidth >= 992;
+    document.addEventListener('DOMContentLoaded', function () {
+        const isDesktop = () => window.innerWidth >= 992;
 
-            // ===============================
-            // 1. DESKTOP: SUBMENU (CẤP 2) - QUAN TRỌNG
-            // ===============================
-            document.querySelectorAll('.dropdown-submenu').forEach(item => {
-                const submenu = item.querySelector('.dropdown-submenu-content');
-                if (!submenu) return;
-                let subHideTimeout = null;
+        // ===============================
+        // 1. DESKTOP: SUBMENU (CẤP 2) - QUAN TRỌNG
+        // ===============================
+        document.querySelectorAll('.dropdown-submenu').forEach(item => {
+            const submenu = item.querySelector('.dropdown-submenu-content');
+            if (!submenu) return;
+            let subHideTimeout = null;
 
-                item.addEventListener('mouseenter', () => {
-                    if (!isDesktop()) return;
-                    clearTimeout(subHideTimeout);
+            item.addEventListener('mouseenter', () => {
+                if (!isDesktop()) return;
+                clearTimeout(subHideTimeout);
 
-                    const rect = item.getBoundingClientRect(); // Lấy vị trí của item cha
-                    const viewportHeight = window.innerHeight;
+                const rect = item.getBoundingClientRect(); // Lấy vị trí của item cha
+                const viewportHeight = window.innerHeight;
 
-                    // Bắt buộc dùng Fixed để thoát khỏi thanh cuộn của menu cha
-                    submenu.style.position = 'fixed';
-                    submenu.style.display = 'block'; // Đảm bảo hiện
+                // Bắt buộc dùng Fixed để thoát khỏi thanh cuộn của menu cha
+                submenu.style.position = 'fixed';
+                submenu.style.display = 'block'; // Đảm bảo hiện
 
-                    // Xử lý vị trí NGANG (Left/Right)
-                    let leftPos = rect.right;
-                    // Nếu menu tràn ra khỏi màn hình bên phải -> đẩy sang trái
-                    if (rect.right + 220 > window.innerWidth) {
-                        leftPos = rect.left - 220;
+                // Xử lý vị trí NGANG (Left/Right)
+                let leftPos = rect.right;
+                // Nếu menu tràn ra khỏi màn hình bên phải -> đẩy sang trái
+                if (rect.right + 220 > window.innerWidth) {
+                    leftPos = rect.left - 220;
+                }
+                submenu.style.left = leftPos + 'px';
+
+                // Xử lý vị trí DỌC (Top)
+                submenu.style.top = rect.top + 'px';
+
+                // Nếu menu dài quá màn hình dưới -> cho phép scroll trong menu con
+                const spaceBelow = viewportHeight - rect.top - 10;
+                submenu.style.maxHeight = spaceBelow + 'px';
+
+                // Thêm class để kích hoạt animation
+                requestAnimationFrame(() => {
+                    submenu.classList.add('menu-open');
+                });
+            });
+
+            item.addEventListener('mouseleave', () => {
+                if (!isDesktop()) return;
+                subHideTimeout = setTimeout(() => {
+                    if (!submenu.matches(':hover')) {
+                        submenu.classList.remove('menu-open');
+                        submenu.style.display = 'none'; // Ẩn hẳn đi sau khi animation xong
                     }
-                    submenu.style.left = leftPos + 'px';
-
-                    // Xử lý vị trí DỌC (Top)
-                    submenu.style.top = rect.top + 'px';
-
-                    // Nếu menu dài quá màn hình dưới -> cho phép scroll trong menu con
-                    const spaceBelow = viewportHeight - rect.top - 10;
-                    submenu.style.maxHeight = spaceBelow + 'px';
-
-                    // Thêm class để kích hoạt animation
-                    requestAnimationFrame(() => {
-                        submenu.classList.add('menu-open');
-                    });
-                });
-
-                item.addEventListener('mouseleave', () => {
-                    if (!isDesktop()) return;
-                    subHideTimeout = setTimeout(() => {
-                        if (!submenu.matches(':hover')) {
-                            submenu.classList.remove('menu-open');
-                            submenu.style.display = 'none'; // Ẩn hẳn đi sau khi animation xong
-                        }
-                    }, 200);
-                });
-
-                // Giữ menu mở khi chuột đang ở trong menu con
-                submenu.addEventListener('mouseenter', () => {
-                    clearTimeout(subHideTimeout);
-                });
-
-                submenu.addEventListener('mouseleave', () => {
-                     if (!isDesktop()) return;
-                    subHideTimeout = setTimeout(() => {
-                         if (!item.matches(':hover')) {
-                            submenu.classList.remove('menu-open');
-                            submenu.style.display = 'none';
-                         }
-                    }, 200);
-                });
+                }, 200);
             });
 
-            // ===============================
-            // 2. DESKTOP: MENU CẤP 1 (Giữ nguyên logic cũ)
-            // ===============================
-            document.querySelectorAll('.nav-item').forEach(item => {
-                const dropdown = item.querySelector('.dropdown-menu-custom');
-                if (!dropdown) return;
-                let showTimeout, hideTimeout;
-
-                item.addEventListener('mouseenter', () => {
-                    if (!isDesktop()) return;
-                    clearTimeout(hideTimeout);
-                    showTimeout = setTimeout(() => {
-                        if (!item.matches(':hover')) return;
-                        const rect = item.getBoundingClientRect();
-                        dropdown.style.position = 'fixed';
-                        dropdown.style.top = rect.bottom + 'px';
-                        dropdown.style.left = rect.left + 'px';
-                        dropdown.style.display = 'block';
-                        requestAnimationFrame(() => dropdown.classList.add('menu-open'));
-                    }, 100);
-                });
-
-                item.addEventListener('mouseleave', () => {
-                    if (!isDesktop()) return;
-                    clearTimeout(showTimeout);
-                    hideTimeout = setTimeout(() => {
-                        if (!dropdown.matches(':hover')) {
-                            dropdown.classList.remove('menu-open');
-                            setTimeout(() => { if(!dropdown.classList.contains('menu-open')) dropdown.style.display = 'none'; }, 200);
-                        }
-                    }, 200);
-                });
-
-                dropdown.addEventListener('mouseleave', () => {
-                     if (!isDesktop()) return;
-                    hideTimeout = setTimeout(() => {
-                        if (!item.matches(':hover')) {
-                            dropdown.classList.remove('menu-open');
-                            setTimeout(() => { if(!dropdown.classList.contains('menu-open')) dropdown.style.display = 'none'; }, 200);
-                        }
-                    }, 200);
-                });
+            // Giữ menu mở khi chuột đang ở trong menu con
+            submenu.addEventListener('mouseenter', () => {
+                clearTimeout(subHideTimeout);
             });
 
-            // ===============================
-            // 3. MOBILE: CLICK (Logic Accordion)
-            // ===============================
-            // Xử lý Menu Cấp 1
-            document.querySelectorAll('.nav-item > .nav-link').forEach(link => {
-                link.addEventListener('click', function(e) {
-                    if (isDesktop()) return;
-                    const dropdown = this.nextElementSibling;
-                    if (dropdown && dropdown.classList.contains('dropdown-menu-custom')) {
-                        e.preventDefault(); e.stopPropagation();
-                        const isOpen = dropdown.style.display === 'block';
-                        // Đóng tất cả
-                        document.querySelectorAll('.dropdown-menu-custom').forEach(m => {
-                            m.style.display = 'none'; m.classList.remove('menu-open');
-                        });
-                        // Mở cái hiện tại
-                        if (!isOpen) {
-                            dropdown.style.display = 'block';
-                            dropdown.style.position = 'static'; // Mobile không dùng fixed
-                            dropdown.classList.add('menu-open');
-                        }
+            submenu.addEventListener('mouseleave', () => {
+                if (!isDesktop()) return;
+                subHideTimeout = setTimeout(() => {
+                    if (!item.matches(':hover')) {
+                        submenu.classList.remove('menu-open');
+                        submenu.style.display = 'none';
                     }
-                });
+                }, 200);
+            });
+        });
+
+        // ===============================
+        // 2. DESKTOP: MENU CẤP 1 (Giữ nguyên logic cũ)
+        // ===============================
+        document.querySelectorAll('.nav-item').forEach(item => {
+            const dropdown = item.querySelector('.dropdown-menu-custom');
+            if (!dropdown) return;
+            let showTimeout, hideTimeout;
+
+            item.addEventListener('mouseenter', () => {
+                if (!isDesktop()) return;
+                clearTimeout(hideTimeout);
+                showTimeout = setTimeout(() => {
+                    if (!item.matches(':hover')) return;
+                    const rect = item.getBoundingClientRect();
+                    dropdown.style.position = 'fixed';
+                    dropdown.style.top = rect.bottom + 'px';
+                    dropdown.style.left = rect.left + 'px';
+                    dropdown.style.display = 'block';
+                    requestAnimationFrame(() => dropdown.classList.add('menu-open'));
+                }, 100);
             });
 
-            // Xử lý Menu Cấp 2 (Submenu)
-            document.querySelectorAll('.dropdown-submenu-toggle').forEach(toggle => {
-                toggle.addEventListener('click', function (e) {
-                    if (isDesktop()) return;
+            item.addEventListener('mouseleave', () => {
+                if (!isDesktop()) return;
+                clearTimeout(showTimeout);
+                hideTimeout = setTimeout(() => {
+                    if (!dropdown.matches(':hover')) {
+                        dropdown.classList.remove('menu-open');
+                        setTimeout(() => { if (!dropdown.classList.contains('menu-open')) dropdown.style.display = 'none'; }, 200);
+                    }
+                }, 200);
+            });
+
+            dropdown.addEventListener('mouseleave', () => {
+                if (!isDesktop()) return;
+                hideTimeout = setTimeout(() => {
+                    if (!item.matches(':hover')) {
+                        dropdown.classList.remove('menu-open');
+                        setTimeout(() => { if (!dropdown.classList.contains('menu-open')) dropdown.style.display = 'none'; }, 200);
+                    }
+                }, 200);
+            });
+        });
+
+        // ===============================
+        // 3. MOBILE: CLICK (Logic Accordion)
+        // ===============================
+        // Xử lý Menu Cấp 1
+        document.querySelectorAll('.nav-item > .nav-link').forEach(link => {
+            link.addEventListener('click', function (e) {
+                if (isDesktop()) return;
+                const dropdown = this.nextElementSibling;
+                if (dropdown && dropdown.classList.contains('dropdown-menu-custom')) {
                     e.preventDefault(); e.stopPropagation();
-                    const parent = this.parentElement;
-                    const submenu = this.nextElementSibling;
-                    parent.classList.toggle('active');
-                    if(submenu) {
-                        submenu.style.display = parent.classList.contains('active') ? 'block' : 'none';
-                        submenu.style.position = 'static';
-                        submenu.classList.toggle('menu-open', parent.classList.contains('active'));
-                    }
-                });
-            });
-
-            // Xử lý scroll: Đóng menu desktop khi cuộn chuột để tránh menu bay lung tung
-            window.addEventListener('scroll', () => {
-                if (isDesktop()) {
-                    document.querySelectorAll('.menu-open').forEach(el => {
-                        el.classList.remove('menu-open');
-                        el.style.display = 'none';
+                    const isOpen = dropdown.style.display === 'block';
+                    // Đóng tất cả
+                    document.querySelectorAll('.dropdown-menu-custom').forEach(m => {
+                        m.style.display = 'none'; m.classList.remove('menu-open');
                     });
+                    // Mở cái hiện tại
+                    if (!isOpen) {
+                        dropdown.style.display = 'block';
+                        dropdown.style.position = 'static'; // Mobile không dùng fixed
+                        dropdown.classList.add('menu-open');
+                    }
                 }
             });
         });
 
-         $(document).ready(function () {
+        // Xử lý Menu Cấp 2 (Submenu)
+        document.querySelectorAll('.dropdown-submenu-toggle').forEach(toggle => {
+            toggle.addEventListener('click', function (e) {
+                if (isDesktop()) return;
+                e.preventDefault(); e.stopPropagation();
+                const parent = this.parentElement;
+                const submenu = this.nextElementSibling;
+                parent.classList.toggle('active');
+                if (submenu) {
+                    submenu.style.display = parent.classList.contains('active') ? 'block' : 'none';
+                    submenu.style.position = 'static';
+                    submenu.classList.toggle('menu-open', parent.classList.contains('active'));
+                }
+            });
+        });
+
+        // Xử lý scroll: Đóng menu desktop khi cuộn chuột để tránh menu bay lung tung
+        window.addEventListener('scroll', () => {
+            if (isDesktop()) {
+                document.querySelectorAll('.menu-open').forEach(el => {
+                    el.classList.remove('menu-open');
+                    el.style.display = 'none';
+                });
+            }
+        });
+    });
+
+    $(document).ready(function () {
         // Hàm kiểm tra và áp dụng trạng thái biểu tượng
         function updateFullscreenIcon() {
             const isFullscreen = !!(
