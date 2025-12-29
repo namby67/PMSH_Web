@@ -794,7 +794,7 @@ namespace Billing.Controllers
                 FolioDetailModel folioDetail = new FolioDetailModel();
                 folioDetail.UserID =  int.Parse(Request.Form["userID"].ToString());
                 folioDetail.ShiftID = shiftID;
-                folioDetail.UserName = Request.Form["userID"].ToString();
+                folioDetail.UserName = Request.Form["userName"].ToString();
                 folioDetail.CashierNo = shiftName;
                 folioDetail.ReservationID = folioDetail.OriginReservationID = reservationID;
                 folioDetail.FolioID = folioDetail.OriginFolioID = folio[0].ID;
