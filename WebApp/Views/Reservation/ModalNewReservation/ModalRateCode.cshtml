@@ -1,0 +1,363 @@
+﻿<!-- Modal more rate code-->
+<div class="modal fade modal-xl" id="modalRateCode" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Search Rate Code</h5>
+                <button type="button" class="btn-close" onclick="closeModalRateCode()"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-2">
+                    <button class="mui-button mui-button-new" onclick="ReservationRateQueryDetail();">Search</button>
+                </div>
+                <div class="row mx-2 justify-content-between d-flex">
+                    <div class="col-md-5 mui-card row">
+                        <div class="form-group-new-reservation col-md-5">
+                            <label>Arrival</label>
+                            <div class="row" style="margin-left:1px;margin-right:2px">
+                                <input type="date" id="arrivalRateCode">
+                            </div>
+                        </div>
+                        <div class="form-group-new-reservation col-md-5">
+                            <label>Departure</label>
+                            <div class="row" style="margin-left:1px;margin-right:2px">
+                                <input type="date" id="departureRateCode">
+                            </div>
+                        </div>
+                        <div class="form-group-new-reservation col-md-2">
+                            <label>Nights</label>
+                            <div class="row" style="margin-left:1px;margin-right:2px">
+                                <input type="text" id="nightsRateCode" readonly class="text-end">
+                            </div>
+                        </div>
+                        <div class="form-group-new-reservation col-md-3">
+                            <label>Adults</label>
+                            <div class="row" style="margin-left:1px;margin-right:2px">
+                                <input type="number" value="2" id="adultsRateCode" class="text-end">
+                            </div>
+                        </div>
+                        <div class="form-group-new-reservation col-md-3">
+                            <label>C</label>
+                            <div class="row" style="margin-left:1px;margin-right:2px">
+                                <input type="number" value="0" id="cRateCode" class="text-end">
+                            </div>
+                        </div>
+                        <div class="form-group-new-reservation col-md-3">
+                            <label>C1</label>
+                            <div class="row" style="margin-left:1px;margin-right:2px">
+                                <input type="number" value="0" id="c1RateCode" class="text-end">
+                            </div>
+                        </div>
+                        <div class="form-group-new-reservation col-md-3">
+                            <label>C2</label>
+                            <div class="row" style="margin-left:1px;margin-right:2px">
+                                <input type="number" value="0" id="c2RateCode" class="text-end">
+                            </div>
+                        </div>
+                        <div class="form-group-new-reservation col-md-6">
+                            <label>No. of Room</label>
+                            <div class="row" style="margin-left:1px;margin-right:2px">
+                                <input class="col-md-7 text-end" type="number" id="numRoomsRateCode" value="1" min="1">
+                            </div>
+                        </div>
+ 
+                    </div>
+                    <div class="col-md-2 mui-card row">
+                        <div class="form-group-new-reservation col-md-12">
+                            <label>RoomType</label>
+                            <div class="row" style="margin-left:1px;margin-right:2px">
+                                <select type="text" id="roomTypeRateCode"  asp-items="ViewBag.cboRoomType"></select>
+                            </div>
+                        </div>
+                        <div class="form-group-new-reservation col-md-12">
+                            <label>Promotions</label>
+                            <div class="row" style="margin-left:1px;margin-right:2px">
+                                <select id="promotionRateCode"  asp-items="ViewBag.cboPromotion">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group-new-reservation col-md-12">
+                            <label>Packages</label>
+                            <div class="row" style="margin-left:1px;margin-right:2px">
+                                <select id="packageRateCode"  asp-items="ViewBag.cboPackage">
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-5 mui-card row" >
+                        <div style="display:flex;column-gap:32px">
+                            <div class="row">
+                                <input type="radio" name="func" checked value="0" class="col-md-1">
+                                <label class="col-md-9">Total</label>
+                            </div>
+                            <div class="row">
+                                <input type="radio" name="func" checked value="1" class="col-md-1">
+                                <label class="col-md-9">Average</label>
+                            </div>
+                            <div class="row">
+                                <input type="radio" name="func" checked value="2" class="col-md-1">
+                                <label class="col-md-9">First Rate</label>
+                            </div>
+                            <div class="row">
+                                <input type="checkbox" name="dayuse" value="1" class="col-md-1">
+                                <label class="col-md-9">Day Use</label>
+                            </div>
+                        </div>
+
+
+
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label>Currency</label>
+                                <div style="display:flex">
+                                    <div class="form-check">
+                                        <input  type="radio" name="currency" checked value="VND">
+                                        <label >VND</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input  type="radio" name="currency" value="USD">
+                                        <label >USD</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label>Display</label>
+                                <div style="display:flex">
+                                    <div class="form-check">
+                                        <input  type="radio" name="display" checked value="0">
+                                        <label >+++</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input  type="radio" name="display" value="1">
+                                        <label>net</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div id="loadingSpinnerRateCode" style="display: none; text-align: center; padding: 20px;">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+                <div class="mui-card">
+                    <div id="gridContainerRateCode" class="mt-2 gridContainer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function openModalRateCode(){
+        $('#arrivalRateCode').val($('#arrival').val());
+        $('#departureRateCode').val($('#departure').val());
+        $('#adultsRateCode').val($('#adults').val());
+        $('#cRateCode').val($('#c').val());
+        $('#c1RateCode').val($('#c1').val());
+        $('#c2RateCode').val($('#c2').val());
+        $('#numRoomsRateCode').val($('#numRooms').val());
+        updateDatesRateCode();
+        ReservationRateQueryDetail();
+        $('#modalRateCode').modal('show');
+
+    }
+    function closeModalRateCode(){
+        $('#modalRateCode').modal('hide');
+    }
+    function ReservationRateQueryDetail() {
+        $("#loadingSpinnerRateCode").show();
+        $.ajax({
+            url: '/Reservation/ReservationRateQueryDetail',
+            type: 'get',
+            dataType: 'json',
+            data:{
+                fromDate:$('#arrivalRateCode').val(),
+                toDate: $('#departureRateCode').val(),
+                roomType:$('#roomTypeRateCode').val(),
+                adults:$('#adultsRateCode').val(),
+                noOfNight:$('#nightsRateCode').val(),
+                packageID:$('#packageRateCode').val(),
+                promotionID:$('#promotionRateCode').val(),
+                func:$('input[name="func"]:checked').val(),
+                display:$('input[name="display"]:checked').val(),
+                dayUse:$('input[name="dayuse"]').is(':checked'),
+                c1:$('#cRateCode').val(),
+                c2:$('#c1RateCode').val(),
+                c3:$('#c2RateCode').val(),
+                noOfRoom:$('#numRoomsRateCode').val(),
+                currency:$('input[name="currency"]:checked').val()
+            },
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                initializeDataGridSearchRateCode(result);
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                } else {
+                    informBox(TOAST_STATUS.DANGER, "Lỗi tải chi tiết danh sách danh mục dịch vụ hoặc bạn không có quyền tải");
+                }
+            }
+            ,complete: function () {
+                $("#loadingSpinnerRateCode").hide(); // 👉 Hide spinner sau khi hoàn tất
+            }
+        });
+    }
+
+    function initializeDataGridSearchRateCode(data) {
+        $("#gridContainerRateCode").dxDataGrid({
+            dataSource: data,
+            allowColumnResizing: true,
+            columnAutoWidth: true,
+            columnMinWidth: 90,
+            paging: { pageSize: 15 },
+            scrolling: {
+                rowRenderingMode: 'virtual',
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [15, 20, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true,
+            },
+            filterRow: {
+                visible: true,
+                applyFilter: "auto"
+            },
+            selection: {
+                mode: "single"
+            },
+            onContentReady: function(e) {
+                // Tìm và ẩn cột RateCodeID
+                var column = e.component.columnOption("RateCodeID");
+                if (column) {
+                    e.component.columnOption("RateCodeID", "visible", false);
+                }
+                var columnCurr = e.component.columnOption("Curr");
+                    if (columnCurr) {
+                    e.component.columnOption("Curr", "visible", false);
+                }
+                var columnIndividualOnly = e.component.columnOption("IndividualOnly");
+                if (columnIndividualOnly) {
+                    e.component.columnOption("IndividualOnly", "visible", false);
+                }
+                var columnMaxLOS = e.component.columnOption("MaxLOS");
+                if (columnMaxLOS) {
+                    e.component.columnOption("MaxLOS", "visible", false);
+                }
+                var columnMaxNoOfRoom = e.component.columnOption("MaxNoOfRoom");
+                if (columnMaxNoOfRoom) {
+                    e.component.columnOption("MaxNoOfRoom", "visible", false);
+                }
+                var columnMinLOS = e.component.columnOption("MinLOS");
+                if (columnMinLOS) {
+                    e.component.columnOption("MinLOS", "visible", false);
+                }
+                var columnMinNoOfRoom = e.component.columnOption("MinNoOfRoom");
+                if (columnMinNoOfRoom) {
+                    e.component.columnOption("MinNoOfRoom", "visible", false);
+                }
+                var columnNegotiated = e.component.columnOption("Negotiated");
+                if (columnNegotiated) {
+                    e.component.columnOption("Negotiated", "visible", false);
+                }
+                var columnPkg = e.component.columnOption("Pkg");
+                if (columnPkg) {
+                    e.component.columnOption("Pkg", "visible", false);
+                }
+                var columnPackageID = e.component.columnOption("PackageID");
+                if (columnPackageID) {
+                    e.component.columnOption("PackageID", "visible", false);
+                }
+                var columns = e.component.getVisibleColumns();
+                columns.forEach(function(column) {
+                    if (column.dataField === "RateCode") {
+                        // Căn trái và không định dạng cho cột RateCode
+                        e.component.columnOption(column.dataField, {
+                            alignment: "left",
+                            format: null
+                        });
+                    }
+                    else {
+                        // Căn phải và định dạng số với dấu phẩy, không thập phân
+                        e.component.columnOption(column.dataField, {
+                            alignment: "right",
+                            customizeText: function(cellInfo) {
+                                // Chuyển đổi giá trị chuỗi thành số và làm tròn
+                                var value = parseFloat(cellInfo.value);
+                                if (!isNaN(value)) {
+                                    return Math.round(value).toLocaleString('en-US', {
+                                        minimumFractionDigits: 0,
+                                        maximumFractionDigits: 0
+                                    });
+                                }
+                                return cellInfo.value || ''; // Giữ nguyên nếu không phải số
+                            }
+                        });
+                    }
+                });
+            },
+            onCellDblClick: function(e) {
+
+                if (e.column.dataField !== "RateCode") {
+                    if(e.value != ''){
+                        var rowData = e.data;
+                        var columnName = e.column.dataField;
+                            var matchingOption = $('#txtRoomType option').filter(function() {
+                            return $(this).text().trim() === columnName;
+                        });
+                        if (matchingOption.length > 0) {
+                            $('#txtRoomType').val(matchingOption.val());
+                        } else {
+                            console.warn("No option found with text: ", columnName);
+                        }
+
+
+                        $('#txtRateCode').val(rowData.RateCode);
+                        $('#txtRateCodeID').val(rowData.RateCodeID);
+                        var value = parseFloat(e.value);
+                        var valueFloat = 0;
+                        if (!isNaN(value)) {
+                            valueFloat =  Math.round(value).toLocaleString('en-US', {
+                                minimumFractionDigits: 0,
+                                maximumFractionDigits: 0
+                            });
+                        }
+                        $('#txtRateAmount').val(valueFloat);
+                        $('#packageRateCode').val(rowData.PackageID);
+                        $('#txtPackage').val(rowData.PackageID);
+                        calculateNet($('#arrival').val(),$('#departure').val(),rowData.RateCodeID,
+                        $('#txtRoomType').val(),'VND',rowData.PackageID,0,value,'',$('#txtDiscountPercent').val(),$('#txtDiscountAmount').val());
+                        closeModalRateCode();
+                        $('#clearRateCode').show();
+
+                    }
+
+                }
+            }
+        });
+    }
+    function clearRateCode(){
+        $('#clearRateCode').hide();
+        $('#txtRateCode').val('');
+        $('#txtRateCodeID').val('');
+        $('#txtRateAmount').val(0);
+        $('#txtNetAmount').val(0);
+        $('#packageRateCode').val('');
+        $('#txtPackage').val('');
+        $('#txtRateAfterDiscount').val(0);
+        $('#txtNetAfterDiscount').val(0);
+        $('#txtTotal').val(0);
+        $('#txtTotalNet').val(0);
+        $('#txtDiscountAmount').val(0);
+        $('#txtDiscountPercent').val(0);
+    }
+</script>

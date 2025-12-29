@@ -1,0 +1,148 @@
+﻿<div class="modal fade" id="modalTransfer" tabindex="-1" aria-labelledby="transactionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="border: 1px solid #bcbcbc">
+            <div class="modal-header">
+                <h5 class="modal-title" >Search Info AR</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="button-group">
+                <button type="button" class="mui-button mui-button-search" onclick="searchTransfer();">Search</button>
+                <button type="button" class="mui-button mui-button-search" onclick="TransferTransaction();">OK</button>
+
+                <button type="button" class="mui-button mui-button-clear" data-bs-dismiss="modal">Close</button>
+            </div>
+            <div class="modal-body row">
+                <div class="form- group-new-reservation col-md-3">
+                    <label>Account Name</label>
+                    <input type="text" id="accountNameTransfer">
+                </div>
+                <div class="form- group-new-reservation col-md-3">
+                    <label>Account No</label>
+                    <input type="text" id="accountNoTransfer">
+                </div>
+                <div class="form- group-new-reservation col-md-3">
+                    <label>Folio No</label>
+                    <input type="text" id="folioNoTransfer">
+                </div>
+                <div class="form- group-new-reservation col-md-3">
+                    <label>Active</label>
+                    <input type="checkbox" id="activeTransfer">
+                </div>
+                <hr class="hr">
+                
+            </div>
+            <div id="gridContainerIransfer" class="gridContainer mt-2"></div>
+
+        </div>
+    </div>
+</div>
+<script>
+    function openModalTransfer(){
+        searchTransfer();
+        $('#modalTransfer').modal('show');
+    }
+    function closeModalTransfer(){
+        $('#modalTransfer').modal('hide');
+
+    }
+    function searchTransfer() {
+         var grid = $("#gridContainerMaintenance").dxDataGrid("instance");
+         var selectedRows = grid.getSelectedRowsData();
+         var selectedIds = selectedRows.map(row => row.FolioID);
+        const activeTransfer = document.getElementById('activeTransfer');
+        const value = activeTransfer.checked ? 1 : 0;
+         $.ajax({
+             url: '/Accounting/SearchARInfo',
+             type: 'get',
+             dataType: 'json',
+             data: {
+                 accountName: $('#accountNameTransfer').val(),
+                 accountNo: $('#accountNoTransfer').val(),
+                 folioNo:$('#folioNoTransfer').val(),
+                 isActive:value,
+                 folioID: selectedIds[0],
+
+             },
+             crossDomain: false,
+             headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+             success: function (result) {
+                 initializeDataGridTransfer(result);
+             },
+             error: function (xhr, statusText, err) {
+                 if (xhr.status == 401) {
+                     sessionTimeout();
+                 }
+             },
+
+         });
+
+    }
+    function initializeDataGridTransfer(data) {
+
+        $("#gridContainerIransfer").dxDataGrid({
+            dataSource: data,
+            allowColumnResizing: true,
+
+            paging: { pageSize: 15 },
+            scrolling: {
+                rowRenderingMode: 'virtual'
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [15, 20, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true
+            },
+            filterRow: {
+                visible: true,
+                applyFilter: "auto"
+            },
+            selection: {
+                mode: "multiple",
+                showCheckBoxesMode: "always"
+            },
+            onRowClick: function (e) {
+                const grid = $("#gridContainerInvoice").dxDataGrid("instance");
+                grid.selectRows([e.key], false);
+            },
+        });
+    }
+
+    function TransferTransaction() {
+        const userName = JSON.parse(localStorage.getItem("Loginname"));
+        const userID = JSON.parse(localStorage.getItem("userID"));
+        var grid = $("#gridContainerInvoice").dxDataGrid("instance");
+        var selectedRows = grid.getSelectedRowsData();
+        var selectedIds = selectedRows.map(row => row.ID);
+
+        var grid2 = $("#gridContainerMaintenance").dxDataGrid("instance");
+        var selectedRows2 = grid2.getSelectedRowsData();
+        var selectedIds2 = selectedRows2.map(row => row.FolioID);
+
+        var grid3 = $("#gridContainerIransfer").dxDataGrid("instance");
+        var selectedRows3 = grid3.getSelectedRowsData();
+        var selectedIds3 = selectedRows3.map(row => row.FolioID);
+        $.ajax({
+            url: '/Billing/TransferTransaction',
+            type: 'POST',
+            data: {
+                userName: userName,
+                userID: userID,
+                folioDetailID: selectedIds,
+                folioMasterID: selectedIds2[0],
+                folioID: selectedIds3[0],
+            },
+            success: function (data) {
+                if (data.code == 0) {
+                    closeModalTransfer();
+                    searchInvoice();
+                    showToast('Success', data.msg, true);
+                } else {
+                    showToast('Error', data.msg, false);
+                }
+            },
+            error: function (xhr, statusText, err) { }
+        });
+    }
+</script>

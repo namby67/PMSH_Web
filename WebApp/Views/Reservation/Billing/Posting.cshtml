@@ -1,0 +1,687 @@
+﻿<link href="~/css/pages/posting.css" rel="stylesheet" />
+<div class="modal fade" id="modalPosting" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">POS Order Screen</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <button class="btn btn-primary btn-primary-post-billing" style="padding: 4px 8px;"
+                        onclick="PostingService();">Post</button>
+                </div>
+                <div class="row g-3">
+                    <!-- LEFT -->
+                    <div class="col-lg-5">
+                        <div class="card p-3">
+                            <div class="filter-bar-post-billing-2">
+                                <i class="fa-solid fa-filter filter-icon-post-billing-2" onclick="toggleFilters()"></i>
+                                <input type="text" class="form-control form-control-sm" id="productSearch"
+                                    placeholder="Tìm kiếm sản phẩm...">
+                            </div>
+                            <div class="filters-container-post-billing-2" id="filtersContainer">
+                                <select class="form-select form-select-sm" id="transactionGroupIDPosting">
+                                </select>
+                                <select class="form-select form-select-sm" id="subTransactionGroupIDPosting">
+                                </select>
+                            </div>
+                            <div class="product-list-post-billing-2" id="listTransactionPosting">
+                            </div>
+                            <div class="sub-product-list-post-billing-2" id="subProductList"></div>
+                        </div>
+                    </div>
+                    <!-- MIDDLE -->
+                    <div class="col-lg-4">
+                        <div class="card p-3">
+                            <div class="section-card-post-billing-2">
+                                <div class="row mb-1">
+                                    <div class="col-6">
+                                        <div class="input-group-post-billing-2">
+                                            <label>T/A Code</label>
+                                            <input type="text" class="form-control-post-billing-2"
+                                                id="taCode1PostBilling" placeholder="Enter T/A Code">
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="input-group-post-billing-2">
+                                            <label>&nbsp;</label>
+                                            <input type="text" class="form-control-post-billing-2"
+                                                id="taCode2PostBilling" placeholder="Enter Bill No">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <label id="articleCodePostBilling"></label>
+                                </div>
+                                <div class="row mb-1">
+                                    <div class="col-6">
+                                        <div class="input-group-post-billing-2">
+                                            <label>Quantity</label>
+                                            <input type="number" class="form-control-post-billing-2"
+                                                id="quantityPostBilling" style="text-align:right" value="1" min="1">
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="input-group-post-billing-2">
+                                            <label>Price++</label>
+                                            <input type="text" step="0.01" class="form-control-post-billing-2"
+                                                id="pricePostBilling" style="text-align:right" value="0"
+                                                placeholder="0.00">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <div class="col-6">
+                                        <div class="input-group-post-billing-2">
+                                            <label>Amount++</label>
+                                            <input type="text" step="0.01" class="form-control-post-billing-2"
+                                                id="amountPostBilling" style="text-align:right" value="0"
+                                                placeholder="0.00" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="input-group-post-billing-2">
+                                            <label>Price.net</label>
+                                            <input type="text" step="0.01" class="form-control-post-billing-2"
+                                                id="priceNetPostBilling" style="text-align:right" value="0"
+                                                placeholder="0.00">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <div class="col-6">
+                                        <div class="input-group-post-billing-2">
+                                            <label>Amount.net</label>
+                                            <input type="text" step="0.01" class="form-control-post-billing-2"
+                                                id="amountNetPostBilling" style="text-align:right" value="0"
+                                                placeholder="0.00" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="input-group-post-billing-2">
+                                            <label>Currency</label>
+                                            <input type="text" class="form-control-post-billing-2"
+                                                id="currencyPostBilling" value="VND" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <div class="col-6">
+                                        <div class="input-group-post-billing-2">
+                                            <label>Win.No</label>
+                                            <input type="text" class="form-control-post-billing-2" id="winNoPostBilling"
+                                                style="text-align:right" readonly />
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="input-group-post-billing-2">
+                                            <label>Bill No</label>
+                                            <input type="text" class="form-control-post-billing-2"
+                                                id="billNoPostBilling" placeholder="Enter Bill No">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <div class="col">
+                                        <button class="btn btn-primary-post-billing-2" onclick="addItemToCart();">Push
+                                            To List</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="cart-header-post-billing-2">
+                                <span class="ta-selected-post-billing-2" id="taSelected">T/A Selected</span>
+                                <a href="#" class="delete-all-post-billing-2" onclick="deleteAllCartItems()">Delete
+                                    All</a>
+                            </div>
+                            <div class="table-responsive-post-billing-2">
+                                <ul class="cart-list-post-billing-2" id="cartList">
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- RIGHT -->
+                    <div class="col-lg-3">
+                        <div class="card p-3 mb-2">
+                            <div class="section-card section-card-post-billing has-overlap-post-billing">
+                                <h8 class="section-heading section-heading-post-billing">
+                                    <input class="form-check-input form-check-input-post-billing me-1" type="checkbox"
+                                        id="expressService-post-billing">
+                                    Express Service
+                                </h8>
+                                <div class="row mt-1">
+                                    <div class="col">
+                                        <div class="input-group input-group-post-billing">
+                                            <label>Percentage</label>
+                                            <input type="number" class="form-control form-control-post-billing"
+                                                id="percentageInput-post-billing" step="0.01">
+                                        </div>
+                                    </div>
+                                    <div style="display: flex; column-gap: 8px;" class="col">
+                                        <div class="form-check">
+                                            <input class="form-check-input form-check-input-post-billing" type="radio"
+                                                name="percentage-post-billing" id="percent10-post-billing" value="10">
+                                            <label class="form-check-label form-check-label-post-billing"
+                                                for="percent10-post-billing">10%</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input form-check-input-post-billing" type="radio"
+                                                name="percentage-post-billing" id="percent50-post-billing" value="50">
+                                            <label class="form-check-label form-check-label-post-billing"
+                                                for="percent50-post-billing">50%</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input form-check-input-post-billing" type="radio"
+                                                name="percentage-post-billing" id="percent100-post-billing" value="100">
+                                            <label class="form-check-label form-check-label-post-billing"
+                                                for="percent100-post-billing">100%</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card p-3">
+                            <div class="radio-group-post-billing-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="detailsToggle"
+                                        id="post-details-radio" value="post-details" checked>
+                                    <label class="form-check-label" for="post-details-radio">Post Details</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="detailsToggle"
+                                        id="invoice-details-radio" value="invoice-details">
+                                    <label class="form-check-label" for="invoice-details-radio">Post Invoice</label>
+                                </div>
+                            </div>
+                            <div class="right-tab-content-post-billing-2" id="rightTabContent">
+                                <div class="right-tab-pane-post-billing-2 active post-details-tab-post-billing-2"
+                                    id="post-details">
+                                    <div class="input-group-post-billing-2 mb-1">
+                                        <label>Rmt.Charge</label>
+                                        <input type="text" class="form-control-post-billing-2"
+                                            id="rmtChargePostBilling">
+                                    </div>
+                                    <div class="input-group-post-billing-2 mb-1">
+                                        <label>Reference</label>
+                                        <input type="text" class="form-control-post-billing-2"
+                                            id="referencePostBilling">
+                                    </div>
+                                    <div class="input-group-post-billing-2 mb-1">
+                                        <label>Supplement</label>
+                                        <input type="text" class="form-control-post-billing-2"
+                                            id="supplementPostBilling">
+                                    </div>
+                                </div>
+                                <div class="right-tab-pane-post-billing-2 invoice-details-tab-post-billing-2"
+                                    id="invoice-details">
+                                    <div class="input-group-post-billing-2 mb-1">
+                                        <label>Description</label>
+                                        <input type="text" class="form-control-post-billing-2"
+                                            id="desInvoicePostBilling">
+                                    </div>
+                                    <div class="input-group-post-billing-2 mb-1">
+                                        <label>Reference</label>
+                                        <input type="text" class="form-control-post-billing-2"
+                                            id="referenceInvoiceBilling">
+                                    </div>
+                                    <div class="input-group-post-billing-2 mb-1">
+                                        <label>Supplement</label>
+                                        <input type="text" class="form-control-post-billing-2"
+                                            id="supplementInvoiceBilling">
+                                    </div>
+                                    <div class="input-group-post-billing-2 mb-1">
+                                        <label>Check No</label>
+                                        <input type="text" class="form-control-post-billing-2"
+                                            id="checkNoInvoicePostBilling">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var postType = 1;
+
+    // === ĐỊNH DẠNG SỐ TIỀN DÙNG DẤU CHẤM ===
+    function formatNumberWithDot(num) {
+        if (isNaN(num)) return '0';
+        return num.toLocaleString('vi-VN', { minimumFractionDigits: 0 });
+    }
+
+    function parseNumberWithDot(str) {
+        if (!str) return 0;
+        return parseFloat(str.replace(/\./g, '').replace(',', '.')) || 0;
+    }
+
+    function openModalPosting() {
+        localStorage.setItem("currentFromID", "modalPosting");
+        const crashierLogin = localStorage.getItem("crashierLogin");
+        $('#winNoPostBilling').val(folioPosting);
+        setGroupTransactionPosting();
+        setSubGroupTransactionPosting($('#transactionGroupIDPosting').val());
+        getTransactionPosting($('#transactionGroupIDPosting').val(), $('#subTransactionGroupIDPosting').val());
+        if (crashierLogin == "NotYet") {
+            openModalShilftLogin();
+        }
+        else {
+            $('#modalPosting').modal('show');
+        }
+    }
+
+    let selectedProductName = '';
+    let isFiltersVisible = false;
+
+    function toggleFilters() {
+        const filtersContainer = document.getElementById('filtersContainer');
+        const filterBar = document.querySelector('.filter-bar-post-billing-2');
+        const productSearch = document.getElementById('productSearch');
+        isFiltersVisible = !isFiltersVisible;
+        filtersContainer.classList.toggle('filters-visible-post-billing-2', isFiltersVisible);
+        if (isFiltersVisible) {
+            if (!filtersContainer.contains(productSearch)) {
+                filtersContainer.appendChild(productSearch);
+            }
+        } else {
+            if (!filterBar.contains(productSearch)) {
+                filterBar.appendChild(productSearch);
+            }
+        }
+    }
+
+    document.querySelectorAll('input[name="detailsToggle"]').forEach(radio => {
+        radio.addEventListener('change', function () {
+            const postDetails = document.getElementById('post-details');
+            const invoiceDetails = document.getElementById('invoice-details');
+            const postRadio = document.getElementById('post-details-radio');
+            if (postRadio.checked) {
+                postDetails.classList.add('active');
+                invoiceDetails.classList.remove('active');
+            } else {
+                postDetails.classList.remove('active');
+                invoiceDetails.classList.add('active');
+            }
+            const selectedValue = this.value;
+            listCart = [];
+            listSelected();
+            resetInfoPost();
+            postType = selectedValue === 'post-details' ? 1 : 2;
+        });
+    });
+
+    function getTransactionPosting(groupTransactionID, subGroupTransactionID) {
+        let filteredSubGroupTransaction = transactionList.filter(function (item) {
+            if (groupTransactionID == 0 && subGroupTransactionID == 0) return true;
+            if (groupTransactionID != 0 && subGroupTransactionID == 0) return item.transactionGroupID == groupTransactionID;
+            return item.transactionSubGroupID == subGroupTransactionID && item.transactionGroupID == groupTransactionID;
+        });
+        if (filteredSubGroupTransaction.length > 0) {
+            $('#listTransactionPosting').empty();
+            var html = '';
+            for (var i = 0; i < filteredSubGroupTransaction.length; i++) {
+                var filterArticlePosting = articleList.filter(function (item) {
+                    return item.transactionCode == filteredSubGroupTransaction[i].code;
+                });
+                const subProducts = filterArticlePosting.map(item => ({
+                    code: item.code,
+                    name: item.description,
+                    id: item.id
+                }));
+                html += `<div class="product-item-post-billing-2" data-subproducts='${JSON.stringify(subProducts)}'>
+                        <span class="product-code-post-billing-2">${filteredSubGroupTransaction[i].code}</span>
+                        <div class="product-name-row-post-billing-2">
+                            <span class="product-name-post-billing-2">${filteredSubGroupTransaction[i].description}</span>
+                            <button class="btn-add-post-billing-2" data-id="${filteredSubGroupTransaction[i].code}" onclick="addItem(1,this)">+</button>
+                        </div>
+                    </div>`;
+            }
+            $('#listTransactionPosting').append(html);
+        }
+        document.querySelectorAll('.product-item-post-billing-2').forEach(item => {
+            item.addEventListener('click', (e) => {
+                if (!e.target.classList.contains('btn-add-post-billing-2') && !e.target.closest('.btn-add-post-billing-2')) {
+                    const isActive = item.classList.contains('active');
+                    closeSubProductList();
+                    if (!isActive) showSubProductList(item);
+                }
+            });
+        });
+    }
+
+    function setGroupTransactionPosting() {
+        $('#transactionGroupIDPosting').empty();
+        var html = `<option value='0' selected>Group Transaction</option>`;
+        groupTransaction.forEach(g => {
+            html += `<option value='${g.id}'>${g.description}</option>`;
+        });
+        $('#transactionGroupIDPosting').append(html);
+    }
+
+    function setSubGroupTransactionPosting(transactionGroupID) {
+        $('#subTransactionGroupIDPosting').empty();
+        var html = `<option value='0' selected>Sub Group Transaction</option>`;
+        const filtered = transactionGroupID != 0
+            ? subGroupTransaction.filter(s => s.transactionGroupID == transactionGroupID)
+            : subGroupTransaction;
+        filtered.forEach(s => {
+            html += `<option value='${s.id}'>${s.description}</option>`;
+        });
+        $('#subTransactionGroupIDPosting').append(html);
+    }
+
+    $('#transactionGroupIDPosting').change(function () {
+        setSubGroupTransactionPosting($(this).val());
+        getTransactionPosting($(this).val(), $('#subTransactionGroupIDPosting').val());
+    });
+
+    $('#subTransactionGroupIDPosting').change(function () {
+        getTransactionPosting($('#transactionGroupIDPosting').val(), $(this).val());
+    });
+
+    function showSubProductList(element) {
+        try {
+            const subProducts = JSON.parse(element.getAttribute('data-subproducts') || '[]');
+            const productName = element.querySelector('.product-name-post-billing-2').textContent.trim();
+            const productCode = element.querySelector('.product-code-post-billing-2').textContent.trim();
+            const subProductList = document.getElementById('subProductList');
+            document.querySelectorAll('.product-item-post-billing-2').forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+            selectedProductName = `${productName} (${productCode})`;
+            document.getElementById('taCode1PostBilling').value = productCode;
+
+            subProductList.innerHTML = subProducts.length > 0 ? `
+            <div class="list-header-post-billing-2">
+              <h6>Articles for ${productName}</h6>
+              <button class="btn-close-list-post-billing-2" onclick="closeSubProductList()">✕</button>
+            </div>
+            ${subProducts.map(sub => `
+              <div class="sub-product-post-billing-2">
+                <span>${sub.name} - Code: ${sub.code}</span>
+                <button class="btn-add-post-billing-2" data-id="${sub.id}" onclick="addItem(2,this)">+</button>
+              </div>
+            `).join('')}
+        ` : `
+            <div class="list-header-post-billing-2">
+              <h6>Articles for ${productName}</h6>
+              <button class="btn-close-list-post-billing-2" onclick="closeSubProductList()">✕</button>
+            </div>
+            <div class="sub-product-post-billing-2">No articles available</div>
+        `;
+            subProductList.classList.add('active');
+        } catch (error) {
+            console.error('Error displaying articles:', error);
+        }
+    }
+
+    function closeSubProductList() {
+        const subProductList = document.getElementById('subProductList');
+        subProductList.classList.remove('active');
+        subProductList.innerHTML = '';
+        document.querySelectorAll('.product-item-post-billing-2').forEach(item => item.classList.remove('active'));
+        selectedProductName = '';
+        resetInputs();
+    }
+
+    function resetInputs() {
+        $('#taCode1PostBilling').val('');
+        $('#quantityPostBilling').val('1');
+        $('#billNoPostBilling').val('');
+        $('#pricePostBilling').val('0');
+        $('#amountPostBilling').val('0');
+        $('#priceNetPostBilling').val('0');
+        $('#amountNetPostBilling').val('0');
+    }
+
+    var cartArrticle;
+    function addItem(type, button) {
+        const dataId = button.getAttribute('data-id');
+        let article = [], transaction = [];
+        if (type == 2) {
+            article = articleList.filter(a => a.id == dataId);
+            transaction = transactionList.filter(t => t.code == article[0]?.transactionCode);
+        } else {
+            transaction = transactionList.filter(t => t.code == dataId);
+        }
+        cartArrticle = article[0];
+        setValueFormPostArticle(cartArrticle, transaction[0]);
+    }
+
+    function setValueFormPostArticle(article, transaction) {
+        if (article) {
+            $('#articleCodePostBilling').text(`${article.code} - ${article.description}`);
+            const price = article.defaultPrice || 0;
+            $('#pricePostBilling').val(formatNumberWithDot(price));
+            $('#priceNetPostBilling').val(formatNumberWithDot(price));
+            $('#amountPostBilling').val(formatNumberWithDot(price * 1));
+            $('#amountNetPostBilling').val(formatNumberWithDot(price * 1));
+        }
+        $('#taCode1PostBilling').val(transaction?.code || '');
+        $('#taCode2PostBilling').val(transaction?.description || '');
+        $('#quantityPostBilling').val('1');
+    }
+
+    function resetInfoPost() {
+        $('#taCode1PostBilling, #taCode2PostBilling, #billNoPostBilling, #referencePostBilling, #supplementPostBilling, #desInvoicePostBilling, #checkNoInvoicePostBilling').val('');
+        $('#pricePostBilling, #amountPostBilling, #priceNetPostBilling, #amountNetPostBilling').val('0');
+        $('#quantityPostBilling').val('1');
+        $('#articleCodePostBilling').text('');
+        $('#rmtChargePostBilling').val('');
+        $('#expressService-post-billing').prop('checked', false);
+        $('#percentageInput-post-billing').val('');
+        $('input[name="percentage-post-billing"]').prop('checked', false);
+    }
+
+    var listCart = [];
+    class CartItem {
+        constructor(transCode, transName, articleCode, articleName, quantity, priceNet, price, amount, amountNet) {
+            this.transCode = transCode;
+            this.transName = transName;
+            this.articleCode = articleCode;
+            this.articleName = articleName;
+            this.quantity = quantity;
+            this.priceNet = priceNet;
+            this.price = price;
+            this.amount = amount;
+            this.amountNet = amountNet;
+        }
+    }
+
+    function addItemToCart() {
+        if (postType == 1 && listCart.length >= 1) {
+            showToast('Error', "Posted transaction! Please create another post", false);
+            return;
+        }
+
+        const articleText = $('#articleCodePostBilling').text();
+        const [articleCode, articleName] = articleText.split(' - ');
+
+        listCart.push(new CartItem(
+            $('#taCode1PostBilling').val(),
+            $('#taCode2PostBilling').val(),
+            articleCode?.trim() || '',
+            articleName?.trim() || '',
+            $('#quantityPostBilling').val(),
+            $('#priceNetPostBilling').val(),
+            $('#pricePostBilling').val(),
+            $('#amountPostBilling').val(),
+            $('#amountNetPostBilling').val()
+        ));
+        listSelected();
+        resetInfoPost();
+    }
+
+    // === HIỂN THỊ DANH SÁCH GIỎ HÀNG VỚI DẤU CHẤM ===
+    function listSelected() {
+        $('#cartList').empty();
+        let html = '';
+        if (listCart.length > 0) {
+            listCart.forEach((item, i) => {
+                html += `
+                    <li>
+                        <span class="item-name-post-billing-2">${item.transName} - ${item.transCode}</span>
+                        <span class="item-quantity-post-billing-2">${item.quantity}</span>
+                        <span class="item-subtotal-post-billing-2">${item.amountNet}</span>
+                        <span class="item-remove-post-billing-2"><button data-id="${i}" onclick="removeCartItem(this)">x</button></span>
+                    </li>`;
+            });
+        } else {
+            html = '<li class="list-group-item list-group-item-post-billing">No items in list</li>';
+        }
+        $('#cartList').append(html);
+    }
+
+    function deleteAllCartItems() {
+        listCart = [];
+        listSelected();
+    }
+
+    function calculateNetPost(transactionCode, price) {
+        $.ajax({
+            url: '/Billing/CalculateNet',
+            type: 'get',
+            data: { transactionCode, price },
+            headers: { "X-CSRF-TOKEN-HEADERNAME": $("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                const qty = parseFloat($('#quantityPostBilling').val()) || 1;
+                $('#pricePostBilling').val(formatNumberWithDot(price));
+                $('#priceNetPostBilling').val(formatNumberWithDot(result));
+                $('#amountPostBilling').val(formatNumberWithDot(price * qty));
+                $('#amountNetPostBilling').val(formatNumberWithDot(result * qty));
+            },
+            error: function (xhr) { if (xhr.status == 401) sessionTimeout(); }
+        });
+    }
+
+    function calculatePost(transactionCode, price) {
+        $.ajax({
+            url: '/Billing/CalculatePrice',
+            type: 'get',
+            data: { transactionCode, price },
+            headers: { "X-CSRF-TOKEN-HEADERNAME": $("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                const qty = parseFloat($('#quantityPostBilling').val()) || 1;
+                $('#pricePostBilling').val(formatNumberWithDot(result));
+                $('#priceNetPostBilling').val(formatNumberWithDot(price));
+                $('#amountPostBilling').val(formatNumberWithDot(result * qty));
+                $('#amountNetPostBilling').val(formatNumberWithDot(price * qty));
+            },
+            error: function (xhr) { if (xhr.status == 401) sessionTimeout(); }
+        });
+    }
+
+    // === XỬ LÝ BLUR CHO CÁC Ô NHẬP TIỀN ===
+    $("#pricePostBilling").blur(function () {
+        const price = parseNumberWithDot($(this).val());
+        calculateNetPost($('#taCode1PostBilling').val(), price);
+    });
+
+    $("#priceNetPostBilling").blur(function () {
+        const price = parseNumberWithDot($(this).val());
+        calculatePost($('#taCode1PostBilling').val(), price);
+    });
+
+    $("#amountPostBilling").blur(function () {
+        const amount = parseNumberWithDot($(this).val());
+        const qty = parseFloat($('#quantityPostBilling').val()) || 1;
+        if (qty > 0) calculateNetPost($('#taCode1PostBilling').val(), amount / qty);
+    });
+
+    $("#amountNetPostBilling").blur(function () {
+        const amount = parseNumberWithDot($(this).val());
+        const qty = parseFloat($('#quantityPostBilling').val()) || 1;
+        if (qty > 0) calculatePost($('#taCode1PostBilling').val(), amount / qty);
+    });
+
+    $("#quantityPostBilling").blur(function () {
+        const qty = parseFloat($(this).val()) || 1;
+        const price = parseNumberWithDot($('#pricePostBilling').val());
+        const priceNet = parseNumberWithDot($('#priceNetPostBilling').val());
+        $('#amountPostBilling').val(formatNumberWithDot(price * qty));
+        $('#amountNetPostBilling').val(formatNumberWithDot(priceNet * qty));
+    });
+
+    function removeCartItem(button) {
+        const index = parseInt(button.getAttribute('data-id'));
+        if (index >= 0 && index < listCart.length) {
+            listCart.splice(index, 1);
+            listSelected();
+        }
+    }
+
+    const expressServiceCheckbox = document.getElementById('expressService-post-billing');
+    const percentageInput = document.getElementById('percentageInput-post-billing');
+    const radioButtons = document.querySelectorAll('input[name="percentage-post-billing"]');
+    expressServiceCheckbox.addEventListener('change', () => {
+        if (expressServiceCheckbox.checked) {
+            percentageInput.value = '50.00';
+            $('#referencePostBilling').val('Express Service: 50%');
+            document.getElementById('percent50-post-billing').checked = true;
+        } else {
+            percentageInput.value = '';
+            $('#referencePostBilling').val('');
+            radioButtons.forEach(r => r.checked = false);
+        }
+    });
+
+    radioButtons.forEach(radio => {
+        radio.addEventListener('change', () => {
+            if (radio.checked) {
+                percentageInput.value = parseFloat(radio.value).toFixed(2);
+                $('#referencePostBilling').val('Express Service: ' + percentageInput.value + '%');
+            }
+        });
+    });
+
+    percentageInput.addEventListener('input', () => {
+        const val = percentageInput.value;
+        radioButtons.forEach(r => r.checked = false);
+        $('#referencePostBilling').val('Express Service: ' + val + '%');
+        if (['10', '50', '100'].includes(val)) {
+            document.getElementById(`percent${val.replace('.', '')}-post-billing`).checked = true;
+        }
+    });
+
+    function PostingService() {
+        const userName = JSON.parse(localStorage.getItem("Loginname"));
+        const userID = JSON.parse(localStorage.getItem("userID"));
+        const shiftID = localStorage.getItem("shiftID");
+        const shiftName = localStorage.getItem("shiftName");
+
+        const formData = new FormData();
+        formData.append('rsvID', idReservation);
+        formData.append('description', $('#taCode2PostBilling').val());
+        formData.append('roomID', roomID);
+        formData.append('referencePost', $('#referencePostBilling').val());
+        formData.append('listItem', JSON.stringify(listCart));
+        formData.append('userName', userName);
+        formData.append('userID', userID);
+        formData.append('postType', postType);
+        formData.append('window', $('#winNoPostBilling').val());
+        formData.append('shiftID', shiftID);
+        formData.append('shiftName', shiftName);
+
+        $.ajax({
+            url: '/Billing/PostArticle',
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            data: formData,
+            success: function (data) {
+                if (data.code == 0) {
+                    resetInfoPost();
+                    listCart = [];
+                    listSelected();
+                    searchFolioDetail(0);
+                    showToast('Success', data.msg, true);
+                } else {
+                    showToast('Error', data.msg, false);
+                }
+            },
+            error: function () { }
+        });
+    }
+</script>

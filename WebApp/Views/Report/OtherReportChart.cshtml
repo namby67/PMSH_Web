@@ -1,0 +1,1165 @@
+﻿@using DevExpress.XtraReports.UI
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewBag.Title = ViewBag.ReportHeader;
+    var rateCodeList = ViewBag.RateCodeList;
+    var report = ViewBag.ReportName as XtraReport;
+}
+
+<style>
+
+
+    .gridContainer {
+        margin: 0px 8px;
+    }
+
+    .button_wrapper {
+        display: flex;
+        margin-right: 5px;
+    }
+
+        .button_wrapper .fa-solid {
+            margin-right: 5px;
+        }
+
+    .selected {
+        background-color: #4CAF50; /* Màu xanh */
+        color: white;
+    }
+
+    .disabled-link {
+        pointer-events: none;
+        opacity: 0.4;
+    }
+
+    #gridContainer .dx-datagrid {
+        border-radius: 10px;
+        overflow: hidden; /* Đảm bảo nội dung không tràn ra ngoài góc bo */
+    }
+
+    .hidden-important {
+        display: none !important;
+    }
+
+    #gridContainer .dx-datagrid-rowsview .dx-selection {
+        background-color: #005f87 !important; /* màu xanh ngọc */
+        color: white !important; /* chữ trắng */
+    }
+
+        #gridContainer .dx-datagrid-rowsview .dx-selection * {
+            color: white !important;
+        }
+
+    #gridContainer .dx-datagrid-rowsview .dx-row > td {
+        padding-top: 2px !important;
+        padding-bottom: 2px !important;
+        font-size: 12px !important;
+        line-height: 24px !important;
+    }
+
+    #gridContainer .dx-datagrid-headers {
+        background-color: #3b9ac6 !important; /* Màu xanh dương */
+        color: white !important; /* Chữ trắng cho dễ đọc */
+    }
+
+        #gridContainer .dx-datagrid-headers .dx-header-row > td {
+            padding-top: 12px !important;
+            padding-bottom: 12px !important;
+            font-size: 12px !important;
+        }
+
+        #gridContainer .dx-datagrid-headers .dx-header-row > td {
+            background-color: #3b9ac6 !important;
+            color: white !important;
+            font-weight: bold;
+            border-right: 1px solid #ddd !important;
+            text-align: center !important;
+        }
+
+        #gridContainer .dx-datagrid-rowsview td,
+        #gridContainer .dx-datagrid-headers td {
+            border-right: 1px solid #ddd !important;
+        }
+
+        /* Loại bỏ viền phải ở cột cuối cùng (tùy chọn) */
+        #gridContainer .dx-datagrid-rowsview tr td:last-child,
+        #gridContainer .dx-datagrid-headers tr td:last-child {
+            border-right: none !important;
+        }
+
+    #gridContainer .dx-datagrid-rowsview .dx-selection {
+        background-color: #01579b !important;
+        color: white !important;
+    }
+
+        #gridContainer .dx-datagrid-rowsview .dx-selection * {
+            color: white !important;
+        }
+
+    #gridContainer .dx-datagrid-filter-row td .dx-datebox {
+        height: 24px !important;
+        min-height: 24px !important;
+    }
+
+        #gridContainer .dx-datagrid-filter-row td .dx-datebox input {
+            font-size: 12px !important;
+            height: 24px !important;
+        }
+
+    #gridContainer .dx-datagrid-filter-row td .dx-editor-with-menu,
+    #gridContainer .dx-datagrid-filter-row td .dx-texteditor input {
+        height: 24px !important;
+        line-height: 24px !important;
+        padding: 2px 6px !important;
+        font-size: 12px !important;
+        box-sizing: border-box;
+    }
+
+    #gridContainer .dx-datagrid-filter-row td .dx-datebox,
+    #gridContainer .dx-datagrid-filter-row td .dx-dropdowneditor {
+        height: 26px !important;
+        min-height: 26px !important;
+        font-size: 12px !important;
+    }
+
+    .mui-divider {
+        border: none;
+        border-top: 1px solid #005f87;
+        color: #005f87;
+        margin: 16px 0;
+        margin-bottom: 0px;
+    }
+
+    .content_wrapper {
+        margin: 12px;
+    }
+
+    .filter-header {
+        FONT-SIZE: 17px;
+        user-select: none; /* Không cho bôi đen */
+        cursor: pointer; /* Hiện icon bàn tay */
+        transition: background-color 0.2s ease;
+    }
+
+    .list-group-item {
+        padding-top: 2px !important;
+        padding-bottom: 2px !important;
+        user-select: none; /* Không cho bôi đen */
+        cursor: pointer; /* Hiện icon bàn tay */
+        transition: background-color 0.2s ease;
+    }
+
+    .header2 {
+        color: black;
+        padding: 10px;
+        border-radius: 5px 5px 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+        .header2 a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+    .form-group2 {
+        margin: 15px 0;
+    }
+
+        .form-group2 label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .form-group2 input[type="text"],
+        .form-group2 select {
+            width: 100%;
+            padding: 4px;
+            border: 1px solid #3b9ac6;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+    .sticky-header {
+        position: sticky;
+        top: 0;
+        background-color: #fff;
+        z-index: 10;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    .form-group2 input[type="text"]:focus,
+    .form-group2 select:focus {
+        border: 1px solid #005f87;
+        outline: none; /* bỏ viền mặc định */
+    }
+
+    .form-group2 .radio-group {
+        display: flex;
+        gap: 20px;
+        margin-top: 5px;
+    }
+
+        .form-group2 .radio-group label {
+            font-weight: normal;
+            margin: 0;
+        }
+
+    .button-group {
+        display: flex;
+        background-color: #3b9ac6;
+        border: 2px solid #3b9ac6;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+        .button-group button {
+            background-color: #3b9ac6;
+            color: white;
+            border: none;
+            padding: 2px 2px;
+            margin: 0;
+            font-size: 16px;
+            cursor: pointer;
+            flex: 1;
+        }
+
+            .button-group button:not(:last-child) {
+                border-right: 2px solid #005f87;
+            }
+
+            .button-group button:hover {
+                background-color: #005f87;
+            }
+
+    .report-link {
+        transition: all 0.2s ease-in-out;
+        display: block;
+    }
+
+        .report-link:hover,
+        .report-link:focus,
+        .report-link.active {
+            background-color: #e6f7ff;
+            /*             font-size: 1.1em; */
+            font-weight: bold;
+            color: #000000 !important;
+            border-radius: 4px;
+        }
+
+    .dx-datagrid .dx-row {
+        min-height: 24px !important; /* Giá trị mặc định thường là 36px */
+        height: 24px !important;
+        font-size: 12px !important; /* Nhỏ lại để vừa kích thước mới */
+        padding-top: 2px !important;
+        padding-bottom: 2px !important;
+    }
+
+    .zone-title {
+        font-weight: bold;
+        font-size: 18px;
+        background-color: #f0f0f0;
+    }
+
+    tr.custom > td {
+        font-weight: bold;
+        font-size: 18px;
+        background-color: #f0f0f0;
+    }
+
+    .report-list-scrollable {
+        max-height: 380px; /* hoặc bạn chọn chiều cao phù hợp */
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .report-list-scrollable {
+        scroll-behavior: smooth;
+    }
+
+    .wrap-cell {
+        white-space: normal !important;
+        word-wrap: break-word;
+    }
+
+    /*     .dx-header-row > td[role="columnheader"]> div.dx-datagrid-text-content {
+          font-size: 17px;
+          font-weight: bold;
+        }   */
+    .menu-item {
+        cursor: pointer; /* đổi con trỏ thành bàn tay */
+        user-select: none; /* không cho bôi đen */
+    }
+
+    #report-list .list-group-item,
+    #reservation-report-list .list-group-item,
+    #night-audit-report-list .list-group-item,
+    #account-report-list .list-group-item,
+    #arrival-report-list .list-group-item,
+    #guest-report-list .list-group-item,
+    #house-report-list .list-group-item,
+    #cashiering-report-list .list-group-item,
+    #financial-report-list .list-group-item,
+    #profile-report-list .list-group-item,
+    #other-report-list .list-group-item {
+        font-size: 12px;
+    }
+
+    .col-custom-2-1 {
+        flex: 0 0 18.33%;
+        max-width: 18.33%;
+    }
+
+    .col-custom-9-9 {
+        flex: 0 0 81.67%;
+        max-width: 81.67%;
+    }
+
+    #gridContainer .dx-datagrid-rowsview {
+        max-height: 400px; /* hoặc bao nhiêu tùy bạn */
+        overflow-y: auto !important;
+    }
+</style>
+<div id="loadingSpinner" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
+    <i class="fa-solid fa-spinner fa-spin"></i>
+</div>
+<div class="content_wrapper row">
+    <div class="filter_wrapper mui-card col-custom-2-1" style="border: 1px solid #005f87; height:fit-content;">
+        <div class="text-center fw-bold py-2" style="font-size: 1.25rem; color: #005f87; border-bottom: 1px solid #ccc;">
+            REPORT BY CHART
+        </div>
+
+        <div class=" py-1 me-1">
+            <input type="text" class="form-control form-control-sm" id="report-search" placeholder="Search...">
+        </div>
+        <div class="filter-header fw-bold" id="header-sale" style="font-size: 14px;">
+            <span>Report By Chart</span>
+            <i id="icon-sale" class="fas fa-chevron-right"></i>
+        </div>
+        <hr class="mui-divider" />
+        <ul id="report-list" class="list-group list-group-flush  report-list-scrollable" style="display: none;">
+            @* <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="CashierAudit" data-title="Cashier Audit">Cashier Audit</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="CashierSummary" data-title="Cashier Summary">Cashier Summary</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="CancellationJournal" data-title="Cancellation Journal">Cancellation Journal</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="GuestTrialBalance" data-title="Guest Trial Balance">Guest Trial Balance</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="RevenueReport" data-title="Revenue Reports">Revenue Reports</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="RevenueSummary" data-title="Revenue Summary">Revenue Summary</a></li>
+            <li class="list-group-item"><a style="color:black" id="RevenueDetail" class="text-decoration-none report-link" data-report="RevenueDetail" data-title="Revenue Detail">Revenue Detail</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="RevenueSpa" data-title="Revenue Spa">Revenue Spa</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="TrialBalance" data-title="Trial Balance">Trial Balance</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="ManagerReport" data-title="Manager Report">Manager Report</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="PostingJournalInvoicing" data-title="Posting Journal Invoicing">Posting Journal Invoicing</a></li>
+            <li class="list-group-item"><a style="color:black" id="DepositTransferredAtCheckIn" class="text-decoration-none report-link" data-report="DepositTransferAtCheckIn" data-title="Deposit Transferred At Check In">Deposit Transferred At Check In</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="TransferAccountReceivableReport" data-title="Transfer Account Receivable Report">Transfer Account Receivable Report</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="ReservationSummary" data-title="Reservation Summary">Reservation Summary</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="ReservationRateCheck" data-title="Reservation Rate Check">Reservation Rate Check</a></li>
+            <li class="list-group-item"><a style="color:black" id="RoomOccupancyStatistics" class="text-decoration-none report-link" data-report="RoomOccupancyStatistics" data-title="Room Occupancy Statistics">Room Occupancy Statistics</a></li>
+            <li class="list-group-item"><a style="color:black" id="NationalStatistics" class="text-decoration-none report-link" data-report="NationalStatistics" data-title="National Statistics">National Statistics</a></li>
+            <li class="list-group-item"> <a style="color:black" class="text-decoration-none report-link" data-report="NoShowReport" data-title="No Show Report">No Show Report</a></li> *@
+            @* <li class="list-group-item">
+                <a style="color:Green" id="BookingSummaryByStatus" class="text-decoration-none report-link" data-report="BookingSummaryByStatus" data-title="Booking Summary By Status">Booking Summary By Status</a>
+            </li> *@
+            <li class="list-group-item">
+                <a style="color:Green" id="RoomOccupancyChart" class="text-decoration-none report-link" data-report="RoomOccupancyChart" data-title="Room Occupancy Chart">Room Occupancy Chart</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:Green" id="RevenueDetailChart" class="text-decoration-none report-link" data-report="RevenueDetailChart" data-title="Revenue Detail Chart">Revenue Detail Chart</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:Green" id="RevenueReportChart" class="text-decoration-none report-link" data-report="RevenueReportChart" data-title="Revenue Report Chart">Revenue Report Chart</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:Green" id="RevenueByChart" class="text-decoration-none report-link" data-report="RevenueByChart" data-title="Revenue By Chart">Revenue By Chart</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:Green" id="ReservationCancellationChart" class="text-decoration-none report-link" data-report="ReservationCancellationChart" data-title="Reservation Cancellation Chart">Reservation Cancellation Chart</a>
+            </li>
+        </ul>
+
+        @* 
+        <hr class="mui-divider" />
+        <ul id="report-list" class="list-group list-group-flush  report-list-scrollable" style="display: none;">
+            <li class="list-group-item">
+                <a style="color:black" id="BookingSource" class="text-decoration-none report-link" data-report="BookingSource" data-title="Booking Source">Booking Source</a>
+            </li> 
+            <li  class="list-group-item">
+                <a style="color:black" id="ReservationSummaryReport" class="text-decoration-none report-link" data-report="ReservationSummaryReport" data-title="Reservation Summary Report">Reservation Summary Report</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" id="RevenueByReport" class="text-decoration-none report-link" data-report="RevenueBy" data-title="Revenue By ">Revenue By </a>
+            </li>
+           @*  <li class="list-group-item">
+                <a style="color:black" id="RatecodebyDateReport" class="text-decoration-none report-link" data-report="RatecodebyDateReport" data-title="Ratecode by Date Report">Ratecode by Date Report</a>
+            </li> 
+            <li class="list-group-item">
+                <a style="color:black" id="OTAsMonthlyReport" class="text-decoration-none report-link" data-report="OTAsMonthlyReport" data-title="OTAs Monthly Report">OTAs Monthly Report</a>
+            </li>
+@*             <li class="list-group-item">
+                <a style="color:black" id="DailyPickupReport" class="text-decoration-none report-link" data-report="DailyPickupReport" data-title="Daily Pickup Report">Daily Pickup Report</a>
+            </li> 
+    @*         <li class="list-group-item">
+                <a style="color:black" id="ReportNationalityStatistics" class="text-decoration-none report-link" data-report="ReportNationalityStatistics" data-title="Report Nationality Statistics">Report Nationality Statistics</a>
+            </li> 
+      @*       <li class="list-group-item">
+                <a style="color:black" id="DailyBreakfastDetail" class="text-decoration-none report-link" data-report="DailyBreakfastDetail" data-title="Daily Breakfast Detail">Daily Breakfast Detail</a>
+            </li> 
+@*             <li class="list-group-item">
+                <a style="color:black" id="FreeUpgradeReport" class="text-decoration-none report-link" data-report="FreeUpgradeReport" data-title="Free Upgrade Report">Free Upgrade Report</a>
+            </li> 
+@*              <li class="list-group-item">
+                <a style="color:black" id="FixChargeReport" class="text-decoration-none report-link" data-report="FixChargeReport" data-title="Fix Charge Report">Fix Charge Report</a>
+            </li> 
+      @*       <li class="list-group-item">
+                <a style="color:black" id="DepartureExtended" class="text-decoration-none report-link" data-report="DepartureExtended" data-title="Departure Extended">Departure Extended</a>
+            </li> 
+            <li class="list-group-item">
+                <a style="color:black" id="RoomOccupancy" class="text-decoration-none report-link" data-report="RoomOccupancy" data-title="Room Occupancy">Room Occupancy</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" id="ReservationCancellation" class="text-decoration-none report-link" data-report="ReservationCancellation" data-title="Reservation Cancellations">Reservation Cancellations</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" id="ReservationStatistics" class="text-decoration-none report-link" data-report="ReservationStatistics" data-title="Reservation Statistics">Reservation Statistics</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" id="ReservationbyCompany" class="text-decoration-none report-link" data-report="ReservationbyCompany" data-title="Reservation by Company">Reservation by Company</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" id="NoShowReport" class="text-decoration-none report-link" data-report="NoShowReport" data-title="No Show Report">No Show Report</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" id="ReservationSummary" class="text-decoration-none report-link" data-report="ReservationSummary" data-title="Reservation Summary">Reservation Summary</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" id="ProductActivity" class="text-decoration-none report-link" data-report="ProductActivity" data-title="Product Activity">Product Activity</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" id="NationalStatistics" class="text-decoration-none report-link" data-report="NationalStatistics" data-title="National Statistics">National Statistics</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" id="SalesinChargeReportsForm" class="text-decoration-none report-link" data-report="SaleinChargeReport" data-title="Sales in Charge Report ">Sales in Charge Reports </a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" id="SalesinChargeActivity" class="text-decoration-none report-link" data-report="SaleinChargeActivity" data-title="Sales in Charge Activity">Sales in Charge Activity</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" id="RevenueDetail" class="text-decoration-none report-link" data-report="RevenueDetail" data-title="Revenue Detail">Revenue Detail</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" id="RevenueSummary" class="text-decoration-none report-link" data-report="RevenueSummary" data-title="Revenue Summary">Revenue Summary</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" id="TAProductionReport" class="text-decoration-none report-link" data-report="TAProductionReport" data-title="TA Production Report">TA Production Report</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" id="LeadtimeReports" class="text-decoration-none report-link" data-report="LeadTimeReport" data-title="Leadtime Report">Leadtime Reports</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" id="RatecodeReports" class="text-decoration-none report-link" data-report="RatecodeReport" data-title="Ratecode Report">Ratecode Reports</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" id="AnnualRoomOccupancy" class="text-decoration-none report-link" data-report="AnnualRoomOccupancy" data-title="Annual Room Occupancy">Annual Room Occupancy</a>
+            </li>
+              <li class="list-group-item">
+                <a style="color:black" id="GuestMarketReport" class="text-decoration-none report-link" data-report="GuestMarketReport" data-title="Guest Market Report">Guest Market Report</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" id="RoomMoves" class="text-decoration-none report-link" data-report="RoomMoves" data-title="Room Moves">Room Moves</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" id="DepositTransferredAtCheckIn" class="text-decoration-none report-link" data-report="DepositTransferAtCheckIn" data-title="Deposit Transferred At Check In">Deposit Transferred At Check In</a>
+            </li>
+          
+            <li class="list-group-item">
+                <a style="color:black" id="DepositLedger" class="text-decoration-none report-link" data-report="DepositLedger" data-title="Deposit Ledger">Deposit Ledger</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" id="RoomOccupancyStatistics" class="text-decoration-none report-link" data-report="RoomOccupancyStatistics" data-title="Room Occupancy Statistics">Room Occupancy Statistics</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" class="text-decoration-none report-link" data-report="ReservationRateCheck" data-title="Reservation Rate Check">Reservation Rate Check</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" class="text-decoration-none report-link" data-report="DepartureExtended" data-title="Departure Extended">Departure Extended</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:Green" id="BookingSummaryByStatus" class="text-decoration-none report-link" data-report="BookingSummaryByStatus" data-title="Booking Summary By Status">Booking Summary By Status</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:Green" id="RoomOccupancyChart" class="text-decoration-none report-link" data-report="RoomOccupancyChart" data-title="Room Occupancy Chart">Room Occupancy Chart</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:Green" id="RevenueDetailChart" class="text-decoration-none report-link" data-report="RevenueDetailChart" data-title="Revenue Detail Chart">Revenue Detail Chart</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:Green" id="RevenueReportChart" class="text-decoration-none report-link" data-report="RevenueReportChart" data-title="Revenue Report Chart">Revenue Report Chart</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:Green" id="RevenueByChart" class="text-decoration-none report-link" data-report="RevenueByChart" data-title="Revenue By Chart">Revenue By Chart</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:Green" id="ReservationCancellationChart" class="text-decoration-none report-link" data-report="ReservationCancellationChart" data-title="Reservation Cancellation Chart">Reservation Cancellation Chart</a>
+            </li>
+        </ul>
+        *@
+        @* <div class="filter-header fw-bold" id="header-account" style="font-size: 14px;">
+            <span>02 - Account Receivable (Chưa làm)</span>
+            <i id="icon-account" class="fas fa-chevron-right"></i>
+        </div>
+        <hr class="mui-divider" />
+        <ul id="account-report-list" class="list-group list-group-flush  report-list-scrollable" style="display: none;">
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="AgingbyTypeOnly" data-title="Aging by Type Only">Aging by Type Only</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="AgingSummaryByType" data-title="Aging Summary By Type">Aging Summary By Type</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="AgingSummaryofAllAcounts" data-title="Aging Summary of All Acounts">Aging Summary of All Acounts</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="ARAdjustment" data-title="AR Adjustment">AR Adjustment</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="ARAgingSummaryofAllTypes" data-title="AR Aging Summary of All Types">AR Aging Summary of All Types</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="ARCollectionStatistics" data-title="AR Collection Statistics">AR Collection Statistics</a></li>
+            <li class="list-group-item"><a style="color:black" id="ARCreditBalance" class="text-decoration-none report-link" data-report="ARCreditBalance" data-title="AR Credit Balance">AR Credit Balance</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="ARCreditCardTransfer" data-title="AR Credit Card Transfer">AR Credit Card Transfer</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="ARCreditLimit" data-title="AR Credit Limit">AR Credit Limit</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="ARLedger" data-title="AR Ledger">AR Ledger</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="ARPayments" data-title="AR Payments">AR Payments</a></li>
+            <li class="list-group-item"><a style="color:black" id="ARTransferReport" class="text-decoration-none report-link" data-report="ARTransferReport" data-title="AR Transfer Report">AR Transfer Report</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="ARDetailedAging" data-title="AR Detailed Aging">AR Detailed Aging</a></li>
+
+        </ul> *@
+        @* <div class="filter-header fw-bold" id="header-reservation" style="font-size: 14px;">
+            <span>03 - Reservation</span>
+            <i id="icon-reservation" class="fas fa-chevron-right"></i>
+        </div>
+        <hr class="mui-divider" />
+        <ul id="reservation-report-list" class="list-group list-group-flush  report-list-scrollable" style="display: none;">
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="Alerts" data-title="Alerts">Alerts</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="DepositActivity" data-title="Deposit Activity">Deposit Activity</a></li>
+            <li class="list-group-item"><a style="color:black" id="ReservationbyCompany" class="text-decoration-none report-link" data-report="ReservationbyCompany" data-title="Reservation by Company">Reservation by Company</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="ReservationPreblocked" data-title="Reservation Preblocked">Reservation Preblocked</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="ReservationRateCheck" data-title="Reservation Rate Check">Reservation Rate Check</a></li>
+            <li class="list-group-item"><a style="color:black" id="ReservationStatistics" class="text-decoration-none report-link" data-report="ReservationStatistics" data-title="Reservation Statistics">Reservation Statistics</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="ReservationCancellation" data-title="Reservation Cancellations">Reservation Cancellations</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="RoomOccupancy" data-title="Room Occupancy">Room Occupancy</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="Transportation" data-title="Transportation">Transportation</a> </li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="MarketSegmentDetail" data-title="Market Segment Detail">Market Segment Detail</a> </li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="DepositLedger" data-title="Deposit Ledger">Deposit Ledger</a></li>
+
+        </ul>
+
+        <div class="filter-header fw-bold" id="header-arrival" style="font-size: 14px;">
+            <span>04 - Arrival & Departure</span>
+            <i id="icon-arrival" class="fas fa-chevron-right"></i>
+        </div>
+        <hr class="mui-divider" />
+        <ul id="arrival-report-list" class="list-group list-group-flush  report-list-scrollable" style="display: none;">
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="ArrivalsAndCheckInToday" data-title="Arrivals and Check In Today">Arrivals and Check In Today</a> </li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="ArrivalsDetailed" data-title="Arrivals Detailed">Arrivals Detailed</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="ArrivalDetailedGroupbyHolder" data-title="Arrival Detail Group by Holders">Arrival Detail Group by Holders</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="DepartureIndividualAndGroup" data-title="Departure Individual and Group">Departure Individual and Group</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="DeparturesReport" data-title="Departure Reports">Departure Reports</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="DepartureExtended" data-title="Departure Extended">Departure Extended</a></li>
+
+        </ul>
+        <div class="filter-header fw-bold" id="header-guest" style="font-size: 14px;">
+            <span>05 - Guest In House</span>
+            <i id="icon-guest" class="fas fa-chevron-right"></i>
+        </div>
+        <hr class="mui-divider" />
+        <ul id="guest-report-list" class="list-group list-group-flush  report-list-scrollable" style="display: none;">
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="GuestBirthdayReport" data-title="Guest Birthday Report">Guest Birthday Report</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="GuestInHousebyCompany" data-title="Guest In House by Company">Guest In House by Company</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="GuestInHousebyGroup" data-title="Guest In House by Group">Guest In House by Group</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="GuestInHousebyRoom" data-title="Guest In House by Room">Guest In House by Room</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="GuestInHouseCashPaymentMethod" data-title="Guest In House Cash Payment Method">Guest In House Cash Payment Method</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="GuestInHouseSpecialRequests" data-title="Guest In House Special Requests">Guest In House Special Requests</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="MessagesGuestsINHAndDueArrival" data-title="Messages Guests INH & Due Arrival">Messages Guests INH & Due Arrival</a> </li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="RoomMoves" data-title="Room Moves">Room Moves</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="GuestInHouseComplimentaryAndHouseUse" data-title="Guest In House Complimentary & House Use">Guest In House Complimentary & House Use</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="GuestLedger" data-title="Guest Ledger">Guest Ledger</a></li>
+        </ul>
+
+        <div class="filter-header fw-bold" id="header-house" style="font-size: 14px;">
+            <span>06 - HouseKeeping</span>
+            <i id="icon-house" class="fas fa-chevron-right"></i>
+        </div>
+        <hr class="mui-divider" />
+        <ul id="house-report-list" class="list-group list-group-flush  report-list-scrollable" style="display: none;">
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="ArticleByRoom" data-title="Article by Rooms">Article by Rooms</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="DailyMinibarReport" data-title="Daily Minibar Report">Daily Minibar Report</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="HouseKeepingStatus" data-title="House Keeping Status">House Keeping Status</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="JournalByCashierAndArticle" data-title="Journal by Cashier & Article">Journal by Cashier & Article</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="OccupancyByPercon" data-title="Occupancy by Person">Occupancy by Person</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="OutOfOrderByPerson" data-title="Out Of Order By Person">Out Of Order By Person</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="RoomDiscrepancy" data-title="Room Discrepancy">Room Discrepancy</a> </li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="SummaryByArticle" data-title="Summary by Article">Summary by Article</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="VacantRoom" data-title="Vacant Room">Vacant Room</a></li>
+        </ul>
+        <div class="filter-header fw-bold" id="header-cashiering" style="font-size: 14px;">
+            <span>07 - Cashiering</span>
+            <i id="icon-cashiering" class="fas fa-chevron-right"></i>
+        </div>
+        <hr class="mui-divider" />
+        <ul id="cashiering-report-list" class="list-group list-group-flush  report-list-scrollable" style="display: none;">
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="DialingInformation" data-title="Dialing Information">Dialing Information</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="IncurringDepositCollection" data-title="Incurring Deposit Collection">Incurring Deposit Collection</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="IncurringDepositPaymentPlan" data-title="Incurring Deposit Payment Plan">Incurring Deposit Payment Plan</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="IncurringDepositReturn" data-title="Incurring Deposit Return">Incurring Deposit Return</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="IncurringDepositSummary" data-title="Incurring Deposit Summary">Incurring Deposit Summary</a></li>
+        </ul>
+        <div class="filter-header fw-bold" id="header-financial" style="font-size: 14px;">
+            <span>08 - Financial</span>
+            <i id="icon-financial" class="fas fa-chevron-right"></i>
+        </div>
+        <hr class="mui-divider" />
+        <ul id="financial-report-list" class="list-group list-group-flush  report-list-scrollable" style="display: none;">
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="TrialBalance" data-title="Trial Balance">Trial Balance</a></li>
+        </ul>
+        <div class="filter-header fw-bold" id="header-profile" style="font-size: 14px;">
+            <span>09 - Profile & Statistics</span>
+            <i id="icon-profile" class="fas fa-chevron-right"></i>
+        </div>
+        <hr class="mui-divider" />
+        <ul id="profile-report-list" class="list-group list-group-flush  report-list-scrollable" style="display: none;">
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="GuestBirthdayReport" data-title="Guest Birthday Report">Guest Birthday Report</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="ProfileAddress" data-title="Profile Address">Profile Address</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="ProfileProductivity" data-title="Profile Productivity">Profile Productivity</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="RoomStatistic" data-title="Room Statistics">Room Statistics</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="RoomTypeStatistic" data-title="Room Type Statistics">Room Type Statistics</a></li>
+        </ul>
+        <div class="filter-header fw-bold" id="header-other" style="font-size: 14px;">
+            <span>10 - Orther Reports</span>
+            <i id="icon-other" class="fas fa-chevron-right"></i>
+        </div>
+        <hr class="mui-divider" />
+        <ul id="other-report-list" class="list-group list-group-flush  report-list-scrollable" style="display: none;">
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="ComplimentaryGuestReport" data-title="Complimentary Guest Report">Complimentary Guest Report</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="GIHComplimentary" data-title="GIH Complimentary">GIH Complimentary</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="GIHComplimentaryandHouseUse" data-title="GIH Complimentary and House Use">GIH Complimentary and House Use</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="PaidOutReport" data-title="Paid Out Report">Paid Out Report</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="RevenueBy" data-title="RevenueBy">RevenueBy</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="HistoryAndForecast" data-title="History And Forecast">History And Forecast</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="Revenuebyroom" data-title="Revenue by room">Revenue by room</a></li>
+        </ul> *@
+        @* <div class="filter-header" id="header-reservation" style="font-size: 14px;">
+            <span>Report reservation</span>
+            <i id="icon-reservation" class="fas fa-chevron-right"></i>
+        </div>
+        <hr class="mui-divider" />
+        <ul id="reservation-report-list" class="list-group list-group-flush  report-list-scrollable" style="display: none;">
+            <li class="list-group-item">
+                <a style="color:black" class="text-decoration-none report-link" data-report="GroupReservationReport" data-title="Group Reservation Report">Group Reservation Report</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" class="text-decoration-none report-link" data-report="BlacklistReport" data-title="Blacklist Report">Blacklist Report</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" class="text-decoration-none report-link" data-report="LeadTimeReport" data-title="Leadtime Reports">Leadtime Reports</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" class="text-decoration-none report-link" data-report="SaleinChargeReport" data-title="Sales in Charge Reports">Sales in Charge Reports</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" class="text-decoration-none report-link" data-report="SaleinChargeActivity" data-title="Sales in Charge Activity">Sales in Charge Activity</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" class="text-decoration-none report-link" data-report="ReservationSummaryReport" data-title="Reservation Summary Report">Reservation Summary Report</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" class="text-decoration-none report-link" data-report="TAProductionReport" data-title="TA Production Report">TA Production Report</a>
+            </li>
+            <li class="list-group-item"> 
+                <a style="color:black" class="text-decoration-none report-link" data-report="NoShowReport" data-title="No Show Report">No Show Report</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" class="text-decoration-none report-link" data-report="ReservationSummary" data-title="Reservation Summary">Reservation Summary</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" class="text-decoration-none report-link" data-report="ReservationRateCheck" data-title="Reservation Rate Check">Reservation Rate Check</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" class="text-decoration-none report-link" data-report="Alerts" data-title="Alerts">Alerts</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" class="text-decoration-none report-link" data-report="ArrivalsAndCheckInToday" data-title="Arrivals and Check In Today">Arrivals and Check In Today</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" class="text-decoration-none report-link" data-report="ArrivalsDetailed" data-title="Arrivals Detailed">Arrivals Detailed</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" class="text-decoration-none report-link" data-report="ArrivalDetailedGroupbyHolder" data-title="Arrival Detail Group by Holders">Arrival Detail Group by Holders</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" class="text-decoration-none report-link" data-report="ReservationbyCompany" data-title="Reservation by Company">Reservation by Company</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" class="text-decoration-none report-link" data-report="ReservationPreblocked" data-title="Reservation Preblocked">Reservation Preblocked</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" class="text-decoration-none report-link" data-report="ReservationStatistics" data-title="Reservation Statistics">Reservation Statistics</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" class="text-decoration-none report-link" data-report="ReservationCancellation" data-title="Reservation Cancellations">Reservation Cancellations</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" class="text-decoration-none report-link" data-report="RoomOccupancy" data-title="Room Occupancy">Room Occupancy</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" class="text-decoration-none report-link" data-report="Transportation" data-title="Transportation">Transportation</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" class="text-decoration-none report-link" data-report="DepartureIndividualAndGroup" data-title="Departure Individual and Group">Departure Individual and Group</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" class="text-decoration-none report-link" data-report="DeparturesReport" data-title="Departure Reports">Departure Reports</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" class="text-decoration-none report-link" data-report="RoomDiscrepancy" data-title="Room Discrepancy">Room Discrepancy</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" class="text-decoration-none report-link" data-report="VacantRoom" data-title="Vacant Room">Vacant Room</a>
+            </li>
+            <li class="list-group-item">
+                <a style="color:black" class="text-decoration-none report-link" data-report="DepartureExtended" data-title="Departure Extended">Departure Extended</a>
+            </li>
+
+        </ul>
+
+        <div class="filter-header" id="header-nightaudit" style="font-size: 14px;">
+            <span>Night audit</span>
+            <i id="icon-nightaudit" class="fas fa-chevron-right"></i>
+        </div>
+        <hr class="mui-divider" />
+        <ul id="night-audit-report-list" class="list-group list-group-flush  report-list-scrollable" style="display: none;">
+       
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="CashierAudit" data-title="Cashier Audit">Cashier Audit</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="CashierSummary" data-title="Cashier Summary">Cashier Summary</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="GuestTrialBalance" data-title="Guest Trial Balance">Guest Trial Balance</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="FixChargeReport" data-title="Fixed Charge Report">Fixed Charge Report</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="DepositRequestLogReport" data-title="Deposit Request Log Report">Deposit Request Log Report</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="RevenueSpa" data-title="Revenue Spa">Revenue Spa</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="RevenueReport" data-title="Revenue Reports">Revenue Reports</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="RevenueSummary" data-title="Revenue Summary">Revenue Summary</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="TransferARReport" data-title="Transfer AR Reports">Transfer AR Reports</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="DepositTransferAtCheckIn" data-title="Deposit Transferred at Check In">Deposit Transferred at Check In</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="TrialBalance" data-title="Trial Balance">Trial Balance</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="DepositActivity" data-title="Deposit Activity">Deposit Activity</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="DepositLedger" data-title="Deposit Ledger">Deposit Ledger</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="DailyMinibarReport" data-title="Daily Minibar Report">Daily Minibar Report</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="GuestLedger" data-title="Guest Ledger">Guest Ledger</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="RevenueBy" data-title="Revenue By">Revenue By</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="CancellationJournal" data-title="Cancellation Journal">Cancellation Journal</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="RatecodeReport" data-title="Ratecode Report">Ratecode Reports</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="PostingJournalInvoicing" data-title="Posting Journal Invoicing">Posting Journal Invoicing</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="ReservationPreblocked" data-title="Reservation Preblocked">Reservation Preblocked</a></li>
+            <li class="list-group-item"><a style="color:red" class="text-decoration-none report-link" data-report="DetailCheckOut" data-title="Detail Check Out">Detail Check Out</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="ArticleByRoom" data-title="Article by Rooms">Article by Rooms</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="JournalByCashierAndArticle" data-title="Journal by Cashier & Article">Journal by Cashier & Article</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="OccupancyByPercon" data-title="Occupancy by Person">Occupancy by Person</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="SummaryByArticle" data-title="Summary by Article">Summary by Article</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="IncurringDepositCollection" data-title="Incurring Deposit Collection">Incurring Deposit Collection</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="IncurringDepositPaymentPlan" data-title="Incurring Deposit Payment Plan">Incurring Deposit Payment Plan</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="IncurringDepositReturn" data-title="Incurring Deposit Return">Incurring Deposit Return</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="IncurringDepositSummary" data-title="Incurring Deposit Summary">Incurring Deposit Summary</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="RoomStatistic" data-title="Room Statistics">Room Statistics</a></li>
+            <li class="list-group-item"><a style="color:red" class="text-decoration-none report-link" data-report="DailyRevenueReports" data-title="Daily Revenue Reports">Daily Revenue Reports</a></li>
+            <li class="list-group-item">
+                <a style="color:black" id="RevenueDetail" class="text-decoration-none report-link" data-report="RevenueDetail" data-title="Revenue Detail">Revenue Detail</a>
+            </li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="DailyRevenueReportNew" data-title="Daily Revenue Reports New">Daily Revenue Reports New</a></li>
+            <li class="list-group-item"><a style="color:black" class="text-decoration-none report-link" data-report="DailyRevenueReport(V2)" data-title="Daily Revenue Report (V2)">Daily Revenue Report (V2)</a></li>
+            <li class="list-group-item"><a style="color:blue" class="text-decoration-none report-link" data-report="ManagerReport" data-title="Manager Report">Manager Report</a></li>
+            <li class="list-group-item"><a style="color:blue" class="text-decoration-none report-link" data-report="RoomTypeStatistic" data-title="Room Type Statistics">Room Type Statistics</a></li>
+
+        </ul> *@        
+    </div>
+
+    <div class="function_wrapper col-custom-9-9">
+
+        <div id="reportContainer"></div>
+
+    </div>
+
+
+</div>
+
+<script>
+
+
+
+    $(document).ready(function () {
+           localStorage.removeItem("CompanyName");
+
+          // Gán giá trị mới từ ViewBag vào localStorage
+          var companyName = '@ViewBag.CompanyName';
+          console.log(companyName);
+          localStorage.setItem("CompanyName", companyName);
+
+               const permissionData = JSON.parse(localStorage.getItem("PermissionNames")) || [];
+
+         const lowerPermissionNames = permissionData
+         .map(x => x.name?.trim().toLowerCase());
+
+
+
+     // Lặp qua tất cả các report-link
+     $(".report-link").each(function () {
+         const reportName = $(this).data("report")?.toString().trim().toLowerCase();
+
+         if (!lowerPermissionNames.includes(reportName)) {
+             $(this).addClass("disabled-link");
+             $(this).css({
+                 "pointer-events": "none",
+                 "opacity": "0.4"
+             });
+         }
+     });
+
+
+
+        $('#header-sale').click(function () {
+             const reportList = $('#report-list');
+             const reservationList = $('#reservation-report-list');
+             const iconSale = $('#icon-sale');
+             const iconReservation = $('#icon-reservation');
+             const iconNight = $('#icon-nightaudit');
+             const isReportVisible = reportList.is(':visible');
+             const nightAuditList = $('#night-audit-report-list');
+
+         if (isReportVisible) {
+             reportList.slideUp();
+             iconSale.removeClass('fa-chevron-down').addClass('fa-chevron-right');
+         } else {
+             reportList.slideDown();
+             iconSale.removeClass('fa-chevron-right').addClass('fa-chevron-down');
+
+             reservationList.slideUp();
+             iconReservation.removeClass('fa-chevron-down').addClass('fa-chevron-right');
+
+                  nightAuditList.slideUp();
+               iconNight.removeClass('fa-chevron-down').addClass('fa-chevron-right');
+         }
+     });
+
+     $('#header-reservation').click(function () {
+         const reportList = $('#report-list');
+         const reservationList = $('#reservation-report-list');
+         const iconSale = $('#icon-sale');
+
+         const nightAuditList = $('#night-audit-report-list');
+         const iconReservation = $('#icon-reservation');
+         const iconNight = $('#icon-nightaudit');
+         const isReservationVisible = reservationList.is(':visible');
+
+         if (isReservationVisible) {
+             reservationList.slideUp();
+             iconReservation.removeClass('fa-chevron-down').addClass('fa-chevron-right');
+         } else {
+             reservationList.slideDown();
+             iconReservation.removeClass('fa-chevron-right').addClass('fa-chevron-down');
+
+             reportList.slideUp();
+             iconSale.removeClass('fa-chevron-down').addClass('fa-chevron-right');
+
+             nightAuditList.slideUp();
+             iconNight.removeClass('fa-chevron-down').addClass('fa-chevron-right');
+         }
+     });
+
+         $('#header-nightaudit').click(function () {
+         const nightAuditList = $('#night-audit-report-list');
+         const saleList = $('#report-list');
+         const reservationList = $('#reservation-report-list');
+
+         const iconNight = $('#icon-nightaudit');
+         const iconSale = $('#icon-sale');
+         const iconReservation = $('#icon-reservation');
+
+         const isNightVisible = nightAuditList.is(':visible');
+
+         if (isNightVisible) {
+             nightAuditList.slideUp();
+             iconNight.removeClass('fa-chevron-down').addClass('fa-chevron-right');
+         } else {
+             nightAuditList.slideDown();
+             iconNight.removeClass('fa-chevron-right').addClass('fa-chevron-down');
+
+             saleList.slideUp();
+             iconSale.removeClass('fa-chevron-down').addClass('fa-chevron-right');
+
+             reservationList.slideUp();
+             iconReservation.removeClass('fa-chevron-down').addClass('fa-chevron-right');
+         }
+     });
+          $('#header-account').click(function () {
+          const list = $('#account-report-list');
+          const icon = $('#icon-account');
+          const isVisible = list.is(':visible');
+
+          if (isVisible) {
+              list.slideUp();
+              icon.removeClass('fa-chevron-down').addClass('fa-chevron-right');
+          } else {
+              list.slideDown();
+              icon.removeClass('fa-chevron-right').addClass('fa-chevron-down');
+
+              $('#report-list, #reservation-report-list, #night-audit-report-list, #arrival-report-list, #guest-report-list, #house-report-list, #cashiering-report-list, #financial-report-list, #profile-report-list, #other-report-list').slideUp();
+              $('#icon-sale, #icon-reservation, #icon-nightaudit, #icon-arrival, #icon-guest, #icon-house, #icon-cashiering, #icon-financial, #icon-profile, #icon-other').removeClass('fa-chevron-down').addClass('fa-chevron-right');
+          }
+      });
+
+      $('#header-arrival').click(function () {
+          const list = $('#arrival-report-list');
+          const icon = $('#icon-arrival');
+          const isVisible = list.is(':visible');
+
+          if (isVisible) {
+              list.slideUp();
+              icon.removeClass('fa-chevron-down').addClass('fa-chevron-right');
+          } else {
+              list.slideDown();
+              icon.removeClass('fa-chevron-right').addClass('fa-chevron-down');
+
+              $('#report-list, #reservation-report-list, #night-audit-report-list, #account-report-list, #guest-report-list, #house-report-list, #cashiering-report-list, #financial-report-list, #profile-report-list, #other-report-list').slideUp();
+              $('#icon-sale, #icon-reservation, #icon-nightaudit, #icon-account, #icon-guest, #icon-house, #icon-cashiering, #icon-financial, #icon-profile, #icon-other').removeClass('fa-chevron-down').addClass('fa-chevron-right');
+          }
+      });
+
+      $('#header-guest').click(function () {
+          const list = $('#guest-report-list');
+          const icon = $('#icon-guest');
+          const isVisible = list.is(':visible');
+
+          if (isVisible) {
+              list.slideUp();
+              icon.removeClass('fa-chevron-down').addClass('fa-chevron-right');
+          } else {
+              list.slideDown();
+              icon.removeClass('fa-chevron-right').addClass('fa-chevron-down');
+
+              $('#report-list, #reservation-report-list, #night-audit-report-list, #account-report-list, #arrival-report-list, #house-report-list, #cashiering-report-list, #financial-report-list, #profile-report-list, #other-report-list').slideUp();
+              $('#icon-sale, #icon-reservation, #icon-nightaudit, #icon-account, #icon-arrival, #icon-house, #icon-cashiering, #icon-financial, #icon-profile, #icon-other').removeClass('fa-chevron-down').addClass('fa-chevron-right');
+          }
+      });
+
+      $('#header-house').click(function () {
+          const list = $('#house-report-list');
+          const icon = $('#icon-house');
+          const isVisible = list.is(':visible');
+
+          if (isVisible) {
+              list.slideUp();
+              icon.removeClass('fa-chevron-down').addClass('fa-chevron-right');
+          } else {
+              list.slideDown();
+              icon.removeClass('fa-chevron-right').addClass('fa-chevron-down');
+
+              $('#report-list, #reservation-report-list, #night-audit-report-list, #account-report-list, #arrival-report-list, #guest-report-list, #cashiering-report-list, #financial-report-list, #profile-report-list, #other-report-list').slideUp();
+              $('#icon-sale, #icon-reservation, #icon-nightaudit, #icon-account, #icon-arrival, #icon-guest, #icon-cashiering, #icon-financial, #icon-profile, #icon-other').removeClass('fa-chevron-down').addClass('fa-chevron-right');
+          }
+      });
+
+      $('#header-cashiering').click(function () {
+          const list = $('#cashiering-report-list');
+          const icon = $('#icon-cashiering');
+          const isVisible = list.is(':visible');
+
+          if (isVisible) {
+              list.slideUp();
+              icon.removeClass('fa-chevron-down').addClass('fa-chevron-right');
+          } else {
+              list.slideDown();
+              icon.removeClass('fa-chevron-right').addClass('fa-chevron-down');
+
+              $('#report-list, #reservation-report-list, #night-audit-report-list, #account-report-list, #arrival-report-list, #guest-report-list, #house-report-list, #financial-report-list, #profile-report-list, #other-report-list').slideUp();
+              $('#icon-sale, #icon-reservation, #icon-nightaudit, #icon-account, #icon-arrival, #icon-guest, #icon-house, #icon-financial, #icon-profile, #icon-other').removeClass('fa-chevron-down').addClass('fa-chevron-right');
+          }
+      });
+
+      $('#header-financial').click(function () {
+          const list = $('#financial-report-list');
+          const icon = $('#icon-financial');
+          const isVisible = list.is(':visible');
+
+          if (isVisible) {
+              list.slideUp();
+              icon.removeClass('fa-chevron-down').addClass('fa-chevron-right');
+          } else {
+              list.slideDown();
+              icon.removeClass('fa-chevron-right').addClass('fa-chevron-down');
+
+              $('#report-list, #reservation-report-list, #night-audit-report-list, #account-report-list, #arrival-report-list, #guest-report-list, #house-report-list, #cashiering-report-list, #profile-report-list, #other-report-list').slideUp();
+              $('#icon-sale, #icon-reservation, #icon-nightaudit, #icon-account, #icon-arrival, #icon-guest, #icon-house, #icon-cashiering, #icon-profile, #icon-other').removeClass('fa-chevron-down').addClass('fa-chevron-right');
+          }
+      });
+
+      $('#header-profile').click(function () {
+          const list = $('#profile-report-list');
+          const icon = $('#icon-profile');
+          const isVisible = list.is(':visible');
+
+          if (isVisible) {
+              list.slideUp();
+              icon.removeClass('fa-chevron-down').addClass('fa-chevron-right');
+          } else {
+              list.slideDown();
+              icon.removeClass('fa-chevron-right').addClass('fa-chevron-down');
+
+              $('#report-list, #reservation-report-list, #night-audit-report-list, #account-report-list, #arrival-report-list, #guest-report-list, #house-report-list, #cashiering-report-list, #financial-report-list, #other-report-list').slideUp();
+              $('#icon-sale, #icon-reservation, #icon-nightaudit, #icon-account, #icon-arrival, #icon-guest, #icon-house, #icon-cashiering, #icon-financial, #icon-other').removeClass('fa-chevron-down').addClass('fa-chevron-right');
+          }
+      });
+
+      $('#header-other').click(function () {
+          const list = $('#other-report-list');
+          const icon = $('#icon-other');
+          const isVisible = list.is(':visible');
+
+          if (isVisible) {
+              list.slideUp();
+              icon.removeClass('fa-chevron-down').addClass('fa-chevron-right');
+          } else {
+              list.slideDown();
+              icon.removeClass('fa-chevron-right').addClass('fa-chevron-down');
+
+              $('#report-list, #reservation-report-list, #night-audit-report-list, #account-report-list, #arrival-report-list, #guest-report-list, #house-report-list, #cashiering-report-list, #financial-report-list, #profile-report-list').slideUp();
+              $('#icon-sale, #icon-reservation, #icon-nightaudit, #icon-account, #icon-arrival, #icon-guest, #icon-house, #icon-cashiering, #icon-financial, #icon-profile').removeClass('fa-chevron-down').addClass('fa-chevron-right');
+          }
+      });
+
+
+            function removeVietnameseTones(str) {
+             return str.normalize('NFD')
+                       .replace(/[\u0300-\u036f]/g, '')
+                       .replace(/đ/g, 'd').replace(/Đ/g, 'D')
+                       .toLowerCase();
+         }
+
+         $('#report-search').on('keyup', function () {
+             const searchText = removeVietnameseTones($(this).val().trim());
+
+             // Danh sách cần duyệt
+             const reportGroups = [
+                 {
+                     ul: '#report-list',
+                     icon: '#icon-sale'
+                 },
+                 {
+                     ul: '#reservation-report-list',
+                     icon: '#icon-reservation'
+                 },
+                 {
+                     ul: '#night-audit-report-list',
+                     icon: '#icon-nightaudit'
+                 },
+                 {
+                      ul: '#account-report-list',
+                      icon: '#icon-account'
+                 },
+                 {
+                     ul: '#arrival-report-list',
+                     icon: '#icon-arrival'
+                 },
+                 {
+                     ul: '#guest-report-list',
+                     icon: '#icon-guest'
+                 },
+                 {
+                     ul: '#cashiering-report-list',
+                     icon: '#icon-cashiering'
+                 },
+                 {
+                      ul: '#financial-report-list',
+                      icon: '#icon-financial'
+                 },
+                 {
+                      ul: '#profile-report-list',
+                      icon: '#icon-profile'
+                 },
+                 {
+                      ul: '#other-report-list',
+                      icon: '#icon-other'
+                 }
+
+
+             ];
+
+             reportGroups.forEach(group => {
+                 let matchFound = false;
+
+                 $(group.ul + ' li').each(function () {
+                     const itemText = removeVietnameseTones($(this).text());
+                     if (itemText.includes(searchText)) {
+                         $(this).show();
+                         matchFound = true;
+                     } else {
+                         $(this).hide();
+                     }
+                 });
+
+                 // Mở danh sách nếu có kết quả
+                 if (searchText.length > 0 && matchFound) {
+                     if (!$(group.ul).is(':visible')) {
+                         $(group.ul).slideDown();
+                         $(group.icon).removeClass('fa-chevron-right').addClass('fa-chevron-down');
+                     }
+                     } else if (searchText.length === 0) {
+                     // Ẩn danh sách và hiển thị lại tất cả các mục
+                     $(group.ul).slideUp();
+                     $(group.ul + ' li').show(); // reset lại hiển thị
+                     $(group.icon).removeClass('fa-chevron-down').addClass('fa-chevron-right');
+                 }
+             });
+         });
+
+     function loadReport(reportName, title) {
+         $.ajax({
+             url: '/Report/LoadReport',
+             type: 'GET',
+             data: { reportName: reportName, title: title },
+             success: function (result) {
+                 $('#reportContainer').html(result);
+
+                 // Thực thi script nếu có
+                 $(result).filter('script').each(function () {
+                     $.globalEval(this.text || this.textContent || this.innerHTML || '');
+                 });
+             },
+             error: function () {
+                 alert('Lỗi khi tải báo cáo!');
+             }
+         });
+     }
+
+         $(document).on('click', '.report-link', function (e) {
+             e.preventDefault();
+
+             $(".report-link").removeClass("active");
+             $(this).addClass("active");
+
+             var reportName = $(this).data('report');
+             var title = $(this).data('title');
+
+             loadReport(reportName, title);
+         });
+
+         // ✅ Load từ URL nếu có ?name=...
+         const urlParams = new URLSearchParams(window.location.search);
+         const reportName = urlParams.get('name');
+
+         if (reportName) {
+             const $link = $('.report-link[data-report="' + reportName + '"]');
+             const title = $link.data('title') || reportName;
+
+             // ❗ Chỉ gọi nếu chưa click (chưa có link active)
+             if (!$('.report-link.active').length) {
+                 $link.addClass("active");
+                 loadReport(reportName, title);
+             }
+         }
+    });
+
+
+</script>

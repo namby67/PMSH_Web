@@ -1,0 +1,566 @@
+﻿@using DevExpress.XtraReports.UI
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewBag.Title = ViewBag.ReportHeader;
+    var zoneList = ViewBag.ZoneList;
+    var rtList = ViewBag.RoomTypeList;
+    var mkList = ViewBag.MarketList;
+}
+
+
+<style>
+    .filter_wrapper {
+        /*     background-color: #ececec; */
+        /*   margin: 0px 8px 14px 8px; */
+        padding: 18px 0px 0px 14px;
+        border-radius: 8px;
+    }
+
+    .gridContainer {
+        margin: 0px 8px;
+    }
+
+    .button_wrapper {
+        display: flex;
+        column-gap: 12px;
+        margin: 0px 8px;
+    }
+
+        .button_wrapper .fa-solid {
+            margin-right: 5px;
+        }
+
+    .selected {
+        background-color: #4CAF50; /* Màu xanh */
+        color: white;
+    }
+
+    #gridContainer .dx-datagrid-rowsview .dx-selection {
+        background-color: #01579b !important; /* màu xanh ngọc */
+        color: white !important; /* chữ trắng */
+    }
+
+        #gridContainer .dx-datagrid-rowsview .dx-selection * {
+            color: white !important;
+        }
+
+    .sticky-header label,
+    .sticky-header .form-control-sm {
+        font-size: 0.75rem;
+        line-height: 1.2;
+    }
+
+
+    .sticky-header .form-control-sm {
+        padding: .1rem .35rem;
+        height: calc(1.1em + .2rem + 2px);
+    }
+
+    .sticky-header label[class*="me-"] {
+        margin-right: .5rem !important;
+    }
+
+    #gridContainer .dx-datagrid-headers .dx-header-row > td {
+        padding: 5px !important;
+        height: 24px !important;
+        font-size: 12px !important;
+        line-height: 1.1 !important;
+    }
+
+    .sticky-header label,
+    .sticky-header .form-control-sm {
+        font-size: 0.75rem;
+        line-height: 1.2;
+    }
+
+
+    .sticky-header .form-control-sm {
+        padding: .1rem .35rem;
+        height: calc(1.1em + .2rem + 2px);
+    }
+
+    .sticky-header label[class*="me-"] {
+        margin-right: .5rem !important;
+    }
+
+    #gridContainer .dx-datagrid-headers .dx-header-row > td {
+        padding: 5px !important;
+        height: 24px !important;
+        font-size: 12px !important;
+        line-height: 1.1 !important;
+    }
+
+    .tomselect-custom {
+        width: 500px;
+        min-height: 30px; /* hoặc tùy theo chiều cao bạn muốn */
+        font-size: 0.65rem;
+        margin-left: 5px;
+    }
+
+        .tomselect-custom .ts-control {
+            padding-left: 8px !important; /* hoặc bất kỳ giá trị nào bạn muốn */
+        }
+
+
+
+</style>
+<link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+<div class="text-center" id="reportTitle" style="font-size: 20px"></div>
+<div class="sticky-header bg-white p-2 shadow-sm z-3">
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-1" style="border: 1px solid #ced4da; border-radius: 6px; padding: 8px;">
+        <!-- From Date -->
+        <div class="d-flex align-items-center me-3">
+            <label class="me-2 mb-0">From Date:</label>
+            <input type="date" id="fromDate" name="fromDate" class="form-control form-control-sm w-auto" />
+        </div>
+
+        <div class="d-flex align-items-center me-3">
+            <label class="me-2 mb-0">To Date:</label>
+            <input type="date" id="toDate" name="toDate" class="form-control form-control-sm w-auto" />
+        </div>
+       
+        <div class="d-flex align-items-center me-1">
+            <label class="me-2 mb-0">Room Type:</label>
+            <select id="roomType" name="roomType" class="tomselect-custom " style="width: 70px;" multiple>
+                @foreach (var item in rtList)
+                {
+                    <option value="@item.Code">@item.Code</option>
+                }
+            </select>
+        </div>
+
+        <div class="d-flex align-items-center me-1">
+            <label class="me-2 mb-0">Zone:</label>
+            <select id="zone" name="zone" class="tomselect-custom" style="width: 70px;" multiple>
+                @foreach (var item in zoneList)
+                {
+                    <option value="@item.Code">@item.Code</option>
+                }
+            </select>
+
+        </div>
+
+        <div class="d-flex align-items-center me-3">
+            <label class="me-2 mb-0">Market:</label>
+            <select id="market" name="market" class="tomselect-custom " style="width: 170px;" multiple>
+                @foreach (var item in mkList)
+                {
+                    <option value="@item.Code">@item.Description</option>
+                }
+            </select>
+
+        </div>
+
+        <div style="display:none!important" class="d-flex align-items-center me-3">
+            <label class="me-2 mb-0">Currency:</label>
+            <select id="viewBy" name="viewBy" class="form-control form-control-sm w-auto">
+
+                <option value="VND">VND</option>
+                <option value="USD">USD</option>
+            </select>
+        </div>
+
+  
+    </div>
+    <div class="">
+        <button style="border-radius: 4px;  margin-right: 6px;background-color: #3b9ac6;" id="btnPrint" class="mui-button mui-button-new"><i class="fa-solid fa-eye"></i>View</button>
+        <button style="border-radius: 4px;  margin-right: 6px;background-color: green;" id="btnExportExcel" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Excel</button>
+        <button style="border-radius: 4px;  margin-right: 6px;background-color: darkorange;" id="btnExportPdf" class="mui-button mui-button-new" type="button"><i class="fas fa-eraser"></i> PDF</button>
+    </div>
+</div>
+
+<div class="mui-card">
+    @* <div style="font-size: 20px;" class="mt-1" id="reportTitle"></div> *@
+    <div id="gridWrapper" class="mt-2" style="max-height: 500px;">
+        <div class="gridContainer mt-2" id="gridContainer"></div>
+    </div>
+</div>
+<div id="loadingSpinner" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
+    <i class="fa-solid fa-spinner fa-spin"></i>
+</div>
+<script>
+    function formatDate(date) {
+        let year = date.getFullYear();
+        let month = (date.getMonth() + 1).toString().padStart(2, '0'); // Đảm bảo có 2 chữ số
+        let day = date.getDate().toString().padStart(2, '0'); // Đảm bảo có 2 chữ số
+        return `${year}-${month}-${day}`;
+    }
+       
+    $(document).ready(function () {
+         document.getElementById("reportTitle").innerText = '@ViewBag.ReportTitle';
+        const today = new Date();
+
+        const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+        // Lấy ngày cuối cùng của tháng
+        const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+        // Định dạng theo local time
+        const formattedFirstDay = formatDate(firstDayOfMonth);
+        const formattedLastDay = formatDate(lastDayOfMonth);
+
+        console.log(formattedFirstDay); // Kiểm tra giá trị đúng chưa
+        console.log(formattedLastDay); // Kiểm tra giá trị đúng chưa
+        // Gán giá trị cho input date
+        document.getElementById('fromDate').value = formattedFirstDay;
+        document.getElementById('toDate').value = formattedLastDay;
+        initializeTomSelects();
+
+
+    });
+        function initializeTomSelects() {
+        const selectors = ["#roomType","#zone","#market"];
+
+            for (const id of selectors) {
+                const el = document.querySelector(id);
+                if (!el) continue;
+
+                // Nếu đã khởi tạo rồi thì destroy
+                if (el.tomselect) el.tomselect.destroy();
+
+                const ts = new TomSelect(el, {
+                    plugins: ['remove_button'],
+                    create: false,
+                    maxItems: null,
+                    allowEmptyOption: true,
+                    placeholder: '',
+                    persist: false,
+                    render: {
+                        option: function (data, escape) {
+                            return `<div>${escape(data.text)}</div>`;
+                        }
+                    }
+                });
+
+            }
+        }
+    $(document).off("click", "#btnPrint").on("click", "#btnPrint", function () {
+        $("#loadingSpinner").show();
+        $.ajax({
+            url: '/Report/ReservationSummaryData',
+            type: 'GET',
+            data: {
+                fromDate: $("#fromDate").val(),
+                toDate: $("#toDate").val(),
+                roomType: $("#roomType").val().join(","),
+                zone: $("#zone").val().join(",") ,
+                market: $("#market").val().join(",") ,
+                viewBy: $("#viewBy").val(),
+            },
+            traditional: true,
+              crossDomain: false,
+                headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                // $("#reportViewerContainer").html(result);
+                // $("#loadingSpinner").hide();
+                     console.log(result);
+    const processedData = prepareReservationSummaryData(result);
+                initializReservationSummaryGrid(processedData);
+                    $("#loadingSpinner").hide();
+            },
+            error: function () {
+                alert("Không thể tải báo cáo.");
+                $("#loadingSpinner").hide();
+            }
+        });
+    });
+      function prepareReservationSummaryData(data) {
+        const groupedData = {};
+
+        // Group by MonthDisplay
+        data.forEach(item => {
+            const key = item.monthDisplay;
+            if (!groupedData[key]) groupedData[key] = [];
+            groupedData[key].push(item);
+        });
+
+        const finalData = [];
+
+        Object.entries(groupedData).forEach(([month, records]) => {
+             finalData.push({
+            weekDate: records[0].monthDisplay,
+            isTitle: true,
+            cssClass: "custom" // Nếu cần CSS riêng cho tiêu đề
+        });
+            finalData.push(...records);
+
+            const totalRow = {
+                rsvSummaryDate: "MONTHLY TOTAL",
+                weekDate:"",
+                totalOccRms: sum(records, 'totalOccRms'),
+                indRms: sum(records, 'indRms'),
+                blkRmsPU: sum(records, 'blkRmsPU'),
+                blkRmsNotPU: sum(records, 'blkRmsNotPU'),
+                   totalAvailable: sum(records, 'totalAvailable'),
+
+                occPer: sum(records, 'occPer'),
+                roomRevenue: sum(records, 'roomRevenue'),
+                grpRevenue: sum(records, 'grpRevenue'),
+                indRevenue: sum(records, 'indRevenue'),
+                avrRate: average(records, 'avrRate'),
+
+                  arrRms: sum(records, 'arrRms'),
+                blkArrRms: sum(records, 'blkArrRms'),
+                charrRms: sum(records, 'charrRms'),
+
+                    totalArrRms: averageOfSums(records, ['arrRms', 'blkArrRms', 'charrRms']),
+
+
+                depRms: sum(records, 'depRms'),
+                blkDepRms: sum(records, 'blkDepRms'),
+                chdepRms: sum(records, 'chdepRms'),
+
+                  totalDepRms: averageOfSums(records, ['depRms', 'blkDepRms', 'chdepRms']),
+
+                oOORms: sum(records, 'oOORms'),
+                adl: average(records, 'adl'),
+
+
+                                chl: sum(records, 'chl'),
+                chl1: sum(records, 'chl1'),
+                chl2: sum(records, 'chl2'),
+                totPer: sum(records, 'totPer'),
+                arrPrs: sum(records, 'arrPrs'),
+                depPrs: sum(records, 'depPrs'),
+                isTotal: true ,
+                    cssClass: "custom",// Để phân biệt dòng tổng
+            };
+
+            finalData.push(totalRow);
+        });
+
+        return finalData;
+    }
+      function averageOfSums(arr, fields) {
+        if (arr.length === 0) return 0;
+        let total = 0;
+        fields.forEach(field => {
+            total += sum(arr, field);
+        });
+        return total / fields.length;
+    }
+
+    // Helper functions
+    function sum(arr, field) {
+        return arr.reduce((total, item) => total + (item[field] || 0), 0);
+    }
+
+    function average(arr, field) {
+        const valid = arr.filter(x => x[field] != null);
+        if (valid.length === 0) return 0;
+        return valid.reduce((sum, x) => sum + x[field], 0) / valid.length;
+    }
+      function initializReservationSummaryGrid(data) {
+        const columnWidth = 180;
+
+        const numericColumns = [
+            "totalOccRms", "indRms", "blkRmsPU", "blkRmsNotPU", "totalAvailable",
+            "occPer", "roomRevenue", "grpRevenue", "avrRate",
+            "arrRms", "blkArrRms", "charrRms",
+            "depRms", "blkDepRms", "chdepRms",
+            "oOORms", "adl", "chl", "chl1", "chl2",
+            "totPer", "arrPrs", "depPrs"
+        ];
+
+        $("#gridContainer").dxDataGrid({
+           dataSource: data,         height: 500,
+            allowColumnResizing: true,
+            columns: [
+                { dataField: "rsvSummaryDate", caption: "Date", width: columnWidth - 60, dataType: "date", format: "dd/MM/yyyy" },
+                { dataField: "weekDate", caption: "Week Date", width: columnWidth - 80 },
+                { dataField: "totalOccRms", caption: "TotalOcc.R", width: columnWidth - 60, dataType: "number", format: "#,##0" },
+                    { dataField: "indRms", caption: "IndRm", width: columnWidth - 60, dataType: "number", format: "#,##0" },
+                    { dataField: "blkRmsPU", caption: "Grp Rm", width: columnWidth - 60, dataType: "number", format: "#,##0" },
+                    { dataField: "blkRmsNotPU", caption: "CH Rm", width: columnWidth - 60, dataType: "number", format: "#,##0" },
+                    { dataField: "totalAvailable", caption: "Total Avail", width: columnWidth - 60, dataType: "number", format: "#,##0" },
+                    { dataField: "occPer", caption: "Occ %", width: columnWidth - 60, dataType: "number", format: "#,##0" },
+                { dataField: "roomRevenue", caption: "Individual Revenue", width: columnWidth - 30, dataType: "number", format: "#,##0" },
+                    { dataField: "grpRevenue", caption: "Group Revenue", width: columnWidth - 30, dataType: "number", format: "#,##0" },
+                    { dataField: "indRevenue", caption: "Total Revenue", width: columnWidth - 30, dataType: "number", format: "#,##0" },
+                    { dataField: "avrRate", caption: "Avr Rate", width: columnWidth - 60, dataType: "number", format: "#,##0" },
+                    { dataField: "arrRms", caption: "Ind Arr Rm", width: columnWidth - 60, dataType: "number", format: "#,##0" },
+                    { dataField: "blkArrRms", caption: "Grp Arr Rm", width: columnWidth - 60, dataType: "number", format: "#,##0" },
+                    { dataField: "charrRms", caption: "C&H Arr Rm", width: columnWidth - 60, dataType: "number", format: "#,##0" },
+                {
+                    caption: "Total Arr Rm", width: columnWidth - 60, dataType: "number", format: "#,##0",
+                    calculateCellValue: function (data) {
+                        return (data.arrRms || 0) + (data.blkArrRms || 0) + (data.charrRms || 0);
+                    }
+                },
+                    { dataField: "depRms", caption: "Ind Dep Rm", width: columnWidth - 60, dataType: "number", format: "#,##0" },
+                    { dataField: "blkDepRms", caption: "Grp Dep Rm", width: columnWidth - 60, dataType: "number", format: "#,##0" },
+                    { dataField: "chdepRms", caption: "C&H Rate", width: columnWidth - 60, dataType: "number", format: "#,##0" },
+                {
+                        caption: "Total Dep Rm", width: columnWidth - 60, dataType: "number", format: "#,##0",
+                    calculateCellValue: function (data) {
+                        return (data.depRms || 0) + (data.blkDepRms || 0) + (data.chdepRms || 0);
+                    }
+                },
+
+                { dataField: "oOORms", caption: "OOO Rm", width: columnWidth - 70, dataType: "number", format: "#,##0" },
+                { dataField: "adl", caption: "Adl.", width: columnWidth - 70, dataType: "number", format: "#,##0" },
+                { dataField: "chl", caption: "C", width: columnWidth - 70, dataType: "number", format: "#,##0" },
+                { dataField: "chl1", caption: "C1", width: columnWidth - 70, dataType: "number", format: "#,##0" },
+                { dataField: "chl2", caption: "C2", width: columnWidth - 70, dataType: "number", format: "#,##0" },
+                { dataField: "totPer", caption: "Total Prs", width: columnWidth - 70, dataType: "number", format: "#,##0" },
+                { dataField: "arrPrs", caption: "Arr. Prs", width: columnWidth - 70, dataType: "number", format: "#,##0" },
+                { dataField: "depPrs", caption: "Dep. Prs", width: columnWidth - 70, dataType: "number", format: "#,##0" }
+            ],
+         summary: {
+        totalItems: numericColumns.map(field => ({
+            name: `${field}Summary`,
+            showInColumn: field, // << QUAN TRỌNG
+            summaryType: "custom",
+            displayFormat: "{0}",
+            valueFormat: "#,##0"
+        })),
+        calculateCustomSummary: function (e) {
+            const isCustomRow = row => row?.cssClass === "custom" || row?.isTotal === true;
+
+            if (e.summaryProcess === "start") {
+                e.totalValue = 0;
+            } else if (e.summaryProcess === "calculate") {
+                const row = e.value;
+                if (isCustomRow(row)) return;
+
+                const field = e.name.replace("Summary", ""); // Tách tên cột từ name
+                const value = parseFloat(row[field]) || 0;
+                e.totalValue += value;
+            }
+        }
+    }
+,
+            paging: { pageSize: 25 },
+            scrolling: {
+                useNative: true,
+                showScrollbar: "always"
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [25, 50, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true
+            },
+            selection: { mode: "multiple", showCheckBoxesMode: "none" },
+            filterRow: { visible: true, applyFilter: "auto" },
+            headerFilter: { visible: true },
+            showBorders: true,
+            onRowPrepared: function (e) {
+                if (e.rowType === "data" && e.data?.cssClass) {
+                    e.rowElement.addClass(e.data.cssClass);
+                }
+            }
+        });
+    }
+
+
+
+
+
+    $("#btnExportExcel").click(function () {
+               const grid = $("#gridContainer").dxDataGrid("instance"); var selectedReport2 = '@ViewBag.ReportTitle';
+        var selectedReport = '@ViewBag.ReportTitle';
+        if (!selectedReport) {
+            alert("Vui lòng chọn báo cáo trước khi xuất Excel.");
+            return;
+        }
+
+                     const workbook = new ExcelJS.Workbook();const companyName = localStorage.getItem("CompanyName") || "Tên công ty chưa xác định";
+        const worksheet = workbook.addWorksheet("Sheet 1");
+
+        // === Tạo header công ty (dòng 1) ===
+       worksheet.addRow([companyName]);
+        worksheet.mergeCells('A1:E1');
+        worksheet.getRow(1).font = { bold: true };
+        worksheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'left' };
+
+        // === Dòng 2: Thời gian xuất (phải) ===
+        const now = new Date();
+        const exportDate = now.toLocaleString("vi-VN");
+        worksheet.addRow(['', '', '', '', ' ' + exportDate]);
+        worksheet.mergeCells('E2:H2');
+        worksheet.getRow(2).alignment = { vertical: 'middle', horizontal: 'right' };
+
+        // === Dòng 3–4: Trống
+        worksheet.addRow([]);
+        worksheet.addRow([]);
+
+        // === Dòng 5: Tên báo cáo ở giữa ===
+        const reportRow = worksheet.addRow(['', '', selectedReport]);
+        worksheet.mergeCells('C5:F5');
+        reportRow.font = { bold: true, size: 14 };
+        reportRow.alignment = { vertical: 'middle', horizontal: 'center' };
+
+        // === Dòng 6: Trống trước khi xuất dữ liệu
+        worksheet.addRow([]);
+
+        // === Export dữ liệu từ DevExtreme (bắt đầu từ dòng 7)
+        DevExpress.excelExporter.exportDataGrid({
+            component: grid,
+            worksheet: worksheet,
+            autoFilterEnabled: true,
+            topLeftCell: { row: 7, column: 1 } // dữ liệu bắt đầu từ dòng 7
+        }).then(function () {
+            // Footer
+            const lastRow = worksheet.lastRow.number + 2;
+
+            worksheet.mergeCells(`A${lastRow}:F${lastRow}`);
+            worksheet.getCell(`A${lastRow}`).alignment = { horizontal: 'center' };
+            worksheet.getCell(`A${lastRow}`).font = { italic: true };
+
+            // Ghi file
+            let fileName = selectedReport + ".xlsx";
+            workbook.xlsx.writeBuffer().then(function (buffer) {
+                saveAs(new Blob([buffer], { type: "application/octet-stream" }), fileName);
+            });
+        });
+    });
+
+
+    // Nút xuất PDF
+            $("#btnExportPdf").click(function () {
+           const grid = $("#gridContainer").dxDataGrid("instance");
+
+           // Lấy đối tượng jsPDF từ window
+           const { jsPDF } = window.jspdf;
+           const doc = new jsPDF({ orientation: "landscape", unit: "pt", format: "A4" });
+
+           const selectedReport = '@ViewBag.ReportTitle';
+           const companyName = localStorage.getItem("CompanyName") || "Tên công ty chưa xác định";
+
+           grid.getDataSource().load().then(data => {
+               const columns = grid.getVisibleColumns();
+
+               const head = [columns.map(col => col.caption)];
+               const body = data.map(row =>
+                   columns.map(col =>
+                       col.calculateCellValue ? col.calculateCellValue(row) : row[col.dataField]
+                   )
+               );
+
+               doc.setFontSize(14);
+               doc.setFont("Helvetica", "bold");
+               doc.text(companyName, doc.internal.pageSize.getWidth() / 2, 40, { align: "center" });
+
+               doc.setFontSize(12);
+               doc.setFont("Helvetica", "normal");
+               doc.text(selectedReport, doc.internal.pageSize.getWidth() / 2, 60, { align: "center" });
+
+               // AutoTable
+               doc.autoTable({
+                   startY: 80,
+                   head: head,
+                   body: body,
+                    styles: { fontSize: 9, cellPadding: 4 , lineWidth: 0.5, lineColor: [0, 0, 0]    },
+                   headStyles: { fillColor: [41, 128, 185], textColor: 255, fontStyle: 'bold' },
+                   alternateRowStyles: { fillColor: [240, 240, 240] },
+                   margin: { left: 20, right: 20 }
+               });
+
+               doc.save(selectedReport + ".pdf");
+           });
+       });
+</script>

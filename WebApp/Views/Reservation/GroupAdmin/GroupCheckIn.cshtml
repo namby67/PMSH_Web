@@ -1,0 +1,167 @@
+﻿<!-- Modal group check in-->
+<div class="modal fade modal-xl" id="modalGroupCheckIn" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Group check in</h5>
+                <button type="button" class="btn-close" onclick="closeModalGroupCheckIn();"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-2">
+                    <button class="mui-button mui-button-search" onclick="GroupCheckIn();">Check In</button>
+                </div>
+
+                <div class="mt-2 row bg-light border rounded" style="margin:0 1px">
+                    <div class="row">
+                        <div class="radio-group col-md-5">
+                            <input type="radio"  name="grouupCheckInType" checked value="3">
+                            <label  style="text-align:left">All Rooms</label>
+                        </div>
+                        <div class="radio-group col-md-5 ">
+                            <input type="radio"  name="grouupCheckInType" style="flex:0" value="1">
+                            <label  style="text-align:left">Clean Rooms Only</label>
+                        </div>
+                        <div class="radio-group col-md-5 ">
+                            <input type="radio"  name="grouupCheckInType" style="flex:0" value="2">
+                            <label  style="text-align:left">Clean Non-checked Rooms Only</label>
+                        </div>
+                        <div class="radio-group col-md-5 ">
+                            <input type="radio"  name="grouupCheckInType" style="flex:0" value="4">
+                            <label  style="text-align:left">Clean Non-checked or Clean Rooms</label>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="mui-divider"></div>
+                <div class="mui-card">
+                    <div id="gridContainerSearchGroupCheckInRoom" class="mt-2 gridContainer"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    function openModalGroupCheckIn(){
+        $('#modalGroupCheckIn').modal('show');
+        searchGroupCheckInRoom($('input[name="grouupCheckInType"]:checked').val());
+    }
+    function closeModalGroupCheckIn(){
+        $('#modalGroupCheckIn').modal('hide');
+    }
+    $('input[name="grouupCheckInType"]').on('change', function () {
+        var selectedValue = $('input[name="grouupCheckInType"]:checked').val();
+        searchGroupCheckInRoom(selectedValue);
+
+    });
+    function searchGroupCheckInRoom(type){
+        $.ajax({
+            url: '/Reservation/SearchGroupCheckInRoom',
+            type: 'get',
+            dataType: 'json',
+            data: {
+                confirmationNo: listData[0].ConfirmationNo,
+                type : type
+            },
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                    initializeDataGridSearchGroupCheckInRoom(result);
+
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                }
+            }
+        });
+    }
+    function initializeDataGridSearchGroupCheckInRoom(data) {
+        // Tự động tạo cột từ data
+        let columns = [];
+
+        if (data.length > 0) {
+            columns = Object.keys(data[0]).map(key => ({
+                dataField: key,
+                caption: key
+            }));
+        }
+
+        // Thêm cột checkbox đầu tiên
+        columns.unshift({
+            caption: "",
+            width: 50,
+            allowFiltering: false,
+            allowSorting: false,
+            cellTemplate: function (container, options) {
+                $("<input>")
+                    .attr("type", "checkbox")
+                    .prop("checked", options.data && options.data.isSelected)
+                    .on("change", function (e) {
+                        options.data.isSelected = e.target.checked;
+                    })
+                    .appendTo(container);
+            }
+        });
+
+        // Khởi tạo grid
+        $("#gridContainerSearchGroupCheckInRoom").dxDataGrid({
+            dataSource: data,
+            columns: columns,
+
+            columnMinWidth: 90,
+            paging: { pageSize: 15 },
+            scrolling: {
+                mode: 'virtual',
+                showScrollbar: 'always',
+                useNative: false,
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [15, 20, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true,
+            },
+            filterRow: {
+                visible: true,
+                applyFilter: "auto"
+            },
+            selection: {
+                mode: "multiple", // Cho phép chọn nhiều dòng
+                showCheckBoxesMode: "none" // Không dùng checkbox mặc định
+            }
+        });
+    }
+
+    function GroupCheckIn() {
+        const dataGrid = $("#gridContainerSearchGroupCheckInRoom").dxDataGrid("instance");
+
+        // Lấy toàn bộ dữ liệu đã load
+        const allData = dataGrid.getDataSource().items();
+
+        // Lọc các dòng có checkbox được tích
+        const selectedItems = allData.filter(item => item.isSelected);
+
+        // Lấy danh sách ID
+        const selectedIds = selectedItems.map(item => item.ID);
+
+        $.ajax({
+            url: '/Reservation/GroupCheckIn', 
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(selectedIds),
+            success: function (data) {
+                closeModalGroupCheckIn();
+                window.location.href = '/Reservation/SearchReservation';
+
+            },
+            error: function (err) {
+                console.error("Lỗi khi gửi danh sách ID:", err);
+            }
+        });
+    }
+
+
+</script>

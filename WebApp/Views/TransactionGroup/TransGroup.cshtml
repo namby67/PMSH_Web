@@ -1,0 +1,278 @@
+﻿<style>
+    .header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 5px 0px;
+        border-bottom: 2px solid #ececec;
+    }
+
+    .header h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+        color: #000000;
+    }
+
+    .header .info-icon {
+        color: #6b7280;
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+
+    .header .info-icon:hover {
+        color: var(--main-color);
+    }
+</style>
+<div>
+    <div class="header mt-2" style="border-bottom:none;justify-content:center">
+        <h3 id="content-title">
+            Transaction Group
+        </h3>
+    </div>
+    <div class="mb-2">
+        <button class="mui-button mui-button-search" onclick="searchTransactionGroup();"> Search</button>
+        <button class="mui-button mui-button-new" onclick="openModalNew();"> New</button>
+        <button class="mui-button mui-button-edit" onclick="EditTransactionGroup();"> Edit</button>
+        <button class="mui-button mui-button-delete" onclick="DeleteTransactionGroup();"> Delete</button>
+
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <label>Code</label>
+            <input type="text" id="code">
+        </div>
+        <div class="col-md-6">
+            <label>Description</label>
+            <input type="text" id="description">
+        </div>
+
+    </div>
+    <div class="mui-card mt-2">
+        <div id="gridContainer" class="gridContainer mt-2"></div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalNew" tabindex="-1" aria-labelledby="transactionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="border: 1px solid #bcbcbc">
+            <div class="modal-header">
+                <h5 class="modal-title" id="transactionModalLabel">New/Edit Transaction Group</h5>
+                <button type="button" class="btn-close" onclick="closeFormAdd()"></button>
+            </div>
+            <div class="button-group" style="margin:0 10px">
+                <button type="button" class="mui-button mui-button-search" onclick="SaveTransGroup();">Save</button>
+                <button type="button" class="mui-button mui-button-clear" onclick="closeFormAdd()">Close</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                     <div class="col-md-3">
+                        <label>Group Code</label>
+                        <input type="text" id="codeAdd">
+                    </div>
+                    <div class="col-md-4">
+                        <label>Description</label>
+                        <input type="text" id="descriptionAdd">
+                    </div>
+                    <div class="col-md-12 mt-2">
+                        <div class="row">
+                            <label class="col-md-1">Revenue</label>
+                            <input class="col-md-1" type="radio" name="type" style="width:15px;height:15px" checked value="0">
+                            <label  class="col-md-1">Payment</label>
+                            <input class="col-md-1" type="radio" name="type" style="width:15px;height:15px" value="1">
+                            <label class="col-md-1">Wrapper</label>
+                            <input class="col-md-1" type="radio" name="type" style="width:15px;height:15px" value="2">
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function openModalNew(){
+
+        $('#modalNew').modal('show');
+    }
+
+    function searchTransactionGroup() {
+
+        $.ajax({
+            url: '/TransactionGroup/SearchTransactionGroup',
+            type: 'get',
+            dataType: 'json',
+            data: {
+                groupCode: $('#code').val(),
+                description: $('#description').val()
+            },
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                initializeDataGridSearch(result);
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                }
+            },
+
+        });
+
+    }
+    function initializeDataGridSearch(data) {
+        const limitedData = data.slice(0, 100);
+
+        $("#gridContainer").dxDataGrid({
+            dataSource: limitedData,
+            allowColumnResizing: true,
+            columnMinWidth: 90,
+            paging: {
+                enabled: true, // Enable paging
+                pageSize: 15 // 15 records per page
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [15, 20, 30], // Fixed page sizes
+                showPageSizeSelector: true,
+                showInfo: true, // Show paging info
+                showNavigationButtons: true
+            },
+            scrolling: {
+                mode: 'standard', // Standard scrolling mode
+                showScrollbar: 'always',
+                useNative: false
+            },
+            filterRow: {
+                visible: true,
+                applyFilter: "auto"
+            },
+            selection: {
+                mode: "multiple", // Enable multiple row selection
+                showCheckBoxesMode: "always" // Always show checkboxes
+            },
+            columns: [
+                { dataField: "ID", caption: "ID",visible: false },
+
+                { dataField: "Code", caption: "Group Code" },
+                { dataField: "Description", caption: "Description" },
+                { dataField: "Type", caption: "Type" },
+            ],
+            onRowClick: function(e) {
+                const grid = $("#gridContainerContact").dxDataGrid("instance");
+                grid.selectRows([e.key], false);
+                templateID = e.data.id;
+            },
+        });
+    }
+    $(document).ready(function() {
+
+        searchTransactionGroup();
+    });
+    function SaveTransGroup() {
+        const userName = JSON.parse(localStorage.getItem("Loginname"));
+        const userID = JSON.parse(localStorage.getItem("userID"));
+        var formData = new FormData();
+        formData.append('description', $('#descriptionAdd').val());
+        formData.append('code',  $('#codeAdd').val());
+        formData.append('userName', userName);
+        formData.append('userID', userID);
+        formData.append('id', transactionID);
+
+        formData.append('type', $('input[name="type"]:checked').val());
+        $.ajax({
+            url: '/TransactionGroup/SaveTransactionGroup',
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            data: formData,
+            success: function (data) {
+                if (data.code == 0) {
+                    closeFormAdd();
+                    searchTransactionGroup();
+                    showToast('Success', data.msg, true);
+                } else {
+                    showToast('Error', data.msg, false);
+                }
+            },
+            error: function (xhr, statusText, err) { }
+        });
+    }
+    function clearFormAdd(){
+        $('#code').val('');
+        $('#description').val('');
+    }
+    function closeFormAdd(){
+        $('#modalNew').modal('hide');
+        clearFormAdd();
+    }
+    var transactionID = 0;
+    function EditTransactionGroup(){
+        var grid = $("#gridContainer").dxDataGrid("instance");
+        var selectedRows = grid.getSelectedRowsData();
+        var selectedIds = selectedRows.map(row => row.ID);
+        if(selectedIds.length < 1){
+            showToast('Error',"Please choose at least 1 transaction group",false);
+            return;
+        }
+        transactionID = selectedIds[0];
+        $.ajax({
+            url: '/TransactionGroup/GetTransactionGroupByID',
+            type: 'get',
+            dataType: 'json',
+            data:{
+                id: selectedIds[0]
+            },
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                if(result != null){
+                    $('#codeAdd').val(result.code);
+                    $('#descriptionAdd').val(result.description);
+                    openModalNew();
+                }
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                }
+            }
+        });
+    }
+
+
+    function DeleteTransactionGroup() {
+        var grid = $("#gridContainer").dxDataGrid("instance");
+        var selectedRows = grid.getSelectedRowsData();
+        var selectedIds = selectedRows.map(row => row.ID);
+
+        $.ajax({
+            url: '/TransactionGroup/DeleteTransactionGroup',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                id:selectedIds,
+            },
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                if(result.code == 0){
+                    searchTransactionGroup();
+                    showToast('Succes',result.msg,true);
+                }
+                else{
+                    showToast('Error',result.msg,false);
+
+                }
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                }
+            },
+
+        });
+
+    }
+</script>

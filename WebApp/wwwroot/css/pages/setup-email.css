@@ -1,0 +1,174 @@
+﻿.container {
+            max-width: 1200px;
+            width: 100%;
+            padding: 2rem;
+        }
+        .content-container {
+            display: flex;
+            gap: 2rem;
+        }
+        .form-container {
+            flex: 1;
+            max-width: 550px;
+        }
+        .table-container {
+            flex: 1;
+            max-width: 550px;
+        }
+        .step {
+            display: none;
+        }
+        .step.active {
+            display: block;
+        }
+
+        .input-field {
+            padding: 0.75rem;
+            border: 1px solid #E5E7EB;
+            border-radius: 0.5rem;
+            background: #FFFFFF;
+            color: #1F2937;
+            transition: all 0.2s ease;
+        }
+.header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 0px;
+    border-bottom: 2px solid #ececec;
+}
+
+    .header h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+        color: #000000;
+    }
+
+    .header .info-icon {
+        color: #6b7280;
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+
+        .header .info-icon:hover {
+            color: var(--main-color);
+        }
+        .input-field:focus {
+            outline: none;
+            border-color: #3B82F6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .input-field::placeholder {
+            color: #9CA3AF;
+        }
+        .input-field:disabled {
+            background: #F3F4F6;
+            cursor: not-allowed;
+        }
+        .btn-primary {
+            background: #3B82F6;
+            color: #FFFFFF;
+            border: none;
+        }
+        .btn-primary:hover {
+            background: #2563EB;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+        }
+        .btn-secondary {
+            background: #E5E7EB;
+            color: #4B5563;
+            border: none;
+        }
+        .btn-secondary:hover {
+            background: #D1D5DB;
+        }
+        .btn-success {
+            background: #14B8A6;
+            color: #FFFFFF;
+            border: none;
+        }
+        .btn-success:hover {
+            background: #0D9488;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(20, 184, 166, 0.2);
+        }
+        .draggable {
+            cursor: grab;
+            padding: 0.5rem 1rem;
+            background: #F9FAFB;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .draggable:hover {
+            background: #E5E7EB;
+            transform: scale(1.02);
+        }
+        .drag-over {
+            background: #EFF6FF !important;
+            border: 2px dashed #3B82F6 !important;
+        }
+        .success-message {
+            display: none;
+            color: #14B8A6;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+        .edit-icon {
+            cursor: pointer;
+            color: #6B7280;
+            margin-left: 0.5rem;
+        }
+        .edit-icon:hover {
+            color: #3B82F6;
+        }
+        .input-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .param-list-container {
+            max-height: 150px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #3B82F6 #F9FAFB;
+        }
+        .param-list-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        .param-list-container::-webkit-scrollbar-track {
+            background: #F9FAFB;
+            border-radius: 9999px;
+        }
+        .param-list-container::-webkit-scrollbar-thumb {
+            background: #3B82F6;
+            border-radius: 9999px;
+        }
+        .delete-icon {
+            cursor: pointer;
+            color: #EF4444;
+            margin-left: 0.5rem;
+        }
+        .delete-icon:hover {
+            color: #B91C1C;
+        }
+        .param-list-container .draggable {
+            justify-content: flex-start;
+        }
+        .nav-tabs .nav-link {
+            color: #6B7280;
+            font-weight: 500;
+        }
+        .nav-tabs .nav-link.active {
+            color: #3B82F6;
+            border-color: #3B82F6;
+        }
+        .config-table {
+
+            padding: 1.5rem;
+
+        }

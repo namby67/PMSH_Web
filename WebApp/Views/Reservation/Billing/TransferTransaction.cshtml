@@ -1,0 +1,138 @@
+﻿<div class="modal fade modal" id="modalTransferTransaction" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Split Transaction</h5>
+                <button type="button" class="btn-close" onclick="closeModalTransferTransaction()"></button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <button class="mui-button mui-button-search" onclick="TransferTransaction();"> Transfer</button>
+                    <button class="mui-button mui-button-new" onclick="SearchGuestRoom();"> Search</button>
+                    <button class="mui-button mui-button-clear" onclick="closeModalTransferTransaction();">Close</button>
+                </div>
+
+                <div class="row mt-2">
+                    <label class="col-md-2">Room</label>
+                    <input id="roomTransferTransaction" class="col-md-10" onblur="SearchGuestRoom()" />
+                </div>
+
+                <div class="row mt-2">
+                    <label class="col-md-2">Name</label>
+                    <input id="nameTransferTransaction" class="col-md-10" onblur="SearchGuestRoom()" />
+                </div>
+                <div id="gridContainerTransferTransaction" class="mt-2 gridContainer"></div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function openModalTransferTransaction(){
+        $('#modalTransferTransaction').modal('show');
+    }
+    function closeModalTransferTransaction(){
+        $('#modalTransferTransaction').modal('hide');
+    }
+    function SearchGuestRoom(){
+        $.ajax({
+            url: '/Billing/SearchGuestInRoom',
+            type: 'get',
+            dataType: 'json',
+            data:{
+                room: $("#roomTransferTransaction").val(),
+                name: $("#nameTransferTransaction").val()
+            },
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                initializeDataGridSearchGuestInRoom(result);
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                } else {
+                }
+            }
+
+        });
+    }
+    var folioTransferTransaction = 0;
+    function initializeDataGridSearchGuestInRoom(data) {
+        $("#gridContainerTransferTransaction").dxDataGrid({
+            dataSource: data,
+            allowColumnResizing: true,
+            columns: [
+                {
+                    type: "selection",
+                    width: 50,
+                    allowFiltering: false,
+                    allowSorting: false,
+                    headerCellTemplate: function() { return $("<div>"); }
+                },
+                { dataField: "reservationID", caption: "ID", visible: false },
+                { dataField: "folioID", caption: "FolioID", visible: false },
+                { dataField: "room", caption: "Room" },
+                { dataField: "name", caption: "Name" },
+                { dataField: "mainGuest", caption: "MG" },
+                { dataField: "balance", caption: "Balance" },
+
+            ],
+            paging: { pageSize: 15 },
+            scrolling: {
+                rowRenderingMode: 'virtual'
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [15, 20, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true
+            },
+            filterRow: {
+                visible: true,
+                applyFilter: "auto"
+            },
+            selection: {
+                mode: "single",
+                showCheckBoxesMode: "always"
+            },
+            onRowClick: function(e) {
+                console.log(e.data);
+                folioTransferTransaction = e.data.folioID;
+                const grid = $("#gridContainerTransferTransaction").dxDataGrid("instance");
+                grid.selectRows([e.key], false);
+            }
+        });
+    }
+
+    function TransferTransaction(){
+        const userName = JSON.parse(localStorage.getItem("Loginname"));
+        const userID = JSON.parse(localStorage.getItem("userID"));
+        var grid = $("#gridContainerBilling").dxDataGrid("instance");
+        var selectedRows = grid.getSelectedRowsData();
+        var selectedIds = selectedRows.map(row => row.id);
+        $.ajax({
+            url: '/Billing/TransferTransaction',
+            type: 'POST',
+            data: {
+                userName: userName,
+                userID:userID,
+                folioDetailID: selectedIds,
+                folioMasterID: folioNoID,
+                folioID: folioTransferTransaction,
+            },
+            success: function (data) {
+                if (data.code == 0) {
+                    closeModalTransferTransaction();
+                    getFolioNo();
+                    showToast('Success', data.msg, true);
+                } else {
+                    showToast('Error', data.msg, false);
+                }
+            },
+            error: function (xhr, statusText, err) { }
+        });
+    }
+</script>

@@ -1,0 +1,26 @@
+﻿.submit-button-new-small {
+    grid-column: span 2;
+    padding: 6px 12px;
+    font-size: 16px;
+    background-color: #bcbcbc;
+    margin-top: 20px;
+}
+
+.submit-button-clear-small {
+    grid-column: span 2;
+    padding: 6px 12px;
+    font-size: 16px;
+    background-color: #2b6cb0;
+    margin-top: 20px;
+}
+button {
+
+    border: none;
+
+    background-color: #bcbcbc;
+    color: white;
+    cursor: pointer;
+
+    text-align:center;
+    justify-content:center;
+}

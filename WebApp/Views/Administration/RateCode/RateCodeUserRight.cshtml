@@ -1,0 +1,399 @@
+@using DevExpress.XtraReports.UI
+
+@{
+    dynamic? listRateCode = @ViewBag.RateCodeList;
+    dynamic? listUser = @ViewBag.UserList;
+}
+
+<link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+
+<div class="text-center" id="reportTitle" style="font-size: 20px">Rate Code User Right </div>
+<div class="sticky-header bg-white p-2 shadow-sm z-3">
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-1"
+        style="border: 1px solid #ccc; border-radius: 6px; padding: 8px;width: fit-content;">
+
+        <div class="d-flex align-items-center me-2">
+            <label class="me-2 mb-0">Rate Code User Right:</label>
+
+            <select id="user" class="form-control form-control-sm w-auto">
+                <option value="">-- Select User --</option>
+                @foreach (dynamic u in ViewBag.UserList)
+                {
+                    <option value="@u.LoginName">@u.LoginName \ @u.JobDescription</option>
+                }
+            </select>
+        </div>
+        <div class="d-flex align-items-center me-2">
+            <label class="me-2 mb-0">User:</label>
+
+            <select id="code" class="form-control form-control-sm w-auto">
+                <option value="">-- Rate Code --</option>
+                @foreach (dynamic u in ViewBag.RateCodeList)
+                {
+                    <option value="@u.RateCode">@u.RateCode \ @u.Descripton</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <div>
+        <button id="btnView" class="mui-button mui-button-new"><i class="fa-solid fa-eye"></i>View</button>
+        <button id="btnNew" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i>
+            New</button>
+        <button id="btnEdit" class="mui-button mui-button-edit " type="button"> <i class="fa-solid fa-file-excel"></i>
+            Edit</button>
+        <button id="btnDelete" class="mui-button button-report-delete" type="button"> <i
+                class="fa-solid fa-file-excel"></i> Delete</button>
+    </div>
+</div>
+<div class="mui-card">
+    <div id="gridWrapper" style="max-height: 500px;">
+        <div class="gridContainer mt-2" id="gridContainer"></div>
+    </div>
+    <div id="overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 999;">
+    </div>
+
+    <div class="modal fade" id="itemModal" tabindex="-1" aria-labelledby="itemModalLabel" aria-hidden="true">
+        <div class="modal-dialog custom-modal-width">
+            <!-- modal-lg để form rộng hơn -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="itemModalLabel">New Item</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <!-- Modal Footer (nút Save & Close) -->
+                <div class="modal-footer justify-content-start">
+                    <button type="button" id="btnSave" class="mui-button mui-button-save">
+                        <i class="fa-solid fa-floppy-disk"></i> Save
+                    </button>
+                    <button type="button" data-bs-dismiss="modal" class="mui-button mui-button-close">
+                        <i class="fa-solid fa-xmark"></i> Close
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div id="itemForm">
+                        <input type="hidden" id="modalItemId" name="id" value="0" />
+                        <div class="row g-3">
+                            <div style="border: 1px solid #ced4da; border-radius: 6px; padding: 8px;">
+                                <div class="form-group-new-reservation col-md-6">
+                                    <label>User Name <span style="color:red">*</span></label>
+                                    <div class="row" style="margin-left:1px;margin-right:2px" name="user">
+                                        <input id="idUserName" class="col-md-10" type="hidden" />
+                                        <input id="txtUserName" class="col-md-10" readonly name="user" />
+                                        <button onclick="openModalSearchUser()" class="col-md-2"><i
+                                                class="fa-solid fa-arrow-down"></i></button>
+                                    </div>
+                                    <div class="invalid-feedback"></div>
+
+                                </div>
+                                <div class="form-group-new-reservation col-md-6">
+                                    <label>Rate Code <span style="color:red">*</span></label>
+                                    <div class="row" style="margin-left:1px;margin-right:2px" name="rateCode">
+                                        <input id="idRateCode" class="col-md-10" disabled type="hidden" />
+                                        <input id="txtRateCode" class="col-md-10" readonly name="rateCode" />
+                                        <button onclick="openModalSearchRateCode()" class="col-md-2"><i
+                                                class="fa-solid fa-arrow-down"></i></button>
+                                    </div>
+                                    <div class="invalid-feedback"></div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</div>
+<div id="loadingSpinner"
+    style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
+    <i class="fa-solid fa-spinner fa-spin"></i>
+</div>
+
+@await Html.PartialAsync(partialViewName: "~/Views/Administration/ModalRateCode/ModalSearchRateCode.cshtml")
+
+
+<script>
+    DevExpress.localization.locale("vi");
+
+    var selectedRowData = null;
+
+    $(document).ready(function () {
+        reloadGrid()
+    });
+    function reloadGrid() {
+        console.log("Calling reloadGrid");
+
+        $("#loadingSpinner").show();
+
+        $.ajax({
+            url: '/Administration/RateCode/GetAllRateCodeUserRight',
+            type: 'GET',
+            data: {
+                userName: $("#user").val() || "",
+                rateCode: $("#code").val() || ""
+            },
+            success: function (data) {
+                if (data && data.length > 0) {
+                    let ids = data[0].idRateCode;
+                    loadTelephoneGrid(data);
+                    $("#loadingSpinner").hide();
+                } else {
+                    loadTelephoneGrid([]);
+                    showToast('Warning', 'No Rate Code data not found.', false);
+                    console.log(`Error: ${data.message}`);
+                    $("#loadingSpinner").hide();
+                }
+            },
+            error: function () {
+                alert("Không thể tải dữ liệu");
+                $("#loadingSpinner").hide();
+            }
+        });
+    }
+
+
+    function initializeTomSelects() {
+        const selectors = [];
+
+        for (const id of selectors) {
+            const el = document.querySelector(id);
+            if (!el) continue;
+
+            if (el.tomselect) el.tomselect.destroy();
+
+            const ts = new TomSelect(el, {
+                plugins: ['remove_button'],
+                create: false,
+                maxItems: null,
+                allowEmptyOption: true,
+                placeholder: '',
+                persist: false,
+                maxOptions: 1000,
+                render: {
+                    option: function (data, escape) {
+                        return `<div>${escape(data.text)}</div>`;
+                    }
+                }
+            });
+        }
+    }
+
+    $(document).off("click", "#btnView").on("click", "#btnView", function () {
+        reloadGrid();
+    });
+
+    $(document).ready(function () {
+        initializeTomSelects();
+    })
+
+    function loadTelephoneGrid(data) {
+        $("#gridContainer").dxDataGrid({
+            dataSource: data,
+            height: 500,
+            columnAutoWidth: false,
+            allowColumnResizing: true,
+            columnResizingMode: "widget",
+            selection: { mode: "single" },
+            width: "100%",
+            columns: [
+                { dataField: "id", visible: false },
+                { dataField: "rateCodeID", visible: false },
+                { dataField: "userID", visible: false },
+
+                { dataField: "userName", caption: "User Name", width: "22%" },
+                { dataField: "rateCode", caption: "Rate Code", width: "18%" },
+                { dataField: "createdBy", caption: "Created By", width: "15%" },
+                {
+                    dataField: "createdDate",
+                    caption: "Created Date",
+                    dataType: "date",
+                    format: "dd/MM/yyyy",
+                    width: "15%"
+                },
+                { dataField: "updatedBy", caption: "Updated By", width: "15%" },
+                {
+                    dataField: "updatedDate",
+                    caption: "Updated Date",
+                    dataType: "date",
+                    format: "dd/MM/yyyy",
+                    width: "15%"
+                }
+            ],
+            scrolling: {
+                mode: "standard", // Không dùng virtual để footer hiển thị đúng
+                showScrollbar: "always",
+                scrollByContent: true
+            },
+            paging: {
+                pageSize: 20
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [20, 50, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true
+            },
+            columnAutoWidth: true,
+            filterRow: {
+                visible: true,
+                applyFilter: "auto"
+            },
+            summary: {
+                totalItems: [{
+                    column: "noOfNights",
+                    summaryType: "sum",
+                    displayFormat: "Total: {0}",
+                    showInColumn: "noOfNights"
+                }]
+            },
+            // 🔥 Quan trọng: gán selectedRowData khi click chọn
+            onSelectionChanged: function (e) {
+                if (e.selectedRowsData.length > 0) {
+                    selectedRowData = e.selectedRowsData[0]; // gán row đang chọn
+                    console.log("Selected Row:", selectedRowData);
+                } else {
+                    selectedRowData = null;
+                }
+            }
+        });
+    }
+
+
+    $("#btnNew").click(function () {
+        applyValidationErrors([], "#itemModal");
+        $("#modalItemId").val(0);
+        $("#idUserName").val("");
+        $("#txtUserName").val("");
+        $("#idRateCode").val("");
+        $("#txtRateCode").val("");
+        $("#itemModalLabel").text("New Rate Code User Right");
+        $("#itemModal").modal("show");
+    });
+
+
+    $(document).off("click", "#btnEdit").on("click", "#btnEdit", function () {
+        if (!selectedRowData) {
+            showToast('Error', 'Please select 1 row to update.', false);
+            return;
+        }
+        applyValidationErrors([], "#itemModal");
+        let id = selectedRowData.id;
+
+        // 🔥 dùng trực tiếp selectedRowData
+        $("#modalItemId").val(id);
+        $("#idUserName").val(selectedRowData.userID);
+        $("#txtUserName").val(selectedRowData.userName);
+        $("#idRateCode").val(selectedRowData.rateCodeID);
+        $("#txtRateCode").val(selectedRowData.rateCode);
+        $("#itemModalLabel").text("Edit Rate Code User Right");
+        // Hiển thị popup
+        $("#itemModal").modal("show");
+
+    });
+
+
+    // Shared save function for New and Edit
+    $(document).off("click", "#btnSave").on("click", "#btnSave", function () {
+        try {
+            saveRateCodeUserRight();
+        } catch (error) {
+            showToast('Error', `Unable to load report: ${error}`, false);
+        }
+
+
+    });
+
+    $(document).off("click", "#btnDelete").on("click", "#btnDelete", function () {
+        if (!selectedRowData) {
+            showToast('Error', 'Please select 1 row to delete.', false);
+            return;
+        }
+
+        if (!confirm("Are you sure you want to delete this record?")) {
+            return; // Nếu chọn Cancel thì dừng
+        }
+
+        $.ajax({
+            url: '/Administration/RateCode/RateCodeUserRightDelete',
+            type: 'POST',
+            data: {
+                id: selectedRowData.id
+            },
+            traditional: true,
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                if (result.success) {
+                    reloadGrid();
+                    showToast('Success', result.message, true);
+                    $("#btnPrint").trigger("click");
+                } else {
+                    showToast('Error', 'Please select a Task Code before saving.', false);
+                }
+
+            },
+            error: function () {
+                alert("Không thể tải báo cáo.");
+                $("#loadingSpinner").hide();
+            }
+        });
+
+
+    });
+
+
+    function saveRateCodeUserRight() {
+        var data = {
+            id: parseInt($("#modalItemId").val()) || 0,
+
+            rateCodeID: parseInt($("#idRateCode").val()) || 0,
+            rateCode: $("#txtRateCode").val()?.trim() || "",
+
+            userID: parseInt($("#idUserName").val()) || 0,
+            userName: $("#txtUserName").val()?.trim() || "",
+
+            userLogin: localStorage.getItem("Loginname")
+        };
+        console.log('Log', data);
+
+
+
+        $("#loadingSpinner").show();
+
+        $.ajax({
+            url: "/Administration/RateCode/RateCodeUserRightSave",
+            type: "POST",
+            contentType: "application/json",   // gửi JSON
+            data: JSON.stringify(data),         // convert object -> JSON
+            success: function (res) {
+                $("#loadingSpinner").hide();
+                if (res.success) {
+                    showToast('Success', res.message, true);
+                    $("#itemModal").modal("hide");
+                    reloadGrid();
+                } else {
+                    applyValidationErrors(res.errors, "#itemForm");
+                }
+            },
+            error: function (xhr, status, error) {
+                // Nếu có mảng errors thì hiển thị từng cái
+                if (Array.isArray(xhr.responseJSON?.errors)) {
+                    xhr.responseJSON.errors.forEach((err, index) => {
+                        setTimeout(() => {
+                            showToast("Error", err, false);
+                        }, index * 1000); // delay 300ms mỗi toast
+                    });
+                }
+
+                $("#loadingSpinner").hide();
+            }
+        });
+    }
+
+</script>

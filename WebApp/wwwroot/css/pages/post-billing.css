@@ -1,0 +1,710 @@
+﻿/* Modal Styling */
+.modal-content-post-billing {
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: none;
+    overflow: hidden;
+}
+
+.modal-header-post-billing {
+    color: #ffffff;
+    padding: 0.5rem 0.8rem;
+    border-bottom: none;
+}
+
+.modal-title-post-billing {
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.modal-body-post-billing {
+    padding: 0.6rem;
+    background-color: #ffffff;
+}
+
+.modal-footer-post-billing {
+    padding: 0.3rem 0.8rem;
+    border-top: 1px solid #e5e7eb;
+    background-color: #f9fafb;
+}
+
+/* Section Card */
+.section-card-post-billing {
+    background-color: #ffffff;
+    padding: 0.3rem;
+    margin-bottom: 0.3rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+    position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .section-card-post-billing:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .section-card-post-billing.no-border-post-billing {
+        border: none;
+        box-shadow: none;
+        background-color: transparent;
+        padding: 0.15rem 0;
+    }
+
+/* Form Inputs */
+.form-control-post-billing, .form-select-post-billing {
+    border-radius: 3px;
+    border: 1px solid #d1d5db;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.4rem;
+    height: 24px;
+    transition: all 0.2s ease;
+    background-color: #f9fafb;
+}
+
+    .form-control-post-billing:focus, .form-select-post-billing:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.1);
+        background-color: #ffffff;
+    }
+
+.search-input-post-billing {
+    margin-bottom: 0.25rem;
+    font-size: 0.75rem;
+    height: 24px;
+    border-radius: 3px;
+}
+
+/* List Group */
+.list-group-post-billing {
+    max-height: 100px;
+    height: 100px;
+    overflow-y: auto;
+    border: 1px solid #e5e7eb;
+    border-radius: 3px;
+    background-color: #ffffff;
+}
+
+#selected-articles-list-post-billing {
+    max-height: none;
+    height: auto;
+    overflow-y: visible;
+}
+
+.list-group-item-post-billing {
+    padding: 0.25rem 0.4rem;
+    font-size: 0.75rem;
+    border: none;
+    border-bottom: 1px solid #f1f3f5;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+    .list-group-item-post-billing:last-child {
+        border-bottom: none;
+    }
+
+    .list-group-item-post-billing:hover {
+        background-color: #f3f4f6;
+    }
+
+    .list-group-item-post-billing.active {
+        color: #2563eb;
+        font-weight: 500;
+        background-color: transparent;
+    }
+
+/* Choose Button */
+.choose-btn-post-billing {
+    padding: 0.15rem 0.4rem;
+    font-size: 0.7rem;
+    font-weight: 500;
+    background-color: #2563eb;
+    color: #ffffff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    display: none;
+}
+
+#transaction-list-post-billing .list-group-item-post-billing.active .choose-btn-post-billing,
+#article-list-post-billing .list-group-item-post-billing.active .choose-btn-post-billing {
+    display: inline-block;
+}
+
+.choose-btn-post-billing:hover {
+    background-color: #1e40af;
+}
+
+/* Buttons */
+.btn-primary-post-billing {
+    border-radius: 3px;
+    padding: 0.25rem 0.6rem;
+    font-size: 0.75rem;
+    background-color: #2563eb;
+    border: none;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+    .btn-primary-post-billing:hover {
+        background-color: #1e40af;
+        transform: translateY(-1px);
+    }
+
+.btn-secondary-post-billing {
+    border-radius: 3px;
+    font-size: 0.75rem;
+    background-color: #6b7280;
+    border: none;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+    .btn-secondary-post-billing:hover {
+        background-color: #4b5563;
+        transform: translateY(-1px);
+    }
+
+/* Form Check */
+.form-check-label-post-billing {
+    font-size: 0.75rem;
+    color: #374151;
+}
+
+.form-check-input-post-billing {
+    cursor: pointer;
+    margin-top: 0.1rem;
+    transform: scale(0.8);
+}
+
+/* Headings */
+h8 {
+    color: #1f2937;
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-bottom: 0.25rem;
+}
+
+.section-heading-post-billing {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.15rem 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    background-color: #f3f4f6;
+    border: 1px solid #d1d5db;
+    border-bottom: none;
+    border-radius: 3px 3px 0 0;
+    position: absolute;
+    top: -0.7rem;
+    left: 0.5rem;
+    z-index: 2;
+    color: #1f2937;
+}
+
+.section-card-post-billing.has-overlap-post-billing {
+    padding-top: 0.8rem;
+}
+
+/* Post Buttons */
+.post-btn-post-billing {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    background-color: #f3f4f6;
+    border: 1px solid #d1d5db;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-right: 0.25rem;
+}
+
+    .post-btn-post-billing:hover {
+        background-color: #e5e7eb;
+        transform: translateY(-1px);
+    }
+
+    .post-btn-post-billing.active {
+        background-color: #2563eb;
+        color: #ffffff;
+        border-color: #2563eb;
+    }
+
+/* Input Group */
+.input-group-post-billing {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.15rem;
+    gap: 0.25rem;
+}
+
+    .input-group-post-billing label {
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: #374151;
+        width: 70px;
+        flex-shrink: 0;
+    }
+
+    .input-group-post-billing .form-control-post-billing,
+    .input-group-post-billing .form-select-post-billing {
+        flex-grow: 1;
+    }
+
+/* Disabled Invoice Section */
+.section-card-post-billing.disabled-post-billing {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* Tight Row */
+.tight-row-post-billing > .col-md-6 {
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+}
+
+/* Invoice Row */
+.invoice-row-post-billing > .col-md-6 {
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+}
+
+/* Scrollbar Styling */
+.list-group-post-billing::-webkit-scrollbar {
+    width: 4px;
+}
+
+.list-group-post-billing::-webkit-scrollbar-track {
+    background: #f1f3f5;
+    border-radius: 2px;
+}
+
+.list-group-post-billing::-webkit-scrollbar-thumb {
+    background: #9ca3af;
+    border-radius: 2px;
+}
+
+    .list-group-post-billing::-webkit-scrollbar-thumb:hover {
+        background: #6b7280;
+    }
+
+/* Pagination */
+.pagination-post-billing {
+    margin-top: 0.25rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.25rem;
+}
+
+.pagination-btn-post-billing {
+    padding: 0.2rem 0.5rem;
+    font-size: 0.75rem;
+    border: 1px solid #d1d5db;
+    color: black;
+    border-radius: 3px;
+    background-color: #f9fafb;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+    .pagination-btn-post-billing:hover {
+        background-color: #e5e7eb;
+        transform: translateY(-1px);
+    }
+
+    .pagination-btn-post-billing.active {
+        background-color: #2563eb;
+        color: #ffffff;
+        border-color: #2563eb;
+    }
+
+    .pagination-btn-post-billing:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+    }
+
+/* Modal Styling (Additional) */
+.modal-content-post-billing {
+    border-radius: 12px;
+    border: none;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.modal-header-post-billing {
+    background: linear-gradient(135deg, #3b82f6, #1e3a8a);
+    padding: 1rem 1.5rem;
+    border-bottom: none;
+}
+
+.modal-title-post-billing {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #ffffff;
+    letter-spacing: 0.02em;
+}
+
+.modal-body-post-billing {
+    padding: 1.5rem;
+    background: transparent;
+}
+
+/* Section Card (Additional) */
+.section-card-post-billing {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(8px);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(229, 231, 235, 0.3);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .section-card-post-billing:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    .section-card-post-billing.has-overlap-post-billing {
+        padding-top: 2rem;
+    }
+
+/* Form Inputs (Additional) */
+.form-control-post-billing, .form-select-post-billing {
+    border-radius: 0;
+    border: 1px solid #d1d5db;
+    font-size: 0.85rem;
+    padding: 0.4rem 0.6rem;
+    height: 32px;
+    background: #ffffff;
+    transition: all 0.3s ease;
+}
+
+    .form-control-post-billing:focus, .form-select-post-billing:focus {
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        background: #ffffff;
+    }
+
+.search-input-post-billing {
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+    height: 32px;
+    border-radius: 0;
+}
+
+/* List Group (Additional) */
+.list-group-post-billing {
+    max-height: 150px;
+    height: 150px;
+    overflow-y: auto;
+    border: 1px solid rgba(229, 231, 235, 0.5);
+    border-radius: 6px;
+    background: #ffffff;
+}
+
+#selected-articles-list-post-billing {
+    max-height: none;
+    height: auto;
+    overflow-y: visible;
+}
+
+.list-group-item-post-billing {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+    border: none;
+    border-bottom: 1px solid rgba(241, 243, 245, 0.5);
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+    .list-group-item-post-billing:last-child {
+        border-bottom: none;
+    }
+
+    .list-group-item-post-billing:hover {
+        background-color: #f1f3f5;
+    }
+
+    .list-group-item-post-billing.active {
+        color: #3b82f6;
+        font-weight: 500;
+        background-color: rgba(59, 130, 246, 0.1);
+    }
+
+/* Choose Button (Additional) */
+.choose-btn-post-billing {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    background: linear-gradient(135deg, #3b82f6, #1e3a8a);
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+    display: none;
+}
+
+#transaction-list-post-billing .list-group-item-post-billing.active .choose-btn-post-billing,
+#article-list-post-billing .list-group-item-post-billing.active .choose-btn-post-billing {
+    display: inline-block;
+}
+
+.choose-btn-post-billing:hover {
+    background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+    transform: translateY(-2px);
+}
+
+/* Buttons (Additional) */
+.btn-primary-post-billing {
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    background: linear-gradient(135deg, #3b82f6, #1e3a8a);
+    border: none;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+    .btn-primary-post-billing:hover {
+        background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+        transform: translateY(-2px);
+    }
+
+.btn-secondary-post-billing {
+    border-radius: 6px;
+    font-size: 0.9rem;
+    background: #6b7280;
+    border: none;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+    .btn-secondary-post-billing:hover {
+        background: #4b5563;
+        transform: translateY(-2px);
+    }
+
+/* Form Check (Additional) */
+.form-check-label-post-billing {
+    font-size: 0.9rem;
+    color: #1f2937;
+}
+
+.form-check-input-post-billing {
+    cursor: pointer;
+    margin-top: 0.2rem;
+    transform: scale(1);
+}
+
+/* Headings (Additional) */
+h8 {
+    color: #1f2937;
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.section-heading-post-billing {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    background: rgba(243, 244, 246, 0.8);
+    border: 1px solid rgba(209, 213, 219, 0.5);
+    border-bottom: none;
+    border-radius: 6px 6px 0 0;
+    position: absolute;
+    top: -1rem;
+    left: 0.75rem;
+    z-index: 2;
+    color: #1f2937;
+}
+
+/* Post Buttons (Additional) */
+.post-btn-post-billing {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    background: #f3f4f6;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-right: 0.5rem;
+}
+
+    .post-btn-post-billing:hover {
+        background: #e5e7eb;
+        transform: translateY(-2px);
+    }
+
+    .post-btn-post-billing.active {
+        background: linear-gradient(135deg, #3b82f6, #1e3a8a);
+        color: #ffffff;
+        border-color: #3b82f6;
+    }
+
+/* Input Group (Additional) */
+.input-group-post-billing {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    gap: 0.5rem;
+}
+
+    .input-group-post-billing label {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: #1f2937;
+        width: 100px;
+        flex-shrink: 0;
+    }
+
+    .input-group-post-billing .form-control-post-billing,
+    .input-group-post-billing .form-select-post-billing {
+        flex-grow: 1;
+    }
+
+/* Disabled Invoice Section (Additional) */
+.section-card-post-billing.disabled-post-billing {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Tight Row (Additional) */
+.tight-row-post-billing > .col-md-6 {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+/* Invoice Row (Additional) */
+.invoice-row-post-billing > .col-md-6 {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+/* Scrollbar Styling (Additional) */
+.list-group-post-billing::-webkit-scrollbar {
+    width: 6px;
+}
+
+.list-group-post-billing::-webkit-scrollbar-track {
+    background: #f1f3f5;
+    border-radius: 3px;
+}
+
+.list-group-post-billing::-webkit-scrollbar-thumb {
+    background: #9ca3af;
+    border-radius: 3px;
+}
+
+    .list-group-post-billing::-webkit-scrollbar-thumb:hover {
+        background: #6b7280;
+    }
+
+/* Tab Navigation */
+.nav-tabs-post-billing {
+    border-bottom: 1px solid rgba(209, 213, 219, 0.5);
+    margin-bottom: 1rem;
+}
+
+    .nav-tabs-post-billing .nav-link {
+        font-size: 1rem;
+        font-weight: 500;
+        color: #1f2937;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 6px 6px 0 0;
+        transition: all 0.3s ease;
+    }
+
+        .nav-tabs-post-billing .nav-link:hover {
+            color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .nav-tabs-post-billing .nav-link.active {
+            color: #ffffff;
+            background: linear-gradient(135deg, #3b82f6, #1e3a8a);
+            border-bottom: none;
+        }
+
+/* Tab Content */
+.tab-content-post-billing {
+    position: relative;
+    overflow: hidden;
+}
+
+.tab-pane-post-billing {
+    transition: transform 0.4s ease, opacity 0.4s ease;
+    width: 100%;
+    opacity: 0;
+    transform: translateX(100%);
+}
+
+    .tab-pane-post-billing.active {
+        position: relative;
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    .tab-pane-post-billing:not(.active) {
+        position: absolute;
+        pointer-events: none;
+    }
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .modal-dialog-post-billing {
+        margin: 0.5rem;
+    }
+
+    .input-group-post-billing {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+        .input-group-post-billing label {
+            width: auto;
+            margin-bottom: 0.25rem;
+        }
+
+    .section-heading-post-billing {
+        left: 0.5rem;
+        font-size: 0.85rem;
+    }
+
+    .section-card-post-billing {
+        padding: 0.75rem;
+    }
+
+    .invoice-row-post-billing, .tight-row-post-billing {
+        flex-direction: column;
+    }
+
+        .invoice-row-post-billing > .col-md-6, .tight-row-post-billing > .col-md-6 {
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+    .form-control-post-billing, .form-select-post-billing {
+        height: 36px;
+        font-size: 0.9rem;
+    }
+}
+

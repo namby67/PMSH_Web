@@ -1,0 +1,365 @@
+﻿<div id="confirmBoxSplit" class="confirm-overlay">
+    <div class="confirm-box">
+        <h2>Confirmation Action</h2>
+        <p id="titleSplitReservation"></p>
+        <div class="confirm-buttons">
+            <button class="mui-button mui-button-search" onclick="onConfirmSplitReservation()">OK</button>
+            <button class="mui-button mui-button-clear" onclick="closeConfirmSplit()">Cancel</button>
+        </div>
+    </div>
+</div>
+<div class="modal fade modal-xl" id="modalSplit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Split Reservation</h5>
+                <button type="button" class="btn-close" onclick="closseModalSplit()"></button>
+            </div>
+            <div class="modal-body">
+                <div class="function-menu mui-card">
+
+                    <a id="splitBtn" onclick="splitReservation();">Split</a>
+                    <a id="splitAllBtn"  onclick="splitAllReservation();">Split All</a>
+                    <a onclick="splitSpecialReservation();">Split Special</a>
+                    <a id="splitAllSpecialBtn" onclick="splitAllSpecialReservation();">Split All Special</a>
+                    <a  onclick="splitAllRoomSharerReservation();">Split All RoomSharer for all main guests</a>
+
+                </div>
+
+                <div class="mui-card mt-2">
+                    <div id="gridContainerSplit" class="mt-2 gridContainer"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function openModalSplit(){
+        listReservationSplitID = listReservationByConfirmationNo.map(x => x.ID);
+        initializeDataGridSplit(listReservationByConfirmationNo);
+        $('#modalSplit').modal('show');
+    }
+    function closseModalSplit(){
+        $('#modalSplit').modal('hide');
+    }
+    function openConfirmSplit(text) {
+        if(idReservation == 0){
+            showToast('Error', 'Please choose booking', false);
+            return;
+        }
+        $('#titleSplitReservation').text(text);
+       document.getElementById("confirmBoxSplit").style.display = "flex";
+    }
+    function closeConfirmSplit() {
+       
+       document.getElementById("confirmBoxSplit").style.display = "none";
+    }
+    function splitReservation(){
+     
+        openConfirmSplit('You are about to split this reservation? Do you want to continue?');
+        type = 1;
+    }
+    function splitAllReservation(){
+
+        openConfirmSplit('You are about to split all this reservation? Do you want to continue?');
+        type = 2;
+
+    }
+    function splitSpecialReservation(){
+        openConfirmSplit('You are about to create room sharer? Do you want to continue?');
+        type = 3;
+    }
+    function splitAllSpecialReservation(){
+        openConfirmSplit('You are about to create all room sharer? Do you want to continue?');
+        type = 4;
+    }
+    function splitAllRoomSharerReservation(){
+        const grid = $("#gridContainerSplit").dxDataGrid("instance");
+       checkedIds = grid.getVisibleRows()
+        .map(row => row.data)
+        .map(row => row.ID); // Lấy ID
+        openConfirmSplit('You are about to split all room sharer for this confimation? Do you want to continue?');
+        type = 5;
+    }
+    var type = 0;
+    function onConfirmSplitReservation(){
+        if(type == 1){
+            ConfirmSplitReservation();
+        }
+        else if(type == 2){
+            ConfirmSplitAlllReservation();
+        }
+        else if(type == 3){
+            ConfirmSplitSpecialReservation();
+        }
+        else if(type == 4){
+            ConfirmSplitSpecialAllReservation();
+        }
+        else if(type == 5){
+            ConfirmSplitAlllRoomSharer();
+        }
+    }
+
+    let checkedIds = [];
+
+    var idReservationSplit = 0;
+    var listReservationSplitID = [];
+    function ConfirmSplitReservation() {
+        if(idReservationSplit == 0){
+            showToast('Error', 'Please choose booking to split', false);
+            return;
+        }
+        const userName = JSON.parse(localStorage.getItem("Loginname"));
+        const userID = JSON.parse(localStorage.getItem("userID"));
+        var formData = new FormData();
+        formData.append('reservationID',idReservationSplit);
+        formData.append('userName',userName);
+        formData.append('userID',userID);
+
+        $.ajax({
+            url: '/Reservation/SplitReservation',
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            data: formData,
+            success: function (data) {
+                if (data.code == 0) {
+                    closeConfirmSplit();
+                                    closseModalSplit();
+                    searchReservation();
+                    showToast('Success', data.msg, true);
+                } else {
+                    showToast('Error', data.msg, false);
+                }
+
+            },
+            error: function (xhr, statusText, err) {
+                 showToast('Error', err, false);
+
+            }
+        });
+
+    }
+    function ConfirmSplitAlllReservation() {
+        const userName = JSON.parse(localStorage.getItem("Loginname"));
+        const userID = JSON.parse(localStorage.getItem("userID"));
+        var formData = new FormData();
+        formData.append('reservationID',listReservationSplitID);
+        formData.append('userName',userName);
+        formData.append('userID',userID);
+
+        $.ajax({
+            url: '/Reservation/SplitAllReservation',
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            data: formData,
+            success: function (data) {
+                if (data.code == 0) {
+                    closeConfirmSplit();
+                    closseModalSplit();
+                    searchReservation();
+                    showToast('Success', data.msg, true);
+                } else {
+                    showToast('Error', data.msg, false);
+                }
+
+            },
+            error: function (xhr, statusText, err) {
+                 showToast('Error', err, false);
+
+            }
+        });
+
+    }
+    function ConfirmSplitSpecialReservation() {
+        const userName = JSON.parse(localStorage.getItem("Loginname"));
+        const userID = JSON.parse(localStorage.getItem("userID"));
+        var formData = new FormData();
+        formData.append('reservationID',idReservationSplit);
+        formData.append('userName',userName);
+        formData.append('userID',userID);
+
+        $.ajax({
+            url: '/Reservation/SplitSpecialReservation',
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            data: formData,
+            success: function (data) {
+                closeConfirmSplit();
+                closseModalSplit();
+                searchReservation();
+                if (data.code == 0) {
+                    showToast('Success', data.msg, true);
+                } else {
+                    showToast('Error', data.msg, false);
+                }
+
+            },
+            error: function (xhr, statusText, err) {
+                 showToast('Error', err, false);
+
+            }
+        });
+
+    }
+
+     function ConfirmSplitSpecialAllReservation() {
+        const userName = JSON.parse(localStorage.getItem("Loginname"));
+        const userID = JSON.parse(localStorage.getItem("userID"));
+        var formData = new FormData();
+        formData.append('reservationID',listReservationSplitID);
+        formData.append('userName',userName);
+        formData.append('userID',userID);
+
+        $.ajax({
+            url: '/Reservation/SplitSpecialAllReservation',
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            data: formData,
+            success: function (data) {
+                closeConfirmSplit();
+                closseModalSplit();
+                searchReservation();
+                if (data.code == 0) {
+                    showToast('Success', data.msg, true);
+                } else {
+                    showToast('Error', data.msg, false);
+                }
+
+            },
+            error: function (xhr, statusText, err) {
+                 showToast('Error', err, false);
+
+            }
+        });
+
+    }
+
+
+    function ConfirmSplitAlllRoomSharer() {
+        const userName = JSON.parse(localStorage.getItem("Loginname"));
+        const userID = JSON.parse(localStorage.getItem("userID"));
+        var formData = new FormData();
+        formData.append('reservationID',checkedIds);
+        formData.append('userName',userName);
+        formData.append('userID',userID);
+
+        $.ajax({
+            url: '/Reservation/SplitSpecialAllReservation',
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            data: formData,
+            success: function (data) {
+                if (data.code == 0) {
+                    closeConfirmSplit();
+                    closseModalSplit();
+                    searchReservation();
+                    showToast('Success', data.msg, true);
+                } else {
+                    showToast('Error', data.msg, false);
+                }
+
+            },
+            error: function (xhr, statusText, err) {
+                 showToast('Error', err, false);
+
+            }
+        });
+
+    }
+
+    function initializeDataGridSplit(data) {
+        const columns = [];
+
+        // Thêm cột checkbox đầu tiên
+        columns.push({
+            caption: "",
+            width: 50,
+            allowFiltering: false,
+            allowSorting: false,
+            cellTemplate: function (cellElement, cellInfo) {
+                if (cellInfo.data && cellInfo.data.NoOfRoom !== '0') {
+                    $("<input>")
+                        .attr("type", "checkbox")
+                        .prop("checked", cellInfo.data._checked || false)
+                        .on("change", function () {
+                            console.log("Checkbox for ID:", cellInfo.data.ID, "Checked:", this.checked);
+                            cellInfo.data._checked = this.checked;
+                        })
+                        .appendTo(cellElement);
+                }
+            }
+        });
+
+        // Tự động thêm các cột từ dữ liệu
+        if (data.length > 0) {
+            for (const key of Object.keys(data[0])) {
+                columns.push({
+                    dataField: key,
+                    caption: key,
+                    alignment: typeof data[0][key] === 'number' ? 'right' : 'left'
+                });
+            }
+        }
+
+        $("#gridContainerSplit").dxDataGrid({
+            dataSource: data,
+            allowColumnResizing: true,
+            columnAutoWidth: true,
+            columnMinWidth: 90,
+            paging: { pageSize: 15 },
+            scrolling: {
+                mode: 'virtual',
+                showScrollbar: 'always',
+                useNative: false,
+                rowRenderingMode: 'virtual',
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [15, 20, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true,
+            },
+            filterRow: {
+                visible: true,
+                applyFilter: "auto"
+            },
+            selection: {
+                mode: "single"
+            },
+            onRowClick: function(e) {
+                idReservationSplit = e.data.ID;
+                if (e.data.NoOfRoom === '1' || e.data.NoOfRoom === '0') {
+                    ['splitBtn', 'splitAllBtn', 'splitAllSpecialBtn'].forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el) {
+                            el.style.pointerEvents = 'none';
+                            el.style.color = 'gray';
+                            el.style.cursor = 'not-allowed';
+                        }
+                    });
+                } else {
+                    ['splitBtn', 'splitAllBtn', 'splitAllSpecialBtn'].forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el) {
+                            el.style.pointerEvents = 'auto';
+                            el.style.color = '';
+                            el.style.cursor = 'pointer';
+                        }
+                    });
+                }
+            },
+            columns: columns
+        });
+    }
+
+</script>

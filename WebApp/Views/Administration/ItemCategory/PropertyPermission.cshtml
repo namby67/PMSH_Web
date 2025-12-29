@@ -1,0 +1,411 @@
+﻿@{
+    //
+}
+<style>
+    .ts-control {
+        min-height: 38px;
+        border-radius: 0.375rem; 
+        border: 1px solid #ced4da;
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        /* Xử lý scroll khi chọn nhiều */
+        max-height: 85px; /* Giới hạn khoảng 2 dòng */
+        overflow-y: auto; /* Hiện thanh cuộn dọc */
+    }
+
+    .ts-wrapper.focus .ts-control {
+        border-color: #86b7fe;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        outline: 0;
+    }
+
+    .ts-wrapper.is-invalid .ts-control {
+        border-color: #dc3545;
+        padding-right: calc(1.5em + 0.75rem);
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right calc(0.375em + 0.1875rem) center;
+        background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+    }
+
+    .ts-control::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .ts-control::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+    }
+
+    .ts-control::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 4px;
+    }
+
+        .ts-control::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+    .ts-dropdown {
+        border-radius: 0.375rem;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        border: 1px solid rgba(0,0,0,.15);
+        z-index: 1056; /* Cao hơn modal Bootstrap một chút */
+    }
+
+    /* Tùy chỉnh nút X xóa nhanh (Clear Button) */
+    .tomselect-custom .ts-control {
+        padding-right: 2.5rem !important;
+    }
+
+    .tomselect-custom .clear-button {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        font-size: 1.2rem;
+        color: #adb5bd; /* Màu xám nhạt */
+        font-weight: bold;
+        z-index: 10;
+        transition: color 0.2s;
+        line-height: 1;
+    }
+
+    .tomselect-custom .clear-button:hover {
+        color: #dc3545;
+    }
+</style>
+
+<div class="text-center" style="font-size: 20px">Property Permission</div>
+<div class="sticky-header bg-white p-2 shadow-sm z-3">
+    <div class="d-flex align-items-center gap-3 p-2"
+         style="border: 1px solid #ccc; border-radius: 6px; padding: 8px;">
+        <div class="d-flex align-items-center" style="min-width: 300px; flex: 1;">
+            <label for="user" class="me-2 mb-0 fw-bold text-nowrap">User:</label>
+            <div class="w-100">
+                <select id="user" name="user" class="tomselect-custom m-2" multiple>
+                    @foreach (var sg in ViewBag.UsersList)
+                    {
+                        <option value="@sg.ID">@sg.LoginName - @sg.FirstName</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="mt-2">
+        <button id="btnView" class="mui-button mui-button-search"><i class="fa-solid fa-eye"></i> View</button>
+        <button id="btnNew" class="mui-button mui-button-new"><i class="fa-solid fa-plus"></i> New</button>
+        <button id="btnDelete" class="mui-button mui-button-delete"> <i class="fa-solid fa-trash-can"></i> Delete</button>
+        <button id="btnRefresh" class="mui-button mui-button-search" style="margin-left: 5px;"> <i class="fa-solid fa-arrows-rotate"></i> Refresh</button>
+    </div>
+</div>
+
+<div class="mui-card">
+    <div id="gridContainerRateCode" class="gridContainer"></div>
+</div>
+<!-- Modal Popup for New Item -->
+<div class="modal fade" id="itemModal" tabindex="-1" aria-labelledby="itemModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="itemModalLabel">New Item</h5>
+            </div>
+            <div class="modal-footer justify-content-start">
+                <button type="button" id="btnSaveItem" class="mui-button mui-button-save"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+                <button type="button" data-bs-dismiss="modal" class="mui-button mui-button-close"><i class="fa-solid fa-xmark"></i> Close</button>
+            </div>
+            <div class="modal-body">
+                <form id="formContainer">
+                    <div class="container-fluid" style="border: 1px solid #ccc; border-radius: 6px; padding: 8px;"> 
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <label for="chooseUser" class="form-label fw-bold">User <span class="text-danger">*</span></label>
+                                <select id="chooseUser" name="chooseUser" class="tomselect-custom m-4" multiple>
+                                    @foreach (var sg in ViewBag.UsersList)
+                                    {
+                                        <option value="@sg.ID">@sg.LoginName - @sg.FirstName</option>
+                                    }
+                                </select>
+                                <div class="invalid-feedback">Please select at least one user.</div>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col-12">
+                                <label for="choosePropertyType" class="form-label fw-bold">Property <span class="text-danger">*</span></label>
+                                <select id="choosePropertyType" name="choosePropertyType" class="tomselect-custom m-4" multiple>
+                                    @foreach (var sg in ViewBag.PropertyList)
+                                    {
+                                        <option value="@sg.ID">@sg.PropertyCode - @sg.PropertyName</option>
+                                    }
+                                </select>
+                                <div class="invalid-feedback" id="propertyError">Please select at least one property.</div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="id" name="id" value="0" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="loadingSpinnerRateCode" style="display: none; text-align: center; padding: 20px;">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+
+<script>
+    DevExpress.localization.locale("vi");
+    var selectedRowData = null;
+
+    $(document).ready(function () {
+        $("#btnView").trigger("click");
+        
+        $(".tomselect-custom").on("change", function() {
+        const val = $(this).val();
+        const wrapper = $(this).next(".ts-wrapper");
+            if (val && val.length > 0) {
+                wrapper.removeClass("is-invalid");
+                wrapper.parent().find(".invalid-feedback").hide();
+            }
+        });
+
+        $("#formContainer").on("input change", "input, select, textarea", function () {
+            if ($(this).hasClass("is-invalid")) {
+                $(this).removeClass("is-invalid");
+                $(this).next(".invalid-feedback").text("");
+            }
+        });
+
+        $('#itemModal').on('hidden.bs.modal', function () {
+             applyValidationErrors([], "#formContainer");
+             $(".ts-wrapper").removeClass("is-invalid");
+             $(".invalid-feedback").hide();
+        });
+
+        initializeTomSelects();
+
+        $("#btnRefresh").click(function() {
+             // Clear the 'user' TomSelect
+             var userSelect = document.getElementById('user').tomselect;
+             if(userSelect) {
+                 userSelect.clear();
+             }
+
+             $("#btnView").trigger("click");
+        });
+    });
+
+    function initializeTomSelects() {
+        const selectors = ["#user", "#choosePropertyType", "#chooseUser"];
+        selectors.forEach(selector => {
+            const el = document.querySelector(selector);
+            if (el) {
+                 if (el.tomselect) el.tomselect.destroy();
+                    new TomSelect(el, {
+                        plugins: {
+                        'remove_button': { title: 'Bỏ chọn mục này' },
+                        'dropdown_input': {},
+                        'clear_button': { title: 'Clear all' },
+                    },
+                    create: false,
+                    maxItems: null,
+                    valueField: 'value',
+                    labelField: 'text',
+                    searchField: ['text'],
+                    placeholder: 'Enter or select options...',
+                    render: {
+                        option: function(data, escape) {
+                            return '<div class="p-2">' + escape(data.text) + '</div>';
+                        },
+                        item: function(data, escape) {
+                            return '<div title="' + escape(data.text) + '">' + escape(data.text) + '</div>';
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    $("#btnNew").click(function () {
+        $("#formContainer")[0].reset();
+        $("#id").val("0");
+        const tsUser = document.querySelector("#chooseUser").tomselect;
+        const tsProp = document.querySelector("#choosePropertyType").tomselect;
+        if( tsUser){tsUser.clear()};
+        if( tsProp){tsProp.clear()};
+
+        $(".ts-wrapper").removeClass("is-invalid");
+        $(".invalid-feedback").hide();
+
+        $("#itemModalLabel").text("New Property Permission");
+        $("#itemModal").modal("show");
+    });
+
+    $("#btnSaveItem").click(function () {
+        $(".is-invalid").removeClass("is-invalid");
+        
+        const id = parseInt($("#id").val()) || 0;
+        let loginName = (localStorage.getItem("Loginname") || "").replace(/^"(.*)"$/, '$1');
+        const loginUser = parseInt(localStorage.getItem("userID")) || 0;
+
+        // Lấy mảng ID từ TomSelect
+        const selectedUsers = $("#chooseUser").val();      
+        const selectedProperties = $("#choosePropertyType").val();
+
+        let isValid = true;
+        if (!selectedUsers || selectedUsers.length === 0) {
+            $("#chooseUser").next(".ts-wrapper").addClass("is-invalid");
+            $("#chooseUser").parent().find(".invalid-feedback").show();
+            isValid = false;
+        }
+        if (!selectedProperties || selectedProperties.length === 0) {
+            $("#choosePropertyType").next(".ts-wrapper").addClass("is-invalid");
+            $("#choosePropertyType").parent().find(".invalid-feedback").show();
+            isValid = false;
+        }
+        if (!isValid) return;
+
+        let listDataToSend = [];
+
+        selectedUsers.forEach(function(uID) {
+
+            selectedProperties.forEach(function(pID) {
+
+                let item = {
+                    ID: id, 
+                    UserID: parseInt(uID),     
+                    PropertyID: parseInt(pID), 
+                    CreatedBy: loginName,
+                    UpdatedBy: loginName,
+                    UserInsertID: loginUser,
+                    UserUpdateID: loginUser
+                };
+
+                listDataToSend.push(item);
+            });
+        });
+
+        $.ajax({
+            url: "/Administration/PropertyPermissionSave",
+            type: "POST",
+            contentType: "application/json", 
+            cache: false,
+            data: JSON.stringify(listDataToSend), 
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (res) {
+                if (res.success) {
+                    showToast("Success", res.message, true);
+                    $("#itemModal").modal("hide");
+                    $("#btnView").trigger("click");
+                } else {
+                    if (res.errors && res.errors.length > 0) {
+                        applyValidationErrors(res.errors, "#formContainer");
+                        showToast("Warning", "Please check input fields.", false);
+                    } else {
+                        showToast("Error", res.message || "Save failed", false);
+                    }
+                }
+            },
+            error: function (xhr) {
+                showToast("Error", "Request error!", false);
+            }
+        });
+    });
+
+    function loadGrid(data) {
+        $("#gridContainerRateCode").dxDataGrid({
+            dataSource: data,
+            height: 450,
+            width: "100%",
+            allowColumnResizing: true,
+            columnResizingMode: "widget",
+            selection: { mode: "multiple" ,showCheckBoxesMode: "always",selectAllMode: "page"},
+            hoverStateEnabled: true,
+            columns: [
+                { dataField: "id", visible: false },
+                { dataField: "loginName", caption: "Login name", groupIndex: 0 },
+                { dataField: "propertyCode", caption: "Property Code", width: "30%" },
+                { dataField: "propertyName", caption: "Property Name", width: "70%" },
+            ],
+            filterRow: { visible: true, applyFilter: "auto" },
+            paging: { pageSize: 20 },
+            pager: {
+                visible: true,
+                allowedPageSizes: [20, 50, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true
+            },
+            scrolling: { mode: "standard", showScrollbar: "always" },
+              onSelectionChanged: function(e){
+                  selectedRowData = e.selectedRowsData.length > 0 ? e.selectedRowsData[0] : null;
+            }
+        });
+    }
+
+    $(document).off("click", "#btnView").on("click", "#btnView", function () {
+          $("#loadingSpinnerRateCode").show();
+          var rawVal = $("#user").val();
+
+          var userIDString = (rawVal && rawVal.length > 0) ? rawVal.join(",") : "";
+
+          $.ajax({
+              url: "/Administration/GetPropertyPermission",
+              type: "GET",
+              cache: false,
+              data: { userID: userIDString},
+              crossDomain: false,
+              headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+              success: function(data){
+                  loadGrid(data);
+                  $("#loadingSpinnerRateCode").hide();
+              },
+              error: function(xhr, status, error){
+                 showToast("Error", "Unable to load data", false);
+                 $("#loadingSpinnerRateCode").hide();
+              }
+             });
+    });
+
+    $("#btnDelete").click(function () {
+        const grid = $("#gridContainerRateCode").dxDataGrid("instance");
+
+        const selectedRows = grid.getSelectedRowsData();
+
+        if (!selectedRows || selectedRows.length === 0) {
+            showToast('Warning', "Please select at least one row to delete!", true);
+            return;
+        }
+
+        if (!confirm(`Are you sure you want to delete ${selectedRows.length} record(s)?`)) {
+            return;
+        }
+
+        const listIdsToSend = selectedRows.map(item => item.id || item.ID);
+
+        $.ajax({
+            url: `/Administration/DeletePropertyPermission`,
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(listIdsToSend),
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function(result){
+                if(result.success){
+                    $("#btnView").trigger("click");
+                    showToast("Success", result.message, true);
+                    grid.clearSelection(); 
+                } else {
+                    showToast("Error", result.message, false);
+                }
+            },
+            error: function(){
+                showToast("Error", "Delete failed!", false);
+            },
+        });
+    });
+
+</script>
