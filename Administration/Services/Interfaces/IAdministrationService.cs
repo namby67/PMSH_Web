@@ -1,11 +1,11 @@
-﻿using System;
+﻿using BaseBusiness.Model;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DevExpress.XtraRichEdit.Model;
-
 namespace Administration.Services.Interfaces
 {
     public interface IAdministrationService
@@ -36,6 +36,7 @@ namespace Administration.Services.Interfaces
         public DataTable Department(string code, string name, int inactive);
         public DataTable Owner(string code, string name, int inactive);
         public DataTable PropertyType(string code, string description, int sequence);
+
         public DataTable ReservationType();
         public DataTable Currency();
         public DataTable hkpEmployee(string code, string name, int inactive);
@@ -49,5 +50,13 @@ namespace Administration.Services.Interfaces
         public DataTable PersonInChargeGroupData(string code, string description, string isActive);
         public DataTable PersonInChargeZoneData(string code, string description, string isActive);
         public DataTable ApproveListData(string code, string description, string isActive);
+        public DataTable PackageForecastGroup(string code, string name, int inactive);
+        public DataTable PreferenceGroup(string code, string name, int inactive);
+        public List<CurrencyModel> Currency(string ID, bool IsShow = false, bool Inactive = false, bool IsMaster = false);
+        public List<CurrencyModel> GetAllCurrency();
+        public DataTable RateCategory(string code, string name, int inactive);
+        public DataTable DepositRule(string code, string description);
+        public DataTable CancellationRule(string code, string description);
+
     }
 }

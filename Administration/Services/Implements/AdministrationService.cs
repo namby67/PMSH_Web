@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Administration.Services.Interfaces;
+using BaseBusiness.BO;
+using BaseBusiness.Model;
 using BaseBusiness.util;
 using DevExpress.XtraRichEdit.Model;
 using Microsoft.Data.SqlClient;
@@ -336,26 +338,6 @@ namespace Administration.Services.Implements
                     DataTable myTable = DataTableHelper.getTableData("spSearchAllForTrans", param);
                     return myTable;
                 }
-        public DataTable Currency()
-        {
-            SqlParameter[] param = new SqlParameter[]
-            {
-        new SqlParameter("@sqlCommand",
-            @"SELECT a.ID,
-                     (CASE a.MasterStatus WHEN 0 THEN '' WHEN 1 THEN 'X' END) AS IsMaster,
-                     (CASE a.Inactive WHEN 0 THEN '' WHEN 1 THEN 'X' END) AS Inactive,
-                     (b.Code + ' - ' + b.Description) AS Trans,
-                     a.Description
-              FROM Currency a
-              LEFT JOIN Transactions b ON a.TransactionCode = b.Code
-              WHERE 1 = 1
-              ORDER BY a.ID DESC")
-            };
-
-            DataTable myTable = DataTableHelper.getTableData("spSearchAllForTrans", param);
-            return myTable;
-        }
-
         public DataTable hkpEmployee(string code, string name, int inactive)
         {
             SqlParameter[] param = new SqlParameter[]
@@ -383,7 +365,7 @@ namespace Administration.Services.Implements
         {
             SqlParameter[] param = new SqlParameter[]
             {
-                new SqlParameter("@UserID", userID ?? "")        
+                new SqlParameter("@UserID", userID ?? "")
             };
 
             DataTable myTable = DataTableHelper.getTableData("spPropertyPermissionSearch", param);
@@ -437,7 +419,7 @@ namespace Administration.Services.Implements
             return myTable;
         }
 
-        public DataTable PersonInChargeData(string code, string description, string group, string zone, string  isActive)
+        public DataTable PersonInChargeData(string code, string description, string group, string zone, string isActive)
         {
             SqlParameter[] param = new SqlParameter[]
             {
@@ -451,7 +433,7 @@ namespace Administration.Services.Implements
             DataTable myTable = DataTableHelper.getTableData("spPersonInChargeSearch", param);
             return myTable;
         }
-        public DataTable PersonInChargeGroupData(string code, string description,  string isActive)
+        public DataTable PersonInChargeGroupData(string code, string description, string isActive)
         {
             SqlParameter[] param = new SqlParameter[]
             {
@@ -486,6 +468,150 @@ namespace Administration.Services.Implements
 
             DataTable myTable = DataTableHelper.getTableData("spFrmApprovedbySearch", param);
             return myTable;
+        }
+        public DataTable PackageForecastGroup(string code, string name, int inactive)
+        {
+            SqlParameter[] param = new SqlParameter[]
+            {
+                new SqlParameter("@Code", code ?? ""),
+                new SqlParameter("@Name", name ?? ""),
+                new SqlParameter("@Inactive", inactive)
+            };
+
+            DataTable myTable = DataTableHelper.getTableData("spFrmPackageForecastGroupSearch", param);
+            return myTable;
+        }
+        public DataTable PreferenceGroup(string code, string name, int inactive)
+        {
+            SqlParameter[] param = new SqlParameter[]
+            {
+                new SqlParameter("@Code", code ?? ""),
+                new SqlParameter("@Name", name ?? ""),
+                new SqlParameter("@Inactive", inactive)
+            };
+
+            DataTable myTable = DataTableHelper.getTableData("spFrmPreferenceGroupSearch", param);
+            return myTable;
+        }
+        public DataTable Currency()
+        {
+            SqlParameter[] param = new SqlParameter[]
+            {
+            new SqlParameter("@sqlCommand",
+                @"SELECT a.ID,
+                         (CASE a.MasterStatus WHEN 0 THEN '' WHEN 1 THEN 'X' END) AS IsMaster,
+                         (CASE a.Inactive WHEN 0 THEN '' WHEN 1 THEN 'X' END) AS Inactive,
+                         (b.Code + ' - ' + b.Description) AS Trans,
+                         a.Description
+                  FROM Currency a
+                  LEFT JOIN Transactions b ON a.TransactionCode = b.Code
+                  WHERE 1 = 1
+                  ORDER BY a.ID DESC")
+            };
+
+            DataTable myTable = DataTableHelper.getTableData("spSearchAllForTrans", param);
+            return myTable;
+        }
+        public List<CurrencyModel> Currency(
+            string? ID,
+            bool IsShow = false,
+            bool Inactive = false,
+            bool IsMaster = false)
+        {
+            try
+            {
+                var list = CurrencyBO.Instance.FindAll(); // ArrayList
+
+                var result = PropertyUtils
+                    .ConvertToList<CurrencyModel>(list)
+                    ?.Where(x =>
+                        // ID filter: chỉ lọc khi ID có giá trị
+                        (string.IsNullOrWhiteSpace(ID) || x.ID == ID.Trim()) &&
+
+                        // bool filters
+                        x.IsShow == IsShow &&
+                        x.Inactive == Inactive &&
+                        x.MasterStatus == IsMaster
+                    )
+                    .ToList();
+
+                return result ?? [];
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"ERROR Currency(): {ex.Message}", ex);
+            }
+        }
+        public List<CurrencyModel> GetAllCurrency()
+        {
+            try
+            {
+                string sql = @"
+                    SELECT *
+                    FROM Currency
+                    WHERE IsShow = 1 AND Inactive = 0
+                    ORDER BY ID
+                ";
+
+                DataTable dataTable = TextUtils.Select(sql.ToString());
+                // Chuyển DataTable sang List<CurrencyModel>
+                var currencies = (from d in dataTable.AsEnumerable()
+                                  select new CurrencyModel
+                                  {
+                                      ID = d["ID"]?.ToString() ?? string.Empty,
+                                      Description = d["Description"]?.ToString() ?? string.Empty,
+                                      MasterStatus = d["MasterStatus"] != DBNull.Value ? Convert.ToBoolean(d["MasterStatus"]) : false,
+                                      UserInsertID = d["UserInsertID"] != DBNull.Value ? Convert.ToInt32(d["UserInsertID"]) : 0,
+                                      CreateDate = d["CreateDate"] != DBNull.Value ? Convert.ToDateTime(d["CreateDate"]) : DateTime.MinValue,
+                                      UpdateDate = d["UpdateDate"] != DBNull.Value ? Convert.ToDateTime(d["UpdateDate"]) : DateTime.MinValue,
+                                      UserUpdateID = d["UserUpdateID"] != DBNull.Value ? Convert.ToInt32(d["UserUpdateID"]) : 0,
+                                      TransactionCode = d["TransactionCode"]?.ToString() ?? string.Empty,
+                                      IsShow = d["IsShow"] != DBNull.Value ? Convert.ToBoolean(d["IsShow"]) : false,
+                                      Inactive = d["Inactive"] != DBNull.Value ? Convert.ToBoolean(d["Inactive"]) : false,
+                                      Decimals = d["Decimals"] != DBNull.Value ? Convert.ToInt32(d["Decimals"]) : 0,
+                                      IsSynchronous = d["IsSynchronous"] != DBNull.Value ? Convert.ToBoolean(d["IsSynchronous"]) : false
+                                  }).ToList();
+                return currencies;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"ERROR: {ex.Message}", ex);
+            }
+        }
+
+        public DataTable RateCategory(string code, string name, int inactive)
+        {
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@Code", code ?? ""),
+                new SqlParameter("@Name", name ?? ""),
+                new SqlParameter("@Inactive", inactive),
+            };
+
+            DataTable dt = DataTableHelper.getTableData("spFrmRateCategorySearch", parameters);
+            return dt;
+        }
+        public DataTable DepositRule(string code, string description)
+        {
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@Code", code ?? ""),
+                new SqlParameter("@Description", description ?? ""),
+            };
+
+            DataTable dt = DataTableHelper.getTableData("spSearchDepositRule", parameters);
+            return dt;
+        }
+        public DataTable CancellationRule(string code, string description)
+        {
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@Code", code ?? ""),
+                new SqlParameter("@Description", description ?? ""),
+            };
+
+            DataTable dt = DataTableHelper.getTableData("spSearchCancellationRule", parameters);
+            return dt;
         }
     }
 }

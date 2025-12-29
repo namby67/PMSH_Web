@@ -17,13 +17,13 @@ namespace Reservation.Services.Interfaces
         /// DatVP: Lây danh sách room available từ store procedure
         /// </summary>
         /// <returns>Data table chứa danh sách room available</returns>
-        DataTable GetRoomAvailable(DateTime fromDate, DateTime toDate,string floor,string roomTypeID,string smoking,string foStatus,string hkStatus,string isDummy,string roomNo,int roomID,int Type );
-        DataTable GetAllotment(string code, string marketID, string profileID,string isDefault,string allotmentTypeID);
-        DataTable GetAllotmentDetail(int allotmentID,string roomType,DateTime showHistory);
+        DataTable GetRoomAvailable(DateTime fromDate, DateTime toDate, string floor, string roomTypeID, string smoking, string foStatus, string hkStatus, string isDummy, string roomNo, int roomID, int Type);
+        DataTable GetAllotment(string code, string marketID, string profileID, string isDefault, string allotmentTypeID);
+        DataTable GetAllotmentDetail(int allotmentID, string roomType, DateTime showHistory);
         DataTable GetReservationPreference(string code, int group);
-        DataTable ReservationRateQueryDetail(DateTime fromDate, DateTime toDate,int roomType,int adults,int noOfNight,int packageID,int promotionID,
-            string tableName,string onRows,string onRowsAlias,string onCols,string sumcol,int func,string currency,int display,int dayUse,int c1,int c2,
-            int c3,int noOfRoom);
+        DataTable ReservationRateQueryDetail(DateTime fromDate, DateTime toDate, int roomType, int adults, int noOfNight, int packageID, int promotionID,
+            string tableName, string onRows, string onRowsAlias, string onCols, string sumcol, int func, string currency, int display, int dayUse, int c1, int c2,
+            int c3, int noOfRoom);
 
         /// <summary>
         /// DatVP: lấy rate query detail
@@ -36,7 +36,7 @@ namespace Reservation.Services.Interfaces
         /// <param name="packageID">id package</param>
         /// <param name="day">day</param>
         /// <returns>Giá trị net</returns>
-        DataTable ReservationGetRateQueryDetail(DateTime fromDate, DateTime toDate,int rateCodeID, int roomType, string currency,int packageID,int day);
+        DataTable ReservationGetRateQueryDetail(DateTime fromDate, DateTime toDate, int rateCodeID, int roomType, string currency, int packageID, int day);
 
         /// <summary>
         /// DatVP: Tính net cho rate code
@@ -44,7 +44,7 @@ namespace Reservation.Services.Interfaces
         /// <param name="Price">Giá trị tiền rate code</param>
         /// <param name="TransactionCode">Giá trị tiền rate code</param>
         /// <returns>Giá trị net</returns>
-        (decimal price, decimal priceAfter, decimal priceDiscount, decimal priceAfterDiscount) CalculateNet(decimal Price,string TransactionCode,decimal DiscountAmount, decimal DiscountPercent);
+        (decimal price, decimal priceAfter, decimal priceDiscount, decimal priceAfterDiscount) CalculateNet(decimal Price, string TransactionCode, decimal DiscountAmount, decimal DiscountPercent);
         (decimal Price, decimal priceAfter, decimal priceDiscount, decimal priceAfterDiscount) CalculateNetReverse(decimal priceAfterDiscount, string TransactionCode, decimal DiscountAmount, decimal DiscountPercent);
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace Reservation.Services.Interfaces
         /// <param name="transactionCode"> code transaction</param>
         /// <param name="price">giá trị tiền</param>
         /// <returns>Giá trị net</returns>
-        decimal CalculateNetFixedCharge(string transactionCode,decimal price);
+        decimal CalculateNetFixedCharge(string transactionCode, decimal price);
 
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace Reservation.Services.Interfaces
         /// DatVP: search waitt list
         /// </summary>
         /// <returns>datatable list wait lít</returns>
-        DataTable SearchWaitlist(string name, string priority, string market, string roomType,  string reason, string rateCode, string phone, DateTime date);
+        DataTable SearchWaitlist(string name, string priority, string market, string roomType, string reason, string rateCode, string phone, DateTime date);
 
         /// <summary>
         /// DatVP: se
@@ -99,7 +99,7 @@ namespace Reservation.Services.Interfaces
         /// <param name="reservationID">reservation id</param>
 
         /// <returns>datatable list reservation alert</returns>
-        DataTable SearchTrace(string departmentID,string resolved,DateTime date,string name,string reservationID);
+        DataTable SearchTrace(string departmentID, string resolved, DateTime date, string name, string reservationID);
 
         /// <summary>
         /// DatVP: seearch room auto assign
@@ -117,8 +117,8 @@ namespace Reservation.Services.Interfaces
         /// <param name="rsvRoomTypeID">id room type</param>
         /// <param name="notAssRoomNo">mot ass room no</param>
         /// <returns>datatable list room auto assign</returns>
-        DataTable ReservationAutoRoomAssignment(int type,string roomType,string roomClass,string smoking,string floor,
-            string startFromRoom,DateTime arrivalDate,DateTime departureDate,string hkStatusID,string confirmationNo,string rsvRoomTypeID,string notAssRoomNo);
+        DataTable ReservationAutoRoomAssignment(int type, string roomType, string roomClass, string smoking, string floor,
+            string startFromRoom, DateTime arrivalDate, DateTime departureDate, string hkStatusID, string confirmationNo, string rsvRoomTypeID, string notAssRoomNo);
         DataTable SearchReservationPackages(int reservationID);
     }
 }

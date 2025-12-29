@@ -61,7 +61,7 @@ namespace Administration.Services.Implements
             entity.Code = dto.Code?.Trim() ?? string.Empty;
             entity.TransCodeAlt = dto.TransCode!.Trim();
             entity.Description = dto.Description!.Trim();
-            entity.TextInNightAudit = dto.DisplayInFolio?.Trim() ?? string.Empty;
+            //entity.TextInNightAudit = dto.DisplayInFolio?.Trim() ?? string.Empty;
 
             entity.ForecastGroupID = dto.ForecastGroupID;
             entity.Type = dto.Type;
