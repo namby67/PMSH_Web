@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,22 +23,6 @@ namespace BaseBusiness.BO
         public static MarketBO Instance
         {
             get { return instance; }
-        }
-        public MarketModel GetById(int id)
-        {
-            string sql = @"SELECT 
-                      Id, Code, Name, Description, Inactive, 
-                      MarketTypeID, Regional, GroupType,
-                      CreatedBy, CreatedDate, UpdatedBy, UpdatedDate
-                   FROM Market
-                   WHERE Id = @Id";
-
-            return GetFirst<MarketModel>(sql, new { Id = id });
-        }
-        public MarketModel GetById(int id, SqlConnection conn, SqlTransaction tx)
-        {
-            const string sql = "SELECT ID, Code, Name, Description, CreatedBy, CreatedDate,  UpdatedBy, UpdatedDate FROM Market WHERE ID = @id";
-            return conn.QuerySingleOrDefault<MarketModel>(sql, new { id }, tx);
         }
     }
 }

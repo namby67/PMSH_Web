@@ -1,4 +1,5 @@
 using Administration.Controllers;
+using Administration.Services;
 using Administration.Services.Implements;
 using Administration.Services.Interfaces;
 using Billing.Controllers;
@@ -75,7 +76,7 @@ builder.Services.AddControllersWithViews()
 builder.Services.AddControllersWithViews()
     .PartManager.ApplicationParts.Add(new AssemblyPart(typeof(BillingController).Assembly));
 builder.Services.AddControllersWithViews()
-.PartManager.ApplicationParts.Add(new AssemblyPart(typeof(NightAuditController).Assembly));
+    .PartManager.ApplicationParts.Add(new AssemblyPart(typeof(NightAuditController).Assembly));
 builder.Services.AddControllersWithViews()
     .PartManager.ApplicationParts.Add(new AssemblyPart(typeof(RoomManagementController).Assembly));
 builder.Services.AddControllersWithViews()
@@ -157,6 +158,17 @@ builder.Services.AddSingleton<IGroupReservationService, GroupReservationService>
 builder.Services.AddSingleton<IMessageService, MessageService>();
 builder.Services.AddSingleton<IShareService, ShareService>();
 builder.Services.AddSingleton<IGroupAdminService, GroupAdminService>();
+
+//Tuan
+builder.Services.AddSingleton<IRateClassService, RateClassService>();
+builder.Services.AddSingleton<IRateCategoryService, RateCategory>();
+builder.Services.AddSingleton<IRateCodeService, RateCodeService>();
+builder.Services.AddSingleton<IRateCodeDetailService, RateCodeDetailService>();
+builder.Services.AddSingleton<IRateCodeUserRightService, RateCodeUserRightService>();
+builder.Services.AddSingleton<IPackageDetailService, PackageDetailService>();
+builder.Services.AddSingleton<IPackageService, PackageService>();
+builder.Services.AddSingleton<ITransactionArticleLinkService, TransactionArticleLinkService>();
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;

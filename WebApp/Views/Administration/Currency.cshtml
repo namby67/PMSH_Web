@@ -89,14 +89,12 @@
 
                 <div class="sticky-header bg-white p-2 shadow-sm z-3">
                     <div class="d-flex align-items-center gap-3 p-2" style="border: 1px solid #ccc; border-radius: 6px; padding: 8px;">
-                        <form id="itemForm">
+                        <form id="formContainer">
                             <div class="d-flex align-items-center">
                                 <div class="d-flex align-items-center me-3">
                                     <label for="code" class="me-2 mb-0">Code</label>
                                     <input type="text" id="code" name="code" class="form-control form-control-sm" style="width: 100px;" />
                                 </div>
-
-                                
                                 <div class="d-flex align-items-center me-3">
                                     <label for="seq" class="me-2 mb-0">Decimals</label>
                                     <input type="number" id="seq" name="seq" min="0" max="999" value="0" runat="server" class="form-control form-control-sm" style="width: 80px;" />
@@ -122,12 +120,12 @@
                         </form>
                     </div>
                     <div class=" mt-1">
-                        <button  id="btnView" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> View</button>
-                        <button  id="btnNew" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> New</button>
-                        <button id="btnEdit" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Edit</button>
-                        <button  id="btnSaveItem" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Save</button>
-                        <button  id="btnDelete" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Delete</button>
-                        <button  id="btnCancel" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Cancel</button>
+                        <button style="border-radius: 4px;  margin-right: 6px;background-color: #6c757d;" id="btnView" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> View</button>
+                        <button style="border-radius: 4px;  margin-right: 6px;background-color: #28a745;" id="btnNew" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> New</button>
+                        <button style="border-radius: 4px;  margin-right: 6px;background-color: #007bff;" id="btnEdit" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Edit</button>
+                        <button style="border-radius: 4px;  margin-right: 6px;background-color: #007bff;" id="btnSaveItem" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Save</button>
+                        <button style="border-radius: 4px;  margin-right: 6px;background-color: #dc3545;" id="btnDelete" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Delete</button>
+                        <button style="border-radius: 4px;  margin-right: 6px;background-color: #dc3545;" id="btnCancel" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Cancel</button>
 
                     </div>
                 </div>
@@ -148,7 +146,7 @@
 
 <script>
     DevExpress.localization.locale("vi");
-       let selectedRowData = null;
+       var selectedRowData = null;
 
         $(document).ready(function () {
         $(".menu-group-title").on("click", function (event) {
@@ -175,7 +173,7 @@
         });
 
         $("#btnNew").click(function () {
-        $("#itemForm")[0].reset();
+        $("#formContainer")[0].reset();
         $("#id").val("");
 
         $("#btnEdit").hide();
@@ -186,7 +184,7 @@
 
 
     $("#btnSaveItem").click(function () {
-        const formData = $("#itemForm").serialize();
+        const formData = $("#formContainer").serialize();
         console.log("FormData:", formData);
 
         let url = "/Administration/InsertCurrency";
@@ -203,7 +201,7 @@
             success: function (res) {
                 if (res.success) {
                     showToast("Success", url.includes("Update") ? "Update success" : "Insert success", true);
-                    $("#itemForm").trigger("reset");
+                    $("#formContainer").trigger("reset");
                     selectedRowData = null;
 
                     $("#btnEdit").show();
@@ -264,7 +262,7 @@
 
 
      $("#btnCancel").click(function () {
-        $("#itemForm")[0].reset();
+        $("#formContainer")[0].reset();
         $("#id").val("0");
 
         $("#btnEdit").show();

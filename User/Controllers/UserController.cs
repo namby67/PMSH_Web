@@ -65,7 +65,7 @@ namespace User.Controllers
 
 
                 if (result.ID != 0) {
-                    return Json(new { code = 0, msg = "Successfully", data = resultname ,namelogin= loginName,userID = UserID,businessDate = businessDate[0].BusinessDate.ToString("dd/MM/yyyy") });
+                    return Json(new { code = 0, msg = "Successfully", data = resultname ,namelogin= loginName,userID = UserID,businessDate = businessDate[0].BusinessDate.ToString() });
                 }
                 else
                 {

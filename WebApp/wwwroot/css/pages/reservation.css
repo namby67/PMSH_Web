@@ -644,6 +644,7 @@ textarea {
     color: #ffffff;
     background-color: #2b6cb0;
 }
+
 .checkbox-row-new-reservation {
     display: grid;
     grid-template-columns: repeat(4, 1fr);

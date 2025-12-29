@@ -145,9 +145,9 @@
 .dx-theme-material-typography small {
   font-size: 12px;
 }
-    .dx-theme-material-typography a {
-        color: #000000;
-    }
+.dx-theme-material-typography a {
+  color: rgba(0,0,0,.87);
+}
 .dx-icon-add,
 .dx-icon-addcolumnleft,
 .dx-icon-addcolumnright,
