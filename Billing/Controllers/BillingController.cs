@@ -1520,12 +1520,12 @@ namespace Billing.Controllers
                         decimal balance = FolioDetailBO.CalculateBalance(folioDetailModel.ReservationID);
 
                         FolioModel folioMaster = (FolioModel)FolioBO.Instance.FindByPrimaryKey(folioMasterID);
-                        folioMaster.BalanceVND = balance;
+                        folioMaster.BalanceVND = folioMaster.BalanceVND- balance;
                         FolioBO.Instance.Update(folioMaster);
 
 
                         FolioModel folio = (FolioModel)FolioBO.Instance.FindByPrimaryKey(folioID);
-                        folio.BalanceVND = balance;
+                        folio.BalanceVND = folio.BalanceVND + balance;
                         FolioBO.Instance.Update(folio);
                         // update balance reservation
                         res.BalanceVND = balance;
