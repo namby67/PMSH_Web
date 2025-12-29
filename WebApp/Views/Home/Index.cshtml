@@ -1,7 +1,8 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿﻿@{
+ViewData["Title"] = "Home Page";
 }
 <div class="layout-wrapper">
+
 
     <!-- Mục 1: Trên cùng -->
     <div class="section-top">
@@ -19,6 +20,7 @@
                 <div class="card-value" id="dueInCheckedInCount">0</div>
             </div>
         </div>
+
 
         <div class="card-box">
             <div class="card-icon"><i class="fas fa-users"></i></div>
@@ -42,55 +44,60 @@
             </div>
         </div>
 
-    </div>
-    <div class="section-left mui-card">
-        <div class="info-box">
-            <div class="info-icon"><i class="fas fa-chart-pie"></i></div>
-            <div class="info-content">
-                <div class="info-title">% Occupancy</div>
-                <div class="info-value" id="occupancyPercent">0%</div>
-            </div>
-        </div>
-        <div class="info-box">
-            <div class="info-icon"><i class="fas fa-male"></i></div>
-            <div class="info-content">
-                <div class="info-title">Adults</div>
-                <div class="info-value" id="totalA">0</div>
-            </div>
-        </div>
 
-        <div class="info-box">
-            <div class="info-icon"><i class="fas fa-child"></i></div>
-            <div class="info-content">
-                <div class="info-title">Children</div>
-                <div class="info-value" id="totalC">0</div>
-            </div>
-        </div>
-        <div class="info-box">
-            <div class="info-icon"><i class="fas fa-calendar-check"></i></div>
-            <div class="info-content">
-                <div class="info-title">Assigned</div>
-                <div class="info-value" id="rsvCount">0</div>
-            </div>
-        </div>
+
     </div>
 
+    <!-- Mục 2 & 3: Chia đôi bên dưới -->
+    <div class="section-bottom">
+        <div class="section-left mui-card">
+            <div class="info-box">
+                <div class="info-icon"><i class="fas fa-chart-pie"></i></div>
+                <div class="info-content">
+                    <div class="info-title">% Occupancy</div>
+                    <div class="info-value" id="occupancyPercent">0%</div>
+                </div>
+            </div>
+            <div class="info-box">
+                <div class="info-icon"><i class="fas fa-male"></i></div>
+                <div class="info-content">
+                    <div class="info-title">Adults</div>
+                    <div class="info-value" id="totalA">0</div>
+                </div>
+            </div>
 
-    <div class="section-right mui-card">
-        <div class="form-group" id="checkchart" style="display:flex">
-            <label style="margin-left: 15px;">
-                <input type="radio" name="chartType" value="pie" checked> Pie Chart
-            </label>
-            <label>
-                <input type="radio" name="chartType" value="bar"> Bar Chart
-            </label>
-
+            <div class="info-box">
+                <div class="info-icon"><i class="fas fa-child"></i></div>
+                <div class="info-content">
+                    <div class="info-title">Children</div>
+                    <div class="info-value" id="totalC">0</div>
+                </div>
+            </div>
+            <div class="info-box">
+                <div class="info-icon"><i class="fas fa-calendar-check"></i></div>
+                <div class="info-content">
+                    <div class="info-title">Assigned</div>
+                    <div class="info-value" id="rsvCount">0</div>
+                </div>
+            </div>
         </div>
-        <div id="highchartBar" class="chart-fixed-sizehigh" style="display:none;"></div>
-        <div id="highchartPie" class="chart-fixed-sizehigh"></div>
-    </div>
 
-</div>
+
+        <div class="section-right mui-card">
+            <div class="form-group" id="checkchart" style="display:flex">
+                <label style="margin-left: 15px;">
+                    <input type="radio" name="chartType" value="pie" checked> Pie Chart
+                </label>
+                <label>
+                    <input type="radio" name="chartType" value="bar"> Bar Chart
+                </label>
+
+            </div>
+            <div id="highchartBar" class="chart-fixed-sizehigh" style="display:none;"></div>
+            <div id="highchartPie" class="chart-fixed-sizehigh"></div>
+        </div>
+
+    </div>
 </div>
 <div id="loadingSpinner"
     style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
@@ -155,6 +162,35 @@
     }
 
     /* --- BOTTOM SECTION --- */
+    .section-bottom {
+        display: flex;
+        justify-content: space-between;
+        gap: 24px;
+    }
+
+    .section-left,
+    .section-right {
+        background-color: #fff;
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+
+    }
+
+    .section-left {
+        width: 30%;
+        height: 450px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .section-right {
+        width: 70%;
+        height: 450px;
+        display: flex;
+        flex-direction: column;
+    }
 
     /* --- INFO BOX --- */
     .info-box {
@@ -214,47 +250,27 @@
     }
 
     $(document).ready(function () {
-        getBusinessDate();
+        var parsedBusinessDate = JSON.parse(localStorage.getItem("businessDate")); // "29/08/2024 00:00:00"
 
+        var dateOnly = parsedBusinessDate.split(' ')[0]; // "29/08/2024"
+        var dateParts = dateOnly.split('/'); // ["29", "08", "2024"]
 
-    });
-    function getBusinessDate() {
-        return $.ajax({
-            url: '/Reservation/GetBusinessDate',
-            type: 'get',
-            dataType: 'json',
-            crossDomain: false,
-            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
-            success: function (result) {
+        var businessDate = new Date(dateParts[2], dateParts[0] - 1, dateParts[1]);// new Date(2024, 7, 29)
 
-                const businessDate = new Date(result);
-                const formattedBusinessDate = result.split('T')[0];
-                loadDashboardData(formattedBusinessDate);
-
-            },
-            error: function (xhr, statusText, err) {
-                if (xhr.status == 401) {
-                    sessionTimeout();
-                }
-            }
-        });
-    }
-
-    function loadDashboardData(businessDate) {
+        var parsedBusinessDate = formatDate(businessDate);
         $("#loadingSpinner").show();
-
         $.ajax({
             url: '/Report/DashBoard',
             type: 'GET',
             data: {
-                businessDate: businessDate,
+                businessDate: parsedBusinessDate,
             },
             headers: {
                 "X-CSRF-TOKEN-HEADERNAME": $("input[name='__RequestVerificationToken']").val()
             },
             success: function (data) {
-                console.log(data);
 
+                console.log(data);
                 $("#dueInCheckedInCount").text(data.totalDueinCheckedint);
                 $("#checkedOutCount").text(data.totaCheckedoutint);
                 $("#dueoutCount").text(data.totalDueoutint);
@@ -267,6 +283,7 @@
                 renderHighchartBar(data.chartStatus);
                 renderHighchartPie(data.chartStatus);
 
+
                 $("#loadingSpinner").hide();
             },
             error: function () {
@@ -274,8 +291,9 @@
                 $("#loadingSpinner").hide();
             }
         });
-    }
 
+
+    });
     function renderHighchartBar(data) {
         const filteredData = data.filter(x => x.label !== 'Total' && x.label !== 'OOO');
 
@@ -308,80 +326,77 @@
     }
 
 
+    // Hàm hiển thị biểu đồ tròn (Pie Chart) bằng Highcharts
     function renderHighchartPie(data) {
-        // Lấy các mục không phải "Total"
-        const itemsRaw = data.filter(x => String(x.label).trim() !== "Total");
+        const totalObj = data.find(x => x.label === 'Total');
+        const total = totalObj ? parseInt(totalObj.value) : 0;
 
-        // Parse giá trị an toàn (loại bỏ dấu phẩy, ký tự lạ)
-        const parsedItems = itemsRaw.map(x => {
-            const raw = String(x.value ?? 0).replace(/[^0-9\.\-]/g, '');
-            const y = parseFloat(raw) || 0;
-            return { label: x.label, y: y };
-        });
+        // Tính phần trăm thực tế chưa làm tròn
+        let items = data
+            .filter(x => x.label !== 'Total')
+            .map(x => {
+                const y = parseInt(x.value);
+                const rawPercent = total > 0 ? (y / total) * 100 : 0;
+                return {
+                    label: x.label,
+                    y: y,
+                    rawPercent: rawPercent
+                };
+            });
 
-        // Tính tổng (total = tổng các phần)
-        const total = parsedItems.reduce((s, it) => s + it.y, 0);
-
-        // Nếu total = 0 thì tránh chia cho 0 — hiển thị 0% cho tất cả
-        let items = parsedItems.map(it => {
-            const rawPercent = total > 0 ? (it.y / total) * 100 : 0;
-            return {
-                label: it.label,
-                y: it.y,
-                rawPercent: rawPercent
-            };
-        });
-
-        // Làm tròn 1 chữ số thập phân
+        // Làm tròn phần trăm
         let roundedPercents = items.map(x => Math.round(x.rawPercent * 10) / 10);
         let sumPercent = roundedPercents.reduce((a, b) => a + b, 0);
 
-        // Điều chỉnh sai số do làm tròn để tổng = 100.0 (nếu tổng khác 100)
+        // Tính chênh lệch do làm tròn
         let diff = +(100.0 - sumPercent).toFixed(1);
-        if (Math.abs(diff) >= 0.1) {
-            // Chọn mục có giá trị y lớn nhất để điều chỉnh
+
+        // Nếu có chênh lệch thì điều chỉnh mục có giá trị lớn nhất
+        if (Math.abs(diff) > 0.0) {
             let maxIndex = items.reduce((maxIdx, item, idx, arr) => {
                 return arr[idx].y > arr[maxIdx].y ? idx : maxIdx;
             }, 0);
+
             roundedPercents[maxIndex] = +(roundedPercents[maxIndex] + diff).toFixed(1);
-        } else {
-            // Nếu khác nhỏ (<0.1) vẫn có thể bỏ qua hoặc gán trực tiếp
-            if (Math.abs(diff) > 0) {
-                let maxIndex = items.reduce((maxIdx, item, idx, arr) => {
-                    return arr[idx].y > arr[maxIdx].y ? idx : maxIdx;
-                }, 0);
-                roundedPercents[maxIndex] = +(roundedPercents[maxIndex] + diff).toFixed(1);
-            }
         }
 
-        // Chuẩn bị dữ liệu cho Highcharts (hiện tên + phần trăm)
+        // Tạo dữ liệu cho Highcharts
         const chartData = items.map((x, i) => {
             return {
                 name: `${x.label} (${roundedPercents[i]}%)`,
-                y: x.y,
-                percent: roundedPercents[i] // có thể dùng trong tooltip nếu cần
+                y: x.y
             };
         });
 
         Highcharts.chart('highchartPie', {
-            chart: { type: 'pie' },
-            title: { text: '' },
+            chart: {
+                type: 'pie'
+            },
+            title: {
+                text: ''
+            },
             tooltip: {
-                // Hiển thị value và % thực tế (từ roundedPercents)
-                formatter: function () {
-                    // this.point.y là giá trị, this.point.percent có thể chứa auto percent của HC
-                    // ta dùng field percent đã chuẩn bị
-                    const p = this.point.percent !== undefined ? this.point.percent : this.percentage;
-                    return `<b>${this.point.name.split(' (')[0]}</b><br/>Value: <b>${this.point.y}</b><br/>Percent: <b>${p}%</b>`;
+                pointFormat: '{series.name}: <b>{point.y}</b>'
+            },
+            accessibility: {
+                point: {
+                    valueSuffix: '%'
                 }
             },
-            accessibility: { point: { valueSuffix: '%' } },
-            legend: { enabled: true, align: 'center', verticalAlign: 'bottom', layout: 'horizontal' },
+            legend: {
+                enabled: true,
+                align: 'center',
+                verticalAlign: 'bottom',
+                layout: 'horizontal'
+            },
             plotOptions: {
                 pie: {
                     allowPointSelect: true,
                     cursor: 'pointer',
-                    dataLabels: { enabled: true, format: '{point.name}: {point.y}' },
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.name}: {point.y}'
+                    },
                     showInLegend: true
                 }
             },
@@ -390,9 +405,12 @@
                 colorByPoint: true,
                 data: chartData
             }],
-            credits: { enabled: false }
+            credits: {
+                enabled: false
+            }
         });
     }
+
 
 
 
