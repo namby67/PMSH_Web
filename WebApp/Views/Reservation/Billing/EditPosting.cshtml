@@ -282,7 +282,7 @@
         formData.append('supplement',  selectedRows[0].supplement);
         formData.append('reference', selectedRows[0].reference);
         formData.append('rowState', selectedRows[0].rowState);
-        $.ajax({
+        $.ajax({ 
             url: '/Billing/EditPosting',
             type: 'POST',
             processData: false,
