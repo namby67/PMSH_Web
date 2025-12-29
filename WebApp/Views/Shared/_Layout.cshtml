@@ -630,129 +630,172 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     DevExpress.localization.locale("vi");
-        document.addEventListener('DOMContentLoaded', function () {
-        // Mobile
-        const submenuToggles = document.querySelectorAll('.dropdown-submenu-toggle');
+         document.addEventListener('DOMContentLoaded', function () {
+            const isDesktop = () => window.innerWidth >= 992;
 
-        submenuToggles.forEach(toggle => {
-            toggle.addEventListener('click', function (e) {
-                if (window.innerWidth <= 991.98) {
-                    e.preventDefault();
-                    e.stopPropagation();
+            // ===============================
+            // 1. DESKTOP: SUBMENU (CẤP 2) - QUAN TRỌNG
+            // ===============================
+            document.querySelectorAll('.dropdown-submenu').forEach(item => {
+                const submenu = item.querySelector('.dropdown-submenu-content');
+                if (!submenu) return;
+                let subHideTimeout = null;
 
-                    const submenu = this.nextElementSibling;
-                    const parent = this.parentElement;
+                item.addEventListener('mouseenter', () => {
+                    if (!isDesktop()) return;
+                    clearTimeout(subHideTimeout);
 
-                    // Toggle active class
-                    if (parent.classList.contains('active')) {
-                        parent.classList.remove('active');
-                        if (submenu) submenu.style.display = 'none';
-                    } else {
-                        document
-                            .querySelectorAll('.dropdown-submenu.active')
-                            .forEach(item => {
-                                if (!item.contains(this)) {
-                                    item.classList.remove('active');
-                                    const sub = item.querySelector('.dropdown-submenu-content');
-                                    if (sub) sub.style.display = 'none';
-                                }
-                            });
-
-                        // open current menu
-                        parent.classList.add('active');
-                        if (submenu) submenu.style.display = 'block';
-                    }
-                }
-            });
-        });
-
-        // --- Xử lý hiển thị Submenu ngang khi có Scroll ---
-        const isDesktop = () => window.innerWidth >= 992;
-        const submenus = document.querySelectorAll('.dropdown-submenu');
-        const scrollContainer = document.querySelectorAll('.dropdown-menu-custom');
-
-        submenus.forEach(item => {
-            const submenuContent = item.querySelector('.dropdown-submenu-content');
-            let hideTimeout = null;
-
-            // 1. Khi chuột VÀO item cha
-            item.addEventListener('mouseenter', function () {
-                if (!isDesktop()) return;
-
-                if (hideTimeout) clearTimeout(hideTimeout);
-
-                if (submenuContent) {
-                    // --- LOGIC TÍNH TOÁN VỊ TRÍ & CHIỀU CAO ---
-                    const rect = this.getBoundingClientRect();
+                    const rect = item.getBoundingClientRect(); // Lấy vị trí của item cha
                     const viewportHeight = window.innerHeight;
 
-                    submenuContent.style.maxHeight = 'none';
-                    submenuContent.style.display = 'block';
-                    submenuContent.style.position = 'fixed';
+                    // Bắt buộc dùng Fixed để thoát khỏi thanh cuộn của menu cha
+                    submenu.style.position = 'fixed';
+                    submenu.style.display = 'block'; // Đảm bảo hiện
 
-                    // hiển thị (Ngang)
+                    // Xử lý vị trí NGANG (Left/Right)
                     let leftPos = rect.right;
-
-                    // Nếu tràn sang phải màn hình -> Đẩy ngược sang trái
+                    // Nếu menu tràn ra khỏi màn hình bên phải -> đẩy sang trái
                     if (rect.right + 220 > window.innerWidth) {
                         leftPos = rect.left - 220;
                     }
+                    submenu.style.left = leftPos + 'px';
 
-                    submenuContent.style.left = leftPos + 'px';
+                    // Xử lý vị trí DỌC (Top)
+                    submenu.style.top = rect.top + 'px';
 
-                    // Xử lý tràn đáy (dọc)
+                    // Nếu menu dài quá màn hình dưới -> cho phép scroll trong menu con
                     const spaceBelow = viewportHeight - rect.top - 10;
-                    const menuHeight = submenuContent.scrollHeight;
+                    submenu.style.maxHeight = spaceBelow + 'px';
 
-                    if (menuHeight > spaceBelow) {
-                        submenuContent.style.top = rect.top + 'px';
-                        submenuContent.style.maxHeight = spaceBelow + 'px';
-                    } else {
-                        submenuContent.style.top = rect.top + 'px';
-                        submenuContent.style.maxHeight = 'none';
+                    // Thêm class để kích hoạt animation
+                    requestAnimationFrame(() => {
+                        submenu.classList.add('menu-open');
+                    });
+                });
+
+                item.addEventListener('mouseleave', () => {
+                    if (!isDesktop()) return;
+                    subHideTimeout = setTimeout(() => {
+                        if (!submenu.matches(':hover')) {
+                            submenu.classList.remove('menu-open');
+                            submenu.style.display = 'none'; // Ẩn hẳn đi sau khi animation xong
+                        }
+                    }, 200);
+                });
+
+                // Giữ menu mở khi chuột đang ở trong menu con
+                submenu.addEventListener('mouseenter', () => {
+                    clearTimeout(subHideTimeout);
+                });
+
+                submenu.addEventListener('mouseleave', () => {
+                     if (!isDesktop()) return;
+                    subHideTimeout = setTimeout(() => {
+                         if (!item.matches(':hover')) {
+                            submenu.classList.remove('menu-open');
+                            submenu.style.display = 'none';
+                         }
+                    }, 200);
+                });
+            });
+
+            // ===============================
+            // 2. DESKTOP: MENU CẤP 1 (Giữ nguyên logic cũ)
+            // ===============================
+            document.querySelectorAll('.nav-item').forEach(item => {
+                const dropdown = item.querySelector('.dropdown-menu-custom');
+                if (!dropdown) return;
+                let showTimeout, hideTimeout;
+
+                item.addEventListener('mouseenter', () => {
+                    if (!isDesktop()) return;
+                    clearTimeout(hideTimeout);
+                    showTimeout = setTimeout(() => {
+                        if (!item.matches(':hover')) return;
+                        const rect = item.getBoundingClientRect();
+                        dropdown.style.position = 'fixed';
+                        dropdown.style.top = rect.bottom + 'px';
+                        dropdown.style.left = rect.left + 'px';
+                        dropdown.style.display = 'block';
+                        requestAnimationFrame(() => dropdown.classList.add('menu-open'));
+                    }, 100);
+                });
+
+                item.addEventListener('mouseleave', () => {
+                    if (!isDesktop()) return;
+                    clearTimeout(showTimeout);
+                    hideTimeout = setTimeout(() => {
+                        if (!dropdown.matches(':hover')) {
+                            dropdown.classList.remove('menu-open');
+                            setTimeout(() => { if(!dropdown.classList.contains('menu-open')) dropdown.style.display = 'none'; }, 200);
+                        }
+                    }, 200);
+                });
+
+                dropdown.addEventListener('mouseleave', () => {
+                     if (!isDesktop()) return;
+                    hideTimeout = setTimeout(() => {
+                        if (!item.matches(':hover')) {
+                            dropdown.classList.remove('menu-open');
+                            setTimeout(() => { if(!dropdown.classList.contains('menu-open')) dropdown.style.display = 'none'; }, 200);
+                        }
+                    }, 200);
+                });
+            });
+
+            // ===============================
+            // 3. MOBILE: CLICK (Logic Accordion)
+            // ===============================
+            // Xử lý Menu Cấp 1
+            document.querySelectorAll('.nav-item > .nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    if (isDesktop()) return;
+                    const dropdown = this.nextElementSibling;
+                    if (dropdown && dropdown.classList.contains('dropdown-menu-custom')) {
+                        e.preventDefault(); e.stopPropagation();
+                        const isOpen = dropdown.style.display === 'block';
+                        // Đóng tất cả
+                        document.querySelectorAll('.dropdown-menu-custom').forEach(m => {
+                            m.style.display = 'none'; m.classList.remove('menu-open');
+                        });
+                        // Mở cái hiện tại
+                        if (!isOpen) {
+                            dropdown.style.display = 'block';
+                            dropdown.style.position = 'static'; // Mobile không dùng fixed
+                            dropdown.classList.add('menu-open');
+                        }
                     }
+                });
+            });
+
+            // Xử lý Menu Cấp 2 (Submenu)
+            document.querySelectorAll('.dropdown-submenu-toggle').forEach(toggle => {
+                toggle.addEventListener('click', function (e) {
+                    if (isDesktop()) return;
+                    e.preventDefault(); e.stopPropagation();
+                    const parent = this.parentElement;
+                    const submenu = this.nextElementSibling;
+                    parent.classList.toggle('active');
+                    if(submenu) {
+                        submenu.style.display = parent.classList.contains('active') ? 'block' : 'none';
+                        submenu.style.position = 'static';
+                        submenu.classList.toggle('menu-open', parent.classList.contains('active'));
+                    }
+                });
+            });
+
+            // Xử lý scroll: Đóng menu desktop khi cuộn chuột để tránh menu bay lung tung
+            window.addEventListener('scroll', () => {
+                if (isDesktop()) {
+                    document.querySelectorAll('.menu-open').forEach(el => {
+                        el.classList.remove('menu-open');
+                        el.style.display = 'none';
+                    });
                 }
             });
-
-            // 2. Khi chuột RỜI item cha
-            item.addEventListener('mouseleave', function () {
-                if (!isDesktop()) return;
-
-                hideTimeout = setTimeout(() => {
-                    if (submenuContent) {
-                        submenuContent.style.display = 'none';
-                    }
-                }, 400);
-            });
-
-            if (submenuContent) {
-                submenuContent.addEventListener('mouseenter', function () {
-                    if (hideTimeout) clearTimeout(hideTimeout);
-                });
-
-                submenuContent.addEventListener('mouseleave', function () {
-                    hideTimeout = setTimeout(() => {
-                        submenuContent.style.display = 'none';
-                    }, 300);
-                });
-            }
         });
 
-        // Ẩn Submenu khi cuộn chuột
-        scrollContainer.forEach(container => {
-            container.addEventListener('scroll', function () {
-                if (!isDesktop()) return;
-
-                const openSubmenus = document.querySelectorAll('.dropdown-submenu-content');
-                openSubmenus.forEach(sub => {
-                    sub.style.display = 'none';
-                });
-            });
-        });
-    });
-        
-
-    $(document).ready(function () {
+         $(document).ready(function () {
         // Hàm kiểm tra và áp dụng trạng thái biểu tượng
         function updateFullscreenIcon() {
             const isFullscreen = !!(
