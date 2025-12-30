@@ -4559,7 +4559,7 @@ namespace Reservation.Controllers
                     }
                 }
 
-                    #endregion
+                #endregion
                 pt.CommitTransaction();
 
                 return Json(new { code = 0, msg = "Split special was successfully!" });

@@ -599,6 +599,5 @@ namespace Administration.Services.Implements
             DataTable dt = DataTableHelper.getTableData("spSearchCancellationRule", parameters);
             return dt;
         }
-
     }
 }
