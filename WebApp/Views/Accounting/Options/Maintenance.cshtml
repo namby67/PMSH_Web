@@ -1,5 +1,6 @@
 ﻿<!-- Modal billimg-->
-<div class="modal fade modal-xl" id="modalMaintenance" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabelBilling" aria-hidden="true">
+<div class="modal fade modal-xl" id="modalMaintenance" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabelBilling" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen">
         <div class="modal-content" style="border: 1px solid #bcbcbc">
             <div class="modal-header">
@@ -10,7 +11,8 @@
                 @* <div class="mb-2">
                     <button class="mui-button mui-button-search" >Post</button>
                 </div> *@
-                <div class="functions-pane mb-2" style="background-color: var(--accent-color);border-radius: 8px; border: 1px solid #e5e7eb;box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);padding:0px">
+                <div class="functions-pane mb-2"
+                    style="background-color: var(--accent-color);border-radius: 8px; border: 1px solid #e5e7eb;box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);padding:0px">
                     <div class="function-menu">
                         <a href="#" onclick="searchMaintenance();">Search</a>
 
@@ -23,13 +25,13 @@
                 <div class="mb-2">
                     <div class="mui-card">
 
-
                         <div id="filter" class="tab-pane ">
                             <div class="row">
                                 <div class="form-group-new-reservation col-md-1">
                                     <label>Date</label>
 
-                                    <input type="checkbox" name="dateMaintenance" id="dateMaintenance" value="1" style="height:auto">
+                                    <input type="checkbox" name="dateMaintenance" id="dateMaintenance" value="1"
+                                        style="height:auto">
                                 </div>
                                 <div class="form-group-new-reservation col-md-1">
                                     <label>From Date</label>
@@ -51,10 +53,12 @@
                                     <div class="form-group-new-reservation">
                                         <label>Payments Only</label>
 
-                                        <input type="checkbox" name="paymentMaintenance" id="paymentMaintenance"  value="1" style="height:auto">
+                                        <input type="checkbox" name="paymentMaintenance" id="paymentMaintenance"
+                                            value="1" style="height:auto">
                                     </div>
                                     <div class="form-group-new-reservation">
-                                        <input type="radio" name="isActiveMaintenance" checked value="" style="height:auto">
+                                        <input type="radio" name="isActiveMaintenance" checked value=""
+                                            style="height:auto">
                                         <label>All</label>
                                     </div>
                                     <div class="form-group-new-reservation">
@@ -65,7 +69,8 @@
                                 <div class="col-md-1">
                                     <label>Print</label>
                                     <div class="form-group-new-reservation">
-                                        <input type="radio" name="printMaintenance" checked value="" style="height:auto">
+                                        <input type="radio" name="printMaintenance" checked value=""
+                                            style="height:auto">
                                         <label>All</label>
                                     </div>
                                     <div class="form-group-new-reservation">
@@ -100,7 +105,7 @@
         searchMaintenance();
         $('#modalMaintenance').modal('show');
     }
-    function closeModalMaintenance(){
+    function closeModalMaintenance() {
         $('#modalMaintenance').modal('hide');
     }
 
@@ -139,34 +144,34 @@
 
     function initializeDataGridMaintenance(data) {
 
-       $("#gridContainerMaintenance").dxDataGrid({
-           dataSource: data,
-           allowColumnResizing: true,
+        $("#gridContainerMaintenance").dxDataGrid({
+            dataSource: data,
+            allowColumnResizing: true,
 
-           paging: { pageSize: 15 },
-           scrolling: {
-               rowRenderingMode: 'virtual'
-           },
-           pager: {
-               visible: true,
-               allowedPageSizes: [15, 20, 'all'],
-               showPageSizeSelector: true,
-               showInfo: true,
-               showNavigationButtons: true
-           },
-           filterRow: {
-               visible: true,
-               applyFilter: "auto"
-           },
-           selection: {
-               mode: "multiple",
-               showCheckBoxesMode: "always"
-           },
-           onRowClick: function (e) {
-               const grid = $("#gridContainerMaintenance").dxDataGrid("instance");
-               grid.selectRows([e.key], false);
+            paging: { pageSize: 15 },
+            scrolling: {
+                rowRenderingMode: 'virtual'
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [15, 20, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true
+            },
+            filterRow: {
+                visible: true,
+                applyFilter: "auto"
+            },
+            selection: {
+                mode: "multiple",
+                showCheckBoxesMode: "always"
+            },
+            onRowClick: function (e) {
+                const grid = $("#gridContainerMaintenance").dxDataGrid("instance");
+                grid.selectRows([e.key], false);
 
-           },
-       });
+            },
+        });
     }
 </script>

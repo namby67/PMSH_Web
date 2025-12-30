@@ -74,7 +74,7 @@ namespace Cashiering.Services.Implements
 
         public DataTable InvoiceSearch(int folioID, int mode)
         {
-          try
+            try
             {
                 SqlParameter[] param = new SqlParameter[]
                 {
@@ -90,7 +90,7 @@ namespace Cashiering.Services.Implements
             {
 
                 throw new Exception($"ERROR: {ex.Message}", ex);
-            }        
+            }
         }
 
         public DataTable SearchByCommmand(string sqlCommand)
@@ -142,7 +142,6 @@ namespace Cashiering.Services.Implements
             {
                 SqlParameter[] param = new SqlParameter[]
                 {
-                   
 
                 };
 

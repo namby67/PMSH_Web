@@ -1,4 +1,4 @@
-﻿﻿@* <link href="~/css/pages/reservation.css" rel="stylesheet" asp-append-version="true" /> *@
+﻿@* <link href="~/css/pages/reservation.css" rel="stylesheet" asp-append-version="true" /> *@
 <style>
 </style>
 <div class="header mt-2" style="border-bottom:none;justify-content:center">
@@ -133,17 +133,17 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group-new-reservation col-md-6 mt-1" style="display:flex">
+                        <div class="form-group-new-reservation col-md-6 mt-1"  style="display:flex">
                             <div class="row" style="margin-left:1px;margin-right:2px">
                                 <input type="checkbox" id="reservationOnline" name="reservationOnline" value="1">
                             </div>
                             <label>Rsv Online</label>
                         </div>
                         <div class="form-group-new-reservation col-md-6 mt-1" style="display:flex">
-                            <div style="margin-left:1px;margin-right:2px">
+                            <div  style="margin-left:1px;margin-right:2px">
                                 <input type="checkbox" id="roomShare" name="roomShare" value="IncludeRS" checked>
                             </div>
-                            <label>Room Sharer</label>
+                            <label >Room Sharer</label>
 
                         </div>
                     </div>
@@ -158,8 +158,8 @@
                     <i class="fa-solid fa-caret-down" id="caretDownFunctionAndOption" onclick="clickCaretDownFunctionAndOption();" title="Click to show funtions and options"></i>
                     <i class="fa-solid fa-caret-up" id="caretUpFunctionAndOption" onclick="clickCaretUpFunctionAndOption();" title="Click to hide funtions and options"></i>
                 </div>
-                <div class="toolbar-menu mt-2 row text-start" id="functionAndOption">
-                    @*                     <div class="dropdown relative col-md-4 mb-1" style="padding:0">
+                <div class="toolbar-menu mt-2 row text-start" id="functionAndOption" >
+@*                     <div class="dropdown relative col-md-4 mb-1" style="padding:0">
                         <a href="#" class="menu-toggle font-semibold">CO</a>
                         <div class="submenu absolute z-10 mt-2">
                             <a href="#" onclick="openModalCheckOutAll(1);" id="assignRoom">C/O All</a>
@@ -167,7 +167,7 @@
                             <a href="#" onclick="openModalCheckOut();" id="unAssignRoom">C/O</a>
                         </div>
                     </div> *@
-                    @*                     <div class="dropdown relative col-md-4 mb-1" style="padding:0">
+@*                     <div class="dropdown relative col-md-4 mb-1" style="padding:0">
                         <a href="#" class="menu-toggle font-semibold">Rm.Assg</a>
                         <div class="submenu absolute z-10 mt-2">
                             <a href="#" onclick="openRoomAssignment();" id="assignRoom">Assignment</a>
@@ -230,7 +230,7 @@
                 <div class="mui-card">
                     <div class="row">
                         <div class="col-md-8">
-
+                            
 
                             <div class="toolbar-menu max-w-7xl row" id="functionAndOptionTable" style="display:none;column-gap:4px">
                                 <a href="#" class="font-semibold col-md-2 mb-2" style="background-color:#0055b8;color:white" onclick="openModalBilling();">Billing</a>
@@ -411,7 +411,7 @@
                 $('#dateTraces').val(formattedBusinessDate);
                 $('#fromDateAddNewTrace').val(formattedBusinessDate);
                 $('#toDateAddNewTrace').val(formattedBusinessDate);
-
+                
                 // Chỉ set giá trị nếu các trường ngày trống
                 if (!$('#arrivalForm').val()) {
                     $('#arrivalForm').val(formattedBusinessDate);
@@ -421,7 +421,7 @@
                     $('#toDateSelectOption').val(formattedBusinessDate);
 
 
-
+                
                 }
                 if (!$('#departureForm').val()) {
                     const departureDate = new Date(businessDate);
@@ -538,7 +538,7 @@
             });
         }
     }
-
+    
     var idReservation = 0;
     var status = '';
     var roomStatus = '';
@@ -897,10 +897,10 @@
         const day = String(date.getDate()).padStart(2, '0');
         return `${year}-${month}-${day}`;
     }
-
-
+          
+      
     function exportExcel() {
-        const grid = $("#gridContainer").dxDataGrid("instance");
+        const grid = $("#gridContainer").dxDataGrid("instance"); 
 
 
           const workbook = new ExcelJS.Workbook();
@@ -985,7 +985,7 @@
             }
         }
     }
-
+    
     function editBooking() {
         // Hiển thị lớp phủ để vô hiệu hóa tương tác
         $('#overlay').show();
@@ -1122,7 +1122,28 @@
             if (loadingIndicator) hideLoading(loadingIndicator);
         });
     }
+     function GetBalanceVND(idReservation) {
+        $.ajax({
+            url: '/Billing/GetBalanceVND',
+            type: 'get',
+            dataType: 'json',
+            data: {
+                rsvID: idReservation
 
+            },
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                    $('#balanceBilling').text(formatNumberBilling(result[0].balanceVND));
+                    $('#totalBilling').text(formatNumberBilling(result[0].balanceVND));
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                }
+            }
+        });
+    }
     // Hàm tiện ích (tùy chọn - bạn có thể bỏ qua hoặc dùng thư viện như SweetAlert, Toastr...)
     function showLoading() {
         const overlay = document.createElement('div');
@@ -1152,5 +1173,5 @@
             element.parentNode.removeChild(element);
         }
     }
-
+     
 </script>

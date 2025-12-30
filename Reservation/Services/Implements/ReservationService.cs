@@ -472,7 +472,6 @@ namespace Reservation.Services.Implements
 
                 throw new Exception($"ERROR: {ex.Message}", ex);
             }
-
         }
 
         public DataTable SearchReservation(int searchType, string name, string firstName, string reservationHolder, string confirmationNo,

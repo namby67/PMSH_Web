@@ -10,7 +10,7 @@ using Microsoft.Data.SqlClient;
 namespace BaseBusiness.BO
 {
     using Dapper;
-    public class NationalityBO: BaseBO
+    public class NationalityBO : BaseBO
     {
         private NationalityFacade facade = NationalityFacade.Instance;
         protected static NationalityBO instance = new NationalityBO();

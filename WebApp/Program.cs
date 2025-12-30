@@ -10,8 +10,6 @@ using Cashiering.Services.Implements;
 using Cashiering.Services.Interfaces;
 using DevExpress.AspNetCore;
 using DevExpress.AspNetCore.Reporting;
-using DevExpress.CodeParser;
-using DevExpress.XtraCharts;
 using FrontDesk.Controllers;
 using FrontDesk.Services.Implements;
 using FrontDesk.Services.Interfaces;

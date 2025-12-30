@@ -1,22 +1,16 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using Administration.Services.Implements;
-using Administration.Services.Interfaces;
+﻿using Administration.Services.Interfaces;
 using BaseBusiness.BO;
 using BaseBusiness.Model;
 using BaseBusiness.util;
-using DevExpress.CodeParser;
+using DocumentFormat.OpenXml.EMMA;
+using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System.Data;
+using System.Text;
 using static BaseBusiness.util.ValidationUtils;
 namespace Administration.Controllers
 {
@@ -66,10 +60,16 @@ namespace Administration.Controllers
             {
                 return Json(ex.Message);
             }
+            //  report.DataSource = dataTable;
+
+            // Không cần gán parameter
+            // report.RequestParameters = false;
+
+            // return PartialView("_ReportViewerPartial", report);
         }
         public IActionResult MemberList()
         {
-            return View();
+            return View(); // View này sẽ chứa DataGrid + script gọi API
         }
         [HttpPost]
         public ActionResult InsertMember()
@@ -376,6 +376,3378 @@ namespace Administration.Controllers
             }
 
         }
+        [HttpPost]
+        public ActionResult InsertCity()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                CityModel member = new CityModel();
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Name = Request.Form["txtname"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                  && Request.Form["inactive"].ToString() == "on";
+                string countryValue = Request.Form["countryId"];
+                member.CountryID = int.TryParse(countryValue, out int cId) ? cId : 0;
+
+                // Thông tin người dùng
+                member.CreatedBy = HttpContext.Session.GetString("LoginName") ?? "";
+                member.UpdatedBy = member.CreatedBy;
+                member.CreatedDate = DateTime.Now;
+                member.UpdatedDate = DateTime.Now;
+
+                // Gọi BO để lưu
+                long memberId = CityBO.Instance.Insert(member);
+
+                pt.CommitTransaction();
+
+                return Json(new { success = true, id = memberId });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult UpdateCity()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                CityModel member = new CityModel();
+
+                // Lấy ID từ form (có khi edit)
+                member.ID = !string.IsNullOrEmpty(Request.Form["id"])
+                             ? int.Parse(Request.Form["id"])
+                             : 0;
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Name = Request.Form["txtname"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                  && Request.Form["inactive"].ToString() == "on";
+                string countryValue = Request.Form["countryId"];
+                member.CountryID = int.TryParse(countryValue, out int cId) ? cId : 0;
+                // Thông tin người dùng
+                string loginName = HttpContext.Session.GetString("LoginName") ?? "";
+
+                if (member.ID == 0) // Insert mới
+                {
+                    member.CreatedBy = loginName;
+                    member.CreatedDate = DateTime.Now;
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    CityBO.Instance.Insert(member);
+                }
+                else // Update
+                {
+                    // Trước khi update, lấy lại bản ghi cũ từ DB để giữ CreatedBy, CreatedDate
+                    var oldData = CityBO.Instance.GetById(member.ID, pt.Connection, pt.Transaction);
+
+                    if (oldData != null)
+                    {
+                        member.CreatedBy = oldData.CreatedBy;
+                        member.CreatedDate = oldData.CreatedDate;
+                    }
+
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    CityBO.Instance.Update(member);
+                }
+
+                pt.CommitTransaction();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult DeleteCity()
+        {
+            try
+            {
+
+                CityModel memberModel = (CityModel)CityBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["id"].ToString()));
+                if (memberModel == null || memberModel.ID == 0)
+                {
+                    return Json(new { code = 1, msg = "Can not find Lost And Found" });
+
+                }
+                CityBO.Instance.Delete(int.Parse(Request.Form["id"].ToString()));
+                return Json(new { code = 0, msg = "Delete Lost And Found was successfully" });
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = 1, msg = ex.Message });
+            }
+
+        }
+        [HttpPost]
+        public ActionResult InsertCountry()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                CountryModel member = new CountryModel();
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Name = Request.Form["txtname"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                  && Request.Form["inactive"].ToString() == "on";
+                member.CreatedBy = HttpContext.Session.GetString("LoginName") ?? "";
+                member.UpdatedBy = member.CreatedBy;
+                member.CreatedDate = DateTime.Now;
+                member.UpdatedDate = DateTime.Now;
+
+                // Gọi BO để lưu
+                long memberId = CountryBO.Instance.Insert(member);
+
+                pt.CommitTransaction();
+
+                return Json(new { success = true, id = memberId });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult UpdateCountry()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                CountryModel member = new CountryModel();
+
+                // Lấy ID từ form (có khi edit)
+                member.ID = !string.IsNullOrEmpty(Request.Form["id"])
+                             ? int.Parse(Request.Form["id"])
+                             : 0;
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Name = Request.Form["txtname"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                  && Request.Form["inactive"].ToString() == "on";
+                string loginName = HttpContext.Session.GetString("LoginName") ?? "";
+
+                if (member.ID == 0) // Insert mới
+                {
+                    member.CreatedBy = loginName;
+                    member.CreatedDate = DateTime.Now;
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    CountryBO.Instance.Insert(member);
+                }
+                else // Update
+                {
+                    // Trước khi update, lấy lại bản ghi cũ từ DB để giữ CreatedBy, CreatedDate
+                    var oldData = CountryBO.Instance.GetById(member.ID, pt.Connection, pt.Transaction);
+
+                    if (oldData != null)
+                    {
+                        member.CreatedBy = oldData.CreatedBy;
+                        member.CreatedDate = oldData.CreatedDate;
+                    }
+
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    CountryBO.Instance.Update(member);
+                }
+
+                pt.CommitTransaction();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult DeleteCountry()
+        {
+            try
+            {
+
+                CountryModel memberModel = (CountryModel)CountryBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["id"].ToString()));
+                if (memberModel == null || memberModel.ID == 0)
+                {
+                    return Json(new { code = 1, msg = "Can not find Country" });
+
+                }
+                CountryBO.Instance.Delete(int.Parse(Request.Form["id"].ToString()));
+                return Json(new { code = 0, msg = "Delete Country was successfully" });
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = 1, msg = ex.Message });
+            }
+
+        }
+
+
+        [HttpPost]
+        public ActionResult InsertLanguage()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                LanguageModel member = new LanguageModel();
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Name = Request.Form["txtname"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                  && Request.Form["inactive"].ToString() == "on";
+                member.CreatedBy = HttpContext.Session.GetString("LoginName") ?? "";
+                member.UpdatedBy = member.CreatedBy;
+                member.CreatedDate = DateTime.Now;
+                member.UpdatedDate = DateTime.Now;
+
+                // Gọi BO để lưu
+                long memberId = LanguageBO.Instance.Insert(member);
+
+                pt.CommitTransaction();
+
+                return Json(new { success = true, id = memberId });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult UpdateLanguage()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                LanguageModel member = new LanguageModel();
+
+                // Lấy ID từ form (có khi edit)
+                member.ID = !string.IsNullOrEmpty(Request.Form["id"])
+                             ? int.Parse(Request.Form["id"])
+                             : 0;
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Name = Request.Form["txtname"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                  && Request.Form["inactive"].ToString() == "on";
+                string loginName = HttpContext.Session.GetString("LoginName") ?? "";
+
+                if (member.ID == 0) // Insert mới
+                {
+                    member.CreatedBy = loginName;
+                    member.CreatedDate = DateTime.Now;
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    LanguageBO.Instance.Insert(member);
+                }
+                else // Update
+                {
+                    // Trước khi update, lấy lại bản ghi cũ từ DB để giữ CreatedBy, CreatedDate
+                    var oldData = LanguageBO.Instance.GetById(member.ID, pt.Connection, pt.Transaction);
+
+                    if (oldData != null)
+                    {
+                        member.CreatedBy = oldData.CreatedBy;
+                        member.CreatedDate = oldData.CreatedDate;
+                    }
+
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    LanguageBO.Instance.Update(member);
+                }
+
+                pt.CommitTransaction();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult DeleteLanguage()
+        {
+            try
+            {
+
+                LanguageModel memberModel = (LanguageModel)LanguageBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["id"].ToString()));
+                if (memberModel == null || memberModel.ID == 0)
+                {
+                    return Json(new { code = 1, msg = "Can not find Country" });
+
+                }
+                LanguageBO.Instance.Delete(int.Parse(Request.Form["id"].ToString()));
+                return Json(new { code = 0, msg = "Delete Country was successfully" });
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = 1, msg = ex.Message });
+            }
+
+        }
+
+
+        [HttpPost]
+        public ActionResult InsertNationality()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                NationalityModel member = new NationalityModel();
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Name = Request.Form["txtname"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                  && Request.Form["inactive"].ToString() == "on";
+                member.CreatedBy = HttpContext.Session.GetString("LoginName") ?? "";
+                member.UpdatedBy = member.CreatedBy;
+                member.CreatedDate = DateTime.Now;
+                member.UpdatedDate = DateTime.Now;
+
+                // Gọi BO để lưu
+                long memberId = NationalityBO.Instance.Insert(member);
+
+                pt.CommitTransaction();
+
+                return Json(new { success = true, id = memberId });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult UpdateNationality()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                NationalityModel member = new NationalityModel();
+
+                // Lấy ID từ form (có khi edit)
+                member.ID = !string.IsNullOrEmpty(Request.Form["id"])
+                             ? int.Parse(Request.Form["id"])
+                             : 0;
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Name = Request.Form["txtname"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                  && Request.Form["inactive"].ToString() == "on";
+                string loginName = HttpContext.Session.GetString("LoginName") ?? "";
+
+                if (member.ID == 0) // Insert mới
+                {
+                    member.CreatedBy = loginName;
+                    member.CreatedDate = DateTime.Now;
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    NationalityBO.Instance.Insert(member);
+                }
+                else // Update
+                {
+                    // Trước khi update, lấy lại bản ghi cũ từ DB để giữ CreatedBy, CreatedDate
+                    var oldData = NationalityBO.Instance.GetById(member.ID, pt.Connection, pt.Transaction);
+
+                    if (oldData != null)
+                    {
+                        member.CreatedBy = oldData.CreatedBy;
+                        member.CreatedDate = oldData.CreatedDate;
+                    }
+
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    NationalityBO.Instance.Update(member);
+                }
+
+                pt.CommitTransaction();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult DeleteNationality()
+        {
+            try
+            {
+
+                NationalityModel memberModel = (NationalityModel)NationalityBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["id"].ToString()));
+                if (memberModel == null || memberModel.ID == 0)
+                {
+                    return Json(new { code = 1, msg = "Can not find Country" });
+
+                }
+                NationalityBO.Instance.Delete(int.Parse(Request.Form["id"].ToString()));
+                return Json(new { code = 0, msg = "Delete Country was successfully" });
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = 1, msg = ex.Message });
+            }
+
+        }
+        [HttpPost]
+        public ActionResult InsertTitle()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                TitleModel member = new TitleModel();
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Name = Request.Form["txtname"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                  && Request.Form["inactive"].ToString() == "on";
+                member.CreatedBy = HttpContext.Session.GetString("LoginName") ?? "";
+                member.UpdatedBy = member.CreatedBy;
+                member.CreatedDate = DateTime.Now;
+                member.UpdatedDate = DateTime.Now;
+
+                // Gọi BO để lưu
+                long memberId = TitleBO.Instance.Insert(member);
+
+                pt.CommitTransaction();
+
+                return Json(new { success = true, id = memberId });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult UpdateTitle()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                TitleModel member = new TitleModel();
+
+                // Lấy ID từ form (có khi edit)
+                member.ID = !string.IsNullOrEmpty(Request.Form["id"])
+                             ? int.Parse(Request.Form["id"])
+                             : 0;
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Name = Request.Form["txtname"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                  && Request.Form["inactive"].ToString() == "on";
+                string loginName = HttpContext.Session.GetString("LoginName") ?? "";
+
+                if (member.ID == 0) // Insert mới
+                {
+                    member.CreatedBy = loginName;
+                    member.CreatedDate = DateTime.Now;
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    TitleBO.Instance.Insert(member);
+                }
+                else // Update
+                {
+                    // Trước khi update, lấy lại bản ghi cũ từ DB để giữ CreatedBy, CreatedDate
+                    var oldData = TitleBO.Instance.GetById(member.ID, pt.Connection, pt.Transaction);
+
+                    if (oldData != null)
+                    {
+                        member.CreatedBy = oldData.CreatedBy;
+                        member.CreatedDate = oldData.CreatedDate;
+                    }
+
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    TitleBO.Instance.Update(member);
+                }
+
+                pt.CommitTransaction();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult DeleteTitle()
+        {
+            try
+            {
+
+                TitleModel memberModel = (TitleModel)TitleBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["id"].ToString()));
+                if (memberModel == null || memberModel.ID == 0)
+                {
+                    return Json(new { code = 1, msg = "Can not find Country" });
+
+                }
+                TitleBO.Instance.Delete(int.Parse(Request.Form["id"].ToString()));
+                return Json(new { code = 0, msg = "Delete Country was successfully" });
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = 1, msg = ex.Message });
+            }
+
+        }
+        [HttpPost]
+        public ActionResult InsertTerritory()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                TerritoryModel member = new TerritoryModel();
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Name = Request.Form["txtname"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                  && Request.Form["inactive"].ToString() == "on";
+                member.CreatedBy = HttpContext.Session.GetString("LoginName") ?? "";
+                member.UpdatedBy = member.CreatedBy;
+                member.CreatedDate = DateTime.Now;
+                member.UpdatedDate = DateTime.Now;
+
+                // Gọi BO để lưu
+                long memberId = TerritoryBO.Instance.Insert(member);
+
+                pt.CommitTransaction();
+
+                return Json(new { success = true, id = memberId });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult UpdateTerritory()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                TerritoryModel member = new TerritoryModel();
+
+                // Lấy ID từ form (có khi edit)
+                member.ID = !string.IsNullOrEmpty(Request.Form["id"])
+                             ? int.Parse(Request.Form["id"])
+                             : 0;
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Name = Request.Form["txtname"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                  && Request.Form["inactive"].ToString() == "on";
+                string loginName = HttpContext.Session.GetString("LoginName") ?? "";
+
+                if (member.ID == 0) // Insert mới
+                {
+                    member.CreatedBy = loginName;
+                    member.CreatedDate = DateTime.Now;
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    TerritoryBO.Instance.Insert(member);
+                }
+                else // Update
+                {
+                    // Trước khi update, lấy lại bản ghi cũ từ DB để giữ CreatedBy, CreatedDate
+                    var oldData = TerritoryBO.Instance.GetById(member.ID, pt.Connection, pt.Transaction);
+
+                    if (oldData != null)
+                    {
+                        member.CreatedBy = oldData.CreatedBy;
+                        member.CreatedDate = oldData.CreatedDate;
+                    }
+
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    TerritoryBO.Instance.Update(member);
+                }
+
+                pt.CommitTransaction();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult DeleteTerritory()
+        {
+            try
+            {
+
+                TerritoryModel memberModel = (TerritoryModel)TerritoryBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["id"].ToString()));
+                if (memberModel == null || memberModel.ID == 0)
+                {
+                    return Json(new { code = 1, msg = "Can not find Country" });
+
+                }
+                TerritoryBO.Instance.Delete(int.Parse(Request.Form["id"].ToString()));
+                return Json(new { code = 0, msg = "Delete Country was successfully" });
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = 1, msg = ex.Message });
+            }
+
+        }
+
+
+        [HttpPost]
+        public ActionResult InsertState()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                StateModel member = new StateModel();
+
+                // Lấy dữ liệu từ form
+                member.ZipCode = Request.Form["txtcode"].ToString();
+                member.StateName = Request.Form["txtname"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                  && Request.Form["inactive"].ToString() == "on";
+                member.CreatedBy = HttpContext.Session.GetString("LoginName") ?? "";
+                member.UpdatedBy = member.CreatedBy;
+                member.CreatedDate = DateTime.Now;
+                member.UpdatedDate = DateTime.Now;
+
+                // Gọi BO để lưu
+                long memberId = StateBO.Instance.Insert(member);
+
+                pt.CommitTransaction();
+
+                return Json(new { success = true, id = memberId });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult UpdateState()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                StateModel member = new StateModel();
+
+                // Lấy ID từ form (có khi edit)
+                member.ID = !string.IsNullOrEmpty(Request.Form["id"])
+                             ? int.Parse(Request.Form["id"])
+                             : 0;
+
+                // Lấy dữ liệu từ form
+                member.ZipCode = Request.Form["txtcode"].ToString();
+                member.StateName = Request.Form["txtname"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                  && Request.Form["inactive"].ToString() == "on";
+                string loginName = HttpContext.Session.GetString("LoginName") ?? "";
+
+                if (member.ID == 0) // Insert mới
+                {
+                    member.CreatedBy = loginName;
+                    member.CreatedDate = DateTime.Now;
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    StateBO.Instance.Insert(member);
+                }
+                else // Update
+                {
+                    // Trước khi update, lấy lại bản ghi cũ từ DB để giữ CreatedBy, CreatedDate
+                    var oldData = StateBO.Instance.GetById(member.ID, pt.Connection, pt.Transaction);
+
+                    if (oldData != null)
+                    {
+                        member.CreatedBy = oldData.CreatedBy;
+                        member.CreatedDate = oldData.CreatedDate;
+                    }
+
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    StateBO.Instance.Update(member);
+                }
+
+                pt.CommitTransaction();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult DeleteState()
+        {
+            try
+            {
+
+                StateModel memberModel = (StateModel)StateBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["id"].ToString()));
+                if (memberModel == null || memberModel.ID == 0)
+                {
+                    return Json(new { code = 1, msg = "Can not find Country" });
+
+                }
+                StateBO.Instance.Delete(int.Parse(Request.Form["id"].ToString()));
+                return Json(new { code = 0, msg = "Delete Country was successfully" });
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = 1, msg = ex.Message });
+            }
+
+        }
+        [HttpPost]
+        public ActionResult InsertVIP()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                VIPModel member = new VIPModel();
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Name = Request.Form["txtname"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                  && Request.Form["inactive"].ToString() == "on";
+                member.CreatedBy = HttpContext.Session.GetString("LoginName") ?? "";
+                member.UpdatedBy = member.CreatedBy;
+                member.CreatedDate = DateTime.Now;
+                member.UpdatedDate = DateTime.Now;
+
+                // Gọi BO để lưu
+                long memberId = VIPBO.Instance.Insert(member);
+
+                pt.CommitTransaction();
+
+                return Json(new { success = true, id = memberId });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult UpdateVIP()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                VIPModel member = new VIPModel();
+
+                // Lấy ID từ form (có khi edit)
+                member.ID = !string.IsNullOrEmpty(Request.Form["id"])
+                             ? int.Parse(Request.Form["id"])
+                             : 0;
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Name = Request.Form["txtname"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                  && Request.Form["inactive"].ToString() == "on";
+                string loginName = HttpContext.Session.GetString("LoginName") ?? "";
+
+                if (member.ID == 0) // Insert mới
+                {
+                    member.CreatedBy = loginName;
+                    member.CreatedDate = DateTime.Now;
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    VIPBO.Instance.Insert(member);
+                }
+                else // Update
+                {
+                    // Trước khi update, lấy lại bản ghi cũ từ DB để giữ CreatedBy, CreatedDate
+                    var oldData = VIPBO.Instance.GetById(member.ID, pt.Connection, pt.Transaction);
+
+                    if (oldData != null)
+                    {
+                        member.CreatedBy = oldData.CreatedBy;
+                        member.CreatedDate = oldData.CreatedDate;
+                    }
+
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    VIPBO.Instance.Update(member);
+                }
+
+                pt.CommitTransaction();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult DeleteVIP()
+        {
+            try
+            {
+
+                VIPModel memberModel = (VIPModel)VIPBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["id"].ToString()));
+                if (memberModel == null || memberModel.ID == 0)
+                {
+                    return Json(new { code = 1, msg = "Can not find Country" });
+
+                }
+                VIPBO.Instance.Delete(int.Parse(Request.Form["id"].ToString()));
+                return Json(new { code = 0, msg = "Delete Country was successfully" });
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = 1, msg = ex.Message });
+            }
+
+        }
+        [HttpGet]
+        public IActionResult GetById(int id)
+        {
+            var market = MarketBO.Instance.GetById(id);
+            if (market == null)
+                return NotFound();
+
+            return Json(market); // trả JSON ra cho Ajax
+        }
+
+        [HttpPost]
+        public ActionResult InsertMarket()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                MarketModel member = new MarketModel();
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Name = Request.Form["txtname"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                  && Request.Form["inactive"].ToString() == "on";
+
+                string marketTypeValue = Request.Form["marketTypeID"];
+                member.MarketTypeID = int.TryParse(marketTypeValue, out int mId) ? mId : 0;
+
+                string groupTypeValue = Request.Form["groupType"];
+                member.GroupType = int.TryParse(groupTypeValue, out int sId) ? sId : 0;
+
+                member.Regional = Request.Form["txtregional"].ToString();
+                // Thông tin người dùng
+                member.CreatedBy = HttpContext.Session.GetString("LoginName") ?? "";
+                member.UpdatedBy = member.CreatedBy;
+                member.CreatedDate = DateTime.Now;
+                member.UpdatedDate = DateTime.Now;
+
+                // Gọi BO để lưu
+                long memberId = MarketBO.Instance.Insert(member);
+
+                pt.CommitTransaction();
+
+                return Json(new { success = true, id = memberId });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult UpdateMarket()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                MarketModel member = new MarketModel();
+
+                // Lấy ID từ form (có khi edit)
+                member.ID = !string.IsNullOrEmpty(Request.Form["id"])
+                             ? int.Parse(Request.Form["id"])
+                             : 0;
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Name = Request.Form["txtname"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                  && Request.Form["inactive"].ToString() == "on";
+                string marketTypeValue = Request.Form["marketTypeID"];
+                member.MarketTypeID = int.TryParse(marketTypeValue, out int mId) ? mId : 0;
+
+                string groupTypeValue = Request.Form["groupType"];
+                member.GroupType = int.TryParse(groupTypeValue, out int sId) ? sId : 0;
+                member.Regional = Request.Form["txtregional"].ToString();
+                string loginName = HttpContext.Session.GetString("LoginName") ?? "";
+
+                if (member.ID == 0) // Insert mới
+                {
+                    member.CreatedBy = loginName;
+                    member.CreatedDate = DateTime.Now;
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    MarketBO.Instance.Insert(member);
+                }
+                else // Update
+                {
+                    // Trước khi update, lấy lại bản ghi cũ từ DB để giữ CreatedBy, CreatedDate
+                    var oldData = MarketBO.Instance.GetById(member.ID, pt.Connection, pt.Transaction);
+
+                    if (oldData != null)
+                    {
+                        member.CreatedBy = oldData.CreatedBy;
+                        member.CreatedDate = oldData.CreatedDate;
+                    }
+
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    MarketBO.Instance.Update(member);
+                }
+
+                pt.CommitTransaction();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult DeleteMarket()
+        {
+            try
+            {
+
+                MarketModel memberModel = (MarketModel)MarketBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["id"].ToString()));
+                if (memberModel == null || memberModel.ID == 0)
+                {
+                    return Json(new { code = 1, msg = "Can not find Lost And Found" });
+
+                }
+                MarketBO.Instance.Delete(int.Parse(Request.Form["id"].ToString()));
+                return Json(new { code = 0, msg = "Delete Lost And Found was successfully" });
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = 1, msg = ex.Message });
+            }
+
+        }
+
+
+        [HttpPost]
+        public ActionResult InsertMarketType()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                MarketTypeModel member = new MarketTypeModel();
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Name = Request.Form["txtname"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                  && Request.Form["inactive"].ToString() == "on";
+                // Thông tin người dùng
+                member.CreatedBy = HttpContext.Session.GetString("LoginName") ?? "";
+                member.UpdatedBy = member.CreatedBy;
+                member.CreatedDate = DateTime.Now;
+                member.UpdatedDate = DateTime.Now;
+
+                // Gọi BO để lưu
+                long memberId = MarketTypeBO.Instance.Insert(member);
+
+                pt.CommitTransaction();
+
+                return Json(new { success = true, id = memberId });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult UpdateMarketType()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                MarketTypeModel member = new MarketTypeModel();
+
+                // Lấy ID từ form (có khi edit)
+                member.ID = !string.IsNullOrEmpty(Request.Form["id"])
+                             ? int.Parse(Request.Form["id"])
+                             : 0;
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Name = Request.Form["txtname"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                  && Request.Form["inactive"].ToString() == "on";
+                string loginName = HttpContext.Session.GetString("LoginName") ?? "";
+
+                if (member.ID == 0) // Insert mới
+                {
+                    member.CreatedBy = loginName;
+                    member.CreatedDate = DateTime.Now;
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    MarketTypeBO.Instance.Insert(member);
+                }
+                else // Update
+                {
+                    // Trước khi update, lấy lại bản ghi cũ từ DB để giữ CreatedBy, CreatedDate
+                    var oldData = MarketTypeBO.Instance.GetById(member.ID, pt.Connection, pt.Transaction);
+
+                    if (oldData != null)
+                    {
+                        member.CreatedBy = oldData.CreatedBy;
+                        member.CreatedDate = oldData.CreatedDate;
+                    }
+
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    MarketTypeBO.Instance.Update(member);
+                }
+
+                pt.CommitTransaction();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult DeleteMarketType()
+        {
+            try
+            {
+
+                MarketTypeModel memberModel = (MarketTypeModel)MarketTypeBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["id"].ToString()));
+                if (memberModel == null || memberModel.ID == 0)
+                {
+                    return Json(new { code = 1, msg = "Can not find Lost And Found" });
+
+                }
+                MarketTypeBO.Instance.Delete(int.Parse(Request.Form["id"].ToString()));
+                return Json(new { code = 0, msg = "Delete Lost And Found was successfully" });
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = 1, msg = ex.Message });
+            }
+
+        }
+
+
+        [HttpPost]
+        public ActionResult InsertPickupDropPlace()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                PickupDropPlaceModel member = new PickupDropPlaceModel();
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Name = Request.Form["txtname"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                  && Request.Form["inactive"].ToString() == "on";
+                // Thông tin người dùng
+                member.CreatedBy = HttpContext.Session.GetString("LoginName") ?? "";
+                member.UpdatedBy = member.CreatedBy;
+                member.CreatedDate = DateTime.Now;
+                member.UpdatedDate = DateTime.Now;
+
+                // Gọi BO để lưu
+                long memberId = PickupDropPlaceBO.Instance.Insert(member);
+
+                pt.CommitTransaction();
+
+                return Json(new { success = true, id = memberId });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult UpdatePickupDropPlace()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                PickupDropPlaceModel member = new PickupDropPlaceModel();
+
+                // Lấy ID từ form (có khi edit)
+                member.ID = !string.IsNullOrEmpty(Request.Form["id"])
+                             ? int.Parse(Request.Form["id"])
+                             : 0;
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Name = Request.Form["txtname"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                  && Request.Form["inactive"].ToString() == "on";
+                string loginName = HttpContext.Session.GetString("LoginName") ?? "";
+
+                if (member.ID == 0) // Insert mới
+                {
+                    member.CreatedBy = loginName;
+                    member.CreatedDate = DateTime.Now;
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    PickupDropPlaceBO.Instance.Insert(member);
+                }
+                else // Update
+                {
+                    // Trước khi update, lấy lại bản ghi cũ từ DB để giữ CreatedBy, CreatedDate
+                    var oldData = PickupDropPlaceBO.Instance.GetById(member.ID, pt.Connection, pt.Transaction);
+
+                    if (oldData != null)
+                    {
+                        member.CreatedBy = oldData.CreatedBy;
+                        member.CreatedDate = oldData.CreatedDate;
+                    }
+
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    PickupDropPlaceBO.Instance.Update(member);
+                }
+
+                pt.CommitTransaction();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult DeletePickupDropPlace()
+        {
+            try
+            {
+
+                PickupDropPlaceModel memberModel = (PickupDropPlaceModel)PickupDropPlaceBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["id"].ToString()));
+                if (memberModel == null || memberModel.ID == 0)
+                {
+                    return Json(new { code = 1, msg = "Can not find Lost And Found" });
+
+                }
+                PickupDropPlaceBO.Instance.Delete(int.Parse(Request.Form["id"].ToString()));
+                return Json(new { code = 0, msg = "Delete Lost And Found was successfully" });
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = 1, msg = ex.Message });
+            }
+
+        }
+
+
+        [HttpPost]
+        public ActionResult InsertTransportType()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                TransportTypeModel member = new TransportTypeModel();
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Name = Request.Form["txtname"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                  && Request.Form["inactive"].ToString() == "on";
+                // Thông tin người dùng
+                member.CreatedBy = HttpContext.Session.GetString("LoginName") ?? "";
+                member.UpdatedBy = member.CreatedBy;
+                member.CreatedDate = DateTime.Now;
+                member.UpdatedDate = DateTime.Now;
+
+                // Gọi BO để lưu
+                long memberId = TransportTypeBO.Instance.Insert(member);
+
+                pt.CommitTransaction();
+
+                return Json(new { success = true, id = memberId });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult UpdateTransportType()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                TransportTypeModel member = new TransportTypeModel();
+
+                // Lấy ID từ form (có khi edit)
+                member.ID = !string.IsNullOrEmpty(Request.Form["id"])
+                             ? int.Parse(Request.Form["id"])
+                             : 0;
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Name = Request.Form["txtname"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                  && Request.Form["inactive"].ToString() == "on";
+                string loginName = HttpContext.Session.GetString("LoginName") ?? "";
+
+                if (member.ID == 0) // Insert mới
+                {
+                    member.CreatedBy = loginName;
+                    member.CreatedDate = DateTime.Now;
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    TransportTypeBO.Instance.Insert(member);
+                }
+                else // Update
+                {
+                    // Trước khi update, lấy lại bản ghi cũ từ DB để giữ CreatedBy, CreatedDate
+                    var oldData = TransportTypeBO.Instance.GetById(member.ID, pt.Connection, pt.Transaction);
+
+                    if (oldData != null)
+                    {
+                        member.CreatedBy = oldData.CreatedBy;
+                        member.CreatedDate = oldData.CreatedDate;
+                    }
+
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    TransportTypeBO.Instance.Update(member);
+                }
+
+                pt.CommitTransaction();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult DeleteTransportType()
+        {
+            try
+            {
+
+                TransportTypeModel memberModel = (TransportTypeModel)TransportTypeBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["id"].ToString()));
+                if (memberModel == null || memberModel.ID == 0)
+                {
+                    return Json(new { code = 1, msg = "Can not find Lost And Found" });
+
+                }
+                TransportTypeBO.Instance.Delete(int.Parse(Request.Form["id"].ToString()));
+                return Json(new { code = 0, msg = "Delete Lost And Found was successfully" });
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = 1, msg = ex.Message });
+            }
+
+        }
+
+        [HttpPost]
+        public ActionResult InsertReason()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                ReasonModel member = new ReasonModel();
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Name = Request.Form["txtname"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                  && Request.Form["inactive"].ToString() == "on";
+                // Thông tin người dùng
+                member.CreatedBy = HttpContext.Session.GetString("LoginName") ?? "";
+                member.UpdatedBy = member.CreatedBy;
+                member.CreatedDate = DateTime.Now;
+                member.UpdatedDate = DateTime.Now;
+
+                // Gọi BO để lưu
+                long memberId = ReasonBO.Instance.Insert(member);
+
+                pt.CommitTransaction();
+
+                return Json(new { success = true, id = memberId });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult UpdateReason()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                ReasonModel member = new ReasonModel();
+
+                // Lấy ID từ form (có khi edit)
+                member.ID = !string.IsNullOrEmpty(Request.Form["id"])
+                             ? int.Parse(Request.Form["id"])
+                             : 0;
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Name = Request.Form["txtname"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                  && Request.Form["inactive"].ToString() == "on";
+                string loginName = HttpContext.Session.GetString("LoginName") ?? "";
+
+                if (member.ID == 0) // Insert mới
+                {
+                    member.CreatedBy = loginName;
+                    member.CreatedDate = DateTime.Now;
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    ReasonBO.Instance.Insert(member);
+                }
+                else // Update
+                {
+                    // Trước khi update, lấy lại bản ghi cũ từ DB để giữ CreatedBy, CreatedDate
+                    var oldData = ReasonBO.Instance.GetById(member.ID, pt.Connection, pt.Transaction);
+
+                    if (oldData != null)
+                    {
+                        member.CreatedBy = oldData.CreatedBy;
+                        member.CreatedDate = oldData.CreatedDate;
+                    }
+
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    ReasonBO.Instance.Update(member);
+                }
+
+                pt.CommitTransaction();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult DeleteReason()
+        {
+            try
+            {
+
+                ReasonModel memberModel = (ReasonModel)ReasonBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["id"].ToString()));
+                if (memberModel == null || memberModel.ID == 0)
+                {
+                    return Json(new { code = 1, msg = "Can not find Lost And Found" });
+
+                }
+                ReasonBO.Instance.Delete(int.Parse(Request.Form["id"].ToString()));
+                return Json(new { code = 0, msg = "Delete Lost And Found was successfully" });
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = 1, msg = ex.Message });
+            }
+
+        }
+
+
+        [HttpPost]
+        public ActionResult InsertOrigin()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                OriginModel member = new OriginModel();
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Name = Request.Form["txtname"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                  && Request.Form["inactive"].ToString() == "on";
+                // Thông tin người dùng
+                member.CreatedBy = HttpContext.Session.GetString("LoginName") ?? "";
+                member.UpdatedBy = member.CreatedBy;
+                member.CreatedDate = DateTime.Now;
+                member.UpdatedDate = DateTime.Now;
+
+                // Gọi BO để lưu
+                long memberId = OriginBO.Instance.Insert(member);
+
+                pt.CommitTransaction();
+
+                return Json(new { success = true, id = memberId });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult UpdateOrigin()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                OriginModel member = new OriginModel();
+
+                // Lấy ID từ form (có khi edit)
+                member.ID = !string.IsNullOrEmpty(Request.Form["id"])
+                             ? int.Parse(Request.Form["id"])
+                             : 0;
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Name = Request.Form["txtname"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                  && Request.Form["inactive"].ToString() == "on";
+                string loginName = HttpContext.Session.GetString("LoginName") ?? "";
+
+                if (member.ID == 0) // Insert mới
+                {
+                    member.CreatedBy = loginName;
+                    member.CreatedDate = DateTime.Now;
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    OriginBO.Instance.Insert(member);
+                }
+                else // Update
+                {
+                    // Trước khi update, lấy lại bản ghi cũ từ DB để giữ CreatedBy, CreatedDate
+                    var oldData = OriginBO.Instance.GetById(member.ID, pt.Connection, pt.Transaction);
+
+                    if (oldData != null)
+                    {
+                        member.CreatedBy = oldData.CreatedBy;
+                        member.CreatedDate = oldData.CreatedDate;
+                    }
+
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    OriginBO.Instance.Update(member);
+                }
+
+                pt.CommitTransaction();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult DeleteOrigin()
+        {
+            try
+            {
+
+                OriginModel memberModel = (OriginModel)OriginBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["id"].ToString()));
+                if (memberModel == null || memberModel.ID == 0)
+                {
+                    return Json(new { code = 1, msg = "Can not find Lost And Found" });
+
+                }
+                OriginBO.Instance.Delete(int.Parse(Request.Form["id"].ToString()));
+                return Json(new { code = 0, msg = "Delete Lost And Found was successfully" });
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = 1, msg = ex.Message });
+            }
+
+        }
+
+
+        [HttpPost]
+        public ActionResult InsertSource()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                SourceModel member = new SourceModel();
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Name = Request.Form["txtname"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                  && Request.Form["inactive"].ToString() == "on";
+                // Thông tin người dùng
+                member.CreatedBy = HttpContext.Session.GetString("LoginName") ?? "";
+                member.UpdatedBy = member.CreatedBy;
+                member.CreatedDate = DateTime.Now;
+                member.UpdatedDate = DateTime.Now;
+
+                // Gọi BO để lưu
+                long memberId = SourceBO.Instance.Insert(member);
+
+                pt.CommitTransaction();
+
+                return Json(new { success = true, id = memberId });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult UpdateSource()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                SourceModel member = new SourceModel();
+
+                // Lấy ID từ form (có khi edit)
+                member.ID = !string.IsNullOrEmpty(Request.Form["id"])
+                             ? int.Parse(Request.Form["id"])
+                             : 0;
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Name = Request.Form["txtname"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                  && Request.Form["inactive"].ToString() == "on";
+                string loginName = HttpContext.Session.GetString("LoginName") ?? "";
+
+                if (member.ID == 0) // Insert mới
+                {
+                    member.CreatedBy = loginName;
+                    member.CreatedDate = DateTime.Now;
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    SourceBO.Instance.Insert(member);
+                }
+                else // Update
+                {
+                    // Trước khi update, lấy lại bản ghi cũ từ DB để giữ CreatedBy, CreatedDate
+                    var oldData = SourceBO.Instance.GetById(member.ID, pt.Connection, pt.Transaction);
+
+                    if (oldData != null)
+                    {
+                        member.CreatedBy = oldData.CreatedBy;
+                        member.CreatedDate = oldData.CreatedDate;
+                    }
+
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    SourceBO.Instance.Update(member);
+                }
+
+                pt.CommitTransaction();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult DeleteSource()
+        {
+            try
+            {
+
+                SourceModel memberModel = (SourceModel)SourceBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["id"].ToString()));
+                if (memberModel == null || memberModel.ID == 0)
+                {
+                    return Json(new { code = 1, msg = "Can not find Lost And Found" });
+
+                }
+                SourceBO.Instance.Delete(int.Parse(Request.Form["id"].ToString()));
+                return Json(new { code = 0, msg = "Delete Lost And Found was successfully" });
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = 1, msg = ex.Message });
+            }
+
+
+        }
+
+
+        [HttpPost]
+        public ActionResult InsertAlertsSetup()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                AlertsSetupModel member = new AlertsSetupModel();
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                  && Request.Form["inactive"].ToString() == "on";
+                // Thông tin người dùng
+                member.CreatedBy = HttpContext.Session.GetString("LoginName") ?? "";
+                member.UpdatedBy = member.CreatedBy;
+                member.CreatedDate = DateTime.Now;
+                member.UpdatedDate = DateTime.Now;
+
+                // Gọi BO để lưu
+                long memberId = AlertsSetupBO.Instance.Insert(member);
+
+                pt.CommitTransaction();
+
+                return Json(new { success = true, id = memberId });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult UpdateAlertsSetup()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                AlertsSetupModel member = new AlertsSetupModel();
+
+                // Lấy ID từ form (có khi edit)
+                member.ID = !string.IsNullOrEmpty(Request.Form["id"])
+                             ? int.Parse(Request.Form["id"])
+                             : 0;
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                  && Request.Form["inactive"].ToString() == "on";
+                string loginName = HttpContext.Session.GetString("LoginName") ?? "";
+
+                if (member.ID == 0) // Insert mới
+                {
+                    member.CreatedBy = loginName;
+                    member.CreatedDate = DateTime.Now;
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    AlertsSetupBO.Instance.Insert(member);
+                }
+                else // Update
+                {
+                    // Trước khi update, lấy lại bản ghi cũ từ DB để giữ CreatedBy, CreatedDate
+                    var oldData = AlertsSetupBO.Instance.GetById(member.ID, pt.Connection, pt.Transaction);
+
+                    if (oldData != null)
+                    {
+                        member.CreatedBy = oldData.CreatedBy;
+                        member.CreatedDate = oldData.CreatedDate;
+                    }
+
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    AlertsSetupBO.Instance.Update(member);
+                }
+
+                pt.CommitTransaction();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult DeleteAlertsSetup()
+        {
+            try
+            {
+
+                AlertsSetupModel memberModel = (AlertsSetupModel)AlertsSetupBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["id"].ToString()));
+                if (memberModel == null || memberModel.ID == 0)
+                {
+                    return Json(new { code = 1, msg = "Can not find Lost And Found" });
+
+                }
+                AlertsSetupBO.Instance.Delete(int.Parse(Request.Form["id"].ToString()));
+                return Json(new { code = 0, msg = "Delete Lost And Found was successfully" });
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = 1, msg = ex.Message });
+            }
+
+
+        }
+        [HttpPost]
+        public ActionResult InsertComment()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                CommentModel member = new CommentModel();
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                  && Request.Form["inactive"].ToString() == "on";
+                string commentValue = Request.Form["commentTypeID"];
+                member.CommentTypeID = int.TryParse(commentValue, out int cId) ? cId : 0;
+
+                // Thông tin người dùng
+                member.CreatedBy = HttpContext.Session.GetString("LoginName") ?? "";
+                member.UpdatedBy = member.CreatedBy;
+                member.CreatedDate = DateTime.Now;
+                member.UpdatedDate = DateTime.Now;
+
+                // Gọi BO để lưu
+                long memberId = CommentBO.Instance.Insert(member);
+
+                pt.CommitTransaction();
+
+                return Json(new { success = true, id = memberId });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult UpdateComment()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                CommentModel member = new CommentModel();
+
+                // Lấy ID từ form (có khi edit)
+                member.ID = !string.IsNullOrEmpty(Request.Form["id"])
+                             ? int.Parse(Request.Form["id"])
+                             : 0;
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                  && Request.Form["inactive"].ToString() == "on";
+                string commentValue = Request.Form["commentTypeID"];
+                member.CommentTypeID = int.TryParse(commentValue, out int cId) ? cId : 0;
+                // Thông tin người dùng
+                string loginName = HttpContext.Session.GetString("LoginName") ?? "";
+
+                if (member.ID == 0) // Insert mới
+                {
+                    member.CreatedBy = loginName;
+                    member.CreatedDate = DateTime.Now;
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    CommentBO.Instance.Insert(member);
+                }
+                else // Update
+                {
+                    // Trước khi update, lấy lại bản ghi cũ từ DB để giữ CreatedBy, CreatedDate
+                    var oldData = CommentBO.Instance.GetById(member.ID, pt.Connection, pt.Transaction);
+
+                    if (oldData != null)
+                    {
+                        member.CreatedBy = oldData.CreatedBy;
+                        member.CreatedDate = oldData.CreatedDate;
+                    }
+
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    CommentBO.Instance.Update(member);
+                }
+
+                pt.CommitTransaction();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult DeleteComment()
+        {
+            try
+            {
+
+                CommentModel memberModel = (CommentModel)CommentBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["id"].ToString()));
+                if (memberModel == null || memberModel.ID == 0)
+                {
+                    return Json(new { code = 1, msg = "Can not find Lost And Found" });
+
+                }
+                CommentBO.Instance.Delete(int.Parse(Request.Form["id"].ToString()));
+                return Json(new { code = 0, msg = "Delete Lost And Found was successfully" });
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = 1, msg = ex.Message });
+            }
+
+        }
+
+
+        [HttpPost]
+        public ActionResult InsertCommentType()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                CommentTypeModel member = new CommentTypeModel();
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Name = Request.Form["txtname"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                  && Request.Form["inactive"].ToString() == "on";
+                // Thông tin người dùng
+                member.CreatedBy = HttpContext.Session.GetString("LoginName") ?? "";
+                member.UpdatedBy = member.CreatedBy;
+                member.CreatedDate = DateTime.Now;
+                member.UpdatedDate = DateTime.Now;
+
+                // Gọi BO để lưu
+                long memberId = CommentTypeBO.Instance.Insert(member);
+
+                pt.CommitTransaction();
+
+                return Json(new { success = true, id = memberId });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult UpdateCommentType()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                CommentTypeModel member = new CommentTypeModel();
+
+                // Lấy ID từ form
+                member.ID = !string.IsNullOrEmpty(Request.Form["id"])
+                             ? int.Parse(Request.Form["id"])
+                             : 0;
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Name = Request.Form["txtname"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                   && Request.Form["inactive"].ToString() == "on";
+
+                string loginName = HttpContext.Session.GetString("LoginName") ?? "";
+
+                if (member.ID == 0) // Insert mới
+                {
+                    member.CreatedBy = loginName;
+                    member.CreatedDate = DateTime.Now;
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    CommentTypeBO.Instance.Insert(member);
+                }
+                else // Update
+                {
+                    // Trước khi update, lấy lại bản ghi cũ từ DB để giữ CreatedBy, CreatedDate
+                    var oldData = CommentTypeBO.Instance.GetById(member.ID, pt.Connection, pt.Transaction);
+
+                    if (oldData != null)
+                    {
+                        member.CreatedBy = oldData.CreatedBy;
+                        member.CreatedDate = oldData.CreatedDate;
+                    }
+
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    CommentTypeBO.Instance.Update(member);
+                }
+
+                pt.CommitTransaction();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult DeleteCommentType()
+        {
+            try
+            {
+
+                CommentTypeModel memberModel = (CommentTypeModel)CommentTypeBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["id"].ToString()));
+                if (memberModel == null || memberModel.ID == 0)
+                {
+                    return Json(new { code = 1, msg = "Can not find Lost And Found" });
+
+                }
+                CommentTypeBO.Instance.Delete(int.Parse(Request.Form["id"].ToString()));
+                return Json(new { code = 0, msg = "Delete Lost And Found was successfully" });
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = 1, msg = ex.Message });
+            }
+
+        }
+
+
+        [HttpPost]
+        public ActionResult InsertSeason()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                SeasonModel member = new SeasonModel();
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Name = Request.Form["txtname"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                  && Request.Form["inactive"].ToString() == "on";
+                // Thông tin người dùng
+                member.CreatedBy = HttpContext.Session.GetString("LoginName") ?? "";
+                member.UpdatedBy = member.CreatedBy;
+                member.CreatedDate = DateTime.Now;
+                member.UpdatedDate = DateTime.Now;
+
+                // Gọi BO để lưu
+                long memberId = SeasonBO.Instance.Insert(member);
+
+                pt.CommitTransaction();
+
+                return Json(new { success = true, id = memberId });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult UpdateSeason()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                SeasonModel member = new SeasonModel();
+
+                // Lấy ID từ form
+                member.ID = !string.IsNullOrEmpty(Request.Form["id"])
+                             ? int.Parse(Request.Form["id"])
+                             : 0;
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Name = Request.Form["txtname"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                   && Request.Form["inactive"].ToString() == "on";
+
+                string loginName = HttpContext.Session.GetString("LoginName") ?? "";
+
+                if (member.ID == 0) // Insert mới
+                {
+                    member.CreatedBy = loginName;
+                    member.CreatedDate = DateTime.Now;
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    SeasonBO.Instance.Insert(member);
+                }
+                else // Update
+                {
+                    // Trước khi update, lấy lại bản ghi cũ từ DB để giữ CreatedBy, CreatedDate
+                    var oldData = SeasonBO.Instance.GetById(member.ID, pt.Connection, pt.Transaction);
+
+                    if (oldData != null)
+                    {
+                        member.CreatedBy = oldData.CreatedBy;
+                        member.CreatedDate = oldData.CreatedDate;
+                    }
+
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    SeasonBO.Instance.Update(member);
+                }
+
+                pt.CommitTransaction();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult DeleteSeason()
+        {
+            try
+            {
+
+                SeasonModel memberModel = (SeasonModel)SeasonBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["id"].ToString()));
+                if (memberModel == null || memberModel.ID == 0)
+                {
+                    return Json(new { code = 1, msg = "Can not find Lost And Found" });
+
+                }
+                SeasonBO.Instance.Delete(int.Parse(Request.Form["id"].ToString()));
+                return Json(new { code = 0, msg = "Delete Lost And Found was successfully" });
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = 1, msg = ex.Message });
+            }
+
+        }
+
+
+        [HttpPost]
+        public ActionResult InsertZone()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                ZoneModel member = new ZoneModel();
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Name = Request.Form["txtname"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                  && Request.Form["inactive"].ToString() == "on";
+                // Thông tin người dùng
+                member.CreatedBy = HttpContext.Session.GetString("LoginName") ?? "";
+                member.UpdatedBy = member.CreatedBy;
+                member.CreatedDate = DateTime.Now;
+                member.UpdatedDate = DateTime.Now;
+
+                // Gọi BO để lưu
+                long memberId = ZoneBO.Instance.Insert(member);
+
+                pt.CommitTransaction();
+
+                return Json(new { success = true, id = memberId });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult UpdateZone()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                ZoneModel member = new ZoneModel();
+
+                // Lấy ID từ form
+                member.ID = !string.IsNullOrEmpty(Request.Form["id"])
+                             ? int.Parse(Request.Form["id"])
+                             : 0;
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Name = Request.Form["txtname"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                   && Request.Form["inactive"].ToString() == "on";
+
+                string loginName = HttpContext.Session.GetString("LoginName") ?? "";
+
+                if (member.ID == 0) // Insert mới
+                {
+                    member.CreatedBy = loginName;
+                    member.CreatedDate = DateTime.Now;
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    ZoneBO.Instance.Insert(member);
+                }
+                else // Update
+                {
+                    // Trước khi update, lấy lại bản ghi cũ từ DB để giữ CreatedBy, CreatedDate
+                    var oldData = ZoneBO.Instance.GetById(member.ID, pt.Connection, pt.Transaction);
+
+                    if (oldData != null)
+                    {
+                        member.CreatedBy = oldData.CreatedBy;
+                        member.CreatedDate = oldData.CreatedDate;
+                    }
+
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    ZoneBO.Instance.Update(member);
+                }
+
+                pt.CommitTransaction();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+
+
+        [HttpPost]
+        public ActionResult DeleteZone()
+        {
+            try
+            {
+
+                ZoneModel memberModel = (ZoneModel)ZoneBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["id"].ToString()));
+                if (memberModel == null || memberModel.ID == 0)
+                {
+                    return Json(new { code = 1, msg = "Can not find Lost And Found" });
+
+                }
+                ZoneBO.Instance.Delete(int.Parse(Request.Form["id"].ToString()));
+                return Json(new { code = 0, msg = "Delete Lost And Found was successfully" });
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = 1, msg = ex.Message });
+            }
+
+        }
+
+
+        [HttpPost]
+        public ActionResult InsertDepartment()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                DepartmentModel member = new DepartmentModel();
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Name = Request.Form["txtname"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                  && Request.Form["inactive"].ToString() == "on";
+                // Thông tin người dùng
+                member.CreatedBy = HttpContext.Session.GetString("LoginName") ?? "";
+                member.UpdatedBy = member.CreatedBy;
+                member.CreatedDate = DateTime.Now;
+                member.UpdatedDate = DateTime.Now;
+                if (string.IsNullOrWhiteSpace(member.Code))
+                    return Json(new { success = false, message = "Code không được để trống." });
+
+                if (string.IsNullOrWhiteSpace(member.Name))
+                    return Json(new { success = false, message = "Name không được để trống." });
+                // Gọi BO để lưu
+                long memberId = DepartmentBO.Instance.Insert(member);
+
+                pt.CommitTransaction();
+
+                return Json(new { success = true, id = memberId });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult UpdateDepartment()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                DepartmentModel member = new DepartmentModel();
+
+                // Lấy ID từ form
+                member.ID = !string.IsNullOrEmpty(Request.Form["id"])
+                             ? int.Parse(Request.Form["id"])
+                             : 0;
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Name = Request.Form["txtname"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                   && Request.Form["inactive"].ToString() == "on";
+
+                string loginName = HttpContext.Session.GetString("LoginName") ?? "";
+                if (string.IsNullOrWhiteSpace(member.Code))
+                    return Json(new { success = false, message = "Code không được để trống." });
+
+                if (string.IsNullOrWhiteSpace(member.Name))
+                    return Json(new { success = false, message = "Name không được để trống." });
+                if (member.ID == 0) // Insert mới
+                {
+                    member.CreatedBy = loginName;
+                    member.CreatedDate = DateTime.Now;
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    DepartmentBO.Instance.Insert(member);
+                }
+                else // Update
+                {
+                    // Trước khi update, lấy lại bản ghi cũ từ DB để giữ CreatedBy, CreatedDate
+                    var oldData = DepartmentBO.Instance.GetById(member.ID, pt.Connection, pt.Transaction);
+
+                    if (oldData != null)
+                    {
+                        member.CreatedBy = oldData.CreatedBy;
+                        member.CreatedDate = oldData.CreatedDate;
+                    }
+
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    DepartmentBO.Instance.Update(member);
+                }
+
+                pt.CommitTransaction();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+
+
+        [HttpPost]
+        public ActionResult DeleteDepartment()
+        {
+            try
+            {
+
+                DepartmentModel memberModel = (DepartmentModel)DepartmentBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["id"].ToString()));
+                if (memberModel == null || memberModel.ID == 0)
+                {
+                    return Json(new { code = 1, msg = "Can not find Lost And Found" });
+
+                }
+                DepartmentBO.Instance.Delete(int.Parse(Request.Form["id"].ToString()));
+                return Json(new { code = 0, msg = "Delete Lost And Found was successfully" });
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = 1, msg = ex.Message });
+            }
+
+        }
+
+
+        [HttpPost]
+        public ActionResult InsertOwner()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                OwnerModel member = new OwnerModel();
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Name = Request.Form["txtname"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                  && Request.Form["inactive"].ToString() == "on";
+                // Thông tin người dùng
+                member.CreatedBy = HttpContext.Session.GetString("LoginName") ?? "";
+                member.UpdatedBy = member.CreatedBy;
+                member.CreatedDate = DateTime.Now;
+                member.UpdatedDate = DateTime.Now;
+                if (string.IsNullOrWhiteSpace(member.Code))
+                    return Json(new { success = false, message = "Code không được để trống." });
+
+                if (string.IsNullOrWhiteSpace(member.Name))
+                    return Json(new { success = false, message = "Name không được để trống." });
+                // Gọi BO để lưu
+                long memberId = OwnerBO.Instance.Insert(member);
+
+                pt.CommitTransaction();
+
+                return Json(new { success = true, id = memberId });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult UpdateOwner()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                OwnerModel member = new OwnerModel();
+
+                // Lấy ID từ form
+                member.ID = !string.IsNullOrEmpty(Request.Form["id"])
+                             ? int.Parse(Request.Form["id"])
+                             : 0;
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["txtcode"].ToString();
+                member.Name = Request.Form["txtname"].ToString();
+                member.Description = Request.Form["txtdescription"].ToString();
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                   && Request.Form["inactive"].ToString() == "on";
+
+                string loginName = HttpContext.Session.GetString("LoginName") ?? "";
+                if (string.IsNullOrWhiteSpace(member.Code))
+                    return Json(new { success = false, message = "Code không được để trống." });
+
+                if (string.IsNullOrWhiteSpace(member.Name))
+                    return Json(new { success = false, message = "Name không được để trống." });
+                if (member.ID == 0) // Insert mới
+                {
+                    member.CreatedBy = loginName;
+                    member.CreatedDate = DateTime.Now;
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    OwnerBO.Instance.Insert(member);
+                }
+                else // Update
+                {
+                    // Trước khi update, lấy lại bản ghi cũ từ DB để giữ CreatedBy, CreatedDate
+                    var oldData = OwnerBO.Instance.GetById(member.ID, pt.Connection, pt.Transaction);
+
+                    if (oldData != null)
+                    {
+                        member.CreatedBy = oldData.CreatedBy;
+                        member.CreatedDate = oldData.CreatedDate;
+                    }
+
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    OwnerBO.Instance.Update(member);
+                }
+
+                pt.CommitTransaction();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+
+
+        [HttpPost]
+        public ActionResult DeleteOwner()
+        {
+            try
+            {
+
+                OwnerModel memberModel = (OwnerModel)OwnerBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["id"].ToString()));
+                if (memberModel == null || memberModel.ID == 0)
+                {
+                    return Json(new { code = 1, msg = "Can not find Lost And Found" });
+
+                }
+                OwnerBO.Instance.Delete(int.Parse(Request.Form["id"].ToString()));
+                return Json(new { code = 0, msg = "Delete Lost And Found was successfully" });
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = 1, msg = ex.Message });
+            }
+
+        }
+
+
+        [HttpPost]
+        public ActionResult InsertPropertyType()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                PropertyTypeModel member = new PropertyTypeModel();
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["code"].ToString();
+                member.Description = Request.Form["description"].ToString();
+                int seqValue;
+                if (int.TryParse(Request.Form["seq"], out seqValue))
+                {
+                    member.Sequence = seqValue;
+                }
+                else
+                {
+                    member.Sequence = 0; // hoặc giá trị mặc định
+                }
+                member.CreatedBy = HttpContext.Session.GetString("LoginName") ?? "";
+                member.UpdatedBy = member.CreatedBy;
+                member.CreatedDate = DateTime.Now;
+                member.UpdatedDate = DateTime.Now;
+                if (string.IsNullOrWhiteSpace(member.Code))
+                    return Json(new { success = false, message = "Code không được để trống." });
+
+                long memberId = PropertyTypeBO.Instance.Insert(member);
+
+                pt.CommitTransaction();
+
+                return Json(new { success = true, id = memberId });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult UpdatePropertyType()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                PropertyTypeModel member = new PropertyTypeModel();
+
+                // Lấy ID từ form
+                member.ID = !string.IsNullOrEmpty(Request.Form["id"])
+                             ? int.Parse(Request.Form["id"])
+                             : 0;
+
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["code"].ToString();
+                member.Description = Request.Form["description"].ToString();
+                int seqValue;
+                if (int.TryParse(Request.Form["seq"], out seqValue))
+                {
+                    member.Sequence = seqValue;
+                }
+                else
+                {
+                    member.Sequence = 0; // hoặc giá trị mặc định
+                }
+
+                string loginName = HttpContext.Session.GetString("LoginName") ?? "";
+                if (string.IsNullOrWhiteSpace(member.Code))
+                    return Json(new { success = false, message = "Code không được để trống." });
+                if (member.ID == 0) // Insert mới
+                {
+                    member.CreatedBy = loginName;
+                    member.CreatedDate = DateTime.Now;
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    PropertyTypeBO.Instance.Insert(member);
+                }
+                else // Update
+                {
+                    // Trước khi update, lấy lại bản ghi cũ từ DB để giữ CreatedBy, CreatedDate
+                    var oldData = PropertyTypeBO.Instance.GetById(member.ID, pt.Connection, pt.Transaction);
+
+                    if (oldData != null)
+                    {
+                        member.CreatedBy = oldData.CreatedBy;
+                        member.CreatedDate = oldData.CreatedDate;
+                    }
+
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    PropertyTypeBO.Instance.Update(member);
+                }
+
+                pt.CommitTransaction();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+
+
+        [HttpPost]
+        public ActionResult DeletePropertyType()
+        {
+            try
+            {
+
+                PropertyTypeModel memberModel = (PropertyTypeModel)PropertyTypeBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["id"].ToString()));
+                if (memberModel == null || memberModel.ID == 0)
+                {
+                    return Json(new { code = 1, msg = "Can not find Lost And Found" });
+
+                }
+                PropertyTypeBO.Instance.Delete(int.Parse(Request.Form["id"].ToString()));
+                return Json(new { code = 0, msg = "Delete Lost And Found was successfully" });
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = 1, msg = ex.Message });
+            }
+
+        }
+
+        [HttpPost]
+        public ActionResult InsertReservationType()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                ReservationTypeModel member = new ReservationTypeModel();
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["code"].ToString();
+                member.Name = Request.Form["name"].ToString();
+                member.Deduct = !string.IsNullOrEmpty(Request.Form["deduct"])
+                                 && Request.Form["deduct"].ToString() == "on";
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                 && Request.Form["inactive"].ToString() == "on";
+                member.ArrivalTimeRequired = !string.IsNullOrEmpty(Request.Form["arrivalTimeRequired"])
+                                 && Request.Form["arrivalTimeRequired"].ToString() == "on";
+                member.CreditCardRequired = !string.IsNullOrEmpty(Request.Form["creditCardRequired"])
+                                 && Request.Form["creditCardRequired"].ToString() == "on";
+                member.DepositRequired = !string.IsNullOrEmpty(Request.Form["depositRequired"])
+                                 && Request.Form["depositRequired"].ToString() == "on";
+                int seqValue;
+                if (int.TryParse(Request.Form["seq"], out seqValue))
+                {
+                    member.Sequence = seqValue;
+                }
+                else
+                {
+                    member.Sequence = 0; // hoặc giá trị mặc định
+                }
+                member.UserInsertID = HttpContext.Session.GetInt32("UserID") ?? 0;
+                member.UserUpdateID = member.UserInsertID;
+                member.CreateDate = DateTime.Now;
+                member.UpdateDate = DateTime.Now;
+                if (string.IsNullOrWhiteSpace(member.Code))
+                    return Json(new { success = false, message = "Code không được để trống." });
+
+                long memberId = ReservationTypeBO.Instance.Insert(member);
+
+                pt.CommitTransaction();
+
+                return Json(new { success = true, id = memberId });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult UpdateReservationType()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                ReservationTypeModel member = new ReservationTypeModel();
+
+                // Lấy ID từ form
+                member.ID = !string.IsNullOrEmpty(Request.Form["id"])
+                             ? int.Parse(Request.Form["id"])
+                             : 0;
+                member.Deduct = !string.IsNullOrEmpty(Request.Form["deduct"])
+                                 && Request.Form["deduct"].ToString() == "on";
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                 && Request.Form["inactive"].ToString() == "on";
+                member.ArrivalTimeRequired = !string.IsNullOrEmpty(Request.Form["arrivalTimeRequired"])
+                                 && Request.Form["arrivalTimeRequired"].ToString() == "on";
+                member.CreditCardRequired = !string.IsNullOrEmpty(Request.Form["creditCardRequired"])
+                                 && Request.Form["creditCardRequired"].ToString() == "on";
+                member.DepositRequired = !string.IsNullOrEmpty(Request.Form["depositRequired"])
+                                 && Request.Form["depositRequired"].ToString() == "on";
+                // Lấy dữ liệu từ form
+                member.Code = Request.Form["code"].ToString();
+                member.Name = Request.Form["name"].ToString();
+                int seqValue;
+                if (int.TryParse(Request.Form["seq"], out seqValue))
+                {
+                    member.Sequence = seqValue;
+                }
+                else
+                {
+                    member.Sequence = 0; // hoặc giá trị mặc định
+                }
+
+                int loginName = HttpContext.Session.GetInt32("UserID") ?? 0;
+                if (string.IsNullOrWhiteSpace(member.Code))
+                    return Json(new { success = false, message = "Code không được để trống." });
+
+                if (member.ID == 0) // Insert mới
+                {
+                    member.UserInsertID = loginName;
+                    member.CreateDate = DateTime.Now;
+                    member.UserUpdateID = loginName;
+                    member.UpdateDate = DateTime.Now;
+
+                    ReservationTypeBO.Instance.Insert(member);
+                }
+                else // Update
+                {
+                    // Trước khi update, lấy lại bản ghi cũ từ DB để giữ CreatedBy, CreatedDate
+                    var oldData = ReservationTypeBO.Instance.GetById(member.ID, pt.Connection, pt.Transaction);
+
+                    if (oldData != null)
+                    {
+                        member.UserInsertID = oldData.UserInsertID;
+                        member.CreateDate = oldData.CreateDate;
+                    }
+
+                    member.UserUpdateID = loginName;
+                    member.UpdateDate = DateTime.Now;
+
+                    ReservationTypeBO.Instance.Update(member);
+                }
+
+                pt.CommitTransaction();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+
+
+        [HttpPost]
+        public ActionResult DeleteReservationType()
+        {
+            try
+            {
+
+                ReservationTypeModel memberModel = (ReservationTypeModel)ReservationTypeBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["id"].ToString()));
+                if (memberModel == null || memberModel.ID == 0)
+                {
+                    return Json(new { code = 1, msg = "Can not find Lost And Found" });
+
+                }
+                ReservationTypeBO.Instance.Delete(int.Parse(Request.Form["id"].ToString()));
+                return Json(new { code = 0, msg = "Delete Lost And Found was successfully" });
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = 1, msg = ex.Message });
+            }
+
+        }
+
+        #endregion
+
+        #region Currency
+        // [HttpGet]
+        // public IActionResult GetCurrency()
+        // {
+        //     try
+        //     {
+        //         DataTable dataTable = _iAdministrationService.Currency();
+        //         var result = (from d in dataTable.AsEnumerable()
+        //                       select new
+        //                       {
+        //                           IsMaster = !string.IsNullOrEmpty(d["IsMaster"].ToString()) ? d["IsMaster"] : "",
+        //                           Trans = !string.IsNullOrEmpty(d["Trans"].ToString()) ? d["Trans"] : "",
+        //                           Description = !string.IsNullOrEmpty(d["Description"].ToString()) ? d["Description"] : "",
+        //                           Inactive = !string.IsNullOrEmpty(d["Inactive"].ToString()) ? d["Inactive"] : "",
+        //                           ID = !string.IsNullOrEmpty(d["ID"].ToString()) ? d["ID"] : "",
+        //                       }).ToList();
+        //         return Json(result);
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         return Json(ex.Message);
+        //     }
+        //  report.DataSource = dataTable;
+
+        // Không cần gán parameter
+        // report.RequestParameters = false;
+
+        // return PartialView("_ReportViewerPartial", report);
+        //}
+        public IActionResult Currency()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult InsertCurrency()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                CurrencyModel member = new CurrencyModel();
+
+                member.IsShow = !string.IsNullOrEmpty(Request.Form["isShow"])
+                                 && Request.Form["isShow"].ToString() == "on";
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                 && Request.Form["inactive"].ToString() == "on";
+                member.MasterStatus = !string.IsNullOrEmpty(Request.Form["masterStatus"])
+                                 && Request.Form["masterStatus"].ToString() == "on";
+                // Lấy dữ liệu từ form
+                member.ID = Request.Form["code"].ToString();
+                member.Description = Request.Form["description"].ToString();
+                int seqValue;
+                if (int.TryParse(Request.Form["seq"], out seqValue))
+                {
+                    member.Decimals = seqValue;
+                }
+                else
+                {
+                    member.Decimals = 0; // hoặc giá trị mặc định
+                }
+                member.UserInsertID = HttpContext.Session.GetInt32("UserID") ?? 0;
+                member.UserUpdateID = member.UserInsertID;
+                member.CreateDate = DateTime.Now;
+                member.UpdateDate = DateTime.Now;
+                if (string.IsNullOrWhiteSpace(member.ID))
+                    return Json(new { success = false, message = "Code không được để trống." });
+
+                string memberId = CurrencyBO.Instance.InsertStringId(member);
+
+                pt.CommitTransaction();
+
+                return Json(new { success = true, id = memberId });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult UpdateCurrency()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                CurrencyModel member = new CurrencyModel();
+
+                // Lấy ID từ form
+                member.IsShow = !string.IsNullOrEmpty(Request.Form["isShow"])
+                                 && Request.Form["isShow"].ToString() == "on";
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                 && Request.Form["inactive"].ToString() == "on";
+                member.MasterStatus = !string.IsNullOrEmpty(Request.Form["masterStatus"])
+                                 && Request.Form["masterStatus"].ToString() == "on";
+                // Lấy dữ liệu từ form
+                member.ID = Request.Form["code"].ToString();
+                member.Description = Request.Form["description"].ToString();
+                int seqValue;
+                if (int.TryParse(Request.Form["seq"], out seqValue))
+                {
+                    member.Decimals = seqValue;
+                }
+                else
+                {
+                    member.Decimals = 0; // hoặc giá trị mặc định
+                }
+
+                int loginName = HttpContext.Session.GetInt32("UserID") ?? 0;
+                if (string.IsNullOrWhiteSpace(member.ID))
+                    return Json(new { success = false, message = "Code không được để trống." });
+
+                if (member.ID == "") // Insert mới
+                {
+                    member.UserInsertID = loginName;
+                    member.CreateDate = DateTime.Now;
+                    member.UserUpdateID = loginName;
+                    member.UpdateDate = DateTime.Now;
+
+                    CurrencyBO.Instance.InsertStringId(member);
+                }
+                else // Update
+                {
+                    // Trước khi update, lấy lại bản ghi cũ từ DB để giữ CreatedBy, CreatedDate
+                    var oldData = CurrencyBO.Instance.GetById(member.ID, pt.Connection, pt.Transaction);
+
+                    if (oldData != null)
+                    {
+
+                        member.UserInsertID = oldData.UserInsertID;
+                        member.CreateDate = oldData.CreateDate;
+                    }
+
+                    member.UserUpdateID = loginName;
+                    member.UpdateDate = DateTime.Now;
+
+                    CurrencyBO.Instance.UpdateStringId(member);
+                }
+
+                pt.CommitTransaction();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+
+
+        [HttpPost]
+        public ActionResult DeleteCurrency()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+                // Lấy ID string từ form
+                string id = Request.Form["id"].ToString();
+
+                if (string.IsNullOrEmpty(id))
+                    return Json(new { code = 1, msg = "ID is null or empty" });
+
+                // Lấy model theo ID
+                CurrencyModel memberModel = CurrencyBO.Instance.GetById(id, pt.Connection, pt.Transaction);
+
+
+                if (memberModel == null || string.IsNullOrEmpty(memberModel.ID))
+                    return Json(new { code = 1, msg = "Cannot find Currency" });
+
+                // Xóa model trực tiếp bằng string ID
+                CurrencyBO.Instance.DeleteStringId(memberModel);
+
+                return Json(new { code = 0, msg = "Deleted successfully" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = 1, msg = ex.Message });
+            }
+        }
+
+
+        [HttpGet]
+        public IActionResult GetCurrencyById(string id)
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                CurrencyModel member = CurrencyBO.Instance.GetById(id, pt.Connection, pt.Transaction);
+
+                pt.CommitTransaction();
+
+                if (member == null)
+                    return Json(new { success = false, message = "Not found" });
+
+                return Json(new
+                {
+                    success = true,
+                    id = member.ID,
+                    description = member.Description ?? "",
+                    decimals = member.Decimals,
+                    inactive = member.Inactive,
+                    isMaster = member.MasterStatus,
+                    isShow = member.IsShow
+                });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
         #endregion
 
         #region hkpEmployee
@@ -384,6 +3756,8 @@ namespace Administration.Controllers
         {
             try
             {
+
+
                 DataTable dataTable = _iAdministrationService.hkpEmployee(code, name, inactive);
                 var result = (from d in dataTable.AsEnumerable()
                               select new
@@ -403,10 +3777,16 @@ namespace Administration.Controllers
             {
                 return Json(ex.Message);
             }
+            //  report.DataSource = dataTable;
+
+            // Không cần gán parameter
+            // report.RequestParameters = false;
+
+            // return PartialView("_ReportViewerPartial", report);
         }
         public IActionResult hkpEmployee()
         {
-            return View();
+            return View(); // View này sẽ chứa DataGrid + script gọi API
         }
         [HttpPost]
         public ActionResult InserthkpEmployee()
@@ -418,7 +3798,6 @@ namespace Administration.Controllers
                 pt.BeginTransaction();
 
                 hkpEmployeeModel member = new hkpEmployeeModel();
-
 
 
                 member.Name = Request.Form["txtname"].ToString();
@@ -514,6 +3893,7 @@ namespace Administration.Controllers
         {
             try
             {
+
                 hkpEmployeeModel memberModel = (hkpEmployeeModel)hkpEmployeeBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["id"].ToString()));
                 if (memberModel == null || memberModel.ID == 0)
                 {
@@ -565,6 +3945,298 @@ namespace Administration.Controllers
             {
                 pt.CloseConnection();
             }
+        }
+        [HttpPost]
+        public ActionResult InsertProperty()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                PropertyModel member = new PropertyModel();
+
+                // Lấy dữ liệu từ form
+                member.PropertyCode = Request.Form["code"].ToString();
+                string propertyTypeValue = Request.Form["propertyType"];
+                member.PropertyTypeID = int.TryParse(propertyTypeValue, out int cId) ? cId : 0;
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                   && Request.Form["inactive"].ToString() == "on";
+                member.PropertyName = Request.Form["propertyName"].ToString();
+                member.Telephone = Request.Form["telephone"].ToString();
+                member.Fax = Request.Form["fax"].ToString();
+                member.Email = Request.Form["email"].ToString();
+                member.Website = Request.Form["website"].ToString();
+                member.Address = Request.Form["address"].ToString();
+
+                member.ServerName = Request.Form["serverName"].ToString();
+                member.DatabaseName = Request.Form["databaseName"].ToString();
+                member.Login = Request.Form["login"].ToString();
+                member.Password = Request.Form["password"].ToString();
+                bool canConnect = DBUtils.TestExternalConnection(
+                    member.ServerName,
+                    member.DatabaseName,
+                    member.Login,
+                    member.Password
+                );
+
+                if (!canConnect)
+                {
+                    return Json(new { success = false, message = "Không thể kết nối đến database với thông tin đã nhập!" });
+                }
+                member.CreatedBy = HttpContext.Session.GetString("LoginName") ?? "";
+                member.UpdatedBy = member.CreatedBy;
+                member.CreatedDate = DateTime.Now;
+                member.UpdatedDate = DateTime.Now;
+                if (string.IsNullOrWhiteSpace(member.PropertyCode))
+                    return Json(new { success = false, message = "Code không được để trống." });
+
+                long memberId = PropertyBO.Instance.Insert(member);
+
+                pt.CommitTransaction();
+
+                return Json(new { success = true, id = memberId });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult UpdateProperty()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                PropertyModel member = new PropertyModel();
+
+                // Lấy ID từ form
+                member.ID = !string.IsNullOrEmpty(Request.Form["id"])
+                             ? int.Parse(Request.Form["id"])
+                             : 0;
+
+                member.PropertyCode = Request.Form["code"].ToString();
+                string propertyTypeValue = Request.Form["propertyType"];
+                member.PropertyTypeID = int.TryParse(propertyTypeValue, out int cId) ? cId : 0;
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                   && Request.Form["inactive"].ToString() == "on";
+                member.PropertyName = Request.Form["propertyName"].ToString();
+                member.Telephone = Request.Form["telephone"].ToString();
+                member.Fax = Request.Form["fax"].ToString();
+                member.Email = Request.Form["email"].ToString();
+                member.Website = Request.Form["website"].ToString();
+                member.Address = Request.Form["address"].ToString();
+
+                member.ServerName = Request.Form["serverName"].ToString();
+                member.DatabaseName = Request.Form["databaseName"].ToString();
+                member.Login = Request.Form["login"].ToString();
+                member.Password = Request.Form["password"].ToString();
+
+                string loginName = HttpContext.Session.GetString("LoginName") ?? "";
+                if (string.IsNullOrWhiteSpace(member.PropertyCode))
+                    return Json(new { success = false, message = "Code không được để trống." });
+
+                if (member.ID == 0) // Insert mới
+                {
+                    member.CreatedBy = loginName;
+                    member.CreatedDate = DateTime.Now;
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    PropertyBO.Instance.Insert(member);
+                }
+                else // Update
+                {
+                    // Trước khi update, lấy lại bản ghi cũ từ DB để giữ CreatedBy, CreatedDate
+                    var oldData = PropertyBO.Instance.GetById(member.ID, pt.Connection, pt.Transaction);
+
+                    if (oldData != null)
+                    {
+                        member.CreatedBy = oldData.CreatedBy;
+                        member.CreatedDate = oldData.CreatedDate;
+                    }
+
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    PropertyBO.Instance.Update(member);
+                }
+
+                pt.CommitTransaction();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+
+
+        [HttpPost]
+        public ActionResult DeleteProperty()
+        {
+            try
+            {
+
+                PropertyModel memberModel = (PropertyModel)PropertyBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["id"].ToString()));
+                if (memberModel == null || memberModel.ID == 0)
+                {
+                    return Json(new { code = 1, msg = "Can not find Lost And Found" });
+
+                }
+                PropertyBO.Instance.Delete(int.Parse(Request.Form["id"].ToString()));
+                return Json(new { code = 0, msg = "Delete Lost And Found was successfully" });
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = 1, msg = ex.Message });
+            }
+
+        }
+        [HttpPost]
+        public ActionResult InsertPropertyPermission()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                PropertyPermissionModel member = new PropertyPermissionModel();
+
+                string propertyTypeValue = Request.Form["propertyType"];
+                member.PropertyID = int.TryParse(propertyTypeValue, out int cId) ? cId : 0;
+
+                string userValue = Request.Form["chooseuser"];
+                member.UserID = int.TryParse(userValue, out int uId) ? uId : 0;
+
+                member.CreatedBy = HttpContext.Session.GetString("LoginName") ?? "";
+                member.UpdatedBy = member.CreatedBy;
+                member.CreatedDate = DateTime.Now;
+                member.UpdatedDate = DateTime.Now;
+
+                long memberId = PropertyPermissionBO.Instance.Insert(member);
+
+                pt.CommitTransaction();
+
+                return Json(new { success = true, id = memberId });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult UpdatePropertyPermission()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                PropertyPermissionModel member = new PropertyPermissionModel();
+
+                // Lấy ID từ form
+                member.ID = !string.IsNullOrEmpty(Request.Form["id"])
+                             ? int.Parse(Request.Form["id"])
+                             : 0;
+
+                string propertyTypeValue = Request.Form["propertyType"];
+                member.PropertyID = int.TryParse(propertyTypeValue, out int cId) ? cId : 0;
+
+                string userValue = Request.Form["chooseuser"];
+                member.UserID = int.TryParse(userValue, out int uId) ? uId : 0;
+
+                string loginName = HttpContext.Session.GetString("LoginName") ?? "";
+                member.UpdatedBy = member.CreatedBy;
+                member.CreatedDate = DateTime.Now;
+                member.UpdatedDate = DateTime.Now;
+
+                if (member.ID == 0) // Insert mới
+                {
+                    member.CreatedBy = loginName;
+                    member.CreatedDate = DateTime.Now;
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    PropertyPermissionBO.Instance.Insert(member);
+                }
+                else // Update
+                {
+                    // Trước khi update, lấy lại bản ghi cũ từ DB để giữ CreatedBy, CreatedDate
+                    var oldData = PropertyPermissionBO.Instance.GetById(member.ID, pt.Connection, pt.Transaction);
+
+                    if (oldData != null)
+                    {
+                        member.CreatedBy = oldData.CreatedBy;
+                        member.CreatedDate = oldData.CreatedDate;
+                    }
+
+                    member.UpdatedBy = loginName;
+                    member.UpdatedDate = DateTime.Now;
+
+                    PropertyPermissionBO.Instance.Update(member);
+                }
+
+                pt.CommitTransaction();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+
+
+        [HttpPost]
+        public ActionResult DeletePropertyPermission()
+        {
+            try
+            {
+
+                PropertyPermissionModel memberModel = (PropertyPermissionModel)PropertyPermissionBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["id"].ToString()));
+                if (memberModel == null || memberModel.ID == 0)
+                {
+                    return Json(new { code = 1, msg = "Can not find Lost And Found" });
+
+                }
+                PropertyPermissionBO.Instance.Delete(int.Parse(Request.Form["id"].ToString()));
+                return Json(new { code = 0, msg = "Delete Lost And Found was successfully" });
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = 1, msg = ex.Message });
+            }
+
         }
         #endregion
 
@@ -677,6 +4349,8 @@ namespace Administration.Controllers
             };
             return View(model);
         }
+
+
         [HttpPost]
         public ActionResult UpdateMessage(string desc)
         {
@@ -809,7 +4483,7 @@ namespace Administration.Controllers
         }
 
         [HttpGet]
-        public IActionResult PersonInChargeData( string code, string description, string group, string zone,string  isActive)
+        public IActionResult PersonInChargeData(string code, string description, string group, string zone, string isActive)
         {
             code = code ?? "";
             description = description ?? "";
@@ -849,7 +4523,6 @@ namespace Administration.Controllers
             {
                 return Json(ex.Message);
             }
-           
         }
         [HttpPost]
         public IActionResult PersonInChargeSave(int id, string codenew, string telephonenew, string handphonenew, string emailnew, string namenew, string descriptionnew, string group, string zone, int isActive, string user)
@@ -876,9 +4549,9 @@ namespace Administration.Controllers
                         Name = namenew?.Trim(),
                         Description = descriptionnew?.Trim(),
                         Inactive = (isActive == 1),
-                        Telephone= telephonenew,
-                        MobilePhone= handphonenew,
-                        Email= emailnew,
+                        Telephone = telephonenew,
+                        MobilePhone = handphonenew,
+                        Email = emailnew,
                         CreatedBy = user,
                         PersonInChargeGroupID = int.Parse(group),
                         PersonInChargeZoneID = int.Parse(zone),
@@ -952,7 +4625,6 @@ namespace Administration.Controllers
         public ActionResult PersonInChargeGroup()
         {
 
-         
             return View();
         }
 
@@ -961,7 +4633,6 @@ namespace Administration.Controllers
         {
             code = code ?? "";
             description = description ?? "";
-           
 
             try
             {
@@ -989,8 +4660,49 @@ namespace Administration.Controllers
             }
 
         }
+        #endregion
+        #region Deposit/Cancellation Rules Search 
+        public IActionResult DepositRule()
+        {
+            List<UsersModel> listUser = PropertyUtils.ConvertToList<UsersModel>(UsersBO.Instance.FindAll());
+            ViewBag.UsersList = listUser;
+
+            List<CurrencyModel> listCurr = PropertyUtils.ConvertToList<CurrencyModel>(CurrencyBO.Instance.FindAll());
+            ViewBag.CurrencyList = listCurr;
+            return View();
+        }
+        [HttpGet]
+        public IActionResult GetDepositRule(string code, string description)
+        {
+            try
+            {
+                DataTable dt = _iAdministrationService.DepositRule(code, description);
+                var result = (from r in dt.AsEnumerable()
+                              select new
+                              {
+                                  Code = !string.IsNullOrEmpty(r["Code"].ToString()) ? r["Code"] : "",
+                                  Description = !string.IsNullOrEmpty(r["Description"].ToString()) ? r["Description"] : "",
+                                  Type = !string.IsNullOrEmpty(r["Type"].ToString()) ? r["Type"] : "",
+                                  AmountValue = !string.IsNullOrEmpty(r["AmountValue"].ToString()) ? r["AmountValue"] : "",
+                                  CurrencyID = !string.IsNullOrEmpty(r["CurrencyID"].ToString()) ? r["CurrencyID"] : "",
+                                  DaysBeforeArrival = !string.IsNullOrEmpty(r["DaysBeforeArrival"].ToString()) ? r["DaysBeforeArrival"] : "",
+                                  DaysAfterBooking = !string.IsNullOrEmpty(r["DaysAfterBooking"].ToString()) ? r["DaysAfterBooking"] : "",
+                                  UserInsertID = r["UserInsertID"] != DBNull.Value ? Convert.ToInt32(r["UserInsertID"]) : 0,
+                                  CreateDate = !string.IsNullOrEmpty(r["CreateDate"].ToString()) ? r["CreateDate"] : "",
+                                  UserUpdateID = !string.IsNullOrEmpty(r["UserUpdateID"].ToString()) ? r["UserUpdateID"] : "",
+                                  UpdateDate = !string.IsNullOrEmpty(r["UpdateDate"].ToString()) ? r["UpdateDate"] : "",
+                                  ID = !string.IsNullOrEmpty(r["ID"].ToString()) ? r["ID"] : "",
+                              }).ToList();
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message);
+            }
+
+        }
         [HttpPost]
-        public IActionResult PersonInChargeGroupSave(int id, string codenew,  string namenew, string descriptionnew,  int isActive, string user)
+        public IActionResult PersonInChargeGroupSave(int id, string codenew, string namenew, string descriptionnew, int isActive, string user)
         {
             var pt = new ProcessTransactions();
             try
@@ -1034,7 +4746,6 @@ namespace Administration.Controllers
                     model.Name = namenew?.Trim();
                     model.Description = descriptionnew?.Trim();
                     model.Inactive = (isActive == 1);
-                  
                     model.UpdatedBy = user;
                     model.UpdatedDate = businessDate;
 
@@ -1108,7 +4819,127 @@ namespace Administration.Controllers
                                   UpdatedBy = d["UpdatedBy"]?.ToString() ?? "",
                                   UpdatedDate = d["UpdatedDate"] != DBNull.Value ? Convert.ToDateTime(d["UpdatedDate"]).ToString("yyyy-MM-dd HH:mm:ss") : "",
                                   Inactive = d["Inactive"]?.ToString() ?? "",
+                              }).ToList();
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message);
+            }
 
+        }
+        [HttpGet]
+        public IActionResult GetDepositRuleById(int id)
+        {
+            var data = (DepositRuleModel)DepositRuleBO.Instance.FindByPrimaryKey(id);
+
+            if (data == null)
+            {
+                return Json(new { inactive = false, sequence = 0 });
+            }
+
+            return Json(new
+            {
+                inactive = data.Inactive,
+                sequence = data.Sequence
+            });
+        }
+        [HttpPost]
+        public IActionResult DepositRuleSave([FromBody] DepositRuleModel model)
+        {
+            var listErrors = GetErrors(
+                Check(model, "general", "Invalid data"),
+                Check(model?.AmountValue < 0, "amountValue", "Deposit Amount cannot be negative."),
+                Check(model?.Type == 0 && string.IsNullOrWhiteSpace(model?.CurrencyID), "currencyID", "Currency is required for Flat type."),
+                Check((model?.DaysBeforeArrival ?? 0) < 0, "dayBA", "Days Before Arrival cannot be negative."),
+                Check((model?.DaysAfterBooking ?? 0) < 0, "dayAB", "Days After Booking cannot be negative."),
+                Check((model?.Sequence ?? 0) < 0, "seq", "Sequence cannot be negative."),
+                Check(model?.Code, "code", "Code is not blank."),
+                Check(model?.Description, "des", "Description is not blank.")
+            );
+
+            if (listErrors.Count > 0)
+            {
+                return Json(new { success = false, errors = listErrors });
+            }
+            string message = "";
+
+            try
+            {
+                if (model.ID == 0)
+                {
+                    model.CreateDate = DateTime.Now;
+                    model.UpdateDate = DateTime.Now;
+                    DepositRuleBO.Instance.Insert(model);
+                    message = "Insert successfully!";
+                }
+                else
+                {
+                    var old = (DepositRuleModel)DepositRuleBO.Instance.FindByPrimaryKey(model.ID);
+                    if (old != null)
+                    {
+                        model.Code = old.Code;
+                        model.CreateDate = old.CreateDate;
+                        model.UserInsertID = old.UserInsertID;
+                    }
+
+                    model.UpdateDate = DateTime.Now;
+                    DepositRuleBO.Instance.Update(model);
+                    message = "Update successfully!";
+                }
+            }
+            catch (Exception ex)
+            {
+                message = ex.Message;
+                return Json(new { success = false, message });
+            }
+            return Json(new { success = true, message });
+        }
+        [HttpPost]
+        public IActionResult DepositRuleDelete(int id)
+        {
+            try
+            {
+                DepositRuleBO.Instance.Delete(id);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, ex.Message });
+            }
+
+            return Json(new { success = true });
+        }
+
+        public IActionResult CancellationRule()
+        {
+            List<UsersModel> listUser = PropertyUtils.ConvertToList<UsersModel>(UsersBO.Instance.FindAll());
+            ViewBag.UsersList = listUser;
+
+            List<CurrencyModel> listCurr = PropertyUtils.ConvertToList<CurrencyModel>(CurrencyBO.Instance.FindAll());
+            ViewBag.CurrencyList = listCurr;
+            return View();
+        }
+        [HttpGet]
+        public IActionResult GetCancellationRule(string code, string description)
+        {
+            try
+            {
+                DataTable dt = _iAdministrationService.CancellationRule(code, description);
+                var result = (from r in dt.AsEnumerable()
+                              select new
+                              {
+                                  Code = !string.IsNullOrEmpty(r["Code"].ToString()) ? r["Code"] : "",
+                                  Description = !string.IsNullOrEmpty(r["Description"].ToString()) ? r["Description"] : "",
+                                  Type = !string.IsNullOrEmpty(r["Type"].ToString()) ? r["Type"] : "",
+                                  AmountValue = !string.IsNullOrEmpty(r["AmountValue"].ToString()) ? r["AmountValue"] : "",
+                                  CurrencyID = !string.IsNullOrEmpty(r["CurrencyID"].ToString()) ? r["CurrencyID"] : "",
+                                  DaysBeforeArrival = !string.IsNullOrEmpty(r["DaysBeforeArrival"].ToString()) ? r["DaysBeforeArrival"] : "",
+                                  CancelBeforeTime = !string.IsNullOrEmpty(r["CancelBeforeTime"].ToString()) ? r["CancelBeforeTime"] : "",
+                                  UserInsertID = r["UserInsertID"] != DBNull.Value ? Convert.ToInt32(r["UserInsertID"]) : 0,
+                                  CreateDate = !string.IsNullOrEmpty(r["CreateDate"].ToString()) ? r["CreateDate"] : "",
+                                  UserUpdateID = !string.IsNullOrEmpty(r["UserUpdateID"].ToString()) ? r["UserUpdateID"] : "",
+                                  UpdateDate = !string.IsNullOrEmpty(r["UpdateDate"].ToString()) ? r["UpdateDate"] : "",
+                                  ID = !string.IsNullOrEmpty(r["ID"].ToString()) ? r["ID"] : "",
                               }).ToList();
                 return Json(result);
             }
@@ -1238,7 +5069,6 @@ namespace Administration.Controllers
                                   UpdatedBy = d["UpdatedBy"]?.ToString() ?? "",
                                   UpdatedDate = d["UpdatedDate"] != DBNull.Value ? Convert.ToDateTime(d["UpdatedDate"]).ToString("yyyy-MM-dd HH:mm:ss") : "",
                                   Inactive = d["Inactive"]?.ToString() ?? "",
-
                               }).ToList();
                 return Json(result);
             }
@@ -1248,256 +5078,7 @@ namespace Administration.Controllers
             }
 
         }
-        [HttpPost]
-        public IActionResult ApproveListSave(int id, string codenew, string namenew, string descriptionnew, int isActive, string user)
-        {
-            var pt = new ProcessTransactions();
-            try
-            {
-                pt.OpenConnection();
-                pt.BeginTransaction();
 
-                user = (user ?? string.Empty).Replace("\"", "").Trim();
-
-                var businessDates = PropertyUtils.ConvertToList<BusinessDateModel>(BusinessDateBO.Instance.FindAll());
-                var businessDate = businessDates[0].BusinessDate;
-
-                 List<UsersModel> tran = PropertyUtils.ConvertToList<UsersModel>(UsersBO.Instance.FindByAttribute("LoginName", user));
-                ApprovedbyModel model;
-                bool isNew = (id == 0);
-
-                if (isNew)
-                {
-                    model = new ApprovedbyModel
-                    {
-                        Code = codenew?.Trim(),
-                        Name = namenew?.Trim(),
-                        Description = descriptionnew?.Trim(),
-                        Inactive = (isActive == 1),
-                        CreatedBy = user,
-                        UserInsertID = tran[0].ID,
-                        UserUpdateID = tran[0].ID,
-                        CreatedDate = businessDate,
-                        UpdatedBy = user,
-                        UpdatedDate = businessDate
-                    };
-
-                    ApprovedbyBO.Instance.Insert(model);
-                }
-                else
-                {
-                    model = (ApprovedbyModel)ApprovedbyBO.Instance.FindByPrimaryKey(id);
-                    if (model == null)
-                    {
-                        throw new Exception($"Không tìm thấy lafZone có ID = {id}");
-                    }
-
-                    model.Code = codenew?.Trim();
-                    model.Name = namenew?.Trim();
-                    model.Description = descriptionnew?.Trim();
-                    model.Inactive = (isActive == 1);
-                    model.UserUpdateID = tran[0].ID;
-                    model.UpdatedBy = user;
-                    model.UpdatedDate = businessDate;
-
-                    ApprovedbyBO.Instance.Update(model);
-                }
-
-                pt.CommitTransaction();
-
-                return Json(new
-                {
-                    success = true,
-                    message = isNew ? "Insert success!" : "Update success!"
-                });
-            }
-            catch (Exception ex)
-            {
-                pt.RollBack();
-                return BadRequest(new { success = false, message = ex.Message });
-            }
-            finally
-            {
-                pt.CloseConnection();
-            }
-        }
-        [HttpPost]
-        public IActionResult ApproveListDelete(int id)
-        {
-            try
-            {
-
-                ApprovedbyBO.Instance.Delete(id);
-
-                return Json(new { success = true, message = "Success Delete!" });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { success = false, message = ex.Message });
-            }
-        }
-
-        #endregion
-
-        #region Deposit/Cancellation Rules Search 
-        public IActionResult DepositRule()
-        {
-            List<UsersModel> listUser = PropertyUtils.ConvertToList<UsersModel>(UsersBO.Instance.FindAll());
-            ViewBag.UsersList = listUser;
-
-            List<CurrencyModel> listCurr = PropertyUtils.ConvertToList<CurrencyModel>(CurrencyBO.Instance.FindAll());
-            ViewBag.CurrencyList = listCurr;
-            return View();
-        }
-        [HttpGet]
-        public IActionResult GetDepositRule(string code, string description)
-        {
-            try
-            {
-                DataTable dt = _iAdministrationService.DepositRule(code, description);
-                var result = (from r in dt.AsEnumerable()
-                              select new
-                              {
-                                  Code = !string.IsNullOrEmpty(r["Code"].ToString()) ? r["Code"] : "",
-                                  Description = !string.IsNullOrEmpty(r["Description"].ToString()) ? r["Description"] : "",
-                                  Type = !string.IsNullOrEmpty(r["Type"].ToString()) ? r["Type"] : "",
-                                  AmountValue = !string.IsNullOrEmpty(r["AmountValue"].ToString()) ? r["AmountValue"] : "",
-                                  CurrencyID = !string.IsNullOrEmpty(r["CurrencyID"].ToString()) ? r["CurrencyID"] : "",
-                                  DaysBeforeArrival = !string.IsNullOrEmpty(r["DaysBeforeArrival"].ToString()) ? r["DaysBeforeArrival"] : "",
-                                  DaysAfterBooking = !string.IsNullOrEmpty(r["DaysAfterBooking"].ToString()) ? r["DaysAfterBooking"] : "",
-                                  UserInsertID = r["UserInsertID"] != DBNull.Value ? Convert.ToInt32(r["UserInsertID"]) : 0,
-                                  CreateDate = !string.IsNullOrEmpty(r["CreateDate"].ToString()) ? r["CreateDate"] : "",
-                                  UserUpdateID = !string.IsNullOrEmpty(r["UserUpdateID"].ToString()) ? r["UserUpdateID"] : "",
-                                  UpdateDate = !string.IsNullOrEmpty(r["UpdateDate"].ToString()) ? r["UpdateDate"] : "",
-                                  ID = !string.IsNullOrEmpty(r["ID"].ToString()) ? r["ID"] : "",
-                              }).ToList();
-                return Json(result);
-            }
-            catch (Exception ex)
-            {
-                return Json(ex.Message);
-            }
-        }
-        [HttpGet]
-        public IActionResult GetDepositRuleById(int id)
-        {
-            var data = (DepositRuleModel)DepositRuleBO.Instance.FindByPrimaryKey(id);
-
-            if (data == null)
-            {
-                return Json(new { inactive = false, sequence = 0 });
-            }
-
-            return Json(new
-            {
-                inactive = data.Inactive,
-                sequence = data.Sequence
-            });
-        }
-        [HttpPost]
-        public IActionResult DepositRuleSave([FromBody] DepositRuleModel model)
-        {
-            var listErrors = GetErrors(
-                Check(model, "general", "Invalid data"),
-                Check(model?.AmountValue < 0, "amountValue", "Deposit Amount cannot be negative."),
-                Check(model?.Type == 0 && string.IsNullOrWhiteSpace(model?.CurrencyID), "currencyID", "Currency is required for Flat type."),
-                Check((model?.DaysBeforeArrival ?? 0) < 0, "dayBA", "Days Before Arrival cannot be negative."),
-                Check((model?.DaysAfterBooking ?? 0) < 0, "dayAB", "Days After Booking cannot be negative."),
-                Check((model?.Sequence ?? 0) < 0, "seq", "Sequence cannot be negative."),
-                Check(model?.Code, "code", "Code is not blank."),
-                Check(model?.Description, "des", "Description is not blank.")
-            );
-
-            if (listErrors.Count > 0)
-            {
-                return Json(new { success = false, errors = listErrors });
-            }
-            string message = "";
-
-            try
-            {
-                if (model.ID == 0)
-                {
-                    model.CreateDate = DateTime.Now;
-                    model.UpdateDate = DateTime.Now;
-                    DepositRuleBO.Instance.Insert(model);
-                    message = "Insert successfully!";
-                }
-                else
-                {
-                    var old = (DepositRuleModel)DepositRuleBO.Instance.FindByPrimaryKey(model.ID);
-                    if (old != null)
-                    {
-                        model.Code = old.Code;
-                        model.CreateDate = old.CreateDate;
-                        model.UserInsertID = old.UserInsertID;
-                    }
-
-                    model.UpdateDate = DateTime.Now;
-                    DepositRuleBO.Instance.Update(model);
-                    message = "Update successfully!";
-                }
-            }
-            catch (Exception ex)
-            {
-                message = ex.Message;
-                return Json(new { success = false, message });
-            }
-            return Json(new { success = true, message });
-        }
-        [HttpPost]
-        public IActionResult DepositRuleDelete(int id)
-        {
-            try
-            {
-                DepositRuleBO.Instance.Delete(id);
-            }
-            catch (Exception ex)
-            {
-                return Json(new { success = false, ex.Message });
-            }
-
-            return Json(new { success = true });
-        }
-
-        public IActionResult CancellationRule()
-        {
-            List<UsersModel> listUser = PropertyUtils.ConvertToList<UsersModel>(UsersBO.Instance.FindAll());
-            ViewBag.UsersList = listUser;
-
-            List<CurrencyModel> listCurr = PropertyUtils.ConvertToList<CurrencyModel>(CurrencyBO.Instance.FindAll());
-            ViewBag.CurrencyList = listCurr;
-            return View();
-        }
-        [HttpGet]
-        public IActionResult GetCancellationRule(string code, string description)
-        {
-            try
-            {
-                DataTable dt = _iAdministrationService.CancellationRule(code, description);
-                var result = (from r in dt.AsEnumerable()
-                              select new
-                              {
-                                  Code = !string.IsNullOrEmpty(r["Code"].ToString()) ? r["Code"] : "",
-                                  Description = !string.IsNullOrEmpty(r["Description"].ToString()) ? r["Description"] : "",
-                                  Type = !string.IsNullOrEmpty(r["Type"].ToString()) ? r["Type"] : "",
-                                  AmountValue = !string.IsNullOrEmpty(r["AmountValue"].ToString()) ? r["AmountValue"] : "",
-                                  CurrencyID = !string.IsNullOrEmpty(r["CurrencyID"].ToString()) ? r["CurrencyID"] : "",
-                                  DaysBeforeArrival = !string.IsNullOrEmpty(r["DaysBeforeArrival"].ToString()) ? r["DaysBeforeArrival"] : "",
-                                  CancelBeforeTime = !string.IsNullOrEmpty(r["CancelBeforeTime"].ToString()) ? r["CancelBeforeTime"] : "",
-                                  UserInsertID = r["UserInsertID"] != DBNull.Value ? Convert.ToInt32(r["UserInsertID"]) : 0,
-                                  CreateDate = !string.IsNullOrEmpty(r["CreateDate"].ToString()) ? r["CreateDate"] : "",
-                                  UserUpdateID = !string.IsNullOrEmpty(r["UserUpdateID"].ToString()) ? r["UserUpdateID"] : "",
-                                  UpdateDate = !string.IsNullOrEmpty(r["UpdateDate"].ToString()) ? r["UpdateDate"] : "",
-                                  ID = !string.IsNullOrEmpty(r["ID"].ToString()) ? r["ID"] : "",
-                              }).ToList();
-                return Json(result);
-            }
-            catch (Exception ex)
-            {
-                return Json(ex.Message);
-            }
-        }
         [HttpGet]
         public IActionResult GetCancellationRuleById(int id)
         {
@@ -1615,6 +5196,95 @@ namespace Administration.Controllers
             catch (Exception ex)
             {
                 return Json(ex.Message);
+            }
+
+        }
+        [HttpPost]
+        public IActionResult ApproveListSave(int id, string codenew, string namenew, string descriptionnew, int isActive, string user)
+        {
+            var pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                user = (user ?? string.Empty).Replace("\"", "").Trim();
+
+                var businessDates = PropertyUtils.ConvertToList<BusinessDateModel>(BusinessDateBO.Instance.FindAll());
+                var businessDate = businessDates[0].BusinessDate;
+
+                List<UsersModel> tran = PropertyUtils.ConvertToList<UsersModel>(UsersBO.Instance.FindByAttribute("LoginName", user));
+                ApprovedbyModel model;
+                bool isNew = (id == 0);
+
+                if (isNew)
+                {
+                    model = new ApprovedbyModel
+                    {
+                        Code = codenew?.Trim(),
+                        Name = namenew?.Trim(),
+                        Description = descriptionnew?.Trim(),
+                        Inactive = (isActive == 1),
+                        CreatedBy = user,
+                        UserInsertID = tran[0].ID,
+                        UserUpdateID = tran[0].ID,
+                        CreatedDate = businessDate,
+                        UpdatedBy = user,
+                        UpdatedDate = businessDate
+                    };
+
+                    ApprovedbyBO.Instance.Insert(model);
+                }
+                else
+                {
+                    model = (ApprovedbyModel)ApprovedbyBO.Instance.FindByPrimaryKey(id);
+                    if (model == null)
+                    {
+                        throw new Exception($"Không tìm thấy lafZone có ID = {id}");
+                    }
+
+                    model.Code = codenew?.Trim();
+                    model.Name = namenew?.Trim();
+                    model.Description = descriptionnew?.Trim();
+                    model.Inactive = (isActive == 1);
+                    model.UserUpdateID = tran[0].ID;
+                    model.UpdatedBy = user;
+                    model.UpdatedDate = businessDate;
+
+                    ApprovedbyBO.Instance.Update(model);
+                }
+
+                pt.CommitTransaction();
+
+                return Json(new
+                {
+                    success = true,
+                    message = isNew ? "Insert success!" : "Update success!"
+                });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return BadRequest(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public IActionResult ApproveListDelete(int id)
+        {
+            try
+            {
+
+                ApprovedbyBO.Instance.Delete(id);
+
+                return Json(new { success = true, message = "Success Delete!" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { success = false, message = ex.Message });
             }
         }
         public IActionResult City()
@@ -4697,7 +8367,7 @@ namespace Administration.Controllers
 
             return Json(new { success = true });
         }
-        #endregion //
+        #endregion 
 
         #region ItemCategory/PreferenceGroup
         [HttpGet]
@@ -4800,7 +8470,7 @@ namespace Administration.Controllers
 
             return Json(new { success = true });
         }
-        #endregion
 
+        #endregion
     }
 }
