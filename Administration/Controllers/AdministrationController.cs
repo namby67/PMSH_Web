@@ -378,6 +378,226 @@ namespace Administration.Controllers
         }
         #endregion
 
+        #region Currency
+        //[HttpGet]
+        //public IActionResult GetCurrency()
+        //{
+        //    try
+        //    {
+        //        var result = _iAdministrationService.GetAllCurrency().ToList();
+        //        return Json(result);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return Json(ex.Message);
+        //    }
+        //}
+
+        public IActionResult Currency()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult InsertCurrency()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                CurrencyModel member = new CurrencyModel();
+
+                member.IsShow = !string.IsNullOrEmpty(Request.Form["isShow"])
+                                 && Request.Form["isShow"].ToString() == "on";
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                 && Request.Form["inactive"].ToString() == "on";
+                member.MasterStatus = !string.IsNullOrEmpty(Request.Form["masterStatus"])
+                                 && Request.Form["masterStatus"].ToString() == "on";
+                // Lấy dữ liệu từ form
+                member.ID = Request.Form["code"].ToString();
+                member.Description = Request.Form["description"].ToString();
+                int seqValue;
+                if (int.TryParse(Request.Form["seq"], out seqValue))
+                {
+                    member.Decimals = seqValue;
+                }
+                else
+                {
+                    member.Decimals = 0; // hoặc giá trị mặc định
+                }
+                member.UserInsertID = HttpContext.Session.GetInt32("UserID") ?? 0;
+                member.UserUpdateID = member.UserInsertID;
+                member.CreateDate = DateTime.Now;
+                member.UpdateDate = DateTime.Now;
+                if (string.IsNullOrWhiteSpace(member.ID))
+                    return Json(new { success = false, message = "Code không được để trống." });
+
+                string memberId = CurrencyBO.Instance.InsertStringId(member);
+
+                pt.CommitTransaction();
+
+                return Json(new { success = true, id = memberId });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        [HttpPost]
+        public ActionResult UpdateCurrency()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                CurrencyModel member = new CurrencyModel();
+
+                // Lấy ID từ form
+                member.IsShow = !string.IsNullOrEmpty(Request.Form["isShow"])
+                                 && Request.Form["isShow"].ToString() == "on";
+                member.Inactive = !string.IsNullOrEmpty(Request.Form["inactive"])
+                                 && Request.Form["inactive"].ToString() == "on";
+                member.MasterStatus = !string.IsNullOrEmpty(Request.Form["masterStatus"])
+                                 && Request.Form["masterStatus"].ToString() == "on";
+                // Lấy dữ liệu từ form
+                member.ID = Request.Form["code"].ToString();
+                member.Description = Request.Form["description"].ToString();
+                int seqValue;
+                if (int.TryParse(Request.Form["seq"], out seqValue))
+                {
+                    member.Decimals = seqValue;
+                }
+                else
+                {
+                    member.Decimals = 0; // hoặc giá trị mặc định
+                }
+
+                int loginName = HttpContext.Session.GetInt32("UserID") ?? 0;
+                if (string.IsNullOrWhiteSpace(member.ID))
+                    return Json(new { success = false, message = "Code không được để trống." });
+
+                if (member.ID == "") // Insert mới
+                {
+                    member.UserInsertID = loginName;
+                    member.CreateDate = DateTime.Now;
+                    member.UserUpdateID = loginName;
+                    member.UpdateDate = DateTime.Now;
+
+                    CurrencyBO.Instance.InsertStringId(member);
+                }
+                else // Update
+                {
+                    // Trước khi update, lấy lại bản ghi cũ từ DB để giữ CreatedBy, CreatedDate
+                    var oldData = CurrencyBO.Instance.GetById(member.ID, pt.Connection, pt.Transaction);
+
+                    if (oldData != null)
+                    {
+
+                        member.UserInsertID = oldData.UserInsertID;
+                        member.CreateDate = oldData.CreateDate;
+                    }
+
+                    member.UserUpdateID = loginName;
+                    member.UpdateDate = DateTime.Now;
+
+                    CurrencyBO.Instance.UpdateStringId(member);
+                }
+
+                pt.CommitTransaction();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+
+
+        [HttpPost]
+        public ActionResult DeleteCurrency()
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+                // Lấy ID string từ form
+                string id = Request.Form["id"].ToString();
+
+                if (string.IsNullOrEmpty(id))
+                    return Json(new { code = 1, msg = "ID is null or empty" });
+
+                // Lấy model theo ID
+                CurrencyModel memberModel = CurrencyBO.Instance.GetById(id, pt.Connection, pt.Transaction);
+
+
+                if (memberModel == null || string.IsNullOrEmpty(memberModel.ID))
+                    return Json(new { code = 1, msg = "Cannot find Currency" });
+
+                // Xóa model trực tiếp bằng string ID
+                CurrencyBO.Instance.DeleteStringId(memberModel);
+
+                return Json(new { code = 0, msg = "Deleted successfully" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = 1, msg = ex.Message });
+            }
+        }
+
+
+        [HttpGet]
+        public IActionResult GetCurrencyById(string id)
+        {
+            ProcessTransactions pt = new ProcessTransactions();
+            try
+            {
+                pt.OpenConnection();
+                pt.BeginTransaction();
+
+                CurrencyModel member = CurrencyBO.Instance.GetById(id, pt.Connection, pt.Transaction);
+
+                pt.CommitTransaction();
+
+                if (member == null)
+                    return Json(new { success = false, message = "Not found" });
+
+                return Json(new
+                {
+                    success = true,
+                    id = member.ID,
+                    description = member.Description ?? "",
+                    decimals = member.Decimals,
+                    inactive = member.Inactive,
+                    isMaster = member.MasterStatus,
+                    isShow = member.IsShow
+                });
+            }
+            catch (Exception ex)
+            {
+                pt.RollBack();
+                return Json(new { success = false, message = ex.Message });
+            }
+            finally
+            {
+                pt.CloseConnection();
+            }
+        }
+        #endregion
+
         #region hkpEmployee
         [HttpGet]
         public IActionResult GethkpEmployee(string code, string name, int inactive)
@@ -590,12 +810,6 @@ namespace Administration.Controllers
             {
                 return Json(ex.Message);
             }
-            //  report.DataSource = dataTable;
-
-            // Không cần gán parameter
-            // report.RequestParameters = false;
-
-            // return PartialView("_ReportViewerPartial", report);
         }
         public IActionResult ConfigStatusColor()
         {
@@ -1210,8 +1424,6 @@ namespace Administration.Controllers
 
         public ActionResult ApproveList()
         {
-
-
             return View();
         }
 

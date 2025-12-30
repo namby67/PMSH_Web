@@ -393,9 +393,6 @@ namespace Administration.Services.Implements
             }
         }
 
-
-
-
         public List<CurrencyModel> GetAllCurrency()
         {
             try
