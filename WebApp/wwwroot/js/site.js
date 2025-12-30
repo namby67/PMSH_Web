@@ -2,10 +2,10 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
-
+//getBusinessDate
 // Hàm gọi để lấy business-date
 
-function getBusinessDate(callback) {
+function getAllBusinessDate(callback) {
   return $.ajax({
     url: "/Reservation/GetBusinessDate",
     type: "get",
