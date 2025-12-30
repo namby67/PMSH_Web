@@ -45,7 +45,7 @@ namespace User.Controllers
             {
                 string loginName = Request.Form["LoginName"].ToString();
                 string password = Request.Form["Password"].ToString();
-                var result = _iUserService.Login(loginName,password);
+                var result = _iUserService.Login(loginName, password);
                 int UserGroupID = result.UserGroupID;
                 int UserID = result.ID;
                 int CashierNo = result.CashierNo;
@@ -57,15 +57,16 @@ namespace User.Controllers
                 var businessDate = PropertyUtils.ConvertToList<BusinessDateModel>(BusinessDateBO.Instance.FindAll());
                 int memberTypeID = 0; int roomTypeID = 0; int vipID = 0;
                 var resultname = (from d in result2.AsEnumerable()
-                              select new
-                              {
-                                  Name = !string.IsNullOrEmpty(d["Name"].ToString()) ? d["Name"] : "",
+                                  select new
+                                  {
+                                      Name = !string.IsNullOrEmpty(d["Name"].ToString()) ? d["Name"] : "",
 
-                              }).ToList();
+                                  }).ToList();
 
 
-                if (result.ID != 0) {
-                    return Json(new { code = 0, msg = "Successfully", data = resultname ,namelogin= loginName,userID = UserID,businessDate = businessDate[0].BusinessDate.ToString() });
+                if (result.ID != 0)
+                {
+                    return Json(new { code = 0, msg = "Successfully", data = resultname, namelogin = loginName, userID = UserID, businessDate = businessDate[0].BusinessDate.ToString("dd/MM/yyyy") });
                 }
                 else
                 {

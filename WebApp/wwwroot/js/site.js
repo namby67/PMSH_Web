@@ -5,7 +5,7 @@
 
 // Hàm gọi để lấy business-date
 
-function getBusinessDate(callback) {
+function getAllBusinessDate(callback) {
   return $.ajax({
     url: "/Reservation/GetBusinessDate",
     type: "get",
@@ -51,5 +51,5 @@ function applyValidationErrors(errors, formSelector) {
   });
 }
 $(document).ready(function () {
-  getBusinessDate();
+    getAllBusinessDate();
 });
