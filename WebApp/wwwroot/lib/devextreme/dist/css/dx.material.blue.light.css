@@ -8710,7 +8710,8 @@
 }
 
 .dx-editor-underlined.dx-texteditor-with-floating-label .dx-texteditor-input,
-.dx-editor-underlined.dx-texteditor-with-floating-label.dx-lookup .dx-lookup-field,
+.dx-editor-underlined.dx-texteditor-with-floating-label.dx-lookup
+  .dx-lookup-field,
 .dx-editor-underlined.dx-texteditor-with-label .dx-texteditor-input,
 .dx-editor-underlined.dx-texteditor-with-label.dx-lookup .dx-lookup-field {
     padding-top: 16px;
@@ -9226,27 +9227,96 @@
 }
 
 .dx-dropdowneditor-input-wrapper .dx-texteditor,
-.dx-dropdowneditor-input-wrapper .dx-texteditor.dx-state-active .dx-dropdowneditor-input-wrapper .dx-texteditor.dx-state-disabled,
-.dx-dropdowneditor-input-wrapper .dx-texteditor.dx-state-active .dx-dropdowneditor-input-wrapper .dx-texteditor.dx-state-disabled.dx-texteditor-with-floating-label .dx-texteditor-label .dx-label,
-.dx-dropdowneditor-input-wrapper .dx-texteditor.dx-state-active .dx-dropdowneditor-input-wrapper .dx-texteditor.dx-state-disabled.dx-texteditor-with-floating-label .dx-texteditor-label .dx-label-after,
-.dx-dropdowneditor-input-wrapper .dx-texteditor.dx-state-active .dx-dropdowneditor-input-wrapper .dx-texteditor.dx-state-disabled.dx-texteditor-with-floating-label .dx-texteditor-label .dx-label-before,
-.dx-dropdowneditor-input-wrapper .dx-texteditor.dx-state-active .dx-dropdowneditor-input-wrapper .dx-texteditor.dx-state-disabled.dx-texteditor-with-label .dx-texteditor-label .dx-label,
-.dx-dropdowneditor-input-wrapper .dx-texteditor.dx-state-active .dx-dropdowneditor-input-wrapper .dx-texteditor.dx-state-disabled.dx-texteditor-with-label .dx-texteditor-label .dx-label-after,
-.dx-dropdowneditor-input-wrapper .dx-texteditor.dx-state-active .dx-dropdowneditor-input-wrapper .dx-texteditor.dx-state-disabled.dx-texteditor-with-label .dx-texteditor-label .dx-label-before,
+.dx-dropdowneditor-input-wrapper
+  .dx-texteditor.dx-state-active
+  .dx-dropdowneditor-input-wrapper
+  .dx-texteditor.dx-state-disabled,
+.dx-dropdowneditor-input-wrapper
+  .dx-texteditor.dx-state-active
+  .dx-dropdowneditor-input-wrapper
+  .dx-texteditor.dx-state-disabled.dx-texteditor-with-floating-label
+  .dx-texteditor-label
+  .dx-label,
+.dx-dropdowneditor-input-wrapper
+  .dx-texteditor.dx-state-active
+  .dx-dropdowneditor-input-wrapper
+  .dx-texteditor.dx-state-disabled.dx-texteditor-with-floating-label
+  .dx-texteditor-label
+  .dx-label-after,
+.dx-dropdowneditor-input-wrapper
+  .dx-texteditor.dx-state-active
+  .dx-dropdowneditor-input-wrapper
+  .dx-texteditor.dx-state-disabled.dx-texteditor-with-floating-label
+  .dx-texteditor-label
+  .dx-label-before,
+.dx-dropdowneditor-input-wrapper
+  .dx-texteditor.dx-state-active
+  .dx-dropdowneditor-input-wrapper
+  .dx-texteditor.dx-state-disabled.dx-texteditor-with-label
+  .dx-texteditor-label
+  .dx-label,
+.dx-dropdowneditor-input-wrapper
+  .dx-texteditor.dx-state-active
+  .dx-dropdowneditor-input-wrapper
+  .dx-texteditor.dx-state-disabled.dx-texteditor-with-label
+  .dx-texteditor-label
+  .dx-label-after,
+.dx-dropdowneditor-input-wrapper
+  .dx-texteditor.dx-state-active
+  .dx-dropdowneditor-input-wrapper
+  .dx-texteditor.dx-state-disabled.dx-texteditor-with-label
+  .dx-texteditor-label
+  .dx-label-before,
 .dx-dropdowneditor-input-wrapper .dx-texteditor.dx-state-focused,
-.dx-dropdowneditor-input-wrapper .dx-texteditor.dx-state-focused.dx-texteditor-with-floating-label .dx-texteditor-label .dx-label,
-.dx-dropdowneditor-input-wrapper .dx-texteditor.dx-state-focused.dx-texteditor-with-floating-label .dx-texteditor-label .dx-label-after,
-.dx-dropdowneditor-input-wrapper .dx-texteditor.dx-state-focused.dx-texteditor-with-floating-label .dx-texteditor-label .dx-label-before,
-.dx-dropdowneditor-input-wrapper .dx-texteditor.dx-state-focused.dx-texteditor-with-label .dx-texteditor-label .dx-label,
-.dx-dropdowneditor-input-wrapper .dx-texteditor.dx-state-focused.dx-texteditor-with-label .dx-texteditor-label .dx-label-after,
-.dx-dropdowneditor-input-wrapper .dx-texteditor.dx-state-focused.dx-texteditor-with-label .dx-texteditor-label .dx-label-before,
+.dx-dropdowneditor-input-wrapper
+  .dx-texteditor.dx-state-focused.dx-texteditor-with-floating-label
+  .dx-texteditor-label
+  .dx-label,
+.dx-dropdowneditor-input-wrapper
+  .dx-texteditor.dx-state-focused.dx-texteditor-with-floating-label
+  .dx-texteditor-label
+  .dx-label-after,
+.dx-dropdowneditor-input-wrapper
+  .dx-texteditor.dx-state-focused.dx-texteditor-with-floating-label
+  .dx-texteditor-label
+  .dx-label-before,
+.dx-dropdowneditor-input-wrapper
+  .dx-texteditor.dx-state-focused.dx-texteditor-with-label
+  .dx-texteditor-label
+  .dx-label,
+.dx-dropdowneditor-input-wrapper
+  .dx-texteditor.dx-state-focused.dx-texteditor-with-label
+  .dx-texteditor-label
+  .dx-label-after,
+.dx-dropdowneditor-input-wrapper
+  .dx-texteditor.dx-state-focused.dx-texteditor-with-label
+  .dx-texteditor-label
+  .dx-label-before,
 .dx-dropdowneditor-input-wrapper .dx-texteditor.dx-state-hover,
-.dx-dropdowneditor-input-wrapper .dx-texteditor.dx-state-hover.dx-texteditor-with-floating-label .dx-texteditor-label .dx-label,
-.dx-dropdowneditor-input-wrapper .dx-texteditor.dx-state-hover.dx-texteditor-with-floating-label .dx-texteditor-label .dx-label-after,
-.dx-dropdowneditor-input-wrapper .dx-texteditor.dx-state-hover.dx-texteditor-with-floating-label .dx-texteditor-label .dx-label-before,
-.dx-dropdowneditor-input-wrapper .dx-texteditor.dx-state-hover.dx-texteditor-with-label .dx-texteditor-label .dx-label,
-.dx-dropdowneditor-input-wrapper .dx-texteditor.dx-state-hover.dx-texteditor-with-label .dx-texteditor-label .dx-label-after,
-.dx-dropdowneditor-input-wrapper .dx-texteditor.dx-state-hover.dx-texteditor-with-label .dx-texteditor-label .dx-label-before,
+.dx-dropdowneditor-input-wrapper
+  .dx-texteditor.dx-state-hover.dx-texteditor-with-floating-label
+  .dx-texteditor-label
+  .dx-label,
+.dx-dropdowneditor-input-wrapper
+  .dx-texteditor.dx-state-hover.dx-texteditor-with-floating-label
+  .dx-texteditor-label
+  .dx-label-after,
+.dx-dropdowneditor-input-wrapper
+  .dx-texteditor.dx-state-hover.dx-texteditor-with-floating-label
+  .dx-texteditor-label
+  .dx-label-before,
+.dx-dropdowneditor-input-wrapper
+  .dx-texteditor.dx-state-hover.dx-texteditor-with-label
+  .dx-texteditor-label
+  .dx-label,
+.dx-dropdowneditor-input-wrapper
+  .dx-texteditor.dx-state-hover.dx-texteditor-with-label
+  .dx-texteditor-label
+  .dx-label-after,
+.dx-dropdowneditor-input-wrapper
+  .dx-texteditor.dx-state-hover.dx-texteditor-with-label
+  .dx-texteditor-label
+  .dx-label-before,
 .dx-dropdowneditor-input-wrapper .dx-texteditor.dx-state-readonly,
 .dx-dropdowneditor-input-wrapper .dx-texteditor.dx-state-readonly.dx-state-hover,
 .dx-dropdowneditor-input-wrapper .dx-texteditor.dx-state-readonly.dx-state-hover.dx-texteditor-with-floating-label .dx-texteditor-label .dx-label,
@@ -12595,7 +12665,6 @@
 .dx-toolbar-menu-section:empty {
     display: none;
 }
-
 .dx-dropdownmenu-popup-wrapper .dx-toolbar-menu-custom > .dx-list-item-content,
 .dx-toolbar-menu-section .dx-toolbar-hidden-button .dx-list-item-content,
 .dx-toolbar-menu-section .dx-toolbar-hidden-button .dx-toolbar-item-auto-hide,
@@ -14026,10 +14095,15 @@
     }
 
 .dx-rtl .dx-dropdownbutton .dx-button-has-icon .dx-button-content,
-.dx-rtl .dx-dropdownbutton .dx-button-has-icon.dx-button-has-text .dx-button-content,
+.dx-rtl
+  .dx-dropdownbutton
+  .dx-button-has-icon.dx-button-has-text
+  .dx-button-content,
 .dx-rtl .dx-dropdownbutton .dx-button-has-text .dx-button-content,
 .dx-rtl.dx-dropdownbutton .dx-button-has-icon .dx-button-content,
-.dx-rtl.dx-dropdownbutton .dx-button-has-icon.dx-button-has-text .dx-button-content,
+.dx-rtl.dx-dropdownbutton
+  .dx-button-has-icon.dx-button-has-text
+  .dx-button-content,
 .dx-rtl.dx-dropdownbutton .dx-button-has-text .dx-button-content {
     padding-left: 8px;
 }
@@ -15105,10 +15179,19 @@
 }
 
 .dx-device-android .dx-gallery-item,
-.dx-device-android .dx-scrollable-native .dx-gallery-active .dx-gallery-indicator,
+.dx-device-android
+  .dx-scrollable-native
+  .dx-gallery-active
+  .dx-gallery-indicator,
 .dx-device-android .dx-scrollable-native .dx-gallery-active .dx-gallery-item,
-.dx-device-android .dx-scrollable-native .dx-gallery-active .dx-gallery-nav-button-next,
-.dx-device-android .dx-scrollable-native .dx-gallery-active .dx-gallery-nav-button-prev,
+.dx-device-android
+  .dx-scrollable-native
+  .dx-gallery-active
+  .dx-gallery-nav-button-next,
+.dx-device-android
+  .dx-scrollable-native
+  .dx-gallery-active
+  .dx-gallery-nav-button-prev,
 .dx-device-ios-6 .dx-gallery,
 .dx-device-ios-6 .dx-gallery-indicator,
 .dx-device-ios-6 .dx-gallery-item,
@@ -25003,7 +25086,9 @@ input.dx-hidden {
 }
 
 .dx-scheduler-timeline .dx-scheduler-date-table,
-.dx-scheduler-timeline .dx-scheduler-date-table-scrollable .dx-scrollable-content,
+.dx-scheduler-timeline
+  .dx-scheduler-date-table-scrollable
+  .dx-scrollable-content,
 .dx-scheduler-timeline .dx-scheduler-group-table,
 .dx-scheduler-timeline .dx-scheduler-sidebar-scrollable .dx-scrollable-content {
     height: 100%;
@@ -26158,7 +26243,8 @@ input.dx-hidden {
 .dx-scheduler-work-space-day .dx-scheduler-date-time-shader-top::before,
 .dx-scheduler-work-space-week .dx-scheduler-date-time-shader-bottom::before,
 .dx-scheduler-work-space-week .dx-scheduler-date-time-shader-top::before,
-.dx-scheduler-work-space-work-week .dx-scheduler-date-time-shader-bottom::before,
+.dx-scheduler-work-space-work-week
+  .dx-scheduler-date-time-shader-bottom::before,
 .dx-scheduler-work-space-work-week .dx-scheduler-date-time-shader-top::before {
     width: inherit;
     height: inherit;
@@ -26212,7 +26298,8 @@ input.dx-hidden {
 
 .dx-scheduler-work-space-day.dx-rtl .dx-scheduler-date-time-shader-bottom::before,
 .dx-scheduler-work-space-day.dx-rtl .dx-scheduler-date-time-shader-top::before,
-.dx-scheduler-work-space-week.dx-rtl .dx-scheduler-date-time-shader-bottom::before,
+.dx-scheduler-work-space-week.dx-rtl
+  .dx-scheduler-date-time-shader-bottom::before,
 .dx-scheduler-work-space-week.dx-rtl .dx-scheduler-date-time-shader-top::before,
 .dx-scheduler-work-space-work-week.dx-rtl .dx-scheduler-date-time-shader-bottom::before,
 .dx-scheduler-work-space-work-week.dx-rtl .dx-scheduler-date-time-shader-top::before {
@@ -27514,7 +27601,6 @@ input.dx-hidden {
     padding-left: 0;
     padding-right: 0;
 }
-
 .dx-field-item-optional .dx-label > span::after,
 .dx-field-item-optional-mark,
 .dx-field-item-required .dx-label > span::after,

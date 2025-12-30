@@ -2,7 +2,6 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
-
 // Hàm gọi để lấy business-date
 
 function getAllBusinessDate(callback) {

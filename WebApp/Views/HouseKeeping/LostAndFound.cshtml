@@ -17,37 +17,41 @@
 <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
 <div class="text-center" id="reportTitle" style="font-size: 20px">Lost And Found</div>
 <div class="mt-3">
-            <div class="content-right">            
-                <div class="d-flex flex-column mb-2 ">
-                    <div class="d-flex align-items-center" style="border: 1px solid #ced4da; border-radius: 6px; padding: 8px;">
-                        <div class="d-flex align-items-center me-2">
-                            <label class="me-2 mb-0">From Date: </label>
-                            <input type="date" id="fromDate" name="fromDate" class="form-control form-control-sm w-auto" />
-                        </div>
+    <div class="content-right">
+        <div class="d-flex flex-column mb-2 ">
+            <div class="d-flex align-items-center" style="border: 1px solid #ced4da; border-radius: 6px; padding: 8px;">
+                <div class="d-flex align-items-center me-2">
+                    <label class="me-2 mb-0">From Date: </label>
+                    <input type="date" id="fromDate" name="fromDate" class="form-control form-control-sm w-auto" />
+                </div>
 
-                        <div class="d-flex align-items-center me-2">
-                            <label class="me-2 mb-0">To Date: </label>
-                            <input type="date" id="toDate" name="toDate" class="form-control form-control-sm w-auto" />
-                        </div>
-                    </div>
-                </div>
-                <div style="display:flex;column-gap:12px">
-                    <button  id="btnView" class="mui-button mui-button-new"><i class="fa-solid fa-eye"></i>View</button>
-                    <button id="btnNew" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> New</button>
-            <button  id="btnEditLostFound" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Edit</button>
-                    <button  id="btnDelete" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Delete</button>
-            <button  id="btnExportExcel" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Excel</button>
-
-                </div>
-                <div id="loadingSpinnerRateCode" style="display: none; text-align: center; padding: 20px;">
-                    <div class="spinner-border text-primary" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
-                </div>
-                <div class="mui-card">
-                    <div id="gridContainerRateCode" class="mt-2 gridContainer"></div>
+                <div class="d-flex align-items-center me-2">
+                    <label class="me-2 mb-0">To Date: </label>
+                    <input type="date" id="toDate" name="toDate" class="form-control form-control-sm w-auto" />
                 </div>
             </div>
+        </div>
+        <div style="display:flex;column-gap:12px">
+            <button id="btnView" class="mui-button mui-button-new"><i class="fa-solid fa-eye"></i>View</button>
+            <button id="btnNew" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i>
+                New</button>
+            <button id="btnEditLostFound" class="mui-button mui-button-new" type="button"> <i
+                    class="fa-solid fa-file-excel"></i> Edit</button>
+            <button id="btnDelete" class="mui-button mui-button-new" type="button"> <i
+                    class="fa-solid fa-file-excel"></i> Delete</button>
+            <button id="btnExportExcel" class="mui-button mui-button-new" type="button"> <i
+                    class="fa-solid fa-file-excel"></i> Excel</button>
+
+        </div>
+        <div id="loadingSpinnerRateCode" style="display: none; text-align: center; padding: 20px;">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+        <div class="mui-card">
+            <div id="gridContainerRateCode" class="mt-2 gridContainer"></div>
+        </div>
+    </div>
 
 </div>
 <div class="modal fade" id="lostFoundModal" tabindex="-1" aria-labelledby="lostFoundLabel" aria-hidden="true">
@@ -152,67 +156,67 @@
 
 
 <script>
-     const statusMap = {
+    const statusMap = {
         "Done": 1,
         "Pending": 2,
         "Transferred": 3
-        };
+    };
 
-        // Map QualityType code -> ID
-        const qualityTypeMap = {
-            "NV": 1, // None Value
-            "V": 2  // Value
-        };
+    // Map QualityType code -> ID
+    const qualityTypeMap = {
+        "NV": 1, // None Value
+        "V": 2  // Value
+    };
 
-        // Map Zone code -> ID (build từ ViewBag)
-        const zoneMap = {
+    // Map Zone code -> ID (build từ ViewBag)
+    const zoneMap = {
             @foreach (var z in ViewBag.lafZoneList)
-            {
-                            @: "@z.Code": "@z.ID",
+        {
+            @: "@z.Code": "@z.ID",
             }
         };
     DevExpress.localization.locale("vi");
     let selectedRowData = null;
 
-      function formatDate(date) {
-            let year = date.getFullYear();
-            let month = (date.getMonth() + 1).toString().padStart(2, '0'); // Đảm bảo có 2 chữ số
-            let day = date.getDate().toString().padStart(2, '0'); // Đảm bảo có 2 chữ số
-            return `${year}-${month}-${day}`;
-        }
+    function formatDate(date) {
+        let year = date.getFullYear();
+        let month = (date.getMonth() + 1).toString().padStart(2, '0'); // Đảm bảo có 2 chữ số
+        let day = date.getDate().toString().padStart(2, '0'); // Đảm bảo có 2 chữ số
+        return `${year}-${month}-${day}`;
+    }
 
-      $(document).ready(function () {
-                const today = new Date();
-                const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-                // Lấy ngày cuối cùng của tháng
-                const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-              // Định dạng theo local time
-                const formattedFirstDay = formatDate(firstDayOfMonth);
-                const formattedLastDay = formatDate(lastDayOfMonth);
-                console.log(formattedFirstDay); // Kiểm tra giá trị đúng chưa
-                console.log(formattedLastDay); // Kiểm tra giá trị đúng chưa
-                // Gán giá trị cho input date
-                document.getElementById('fromDate').value = formattedFirstDay;
-                document.getElementById('toDate').value = formattedLastDay;
-                   $("#sendDate").prop("disabled", true);
+    $(document).ready(function () {
+        const today = new Date();
+        const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+        // Lấy ngày cuối cùng của tháng
+        const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+        // Định dạng theo local time
+        const formattedFirstDay = formatDate(firstDayOfMonth);
+        const formattedLastDay = formatDate(lastDayOfMonth);
+        console.log(formattedFirstDay); // Kiểm tra giá trị đúng chưa
+        console.log(formattedLastDay); // Kiểm tra giá trị đúng chưa
+        // Gán giá trị cho input date
+        document.getElementById('fromDate').value = formattedFirstDay;
+        document.getElementById('toDate').value = formattedLastDay;
+        $("#sendDate").prop("disabled", true);
 
-                    $("#chkSendDate").change(function () {
-                        if ($(this).is(":checked")) {
-                            // enable cho phép chọn ngày
-                            $("#sendDate").prop("disabled", false);
+        $("#chkSendDate").change(function () {
+            if ($(this).is(":checked")) {
+                // enable cho phép chọn ngày
+                $("#sendDate").prop("disabled", false);
 
-                            // gán mặc định ngày hôm nay
-                            let today = new Date().toISOString().split('T')[0];
-                            $("#sendDate").val(today);
-                        } else {
-                            // disable và xoá giá trị
-                            $("#sendDate").prop("disabled", true);
-                        }
-                    });
-                reloadGrid();
+                // gán mặc định ngày hôm nay
+                let today = new Date().toISOString().split('T')[0];
+                $("#sendDate").val(today);
+            } else {
+                // disable và xoá giá trị
+                $("#sendDate").prop("disabled", true);
+            }
         });
-      
-              function loadGrid(data) {
+        reloadGrid();
+    });
+
+    function loadGrid(data) {
         $("#gridContainerRateCode").dxDataGrid({
             dataSource: data,
             height: 500,
@@ -226,7 +230,7 @@
                 { dataField: "transactionDate", caption: "Date", dataType: "date", format: "dd/MM/yyyy", width: "11%" },
                 { dataField: "description", caption: "Description of Lost & Found Item", width: "23%" },
                 { dataField: "code", caption: "Zone", width: "11%" },
-                { dataField: "location", caption: "Location", width:"11%" },
+                { dataField: "location", caption: "Location", width: "11%" },
                 { dataField: "finder", caption: "Finder", width: "11%" },
                 { dataField: "surrenderBy", caption: "Surrender By", width: "11%" },
                 { dataField: "signatureName", caption: "Reciever", width: "11%" },
@@ -238,69 +242,69 @@
                 { dataField: "updatedBy", caption: "Updated By", width: "11%" },
                 { dataField: "updateDate", caption: "Updated Date", dataType: "date", format: "dd/MM/yyyy", width: "11%" },
             ],
-            filterRow: { visible:true, applyFilter:"auto" },
-            paging: { pageSize:20 },
+            filterRow: { visible: true, applyFilter: "auto" },
+            paging: { pageSize: 20 },
             pager: {
-                visible:true,
-                allowedPageSizes:[20,50,'all'],
-                showPageSizeSelector:true,
-                showInfo:true,
-                showNavigationButtons:true
+                visible: true,
+                allowedPageSizes: [20, 50, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true
             },
-            scrolling: { mode:"standard", showScrollbar:"always", scrollByContent:true },
-            onSelectionChanged: function(e){
+            scrolling: { mode: "standard", showScrollbar: "always", scrollByContent: true },
+            onSelectionChanged: function (e) {
                 selectedRowData = e.selectedRowsData.length > 0 ? e.selectedRowsData[0] : null;
                 console.log("Selected Row:", selectedRowData);
             }
         });
     }
 
-        // Reload grid với filter từ form
-        function reloadGrid() {
-            $("#loadingSpinnerRateCode").show();
+    // Reload grid với filter từ form
+    function reloadGrid() {
+        $("#loadingSpinnerRateCode").show();
 
-            $.ajax({
-                url: '/HouseKeeping/GetLostAndFound',
-                type: 'GET',
-                data: {
-                    fromDate: $("#fromDate").val(),
-                    toDate: $("#toDate").val(),
+        $.ajax({
+            url: '/HouseKeeping/GetLostAndFound',
+            type: 'GET',
+            data: {
+                fromDate: $("#fromDate").val(),
+                toDate: $("#toDate").val(),
 
-                },
-                success: function(data){
-                    console.log(data);
-                    loadGrid(data);
-                    $("#loadingSpinnerRateCode").hide();
-                },
-                error: function(xhr, status, error){
-                    alert("Không thể tải dữ liệu");
-                    $("#loadingSpinnerRateCode").hide();
-                }
-            });
-        }
-
-        // Nút view click
-        $("#btnView").click(function(){
-            reloadGrid();
+            },
+            success: function (data) {
+                console.log(data);
+                loadGrid(data);
+                $("#loadingSpinnerRateCode").hide();
+            },
+            error: function (xhr, status, error) {
+                alert("Không thể tải dữ liệu");
+                $("#loadingSpinnerRateCode").hide();
+            }
         });
-            $("#btnNew").click(function () {
-            // reset form
-            $("#lostFoundForm")[0].reset();
+    }
 
-            // set default Transaction Date = hôm nay
-            const today = new Date().toISOString().split('T')[0];
-            $("#transactionDate").val(today);
-            $("#sendDate").val("1900-01-01");
+    // Nút view click
+    $("#btnView").click(function () {
+        reloadGrid();
+    });
+    $("#btnNew").click(function () {
+        // reset form
+        $("#lostFoundForm")[0].reset();
 
-            // ✅ Reset nút: chỉ hiển thị Save, ẩn Update
-            $("#btnSaveLostFound").show();
-            $("#btnUpdateLostFound").hide();
+        // set default Transaction Date = hôm nay
+        const today = new Date().toISOString().split('T')[0];
+        $("#transactionDate").val(today);
+        $("#sendDate").val("1900-01-01");
 
-            // mở modal
-            $("#lostFoundModal").modal("show");
-        });
+        // ✅ Reset nút: chỉ hiển thị Save, ẩn Update
+        $("#btnSaveLostFound").show();
+        $("#btnUpdateLostFound").hide();
 
-        function parseDateString(dateStr) {
+        // mở modal
+        $("#lostFoundModal").modal("show");
+    });
+
+    function parseDateString(dateStr) {
         if (!dateStr) return null;
 
         // Nếu là default SQL
@@ -317,18 +321,18 @@
             }
         }
 
-            // Nếu ISO yyyy-MM-ddTHH:mm:ss
-            if (dateStr.includes("T")) {
-                return dateStr.split("T")[0];
-            }
-
-            return dateStr;
+        // Nếu ISO yyyy-MM-ddTHH:mm:ss
+        if (dateStr.includes("T")) {
+            return dateStr.split("T")[0];
         }
 
+        return dateStr;
+    }
 
 
 
-        $("#btnEditLostFound").click(function () {
+
+    $("#btnEditLostFound").click(function () {
         var grid = $("#gridContainerRateCode").dxDataGrid("instance");
         var selected = grid.getSelectedRowsData();
 
@@ -338,7 +342,7 @@
         }
 
         var row = selected[0];
-       
+
 
         // Map dữ liệu lên form
         $("#transactionDate").val(row.transactionDate ? row.transactionDate.split('T')[0] : "");
@@ -346,24 +350,24 @@
         $("#description").val(row.description);
         $("#location").val(row.location);
         $("#finder").val(row.finder);
-        $("#signatureName").val(row.signatureName);    
+        $("#signatureName").val(row.signatureName);
         $("#surrenderBy").val(row.surrenderBy);
         $("#qualityTypeID").val(qualityTypeMap[row.codeQualityType]).trigger("change"); // code -> id
         $("#zoneID").val(zoneMap[row.code]).trigger("change");       // code -> id
         $("#notes").val(row.notes);
 
         // sendDate + checkbox
-             var sendDateFormatted = parseDateString(row.sendDate);
+        var sendDateFormatted = parseDateString(row.sendDate);
 
-    if (sendDateFormatted) {
-        $("#chkSendDate").prop("checked", true);
-        $("#sendDate").prop("disabled", false).val(sendDateFormatted);
-    } else {
-        $("#chkSendDate").prop("checked", false);
-        $("#sendDate").prop("disabled", true).val("");
-    }
+        if (sendDateFormatted) {
+            $("#chkSendDate").prop("checked", true);
+            $("#sendDate").prop("disabled", false).val(sendDateFormatted);
+        } else {
+            $("#chkSendDate").prop("checked", false);
+            $("#sendDate").prop("disabled", true).val("");
+        }
         console.log("Raw sendDate:", row.sendDate);
-    console.log("Parsed sendDate:", parseDateString(row.sendDate));
+        console.log("Parsed sendDate:", parseDateString(row.sendDate));
 
 
         // Mở modal
@@ -379,7 +383,7 @@
     });
 
 
-   
+
     $("#btnSaveLostFound").click(function () {
         const formData = $("#lostFoundForm").serialize();
 
@@ -389,12 +393,12 @@
             data: formData,
             success: function (res) {
                 if (res.success) {
-                   showToast("Seccess", "Insert success", true);
+                    showToast("Seccess", "Insert success", true);
                     $("#lostFoundModal").modal("hide");
                     reloadGrid(); // reload lại grid
                 } else {
-                   
-                   showToast("Failed", "Insert Failed!", false);
+
+                    showToast("Failed", "Insert Failed!", false);
                 }
             },
             error: function (xhr, status, error) {
@@ -403,7 +407,7 @@
         });
     });
 
-       $(document).on("click", "#btnUpdateLostFound", function () {
+    $(document).on("click", "#btnUpdateLostFound", function () {
         let formData = $("#lostFoundForm").serialize();
 
         // Thêm ID vào formData (nếu API cần ID để update)
@@ -424,14 +428,14 @@
                     showToast("Error", res.message || "Update failed!", false);
                 }
             },
-                error: function (xhr) {
+            error: function (xhr) {
                 console.error("Update error detail:", xhr.responseText);
                 showToast("Error", "Update error! " + xhr.responseText, false);
             }
         });
     });
 
-            $("#btnDelete").click(function () {
+    $("#btnDelete").click(function () {
         if (!selectedRowData) {
             DevExpress.ui.notify("Please select a row first!", "warning", 2000);
             return;
@@ -454,11 +458,11 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 // AJAX xóa chỉ chạy khi người dùng confirm
-                    $.ajax({
+                $.ajax({
                     url: "/HouseKeeping/DeleteLostAndFound",
                     type: "POST",
                     data: { id: id }, // 👈 gửi đúng key "id"
-                    success: function(res) {
+                    success: function (res) {
                         if (res.code === 0) {
                             showToast("Success", res.msg, true);
                             reloadGrid();
@@ -467,7 +471,7 @@
                             showToast("Error", res.msg, false);
                         }
                     },
-                    error: function(xhr, status, error) {
+                    error: function (xhr, status, error) {
                         console.error("Delete error:", xhr.responseText);
                         showToast("Error", "Delete error!", false);
                     }
@@ -529,8 +533,4 @@
             });
         });
     });
-
-
-
-
 </script>

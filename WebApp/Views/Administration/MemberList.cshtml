@@ -305,7 +305,7 @@
             return;
         }
 
-                Swal.fire({
+        Swal.fire({
             title: 'Are you sure?',
             text: "This action cannot be undone.",
             icon: 'warning',
@@ -325,7 +325,7 @@
 
     });
 
-            function deleteSelectedItem() {
+    function deleteSelectedItem() {
         $.ajax({
             url: "/Administration/DeleteMember",
             type: "POST",
@@ -399,4 +399,4 @@
         });
     });
 
-    </script>
+</script>

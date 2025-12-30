@@ -35,14 +35,15 @@
     <!-- DevExtreme DataGrid -->
     <div id="gridContainer" class="gridContainer mt-2"></div>
 </div>
- 
+
 <!-- Modal cancel-->
-<div class="modal fade modal" id="modalNewOverBooking" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade modal" id="modalNewOverBooking" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
 
             <div class="modal-header">
-                <h5 class="modal-title" >Overbooking Setup</h5>
+                <h5 class="modal-title">Overbooking Setup</h5>
                 <button type="button" class="btn-close" onclick="closeModalNew()"></button>
             </div>
             <div class="modal-body">
@@ -78,19 +79,19 @@
                         </div>
                         <div class="form-check col-md-1">
                             <input type="checkbox" name="dayName" checked id="tue">
-                            <label  style="padding-top:4px">Tue</label>
+                            <label style="padding-top:4px">Tue</label>
                         </div>
                         <div class="form-check col-md-1">
                             <input type="checkbox" name="dayName" checked id="wed">
-                            <label  style="padding-top:4px">Wed</label>
+                            <label style="padding-top:4px">Wed</label>
                         </div>
                         <div class="form-check col-md-1">
                             <input type="checkbox" name="dayName" checked id="thu">
-                            <label  style="padding-top:4px">Thu</label>
+                            <label style="padding-top:4px">Thu</label>
                         </div>
                         <div class="form-check col-md-1">
                             <input type="checkbox" name="dayName" checked id="fri">
-                            <label  style="padding-top:4px">Fri</label>
+                            <label style="padding-top:4px">Fri</label>
                         </div>
                         <div class="form-check col-md-1">
                             <input type="checkbox" name="dayName" checked id="sat">
@@ -126,7 +127,7 @@
                             <input type="radio" name="type" checked>
                             <label style="padding-top:4px">Number</label>
                         </div>
-                        
+
                     </div>
                     <div class="row col-md-3 mt-2">
                         <div class="form-check col-md-1">
@@ -150,7 +151,8 @@
 
 
 <!-- Modal activity log-->
-<div class="modal fade modal" id="modalActivityLog" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade modal" id="modalActivityLog" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
 
@@ -174,11 +176,11 @@
         getNumberOfRoom($('#roomType').val());
 
     });
-    function openModalNew(){
+    function openModalNew() {
         $('#modalNewOverBooking').modal('show');
     }
-    function closeModalNew(){
-                                    clearForm();
+    function closeModalNew() {
+        clearForm();
         $('#modalNewOverBooking').modal('hide');
     }
 
@@ -211,13 +213,13 @@
             url: '/Reservation/SearchOverBooking',
             type: 'get',
             dataType: 'json',
-            data:{
+            data: {
                 date: $('#fromDate').val()
             },
             crossDomain: false,
             headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
             success: function (result) {
-     
+
                 listData = result;
                 initializeDataGridSearch(result);
             },
@@ -266,7 +268,7 @@
             selection: {
                 mode: "single"
             },
-            onRowClick: function(e) {
+            onRowClick: function (e) {
                 waitListID = e.data.WaitListID;
                 $('#companyWaitList').val(e.data.Company);
                 $('#sourceWaitList').val(e.data.Source);
@@ -280,10 +282,10 @@
         });
     }
 
-    $('#roomType').on('change', function() {
+    $('#roomType').on('change', function () {
         // Get the selected value
         var selectedValue = $(this).val();
-        if(selectedValue != 0){
+        if (selectedValue != 0) {
             getNumberOfRoom(selectedValue);
         }
         // Your logic here
@@ -294,7 +296,7 @@
             type: 'get',
             dataType: 'json',
             crossDomain: false,
-            data:{roomTypeID : id},
+            data: { roomTypeID: id },
             headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
             success: function (result) {
                 $('#quantityRoom').text(result);
@@ -361,11 +363,11 @@
             }
         });
     }
-    function clearForm(){
+    function clearForm() {
         $('#roomType').val(0);
         $('#obLevel').val('');
-       $('#noToSell').val('');
-       getBusinessDate();
+        $('#noToSell').val('');
+        getBusinessDate();
         getNumberOfRoom($('#roomType').val());
 
     }
@@ -431,9 +433,9 @@
 
         });
     }
-    function closeActivityLog(){
+    function closeActivityLog() {
 
-                $('#modalActivityLog').modal('hide');
+        $('#modalActivityLog').modal('hide');
 
     }
 </script>

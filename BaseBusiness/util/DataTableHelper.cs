@@ -78,7 +78,6 @@ namespace BaseBusiness.util
             }
         }
 
-
         static public DataTable getTableData(string procedureName, SqlParameter[] mySqlParameter)
         {
             DataTable table = new DataTable();

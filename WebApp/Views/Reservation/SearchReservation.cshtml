@@ -1122,7 +1122,28 @@
             if (loadingIndicator) hideLoading(loadingIndicator);
         });
     }
+     function GetBalanceVND(idReservation) {
+        $.ajax({
+            url: '/Billing/GetBalanceVND',
+            type: 'get',
+            dataType: 'json',
+            data: {
+                rsvID: idReservation
 
+            },
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                    $('#balanceBilling').text(formatNumberBilling(result[0].balanceVND));
+                    $('#totalBilling').text(formatNumberBilling(result[0].balanceVND));
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                }
+            }
+        });
+    }
     // Hàm tiện ích (tùy chọn - bạn có thể bỏ qua hoặc dùng thư viện như SweetAlert, Toastr...)
     function showLoading() {
         const overlay = document.createElement('div');

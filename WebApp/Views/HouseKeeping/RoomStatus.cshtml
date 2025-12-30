@@ -11,7 +11,7 @@
 @* <link asp-append-version="true" href="~/css/reservation.css" rel="stylesheet" /> *@
 
 <style>
-   /*  #gridContainer .dx-datagrid-rowsview .dx-selection {
+    /*  #gridContainer .dx-datagrid-rowsview .dx-selection {
         background-color: #005f87 !important; 
         color: white !important; 
     }
@@ -198,23 +198,27 @@
         margin: 0px 8px;
     }
 
-        .button_wrapper .fa-solid {
-            margin-right: 5px;
-        }
+    .button_wrapper .fa-solid {
+        margin-right: 5px;
+    }
 
     .selected {
-        background-color: #4CAF50; /* Màu xanh */
+        background-color: #4CAF50;
+        /* Màu xanh */
         color: white;
     }
 
     #gridContainer .dx-datagrid-rowsview .dx-selection {
-        background-color: #01579b !important; /* màu xanh ng?c */
-        color: white !important; /* ch? tr?ng */
+        background-color: #01579b !important;
+        /* màu xanh ng?c */
+        color: white !important;
+        /* ch? tr?ng */
     }
 
-        #gridContainer .dx-datagrid-rowsview .dx-selection * {
-            color: white !important;
-        }
+    #gridContainer .dx-datagrid-rowsview .dx-selection * {
+        color: white !important;
+    }
+
     .sticky-header .form-control-sm {
         padding: .1rem .35rem;
         height: calc(1.1em + .2rem + 2px);
@@ -224,7 +228,7 @@
         margin-right: .5rem !important;
     }
 
-    #gridContainer .dx-datagrid-headers .dx-header-row > td {
+    #gridContainer .dx-datagrid-headers .dx-header-row>td {
         padding: 5px !important;
         height: 24px !important;
         font-size: 12px !important;
@@ -232,8 +236,10 @@
     }
 
     .sticky-header input[type="date"].form-control-sm {
-        font-size: 12px !important; /* dúng 12?px */
-        height: calc(1.1em + .2rem + 2px); /* gi? cùng chi?u cao */
+        font-size: 12px !important;
+        /* dúng 12?px */
+        height: calc(1.1em + .2rem + 2px);
+        /* gi? cùng chi?u cao */
     }
 
     .sticky-header label {
@@ -243,12 +249,14 @@
 
     .tomselect-custom {
         width: 250px;
-        min-height: 30px; /* ho?c tùy theo chi?u cao b?n mu?n */
+        min-height: 30px;
+        /* ho?c tùy theo chi?u cao b?n mu?n */
         font-size: 0.65rem;
     }
 
     .sort-select {
-        max-width: 130px; /* ho?c 100px n?u mu?n nh? hon */
+        max-width: 130px;
+        /* ho?c 100px n?u mu?n nh? hon */
         font-size: 12px;
         padding: 0.15rem 0.5rem;
     }
@@ -260,40 +268,46 @@
         background-image: none !important;
         padding-right: 10px !important;
     }
-
 </style>
 <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
 <div class="text-center" id="reportTitle" style="font-size: 20px"></div>
 <div class="sticky-header bg-white p-2 shadow-sm z-3">
-    <div class="d-flex flex-wrap align-items-center gap-2 mb-1 filter-panel" style=" border: 1px solid; border-radius: 6px; ">
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-1 filter-panel"
+        style=" border: 1px solid; border-radius: 6px; ">
         <!-- From Date -->
         <div class="d-flex flex-column">
 
             <div class="d-flex flex-wrap align-items-center gap-2">
                 <label class="mb-1 fw-bold me-3">Room Status:</label>
                 <div class="form-check me-3">
-                    <input class="form-check-input include-option" type="checkbox" id="cleannon" name="masterllio" value="1" checked>
+                    <input class="form-check-input include-option" type="checkbox" id="cleannon" name="masterllio"
+                        value="1" checked>
                     <label class="form-check-label" for="cancel">Clean Non-Checked</label>
                 </div>
                 <div class="form-check me-3">
-                    <input class="form-check-input include-option" type="checkbox" id="clean" name="masterllio" value="1" checked>
+                    <input class="form-check-input include-option" type="checkbox" id="clean" name="masterllio"
+                        value="1" checked>
                     <label class="form-check-label" for="cancel">Clean</label>
                 </div>
                 <div class="form-check me-3">
-                    <input class="form-check-input include-option" type="checkbox" id="dirty" name="masterllio" value="1" checked>
+                    <input class="form-check-input include-option" type="checkbox" id="dirty" name="masterllio"
+                        value="1" checked>
                     <label class="form-check-label" for="cancel">Dirty</label>
                 </div>
                 <div class="form-check me-3">
-                    <input class="form-check-input include-option" type="checkbox" id="pickup" name="masterllio" value="1" checked>
+                    <input class="form-check-input include-option" type="checkbox" id="pickup" name="masterllio"
+                        value="1" checked>
                     <label class="form-check-label" for="cancel">Pickup</label>
                 </div>
                 <div class="form-check me-3">
-                    <input class="form-check-input include-option" type="checkbox" id="oocheck" name="masterllio" value="1" checked>
+                    <input class="form-check-input include-option" type="checkbox" id="oocheck" name="masterllio"
+                        value="1" checked>
                     <label class="form-check-label" for="cancel">OO</label>
                 </div>
                 <div class="form-check me-3">
-                    <input class="form-check-input include-option" type="checkbox" id="oscheck" name="masterllio" value="1" checked>
+                    <input class="form-check-input include-option" type="checkbox" id="oscheck" name="masterllio"
+                        value="1" checked>
                     <label class="form-check-label" for="cancel">OS</label>
                 </div>
             </div>
@@ -304,11 +318,13 @@
             <div class="d-flex flex-wrap align-items-center gap-2">
                 <label class="mb-1 fw-bold me-3">FO Status:</label>
                 <div class="form-check me-3">
-                    <input class="form-check-input include-option" type="checkbox" id="vacant" name="masterllio" value="1" checked>
+                    <input class="form-check-input include-option" type="checkbox" id="vacant" name="masterllio"
+                        value="1" checked>
                     <label class="form-check-label" for="cancel">Vacant</label>
                 </div>
                 <div class="form-check me-3">
-                    <input class="form-check-input include-option" type="checkbox" id="occupied" name="masterllio" value="1" checked>
+                    <input class="form-check-input include-option" type="checkbox" id="occupied" name="masterllio"
+                        value="1" checked>
                     <label class="form-check-label" for="cancel">Occupied</label>
                 </div>
 
@@ -320,15 +336,18 @@
             <div class="d-flex flex-wrap align-items-center gap-2">
                 <label class="mb-1 fw-bold me-3">Reservation Status:</label>
                 <div class="form-check me-3">
-                    <input class="form-check-input include-option" type="checkbox" id="arrivals" name="masterllio" value="1" checked>
+                    <input class="form-check-input include-option" type="checkbox" id="arrivals" name="masterllio"
+                        value="1" checked>
                     <label class="form-check-label" for="cancel">Arrivals</label>
                 </div>
                 <div class="form-check me-3">
-                    <input class="form-check-input include-option" type="checkbox" id="arrived" name="masterllio" value="1" checked>
+                    <input class="form-check-input include-option" type="checkbox" id="arrived" name="masterllio"
+                        value="1" checked>
                     <label class="form-check-label" for="cancel">Arrived</label>
                 </div>
                 <div class="form-check me-3">
-                    <input class="form-check-input include-option" type="checkbox" id="stayover" name="masterllio" value="1" checked>
+                    <input class="form-check-input include-option" type="checkbox" id="stayover" name="masterllio"
+                        value="1" checked>
                     <label class="form-check-label" for="cancel">Stayover</label>
                 </div>
                 <div class="form-check me-3">
@@ -336,19 +355,23 @@
                     <label class="form-check-label" for="cancel">DayUse</label>
                 </div>
                 <div class="form-check me-3">
-                    <input class="form-check-input include-option" type="checkbox" id="dueout" name="masterllio" value="1" checked>
+                    <input class="form-check-input include-option" type="checkbox" id="dueout" name="masterllio"
+                        value="1" checked>
                     <label class="form-check-label" for="cancel">Due Out</label>
                 </div>
                 <div class="form-check me-3">
-                    <input class="form-check-input include-option" type="checkbox" id="departed" name="masterllio" value="1" checked>
+                    <input class="form-check-input include-option" type="checkbox" id="departed" name="masterllio"
+                        value="1" checked>
                     <label class="form-check-label" for="cancel">Departed</label>
                 </div>
                 <div class="form-check me-3">
-                    <input class="form-check-input include-option" type="checkbox" id="notReserved" name="masterllio" value="1" checked>
+                    <input class="form-check-input include-option" type="checkbox" id="notReserved" name="masterllio"
+                        value="1" checked>
                     <label class="form-check-label" for="cancel">NotReserved</label>
                 </div>
                 <div class="form-check me-3">
-                    <input class="form-check-input " type="checkbox" id="departuredarr" name="masterllio" value="1" checked>
+                    <input class="form-check-input " type="checkbox" id="departuredarr" name="masterllio" value="1"
+                        checked>
                     <label class="form-check-label" for="cancel">Departured/Arrival</label>
                 </div>
             </div>
@@ -370,7 +393,7 @@
                     </select>
                 </div>
 
-                <div class="d-flex align-items-center me-3"> 
+                <div class="d-flex align-items-center me-3">
                     <label class="me-2 mb-1  mt-1">Zone:</label>
                     <select id="zone" name="zone" class="tomselect-custom" multiple>
                         @foreach (var item in zoneList)
@@ -402,13 +425,10 @@
                     </select>
                 </div>
             </div>
-
-           
         </div>
 
         <div class="d-flex flex-column">
 
-          
             <div class="d-flex align-items-center flex-wrap mb-2">
                 <label class="fw-bold me-3 mb-1">Change Status:</label>
 
@@ -431,21 +451,25 @@
         </div>
     </div>
     <div class="">
-        <button  id="btnPrint" class="mui-button mui-button-new"><i class="fa-solid fa-eye"></i>View</button>
+        <button id="btnPrint" class="mui-button mui-button-new"><i class="fa-solid fa-eye"></i>View</button>
         <button id="btnSelectAll" class="mui-button mui-button-new" type="button">
             <i class="fa-solid fa-check-square"></i> Select All
         </button>
 
-        <button  id="btnClearAll" class="mui-button mui-button-new" type="button">
+        <button id="btnClearAll" class="mui-button mui-button-new" type="button">
             <i class="fa-solid fa-x"></i> Clear All
         </button>
-        <button  id="btnChangeStatus" class="mui-button mui-button-new" type="button">
+        <button id="btnChangeStatus" class="mui-button mui-button-new" type="button">
             <i class="fa-solid fa-rotate"></i> Chg Status
         </button>
-        <button  id="btnChecklog" class="mui-button mui-button-new" type="button"><i class="fa-solid fa-floppy-disk"></i> Ac.Log</button>
-        <button id="btnExportExcel" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Excel</button>
-        <button  id="btnExportPdf" class="mui-button mui-button-new" type="button"><i class="fas fa-eraser"></i> PDF</button>
-       <button  id="btnUpdatestatus" class="mui-button mui-button-new" type="button"><i class="fa-solid fa-floppy-disk"></i> Update</button>
+        <button id="btnChecklog" class="mui-button mui-button-new" type="button"><i class="fa-solid fa-floppy-disk"></i>
+            Ac.Log</button>
+        <button id="btnExportExcel" class="mui-button mui-button-new" type="button"> <i
+                class="fa-solid fa-file-excel"></i> Excel</button>
+        <button id="btnExportPdf" class="mui-button mui-button-new" type="button"><i class="fas fa-eraser"></i>
+            PDF</button>
+        <button id="btnUpdatestatus" class="mui-button mui-button-new" type="button"><i
+                class="fa-solid fa-floppy-disk"></i> Update</button>
         <button id="btnFlorrflan" class="mui-button mui-button-new" type="button">
             <i class="fa-solid fa-rotate"></i> Floor Flan
         </button>
@@ -561,7 +585,8 @@
             <button id="btnSearchHis" class="btn text-white" style="background-color: #3b9ac6; border-radius: 4px;">
                 <i class="fa-solid fa-floppy-disk me-1"></i> Search
             </button>
-            <button onclick="$('#popupLogGrid').hide()" class="btn btn-sm btn-danger" style="background-color: #3b9ac6; border-radius: 4px;">
+            <button onclick="$('#popupLogGrid').hide()" class="btn btn-sm btn-danger"
+                style="background-color: #3b9ac6; border-radius: 4px;">
                 <i class="fa-solid fa-xmark me-1"></i> Close
             </button>
         </div>
@@ -582,7 +607,8 @@
 
         <div class="d-flex align-items-center me-3">
             <label class="me-2 mb-0">User name:</label>
-            <input id="username" type="text" class="form-control form-control-sm" placeholder="Enter user name" style="width: 100px;">
+            <input id="username" type="text" class="form-control form-control-sm" placeholder="Enter user name"
+                style="width: 100px;">
         </div>
         <div class="d-flex align-items-center me-3">
             <label class="me-2 mb-0">From Date:</label>
@@ -605,23 +631,24 @@
     @*     <div style="font-size: 20px;" class="mt-1" id="reportTitle"></div> *@
     <div id="gridContainer" class="gridContainer mt-2"></div>
 </div>
-<div id="loadingSpinner" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
+<div id="loadingSpinner"
+    style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
     <i class="fa-solid fa-spinner fa-spin"></i>
 </div>
 <script>
 
 
-        function formatDate(date) {
-            let year = date.getFullYear();
-            let month = (date.getMonth() + 1).toString().padStart(2, '0'); // Ð?m b?o có 2 ch? s?
-            let day = date.getDate().toString().padStart(2, '0'); // Ð?m b?o có 2 ch? s?
-            return `${year}-${month}-${day}`;
-        }
+    function formatDate(date) {
+        let year = date.getFullYear();
+        let month = (date.getMonth() + 1).toString().padStart(2, '0'); // Ð?m b?o có 2 ch? s?
+        let day = date.getDate().toString().padStart(2, '0'); // Ð?m b?o có 2 ch? s?
+        return `${year}-${month}-${day}`;
+    }
 
-        $(document).ready(function () {
-                    const today = new Date();
+    $(document).ready(function () {
+        const today = new Date();
 
-           const firstDayOfMonth = new Date(today);
+        const firstDayOfMonth = new Date(today);
         firstDayOfMonth.setDate(today.getDate() - 1);
 
         // Ngày hôm nay
@@ -634,81 +661,81 @@
         console.log(formattedFirstDay); // Ki?m tra giá tr? dúng chua
         console.log(formattedLastDay); // Ki?m tra giá tr? dúng chua
         // Gán giá tr? cho input date
-    $('#fromDate').val(formattedFirstDay);
-    $('#toDate').val(formattedLastDay);
+        $('#fromDate').val(formattedFirstDay);
+        $('#toDate').val(formattedLastDay);
 
-                 $("#btnPrint").trigger("click");
-             document.getElementById("reportTitle").innerText = 'Room Status';
+        $("#btnPrint").trigger("click");
+        document.getElementById("reportTitle").innerText = 'Room Status';
 
-               $("input[name='masterllioup']").on("change", function () {
-                 $("input[name='masterllioup']").not(this).prop("checked", false);
-              });
+        $("input[name='masterllioup']").on("change", function () {
+            $("input[name='masterllioup']").not(this).prop("checked", false);
+        });
 
-               $("input[name='masterlliouppop']").on("change", function () {
-                 $("input[name='masterlliouppop']").not(this).prop("checked", false);
-              });
-              $('#btnSelectAll').click(function () {
-                $('.include-option').prop('checked', true);
-            });
+        $("input[name='masterlliouppop']").on("change", function () {
+            $("input[name='masterlliouppop']").not(this).prop("checked", false);
+        });
+        $('#btnSelectAll').click(function () {
+            $('.include-option').prop('checked', true);
+        });
 
-            // Khi nh?n "Clear All" => b? check t?t c? checkbox có class include-option
-            $('#btnClearAll').click(function () {
-                $('.include-option').prop('checked', false);
-            });
+        // Khi nh?n "Clear All" => b? check t?t c? checkbox có class include-option
+        $('#btnClearAll').click(function () {
+            $('.include-option').prop('checked', false);
+        });
 
-             $('#btnChangeStatus').click(function () {
-                $('#overlay').fadeIn(200);
-                $('#popupChangeStatus').fadeIn(200);
-             });
+        $('#btnChangeStatus').click(function () {
+            $('#overlay').fadeIn(200);
+            $('#popupChangeStatus').fadeIn(200);
+        });
 
         // Ðóng popup
-            $('#btnClosePopup, #overlay').click(function () {
-                $('#popupChangeStatus').fadeOut(200);
-                $('#overlay').fadeOut(200);
-                     // $("#btnPrint").trigger("click");
-                     //          const grid = $("#gridContainer").dxDataGrid("instance"); var selectedReport2 = '@ViewBag.ReportTitle';
-                     //   grid.refresh();
-            });
-           $('#checkRoomList').change(function () {
-                $('#checkRoomRange').prop('checked', false);
-                updateRoomInputs();
-           });
-
-            $('#checkRoomRange').change(function () {
-                $('#checkRoomList').prop('checked', false);
-                updateRoomInputs();
-            });
-
-            // N?u ngu?i dùng click label ? set checked và g?i l?i logic
-            $('label[for="checkRoomList"]').click(function () {
-                $('#checkRoomList').prop('checked', true).trigger('change');
-            });
-
-            $('label[for="checkRoomRange"]').click(function () {
-                $('#checkRoomRange').prop('checked', true).trigger('change');
-            });
-
-
-             $('#btnClearPopup').on('click', function () {
-        // B? ch?n t?t c? option trong Room List (multiple select)
-                $('#popupRoomList').val([]).trigger('change');
-
-                // Reset From Room và To Room v? r?ng
-                $('#popupRoomFrom').val('');
-                $('#popupRoomTo').val('');
-
-                // B? check 2 checkbox
-                $('#checkRoomList').prop('checked', false);
-                $('#checkRoomRange').prop('checked', false);
-            });
-            // G?i kh?i t?o ban d?u
-           initializePopupRoomListTomSelect();
-           updateRoomInputs();
-            initializeTomSelects();
-
+        $('#btnClosePopup, #overlay').click(function () {
+            $('#popupChangeStatus').fadeOut(200);
+            $('#overlay').fadeOut(200);
+            // $("#btnPrint").trigger("click");
+            //          const grid = $("#gridContainer").dxDataGrid("instance"); var selectedReport2 = '@ViewBag.ReportTitle';
+            //   grid.refresh();
         });
-        function initializeTomSelects() {
-        const selectors = ["#roomtype","#zone"];
+        $('#checkRoomList').change(function () {
+            $('#checkRoomRange').prop('checked', false);
+            updateRoomInputs();
+        });
+
+        $('#checkRoomRange').change(function () {
+            $('#checkRoomList').prop('checked', false);
+            updateRoomInputs();
+        });
+
+        // N?u ngu?i dùng click label ? set checked và g?i l?i logic
+        $('label[for="checkRoomList"]').click(function () {
+            $('#checkRoomList').prop('checked', true).trigger('change');
+        });
+
+        $('label[for="checkRoomRange"]').click(function () {
+            $('#checkRoomRange').prop('checked', true).trigger('change');
+        });
+
+
+        $('#btnClearPopup').on('click', function () {
+            // B? ch?n t?t c? option trong Room List (multiple select)
+            $('#popupRoomList').val([]).trigger('change');
+
+            // Reset From Room và To Room v? r?ng
+            $('#popupRoomFrom').val('');
+            $('#popupRoomTo').val('');
+
+            // B? check 2 checkbox
+            $('#checkRoomList').prop('checked', false);
+            $('#checkRoomRange').prop('checked', false);
+        });
+        // G?i kh?i t?o ban d?u
+        initializePopupRoomListTomSelect();
+        updateRoomInputs();
+        initializeTomSelects();
+
+    });
+    function initializeTomSelects() {
+        const selectors = ["#roomtype", "#zone"];
 
         for (const id of selectors) {
             const el = document.querySelector(id);
@@ -733,46 +760,46 @@
         }
     }
 
-        function updateRoomInputs() {
-            const useList = $('#checkRoomList').is(':checked');
+    function updateRoomInputs() {
+        const useList = $('#checkRoomList').is(':checked');
 
-            $('#checkRoomRange').prop('checked', !useList);
+        $('#checkRoomRange').prop('checked', !useList);
 
-            const popupRoomListEl = document.querySelector("#popupRoomList");
-            if (popupRoomListEl.tomselect) {
-                popupRoomListEl.tomselect.setDisabled(!useList);
-            } else {
-                $('#popupRoomList').prop('disabled', !useList);
-            }
-
-            $('#popupRoomFrom, #popupRoomTo').prop('disabled', useList);
+        const popupRoomListEl = document.querySelector("#popupRoomList");
+        if (popupRoomListEl.tomselect) {
+            popupRoomListEl.tomselect.setDisabled(!useList);
+        } else {
+            $('#popupRoomList').prop('disabled', !useList);
         }
-         $("#btnFlorrflan").on("click", function () {
-                window.location.href = "/HouseKeeping/FloorPlan";
-       
-        });
 
-        function initializePopupRoomListTomSelect() {
-            const el = document.querySelector("#popupRoomList");
-            if (!el) return;
+        $('#popupRoomFrom, #popupRoomTo').prop('disabled', useList);
+    }
+    $("#btnFlorrflan").on("click", function () {
+        window.location.href = "/HouseKeeping/FloorPlan";
 
-            // N?u dã du?c kh?i t?o thì hu? tru?c
-            if (el.tomselect) el.tomselect.destroy();
+    });
 
-            new TomSelect(el, {
-                plugins: ['remove_button'],
-                create: false,
-                maxItems: null,
-                allowEmptyOption: true,
-                placeholder: 'Select rooms...',
-                persist: false,
-                render: {
-                    option: function (data, escape) {
-                        return `<div>${escape(data.text)}</div>`;
-                    }
+    function initializePopupRoomListTomSelect() {
+        const el = document.querySelector("#popupRoomList");
+        if (!el) return;
+
+        // N?u dã du?c kh?i t?o thì hu? tru?c
+        if (el.tomselect) el.tomselect.destroy();
+
+        new TomSelect(el, {
+            plugins: ['remove_button'],
+            create: false,
+            maxItems: null,
+            allowEmptyOption: true,
+            placeholder: 'Select rooms...',
+            persist: false,
+            render: {
+                option: function (data, escape) {
+                    return `<div>${escape(data.text)}</div>`;
                 }
-            });
-        }
+            }
+        });
+    }
 
     $(document).off("click", "#btnPrint").on("click", "#btnPrint", function () {
         $("#loadingSpinner").show();
@@ -834,46 +861,46 @@
                 roomFrom: roomFrom,
                 roomTo: roomTo
             },
-                traditional: true,
-                  crossDomain: false,
-                    headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
-                success: function (result) {
-                    // $("#reportViewerContainer").html(result);
-                    // $("#loadingSpinner").hide();
+            traditional: true,
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+                // $("#reportViewerContainer").html(result);
+                // $("#loadingSpinner").hide();
                 console.log(result);
-            initializeRoomStatusGrid(result);
-                        $("#loadingSpinner").hide();
-                },
-                error: function () {
-                    alert("Không th? t?i báo cáo.");
-                    $("#loadingSpinner").hide();
-                }
-            });
+                initializeRoomStatusGrid(result);
+                $("#loadingSpinner").hide();
+            },
+            error: function () {
+                alert("Không th? t?i báo cáo.");
+                $("#loadingSpinner").hide();
+            }
         });
+    });
 
 
 
 
-        let selectedRoomIds = [];
+    let selectedRoomIds = [];
     function initializeRoomStatusGrid(data) {
-         const columnWidth = 120;
+        const columnWidth = 120;
 
         $("#gridContainer").dxDataGrid({
-            dataSource: data,     
+            dataSource: data,
             allowColumnResizing: true,
-              height: 500,
+            height: 500,
             columnAutoWidth: true,
             columns: [
-                 { dataField: "id", caption: "ID", width: columnWidth -10 , visible: false},
+                { dataField: "id", caption: "ID", width: columnWidth - 10, visible: false },
                 { dataField: "roomNumber", caption: "Room No", width: columnWidth },
-                { dataField: "roomType", caption: "Room Type", width: columnWidth  },
-                { dataField: "roomName", caption: "Room Name", width: columnWidth +50 },
-                { dataField: "roomStatus", caption: "Room Status", width: columnWidth+ 50 },
-                { dataField: "foStatus", caption: "FO Status", width: columnWidth  },
+                { dataField: "roomType", caption: "Room Type", width: columnWidth },
+                { dataField: "roomName", caption: "Room Name", width: columnWidth + 50 },
+                { dataField: "roomStatus", caption: "Room Status", width: columnWidth + 50 },
+                { dataField: "foStatus", caption: "FO Status", width: columnWidth },
                 { dataField: "floor", caption: "Floor", width: columnWidth, dataType: "number", format: "#,##0" },
-                { dataField: "roomClass", caption: "Room Class", width: columnWidth  },
-                { dataField: "reservationStatus", caption: "Resv.Type", width: columnWidth +columnWidth },
-                 { dataField: "arrival", caption: "Arrivals", width: columnWidth+columnWidth , dataType: "date", format: "dd/MM/yyyy" },
+                { dataField: "roomClass", caption: "Room Class", width: columnWidth },
+                { dataField: "reservationStatus", caption: "Resv.Type", width: columnWidth + columnWidth },
+                { dataField: "arrival", caption: "Arrivals", width: columnWidth + columnWidth, dataType: "date", format: "dd/MM/yyyy" },
             ],
 
             paging: { pageSize: 25 },
@@ -904,28 +931,28 @@
                 }
 
             },
-                onCellPrepared: function (e) {
-                    if (e.rowType === "data" && e.column.dataField === "roomStatus") {
-                        const status = (e.value || "").toLowerCase();
+            onCellPrepared: function (e) {
+                if (e.rowType === "data" && e.column.dataField === "roomStatus") {
+                    const status = (e.value || "").toLowerCase();
 
-                        if (status.includes("dirty")) {
-                            e.cellElement.css("background-color", "Red"); // d? nh?t
-                              e.cellElement.css("color", "white");
-                        } else if (status.includes("pickup")) {
-                            e.cellElement.css("background-color", "#f740f4"); // tím nh?t
-                        } else if (status.includes("clean non-checked")) {
-                            e.cellElement.css("background-color", "#1bdff5"); // xanh nu?c bi?n nh?t
-                        } else if (status.includes("out of order")) {
-                            e.cellElement.css("background-color", "#cf159a"); // h?ng
-                              e.cellElement.css("color", "white");
-                        } else if (status.includes("clean")) {
-                            e.cellElement.css("background-color", "green"); // xanh lá
-                            e.cellElement.css("color", "white"); // ch? tr?ng cho d? nhìn
-                        }
+                    if (status.includes("dirty")) {
+                        e.cellElement.css("background-color", "Red"); // d? nh?t
+                        e.cellElement.css("color", "white");
+                    } else if (status.includes("pickup")) {
+                        e.cellElement.css("background-color", "#f740f4"); // tím nh?t
+                    } else if (status.includes("clean non-checked")) {
+                        e.cellElement.css("background-color", "#1bdff5"); // xanh nu?c bi?n nh?t
+                    } else if (status.includes("out of order")) {
+                        e.cellElement.css("background-color", "#cf159a"); // h?ng
+                        e.cellElement.css("color", "white");
+                    } else if (status.includes("clean")) {
+                        e.cellElement.css("background-color", "green"); // xanh lá
+                        e.cellElement.css("color", "white"); // ch? tr?ng cho d? nhìn
                     }
-                },
+                }
+            },
 
-               onRowClick: onRowClick,
+            onRowClick: onRowClick,
 
         });
     }
@@ -967,7 +994,7 @@
 
         updateStatus(selectedRoomIds);
     });
-        $(document).off("click", "#btnChecklog").on("click", "#btnChecklog", function () {
+    $(document).off("click", "#btnChecklog").on("click", "#btnChecklog", function () {
         if (!selectedRoomIds || selectedRoomIds.length === 0) {
             alert("You must choose at least one room.");
             return;
@@ -976,14 +1003,14 @@
         const fromDate = $('#fromDate').val();
         console.log(fromDate);
         const toDate = $('#toDate').val();
-     const username = $('#username').val();
+        const username = $('#username').val();
 
 
-        checkLogStatus(selectedRoomIds,fromDate,toDate,username);
+        checkLogStatus(selectedRoomIds, fromDate, toDate, username);
     });
 
 
-        $(document).off("click", "#btnSearchHis").on("click", "#btnSearchHis", function () {
+    $(document).off("click", "#btnSearchHis").on("click", "#btnSearchHis", function () {
         if (!selectedRoomIds || selectedRoomIds.length === 0) {
             alert("You must choose at least one room.");
             return;
@@ -992,172 +1019,173 @@
         const fromDate = $('#fromDate').val();
         console.log(fromDate);
         const toDate = $('#toDate').val();
-     const username = $('#username').val();
+        const username = $('#username').val();
 
-      const roomStatusValue = $('#roomstatus').val();
-        checkLogStatus(roomStatusValue,fromDate,toDate,username);
+        const roomStatusValue = $('#roomstatus').val();
+        checkLogStatus(roomStatusValue, fromDate, toDate, username);
     });
-         function checkLogStatus(selectedRoomIds,fromDate,toDate,username) {
+    function checkLogStatus(selectedRoomIds, fromDate, toDate, username) {
 
-            $.ajax({
-                url: '/HouseKeeping/CheckLogStatus',
-                type: 'POST',
-                data: {  id: selectedRoomIds,
-                    fromDate: fromDate,
-                    toDate: toDate,
-                    username: username
-                },
-                headers: {
-                    "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val()
-                },
-                success: function (response) {
+        $.ajax({
+            url: '/HouseKeeping/CheckLogStatus',
+            type: 'POST',
+            data: {
+                id: selectedRoomIds,
+                fromDate: fromDate,
+                toDate: toDate,
+                username: username
+            },
+            headers: {
+                "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val()
+            },
+            success: function (response) {
 
-                    if (response.length > 0 && response[0].roomNo) {
-                        $('#roomstatus').val(response[0].roomNo);
-                        selectedRoomIds = [];
-                    }
-
-
-                    // Hi?n th? grid m?i
-                    initializeLogStatusGrid(response);
-
-                    // Hi?n th? popup
-                    $("#popupLogGrid").show();
-                },
-                error: function () {
-                    alert("Ðã x?y ra l?i khi c?p nh?t tr?ng thái.");
-                }
-            });
-         }
-
-         function updateStatus(selectedRoomIds) {
-            let status = 0;
-
-            if ($("#cleannonup").is(":checked")) {
-                status = 1;
-            } else if ($("#dirtyup").is(":checked")) {
-                status = 2;
-            } else if ($("#cleanup").is(":checked")) {
-                status = 4;
-            }
-
-            if (selectedRoomIds.length === 0) {
-                alert("You must chose room.");
-                return;
-            }
-                const loginName = JSON.parse(localStorage.getItem("Loginname"));
-            $.ajax({
-                url: '/HouseKeeping/UpdateRoomStatus',
-                type: 'POST',
-                data: { ids: selectedRoomIds  , status: status,loginName:loginName},
-                headers: {
-                    "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val()
-                },
-                success: function (response) {
-                   if (response.success) {
-                        alert(response.message);
-                       $("#btnPrint").trigger("click");
-                              const grid = $("#gridContainer").dxDataGrid("instance"); var selectedReport2 = '@ViewBag.ReportTitle';
-                       grid.refresh();
-
-                    } else {
-                        alert(response.message);
-                    }
-                },
-                error: function () {
-                    alert("Ðã x?y ra l?i khi c?p nh?t tr?ng thái.");
-                }
-            });
-         }
-
-        $(document).off("click", "#btnSavePopup").on("click", "#btnSavePopup", function () {
-            $("#loadingSpinner").show();
-
-            // Determine status from checkboxes
-            let status = 0;
-            if ($("#cleannonupop").is(":checked")) {
-                status = 1;
-            } else if ($("#dirtyupop").is(":checked")) {
-                status = 2;
-            } else if ($("#cleanupop").is(":checked")) {
-                status = 4;
-            } else if ($("#dueout").is(":checked")) {
-                status = 7;
-            } else if ($("#pickup").is(":checked")) {
-                status = 3;
-            }
-
-            if (status === 0) {
-                alert("Please select a room status.");
-                $("#loadingSpinner").hide();
-                return;
-            }
-
-            // Get room list
-            let isFromTo = 0;
-            let roomIds = [];
-
-            if ($("#checkRoomRange").is(":checked")) {
-                isFromTo = 1;
-                let from = $("#popupRoomFrom").val();
-                let to = $("#popupRoomTo").val();
-
-                if (!from || !to) {
-                    alert("Please select both From and To rooms.");
-                    $("#loadingSpinner").hide();
-                    return;
+                if (response.length > 0 && response[0].roomNo) {
+                    $('#roomstatus').val(response[0].roomNo);
+                    selectedRoomIds = [];
                 }
 
-                roomIds = [from, to]; // Let server handle range
-            } else if ($("#checkRoomList").is(":checked")) {
-                isFromTo = 0;
-                roomIds = $("#popupRoomList").val();
 
-                if (!roomIds || roomIds.length === 0) {
-                    alert("Please select at least one room.");
-                    $("#loadingSpinner").hide();
-                    return;
-                }
-            } else {
-                alert("Please choose how to select rooms (List or From ? To).");
-                $("#loadingSpinner").hide();
-                return;
+                // Hi?n th? grid m?i
+                initializeLogStatusGrid(response);
+
+                // Hi?n th? popup
+                $("#popupLogGrid").show();
+            },
+            error: function () {
+                alert("Ðã x?y ra l?i khi c?p nh?t tr?ng thái.");
             }
-             const loginName = JSON.parse(localStorage.getItem("Loginname"));
-            // Send AJAX
-            $.ajax({
-                url: '/HouseKeeping/UpdateRoomStatusPopup',
-                type: 'POST',
-                data: {
-                    status: status,
-                    roomIds: roomIds,
-                    isFromTo: isFromTo,
-                    loginName:loginName
-                },
-                traditional: true,
-                crossDomain: false,
-                headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
-                success: function (response) {
-                   if (response.success) {
-                        alert(response.message);
-
-
-                    } else {
-                        alert(response.message);
-                    }
-                },
-                error: function () {
-                    alert("Failed to update room status.");
-                    $("#loadingSpinner").hide();
-                }
-            });
         });
+    }
 
-            function initializeLogStatusGrid(data) {
+    function updateStatus(selectedRoomIds) {
+        let status = 0;
+
+        if ($("#cleannonup").is(":checked")) {
+            status = 1;
+        } else if ($("#dirtyup").is(":checked")) {
+            status = 2;
+        } else if ($("#cleanup").is(":checked")) {
+            status = 4;
+        }
+
+        if (selectedRoomIds.length === 0) {
+            alert("You must chose room.");
+            return;
+        }
+        const loginName = JSON.parse(localStorage.getItem("Loginname"));
+        $.ajax({
+            url: '/HouseKeeping/UpdateRoomStatus',
+            type: 'POST',
+            data: { ids: selectedRoomIds, status: status, loginName: loginName },
+            headers: {
+                "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val()
+            },
+            success: function (response) {
+                if (response.success) {
+                    alert(response.message);
+                    $("#btnPrint").trigger("click");
+                    const grid = $("#gridContainer").dxDataGrid("instance"); var selectedReport2 = '@ViewBag.ReportTitle';
+                    grid.refresh();
+
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function () {
+                alert("Ðã x?y ra l?i khi c?p nh?t tr?ng thái.");
+            }
+        });
+    }
+
+    $(document).off("click", "#btnSavePopup").on("click", "#btnSavePopup", function () {
+        $("#loadingSpinner").show();
+
+        // Determine status from checkboxes
+        let status = 0;
+        if ($("#cleannonupop").is(":checked")) {
+            status = 1;
+        } else if ($("#dirtyupop").is(":checked")) {
+            status = 2;
+        } else if ($("#cleanupop").is(":checked")) {
+            status = 4;
+        } else if ($("#dueout").is(":checked")) {
+            status = 7;
+        } else if ($("#pickup").is(":checked")) {
+            status = 3;
+        }
+
+        if (status === 0) {
+            alert("Please select a room status.");
+            $("#loadingSpinner").hide();
+            return;
+        }
+
+        // Get room list
+        let isFromTo = 0;
+        let roomIds = [];
+
+        if ($("#checkRoomRange").is(":checked")) {
+            isFromTo = 1;
+            let from = $("#popupRoomFrom").val();
+            let to = $("#popupRoomTo").val();
+
+            if (!from || !to) {
+                alert("Please select both From and To rooms.");
+                $("#loadingSpinner").hide();
+                return;
+            }
+
+            roomIds = [from, to]; // Let server handle range
+        } else if ($("#checkRoomList").is(":checked")) {
+            isFromTo = 0;
+            roomIds = $("#popupRoomList").val();
+
+            if (!roomIds || roomIds.length === 0) {
+                alert("Please select at least one room.");
+                $("#loadingSpinner").hide();
+                return;
+            }
+        } else {
+            alert("Please choose how to select rooms (List or From ? To).");
+            $("#loadingSpinner").hide();
+            return;
+        }
+        const loginName = JSON.parse(localStorage.getItem("Loginname"));
+        // Send AJAX
+        $.ajax({
+            url: '/HouseKeeping/UpdateRoomStatusPopup',
+            type: 'POST',
+            data: {
+                status: status,
+                roomIds: roomIds,
+                isFromTo: isFromTo,
+                loginName: loginName
+            },
+            traditional: true,
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (response) {
+                if (response.success) {
+                    alert(response.message);
+
+
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function () {
+                alert("Failed to update room status.");
+                $("#loadingSpinner").hide();
+            }
+        });
+    });
+
+    function initializeLogStatusGrid(data) {
         const columnWidth = 130;
 
         $("#logGridContainer").dxDataGrid({
-            dataSource: data,    
+            dataSource: data,
             allowColumnResizing: true,
             columnAutoWidth: true,
             showBorders: true,
@@ -1168,7 +1196,7 @@
                 { dataField: "userName", caption: "User Name", width: columnWidth },
                 { dataField: "action", caption: "Action", width: columnWidth },
                 { dataField: "computerName", caption: "Computer", width: columnWidth },
-                { dataField: "changeDate", caption: "Change Date", width: columnWidth + 30 , dataType: "date", format: "dd/MM/yyyy" },
+                { dataField: "changeDate", caption: "Change Date", width: columnWidth + 30, dataType: "date", format: "dd/MM/yyyy" },
             ],
             paging: { pageSize: 25 },
             scrolling: {
@@ -1198,82 +1226,82 @@
 
 
 
-        $("#btnExportExcel").click(function () {
-                   const grid = $("#gridContainer").dxDataGrid("instance"); var selectedReport2 = '@ViewBag.ReportTitle';
-            var selectedReport = '@ViewBag.ReportTitle';
-            if (!selectedReport) {
-                alert("Vui lòng ch?n báo cáo tru?c khi xu?t Excel.");
-                return;
+    $("#btnExportExcel").click(function () {
+        const grid = $("#gridContainer").dxDataGrid("instance"); var selectedReport2 = '@ViewBag.ReportTitle';
+        var selectedReport = '@ViewBag.ReportTitle';
+        if (!selectedReport) {
+            alert("Vui lòng ch?n báo cáo tru?c khi xu?t Excel.");
+            return;
+        }
+
+        const workbook = new ExcelJS.Workbook(); const companyName = localStorage.getItem("CompanyName") || "Tên công ty chưa xác định";
+        const worksheet = workbook.addWorksheet("Sheet 1");
+
+        // === T?o header công ty (dòng 1) ===
+        worksheet.addRow(['Công ty C? ph?n Gi?i pháp Công ngh? CS-Solution']);
+        worksheet.mergeCells('A1:E1');
+        worksheet.getRow(1).font = { bold: true };
+        worksheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'left' };
+
+        // === Dòng 2: Th?i gian xu?t (ph?i) ===
+        const now = new Date();
+        const exportDate = now.toLocaleString("vi-VN");
+        worksheet.addRow(['', '', '', '', ' ' + exportDate]);
+        worksheet.mergeCells('E2:H2');
+        worksheet.getRow(2).alignment = { vertical: 'middle', horizontal: 'right' };
+
+        // === Dòng 3–4: Tr?ng
+        worksheet.addRow([]);
+        worksheet.addRow([]);
+
+        // === Dòng 5: Tên báo cáo ? gi?a ===
+        const reportRow = worksheet.addRow(['', '', selectedReport]);
+        worksheet.mergeCells('C5:F5');
+        reportRow.font = { bold: true, size: 14 };
+        reportRow.alignment = { vertical: 'middle', horizontal: 'center' };
+
+        // === Dòng 6: Tr?ng tru?c khi xu?t d? li?u
+        worksheet.addRow([]);
+
+        // === Export d? li?u t? DevExtreme (b?t d?u t? dòng 7)
+        DevExpress.excelExporter.exportDataGrid({
+            component: grid,
+            worksheet: worksheet,
+            autoFilterEnabled: true,
+            topLeftCell: { row: 7, column: 1 } // d? li?u b?t d?u t? dòng 7
+        }).then(function () {
+            // Footer
+            const lastRow = worksheet.lastRow.number + 2;
+            worksheet.getCell(`A${lastRow}`).value = "--- END  ---";
+            worksheet.mergeCells(`A${lastRow}:F${lastRow}`);
+            worksheet.getCell(`A${lastRow}`).alignment = { horizontal: 'center' };
+            worksheet.getCell(`A${lastRow}`).font = { italic: true };
+
+            // Ghi file
+            let fileName = selectedReport + ".xlsx";
+            workbook.xlsx.writeBuffer().then(function (buffer) {
+                saveAs(new Blob([buffer], { type: "application/octet-stream" }), fileName);
+            });
+        });
+    });
+
+
+
+    // Nút xu?t PDF
+    $("#btnExportPdf").click(function () {
+        const { jsPDF } = window.jspdf; // ?? B? sung dòng này
+
+        const doc = new jsPDF();
+
+        DevExpress.pdfExporter.exportDataGrid({
+            jsPDFDocument: doc,
+            component: $("#gridContainer").dxDataGrid("instance"),
+            autoTableOptions: {
+                styles: { cellPadding: 2, fontSize: 8 },
+                margin: { top: 20 }
             }
-
-                         const workbook = new ExcelJS.Workbook();const companyName = localStorage.getItem("CompanyName") || "Tên công ty chưa xác định";
-            const worksheet = workbook.addWorksheet("Sheet 1");
-
-            // === T?o header công ty (dòng 1) ===
-            worksheet.addRow(['Công ty C? ph?n Gi?i pháp Công ngh? CS-Solution']);
-            worksheet.mergeCells('A1:E1');
-            worksheet.getRow(1).font = { bold: true };
-            worksheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'left' };
-
-            // === Dòng 2: Th?i gian xu?t (ph?i) ===
-            const now = new Date();
-            const exportDate = now.toLocaleString("vi-VN");
-            worksheet.addRow(['', '', '', '', ' ' + exportDate]);
-            worksheet.mergeCells('E2:H2');
-            worksheet.getRow(2).alignment = { vertical: 'middle', horizontal: 'right' };
-
-            // === Dòng 3–4: Tr?ng
-            worksheet.addRow([]);
-            worksheet.addRow([]);
-
-            // === Dòng 5: Tên báo cáo ? gi?a ===
-            const reportRow = worksheet.addRow(['', '', selectedReport]);
-            worksheet.mergeCells('C5:F5');
-            reportRow.font = { bold: true, size: 14 };
-            reportRow.alignment = { vertical: 'middle', horizontal: 'center' };
-
-            // === Dòng 6: Tr?ng tru?c khi xu?t d? li?u
-            worksheet.addRow([]);
-
-            // === Export d? li?u t? DevExtreme (b?t d?u t? dòng 7)
-            DevExpress.excelExporter.exportDataGrid({
-                component: grid,
-                worksheet: worksheet,
-                autoFilterEnabled: true,
-                topLeftCell: { row: 7, column: 1 } // d? li?u b?t d?u t? dòng 7
-            }).then(function () {
-                // Footer
-                const lastRow = worksheet.lastRow.number + 2;
-                worksheet.getCell(`A${lastRow}`).value = "--- END  ---";
-                worksheet.mergeCells(`A${lastRow}:F${lastRow}`);
-                worksheet.getCell(`A${lastRow}`).alignment = { horizontal: 'center' };
-                worksheet.getCell(`A${lastRow}`).font = { italic: true };
-
-                // Ghi file
-                let fileName = selectedReport + ".xlsx";
-                workbook.xlsx.writeBuffer().then(function (buffer) {
-                    saveAs(new Blob([buffer], { type: "application/octet-stream" }), fileName);
-                });
-            });
+        }).then(() => {
+            doc.save("BaoCao.pdf");
         });
-
-
-
-        // Nút xu?t PDF
-           $("#btnExportPdf").click(function () {
-            const { jsPDF } = window.jspdf; // ?? B? sung dòng này
-
-            const doc = new jsPDF();
-
-            DevExpress.pdfExporter.exportDataGrid({
-                jsPDFDocument: doc,
-                component: $("#gridContainer").dxDataGrid("instance"),
-                autoTableOptions: {
-                    styles: { cellPadding: 2, fontSize: 8 },
-                    margin: { top: 20 }
-                }
-            }).then(() => {
-                doc.save("BaoCao.pdf");
-            });
-        });
+    });
 </script>

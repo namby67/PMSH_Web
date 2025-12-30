@@ -4,7 +4,8 @@
 @* <link href="~/css/pages/reservation.css" rel="stylesheet" asp-append-version="true" /> *@
 
 <!--Model chose product type-->
-<div class="modal fade bd-example-modal-sm" id="profileTypeModal" tabindex="-1" role="dialog" aria-labelledby="profileTypeModal" aria-hidden="true">
+<div class="modal fade bd-example-modal-sm" id="profileTypeModal" tabindex="-1" role="dialog"
+    aria-labelledby="profileTypeModal" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -13,7 +14,8 @@
             </div>
             <div class="modal-body">
                 <div class="form-check d-block">
-                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="0" checked>
+                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="0"
+                        checked>
                     <label class="form-check-label" for="inlineRadio1"><b>Individual</b></label>
                 </div>
                 <div class="form-check d-block">
@@ -38,7 +40,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#profileTypeModal').modal('hide');">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                    onclick="$('#profileTypeModal').modal('hide');">Close</button>
                 <button type="button" class="btn btn-primary" onclick="chooseProfileType();">OK</button>
             </div>
         </div>
@@ -55,30 +58,38 @@
     </div>
     <div class="mt-4">
         <button type="button" class="submit-button-clear-reservation" onclick="saveProfile();">Save</button>
-        <button type="button" class="submit-button-clear-reservation" onclick="closeFormProfile()">Change Profile Type</button>
+        <button type="button" class="submit-button-clear-reservation" onclick="closeFormProfile()">Change Profile
+            Type</button>
         <button type="button" class="submit-button-new-reservation">Clear</button>
     </div>
     <div class="profile_input">
         <div style="display:flex" class="mt-4">
-            <div style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;padding:4px;background-color:#ececec">Stats Infor</div>
-            <div style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;padding:4px;background-color:#ececec;margin-left:4px">Contact</div>
+            <div
+                style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;padding:4px;background-color:#ececec">
+                Stats Infor</div>
+            <div
+                style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;padding:4px;background-color:#ececec;margin-left:4px">
+                Contact</div>
         </div>
 
         <!--profile individual-->
         <div class="main-infor mt-4 row" style="justify-content:space-between" id="profile_individual">
             <div class="col-md-6 mui-card" style="position: relative;padding-left: 17px;">
-                <div style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
+                <div
+                    style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
                     <b>Address Information</b>
                 </div>
                 <div class="row mt-4">
-                    
+
                     <div class="col-md-4" id="image_wrapper">
                         <div class="form-group-new-reservation ">
                             <label for="txtFirstName">Image</label>
                             <div class="row" style="margin-left:1px;margin-right:2px">
-                                <div class="mt-2" style="height: 240px;box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;background-color:#ececec"></div>
+                                <div class="mt-2"
+                                    style="height: 240px;box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;background-color:#ececec">
+                                </div>
                             </div>
-                        </div>                        
+                        </div>
                     </div>
                     <div class="col-md-8 ">
                         <div class="form-group row">
@@ -88,16 +99,19 @@
                             </div>
                         </div>
                         <div class="form-group row mt-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Full Name</b></label>
+                            <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Full
+                                    Name</b></label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="txtFullNameIndividual">
                                 <div id="errorMessage" style="color: red; margin-top: 5px; display: none;">
-                                    <strong>Typing format is not correct. Please typing as below: FirstName Middle, LastName </strong>
+                                    <strong>Typing format is not correct. Please typing as below: FirstName Middle,
+                                        LastName </strong>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group row  mt-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label text-right">First/Last Name</label>
+                            <label for="inputPassword" class="col-sm-4 col-form-label text-right">First/Last
+                                Name</label>
                             <div class="col-sm-8" style="display:flex;column-gap:8px">
                                 <input type="text" class="form-control" id="txtFirstNameIndividual">
                                 <input type="text" class="form-control" id="txtLastNameIndividual">
@@ -112,15 +126,16 @@
                         <div class="form-group row  mt-1">
                             <label for="inputPassword" class="col-sm-4 col-form-label text-right">Language/Title</label>
                             <div class="col-sm-8" style="display:flex;column-gap:8px">
-                                <select type="text" id="txtLanguageIndividual" >
+                                <select type="text" id="txtLanguageIndividual">
                                 </select>
 
-                                <select type="text" id="txtTitleIndividual" >
+                                <select type="text" id="txtTitleIndividual">
                                 </select>
                             </div>
                         </div>
                         <div class="form-group row  mt-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label text-right">Nationality/Country</label>
+                            <label for="inputPassword"
+                                class="col-sm-4 col-form-label text-right">Nationality/Country</label>
                             <div class="col-sm-8" style="display:flex;column-gap:8px">
                                 <select type="text" id="txtNationalityIndividual">
                                 </select>
@@ -145,14 +160,16 @@
                             </div>
                         </div>
                         <div class="form-group row  mt-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label text-right">Religion/Nation</label>
+                            <label for="inputPassword"
+                                class="col-sm-4 col-form-label text-right">Religion/Nation</label>
                             <div class="col-sm-8" style="display:flex;column-gap:8px">
                                 <input type="text" class="form-control" id="txtReligionIndividual">
                                 <input type="text" class="form-control" id="txtNationIndividual">
                             </div>
                         </div>
                         <div class="form-group row  mt-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label text-right">Purpose Of Stay</label>
+                            <label for="inputPassword" class="col-sm-4 col-form-label text-right">Purpose Of
+                                Stay</label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="txtPurposeIndividual">
                             </div>
@@ -165,7 +182,7 @@
                         <textarea id="txtAddressIndividual" class="form-control" rows="4"></textarea>
                     </div>
                 </div>
- @*                <div class="row">
+                @*                <div class="row">
                     <div class="col-md-2">Searh Name</div>
                     <div class="col-md-3">
                         <input type="text" class="form-control">
@@ -186,7 +203,8 @@
             <div class="col-md-6 row" style="justify-content:space-between;display: flex;
                 align-items: flex-start;">
                 <div class="col-md-5 mui-card" style="position: relative">
-                    <div style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
+                    <div
+                        style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
                         <b>Internal Information</b>
                     </div>
                     <div class="form-group row mt-4">
@@ -265,7 +283,8 @@
                 </div>
                 <div class="col-md-7 row">
                     <div class="col-md-12 mui-card" style="position: relative">
-                        <div class="mb-4" style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
+                        <div class="mb-4"
+                            style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
                             <b>Tax</b>
                         </div>
                         <div class="form-group mt-4 row">
@@ -288,7 +307,8 @@
                         </div>
                     </div>
                     <div class="col-md-12 mt-4 mui-card" style="position: relative">
-                        <div class="mb-4" style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
+                        <div class="mb-4"
+                            style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
                             <b>Communications</b>
                         </div>
                         <div class="form-group mt-4 row">
@@ -354,7 +374,8 @@
                 </div>
                 <div class="col-md-12 row mt-4" style="justify-content:space-between">
                     <div class="col-md-5 mui-card" style="position: relative">
-                        <div class="mb-4" style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
+                        <div class="mb-4"
+                            style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
                             <b>Attributes</b>
                         </div>
                         <div class="form-group row mt-4">
@@ -377,7 +398,8 @@
                         </div>
                     </div>
                     <div class="col-md-7 mui-card" style="position: relative">
-                        <div class="mb-4" style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
+                        <div class="mb-4"
+                            style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
                             <b>History Information</b>
                         </div>
                         <div class="row mt-4">
@@ -414,32 +436,38 @@
         <!--Profile company,ta,source-->
         <div class="main-infor mt-4 row" style="justify-content:space-between;display:none" id="profile_com_ta_source">
             <div class="col-md-6 row">
-                <div style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative;">
-                    <div style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
+                <div
+                    style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative;">
+                    <div
+                        style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
                         <b>Address Information</b>
                     </div>
                     <div class="row mt-4">
                         <div class="col-md-12">
                             <div class="form-group row">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Code</b></label>
+                                <label for="inputPassword"
+                                    class="col-sm-4 col-form-label text-right"><b>Code</b></label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="txtCodeCOM">
                                 </div>
                             </div>
                             <div class="form-group row mt-1">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Account</b></label>
+                                <label for="inputPassword"
+                                    class="col-sm-4 col-form-label text-right"><b>Account</b></label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="txtAccountCOM">
                                 </div>
                             </div>
                             <div class="form-group row mt-1">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Address</b></label>
+                                <label for="inputPassword"
+                                    class="col-sm-4 col-form-label text-right"><b>Address</b></label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="txtAddressCOM">
                                 </div>
                             </div>
                             <div class="form-group row mt-1">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">City/Country</label>
+                                <label for="inputPassword"
+                                    class="col-sm-4 col-form-label text-right">City/Country</label>
                                 <div class="col-sm-8" style="display:flex;column-gap:8px">
                                     <select type="text" id="txtCityCOM">
                                         <option value="value">text</option>
@@ -451,7 +479,8 @@
                                 </div>
                             </div>
                             <div class="form-group row mt-1 mb-4">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Postal/State</label>
+                                <label for="inputPassword"
+                                    class="col-sm-4 col-form-label text-right">Postal/State</label>
                                 <div class="col-sm-8" style="display:flex;column-gap:8px">
                                     <input type="text" class="form-control" style="width:50%" id="txtPostalCOM">
                                     <select type="text" id="txtStateCOM" style="width:50%">
@@ -462,8 +491,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="mt-4" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
-                    <div class="mb-4" style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
+                <div class="mt-4"
+                    style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
+                    <div class="mb-4"
+                        style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
                         <b>Tax</b>
                     </div>
                     <div class="form-group mt-4 row">
@@ -485,8 +516,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-12 mt-4" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
-                    <div class="mb-4" style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
+                <div class="col-md-12 mt-4"
+                    style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
+                    <div class="mb-4"
+                        style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
                         <b>Communications</b>
                     </div>
                     <div class="form-group mt-4 row">
@@ -536,8 +569,10 @@
             </div>
             <div class="col-md-6 row" style="justify-content:space-between;display: flex;
                 align-items: flex-start;">
-                <div class="col-md-12" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
-                    <div style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
+                <div class="col-md-12"
+                    style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
+                    <div
+                        style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
                         <b>Internal Information</b>
                     </div>
                     <div class="form-group row mt-4">
@@ -638,14 +673,17 @@
         <!--Profile group-->
         <div class="main-infor mt-4 row" style="justify-content:space-between;display:none" id="profile_group">
             <div class="col-md-6 row">
-                <div style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative;">
-                    <div style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
+                <div
+                    style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative;">
+                    <div
+                        style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
                         <b>Address Information</b>
                     </div>
                     <div class="row mt-4">
                         <div class="col-md-12">
                             <div class="form-group row">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Code</b></label>
+                                <label for="inputPassword"
+                                    class="col-sm-4 col-form-label text-right"><b>Code</b></label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="txtCodeGroup">
                                 </div>
@@ -664,15 +702,17 @@
                                     </select>
                                 </div>
                             </div>
-                                    <div class="form-group row mt-1">
-                                        <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Address</b></label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="txtAddressGroup">
-                                        </div>
-                                    </div>
+                            <div class="form-group row mt-1">
+                                <label for="inputPassword"
+                                    class="col-sm-4 col-form-label text-right"><b>Address</b></label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="txtAddressGroup">
+                                </div>
+                            </div>
 
                             <div class="form-group row mt-1">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Home Address</label>
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Home
+                                    Address</label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="txtHomeAddressGroup">
                                 </div>
@@ -686,13 +726,15 @@
                                 </div>
                             </div>
                             <div class="form-group row mt-1">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Postal Code</label>
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Postal
+                                    Code</label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="txtPostalCodeGroup">
                                 </div>
                             </div>
                             <div class="form-group row mt-1 mb-4">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Country/State</label>
+                                <label for="inputPassword"
+                                    class="col-sm-4 col-form-label text-right">Country/State</label>
                                 <div class="col-sm-8" style="display:flex;column-gap:8px">
                                     <select type="text" id="txtCountryGroup">
                                         <option value="value">text</option>
@@ -721,8 +763,10 @@
             </div>
             <div class="col-md-6 row" style="justify-content:space-between;display: flex;
                 align-items: flex-start;">
-                <div class="col-md-12" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
-                    <div style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
+                <div class="col-md-12"
+                    style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
+                    <div
+                        style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
                         <b>Internal Information</b>
                     </div>
                     <div class="form-group row mt-4">
@@ -744,7 +788,7 @@
                         <label for="inputPassword" class="col-sm-4 col-form-label text-right">Account Type</label>
                         <div class="col-sm-8">
                             <select type="text" class="form-select">
-                     
+
                             </select>
                         </div>
                     </div>
@@ -777,8 +821,10 @@
                     </div>
                 </div>
 
-                <div class="col-md-12 mt-4" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
-                    <div class="mb-4" style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
+                <div class="col-md-12 mt-4"
+                    style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
+                    <div class="mb-4"
+                        style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
                         <b>Communications</b>
                     </div>
                     <div class="form-group mt-4 row">
@@ -808,8 +854,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-12 mt-4" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
-                    <div class="mb-4" style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
+                <div class="col-md-12 mt-4"
+                    style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
+                    <div class="mb-4"
+                        style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
                         <b>Attributes</b>
                     </div>
                     <div class="form-group mt-4 row">
@@ -832,43 +880,51 @@
         <!--Profile contact-->
         <div class="main-infor mt-4 row" style="justify-content:space-between;" id="profile_contact">
             <div class="col-md-6 row">
-                <div style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative;">
-                    <div style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
+                <div
+                    style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative;">
+                    <div
+                        style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
                         <b>Address Information</b>
                     </div>
                     <div class="row mt-4">
                         <div class="col-md-12">
                             <div class="form-group row">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Code</b></label>
+                                <label for="inputPassword"
+                                    class="col-sm-4 col-form-label text-right"><b>Code</b></label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="txtCodeContact">
                                 </div>
                             </div>
                             <div class="form-group row mb-1">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Full Name</b></label>
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Full
+                                        Name</b></label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="txtFullNameContact">
                                     <div id="errorMessageContact" style="color: red; margin-top: 5px; display: none;">
-                                        <strong>Typing format is not correct. Please typing as below: FirstName Middle, LastName </strong>
+                                        <strong>Typing format is not correct. Please typing as below: FirstName Middle,
+                                            LastName </strong>
                                     </div>
                                 </div>
 
                             </div>
                             <div class="form-group row mt-1">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">First/Last Name</label>
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">First/Last
+                                    Name</label>
                                 <div class="col-sm-8" style="display:flex;column-gap:8px">
                                     <input type="text" class="form-control" id="txtFirstNameContact">
                                     <input type="text" class="form-control" id="txtLastContact">
                                 </div>
                             </div>
                             <div class="form-group row mt-1">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Middle Name</label>
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Middle
+                                    Name</label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="txtMiddleNameContact">
                                 </div>
                             </div>
                             <div class="form-group row mt-1">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Position/Dept</label>
+                                <label for="inputPassword"
+                                    class="col-sm-4 col-form-label text-right">Position/Dept</label>
                                 <div class="col-sm-8" style="display:flex;column-gap:8px">
                                     <input type="text" class="form-control" id="txtPositionContact">
 
@@ -877,7 +933,8 @@
                                 </div>
                             </div>
                             <div class="form-group row mt-1">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Language/Title</label>
+                                <label for="inputPassword"
+                                    class="col-sm-4 col-form-label text-right">Language/Title</label>
                                 <div class="col-sm-8" style="display:flex;column-gap:8px">
                                     <select type="text" id="txtLanguageContact">
                                         <option value="value">text</option>
@@ -901,7 +958,8 @@
                                 </div>
                             </div>
                             <div class="form-group row mt-1">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Home Address</label>
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Home
+                                    Address</label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="txtHomeAddressContact">
                                 </div>
@@ -915,13 +973,15 @@
                                 </div>
                             </div>
                             <div class="form-group row mt-1">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Postal Code</label>
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Postal
+                                    Code</label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="txtPostalCodeContact">
                                 </div>
                             </div>
                             <div class="form-group row mt-1 mb-4">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Country/State</label>
+                                <label for="inputPassword"
+                                    class="col-sm-4 col-form-label text-right">Country/State</label>
                                 <div class="col-sm-8" style="display:flex;column-gap:8px">
                                     <select type="text" id="txtCountryContact">
                                         <option value="value">text</option>
@@ -937,8 +997,10 @@
             </div>
             <div class="col-md-6 row" style="justify-content:space-between;display: flex;
                 align-items: flex-start;">
-                <div class="col-md-12" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
-                    <div style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
+                <div class="col-md-12"
+                    style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
+                    <div
+                        style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
                         <b>Internal Information</b>
                     </div>
                     <div class="form-group row mt-4">
@@ -982,8 +1044,10 @@
                     </div>
 
                 </div>
-                <div class="col-md-12 mt-4" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
-                    <div class="mb-4" style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
+                <div class="col-md-12 mt-4"
+                    style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
+                    <div class="mb-4"
+                        style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
                         <b>Communications</b>
                     </div>
                     <div class="form-group mt-4 row">
@@ -1026,25 +1090,25 @@
 
 <script>
 
-     $(document).ready(async  function () {
-          var today = new Date().toISOString().split('T')[0];
+    $(document).ready(async function () {
+        var today = new Date().toISOString().split('T')[0];
         $('#txtDobIndividual').val(today);
-        await  setSelect2();
-         getAllLanguage();
-         getAllTitle();
-         getAllNationality();
-         getAllCountry();
-         getAllState();
-         getAllCity();
-         getAllVIP();
-         getPersonInCharge2();
-         getAllOwner();
-         getAllTerritory();
-         getCompanyType();
-         getCurrency();
-         getMarketType();
-         $('#form_profile').hide();
-         $('#profileTypeModal').modal('show');
+        await setSelect2();
+        getAllLanguage();
+        getAllTitle();
+        getAllNationality();
+        getAllCountry();
+        getAllState();
+        getAllCity();
+        getAllVIP();
+        getPersonInCharge2();
+        getAllOwner();
+        getAllTerritory();
+        getCompanyType();
+        getCurrency();
+        getMarketType();
+        $('#form_profile').hide();
+        $('#profileTypeModal').modal('show');
 
 
 
@@ -1052,7 +1116,7 @@
 
     var profileTypeValue = 0;
     var profileTypeLabel = '';
-    function chooseProfileType(){
+    function chooseProfileType() {
         var radios = document.getElementsByName('inlineRadioOptions');
         for (var i = 0; i < radios.length; i++) {
             if (radios[i].checked) {
@@ -1060,37 +1124,37 @@
                 profileTypeLabel = document.querySelector('label[for="' + radios[i].id + '"]').innerText;
                 $('#profileTypeModal').modal('hide');
                 $('#chooseProfileTypeLabel').text(profileTypeLabel);
-                if(profileTypeValue == '0'){
+                if (profileTypeValue == '0') {
                     $('#profile_individual').show();
                     $('#profile_com_ta_source').hide();
                     $('#profile_group').hide();
                     $('#profile_contact').hide();
                 }
-                else if(profileTypeValue == '1'){
+                else if (profileTypeValue == '1') {
                     $('#profile_individual').hide();
                     $('#profile_com_ta_source').show();
                     $('#profile_group').hide();
                     $('#profile_contact').hide();
                 }
-                else if(profileTypeValue == '2'){
-                   $('#profile_individual').hide();
-                    $('#profile_com_ta_source').show();
-                    $('#profile_group').hide();
-                    $('#profile_contact').hide();
-                }
-                else if(profileTypeValue == '3'){
+                else if (profileTypeValue == '2') {
                     $('#profile_individual').hide();
                     $('#profile_com_ta_source').show();
                     $('#profile_group').hide();
                     $('#profile_contact').hide();
                 }
-                else if(profileTypeValue == '4'){
+                else if (profileTypeValue == '3') {
+                    $('#profile_individual').hide();
+                    $('#profile_com_ta_source').show();
+                    $('#profile_group').hide();
+                    $('#profile_contact').hide();
+                }
+                else if (profileTypeValue == '4') {
                     $('#profile_individual').hide();
                     $('#profile_com_ta_source').hide();
                     $('#profile_group').show();
                     $('#profile_contact').hide();
                 }
-                else if(profileTypeValue == '5'){
+                else if (profileTypeValue == '5') {
                     $('#profile_individual').hide();
                     $('#profile_com_ta_source').hide();
                     $('#profile_group').hide();
@@ -1102,7 +1166,7 @@
         }
 
     }
-    async function setSelect2(){
+    async function setSelect2() {
         const ids = [
             "#select-beast-empty", "#txtLanguageIndividual", "#txtTitleIndividual",
             "#txtNationalityIndividual", "#txtCountryIndividual", "#txtStateIndividual",
@@ -1124,43 +1188,43 @@
             }
         }
     }
-    function closeFormProfile(){
+    function closeFormProfile() {
         $('#form_profile').hide();
         $('#profileTypeModal').modal('show');
 
     }
-     $('#txtFullNameContact').on('blur', function () {
-      var input = $(this).val().trim();
-      var regex = /^[a-zA-Z]+(?:\s[a-zA-Z]+)*,\s*[a-zA-Z]+(?:\s[a-zA-Z]+)*$/i;
-      // Ví dụ: Nguyen Van, Tuan Anh
+    $('#txtFullNameContact').on('blur', function () {
+        var input = $(this).val().trim();
+        var regex = /^[a-zA-Z]+(?:\s[a-zA-Z]+)*,\s*[a-zA-Z]+(?:\s[a-zA-Z]+)*$/i;
+        // Ví dụ: Nguyen Van, Tuan Anh
 
-      if (regex.test(input)) {
-        $('#errorMessageContact').hide();
-        $(this).removeClass('is-invalid').addClass('is-valid');
+        if (regex.test(input)) {
+            $('#errorMessageContact').hide();
+            $(this).removeClass('is-invalid').addClass('is-valid');
 
-        // Tách chuỗi theo định dạng "LastName, FirstName MiddleName"
-        var parts = input.split(',');
-        var lastName = parts[0].trim();          // "Nguyen Van"
-        var firstMiddlePart = parts[1].trim();   // "Tuan Anh"
-        var nameTokens = firstMiddlePart.split(/\s+/); // ["Tuan", "Anh"]
+            // Tách chuỗi theo định dạng "LastName, FirstName MiddleName"
+            var parts = input.split(',');
+            var lastName = parts[0].trim();          // "Nguyen Van"
+            var firstMiddlePart = parts[1].trim();   // "Tuan Anh"
+            var nameTokens = firstMiddlePart.split(/\s+/); // ["Tuan", "Anh"]
 
-        var firstName = nameTokens[0];
-        var middleName = nameTokens.slice(1).join(' '); // Có thể là rỗng
+            var firstName = nameTokens[0];
+            var middleName = nameTokens.slice(1).join(' '); // Có thể là rỗng
 
-        $('#txtFirstNameContact').val(firstName);
-        $('#txtMiddleNameContact').val(middleName);
-        $('#txtLastContact').val(lastName);
-        $('#txtSalulationContact').val('Dear ' + firstName);
+            $('#txtFirstNameContact').val(firstName);
+            $('#txtMiddleNameContact').val(middleName);
+            $('#txtLastContact').val(lastName);
+            $('#txtSalulationContact').val('Dear ' + firstName);
 
-      } else {
-        $('#errorMessageContact').show();
-        $(this).removeClass('is-valid').addClass('is-invalid');
+        } else {
+            $('#errorMessageContact').show();
+            $(this).removeClass('is-valid').addClass('is-invalid');
 
-        $('#txtFirstNameContact').val('');
-        $('#txtMiddleNameContact').val('');
-        $('#txtLastContact').val('');
-        $('#txtSalulationContact').val('');
-      }
+            $('#txtFirstNameContact').val('');
+            $('#txtMiddleNameContact').val('');
+            $('#txtLastContact').val('');
+            $('#txtSalulationContact').val('');
+        }
     });
     $('#txtFullNameIndividual').on('blur', function () {
         var input = $(this).val().trim();
@@ -1200,11 +1264,11 @@
                     if ($('#txtSalutationIndividual').length)
                         $('#txtSalutationIndividual').val(res.salutation);
 
-                         
+
                     // Title (nếu có dropdown)
                     if (res.titleID) {
-                       let selectTitle= $('#txtTitleIndividual')[0].tomselect;
-                            selectTitle.setValue(res.titleID);
+                        let selectTitle = $('#txtTitleIndividual')[0].tomselect;
+                        selectTitle.setValue(res.titleID);
                     }
                 }
             },
@@ -1368,7 +1432,7 @@
                     select2.setValue('0'); // Chọn giá trị mặc định
 
 
-                     let select3 = $('#txtCountryGroup')[0].tomselect; // Lấy instance của TomSelect
+                    let select3 = $('#txtCountryGroup')[0].tomselect; // Lấy instance của TomSelect
                     select3.clear(); // Xóa giá trị hiện tại
                     select3.clearOptions(); // Xóa tất cả option cũ
 
@@ -1378,7 +1442,7 @@
                     });
                     select3.setValue('0'); // Chọn giá trị mặc định
 
-                      let select4 = $('#txtCountryContact')[0].tomselect; // Lấy instance của TomSelect
+                    let select4 = $('#txtCountryContact')[0].tomselect; // Lấy instance của TomSelect
                     select4.clear(); // Xóa giá trị hiện tại
                     select4.clearOptions(); // Xóa tất cả option cũ
 
@@ -1414,7 +1478,7 @@
                     select.addOption({ value: '0', text: 'Please select state' });
                     result.forEach(item => {
                         // select.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
-                          select.addOption({ value: item.id, text: `${item.stateName}` });
+                        select.addOption({ value: item.id, text: `${item.stateName}` });
                     });
                     select.setValue('0'); // Chọn giá trị mặc định
 
@@ -1423,7 +1487,7 @@
                     select2.clearOptions(); // Xóa tất cả option cũ
                     select2.addOption({ value: '0', text: 'Please select state' });
                     result.forEach(item => {
-                         select2.addOption({ value: item.id, text: `${item.stateName}` });
+                        select2.addOption({ value: item.id, text: `${item.stateName}` });
                     });
                     select2.setValue('0'); // Chọn giá trị mặc định
 
@@ -1445,7 +1509,7 @@
                     });
                     select4.setValue('0'); // Chọn giá trị mặc định
                 }
-                else{
+                else {
                     let select = $('#txtStateIndividual')[0].tomselect; // Lấy instance của TomSelect
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
@@ -1480,7 +1544,7 @@
             }
         });
     }
-      function getPersonInCharge2() {
+    function getPersonInCharge2() {
         $.ajax({
             url: '/Administration/PersonInChargeData',
             type: 'get',
@@ -1513,7 +1577,7 @@
 
                     // select2.setValue('0'); // Chọn giá trị mặc định
                 }
-                else{
+                else {
                     let select = $('#txtSaleInChargeCOM')[0].tomselect; // Lấy instance của TomSelect
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
@@ -1557,7 +1621,7 @@
 
                     select.setValue('0'); // Chọn giá trị mặc định
 
-                     let select2 = $('#txtCityCOM')[0].tomselect; // Lấy instance của TomSelect
+                    let select2 = $('#txtCityCOM')[0].tomselect; // Lấy instance của TomSelect
                     select2.clear(); // Xóa giá trị hiện tại
                     select2.clearOptions(); // Xóa tất cả option cũ
 
@@ -1679,7 +1743,7 @@
 
                     select.setValue('0'); // Chọn giá trị mặc định
 
-                     let select2 = $('#txtOwnerContact')[0].tomselect; // Lấy instance của TomSelect
+                    let select2 = $('#txtOwnerContact')[0].tomselect; // Lấy instance của TomSelect
                     select2.clear(); // Xóa giá trị hiện tại
                     select2.clearOptions(); // Xóa tất cả option cũ
 
@@ -1731,14 +1795,14 @@
 
                     select2.setValue('0'); // Chọn giá trị mặc định
                 }
-                else{
+                else {
                     let select = $('#txtTerritoryCOM')[0].tomselect; // Lấy instance của TomSelect
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
                     select.addOption({ value: '0', text: 'Please select Territory' });
                     select.setValue('0');
 
-                     let select2 = $('#txtTerritoryContact')[0].tomselect; // Lấy instance của TomSelect
+                    let select2 = $('#txtTerritoryContact')[0].tomselect; // Lấy instance của TomSelect
                     select2.clear(); // Xóa giá trị hiện tại
                     select2.clearOptions(); // Xóa tất cả option cũ
                     select2.addOption({ value: '0', text: 'Please select Territory' });
@@ -1775,7 +1839,7 @@
 
                     select.setValue('0'); // Chọn giá trị mặc định
                 }
-                else{
+                else {
                     let select = $('#txtCompanyTypeCOM')[0].tomselect; // Lấy instance của TomSelect
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
@@ -1825,7 +1889,7 @@
 
                     select2.setValue('0'); // Chọn giá trị mặc định
                 }
-                else{
+                else {
                     let select = $('#txtCurrencyCOM')[0].tomselect; // Lấy instance của TomSelect
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
@@ -1871,7 +1935,7 @@
 
                     select.setValue('0'); // Chọn giá trị mặc định
                 }
-                else{
+                else {
                     let select = $('#txtMarketTypeCOM')[0].tomselect; // Lấy instance của TomSelect
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
@@ -1889,7 +1953,7 @@
             }
         });
     }
-    $('#txtMarketTypeCOM').on('change', function() {
+    $('#txtMarketTypeCOM').on('change', function () {
         console.log('change');
         getMarket();
     });
@@ -1900,7 +1964,7 @@
             dataType: 'json',
             crossDomain: false,
             headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
-            data:{marketTypeID : $('#txtMarketTypeCOM').val()},
+            data: { marketTypeID: $('#txtMarketTypeCOM').val() },
             success: function (result) {
                 if (result.length > 0) {
                     let select = $('#txtMarketCOM')[0].tomselect; // Lấy instance của TomSelect
@@ -1914,7 +1978,7 @@
 
                     select.setValue('0'); // Chọn giá trị mặc định
                 }
-                else{
+                else {
                     let select = $('#txtMarketCOM')[0].tomselect; // Lấy instance của TomSelect
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
@@ -1968,7 +2032,7 @@
         var formData = new FormData();
         formData.append('Type', profileTypeValue);
         // individual profile
-        if(profileTypeValue == 0){
+        if (profileTypeValue == 0) {
             formData.append('CodeIndividual', $("#txtCodeIndividual").val());
             formData.append('AccountIndividual', $("#txtFullNameIndividual").val());
             formData.append('LastNameIndivdual', $("#txtLastNameIndividual").val());
@@ -2011,7 +2075,7 @@
             formData.append('NoteIndividual', $("#txtNoteIndividual").val());
         }
 
-        else if(profileTypeValue == 1 || profileTypeValue == 2 || profileTypeValue == 3){
+        else if (profileTypeValue == 1 || profileTypeValue == 2 || profileTypeValue == 3) {
             formData.append('CodeCOM', $("#txtCodeCOM").val());
             formData.append('AccountCOM', $("#txtAccountCOM").val());
             formData.append('AddressCOM', $("#txtAddressCOM").val());
@@ -2042,7 +2106,7 @@
             formData.append('BlackListReasonCOM', $("#blackListCOM").val());
             formData.append('NoteCOM', $("#txtNotECOM").val());
         }
-        else if(profileTypeValue == 4){
+        else if (profileTypeValue == 4) {
             formData.append('CodeCOM', $("#txtCodeGroup").val());
             formData.append('GroupNameGroup', $("#txtGroupNameGroup").val());
             formData.append('LanguageGruop', $("#txtLanguageGroup").val());
@@ -2056,18 +2120,18 @@
             formData.append('EmailGroup', $("#txtEmailGroup").val());
             formData.append('WebsiteGroup', $("#txtWebsiteGroup").val());
             formData.append('HandPhoneGroup', $("#txtHandPhoneGroup").val());
-             formData.append('FaxGroup', $("#txtFaxGroup").val());
+            formData.append('FaxGroup', $("#txtFaxGroup").val());
             formData.append('ContactNameGroup', $("#txtContactGroup").val());
             formData.append('CurrencyGroup', $("#txtCurrencyGroup").val());
             formData.append('VIPGroup', $("#txtVIPIndividual").val());
             formData.append('VIPReason', $("#txtVIPReasonGroup").val());
             formData.append('HistoryGroup', $("#txtHistory").is(":checked"));
-                formData.append('NotesGroup', $("#txtNotesGroup").val());
-                            formData.append('AcctContact', $("#txtContactGroup").val());
+            formData.append('NotesGroup', $("#txtNotesGroup").val());
+            formData.append('AcctContact', $("#txtContactGroup").val());
 
         }
-        else{
-             formData.append('CodeContact', $("#txtCodeContact").val());
+        else {
+            formData.append('CodeContact', $("#txtCodeContact").val());
             formData.append('AccountContact', $("#txtFullNameContact").val());
             formData.append('LastNameContact', $("#txtLastContact").val());
             formData.append('FirstNameContact', $("#txtFirstNameContact").val());
@@ -2087,7 +2151,7 @@
             formData.append('TerritoryContact', $("#txtTerritoryContact").val());
             formData.append('ARNoContact', $("#txtARNoContact").val());
             formData.append('DobContact', $("#txtDobContact").val());
-             formData.append('TelephoneContact', $("#txtTelephoneContact").val());
+            formData.append('TelephoneContact', $("#txtTelephoneContact").val());
             formData.append('FaxContact', $("#txtFaxContact").val());
             formData.append('EmailContact', $("#txtEmailContact").val());
             formData.append('WebsiteContact', $("#txtWebsiteContact").val());
@@ -2104,10 +2168,10 @@
             success: function (data) {
                 if (data.code == 0) {
                     resetForm();
-                    showToast("Success", data.msg,true);
+                    showToast("Success", data.msg, true);
 
                 } else {
-                    showToast("Error", data.msg,false);
+                    showToast("Error", data.msg, false);
                 }
 
             },
@@ -2121,7 +2185,7 @@
 
 
 
-    function resetForm(){
+    function resetForm() {
         //id individual
         $("#txtCodeIndividual").val("");
         $("#txtFullNameIndividual").val("");
@@ -2192,12 +2256,12 @@
         $("#blackListCOM").val();
         $("#txtNotECOM").val();
 
-          // id group
+        // id group
         $("#txtCodeGroup").val();
         $("#txtGroupNameGroup").val();
         $("#txtLanguageGroup").val();
         $("#txtHomeAddressGroup").val();
-                $("#txtAddressGroup").val();
+        $("#txtAddressGroup").val();
         $("#txtCityGroup").val();
         $("#txtPostalCodeGroup").val();
         $("#txtCountryGroup").val();

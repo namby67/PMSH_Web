@@ -535,7 +535,6 @@ namespace Reservation.Controllers
                                   IsDefault = d["IsDefault"].ToString(),
 
                               }).ToList();
-
                 return Json(result);
             }
             catch (Exception ex)
@@ -589,7 +588,6 @@ namespace Reservation.Controllers
                                   PreferenceID = d["PreferenceID"].ToString(),
                                   Code = d["Code"].ToString(),
                                   Description = d["Description"].ToString(),
-
 
                               }).ToList();
 
@@ -1662,7 +1660,6 @@ namespace Reservation.Controllers
                     return Json(new { code = 0, msg = $"Update reservation created successfully. ConfirmationNo : {reservationModel.ConfirmationNo}" });
                 }
 
-
             }
             catch (Exception ex)
             {
@@ -2082,7 +2079,6 @@ namespace Reservation.Controllers
                 RoomTypeModel roomType = (RoomTypeModel)RoomTypeBO.Instance.FindByPrimaryKey(roomTypeID);
                 ReservationModel reservationModel = (ReservationModel)ReservationBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["rsvID"].ToString()));
                 #region edit reservation
-
                 reservationModel.ProfileComment = "";
                 reservationModel.LastName = Request.Form["lastName"].ToString();
                 reservationModel.FirstName = Request.Form["firstName"].ToString();
@@ -2126,7 +2122,6 @@ namespace Reservation.Controllers
                 reservationModel.CheckInDate = DateTime.Parse(Request.Form["arrival"].ToString());
                 reservationModel.Etd = !string.IsNullOrEmpty(Request.Form["etd"].ToString()) ? Request.Form["etd"].ToString() : "";
                 reservationModel.CheckOutDate = DateTime.Parse(Request.Form["arrival"].ToString());
-
                 if (string.IsNullOrEmpty(Request.Form["marketID"].ToString()))
                 {
                     reservationModel.MarketId = 0;
@@ -2137,7 +2132,6 @@ namespace Reservation.Controllers
                     reservationModel.MarketId = int.Parse(Request.Form["marketID"].ToString());
 
                 }
-
                 if (string.IsNullOrEmpty(Request.Form["rateCode"].ToString()))
                 {
                     reservationModel.RateCodeId = 0;
@@ -2265,7 +2259,6 @@ namespace Reservation.Controllers
                 {
                     return Json(new { code = 1, msg = "Can not find reservation" });
                 }
-
                 #region  check xem Reservation có deposit không
                 var deposit = DepositPaymentBO.Instance.FindByAttribute("ReservationID", rsv.ID);
                 if (deposit.Count > 0)
@@ -5354,7 +5347,6 @@ namespace Reservation.Controllers
                         overBooking.UpdateBy = userName;
                         overBooking.CreateDate = DateTime.Now;
                         overBooking.UpdateDate = DateTime.Now;
-
                         OverbookingBO.Instance.Insert(overBooking);
                     }
 

@@ -176,7 +176,7 @@ namespace Administration.Controllers
                         pt.UpdateAttribute("FolioDetail", Field_Exp1, Field_ExpValue1, Field_Change1, Field_ChangeValue1);
                     }
                     #endregion
-           
+
                 }
 
                 pt.CommitTransaction();
@@ -199,7 +199,7 @@ namespace Administration.Controllers
             //return BadRequest(new { success = false });
         }
         [HttpPost]
-        public IActionResult TransactionDelete(int  id)
+        public IActionResult TransactionDelete(int id)
         {
             try
             {
@@ -241,7 +241,7 @@ namespace Administration.Controllers
             }
         }
         [HttpPost]
-        public IActionResult GenerateSave(int ID,string transactionsGernew ,int percentagetext,int percengegre,int  amountPer,string formular,int percenOption,string CreatedBy,int UserInsertID,int subTotal1,int subTotal2,int subTotal3)
+        public IActionResult GenerateSave(int ID, string transactionsGernew, int percentagetext, int percengegre, int amountPer, string formular, int percenOption, string CreatedBy, int UserInsertID, int subTotal1, int subTotal2, int subTotal3)
         {
             ProcessTransactions pt = new ProcessTransactions();
             pt.OpenConnection();

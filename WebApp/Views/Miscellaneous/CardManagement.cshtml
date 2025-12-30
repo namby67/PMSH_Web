@@ -11,24 +11,28 @@
         <div class="d-flex align-items-center me-3">
             <label class="me-2 mb-0">Card Type:</label>
             <select id="cardType" name="cardType" class="form-control form-control-sm w-auto">
-                <option value="0">Card Hotel</option>       
+                <option value="0">Card Hotel</option>
             </select>
         </div>
         <div class="d-flex align-items-center me-3">
             <label class="me-2 mb-0">Status:</label>
             <select id="status" name="status" class="form-control form-control-sm w-auto">
                 <option value="1">Active</option>
-                <option value="0">Inactive</option>                
+                <option value="0">Inactive</option>
                 <option value="2">Other</option>
             </select>
         </div>
     </div>
     <div class=" mt-1">
-       
-        <button style="border-radius: 4px;  margin-right: 6px;" id="btnNew" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-plus"></i> New</button>
-        <button class="mui-button mui-button-edit" id="btnEdit" ctype="button"><i class="fa-solid fa-pen"></i> Edit</button>
-        <button class="mui-button button-report-delete" id="btnDelete"  type="button"> <i class="fa-solid fa-trash-can"></i> Delete</button>
-        <button class="mui-button mui-button-advance" id="btnSave" type="button"> <i class="fa-solid fa-floppy-disk"></i> Save</button>
+
+        <button style="border-radius: 4px;  margin-right: 6px;" id="btnNew" class="mui-button mui-button-new"
+            type="button"> <i class="fa-solid fa-plus"></i> New</button>
+        <button class="mui-button mui-button-edit" id="btnEdit" ctype="button"><i class="fa-solid fa-pen"></i>
+            Edit</button>
+        <button class="mui-button button-report-delete" id="btnDelete" type="button"> <i
+                class="fa-solid fa-trash-can"></i> Delete</button>
+        <button class="mui-button mui-button-advance" id="btnSave" type="button"> <i
+                class="fa-solid fa-floppy-disk"></i> Save</button>
     </div>
 </div>
 
@@ -43,58 +47,58 @@
 
 <script>
     DevExpress.localization.locale("vi");
-       var selectedRow;
-         function formatDate(date) {
-               let year = date.getFullYear();
-               let month = (date.getMonth() + 1).toString().padStart(2, '0'); // Đảm bảo có 2 chữ số
-               let day = date.getDate().toString().padStart(2, '0'); // Đảm bảo có 2 chữ số
-               return `${year}-${month}-${day}`;
-           }
-         $(document).ready(function () {
-                 const connection = new signalR.HubConnectionBuilder()
-                .withUrl("/tagScanHub")
-                .build();
+    var selectedRow;
+    function formatDate(date) {
+        let year = date.getFullYear();
+        let month = (date.getMonth() + 1).toString().padStart(2, '0'); // Đảm bảo có 2 chữ số
+        let day = date.getDate().toString().padStart(2, '0'); // Đảm bảo có 2 chữ số
+        return `${year}-${month}-${day}`;
+    }
+    $(document).ready(function () {
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/tagScanHub")
+            .build();
 
-            // Khi server gửi code RFID về
-                    connection.on("ReceiveCode", function (code) {
-                        console.log("Mã quét được:", code);
+        // Khi server gửi code RFID về
+        connection.on("ReceiveCode", function (code) {
+            console.log("Mã quét được:", code);
 
-                        // Gán giá trị vào ô input
-                        $("#cardID")
-                        .val(code)
-                        .trigger("change") // 🔥 Thêm dòng này để on("change") hoạt động
-                        .addClass("border-success")
-                        .fadeOut(100)
+            // Gán giá trị vào ô input
+            $("#cardID")
+                .val(code)
+                .trigger("change") // 🔥 Thêm dòng này để on("change") hoạt động
+                .addClass("border-success")
+                .fadeOut(100)
                 .fadeIn(100);
 
 
-                    });
+        });
 
-            // Bắt đầu kết nối
-                 connection.start()
-                .then(function () {
-                    console.log("✅ Kết nối SignalR thành công!");
-                })
-                .catch(function (err) {
-                    console.error("❌ Lỗi kết nối SignalR:", err);
-                });
-
-
-                $("#cardID").on("change", function () {
-                    let value = $(this).val();
-
-                    // Kiểm tra nếu đủ 8 số và toàn là số
-                    if (value.length === 8 && /^\d+$/.test(value)) {
-                        insertCard(value);
-                    }
-                });
+        // Bắt đầu kết nối
+        connection.start()
+            .then(function () {
+                console.log("✅ Kết nối SignalR thành công!");
+            })
+            .catch(function (err) {
+                console.error("❌ Lỗi kết nối SignalR:", err);
+            });
 
 
+        $("#cardID").on("change", function () {
+            let value = $(this).val();
 
-           reloadGrid();
-           });
+            // Kiểm tra nếu đủ 8 số và toàn là số
+            if (value.length === 8 && /^\d+$/.test(value)) {
+                insertCard(value);
+            }
+        });
 
-                  function insertCard(cardId) {
+
+
+        reloadGrid();
+    });
+
+    function insertCard(cardId) {
         let cardTypeId = $("#cardType").val();
         let status = $("#status").val();
 
@@ -109,7 +113,7 @@
                 CanSell: false // mặc định
             }),
             success: function (res) {
-                
+
                 if (res.success) {
                     showToast("Success", "Insert success", 2000);
                     $("#gridContainerRateCode").dxDataGrid("instance").refresh();
@@ -120,11 +124,11 @@
                 }
             },
             error: function (xhr) {
-               showToast("Error", "Insert error!", false);
+                showToast("Error", "Insert error!", false);
             }
         });
     }
-        $("#btnEdit").on("click", function () {
+    $("#btnEdit").on("click", function () {
         if (!selectedRow) {
             DevExpress.ui.notify("Please select a row first!", "warning", 2000);
             return;
@@ -135,13 +139,13 @@
         $("#cardType").val(selectedRow.cardTypeID);
         $("#status").val(selectedRow.status);
     });
-     $("#btnDelete").on("click", function () {
-         if (!selectedRow) {
+    $("#btnDelete").on("click", function () {
+        if (!selectedRow) {
             DevExpress.ui.notify("Please select a row first!", "warning", 2000);
             return;
         }
 
-                Swal.fire({
+        Swal.fire({
             title: 'Are you sure?',
             text: "This action cannot be undone.",
             icon: 'warning',
@@ -158,9 +162,9 @@
                 deleteSelectedItem();
             }
         });
-  
+
     });
-        $("#btnSave").on("click", function() {
+    $("#btnSave").on("click", function () {
         if (!selectedRow) {
             alert("Please select a row  để lưu");
             return;
@@ -179,7 +183,7 @@
                 CardTypeID: parseInt(cardTypeId),
                 Status: parseInt(status)
             }),
-               success: function(res) {
+            success: function (res) {
                 console.log(res); // kiểm tra server trả về gì
                 // hỗ trợ nhiều kiểu response
                 if ((res.updated && res.updated > 0) || res.success) {
@@ -188,25 +192,25 @@
                     selectedRow = null;
                     $("#cardID").val("");
                 } else {
-                    showToast("Error", res.message , false);
+                    showToast("Error", res.message, false);
                 }
             },
 
-            error: function(xhr) {
+            error: function (xhr) {
                 showToast("Error", "Update error!", false);
             }
         });
     });
 
-       function reloadGrid() {
+    function reloadGrid() {
         $("#loadingSpinnerRateCode").show();
-     
+
         $.ajax({
             url: "/Miscellaneous/GetCardManagement",
             type: "GET",
             success: function (data) {
 
-                    $("#gridContainerRateCode").dxDataGrid({
+                $("#gridContainerRateCode").dxDataGrid({
                     dataSource: {
                         load: function () {
                             return $.getJSON("/Miscellaneous/GetCardManagement");
@@ -231,26 +235,26 @@
                         { dataField: "updatedDate", caption: "Updated Date", dataType: "date" },
                     ],
                     scrolling: {
-                    mode: "standard", // Không dùng virtual để footer hiển thị đúng
-                    showScrollbar: "always",
-                    scrollByContent: true
-                },
-                paging: {
-                    pageSize: 20
-                },
-                pager: {
-                    visible: true,
-                    allowedPageSizes: [20, 50, 'all'],
-                    showPageSizeSelector: true,
-                    showInfo: true,
-                    showNavigationButtons: true
-                },
-                columnAutoWidth: true,
-                filterRow: { visible:true, applyFilter:"auto" },
+                        mode: "standard", // Không dùng virtual để footer hiển thị đúng
+                        showScrollbar: "always",
+                        scrollByContent: true
+                    },
+                    paging: {
+                        pageSize: 20
+                    },
+                    pager: {
+                        visible: true,
+                        allowedPageSizes: [20, 50, 'all'],
+                        showPageSizeSelector: true,
+                        showInfo: true,
+                        showNavigationButtons: true
+                    },
+                    columnAutoWidth: true,
+                    filterRow: { visible: true, applyFilter: "auto" },
 
                     onSelectionChanged: function (e) {
-                    selectedRow = e.selectedRowsData[0]; // lấy dòng đã chọn
-                }
+                        selectedRow = e.selectedRowsData[0]; // lấy dòng đã chọn
+                    }
                 });
 
                 console.log(data);
@@ -262,10 +266,10 @@
             }
         });
     }
-   
 
 
-        function deleteSelectedItem() {
+
+    function deleteSelectedItem() {
         $.ajax({
             url: "/Miscellaneous/DeleteCard",
             type: "POST",
@@ -273,7 +277,7 @@
             data: JSON.stringify({ ID: selectedRow.id }), // phải đúng property tên ID
             success: function (res) {
                 if (res.deleted > 0 || res.success) {
-                  showToast("Success", "Deleted successfully!", true);
+                    showToast("Success", "Deleted successfully!", true);
                     reloadGrid();
                     selectedRow = null;
                 } else {
@@ -282,7 +286,7 @@
             },
             error: function (xhr) {
                 console.error("Delete error:", xhr.responseText);
-                    showToast("Error", "Delete error!", false);
+                showToast("Error", "Delete error!", false);
             }
         });
     }

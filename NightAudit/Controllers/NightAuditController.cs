@@ -36,7 +36,7 @@ namespace NightAudit.Controllers
         DataTable dt_RoomType = null;
         bool _IsRunning = false;
         string path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).Substring(6);
-      //  ProcessTransactions pt = null;
+        //  ProcessTransactions pt = null;
 
 
         string time = "";
@@ -148,7 +148,7 @@ namespace NightAudit.Controllers
     "AND ReservationNo > 0"
 );
 
-           // dataNotCheckIn = pt.getTable("spNightAuditNotCheckInSearch", new SqlParameter("@ArrivalDate", pt.GetBusinessDateTime()), "tblNotCheckIn");
+            // dataNotCheckIn = pt.getTable("spNightAuditNotCheckInSearch", new SqlParameter("@ArrivalDate", pt.GetBusinessDateTime()), "tblNotCheckIn");
             if (dataNotCheckIn.Rows.Count > 0)
             {
                 _IsNotCI = true;
@@ -179,7 +179,7 @@ namespace NightAudit.Controllers
     "AND DATEDIFF(day, '" + businessDateSql + "', DepartureDate) = 0 " +
     "AND ReservationNo <> 0"
 );
-          //  dataNotCheckIn = pt.getTable("spNightAuditNotCheckOutSearch", new SqlParameter("@DeparturDate", TextUtils.GetBusinessDateTime()), "tblNotCheckOut");
+            //  dataNotCheckIn = pt.getTable("spNightAuditNotCheckOutSearch", new SqlParameter("@DeparturDate", TextUtils.GetBusinessDateTime()), "tblNotCheckOut");
             //Kiểm tra những người đến ngày checkout nhưng chưa check out
             if (dataNotCheckIn.Rows.Count > 0)
             {
@@ -240,7 +240,7 @@ namespace NightAudit.Controllers
         {
             try
             {
-                 DateTime time = ((BusinessDateModel)BusinessDateBO.Instance.FindAll()[0]).BusinessDate;
+                DateTime time = ((BusinessDateModel)BusinessDateBO.Instance.FindAll()[0]).BusinessDate;
                 _IsOK = true;
                 string strDelete = "DELETE FROM dbo.FolioDetail WHERE UserName ='$$' AND DATEDIFF(day,TransactionDate,'" + time.ToString("yyyy/MM/dd") + "')=0";
                 TextUtils.ExcuteSQL(strDelete);
@@ -715,7 +715,6 @@ namespace NightAudit.Controllers
                 //Nếu chưa có thì tạo mới
                 else
                 {
-                  
                     ReservationModel mR = (ReservationModel)ReservationBO.Instance.FindByPrimaryKey(_FromRsvID);
                     mR.Status = 0;
                     mR.MainGuest = false;
@@ -1699,7 +1698,6 @@ namespace NightAudit.Controllers
                 _Message = ex.Message;
                 return false;
             }
-         
         }
 
 
@@ -3661,7 +3659,7 @@ namespace NightAudit.Controllers
                         //if (pt != null)
                         //    pt.Insert(mATF);
                         //else
-                            AllotmentTransferBO.Instance.Insert(mATF);
+                        AllotmentTransferBO.Instance.Insert(mATF);
                         #endregion
 
                         #region 2.Insert to table AllotmentDetail - To
@@ -3752,7 +3750,7 @@ namespace NightAudit.Controllers
                         //if (pt != null)
                         //    pt.Insert(mATF);
                         //else
-                            AllotmentTransferBO.Instance.Insert(mATF);
+                        AllotmentTransferBO.Instance.Insert(mATF);
                         #endregion
 
                         #region 2.Insert to table AllotmentDetail - To
@@ -3982,7 +3980,6 @@ namespace NightAudit.Controllers
             ProcessTransactions pt = new ProcessTransactions();
             try
             {
-                
                 pt.OpenConnection();
                 pt.BeginTransaction();
 
@@ -4019,7 +4016,6 @@ namespace NightAudit.Controllers
 
                 #endregion
 
-
                 pt.CommitTransaction();
                 return Json(new { code = 0, msg = "Check out was successfully" });
             }
@@ -4040,7 +4036,6 @@ namespace NightAudit.Controllers
             ProcessTransactions pt = new ProcessTransactions();
             try
             {
-                
                 pt.OpenConnection();
                 pt.BeginTransaction();
 
@@ -4089,7 +4084,6 @@ namespace NightAudit.Controllers
 
                 #endregion
 
-
                 pt.CommitTransaction();
                 return Json(new { code = 0, msg = "Check out was successfully" });
             }
@@ -4110,7 +4104,6 @@ namespace NightAudit.Controllers
             ProcessTransactions pt = new ProcessTransactions();
             try
             {
-               
                 pt.OpenConnection();
                 pt.BeginTransaction();
 
@@ -4177,8 +4170,8 @@ namespace NightAudit.Controllers
         [HttpPost]
         public ActionResult Preprocess()
         {
-            
-     
+
+
             try
             {
 
@@ -4215,17 +4208,14 @@ namespace NightAudit.Controllers
                 #endregion
 
 
-             
                 return Json(new { code = 0, msg = "Check out was successfully" });
             }
             catch (Exception ex)
             {
-               
                 return Json(new { code = 1, msg = ex.Message });
             }
             finally
             {
-                
             }
         }
 
@@ -4235,7 +4225,6 @@ namespace NightAudit.Controllers
             ProcessTransactions pt = new ProcessTransactions();
             try
             {
-                
                 pt.OpenConnection();
                 pt.BeginTransaction();
 
@@ -4282,7 +4271,6 @@ namespace NightAudit.Controllers
             ProcessTransactions pt = new ProcessTransactions();
             try
             {
-               
                 pt.OpenConnection();
                 pt.BeginTransaction();
 
@@ -4389,7 +4377,6 @@ namespace NightAudit.Controllers
             ProcessTransactions pt = new ProcessTransactions();
             try
             {
-               
                 pt.OpenConnection();
                 pt.BeginTransaction();
 
@@ -4490,7 +4477,6 @@ namespace NightAudit.Controllers
             ProcessTransactions pt = new ProcessTransactions();
             try
             {
-               
                 pt.OpenConnection();
                 pt.BeginTransaction();
 
@@ -4562,7 +4548,6 @@ namespace NightAudit.Controllers
 
                 #endregion
 
-
                 pt.CommitTransaction();
                 return Json(new { code = 0, msg = "Check out was successfully" });
             }
@@ -4582,7 +4567,6 @@ namespace NightAudit.Controllers
             ProcessTransactions pt = new ProcessTransactions();
             try
             {
-                
                 pt.OpenConnection();
                 pt.BeginTransaction();
 
@@ -4647,7 +4631,6 @@ namespace NightAudit.Controllers
             ProcessTransactions pt = new ProcessTransactions();
             try
             {
-                
                 pt.OpenConnection();
                 pt.BeginTransaction();
 

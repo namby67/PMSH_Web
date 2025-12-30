@@ -7,11 +7,12 @@
     .form-control,
     .form-control-sm {
         position: relative;
-        right: 10px; /* thử -1px hoặc -2px nếu còn lệch */
+        right: 10px;
+        /* thử -1px hoặc -2px nếu còn lệch */
     }
-
 </style>
-<div id="loadingSpinner" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
+<div id="loadingSpinner"
+    style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
     <i class="fa-solid fa-spinner fa-spin"></i>
 </div>
 
@@ -19,7 +20,8 @@
     <div class="header" style="justify-content:center;border:none">
         <h3 id="content-title">Search Profile</h3>
     </div>
-    <div class="functions-pane mb-2 row" style="background-color: var(--accent-color);border-radius: 8px; border: 1px solid #e5e7eb;box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);padding:0px">
+    <div class="functions-pane mb-2 row"
+        style="background-color: var(--accent-color);border-radius: 8px; border: 1px solid #e5e7eb;box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);padding:0px">
         <div class="function-menu col-md-10">
             <a href="#" onclick="getAllProfiles();">Search</a>
 
@@ -28,9 +30,9 @@
             <a href="#" onclick="clearSearchForm();">Clear</a>
             <a href="#" onclick="openModalOption();">Option</a>
             <a href="#" onclick="openModalFuture();">Future</a>
-            <a href="#"  onclick="window.location.href='@Url.Action("Index", "Home")'">Close</a>
+            <a href="#" onclick="window.location.href='@Url.Action("Index", "Home")'">Close</a>
         </div>
-        
+
     </div>
     <div class="row">
         <div class="form-group-new-reservation col-md-2">
@@ -57,14 +59,14 @@
         <div class="form-group-new-reservation col-md-2">
             <label for="txtTitle">Keyword</label>
             <div class="row" style="margin-left:1px;margin-right:2px">
-                <input type="text" id="txtKeyword" >
+                <input type="text" id="txtKeyword">
 
             </div>
         </div>
         <div class="form-group-new-reservation col-md-2">
             <label for="txtTitle">First Name</label>
             <div class="row" style="margin-left:1px;margin-right:2px">
-                <input type="text" id="txtFirstName" >
+                <input type="text" id="txtFirstName">
 
             </div>
         </div>
@@ -72,7 +74,7 @@
         <div class="form-group-new-reservation col-md-2">
             <label for="txtTitle">Code</label>
             <div class="row" style="margin-left:1px;margin-right:2px">
-                <input type="text" id="txtCode" >
+                <input type="text" id="txtCode">
 
             </div>
         </div>
@@ -93,7 +95,7 @@
         </div>
         <div class="form-group-new-reservation col-md-2">
             <div class="row" style="margin-left:1px;margin-right:2px">
-                <input type="checkbox" class="form-check-input" id="txtShowSaleInCharge" >
+                <input type="checkbox" class="form-check-input" id="txtShowSaleInCharge">
                 <label class="form-check-label" for="termsCheckbox">Show Sale In Charge</label>
             </div>
         </div>
@@ -105,7 +107,8 @@
 </div>
 
 
-<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="modalEdit">
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true"
+    id="modalEdit">
     <div class="modal-dialog modal-fullscreen">
         <div class="modal-content">
             <div class="modal-header">
@@ -114,46 +117,56 @@
             </div>
             <div class="modal-body">
                 <div class="main-infor mt-4 row" style="justify-content:space-between" id="profile_individual">
-                    <div class="col-md-6" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative;">
-                        <div style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
+                    <div class="col-md-6"
+                        style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative;">
+                        <div
+                            style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
                             <b>Address Information</b>
                         </div>
                         <div class="row mt-4">
                             <div class="col-md-4" id="image_wrapper">
                                 <div style="margin:0px">Image</div>
-                                <div class="mt-2" style="height: 240px;box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;background-color:#ececec"></div>
+                                <div class="mt-2"
+                                    style="height: 240px;box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;background-color:#ececec">
+                                </div>
                             </div>
                             <div class="col-md-8">
                                 <div class="form-group row">
-                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Code</b></label>
+                                    <label for="inputPassword"
+                                        class="col-sm-4 col-form-label text-right"><b>Code</b></label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" id="txtCodeIndividual">
                                     </div>
                                 </div>
                                 <div class="form-group row mt-1">
-                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Full Name</b></label>
+                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Full
+                                            Name</b></label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" id="txtFullNameIndividual">
                                         <div id="errorMessage" style="color: red; margin-top: 5px; display: none;">
-                                            <strong>Typing format is not correct. Please typing as below: FirstName Middle, LastName </strong>
+                                            <strong>Typing format is not correct. Please typing as below: FirstName
+                                                Middle, LastName </strong>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group row mt-1">
-                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">First/Last Name</label>
+                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">First/Last
+                                        Name</label>
                                     <div class="col-sm-8" style="display:flex;column-gap:8px">
                                         <input type="text" class="form-control" id="txtFirstNameIndividual">
                                         <input type="text" class="form-control" id="txtLastNameIndividual">
                                     </div>
                                 </div>
                                 <div class="form-group row mt-1">
-                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Middle Name</label>
+                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Middle
+                                        Name</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" id="txtMiddleNameIndividual">
                                     </div>
                                 </div>
                                 <div class="form-group row mt-1">
-                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Language/Title</label>
+                                    <label for="inputPassword"
+                                        class="col-sm-4 col-form-label text-right">Language/Title</label>
                                     <div class="col-sm-8 row" style="justify-content:space-between">
                                         <select type="text" id="txtLanguageIndividual" class="col-md-6">
                                         </select>
@@ -163,7 +176,8 @@
                                     </div>
                                 </div>
                                 <div class="form-group row mt-1">
-                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right" style="white-space: normal; word-break: break-word;">Nationality/Country</label>
+                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right"
+                                        style="white-space: normal; word-break: break-word;">Nationality/Country</label>
                                     <div class="col-sm-8  row" style="justify-content:space-between">
                                         <select type="text" id="txtNationalityIndividual" class="col-md-6">
                                         </select>
@@ -180,40 +194,47 @@
                                     </div>
                                 </div>
                                 <div class="form-group row mt-1">
-                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Postal/State</label>
+                                    <label for="inputPassword"
+                                        class="col-sm-4 col-form-label text-right">Postal/State</label>
                                     <div class="col-sm-8 " style="display:flex;column-gap:8px">
-                                        <input type="text" class="form-control" style="width:50%;" id="txtPostalIndividual">
+                                        <input type="text" class="form-control" style="width:50%;"
+                                            id="txtPostalIndividual">
                                         <select type="text" id="txtStateIndividual" style="width:50%;">
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group row mt-1">
-                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Religion/Nation</label>
+                                    <label for="inputPassword"
+                                        class="col-sm-4 col-form-label text-right">Religion/Nation</label>
                                     <div class="col-sm-8" style="display:flex;column-gap:8px">
                                         <input type="text" class="form-control" id="txtReligionIndividual">
                                         <input type="text" class="form-control" id="txtNationIndividual">
                                     </div>
                                 </div>
                                 <div class="form-group row mt-1 mb-4">
-                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Purpose Of Stay</label>
+                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Purpose Of
+                                        Stay</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" id="txtPurposeIndividual">
                                     </div>
                                 </div>
                                 <div class="form-group row mt-1 mb-4">
-                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Address</label>
+                                    <label for="inputPassword"
+                                        class="col-sm-4 col-form-label text-right">Address</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" id="txtAddressIndividual">
                                     </div>
                                 </div>
                             </div>
                         </div>
-  
+
                     </div>
                     <div class="col-md-6 row" style="justify-content:space-between;display: flex;
                 align-items: flex-start;">
-                        <div class="col-md-5" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
-                            <div style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
+                        <div class="col-md-5"
+                            style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
+                            <div
+                                style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
                                 <b>Internal Information</b>
                             </div>
                             <div class="form-group row mt-4">
@@ -254,13 +275,15 @@
                                 </div>
                             </div>
                             <div class="form-group row mt-1">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Identity Card</label>
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Identity
+                                    Card</label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="txtCardIndividual">
                                 </div>
                             </div>
                             <div class="form-group row mt-1">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Date of birth</label>
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Date of
+                                    birth</label>
                                 <div class="col-sm-8">
                                     <input type="date" class="form-control" id="txtDobIndividual">
                                 </div>
@@ -271,7 +294,8 @@
                             <div class="form-group row mb0-1" style="justify-content:center">
                                 <div class="col-sm-6 text-end">
                                     <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="txtActiveIndividual" checked>
+                                        <input type="checkbox" class="form-check-input" id="txtActiveIndividual"
+                                            checked>
                                         <label class="form-check-label" for="termsCheckbox">Active</label>
                                     </div>
                                 </div>
@@ -291,41 +315,50 @@
 
                         </div>
                         <div class="col-md-7 row">
-                            <div class="col-md-12" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
-                                <div class="mb-4" style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
+                            <div class="col-md-12"
+                                style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
+                                <div class="mb-4"
+                                    style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
                                     <b>Tax</b>
                                 </div>
                                 <div class="form-group mt-4 row">
-                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Company</label>
+                                    <label for="inputPassword"
+                                        class="col-sm-4 col-form-label text-right">Company</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" id="txtCompanyIndividual">
                                     </div>
                                 </div>
                                 <div class="form-group row mt-1">
-                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Tax code</label>
+                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Tax
+                                        code</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" id="txtTaxIndividual">
                                     </div>
                                 </div>
                                 <div class="form-group row mt-1 mb-4">
-                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Bus .Address</label>
+                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Bus
+                                        .Address</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" id="txtBusAddressIndividual">
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-12 mt-4" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
-                                <div class="mb-4" style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
+                            <div class="col-md-12 mt-4"
+                                style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
+                                <div class="mb-4"
+                                    style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
                                     <b>Communications</b>
                                 </div>
                                 <div class="form-group mt-4 row">
-                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Telephone</label>
+                                    <label for="inputPassword"
+                                        class="col-sm-4 col-form-label text-right">Telephone</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" id="txtTelephoneIndividual">
                                     </div>
                                 </div>
                                 <div class="form-group row mt-1">
-                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Hand Phone</label>
+                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Hand
+                                        Phone</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" id="txtHandPhoneIndividual">
                                     </div>
@@ -345,19 +378,22 @@
                                     </div>
                                 </div>
                                 <div class="form-group row mt-1">
-                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Website</label>
+                                    <label for="inputPassword"
+                                        class="col-sm-4 col-form-label text-right">Website</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" id="txtWebsiteIndividual">
                                     </div>
                                 </div>
                                 <div class="form-group row mt-1">
-                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Company</label>
+                                    <label for="inputPassword"
+                                        class="col-sm-4 col-form-label text-right">Company</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" id="txtCompany2Individual">
                                     </div>
                                 </div>
                                 <div class="form-group row mt-1 mb-4">
-                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Business Title</label>
+                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Business
+                                        Title</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" id="txtBusinessTitleIndividual">
                                     </div>
@@ -376,16 +412,19 @@
                         <div class="row mt-4" style="justify-content:space-between">
                             <div class="col-sm-2" style="color:red">Notes</div>
                             <div class="col-sm-10">
-                                <textarea  class="form-control" rows="4" id="txtNoteIndividual"></textarea>
+                                <textarea class="form-control" rows="4" id="txtNoteIndividual"></textarea>
                             </div>
                         </div>
                         <div class="col-md-12 row mt-4" style="justify-content:space-between">
-                            <div class="col-md-12 mt-4" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
-                                <div class="mb-4" style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
+                            <div class="col-md-12 mt-4"
+                                style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
+                                <div class="mb-4"
+                                    style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
                                     <b>Attributes</b>
                                 </div>
                                 <div class="form-group row mt-4">
-                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Rate code</label>
+                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Rate
+                                        code</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control">
                                     </div>
@@ -397,14 +436,17 @@
                                     </div>
                                 </div>
                                 <div class="form-group row mt-1 mb-4">
-                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Member No</label>
+                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Member
+                                        No</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control">
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-7" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
-                                <div class="mb-4" style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
+                            <div class="col-md-7"
+                                style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
+                                <div class="mb-4"
+                                    style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
                                     <b>History Information</b>
                                 </div>
                                 <div class="row mt-4">
@@ -420,7 +462,8 @@
                                     </div>
                                 </div>
                                 <div class="form-group row mt-1">
-                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Last Rate</label>
+                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Last
+                                        Rate</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control">
                                     </div>
@@ -438,51 +481,60 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#modalEdit').modal('hide');">Close</button>
-                <button type="button" class="btn btn-primary" onclick="SaveProfile();" style="background-color:#01579b">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                    onclick="$('#modalEdit').modal('hide');">Close</button>
+                <button type="button" class="btn btn-primary" onclick="SaveProfile();"
+                    style="background-color:#01579b">Save changes</button>
             </div>
         </div>
     </div>
 </div>
 
-<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel2" aria-hidden="true" id="modalEditCOM">
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel2" aria-hidden="true"
+    id="modalEditCOM">
     <div class="modal-dialog modal-fullscreen">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="profileTypeModalLabelCOM">Edit Profile</h5>
-              @*   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                @*   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button> *@
             </div>
             <div class="modal-body">
                 <div class="main-infor mt-4 row" style="justify-content:space-between;" id="profile_com_ta_source">
                     <div class="col-md-6 row">
-                        <div style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative;">
-                            <div style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
+                        <div
+                            style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative;">
+                            <div
+                                style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
                                 <b>Address Information</b>
                             </div>
                             <div class="row mt-4">
                                 <div class="col-md-12">
                                     <div class="form-group row">
-                                        <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Code</b></label>
+                                        <label for="inputPassword"
+                                            class="col-sm-4 col-form-label text-right"><b>Code</b></label>
                                         <div class="col-sm-8">
                                             <input type="text" class="form-control" id="txtCodeCOM">
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Account</b></label>
+                                        <label for="inputPassword"
+                                            class="col-sm-4 col-form-label text-right"><b>Account</b></label>
                                         <div class="col-sm-8">
                                             <input type="text" class="form-control" id="txtAccountCOM">
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Address</b></label>
+                                        <label for="inputPassword"
+                                            class="col-sm-4 col-form-label text-right"><b>Address</b></label>
                                         <div class="col-sm-8">
                                             <input type="text" class="form-control" id="txtAddressCOM">
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">City/Country</label>
+                                        <label for="inputPassword"
+                                            class="col-sm-4 col-form-label text-right">City/Country</label>
                                         <div class="col-sm-8" style="display:flex;column-gap:8px">
                                             <select type="text" id="txtCityCOM">
                                                 <option value="value">text</option>
@@ -494,7 +546,8 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Postal/State</label>
+                                        <label for="inputPassword"
+                                            class="col-sm-4 col-form-label text-right">Postal/State</label>
                                         <div class="col-sm-8" style="display:flex;column-gap:8px">
                                             <input type="text" class="form-control" style="width:50%" id="txtPostalCOM">
                                             <select type="text" id="txtStateCOM" style="width:50%">
@@ -505,8 +558,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="mt-4" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
-                            <div class="mb-4" style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
+                        <div class="mt-4"
+                            style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
+                            <div class="mb-4"
+                                style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
                                 <b>Tax</b>
                             </div>
                             <div class="form-group mt-4 row">
@@ -522,14 +577,17 @@
                                 </div>
                             </div>
                             <div class="form-group row ">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Bus .Address</label>
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Bus
+                                    .Address</label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="txtBusAddressCOM">
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-12 mt-4" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
-                            <div class="mb-4" style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
+                        <div class="col-md-12 mt-4"
+                            style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
+                            <div class="mb-4"
+                                style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
                                 <b>Communications</b>
                             </div>
                             <div class="form-group mt-4 row">
@@ -539,7 +597,8 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Contract Name</label>
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Contract
+                                    Name</label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="txtContractName">
                                 </div>
@@ -570,7 +629,8 @@
                                 </div>
                             </div>
                             <div class="form-group row ">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Business Title</label>
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Business
+                                    Title</label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="txtBusTitleCOM">
                                 </div>
@@ -579,8 +639,10 @@
                     </div>
                     <div class="col-md-6 row" style="justify-content:space-between;display: flex;
                 align-items: flex-start;">
-                        <div class="col-md-12" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
-                            <div style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
+                        <div class="col-md-12"
+                            style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
+                            <div
+                                style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
                                 <b>Internal Information</b>
                             </div>
                             <div class="form-group row mt-4">
@@ -629,15 +691,17 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Sale In Charge</label>
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Sale In
+                                    Charge</label>
                                 <div class="col-sm-8">
-                                    <select type="text"  id="txtSaleInChargeCOM">
+                                    <select type="text" id="txtSaleInChargeCOM">
                                         <option value="value">text</option>
                                     </select>
                                 </div>
                             </div>
                             <div style="display:none" class="form-group row">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Market Type</label>
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Market
+                                    Type</label>
                                 <div class="col-sm-8">
                                     <select type="text" id="txtMarketTypeCOM">
                                         <option value="value">text</option>
@@ -679,14 +743,17 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#modalEditCOM').modal('hide');">Close</button>
-                <button type="button" class="btn btn-primary" onclick="SaveProfile();" style="background-color:#01579b">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                    onclick="$('#modalEditCOM').modal('hide');">Close</button>
+                <button type="button" class="btn btn-primary" onclick="SaveProfile();"
+                    style="background-color:#01579b">Save changes</button>
             </div>
         </div>
     </div>
 </div>
 
-<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel2" aria-hidden="true" id="modalEditGroup">
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel2" aria-hidden="true"
+    id="modalEditGroup">
     <div class="modal-dialog modal-fullscreen">
         <div class="modal-content">
             <div class="modal-header">
@@ -698,26 +765,31 @@
             <div class="modal-body">
                 <div class="main-infor mt-4 row" style="justify-content:space-between;" id="profile_com_ta_source">
                     <div class="col-md-6 row">
-                        <div style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative;">
-                            <div style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
+                        <div
+                            style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative;">
+                            <div
+                                style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
                                 <b>Address Information</b>
                             </div>
                             <div class="row mt-4">
                                 <div class="col-md-12">
                                     <div class="form-group row">
-                                        <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Code</b></label>
+                                        <label for="inputPassword"
+                                            class="col-sm-4 col-form-label text-right"><b>Code</b></label>
                                         <div class="col-sm-8">
                                             <input type="text" class="form-control" id="txtCodeGroup">
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Group Name</b></label>
+                                        <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Group
+                                                Name</b></label>
                                         <div class="col-sm-8">
                                             <input type="text" class="form-control" id="txtGroupName">
                                         </div>
                                     </div>
                                     <div class="form-group row mt-1">
-                                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Language</label>
+                                        <label for="inputPassword"
+                                            class="col-sm-4 col-form-label text-right">Language</label>
                                         <div class="col-sm-8 row" style="justify-content:space-between">
                                             <select type="text" id="txtLanguageGroup" class="col-md-6">
                                                 <option value="value">text</option>
@@ -725,31 +797,37 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Address</b></label>
+                                        <label for="inputPassword"
+                                            class="col-sm-4 col-form-label text-right"><b>Address</b></label>
                                         <div class="col-sm-8">
                                             <input type="text" class="form-control" id="txtAddressGroup">
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Home Address</b></label>
+                                        <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Home
+                                                Address</b></label>
                                         <div class="col-sm-8">
                                             <input type="text" class="form-control" id="txtHomeAddressGroup">
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">City</label>
+                                        <label for="inputPassword"
+                                            class="col-sm-4 col-form-label text-right">City</label>
                                         <div class="col-sm-8" style="display:flex;column-gap:8px">
                                             <input type="text" class="form-control" id="txtCityGroup">
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Postal Code</label>
+                                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Postal
+                                            Code</label>
                                         <div class="col-sm-8" style="display:flex;column-gap:8px">
-                                            <input type="text" class="form-control" style="width:50%" id="txtPostalGroup">
+                                            <input type="text" class="form-control" style="width:50%"
+                                                id="txtPostalGroup">
                                         </div>
                                     </div>
                                     <div class="form-group row mt-1">
-                                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Country/State</label>
+                                        <label for="inputPassword"
+                                            class="col-sm-4 col-form-label text-right">Country/State</label>
                                         <div class="col-sm-8 row" style="justify-content:space-between">
                                             <select type="text" id="txtCountryGroup" class="col-md-6">
                                             </select>
@@ -760,9 +838,11 @@
                                 </div>
                             </div>
                         </div>
-                 
-                        <div class="col-md-12 mt-4" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
-                            <div class="mb-4" style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
+
+                        <div class="col-md-12 mt-4"
+                            style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
+                            <div class="mb-4"
+                                style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
                                 <b>Communications</b>
                             </div>
                             <div class="form-group mt-4 row">
@@ -771,7 +851,7 @@
                                     <input type="text" class="form-control" id="txtTelephoneGroup">
                                 </div>
                             </div>
-                   @*          <div class="form-group row">
+                            @*          <div class="form-group row">
                                 <label for="inputPassword" class="col-sm-4 col-form-label text-right">Contract Name</label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="txtContractNameGroup">
@@ -802,18 +882,21 @@
                                     <input type="text" class="form-control" id="txtFax">
                                 </div>
                             </div>
-                          
+
                         </div>
-                       
+
                     </div>
                     <div class="col-md-6 row" style="justify-content:space-between;display: flex;
                 align-items: flex-start;">
-                        <div class="col-md-12" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
-                            <div style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
+                        <div class="col-md-12"
+                            style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
+                            <div
+                                style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
                                 <b>Internal Information</b>
                             </div>
                             <div class="form-group row mt-4">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Acct.Contact</label>
+                                <label for="inputPassword"
+                                    class="col-sm-4 col-form-label text-right">Acct.Contact</label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="txtAcctContact">
                                 </div>
@@ -827,10 +910,11 @@
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Account Type</label>
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Account
+                                    Type</label>
                                 <div class="col-sm-8">
                                     <select id="txtAccountGroup">
-                                   
+
                                     </select>
                                 </div>
                             </div>
@@ -855,7 +939,7 @@
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
-             
+
                                 <div class="col-sm-6">
                                     <div class="form-check">
                                         <input type="checkbox" class="form-check-input" id="txtHistoryGroup">
@@ -865,12 +949,15 @@
                             </div>
                         </div>
                         <div class="col-md-12 row mt-4" style="justify-content:space-between">
-                            <div class="col-md-5" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
-                                <div class="mb-4" style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
+                            <div class="col-md-5"
+                                style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
+                                <div class="mb-4"
+                                    style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#01579b">
                                     <b>Attributes</b>
                                 </div>
                                 <div class="form-group row mt-4">
-                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Rate code</label>
+                                    <label for="inputPassword" class="col-sm-4 col-form-label text-right">Rate
+                                        code</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" readonly>
                                     </div>
@@ -881,23 +968,26 @@
                                         <input type="text" class="form-control" readonly>
                                     </div>
                                 </div>
-                             
+
                             </div>
 
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#modalEditGroup').modal('hide');">Close</button>
-                <button type="button" class="btn btn-primary" onclick="SaveProfile();" style="background-color:#01579b">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                    onclick="$('#modalEditGroup').modal('hide');">Close</button>
+                <button type="button" class="btn btn-primary" onclick="SaveProfile();"
+                    style="background-color:#01579b">Save changes</button>
             </div>
         </div>
     </div>
 </div>
 
-<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel2" aria-hidden="true" id="modelReservation">
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel2" aria-hidden="true"
+    id="modelReservation">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
@@ -908,7 +998,8 @@
                 <div style="height:1px;background-color:#ececec" class="mt-3"></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#modelReservation').modal('hide');">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                    onclick="$('#modelReservation').modal('hide');">
                     Close
                 </button>
                 <button type="button" class="btn btn-primary" style="background-color:#01579b">Save changes</button>
@@ -936,14 +1027,17 @@
                     <a href="#" class="font-semibold col-md-4 mb-1" onclick="openModalMembership();">Memberships</a>
                     <a href="#" class="font-semibold col-md-4 mb-1" onclick="openConfirmRoomUnAssign();">Merge</a>
                     <a href="#" class="font-semibold col-md-4 mb-1" onclick="openConfirmRoomUnAssign();">Neg.Rates</a>
-                    <a href="#" class="font-semibold col-md-4 mb-1" onclick="openConfirmRoomUnAssign();">Profile Update</a>
-                    <a href="#" class="font-semibold col-md-4 mb-1" onclick="openConfirmRoomUnAssign();">Relationships</a>
+                    <a href="#" class="font-semibold col-md-4 mb-1" onclick="openConfirmRoomUnAssign();">Profile
+                        Update</a>
+                    <a href="#" class="font-semibold col-md-4 mb-1"
+                        onclick="openConfirmRoomUnAssign();">Relationships</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<div class="modal fade modal-xl" id="modalHistory" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade modal-xl" id="modalHistory" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
 
@@ -953,9 +1047,11 @@
             </div>
             <div class="modal-body">
                 <div class="">
-                    <button class="submit-button-clear-reservation" id="attach" onclick="AttachAccompanying();"> Attach</button>
+                    <button class="submit-button-clear-reservation" id="attach" onclick="AttachAccompanying();">
+                        Attach</button>
                     <button class="submit-button-clear-reservation" id="detach" onclick="detach()">Detach</button>
-                    <button class="submit-button-clear-reservation" id="detach" onclick="openModalViewProfile()">Profile</button>
+                    <button class="submit-button-clear-reservation" id="detach"
+                        onclick="openModalViewProfile()">Profile</button>
 
                     <button class="submit-button-clear-reservation" onclick="closeModalHistory();"> Close</button>
                     <button class="submit-button-clear-reservation" onclick="closeModalHistory();"> Close</button>
@@ -978,24 +1074,24 @@
         await setSelect2();
         getAllCity();
         getAllProfiles();
-         getAllLanguage2();
-         getAllTitle2();
-         getAllNationality2();
-         getAllCountry2();
-         getAllState2();
-         getAllCity2();
-         getAllVIP2();
-         getAllOwner2();
-         getAllTerritory2();
-         getCompanyType2();
-         getCurrency2();
-         getMarketType2();
-         getPersonInCharge2();
+        getAllLanguage2();
+        getAllTitle2();
+        getAllNationality2();
+        getAllCountry2();
+        getAllState2();
+        getAllCity2();
+        getAllVIP2();
+        getAllOwner2();
+        getAllTerritory2();
+        getCompanyType2();
+        getCurrency2();
+        getMarketType2();
+        getPersonInCharge2();
     });
-    function openModalOption(){
+    function openModalOption() {
         $('#modalOption').modal('show');
     }
-    function closeModalOption(){
+    function closeModalOption() {
         $('#modalOption').modal('hide');
     }
     function getAllCity() {
@@ -1007,10 +1103,10 @@
             headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
             success: function (result) {
 
-                if(result.length > 0){
+                if (result.length > 0) {
                     $('#txtCity').empty();
                     var html = `<option value=''>Select city</option>`;
-                    for(var i = 0;i < result.length;i++){
+                    for (var i = 0; i < result.length; i++) {
                         html += `<option value='${result[i].name}'>${result[i].code} - ${result[i].name}</option>`
                     }
                     $('#txtCity').append(html);
@@ -1032,7 +1128,7 @@
             url: '/Profile/GetAllProfiles',
             type: 'get',
             dataType: 'json',
-            data:{
+            data: {
                 code: $('#txtCode').val(),
                 account: $('#txtAccount').val(),
                 firstName: $('#txtFirstName').val(),
@@ -1060,7 +1156,7 @@
             }
         });
     }
-        function clearSearchForm() {
+    function clearSearchForm() {
 
         /* ========================= */
         /* Clear input text */
@@ -1088,7 +1184,7 @@
     }
 
     var profileID = 0;
-    
+
     var profileType = 0;
     var profileName = "";
     function initializeDataGrid(data) {
@@ -1106,7 +1202,7 @@
         var columns = [
             { dataField: "id", caption: "ID", width: columnWidth - 80, visible: false },
             { dataField: "code", caption: "Code", width: columnWidth - 50 },
-             {
+            {
                 dataField: "vip",
                 caption: "Vip",
                 width: columnWidth - 80,
@@ -1123,29 +1219,29 @@
         // 👉 Các cột còn lại
         columns = columns.concat([
 
-     {
-    dataField: "dateOfBirth",
-    caption: "DateOfBirth",
-    width: columnWidth,
-    dataType: "date",
-    format: "dd/MM/yyyy",
-    visible: typeValue != "1",
-    calculateCellValue: function (data) {
-        if (!data.dateOfBirth) return null;
+            {
+                dataField: "dateOfBirth",
+                caption: "DateOfBirth",
+                width: columnWidth,
+                dataType: "date",
+                format: "dd/MM/yyyy",
+                visible: typeValue != "1",
+                calculateCellValue: function (data) {
+                    if (!data.dateOfBirth) return null;
 
-        // value: "22.12.2025"
-        const parts = data.dateOfBirth.split(".");
-        return new Date(parts[2], parts[1] - 1, parts[0]);
-    }
-},
+                    // value: "22.12.2025"
+                    const parts = data.dateOfBirth.split(".");
+                    return new Date(parts[2], parts[1] - 1, parts[0]);
+                }
+            },
 
             { dataField: "passPort", caption: "PassPort", width: columnWidth, visible: typeValue != "1" },
             { dataField: "identityCard", caption: "IdentityCard", width: columnWidth, visible: typeValue != "1" },
 
-           
+
             { dataField: "city", caption: "City", width: columnWidth },
             { dataField: "nationality", caption: "Nat", width: columnWidth - 60 },
-             { dataField: "address", caption: "Address", width: columnWidth + 50 },
+            { dataField: "address", caption: "Address", width: columnWidth + 50 },
             { dataField: "handPhone", caption: "HandPhone", width: columnWidth },
             { dataField: "telephone", caption: "Telephone", width: columnWidth },
             { dataField: "email", caption: "Email", width: columnWidth },
@@ -1212,7 +1308,7 @@
         });
     }
 
-      $('#txtFullNameIndividual').on('blur', function () {
+    $('#txtFullNameIndividual').on('blur', function () {
         var input = $(this).val().trim();
 
         if (input === '') return;
@@ -1250,11 +1346,11 @@
                     if ($('#txtSalutationIndividual').length)
                         $('#txtSalutationIndividual').val(res.salutation);
 
-                         
+
                     // Title (nếu có dropdown)
                     if (res.titleID) {
-                       let selectTitle= $('#txtTitleIndividual')[0].tomselect;
-                            selectTitle.setValue(res.titleID);
+                        let selectTitle = $('#txtTitleIndividual')[0].tomselect;
+                        selectTitle.setValue(res.titleID);
                     }
                 }
             },
@@ -1264,38 +1360,38 @@
         });
     });
 
-    function reserveProfile(){
+    function reserveProfile() {
         $('#modelReservation').modal('show');
     }
 
 
-    function editProfile(mode){
+    function editProfile(mode) {
         var grid = $("#gridContainer").dxDataGrid("instance");
         var selectedRowsData = grid.getSelectedRowsData();
         console.log(mode);
         if (mode === 'NEW') {
 
             clearProfileForm();          // clear toàn bộ form
-                console.log($('#txtType').val());
-             if($('#txtType').val() == 3  || $('#txtType').val() === ''){
+            console.log($('#txtType').val());
+            if ($('#txtType').val() == 3 || $('#txtType').val() === '') {
                 $('#modalEdit').modal('show');
-                    $("#profileTypeModalLabel").text("New Profile");
-             }else if($('#txtType').val() == 5){
-                   $('#modalEditGroup').modal('show');
-                    $("#profileTypeModalLabelGroup").text("New Profile");
-             }
-             else {
-                  $('#modalEditCOM').modal('show');
-                      $("#profileTypeModalLabelCOM").text("New Profile");
-             }
+                $("#profileTypeModalLabel").text("New Profile");
+            } else if ($('#txtType').val() == 5) {
+                $('#modalEditGroup').modal('show');
+                $("#profileTypeModalLabelGroup").text("New Profile");
+            }
+            else {
+                $('#modalEditCOM').modal('show');
+                $("#profileTypeModalLabelCOM").text("New Profile");
+            }
 
-           
-             selectedRowsData = null;
+
+            selectedRowsData = null;
             return;
         }
-  
+
         if (mode === 'EDIT') {
-             if(selectedRowsData.length < 1){
+            if (selectedRowsData.length < 1) {
                 informBox(TOAST_STATUS.DANGER, "Please choose 1 profile to edit");
                 return;
             }
@@ -1306,30 +1402,30 @@
                 dataType: 'json',
                 crossDomain: false,
                 headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
-                data:{
+                data: {
                     id: selectedRowsData[0].id
                 },
                 success: function (result) {
                     console.log(result);
-                   if(result.code != 0){
+                    if (result.code != 0) {
                         informBox(TOAST_STATUS.DANGER, result.msg);
                         return;
-                   }
-                   else{
-                       if(result.profile.type == 0){
+                    }
+                    else {
+                        if (result.profile.type == 0) {
                             $("#txtCodeIndividual").val(result.profile.code);
                             $("#txtFullNameIndividual").val(result.profile.account);
                             $("#txtLastNameIndividual").val(result.profile.lastName);
                             $("#txtFirstNameIndividual").val(result.profile.firstname);
                             $("#txtMiddleNameIndividual").val(result.profile.middleName);
-                           // $("#txtCityIndividual").val(result.profile.city);
+                            // $("#txtCityIndividual").val(result.profile.city);
                             $("#txtReasonIndividual").val(result.profile.vipReason);
                             let selectCity = $('#txtCityIndividual')[0].tomselect;
                             selectCity.setValue(result.profile.city);
 
                             let selectLanguage = $('#txtLanguageIndividual')[0].tomselect;
                             selectLanguage.setValue(result.profile.languageID);
-                            let selectTitle= $('#txtTitleIndividual')[0].tomselect;
+                            let selectTitle = $('#txtTitleIndividual')[0].tomselect;
                             selectTitle.setValue(result.profile.titleID);
                             let selectNationality = $('#txtNationalityIndividual')[0].tomselect;
                             selectNationality.setValue(result.profile.nationalityID);
@@ -1381,44 +1477,44 @@
                             $("#blackListIndividual").val(result.profile.blackListReason);
                             $("#txtNoteIndividual").val(result.profile.description);
                             $('#modalEdit').modal('show');
-                       }
-                       else if(result.profile.type == 1 || result.profile.type == 2 || result.profile.type == 3){
-                           $("#txtCodeCOM").val(result.profile.code);
+                        }
+                        else if (result.profile.type == 1 || result.profile.type == 2 || result.profile.type == 3) {
+                            $("#txtCodeCOM").val(result.profile.code);
                             //$("#txtCityCOM").val(result.profile.city);
                             $("#txtAccountCOM").val(result.profile.account);
                             $("#txtAddressCOM").val(result.profile.address);
                             // $("#txtCountryCOM").val(result.profile.countryID);
                             // $("#txtCityCOM").val(result.profile.city);
-                                let selectCountryCOM = $('#txtCountryCOM')[0].tomselect;
+                            let selectCountryCOM = $('#txtCountryCOM')[0].tomselect;
                             selectCountryCOM.setValue(result.profile.countryID);
 
-                                let selectCityCOM = $('#txtCityCOM')[0].tomselect;
+                            let selectCityCOM = $('#txtCityCOM')[0].tomselect;
                             selectCityCOM.setValue(result.profile.city);
 
-                        
-                                let selectStateCOM = $('#txtStateCOM')[0].tomselect;
+
+                            let selectStateCOM = $('#txtStateCOM')[0].tomselect;
                             selectStateCOM.setValue(result.profile.stateID);
 
-                                            let selectOwnerCOM = $('#txtOwnerCOM')[0].tomselect;
+                            let selectOwnerCOM = $('#txtOwnerCOM')[0].tomselect;
                             selectOwnerCOM.setValue(result.profile.ownerID);
 
-                                let selectTerritoryCOM = $('#txtTerritoryCOM')[0].tomselect;
+                            let selectTerritoryCOM = $('#txtTerritoryCOM')[0].tomselect;
                             selectTerritoryCOM.setValue(result.profile.territoryID);
 
-                                   let selectCompanyTypeCOM = $('#txtCompanyTypeCOM')[0].tomselect;
+                            let selectCompanyTypeCOM = $('#txtCompanyTypeCOM')[0].tomselect;
                             selectCompanyTypeCOM.setValue(result.profile.memberType);
 
-                                     let selectCurrencyCOM = $('#txtCurrencyCOM')[0].tomselect;
+                            let selectCurrencyCOM = $('#txtCurrencyCOM')[0].tomselect;
                             selectCurrencyCOM.setValue(result.profile.currencyID);
 
-                               let selectMarketCOM = $('#txtMarketCOM')[0].tomselect;
+                            let selectMarketCOM = $('#txtMarketCOM')[0].tomselect;
                             selectMarketCOM.setValue(result.profile.marketID);
-                        
-                             let selectSaleInChargeCOM = $('#txtSaleInChargeCOM')[0].tomselect;
+
+                            let selectSaleInChargeCOM = $('#txtSaleInChargeCOM')[0].tomselect;
                             selectSaleInChargeCOM.setValue(result.profile.personInChargeID);
-                        
+
                             $("#txtPostalCOM").val(result.profile.postalCode);
-                           // $("#txtStateCOM").val(result.profilestateID);
+                            // $("#txtStateCOM").val(result.profilestateID);
                             $("#txtCompanyCOM").val(result.profile.fullAccount);
                             $("#txtTaxCOM").val(result.profile.taxCode);
                             $("#txtBusAddressCOM").val(result.profile.homeAddress);
@@ -1430,52 +1526,52 @@
                             $("#txtHandPhoneCOM").val(result.profile.handPhone);
                             $("#txtCompany2COM").val(result.profile.company);
                             $("#txtBusTitleCOM").val(result.profile.businessTitle);
-                        //    $("#txtOwnerCOM").val(result.profile.ownerID);
-                           // $("#txtTerritoryCOM").val(result.profile.territoryID);
+                            //    $("#txtOwnerCOM").val(result.profile.ownerID);
+                            // $("#txtTerritoryCOM").val(result.profile.territoryID);
                             $("#txtKeywordCOM").val(result.profile.keyword);
-                           // $("#txtCompanyTypeCOM").val(0);
+                            // $("#txtCompanyTypeCOM").val(0);
                             $("#txtARCOM").val(result.profile.arNo);
                             //$("#txtCurrencyCOM").val(result.profile.currencyID);
-                           // $("#txtSaleInChargeCOM").val(result.profile.personInChargeID);
-                          //  $("#txtMarketCOM").val(result.profile.marketID);
+                            // $("#txtSaleInChargeCOM").val(result.profile.personInChargeID);
+                            //  $("#txtMarketCOM").val(result.profile.marketID);
                             if (result.profile.active === true) {
                                 $("#txtActiveCOM").prop("checked", true);
-                            }else{
+                            } else {
                                 $("#txtActiveCOM").prop("checked", false);
                             }
 
-                             if (result.profile.isBlackList === true) {
+                            if (result.profile.isBlackList === true) {
                                 $("#txtBlackListCOM").prop("checked", true);
-                            }else{
+                            } else {
                                 $("#txtBlackListCOM").prop("checked", false);
                             }
-                           //$("#txtBlackListCOM").is(":checked");
+                            //$("#txtBlackListCOM").is(":checked");
                             $("#blackListCOM").val(result.profile.blackListReason);
-                                      console.log(result.profile.description);
+                            console.log(result.profile.description);
                             $("#txtNoteCOM").val(result.profile.description);
                             $('#modalEditCOM').modal('show');
-                       }
-                       else if(result.profile.type == 4){
-                           $("#txtCodeGroup").val(result.profile.code);
+                        }
+                        else if (result.profile.type == 4) {
+                            $("#txtCodeGroup").val(result.profile.code);
                             //$("#txtCityCOM").val(result.profile.city);
                             $("#txtGroupName").val(result.profile.account);
                             $("#txtAddressGroup").val(result.profile.address);
                             // $("#txtCountryCOM").val(result.profile.countryID);
                             // $("#txtCityCOM").val(result.profile.city);
-                                let selectCountryGroup = $('#txtCountryGroup')[0].tomselect;
+                            let selectCountryGroup = $('#txtCountryGroup')[0].tomselect;
                             selectCountryGroup.setValue(result.profile.countryID);
 
-                
-                                $("#txtCityGroup").val(result.profile.city)
+
+                            $("#txtCityGroup").val(result.profile.city)
 
 
-                                let selectStateGroup = $('#txtStateGroup')[0].tomselect;
+                            let selectStateGroup = $('#txtStateGroup')[0].tomselect;
                             selectStateGroup.setValue(result.profile.stateID);
 
-                                   let selectLanguageGroup = $('#txtLanguageGroup')[0].tomselect;
+                            let selectLanguageGroup = $('#txtLanguageGroup')[0].tomselect;
                             selectLanguageGroup.setValue(result.profile.languageID);
 
-                                     let selectCurrencyGroup = $('#txtCurrGroup')[0].tomselect;
+                            let selectCurrencyGroup = $('#txtCurrGroup')[0].tomselect;
                             selectCurrencyGroup.setValue(result.profile.currencyID);
 
 
@@ -1489,28 +1585,28 @@
                             $("#txtHandPhoneGroup").val(result.profile.handPhone);
                             $("#txtCityGroup").val(result.profile.city);
                             $("#txtVipReasonGroup").val(result.profile.vipReason);
-                       
-                          let selectVIP = $('#txtVipGroup')[0].tomselect;
+
+                            let selectVIP = $('#txtVipGroup')[0].tomselect;
                             selectVIP.setValue(result.profile.vipid);
-                           // $("#txtCompanyTypeCOM").val(0);
+                            // $("#txtCompanyTypeCOM").val(0);
                             $("#txtAcctContact").val(result.profile.acctContact);
-                           // $("#txtSaleInChargeCOM").val(result.profile.personInChargeID);
-                          //  $("#txtMarketCOM").val(result.profile.marketID);
+                            // $("#txtSaleInChargeCOM").val(result.profile.personInChargeID);
+                            //  $("#txtMarketCOM").val(result.profile.marketID);
                             if (result.profile.history === true) {
                                 $("#txtHistoryGroup").prop("checked", true);
-                            }else{
+                            } else {
                                 $("#txtHistoryGroup").prop("checked", false);
                             }
 
-                           //$("#txtBlackListCOM").is(":checked");
-                   
+                            //$("#txtBlackListCOM").is(":checked");
+
                             $("#txtNotesGroup").val(result.profile.description);
                             $('#modalEditGroup').modal('show');
-                       }
-                       else{
+                        }
+                        else {
 
-                       }
-                   }
+                        }
+                    }
                 },
                 error: function (xhr, statusText, err) {
 
@@ -1615,12 +1711,12 @@
         /* ===================== */
         /* Group (TYPE = 4)  */
         /* ===================== */
-               const groupInputs = [
-                   "#txtCodeGroup", "#txtGroupName", "#txtAddressGroup",
+        const groupInputs = [
+            "#txtCodeGroup", "#txtGroupName", "#txtAddressGroup",
             "#txtHomeAddressGroup", "#txtCityGroup", "#txtPostalGroup",
             "#txtTelephoneGroup", "#txtContractNameGroup",
             "#txtEmailGroup", "#txtWebsiteGroup",
-            "#txtHandPhoneGroup", "#txtAcctContact","#txtFax",
+            "#txtHandPhoneGroup", "#txtAcctContact", "#txtFax",
             "#txtCurrGroup", "#txtAccountGroup",
             "#txtVipGroup", "#txtVipReasonGroup",
             "#txtNotesGroup"
@@ -1654,14 +1750,14 @@
         });
     }
 
-    async function setSelect2(){
+    async function setSelect2() {
         const ids = [
             "#txtLanguageIndividual", "#txtTitleIndividual", "#txtNationalityIndividual",
             "#txtCountryIndividual", "#txtStateIndividual", "#txtCityIndividual",
-                "#txtVIPIndividual", "#txtCityCOM", "#txtCountryCOM",
+            "#txtVIPIndividual", "#txtCityCOM", "#txtCountryCOM",
             "#txtStateCOM"
             , "#txtOwnerCOM", "#txtTerritoryCOM", "#txtCompanyTypeCOM",
-            "#txtCurrencyCOM", "#txtMarketTypeCOM", "#txtMarketCOM","#txtSaleInChargeCOM", 
+            "#txtCurrencyCOM", "#txtMarketTypeCOM", "#txtMarketCOM", "#txtSaleInChargeCOM",
             "#txtLanguageGroup", "#txtCountryGroup", "#txtStateGroup",
             "#txtCurrGroup", "#txtAccountGroup", "#txtVipGroup"
             //,
@@ -1701,7 +1797,7 @@
 
                     select.setValue('0'); // Chọn option mặc định
 
-                     let select2 = $('#txtLanguageGroup')[0].tomselect; // Lấy instance của TomSelect
+                    let select2 = $('#txtLanguageGroup')[0].tomselect; // Lấy instance của TomSelect
                     select2.clear(); // Xóa giá trị hiện tại
                     select2.clearOptions(); // Xóa danh sách options cũ
                     select2.addOption({ value: '0', text: 'Please select language' });
@@ -1810,7 +1906,7 @@
                     });
                     select2.setValue('0'); // Chọn giá trị mặc định
 
-                     let select3 = $('#txtCountryGroup')[0].tomselect; // Lấy instance của TomSelect
+                    let select3 = $('#txtCountryGroup')[0].tomselect; // Lấy instance của TomSelect
                     select3.clear(); // Xóa giá trị hiện tại
                     select3.clearOptions(); // Xóa tất cả option cũ
 
@@ -1846,8 +1942,8 @@
 
                     select.addOption({ value: '0', text: 'Please select state' });
                     result.forEach(item => {
-                       // select.addOption({ value: item.id, text: `${item.StateName} - ${item.name}` });
-                                    select.addOption({ value: item.id, text: `${item.stateName}` });
+                        // select.addOption({ value: item.id, text: `${item.StateName} - ${item.name}` });
+                        select.addOption({ value: item.id, text: `${item.stateName}` });
                     });
 
                     select.setValue('0'); // Chọn giá trị mặc định
@@ -1857,36 +1953,36 @@
                     select2.clearOptions(); // Xóa tất cả option cũ
                     select2.addOption({ value: '0', text: 'Please select state' });
                     result.forEach(item => {
-                      //  select2.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
-                         select2.addOption({ value: item.id, text: `${item.stateName}` });
+                        //  select2.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
+                        select2.addOption({ value: item.id, text: `${item.stateName}` });
                     });
                     select2.setValue('0'); // Chọn giá trị mặc định
 
 
-                     let select3 = $('#txtStateGroup')[0].tomselect; // Lấy instance của TomSelect
+                    let select3 = $('#txtStateGroup')[0].tomselect; // Lấy instance của TomSelect
                     select3.clear(); // Xóa giá trị hiện tại
                     select3.clearOptions(); // Xóa tất cả option cũ
                     select3.addOption({ value: '0', text: 'Please select state' });
                     result.forEach(item => {
-                      //  select2.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
-                         select3.addOption({ value: item.id, text: `${item.stateName}` });
+                        //  select2.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
+                        select3.addOption({ value: item.id, text: `${item.stateName}` });
                     });
                     select3.setValue('0'); // Chọn giá trị mặc định
                 }
-                else{
+                else {
                     let select = $('#txtStateIndividual')[0].tomselect; // Lấy instance của TomSelect
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
                     select.addOption({ value: '0', text: 'Please select state' });
                     select.setValue('0');
 
-                     let select2 = $('#txtStateCOM')[0].tomselect; // Lấy instance của TomSelect
+                    let select2 = $('#txtStateCOM')[0].tomselect; // Lấy instance của TomSelect
                     select2.clear(); // Xóa giá trị hiện tại
                     select2.clearOptions(); // Xóa tất cả option cũ
                     select2.addOption({ value: '0', text: 'Please select state' });
                     select2.setValue('0');
 
-                         let select3 = $('#txtStateGroup')[0].tomselect; // Lấy instance của TomSelect
+                    let select3 = $('#txtStateGroup')[0].tomselect; // Lấy instance của TomSelect
                     select3.clear(); // Xóa giá trị hiện tại
                     select3.clearOptions(); // Xóa tất cả option cũ
                     select3.addOption({ value: '0', text: 'Please select state' });
@@ -1962,7 +2058,7 @@
                     });
 
                     select.setValue('0'); // Chọn giá trị mặc định
-                              select.on('change', function (value) {
+                    select.on('change', function (value) {
                         if (!value || value === '0') {
                             $('#txtReasonIndividual').val('');
                             return;
@@ -1980,7 +2076,7 @@
                         }
                     });
 
-                             let select2 = $('#txtVipGroup')[0].tomselect; // Lấy instance của TomSelect
+                    let select2 = $('#txtVipGroup')[0].tomselect; // Lấy instance của TomSelect
                     select2.clear(); // Xóa giá trị hiện tại
                     select2.clearOptions(); // Xóa tất cả option cũ
 
@@ -2073,7 +2169,7 @@
 
                     // select2.setValue('0'); // Chọn giá trị mặc định
                 }
-                else{
+                else {
                     let select = $('#txtTerritoryCOM')[0].tomselect; // Lấy instance của TomSelect
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
@@ -2117,7 +2213,7 @@
 
                     select.setValue('0'); // Chọn giá trị mặc định
                 }
-                else{
+                else {
                     let select = $('#txtCompanyTypeCOM')[0].tomselect; // Lấy instance của TomSelect
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
@@ -2166,7 +2262,7 @@
                     // });
 
                     // select2.setValue('0'); // Chọn giá trị mặc định
-                       let select2 = $('#txtCurrGroup')[0].tomselect; // Lấy instance của TomSelect
+                    let select2 = $('#txtCurrGroup')[0].tomselect; // Lấy instance của TomSelect
                     select2.clear(); // Xóa giá trị hiện tại
                     select2.clearOptions(); // Xóa tất cả option cũ
 
@@ -2178,7 +2274,7 @@
                     select2.setValue('0'); // Chọn giá trị mặc định
 
                 }
-                else{
+                else {
                     let select = $('#txtCurrencyCOM')[0].tomselect; // Lấy instance của TomSelect
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
@@ -2213,7 +2309,7 @@
             success: function (result) {
                 console.log(result);
                 if (result.length > 0) {
-                     saleInChargeData = result || [];
+                    saleInChargeData = result || [];
                     let select = $('#txtSaleInChargeCOM')[0].tomselect; // Lấy instance của TomSelect
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
@@ -2237,7 +2333,7 @@
 
                     // select2.setValue('0'); // Chọn giá trị mặc định
                 }
-                else{
+                else {
                     let select = $('#txtSaleInChargeCOM')[0].tomselect; // Lấy instance của TomSelect
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
@@ -2282,7 +2378,7 @@
 
                     select.setValue('0'); // Chọn giá trị mặc định
                 }
-                else{
+                else {
                     let select = $('#txtMarketTypeCOM')[0].tomselect; // Lấy instance của TomSelect
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
@@ -2300,7 +2396,7 @@
             }
         });
     }
-    $('#txtMarketTypeCOM').on('change', function() {
+    $('#txtMarketTypeCOM').on('change', function () {
 
         getMarket2();
     });
@@ -2311,7 +2407,7 @@
             dataType: 'json',
             crossDomain: false,
             headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
-            data:{marketTypeID : $('#txtMarketTypeCOM').val()},
+            data: { marketTypeID: $('#txtMarketTypeCOM').val() },
             success: function (result) {
                 if (result.length > 0) {
                     let select = $('#txtMarketCOM')[0].tomselect; // Lấy instance của TomSelect
@@ -2325,7 +2421,7 @@
 
                     select.setValue('0'); // Chọn giá trị mặc định
                 }
-                else{
+                else {
                     let select = $('#txtMarketCOM')[0].tomselect; // Lấy instance của TomSelect
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
@@ -2343,14 +2439,14 @@
             }
         });
     }
-    function SaveProfile(){
+    function SaveProfile() {
         var formData = new FormData();
-          var grid = $("#gridContainer").dxDataGrid("instance");
+        var grid = $("#gridContainer").dxDataGrid("instance");
         var selectedRowsData = grid.getSelectedRowsData();
         console.log(selectedRowsData);
-        if (selectedRowsData[0]?.type === 0 || $('#txtType').val() === ""|| $('#txtType').val() === "3") {
+        if (selectedRowsData[0]?.type === 0 || $('#txtType').val() === "" || $('#txtType').val() === "3") {
             formData.append('ID', selectedRowsData[0]?.id);
-             formData.append('CodeIndividual', $("#txtCodeIndividual").val());
+            formData.append('CodeIndividual', $("#txtCodeIndividual").val());
             formData.append('AccountIndividual', $("#txtFullNameIndividual").val());
             formData.append('LastNameIndivdual', $("#txtLastNameIndividual").val());
             formData.append('FirstNameIndividual', $("#txtFirstNameIndividual").val());
@@ -2377,8 +2473,8 @@
             formData.append('ActiveIndividual', $("#txtActiveIndividual").is(":checked"));
             formData.append('ContactIndividual', $("#txtContactIndividual").is(":checked"));
             formData.append('KeywordIndividual', $("#txtKeywordIndividual").val());
-          //  formData.append('CompanyIndividual', $("#txtCompanyIndividual").val());
-               formData.append('FullAccount', $("#txtCompanyIndividual").val());
+            //  formData.append('CompanyIndividual', $("#txtCompanyIndividual").val());
+            formData.append('FullAccount', $("#txtCompanyIndividual").val());
             formData.append('TaxIndividual', $("#txtTaxIndividual").val());
             formData.append('BusAddressIndividual', $("#txtBusAddressIndividual").val());
             formData.append('TelephoneIndividual', $("#txtTelephoneIndividual").val());
@@ -2391,24 +2487,24 @@
             formData.append('BlackListIndividual', $("#txtBlackListIndividual").is(":checked"));
             formData.append('BlackListReasonIndividual', $("#blackListIndividual").val());
             formData.append('NoteIndividual', $("#txtNoteIndividual").val());
-                        formData.append('Type', 0);
+            formData.append('Type', 0);
         }
-         else if (selectedRowsData[0].type === 2 || selectedRowsData[0].type === 3 || selectedRowsData[0].type === 1|| $('#txtType').val() === "0"|| $('#txtType').val() === "2"|| $('#txtType').val() === "4"|| $('#txtType').val() === "1") {
+        else if (selectedRowsData[0].type === 2 || selectedRowsData[0].type === 3 || selectedRowsData[0].type === 1 || $('#txtType').val() === "0" || $('#txtType').val() === "2" || $('#txtType').val() === "4" || $('#txtType').val() === "1") {
             formData.append('ID', selectedRowsData[0].id);
-             formData.append('CodeCOM', $("#txtCodeCOM").val());
-            formData.append('AccountCOM', $("#txtAccountCOM").val());         
+            formData.append('CodeCOM', $("#txtCodeCOM").val());
+            formData.append('AccountCOM', $("#txtAccountCOM").val());
             formData.append('CountryCOM', $("#txtCountryCOM").val());
             formData.append('CityCOM', $("#txtCityCOM").val());
             formData.append('PostalCOM', $("#txtPostalCOM").val());
-          
+
             formData.append('StateCOM', $("#txtStateCOM").val());
-         
+
             formData.append('AddressCOM', $("#txtAddressCOM").val());
-          
+
             formData.append('ActiveCOM', $("#txtActiveCOM").is(":checked"));
             formData.append('KeywordCOM', $("#txtKeywordCOM").val());
-          //  formData.append('CompanyIndividual', $("#txtCompanyIndividual").val());
-               formData.append('FullAccount', $("#txtCompanyCOM").val());
+            //  formData.append('CompanyIndividual', $("#txtCompanyIndividual").val());
+            formData.append('FullAccount', $("#txtCompanyCOM").val());
             formData.append('TaxCOM', $("#txtTaxCOM").val());
             formData.append('BusAddressCOM', $("#txtBusAddressCOM").val());
             formData.append('TelephoneCOM', $("#txtTelephoneCOM").val());
@@ -2428,21 +2524,21 @@
             formData.append('CurrencyCOM', $("#txtCurrencyCOM").val());
             formData.append('SaleInChargeCOM', $("#txtSaleInChargeCOM").val());
             formData.append('MarketCOM', $("#txtMarketCOM").val());
-                var uiType = $("#txtType").val(); // "0", "1", "2", hoặc ""
+            var uiType = $("#txtType").val(); // "0", "1", "2", hoặc ""
 
-                var typeMap = {
-                    "0": 1, // Travel Agent → Agent
-                    "1": 2, // Company
-                    "2": 3  // Source
-                };
+            var typeMap = {
+                "0": 1, // Travel Agent → Agent
+                "1": 2, // Company
+                "2": 3  // Source
+            };
 
-                var finalType = typeMap[uiType] ?? ""; // hoặc "0" nếu backend cần default
+            var finalType = typeMap[uiType] ?? ""; // hoặc "0" nếu backend cần default
 
-                formData.append('Type', finalType);
-        }   
+            formData.append('Type', finalType);
+        }
         else if (selectedRowsData[0].type === 4 || $('#txtType').val() === "5") {
             formData.append('ID', selectedRowsData[0].id);
-             formData.append('CodeGroup', $("#txtCodeGroup").val());
+            formData.append('CodeGroup', $("#txtCodeGroup").val());
             formData.append('GroupName', $("#txtGroupName").val());
             formData.append('LanguageGroup', $("#txtLanguageGroup").val());
             formData.append('AddressGroup', $("#txtAddressGroup").val());
@@ -2452,8 +2548,8 @@
 
             formData.append('PostalGroup', $("#txtPostalGroup").val());
             formData.append('CountryGroup', $("#txtCountryGroup").val());
-          //  formData.append('CompanyIndividual', $("#txtCompanyIndividual").val());
-               formData.append('StateGroup', $("#txtStateGroup").val());
+            //  formData.append('CompanyIndividual', $("#txtCompanyIndividual").val());
+            formData.append('StateGroup', $("#txtStateGroup").val());
             formData.append('TelephoneGroup', $("#txtTelephoneGroup").val());
             formData.append('ContractNameGroup', $("#txtContractNameGroup").val());
             formData.append('EmailGroup', $("#txtEmailGroup").val());
@@ -2468,7 +2564,7 @@
             formData.append('Fax', $("#txtFax").val());
             formData.append('Type', 4);
         }
-            $.ajax({
+        $.ajax({
             url: '/Profile/EditProfile',
             type: 'POST',
             processData: false,
@@ -2480,9 +2576,9 @@
                     $('#modalEdit').modal('hide');
                     getAllProfiles();
                     clearProfileForm();
-                    showToast("Success",data.msg,true);
+                    showToast("Success", data.msg, true);
                 } else {
-                    showToast("Error",data.msg,false);
+                    showToast("Error", data.msg, false);
                 }
 
             },
@@ -2492,10 +2588,10 @@
         });
     }
 
-    function ReservationProfile(){
+    function ReservationProfile() {
         var grid = $("#gridContainer").dxDataGrid("instance");
         var selectedRowsData = grid.getSelectedRowsData();
-        if(selectedRowsData.length < 1){
+        if (selectedRowsData.length < 1) {
             informBox(TOAST_STATUS.DANGER, "Please choose 1 profile to reservation");
             return;
         }
@@ -2505,18 +2601,18 @@
             dataType: 'json',
             crossDomain: false,
             headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
-            data:{
+            data: {
                 id: selectedRowsData[0].id
             },
             success: function (result) {
-               if(result.code != 0){
+                if (result.code != 0) {
                     informBox(TOAST_STATUS.DANGER, result.msg);
                     return;
-               }
-               else{
-                      console.log('click');
-                   $('#modelReservation').modal('show');
-               }
+                }
+                else {
+                    console.log('click');
+                    $('#modelReservation').modal('show');
+                }
             },
             error: function (xhr, statusText, err) {
 
@@ -2524,18 +2620,18 @@
         });
     }
 
-    function DeleteProfile(){
+    function DeleteProfile() {
         var grid = $("#gridContainer").dxDataGrid("instance");
         var selectedRowsData = grid.getSelectedRowsData();
-         if (selectedRowsData.length > 0) {
-             $.confirm({
-            title: 'Cảnh báo',
-            content: 'Are you sure you want to delete profile??',
-            buttons: {
-                'Hủy bỏ': function () { },
-                confirm: {
-                    text: 'Xác nhận',
-                    action: function () {
+        if (selectedRowsData.length > 0) {
+            $.confirm({
+                title: 'Cảnh báo',
+                content: 'Are you sure you want to delete profile??',
+                buttons: {
+                    'Hủy bỏ': function () { },
+                    confirm: {
+                        text: 'Xác nhận',
+                        action: function () {
                             var defer = $.Deferred();
                             $.ajax({
                                 url: '/Profile/DeleteProfile',
@@ -2543,7 +2639,7 @@
                                 dataType: 'json',
                                 crossDomain: false,
                                 headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
-                                data: { ID:  selectedRowsData[0].id },
+                                data: { ID: selectedRowsData[0].id },
                                 success: function (data) {
                                     if (data.code == 0) {
                                         getAllProfiles();
@@ -2564,27 +2660,27 @@
                             });
                             return defer.promise();
 
+                        }
                     }
                 }
-            }
             });
-         }
-         else {
-           informBox(TOAST_STATUS.WARNING, "Please select the product type you want to delete");
+        }
+        else {
+            informBox(TOAST_STATUS.WARNING, "Please select the product type you want to delete");
         }
 
     }
 
     function GetProfileHistory() {
-        if(profileID == 0){
-            showToast("Error","Please chooe at least 1 profile",false);
+        if (profileID == 0) {
+            showToast("Error", "Please chooe at least 1 profile", false);
             return;
         }
         $.ajax({
             url: '/Profile/SearchProfileHistory',
             type: 'get',
             dataType: 'json',
-            data:{
+            data: {
                 profileID: profileID
             },
             crossDomain: false,
@@ -2602,7 +2698,7 @@
 
         });
     }
-    function closeModalHistory(){
+    function closeModalHistory() {
         $('#modalHistory').modal('hide');
 
     }
@@ -2610,40 +2706,40 @@
         const columnWidth = 150;
 
         const columns = [
-            { dataField: 'ConfirmationNo', caption: 'Conf.No', visible: true,width:columnWidth  },
-            { dataField: 'CRSNo', caption: 'CRSNo', visible: true,width:columnWidth },
-            { dataField: 'ArrivalDate', caption: 'ArrivalDate', visible: true,width:columnWidth  ,dataType: "date", format: "dd/MM/yyyy" },
-            { dataField: 'DepartureDate', caption: 'DepartureDate', visible: true,width:columnWidth  ,dataType: "date", format: "dd/MM/yyyy" },
-            { dataField: 'RoomNo', caption: 'Room', visible: true,width:columnWidth },
-            { dataField: 'RoomType', caption: 'Room Type', visible: true ,width:columnWidth},
-            { dataField: 'Rate', caption: 'Rate', visible: true,width:columnWidth },
-            { dataField: 'CurrencyID', caption: 'Currency', visible: true,width:columnWidth },
-            { dataField: 'RateCode', caption: 'Rate Code', visible: true ,width:columnWidth},
-            { dataField: 'NoOfAdult', caption: 'A', visible: true ,width:columnWidth},
-            { dataField: 'NoOfChild', caption: 'C', visible: true,width:columnWidth },
-            { dataField: 'NoOfChild1', caption: 'C1', visible: true,width:columnWidth },
-            { dataField: 'NoOfChild2', caption: 'C2', visible: true,width:columnWidth },
-            { dataField: 'LastName', caption: 'Guest Name', visible: true,width:columnWidth },
-            { dataField: 'BusinessBlockCode', caption: 'Block', visible: true,width:columnWidth },
-            { dataField: 'MarketCode', caption: 'Market', visible: true ,width:columnWidth},
-            { dataField: 'SourceCode', caption: 'Source', visible: true,width:columnWidth },
-            { dataField: 'ReservationHolder', caption: 'Reservation Holder', visible: true ,width:columnWidth},
-            { dataField: 'Status', caption: 'Status', visible: true,width:columnWidth },
-            { dataField: 'TotalRevenue', caption: 'Total Rev', visible: true,width:columnWidth },
-            { dataField: 'RoomRevenue', caption: 'Room Rev', visible: true ,width:columnWidth},
-            { dataField: 'FBRevenue', caption: 'F&B Rev', visible: true,width:columnWidth },
-            { dataField: 'ExtraRevenue', caption: 'Extra Rev', visible: true,width:columnWidth },
-            { dataField: 'NonRevenue', caption: 'Non Rev', visible: true,width:columnWidth },
-            { dataField: 'UserInsert', caption: 'Created By', visible: true,width:columnWidth },
-            { dataField: 'CreateDate', caption: 'Created On', visible: true ,width:columnWidth},
-            { dataField: 'UserUpdate', caption: 'Updated By', visible: true,width:columnWidth },
-            { dataField: 'UpdateDate', caption: 'Update On', visible: true,width:columnWidth },
+            { dataField: 'ConfirmationNo', caption: 'Conf.No', visible: true, width: columnWidth },
+            { dataField: 'CRSNo', caption: 'CRSNo', visible: true, width: columnWidth },
+            { dataField: 'ArrivalDate', caption: 'ArrivalDate', visible: true, width: columnWidth, dataType: "date", format: "dd/MM/yyyy" },
+            { dataField: 'DepartureDate', caption: 'DepartureDate', visible: true, width: columnWidth, dataType: "date", format: "dd/MM/yyyy" },
+            { dataField: 'RoomNo', caption: 'Room', visible: true, width: columnWidth },
+            { dataField: 'RoomType', caption: 'Room Type', visible: true, width: columnWidth },
+            { dataField: 'Rate', caption: 'Rate', visible: true, width: columnWidth },
+            { dataField: 'CurrencyID', caption: 'Currency', visible: true, width: columnWidth },
+            { dataField: 'RateCode', caption: 'Rate Code', visible: true, width: columnWidth },
+            { dataField: 'NoOfAdult', caption: 'A', visible: true, width: columnWidth },
+            { dataField: 'NoOfChild', caption: 'C', visible: true, width: columnWidth },
+            { dataField: 'NoOfChild1', caption: 'C1', visible: true, width: columnWidth },
+            { dataField: 'NoOfChild2', caption: 'C2', visible: true, width: columnWidth },
+            { dataField: 'LastName', caption: 'Guest Name', visible: true, width: columnWidth },
+            { dataField: 'BusinessBlockCode', caption: 'Block', visible: true, width: columnWidth },
+            { dataField: 'MarketCode', caption: 'Market', visible: true, width: columnWidth },
+            { dataField: 'SourceCode', caption: 'Source', visible: true, width: columnWidth },
+            { dataField: 'ReservationHolder', caption: 'Reservation Holder', visible: true, width: columnWidth },
+            { dataField: 'Status', caption: 'Status', visible: true, width: columnWidth },
+            { dataField: 'TotalRevenue', caption: 'Total Rev', visible: true, width: columnWidth },
+            { dataField: 'RoomRevenue', caption: 'Room Rev', visible: true, width: columnWidth },
+            { dataField: 'FBRevenue', caption: 'F&B Rev', visible: true, width: columnWidth },
+            { dataField: 'ExtraRevenue', caption: 'Extra Rev', visible: true, width: columnWidth },
+            { dataField: 'NonRevenue', caption: 'Non Rev', visible: true, width: columnWidth },
+            { dataField: 'UserInsert', caption: 'Created By', visible: true, width: columnWidth },
+            { dataField: 'CreateDate', caption: 'Created On', visible: true, width: columnWidth },
+            { dataField: 'UserUpdate', caption: 'Updated By', visible: true, width: columnWidth },
+            { dataField: 'UpdateDate', caption: 'Update On', visible: true, width: columnWidth },
 
-            
+
         ];
         $("#gridContainerHistory").dxDataGrid({
 
-            dataSource: data,    
+            dataSource: data,
             allowColumnResizing: true,  // Dữ liệu từ server
 
             paging: { pageSize: 15 },
@@ -2667,7 +2763,7 @@
             columns: columns,
 
             showBorders: false,
-            onRowClick: function(e) {
+            onRowClick: function (e) {
                 console.log("ID được click:", e.data.id);
             }
 

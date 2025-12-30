@@ -25,5 +25,4 @@ namespace BaseBusiness.BO
             get { return instance; }
         }
     }
-   
 }
