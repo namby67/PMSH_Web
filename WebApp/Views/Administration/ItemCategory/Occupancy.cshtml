@@ -2,15 +2,6 @@
     //
 }
 <style>
-    .form-locked {
-        pointer-events: none; /* khóa toàn bộ click */
-        opacity: 0.6; /* làm mờ */
-    }
-
-    .form-unlocked {
-        pointer-events: auto;
-        opacity: 1;
-    }
     /* CSS để khi hover vào hàng đã tô màu, màu không bị đè bởi màu hover mặc định (tùy chọn) */
     .dx-datagrid-rowsview .dx-row.dx-data-row:hover:not(.dx-selection) > td {
         filter: brightness(95%);
@@ -19,74 +10,85 @@
 
 <div class="text-center" style="font-size: 20px">Occupancy Config</div>
 <div class="sticky-header bg-white p-2 shadow-sm z-3">
-    <div id="formContainer" class="d-flex align-items-center gap-3 p-2 formLocked" style="border: 1px solid #ccc; border-radius: 6px; padding: 8px;">
-        <div class="row g-2 w-100 align-items-start">
-
-            <div class="col-lg-1 col-md-2">
-                <label class="form-label mb-1" style="font-size: 12px;">Type:</label>
-                <input type="text"
-                       id="typeInput"
-                       class="form-control form-control-sm"
-                       value="Hotel"
-                       disabled>
-            </div>
-
-            <div class="col-lg-1 col-md-2">
-                <label for="occLevel" class="form-label mb-1" style="font-size: 12px;">Occ. Level:</label>
-                <input type="text" id="occLevelInput" name="occLevel"
-                       class="form-control form-control-sm">
-                <div class="invalid-feedback" id="occLevelError"></div>
-            </div>
-
-            <div class="col-lg-2 col-md-3">
-                <label class="form-label mb-1 fw-bold" style="font-size: 12px;">Color:</label>
-                <div class="input-group input-group-sm">
-                    <input type="text" id="colorDisplay"
-                           class="form-control"
-                           placeholder="None"
-                           style="min-width: 50px;"
-                           readonly />
-                    <span class="input-group-text p-0">
-                        <input type="color" id="colorPicker"
-                               class="form-control form-control-color border-0"
-                               style="width: 30px; height: 30px; padding: 0; cursor: pointer;">
-                    </span>
-                    <button class="btn btn-outline-danger px-2" type="button" id="btnClearColor">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            </div>
-
-            <div class="col-lg-2 col-md-3">
-                <label class="form-label mb-1" style="font-size: 12px;">Title:</label>
-                <input type="text" id="titleInput" class="form-control form-control-sm">
-            </div>
-
-            <div class="col-lg-2 col-md-4">
-                <label class="form-label mb-1" style="font-size: 12px;">Email:</label>
-                <input type="email" id="emailInput" class="form-control form-control-sm">
-            </div>
-
-            <div class="col-lg-4 col-md-12">
-                <label class="form-label mb-1" style="font-size: 12px;">Description:</label>
-                <textarea id="descriptionInput" class="form-control form-control-sm"></textarea>
-            </div>
-
-            <input type="hidden" id="id" name="id" value="0" />
-        </div>
-    </div>
     <div class="mt-2">
         <button id="btnNew" class="mui-button mui-button-new"><i class="fa-solid fa-plus"></i> New</button>
         <button id="btnUpdate" class="mui-button mui-button-edit"> <i class="fa-solid fa-pen"></i> Edit</button>
         <button id="btnDelete" class="mui-button mui-button-delete"> <i class="fa-solid fa-trash-can"></i> Delete</button>
-        <button id="btnSave" class="mui-button mui-button-save d-none"><i class="fa-solid fa-check"></i> Save</button>
-        <button id="btnCancel" class="mui-button mui-button-cancel d-none"><i class="fa-solid fa-xmark"></i> Cancel</button>
     </div>
 
 </div>
 <div class="mui-card">
     <div id="gridContainerRateCode" class="mt-2 gridContainer"></div>
 </div>
+<!-- Modal Popup for New Item -->
+<div class="modal fade" id="itemModal" tabindex="-1" aria-labelledby="itemModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="itemModalLabel">New Item</h5>
+            </div>
+            <div class="modal-footer justify-content-start">
+                <button type="button" id="btnSave" class="mui-button mui-button-save"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+                <button type="button" data-bs-dismiss="modal" class="mui-button mui-button-close"><i class="fa-solid fa-xmark"></i> Close</button>
+            </div>
+            <div class="modal-body">
+
+                <form id="formContainer">
+                    <div class="container-fluid">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold mb-1" style="font-size: 12px;">Type:</label>
+                                <input type="text" id="typeInput" class="form-control form-control-sm bg-light" value="Hotel" disabled>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="occLevelInput" class="form-label fw-bold mb-1" style="font-size: 12px;">Occ. Level:</label>
+                                <input type="number" id="occLevelInput" name="occLevel" class="form-control form-control-sm" placeholder="0.00">
+                                <div class="invalid-feedback" id="occLevelError"></div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold mb-1" style="font-size: 12px;">Title:</label>
+                                <input type="text" id="titleInput" class="form-control form-control-sm" placeholder="Enter title">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold mb-1" style="font-size: 12px;">Color Selection:</label>
+                                <div class="input-group input-group-sm">
+                                    <input type="text" id="colorDisplay" class="form-control" placeholder="Color Value" readonly />
+                                    <span class="input-group-text p-0">
+                                        <input type="color" id="colorPicker" class="form-control form-control-color border-0" style="width: 35px; height: 30px; padding: 0; cursor: pointer;">
+                                    </span>
+                                    <button class="btn btn-outline-danger" type="button" id="btnClearColor">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <label class="form-label fw-bold mb-1" style="font-size: 12px;">Notification Email:</label>
+                                <input type="email" id="emailInput" class="form-control form-control-sm" placeholder="example@domain.com">
+                            </div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col-12">
+                                <label class="form-label fw-bold mb-1" style="font-size: 12px;">Description:</label>
+                                <textarea id="descriptionInput" class="form-control form-control-sm" rows="4" style="height:100px" placeholder="Enter description..."></textarea>
+                            </div>
+                        </div>
+
+                        <input type="hidden" id="id" name="id" value="0" />
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="loadingSpinnerRateCode" style="display: none; text-align: center; padding: 20px;">
     <div class="spinner-border text-primary" role="status">
         <span class="visually-hidden">Loading...</span>
@@ -109,16 +111,7 @@
         $('#itemModal').on('hidden.bs.modal', function () {
              applyValidationErrors([], "#formContainer");
         });
-        lockForm();
     });
-
-    function lockForm() {
-        $("#formContainer").removeClass("form-unlocked").addClass("form-locked");
-    }
-
-    function unlockForm() {
-        $("#formContainer").removeClass("form-locked").addClass("form-unlocked");
-    }
 
     function hexToArgbInt(hex) {
         hex = hex.replace("#", "");
@@ -163,7 +156,7 @@
     function loadGrid(data) {
         $("#gridContainerRateCode").dxDataGrid({
             dataSource: data,
-            height: 450,
+            height: 500,
             width: "100%",
             columnAutoWidth: false,
             allowColumnResizing: true,
@@ -239,44 +232,28 @@
         });
     }
 
-    @*JS handle button new edit*@
-        function switchToEditMode() {
-        $("#btnNew, #btnUpdate, #btnDelete").addClass("d-none");
-        $("#btnSave, #btnCancel").removeClass("d-none");
-        unlockForm();
-    }
-
-    function switchToNormalMode() {
-        $("#btnNew, #btnUpdate, #btnDelete").removeClass("d-none");
-        $("#btnSave, #btnCancel").addClass("d-none");
-        $("#content-title").text("Occupancy Config");
-        lockForm();
-    }
-
     // --- NÚT NEW ---
     $("#btnNew").click(function () {
+        $("#formContainer")[0].reset();
         $("#id").val("0");
-        $("#content-title").text("Add Occupancy Config");
-        switchToEditMode();
+        $("#itemModalLabel").text("Add Occupancy");
+        $("#itemModal").modal("show");
         clearForm();
     });
 
-    // --- NÚT EDIT ---
+    // --- NÚT Update ---
     $("#btnUpdate").click(function () {
         if (!selectedRowData) {
             showToast("Warning", "Select one row to edit please.", false);
             return;
         }
-
-        switchToEditMode();
-        $("#content-title").text("Edit Occupancy Config");
-        // fill dữ liệu vào form
+        $("#itemModal").modal("show");
         $("#occLevelInput").val(selectedRowData.occupancylevel);
         $("#titleInput").val(selectedRowData.title);
         $("#emailInput").val(selectedRowData.email);
         $("#descriptionInput").val(selectedRowData.description);
         $("#id").val(selectedRowData.id);
-
+        $("#itemModalLabel").text("Edit Occupancy Config");
         if (selectedRowData.color) {
             const hex = argbIntToHex(selectedRowData.color);
             $("#colorPicker").val(hex);
@@ -288,17 +265,9 @@
 
     });
 
-    // --- NÚT CANCEL ---
-    $("#btnCancel").click(function () {
-        $(".form-control").removeClass("is-invalid is-valid");
-        $("#content-title").text("Occupancy Config");
-        clearForm();
-        switchToNormalMode();
-    });
-
     // --- NÚT SAVE ---
     $("#btnSave").click(function(){
-       
+
         const id = parseInt($("#id").val()) || 0;
             let loginName = (localStorage.getItem("Loginname") || "").trim()
             .replace(/^"(.*)"$/, '$1');
@@ -325,6 +294,8 @@
               success: function (res) {
                   if (res.success) {
                     showToast("Success", res.message, true);
+                    $("#itemModal").modal("hide");
+                    clearForm();
                     reloadGrid();
                 } else {
                     if (res.errors && res.errors.length > 0) {

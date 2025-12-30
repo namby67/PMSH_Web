@@ -57,6 +57,7 @@
     /* Tùy chỉnh nút X xóa nhanh (Clear Button) */
     .tomselect-custom .ts-control {
         padding-right: 2.5rem !important;
+        margin-right: 2.5rem !important;
     }
 
     .tomselect-custom .clear-button {
@@ -66,7 +67,7 @@
         transform: translateY(-50%);
         cursor: pointer;
         font-size: 1.2rem;
-        color: #adb5bd; /* Màu xám nhạt */
+        color: #adb9bd !important;
         font-weight: bold;
         z-index: 10;
         transition: color 0.2s;
@@ -74,14 +75,14 @@
     }
 
     .tomselect-custom .clear-button:hover {
-        color: #dc3545;
+        color: #dc3545 !important;
     }
 </style>
 
 <div class="text-center" style="font-size: 20px">Property Permission</div>
 <div class="sticky-header bg-white p-2 shadow-sm z-3">
     <div class="d-flex align-items-center gap-3 p-2"
-         style="border: 1px solid #ccc; border-radius: 6px; padding: 8px;">
+         >
         <div class="d-flex align-items-center" style="min-width: 300px; flex: 1;">
             <label for="user" class="me-2 mb-0 fw-bold text-nowrap">User:</label>
             <div class="w-100">
@@ -118,7 +119,7 @@
             </div>
             <div class="modal-body">
                 <form id="formContainer">
-                    <div class="container-fluid" style="border: 1px solid #ccc; border-radius: 6px; padding: 8px;"> 
+                    <div class="container-fluid" > 
                         <div class="row mb-3">
                             <div class="col-12">
                                 <label for="chooseUser" class="form-label fw-bold">User <span class="text-danger">*</span></label>
@@ -280,9 +281,7 @@
                     UserID: parseInt(uID),     
                     PropertyID: parseInt(pID), 
                     CreatedBy: loginName,
-                    UpdatedBy: loginName,
-                    UserInsertID: loginUser,
-                    UserUpdateID: loginUser
+                    UpdatedBy: loginName
                 };
 
                 listDataToSend.push(item);

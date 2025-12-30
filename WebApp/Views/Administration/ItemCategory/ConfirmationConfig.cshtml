@@ -5,7 +5,7 @@
 
 <div class="text-center" style="font-size: 20px">Confirmation Config</div>
 <div class="sticky-header bg-white p-2 shadow-sm z-3">
-    <div id="formContainer" class="d-flex align-items-center gap-3 p-2 " style="border: 1px solid #ccc; border-radius: 6px; padding: 8px;">
+    <div id="formContainer" class="d-flex align-items-center gap-3 p-2 " >
         <div class="row g-3">
             <div class="">
                 <button type="button" id="btnSave" class="mui-button mui-button-save">
@@ -63,7 +63,7 @@
 
             <div class="col-md-4">
                 <label class="form-label mb-1">Body ENG:</label>
-                <textarea id="bodyEInput" rows="2" name="bodyEngMail"
+                <textarea id="bodyEInput" rows="4" name="bodyEngMail"
                     class="form-control form-control-sm"></textarea><div class="invalid-feedback"></div>
             </div>
             <input type="hidden" id="id" name="id" value="0" />
@@ -147,9 +147,7 @@
                 mailBodyENG: $("#bodyEInput").val(),
                 updatedBy: loginName,
             };
-            if (!confirm("Are you sure you want to save confirmation config?")) {
-                return;
-            }
+        
             $.ajax({
                 url: "/Administration/ConfirmationConfigSave",
                 type: "POST",

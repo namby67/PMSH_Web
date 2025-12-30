@@ -1,77 +1,15 @@
-﻿
-@{
+﻿@{
     var listRateCode = ViewBag.RateCodeList;
     var listLanguage = ViewBag.LanguageList;
 }
 
-<style>
-    .form-locked {
-        pointer-events: none;
-        opacity: 0.6;
-        background-color: #f9f9f9;
-    }
-
-    .form-unlocked {
-        pointer-events: auto;
-        opacity: 1;
-        background-color: #fff;
-    }
-
-</style>
-
 <div class="text-center" style="font-size: 20px">Confirmation Template Config</div>
 <div class="sticky-header bg-white p-2 shadow-sm z-3">
-    <div id="formContainer" class="p-2 form-locked  " style="border: 1px solid #ccc; border-radius: 6px;">
-        <div class="row g-3">
-            <div class="col-md-4">
-                <label class="form-label mb-1">Rate code:</label>
-                <select id="rateCodeID" class="form-select form-select-sm">
-                    <option value="">-- Select Rate Code --</option>
-                    @if (listRateCode != null)
-                    {
-                        foreach (var item in listRateCode)
-                        {
-                            <option value="@item.ID">@item.RateCode</option>
-                        }
-                    }
-                </select>
-            </div>
-
-            <div class="col-md-4">
-                <label class="form-label mb-1">Letter name:</label>
-                <input type="text" id="letterNameInput" class="form-control form-control-sm">
-                <div class="invalid-feedback" id="letterNameError"></div>
-            </div>
-
-            <div class="col-md-4">
-                <label class="form-label mb-1">Language:</label>
-                <select id="nationality" class="form-select form-select-sm">
-                    <option value="">-- Select Language --</option>
-                    @if (listLanguage != null)
-                    {
-                        foreach (var item in listLanguage)
-                        {
-                            <option value="@item.Code">@item.Name</option>
-                        }
-                    }
-                </select>
-            </div>
-
-            <div class="col-md-12">
-                <label class="form-label mb-1 fw-bold">Template:</label>
-                <textarea id="templateInput"></textarea>
-            </div>
-
-            <input type="hidden" id="id" name="id" value="0" />
-        </div>
-    </div>
 
     <div class="mt-2">
         <button id="btnNew" class="mui-button mui-button-new"><i class="fa-solid fa-plus"></i> New</button>
         <button id="btnUpdate" class="mui-button mui-button-edit"><i class="fa-solid fa-pen"></i> Edit</button>
         <button id="btnDelete" class="mui-button mui-button-delete"><i class="fa-solid fa-trash-can"></i> Delete</button>
-        <button id="btnSave" class="mui-button mui-button-save d-none"><i class="fa-solid fa-check"></i> Save</button>
-        <button id="btnCancel" class="mui-button mui-button-cancel d-none"><i class="fa-solid fa-xmark"></i> Cancel</button>
     </div>
 
 </div>
@@ -80,16 +18,104 @@
     <div id="gridContainerRateCode" class="mt-2 gridContainer"></div>
 </div>
 
+<!-- Modal Popup for New Item -->
+<div class="modal fade" id="itemModal" tabindex="-1" aria-labelledby="itemModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="itemModalLabel">New Item</h5>
+            </div>
+            <div class="modal-footer justify-content-start">
+                <button type="button" id="btnSave" class="mui-button mui-button-save"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+                <button type="button" data-bs-dismiss="modal" class="mui-button mui-button-close"><i class="fa-solid fa-xmark"></i> Close</button>
+            </div>
+            <div class="modal-body">
+
+                <form id="formContainer">
+                    <div class="container-fluid">
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label mb-1 fw-bold" style="font-size: 12px;">Rate code:</label>
+                                <select id="rateCodeID" class="form-select form-select-sm">
+                                    <option value="">-- Select Rate Code --</option>
+                                    @if (listRateCode != null)
+                                    {
+                                        foreach (var item in listRateCode)
+                                        {
+                                            <option value="@item.ID">@item.RateCode</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label mb-1 fw-bold" style="font-size: 12px;">Letter name:</label>
+                                <input type="text" id="letterNameInput" class="form-control form-control-sm">
+                                <div class="invalid-feedback" id="letterNameError"></div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label mb-1 fw-bold" style="font-size: 12px;">Language:</label>
+                                <select id="nationality" class="form-select form-select-sm">
+                                    <option value="">-- Select Language --</option>
+                                    @if (listLanguage != null)
+                                    {
+                                        foreach (var item in listLanguage)
+                                        {
+                                            <option value="@item.Code">@item.Name</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="form-label mb-1 fw-bold" style="font-size: 12px;">Template:</label>
+                                <textarea id="editor"></textarea>
+                            </div>
+                        </div>
+                        @* <div class="row">
+                            <div class="col-md-12">
+                                <label class="form-label mb-1 fw-bold" style="font-size: 12px;">Template:</label>
+                                <textarea id="templateInput" class="form-control form-control-sm" rows="10"></textarea>
+                            </div>
+                        </div> *@
+                        <input type="hidden" id="id" name="id" value="0" />
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <div id="loadingSpinnerRateCode" style="display: none; text-align: center; padding: 20px;">
     <div class="spinner-border text-primary" role="status">
         <span class="visually-hidden">Loading...</span>
     </div>
 </div>
 
+<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
 <script>
     DevExpress.localization.locale("vi");
     var selectedRowData = null;
 
+    let myEditor;
+
+    ClassicEditor
+        .create(document.querySelector('#editor'), {
+            toolbar: [
+                'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList',
+                'blockQuote', 'insertTable', 'undo', 'redo', 'alignment', 'fontColor', 'fontSize'
+            ]
+        })
+        .then(editor => {
+            myEditor = editor; // Lưu instance để lấy dữ liệu sau này
+        })
+        .catch(error => {
+            console.error(error);
+        });
     $(document).ready(function () {
         $("#formContainer").on("input change", "input, select, textarea", function () {
             if ($(this).hasClass("is-invalid")) {
@@ -103,25 +129,15 @@
         });
 
         reloadGrid();
-        lockForm();
     });
-
-    function lockForm() {
-        $("#formContainer").addClass("form-locked").removeClass("form-unlocked");
-        $("#rateCodeID, #letterNameInput, #nationality").prop("disabled", true);
-    }
-
-    function unlockForm() {
-        $("#formContainer").removeClass("form-locked").addClass("form-unlocked");
-        $("#rateCodeID, #letterNameInput, #nationality").prop("disabled", false);
-    }
 
     function loadGrid(data) {
         const dataSource = data || [];
         $("#gridContainerRateCode").dxDataGrid({
             dataSource: dataSource,
-            height: 300,
+            height: 550,
             width: "100%",
+            wordWrapEnabled: true,
             columnAutoWidth: true,
             allowColumnResizing: true,
             selection: { mode: "single" },
@@ -132,7 +148,13 @@
                 { dataField: "rateCodeID", visible: false },
                 { dataField: "rateCode", caption: "Rate Code", width: "15%" },
                 { dataField: "nationality", caption: "Language", width: "15%" },
-                { dataField: "template", caption: "Template" }
+                {
+                    dataField: "template",
+                    caption: "Template",
+                    width: "50%",
+                    encodeHtml: false, //Để Grid hiển thị định dạng HTML (Bold, Color...) thay vì hiện chữ <b>...</b>
+                }
+                // { dataField: "template", caption: "Template", width:"50%" }
             ],
             filterRow: { visible: true, applyFilter: "auto" },
             paging: { pageSize: 20 },
@@ -150,7 +172,7 @@
             url: "/Administration/GetConfirmationTemp",
             type: "GET",
             dataType: "json",
-            cache: false, 
+            cache: false,
             success: function (data) {
                 loadGrid(data);
             },
@@ -163,31 +185,23 @@
         });
     }
 
-    // 4. Button Handlers
-    function switchToEditMode() {
-        $("#btnNew, #btnUpdate, #btnDelete").addClass("d-none");
-        $("#btnSave, #btnCancel").removeClass("d-none");
-        unlockForm();
-    }
-
-    function switchToNormalMode() {
-        $("#btnNew, #btnUpdate, #btnDelete").removeClass("d-none");
-        $("#btnSave, #btnCancel").addClass("d-none");
-        lockForm();
-    }
-
     function clearForm() {
         $("#id").val("0");
         $("#rateCodeID").val("");
         $("#letterNameInput").val("");
         $("#nationality").val("");
-        $("#templateInput").val("");
+        // $("#templateInput").val("");
+        if (myEditor) {
+            myEditor.setData("");
+        }
     }
 
     // --- NEW ---
     $("#btnNew").click(function () {
-        clearForm();
-        switchToEditMode();
+        $("#formContainer")[0].reset();
+        $("#id").val("0");
+        $("#itemModalLabel").text("Add Confirmation Template");
+        $("#itemModal").modal("show");
     });
 
     // --- EDIT ---
@@ -196,27 +210,25 @@
             showToast("Warning", "Please select a row to edit.", false);
             return;
         }
-        switchToEditMode();
+        $("#itemModalLabel").text("Edit Confirmation Template");
+        $("#itemModal").modal("show");
 
         // Fill Data
         $("#id").val(selectedRowData.id);
         $("#rateCodeID").val(selectedRowData.rateCodeID);
         $("#letterNameInput").val(selectedRowData.letterName);
         $("#nationality").val(selectedRowData.nationality);
-        $("#templateInput").val(selectedRowData.template);
+        // $("#templateInput").val(selectedRowData.template);
+        // Thay vì $("#templateInput").val(data.template)
+        if (myEditor) {
+            myEditor.setData(selectedRowData.template);
+        }
 
-    });
-
-    // --- CANCEL ---
-    $("#btnCancel").click(function () {
-        $(".form-control").removeClass("is-invalid is-valid");
-        clearForm();
-        switchToNormalMode();
     });
 
     // --- SAVE ---
     $("#btnSave").click(function () {
-        
+
         const id = parseInt($("#id").val()) || 0;
         let loginName = (localStorage.getItem("Loginname") || "").trim()
             .replace(/^"(.*)"$/, '$1');
@@ -226,15 +238,16 @@
             rateCodeID: parseInt($("#rateCodeID").val()) || 0,
             letterName: $("#letterNameInput").val().trim(),
             nationality: ($("#nationality").val() || "").trim(),
-            template: $("#templateInput").val().trim(),
+            // template: $("#templateInput").val().trim(),
+            template: myEditor.getData(),
             createdBy: loginName,
             updatedBy: loginName,
         };
 
-        if (!model.letterName) { 
+        if (!model.letterName) {
             $("#letterNameInput").addClass("is-invalid");
             $("#letterNameError").text("Letter name must not be blank.");
-            return; 
+            return;
         }
 
         $.ajax({
@@ -247,14 +260,15 @@
                 if (res.success) {
                     showToast("Success", res.message, true);
                     reloadGrid();
-                    $("#btnCancel").trigger("click");
+                    $("#itemModal").modal("hide");
+                    clearForm();
                 } else {
                     if (res.errors && res.errors.length > 0) {
                         applyValidationErrors(res.errors, "#formContainer");
                         let generalError = res.errors.find(x => x.field === "general");
                         let toastMessage = generalError ? generalError.message : "Please check input fields.";
-
                         showToast("Warning", toastMessage, false);
+                         
                     } else {
                         if (res.errors && res.errors.length > 0) {
                             applyValidationErrors(res.errors, "#formContainer");
