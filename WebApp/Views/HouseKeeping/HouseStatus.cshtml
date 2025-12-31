@@ -237,17 +237,6 @@
         transform: translateY(0);
     }
 
-    #btnPrint {
-        background-color: #3b9ac6;
-    }
-
-    #btnExportExcel {
-        background-color: #28a745;
-    }
-
-    #btnExportPdf {
-        background-color: #ff8c00;
-    }
 
     .tomselect-custom {
         width: 120px;
@@ -335,7 +324,7 @@
     @*     <button style="border-radius: 4px;  margin-right: 6px;background-color: crimson;" id="btnPrintGrid" class="mui-button mui-button-new" type="button">
         <i class="fa-solid fa-print"></i> Print
     </button> *@
-   
+
 </div>
 <div class="containerhs">
 
@@ -636,17 +625,13 @@
     style=" display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 10px; z-index: 1050; box-shadow: 0 0 10px rgba(0,0,0,0.3); width: fit-content; max-width: 90vw; max-height: 600px; overflow-y: auto; ">
 
     <div class="d-flex justify-content-between mb-2">
-        class="fa-solid fa-file-excel"></i> Excel</button>
-        =======
         <button id="btnExportExcel" class="mui-button mui-button-new" type="button"> <i
                 class="fa-solid fa-file-excel"></i> Excel</button>
-        <button onclick="$('#popupLogGrid').hide()" class="btn btn-sm btn-danger">
-            >>>>>>> origin/master
+        <button onclick="$('#popupLogGrid').hide()" class="mui-button mui-button-close ">
             <i class="fa-solid fa-xmark me-1"></i> Close
         </button>
     </div>
-</div>
-<div id="logGridContainer" class="gridContainer mt-2"></div>
+    <div id="logGridContainer" class="gridContainer mt-2"></div>
 </div>
 
 <div id="loadingSpinner"
@@ -731,50 +716,50 @@
         ];
         if (inputId === "outOfService") {
             columns.push(
-                { dataField: "roomName", caption: "Room Name", width: columnWidth },
-                { dataField: "roomType", caption: "Room Type", width: columnWidth },
+                { dataField: "roomName", caption: "Room Name", width: "30%" },
+                { dataField: "roomType", caption: "Room Type", width: "30%" },
                 {
                     dataField: "direction",
                     caption: "Direction",
-                    width: columnWidth
+                    width: "40%"
                 }
             );
         } else if (inputId === "outOfOrder") {
             columns.push(
-                { dataField: "roomName", caption: "Room Name", width: columnWidth },
-                { dataField: "roomType", caption: "Room Type", width: columnWidth },
+                { dataField: "roomName", caption: "Room Name", width: "30%" },
+                { dataField: "roomType", caption: "Room Type", width: "30%" },
                 {
                     dataField: "fromDate",
                     caption: "From Date",
-                    width: columnWidth + 30,
+                    width: "20%",
                     dataType: "date",
                     format: "dd/MM/yyyy"
                 },
                 {
                     dataField: "toDate",
                     caption: "To Date",
-                    width: columnWidth + 30,
+                    width: "20%",
                     dataType: "date",
                     format: "dd/MM/yyyy"
                 }
             );
         } else if (inputId === "stayoverRoom") {
             columns.push(
-                { dataField: "reservationNumber", caption: "Reservation Number", width: columnWidth },
-                { dataField: "roomNo", caption: "Room No", width: columnWidth },
-                { dataField: "roomType", caption: "Room Type", width: columnWidth },
-                { dataField: "guest", caption: "Guest", width: columnWidth },
+                { dataField: "reservationNumber", caption: "Reservation Number", width: "10%" },
+                { dataField: "roomNo", caption: "Room No", width: "10%" },
+                { dataField: "roomType", caption: "Room Type", width: "20%" },
+                { dataField: "guest", caption: "Guest", width: "20%" },
                 {
                     dataField: "arrivalDate",
                     caption: "Arrival Date",
-                    width: columnWidth + 30,
+                    width: "20%",
                     dataType: "date",
                     format: "dd/MM/yyyy"
                 },
                 {
                     dataField: "departureDate",
                     caption: "Departure Date",
-                    width: columnWidth + 30,
+                    width: "20%",
                     dataType: "date",
                     format: "dd/MM/yyyy"
                 }
@@ -782,43 +767,41 @@
         }
         else if (inputId === "depExpectedRoom") {
             columns.push(
-                { dataField: "reservationNumber", caption: "Reservation Number", width: columnWidth },
-                { dataField: "roomNo", caption: "Room No", width: columnWidth },
-                { dataField: "roomType", caption: "Room Type", width: columnWidth },
-                { dataField: "guest", caption: "Guest", width: columnWidth },
+                { dataField: "reservationNumber", caption: "Reservation Number", width: "10%" },
+                { dataField: "roomNo", caption: "Room No", width: "10%" },
+                { dataField: "roomType", caption: "Room Type", width: "20%" },
+                { dataField: "guest", caption: "Guest", width: "20%" },
                 {
                     dataField: "arrivalDate",
                     caption: "Arrival Date",
-                    width: columnWidth + 30,
-                    dataType: "date",
-                    format: "dd/MM/yyyy"
+                    width: "20%",
+                    dataType: "date", format: "dd/MM/yyyy"
                 },
                 {
                     dataField: "departureDate",
                     caption: "Departure Date",
-                    width: columnWidth + 30,
-                    dataType: "date",
-                    format: "dd/MM/yyyy"
+                    width: "20%",
+                    dataType: "date", format: "dd/MM/yyyy"
                 }
             );
         }
         else if (inputId === "actualRoom") {
             columns.push(
-                { dataField: "reservationNumber", caption: "Reservation Number", width: columnWidth },
-                { dataField: "roomNo", caption: "Room No", width: columnWidth },
-                { dataField: "roomType", caption: "Room Type", width: columnWidth },
-                { dataField: "guest", caption: "Guest", width: columnWidth },
+                { dataField: "reservationNumber", caption: "Reservation Number", width: "10%" },
+                { dataField: "roomNo", caption: "Room No", width: "10%" },
+                { dataField: "roomType", caption: "Room Type", width: "20%" },
+                { dataField: "guest", caption: "Guest", width: "20%" },
                 {
                     dataField: "arrivalDate",
                     caption: "Arrival Date",
-                    width: columnWidth + 30,
+                    width: "20%",
                     dataType: "date",
                     format: "dd/MM/yyyy"
                 },
                 {
                     dataField: "departureDate",
                     caption: "Departure Date",
-                    width: columnWidth + 30,
+                    width: "20%",
                     dataType: "date",
                     format: "dd/MM/yyyy"
                 }
@@ -826,72 +809,70 @@
         }
         else if (inputId === "arrivalExpectedRoom") {
             columns.push(
-                { dataField: "reservationNumber", caption: "Reservation Number", width: columnWidth },
-                { dataField: "roomNo", caption: "Room No", width: columnWidth },
-                { dataField: "roomType", caption: "Room Type", width: columnWidth },
-                { dataField: "guest", caption: "Guest", width: columnWidth },
-                { dataField: "adult", caption: "Adult", width: columnWidth },
-                { dataField: "child", caption: "Child", width: columnWidth },
+                { dataField: "reservationNumber", caption: "Reservation Number", width: "10%" },
+                { dataField: "roomNo", caption: "Room No", width: "10%" },
+                { dataField: "roomType", caption: "Room Type", width: "10%" },
+                { dataField: "guest", caption: "Guest", width: "10%" },
+                { dataField: "adult", caption: "Adult", width: "10%" },
+                { dataField: "child", caption: "Child", width: "10%" },
                 {
                     dataField: "arrivalDate",
                     caption: "Arrival Date",
-                    width: columnWidth + 30,
-                    dataType: "date",
-                    format: "dd/MM/yyyy"
+                    width: "20%",
+                    dataType: "date", format: "dd/MM/yyyy"
                 },
                 {
                     dataField: "departureDate",
                     caption: "Departure Date",
-                    width: columnWidth + 30,
-                    dataType: "date",
-                    format: "dd/MM/yyyy"
+                    width: "20%",
+                    dataType: "date", format: "dd/MM/yyyy"
                 }
             );
         }
         else if (inputId === "arrivalActualRoom") {
             columns.push(
-                { dataField: "reservationNumber", caption: "Reservation Number", width: columnWidth },
-                { dataField: "roomNo", caption: "Room No", width: columnWidth },
-                { dataField: "roomType", caption: "Room Type", width: columnWidth },
-                { dataField: "guest", caption: "Guest", width: columnWidth },
-                { dataField: "adult", caption: "Adult", width: columnWidth },
-                { dataField: "child", caption: "Child", width: columnWidth },
-                { dataField: "employeeCI", caption: "Employee CI", width: columnWidth },
+                { dataField: "reservationNumber", caption: "Reservation Number", width: "10%" },
+                { dataField: "roomNo", caption: "Room No", width: "10%" },
+                { dataField: "roomType", caption: "Room Type", width: "10%" },
+                { dataField: "guest", caption: "Guest", width: "10%" },
+                { dataField: "adult", caption: "Adult", width: "20%" },
+                { dataField: "child", caption: "Child", width: "10%" },
+                { dataField: "employeeCI", caption: "Employee CI", width: "10%" },
                 {
                     dataField: "arrivalDate",
                     caption: "Arrival Date",
-                    width: columnWidth + 30,
+                    width: "10%",
                     dataType: "date",
                     format: "dd/MM/yyyy"
                 },
                 {
                     dataField: "departureDate",
                     caption: "Departure Date",
-                    width: columnWidth + 30,
+                    width: "10%",
                     dataType: "date",
                     format: "dd/MM/yyyy"
                 }
             );
         } else if (inputId === "extendedStaysRoom") {
             columns.push(
-                { dataField: "reservationNumber", caption: "Reservation Number", width: columnWidth },
-                { dataField: "roomNo", caption: "Room No", width: columnWidth },
-                { dataField: "roomType", caption: "Room Type", width: columnWidth },
-                { dataField: "guest", caption: "Guest", width: columnWidth },
-                { dataField: "adult", caption: "Adult", width: columnWidth },
-                { dataField: "child", caption: "Child", width: columnWidth },
+                { dataField: "reservationNumber", caption: "Reservation Number", width: "10%" },
+                { dataField: "roomNo", caption: "Room No", width: "10%" },
+                { dataField: "roomType", caption: "Room Type", width: "20%" },
+                { dataField: "guest", caption: "Guest", width: "10%" },
+                { dataField: "adult", caption: "Adult", width: "10%" },
+                { dataField: "child", caption: "Child", width: "20%" },
 
                 {
                     dataField: "arrivalDate",
                     caption: "Arrival Date",
-                    width: columnWidth + 30,
+                    width: "10%",
                     dataType: "date",
                     format: "dd/MM/yyyy"
                 },
                 {
                     dataField: "departureDate",
                     caption: "Departure Date",
-                    width: columnWidth + 30,
+                    width: "10%",
                     dataType: "date",
                     format: "dd/MM/yyyy"
                 }
@@ -899,66 +880,66 @@
         }
         else if (inputId === "earlyDeparturesRoom") {
             columns.push(
-                { dataField: "reservationNumber", caption: "Reservation Number", width: columnWidth },
-                { dataField: "roomNo", caption: "Room No", width: columnWidth },
+                { dataField: "reservationNumber", caption: "Reservation Number", width: "10%" },
+                { dataField: "roomNo", caption: "Room No", width: "10%" },
 
-                { dataField: "guest", caption: "Guest", width: columnWidth },
+                { dataField: "guest", caption: "Guest", width: "40%" },
 
                 {
                     dataField: "arrivalDate",
                     caption: "Arrival Date",
-                    width: columnWidth + 30,
+                    width: "20%",
                     dataType: "date",
                     format: "dd/MM/yyyy"
                 },
                 {
                     dataField: "departureDate",
                     caption: "Departure Date",
-                    width: columnWidth + 30,
+                    width: "20%",
                     dataType: "date",
                     format: "dd/MM/yyyy"
                 }
             );
         } else if (inputId === "dayUseRoom") {
             columns.push(
-                { dataField: "reservationNumber", caption: "Reservation Number", width: columnWidth },
-                { dataField: "roomNo", caption: "Room No", width: columnWidth },
-                { dataField: "roomType", caption: "Room Type", width: columnWidth },
-                { dataField: "guest", caption: "Guest", width: columnWidth },
+                { dataField: "reservationNumber", caption: "Reservation Number", width: "10%" },
+                { dataField: "roomNo", caption: "Room No", width: "10%" },
+                { dataField: "roomType", caption: "Room Type", width: "20%" },
+                { dataField: "guest", caption: "Guest", width: "20%" },
 
                 {
                     dataField: "arrivalDate",
                     caption: "Arrival Date",
-                    width: columnWidth + 30,
+                    width: "20%",
                     dataType: "date",
                     format: "dd/MM/yyyy"
                 },
                 {
                     dataField: "departureDate",
                     caption: "Departure Date",
-                    width: columnWidth + 30,
+                    width: "20%",
                     dataType: "date",
                     format: "dd/MM/yyyy"
                 }
             );
         } else if (inputId === "walkinRoom") {
             columns.push(
-                { dataField: "reservationNumber", caption: "Reservation Number", width: columnWidth },
-                { dataField: "roomNo", caption: "Room No", width: columnWidth },
-                { dataField: "roomType", caption: "Room Type", width: columnWidth },
-                { dataField: "guest", caption: "Guest", width: columnWidth },
+                { dataField: "reservationNumber", caption: "Reservation Number", width: "10%" },
+                { dataField: "roomNo", caption: "Room No", width: "10%" },
+                { dataField: "roomType", caption: "Room Type", width: "20%" },
+                { dataField: "guest", caption: "Guest", width: "20%" },
 
                 {
                     dataField: "arrivalDate",
                     caption: "Arrival Date",
-                    width: columnWidth + 30,
+                    width: "20%",
                     dataType: "date",
                     format: "dd/MM/yyyy"
                 },
                 {
                     dataField: "departureDate",
                     caption: "Departure Date",
-                    width: columnWidth + 30,
+                    width: "20%",
                     dataType: "date",
                     format: "dd/MM/yyyy"
                 }
@@ -966,50 +947,50 @@
         }
         else if (inputId === "cleanVacant") {
             columns.push(
-                { dataField: "roomName", caption: "Room Name", width: columnWidth },
-                { dataField: "roomType", caption: "Room Type", width: columnWidth },
-                { dataField: "zone", caption: "Zone", width: columnWidth },
+                { dataField: "roomName", caption: "Room Name", width: "20%" },
+                { dataField: "roomType", caption: "Room Type", width: "20%" },
+                { dataField: "zone", caption: "Zone", width: "60%" },
             );
         }
         else if (inputId === "cleanOccupied") {
             columns.push(
-                { dataField: "roomName", caption: "Room Name", width: columnWidth },
-                { dataField: "roomType", caption: "Room Type", width: columnWidth },
-                { dataField: "zone", caption: "Zone", width: columnWidth },
+                { dataField: "roomName", caption: "Room Name", width: "20%" },
+                { dataField: "roomType", caption: "Room Type", width: "20%" },
+                { dataField: "zone", caption: "Zone", width: "60%" },
             );
         }
         else if (inputId === "cleannonVacant") {
             columns.push(
-                { dataField: "roomName", caption: "Room Name", width: columnWidth },
-                { dataField: "roomType", caption: "Room Type", width: columnWidth },
-                { dataField: "zone", caption: "Zone", width: columnWidth },
+                { dataField: "roomName", caption: "Room Name", width: "20%" },
+                { dataField: "roomType", caption: "Room Type", width: "20%" },
+                { dataField: "zone", caption: "Zone", width: "60%" },
             );
         }
         else if (inputId === "cleannonOccupied") {
             columns.push(
-                { dataField: "roomName", caption: "Room Name", width: columnWidth },
-                { dataField: "roomType", caption: "Room Type", width: columnWidth },
-                { dataField: "zone", caption: "Zone", width: columnWidth },
+                { dataField: "roomName", caption: "Room Name", width: "20%" },
+                { dataField: "roomType", caption: "Room Type", width: "20%" },
+                { dataField: "zone", caption: "Zone", width: "60%" },
             );
         }
         else if (inputId === "doeoutOccupied") {
             columns.push(
-                { dataField: "reservationNumber", caption: "Reservation Number", width: columnWidth },
-                { dataField: "roomNo", caption: "Room No", width: columnWidth },
-                { dataField: "roomType", caption: "Room Type", width: columnWidth },
-                { dataField: "guest", caption: "Guest", width: columnWidth },
+                { dataField: "reservationNumber", caption: "Reservation Number", width: "10%" },
+                { dataField: "roomNo", caption: "Room No", width: "10%" },
+                { dataField: "roomType", caption: "Room Type", width: "20%" },
+                { dataField: "guest", caption: "Guest", width: "20%" },
 
                 {
                     dataField: "arrivalDate",
                     caption: "Arrival Date",
-                    width: columnWidth + 30,
+                    width: "20%",
                     dataType: "date",
                     format: "dd/MM/yyyy"
                 },
                 {
                     dataField: "departureDate",
                     caption: "Departure Date",
-                    width: columnWidth + 30,
+                    width: "20%",
                     dataType: "date",
                     format: "dd/MM/yyyy"
                 }
@@ -1017,37 +998,37 @@
         }
         else if (inputId === "dirtyVacant") {
             columns.push(
-                { dataField: "roomName", caption: "Room Name", width: columnWidth },
-                { dataField: "roomType", caption: "Room Type", width: columnWidth },
-                { dataField: "zone", caption: "Zone", width: columnWidth },
+                { dataField: "roomName", caption: "Room Name", width: "20%" },
+                { dataField: "roomType", caption: "Room Type", width: "20%" },
+                { dataField: "zone", caption: "Zone", width: "60%" },
             );
         }
         else if (inputId === "dirtyOccupied") {
             columns.push(
-                { dataField: "roomName", caption: "Room Name", width: columnWidth },
-                { dataField: "roomType", caption: "Room Type", width: columnWidth },
-                { dataField: "zone", caption: "Zone", width: columnWidth },
+                { dataField: "roomName", caption: "Room Name", width: "20%" },
+                { dataField: "roomType", caption: "Room Type", width: "20%" },
+                { dataField: "zone", caption: "Zone", width: "60%" },
             );
         }
         else if (inputId === "outoforderVacant") {
             columns.push(
-                { dataField: "roomName", caption: "Room Name", width: columnWidth },
-                { dataField: "roomType", caption: "Room Type", width: columnWidth },
-                { dataField: "zone", caption: "Zone", width: columnWidth },
+                { dataField: "roomName", caption: "Room Name", width: "20%" },
+                { dataField: "roomType", caption: "Room Type", width: "20%" },
+                { dataField: "zone", caption: "Zone", width: "60%" },
             );
         }
         else if (inputId === "outofserviveVacant") {
             columns.push(
-                { dataField: "roomName", caption: "Room Name", width: columnWidth },
-                { dataField: "roomType", caption: "Room Type", width: columnWidth },
-                { dataField: "zone", caption: "Zone", width: columnWidth },
+                { dataField: "roomName", caption: "Room Name", width: "20%" },
+                { dataField: "roomType", caption: "Room Type", width: "20%" },
+                { dataField: "zone", caption: "Zone", width: "60%" },
             );
         }
         else if (inputId === "outofserviveOccupied") {
             columns.push(
-                { dataField: "roomName", caption: "Room Name", width: columnWidth },
-                { dataField: "roomType", caption: "Room Type", width: columnWidth },
-                { dataField: "zone", caption: "Zone", width: columnWidth },
+                { dataField: "roomName", caption: "Room Name", width: "20%" },
+                { dataField: "roomType", caption: "Room Type", width: "20%" },
+                { dataField: "zone", caption: "Zone", width: "60%" },
             );
         }
         $("#logGridContainer").dxDataGrid({
@@ -1327,5 +1308,7 @@
             });
         });
     });
+
+
 
 </script>

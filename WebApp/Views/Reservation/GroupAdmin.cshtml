@@ -55,7 +55,12 @@
 
 
     var idReservation = 0;
-        var mg ='';
+    var isPseudo = 0;
+    var roomID = 0;
+    var shareRoom = 0;
+    var reservationStatus = 0;
+    var noOfRoom = 0;
+    var mg ='';
     var status = '';
     var roomStatus = '';
     var roomNo = '';
@@ -169,10 +174,14 @@
                 roomType = e.data.RoomType;
                 roomNo = e.data.RoomNo;
                 arivalDate = e.data.Arrival;
+                shareRoom = e.data.ShareRoom;
                 departureDate = e.data.Departure;
                 confirmationNo = e.data.ConfirmationNo;
                 lastname = e.data.GuestName;
-
+                reservationStatus = e.data.ReservationStatus;
+                roomID = e.data.RoomID;
+                noOfRoom= e.data.NoOfRoom;
+                isPseudo= e.data.IsPseudo;
                 // Xử lý disable/enable button assign room
                 if(e.data.NoOfRoom != '1'){
                     ['assignRoom', 'unAssignRoom'].forEach(id => {
@@ -316,6 +325,11 @@
         formData.append('userID',userID);
         formData.append('mg',mg);
         formData.append('arivalDate',arivalDate);
+        formData.append('shareRoom',shareRoom);
+        formData.append('reservationStatus',reservationStatus);
+        formData.append('roomID',roomID);
+        formData.append('noOfRoom',noOfRoom);
+        formData.append('isPseudo',isPseudo);
         $.ajax({
             url: '/Reservation/CheckinGroup',
             type: 'POST',

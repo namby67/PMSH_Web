@@ -2,8 +2,11 @@
 using BaseBusiness.Facade;
 using BaseBusiness.Model;
 using BaseBusiness.util;
+using DevExpress.Xpo.DB.Helpers;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -154,6 +157,91 @@ namespace BaseBusiness.BO
 
             string query = $"SELECT * FROM Profile WHERE CAST(DateOfBirth AS DATE) >= CAST('{fromDateStr}' AS DATE) AND CAST(DateOfBirth AS DATE) <= CAST('{toDateStr}' AS DATE) ORDER BY id DESC";
             return instance.GetList<ProfileModel>(query);
+        }
+        public string GenerateNo3(string code)
+        {
+            IConfiguration config = new ConfigurationBuilder()
+        .SetBasePath(Directory.GetCurrentDirectory())
+        .AddJsonFile("appsettings.json", optional: false)
+        .Build();
+
+            string strcon = config.GetConnectionString("DefaultConnection");
+            string tableName = "Profile";
+            string sql = "SELECT TOP 1 MAX(Convert(int," + code + ")) FROM " + tableName + " with (nolock) ";
+            string lastBillNo = "";
+            SqlConnection conn = new SqlConnection(strcon);
+            SqlCommand cmd = conn.CreateCommand();
+            cmd.CommandText = sql;
+            cmd.CommandType = CommandType.Text;
+            SqlDataReader reader = null;
+            ArrayList result = new ArrayList();
+            try
+            {
+                conn.Open();
+                reader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+                if (reader.Read())
+                {
+                    lastBillNo = reader[0].ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                conn.Close();
+            }
+            if (lastBillNo.Length == 0)
+            {
+                return "00001";
+            }
+            else
+            {
+                string digitPart = "", stringPart = lastBillNo, newDigitPart;
+                int i = lastBillNo.Length - 1;
+                while (i >= 0)
+                {
+                    try
+                    {
+                        Convert.ToInt32(lastBillNo.Substring(i, 1));
+                        digitPart = lastBillNo.Substring(i, 1) + digitPart;
+                        i--;
+                    }
+                    catch
+                    {
+                        break;
+                    }
+                }
+                if (digitPart.Length > 0)
+                {
+                    stringPart = lastBillNo.Substring(0, i + 1);
+                    newDigitPart = Convert.ToString(Convert.ToInt32(digitPart) + 1);
+                    switch (newDigitPart.Length)
+                    {
+                        case 1:
+                            newDigitPart = "0000" + newDigitPart;
+                            break;
+                        case 2:
+                            newDigitPart = "000" + newDigitPart;
+                            break;
+                        case 3:
+                            newDigitPart = "00" + newDigitPart;
+                            break;
+                        case 4:
+                            newDigitPart = "0" + newDigitPart;
+                            break;
+                    }
+                    return stringPart + newDigitPart;
+                }
+                else
+                {
+                    return lastBillNo + "00001";
+                }
+
+            }
+
+
         }
     }
 }

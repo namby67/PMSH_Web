@@ -1328,8 +1328,8 @@ namespace HouseKeeping.Controllers
 
                                   ReservationNumber = d["Reservation Number"]?.ToString() ?? "",
                                   RoomNo = d["Room No"]?.ToString() ?? "",
-                                  ArrivalDate = d["Arrival Date"]?.ToString() ?? "",
-                                  DepartureDate = d["Departure Date"]?.ToString() ?? "",
+                                  ArrivalDate = d.Field<DateTime?>("Arrival Date"),
+                                  DepartureDate = d.Field<DateTime?>("Departure Date"),
                               }).ToList<object>();
                 }
                 else if (inputId == "depExpectedRoom")
@@ -1343,8 +1343,8 @@ namespace HouseKeeping.Controllers
 
                                   ReservationNumber = d["Reservation Number"]?.ToString() ?? "",
                                   RoomNo = d["Room No"]?.ToString() ?? "",
-                                  ArrivalDate = d["Arrival Date"]?.ToString() ?? "",
-                                  DepartureDate = d["Departure Date"]?.ToString() ?? "",
+                                  ArrivalDate = d.Field<DateTime?>("Arrival Date"),
+                                  DepartureDate = d.Field<DateTime?>("Departure Date"),
                               }).ToList<object>();
                 }
                 else if (inputId == "actualRoom")
@@ -1358,8 +1358,8 @@ namespace HouseKeeping.Controllers
 
                                   ReservationNumber = d["Reservation Number"]?.ToString() ?? "",
                                   RoomNo = d["Room No"]?.ToString() ?? "",
-                                  ArrivalDate = d["Arrival Date"]?.ToString() ?? "",
-                                  DepartureDate = d["Departure Date"]?.ToString() ?? "",
+                                  ArrivalDate = d.Field<DateTime?>("Arrival Date"),
+                                  DepartureDate = d.Field<DateTime?>("Departure Date"),
                               }).ToList<object>();
                 }
                 else if (inputId == "arrivalExpectedRoom")
@@ -1373,8 +1373,8 @@ namespace HouseKeeping.Controllers
 
                                   ReservationNumber = d["Reservation Number"]?.ToString() ?? "",
                                   RoomNo = d["Room No"]?.ToString() ?? "",
-                                  ArrivalDate = d["Arrival Date"]?.ToString() ?? "",
-                                  DepartureDate = d["Departure Date"]?.ToString() ?? "",
+                                  ArrivalDate = d.Field<DateTime?>("Arrival Date"),
+                                  DepartureDate = d.Field<DateTime?>("Departure Date"),
                                   Adult = d["Adult"]?.ToString() ?? "",
                                   Child = d["Child"]?.ToString() ?? "",
                               }).ToList<object>();
@@ -1390,8 +1390,8 @@ namespace HouseKeeping.Controllers
 
                                   ReservationNumber = d["Reservation Number"]?.ToString() ?? "",
                                   RoomNo = d["Room No"]?.ToString() ?? "",
-                                  ArrivalDate = d["Arr Date"]?.ToString() ?? "",
-                                  DepartureDate = d["Dep Date"]?.ToString() ?? "",
+                                  ArrivalDate = d.Field<DateTime?>("Arrival Date"),
+                                  DepartureDate = d.Field<DateTime?>("Departure Date"),
                                   Adult = d["Adult"]?.ToString() ?? "",
                                   Child = d["Child"]?.ToString() ?? "",
                                   EmployeeCI = d["Employee CI"]?.ToString() ?? "",
@@ -1409,8 +1409,8 @@ namespace HouseKeeping.Controllers
 
                                   ReservationNumber = d["Reservation Number"]?.ToString() ?? "",
                                   RoomNo = d["Room No"]?.ToString() ?? "",
-                                  ArrivalDate = d["Arr Date"]?.ToString() ?? "",
-                                  DepartureDate = d["Dep Date"]?.ToString() ?? "",
+                                  ArrivalDate = d.Field<DateTime?>("Arrival Date"),
+                                  DepartureDate = d.Field<DateTime?>("Departure Date"),
                                   Adult = d["Adult"]?.ToString() ?? "",
                                   Child = d["Child"]?.ToString() ?? "",
 
@@ -1428,8 +1428,8 @@ namespace HouseKeeping.Controllers
 
                                   ReservationNumber = d["Reservation Number"]?.ToString() ?? "",
                                   RoomNo = d["Room No"]?.ToString() ?? "",
-                                  ArrivalDate = d["Arr Date"]?.ToString() ?? "",
-                                  DepartureDate = d["Dep Date"]?.ToString() ?? "",
+                                  ArrivalDate = d.Field<DateTime?>("Arrival Date"),
+                                  DepartureDate = d.Field<DateTime?>("Departure Date"),
 
 
 
@@ -1446,8 +1446,8 @@ namespace HouseKeeping.Controllers
 
                                   ReservationNumber = d["Reservation Number"]?.ToString() ?? "",
                                   RoomNo = d["Room No"]?.ToString() ?? "",
-                                  ArrivalDate = d["Arr Date"]?.ToString() ?? "",
-                                  DepartureDate = d["Dep Date"]?.ToString() ?? "",
+                                  ArrivalDate = d.Field<DateTime?>("Arrival Date"),
+                                  DepartureDate = d.Field<DateTime?>("Departure Date"),
 
 
 
@@ -1464,8 +1464,8 @@ namespace HouseKeeping.Controllers
 
                                   ReservationNumber = d["Reservation Number"]?.ToString() ?? "",
                                   RoomNo = d["Room No"]?.ToString() ?? "",
-                                  ArrivalDate = d["Arr Date"]?.ToString() ?? "",
-                                  DepartureDate = d["Dep Date"]?.ToString() ?? "",
+                                  ArrivalDate = d.Field<DateTime?>("Arrival Date"),
+                                  DepartureDate = d.Field<DateTime?>("Departure Date"),
 
 
 
@@ -1530,8 +1530,8 @@ namespace HouseKeeping.Controllers
 
                                   ReservationNumber = d["Reservation Number"]?.ToString() ?? "",
                                   RoomNo = d["Room No"]?.ToString() ?? "",
-                                  ArrivalDate = d["Arr Date"]?.ToString() ?? "",
-                                  DepartureDate = d["Dep Date"]?.ToString() ?? "",
+                                  ArrivalDate = d.Field<DateTime?>("Arrival Date"),
+                                  DepartureDate = d.Field<DateTime?>("Departure Date"),
 
 
 
