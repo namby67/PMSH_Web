@@ -1,15 +1,16 @@
 
 using BaseBusiness.BO;
 using BaseBusiness.Model;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Data;
-using System.Data.SqlClient;
+//using System.Data.SqlClient;
 using System.Globalization;
 using System.IO;
 using System.Text;
-
+using Microsoft.Data.SqlClient;
 namespace BaseBusiness.util
 {
 	/// <summary>
@@ -38,8 +39,76 @@ namespace BaseBusiness.util
 			else
 				return 1;
 
-		}
-		public static string GetHostName()
+        }
+
+        public static decimal ExchangeCurrency(DateTime date, string FromCurrencyID, string ToCurrencyID, decimal Amount)
+        {
+            try
+            {
+                // S?a: Ch? truy?n tên SP và các SqlParameter
+                DataTable dt = getTable("spExchangeCurrency",
+                    new SqlParameter("@DateTime", date),
+                    new SqlParameter("@FromCurrency", FromCurrencyID),
+                    new SqlParameter("@ToCurrency", ToCurrencyID),
+                    new SqlParameter("@Amount", Amount));
+
+                if (dt.Rows.Count > 0 && dt.Rows[0][0] != DBNull.Value)
+                {
+                    return Convert.ToDecimal(dt.Rows[0][0]);
+                }
+
+                return 0;
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+        private static readonly string _connectionString;
+
+        // Static constructor: ch?y m?t l?n duy nh?t khi class ???c dùng l?n ??u
+        static TextUtils()
+        {
+            try
+            {
+                var builder = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+                IConfiguration configuration = builder.Build();
+
+                _connectionString = configuration.GetConnectionString("DefaultConnection");
+
+                if (string.IsNullOrEmpty(_connectionString))
+                {
+                    throw new Exception("Không tìm th?y Connection String 'DefaultConnection' trong appsettings.json");
+                }
+            }
+            catch (Exception ex)
+            {
+                // N?u không load ???c config, ném l?i rõ ràng ?? d? debug
+                throw new Exception("L?i kh?i t?o Connection String: " + ex.Message, ex);
+            }
+        }
+        public static DataTable getTable(string spName, params SqlParameter[] parameters)
+        {
+            DataTable dt = new DataTable();
+
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            using (SqlCommand cmd = new SqlCommand(spName, conn))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddRange(parameters);
+
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                {
+                    da.Fill(dt);
+                }
+            }
+
+            return dt;
+        }
+        public static string GetHostName()
 		{
 			return System.Environment.MachineName; //System.Net.Dns.GetHostName();
 
