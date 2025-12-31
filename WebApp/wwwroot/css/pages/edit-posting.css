@@ -49,10 +49,10 @@
       font-size: 0.85rem;
       padding: 5px 12px;
     }
-    .btn-primary {
-      background-color: #4b6cb7;
-      border: none;
-    }
+.btn-primary {
+    background-color: #1f501f;
+    border: none;
+}
     .btn-primary:hover {
       background-color: #182848;
     }

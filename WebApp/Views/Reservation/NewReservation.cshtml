@@ -6,7 +6,7 @@
         <div class="col-md-12">
             <div class="content-right">
                 <div class="header" style="justify-content:center;border:none">
-                        <h3 id="content-title">New Reservation</h3>
+                    <h3 id="content-title">New Reservation</h3>
                 </div>
                 <div class="mb-2">
                     <button class="submit-button-clear-reservation" onclick="SaveReservation(0)">Save</button>
@@ -25,8 +25,8 @@
                                     <div class="form-group-new-reservation col-md-6">
                                         <label>Name <span style="color:red">*</span></label>
                                         <div class="row" style="margin-left:1px;margin-right:2px">
-                                            <input id="txtName"  class="col-md-10"/>
-                                            <button onclick="openModalSearchProfile()" class="col-md-2"><i class="fa-solid fa-arrow-down" ></i></button>
+                                            <input id="txtName" class="col-md-10" />
+                                            <button onclick="openModalSearchProfile()" class="col-md-2"><i class="fa-solid fa-arrow-down"></i></button>
                                         </div>
                                         <div id="errorMessage" style="color: red; margin-top: 5px; display: none;">
                                             <strong>Typing format is not correct. Please typing as below: FirstName Middle, LastName </strong>
@@ -73,7 +73,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div  class="col-md-4">
+                        <div class="col-md-4">
                             <div class="section-new-reservation " style="margin:5px">
                                 <h3>Membership Information</h3>
                                 <div class="form-grid-new-reservation row">
@@ -122,9 +122,9 @@
                                 </div>
                             </div>
                         </div>
-                   
 
-                        <div  class="col-md-4">
+
+                        <div class="col-md-4">
                             <div class="section-new-reservation " style="margin:5px">
                                 <h3>Agent Information</h3>
                                 <div class="form-grid-new-reservation row">
@@ -132,7 +132,7 @@
                                         <label>Agent</label>
                                         <div class="row" style="margin-left:1px;margin-right:2px">
                                             <input id="txtAgentID" readonly style="display:none" />
-                                            <input id="txtAgent" readonly class="col-md-8"/>
+                                            <input id="txtAgent" readonly class="col-md-8" />
                                             <button onclick="openModalSearchAgent()" class="col-md-2"><i class="fa-solid fa-arrow-down"></i></button>
                                             <div class="col-md-1" style="justify-content:center;text-align:center;color:red;" id="clearAgent" onclick="clearAgent()">
                                                 <i class="fa-solid fa-xmark" style="padding-top:6px"></i>
@@ -157,13 +157,13 @@
                                         <div class="row" style="margin-left:1px;margin-right:2px">
                                             <input type="text" id="txtGroupCode">
                                         </div>
-                                        
+
                                     </div>
                                     <div class="form-group-new-reservation col-md-6">
                                         <label>Contact</label>
                                         <div class="row" style="margin-left:1px;margin-right:2px">
                                             <input id="txtContactID" readonly style="display:none" />
-                                            <input id="txtContact" readonly class="col-md-8"/>
+                                            <input id="txtContact" readonly class="col-md-8" />
                                             <button onclick="openModalSearchContact()" class="col-md-2"><i class="fa-solid fa-arrow-down"></i></button>
                                             <div class="col-md-1" style="justify-content:center;text-align:center;color:red;" id="clearContact" onclick="clearContact()">
                                                 <i class="fa-solid fa-xmark" style="padding-top:6px"></i>
@@ -194,7 +194,7 @@
                             </div>
                         </div>
 
-                        <div  class="col-md-4">
+                        <div class="col-md-4">
                             <div class="section-new-reservation" style="margin:5px">
                                 <h3>Stay Details</h3>
                                 <div class="stay-details-grid-new-reservation row">
@@ -202,16 +202,16 @@
                                         <label for="arrival">Arrival</label>
                                         <div class="row" style="margin-left:1px;margin-right:2px">
                                             <input type="date" id="arrival" class="col-md-12">
-               
+
                                             <span style="font-size:12px;color:#c53030;display:none" id="arrival-day"></span>
                                         </div>
-        
+
                                     </div>
                                     <div class="form-group-new-reservation col-md-5">
                                         <label for="departure">Departure</label>
                                         <div class="row" style="margin-left:1px;margin-right:2px">
                                             <input type="date" id="departure" class="col-md-12">
-         
+
                                             <span style="font-size:12px;color:#c53030;display:none" id="departure-day"></span>
                                         </div>
 
@@ -247,7 +247,7 @@
                                         <div class="row" style="margin-left:1px;margin-right:2px">
                                             <input type="number" value="0" id="c2" style="text-align:right">
                                         </div>
-                                     </div>
+                                    </div>
                                     <div class="form-group-new-reservation col-md-4">
                                         <label for="numRooms">Num. Rooms</label>
                                         <div class="row" style="margin-left:1px;margin-right:2px">
@@ -271,7 +271,7 @@
                                     <div class="form-group-new-reservation col-md-6">
                                         <label for="roomSelect">Room</label>
                                         <div class="row" style="margin-left:1px;margin-right:2px">
-                                            <input id="roomSelect" readonly  class="col-md-8"/>
+                                            <input id="roomSelect" readonly class="col-md-8" />
                                             <input id="roomID" style="display:none" />
                                             <button id="btnRoom" onclick="openModalSearchRoom()" class="col-md-2"><i class="fa-solid fa-arrow-down"></i></button>
                                             <div class="col-md-1" style="justify-content:center;text-align:center;color:red;" id="clearRoomNo" onclick="clearRoomNo()">
@@ -289,7 +289,7 @@
                                     <div class="form-group-new-reservation col-md-7">
                                         <label for="txtRateCode">Rate Code</label>
                                         <div class="row" style="margin-left:1px;margin-right:2px">
-                                            <input id="txtRateCode" style="text-align:right" readonly class="col-md-7"/>
+                                            <input id="txtRateCode" style="text-align:right" readonly class="col-md-7" />
                                             <input id="txtRateCodeID" style="display:none" readonly />
                                             <button onclick="openModalRateCode()" class="col-md-2"><i class="fa-solid fa-arrow-down"></i></button>
                                             <div class="col-md-1" style="justify-content:center;text-align:center;color:red;" id="clearRateCode" onclick="clearRateCode()">
@@ -310,7 +310,7 @@
                                             <input value="0" id="txtNetAmount" style="text-align:right">
                                         </div>
                                     </div>
-                                    
+
 
                                     <div class="form-group-new-reservation col-md-4">
                                         <label for="txtDiscountAmount">Disc. Amt</label>
@@ -328,7 +328,7 @@
                             </div>
                         </div>
 
-                        <div  class="col-md-4">
+                        <div class="col-md-4">
                             <div class="section-new-reservation" style="margin:5px">
                                 <h3>Rate Summary</h3>
                                 <div class="form-grid-new-reservation row">
@@ -357,7 +357,7 @@
                                     <div class="form-group-new-reservation col-md-5">
                                         <label for="txtMarket">Market <span style="color:red">*</span></label>
                                         <div class="row" style="margin-left:1px;margin-right:2px">
-                                            <input id="txtMarket" class="col-md-9"/>
+                                            <input id="txtMarket" class="col-md-9" />
                                             <input id="txtMarketID" style="display:none" />
                                             <button onclick="openModalSearchMarket()" class="col-md-3"><i class="fa-solid fa-arrow-down"></i></button>
                                         </div>
@@ -389,7 +389,7 @@
                                     <div class="form-group-new-reservation col-md-6">
                                         <label for="txtBooker">Booker</label>
                                         <div class="row" style="margin-left:1px;margin-right:2px">
-                                            <input id="txtBooker"  class="col-md-8"/>
+                                            <input id="txtBooker" class="col-md-8" />
                                             <input id="txtBookerID" style="display:none" />
                                             <button onclick="openModalSearchBooker()" class="col-md-2"><i class="fa-solid fa-arrow-down"></i></button>
                                             <div class="col-md-1" style="justify-content:center;text-align:center;color:red;" id="clearBooker" onclick="clearBooker()">
@@ -417,15 +417,15 @@
                                             <span style="font-size:12px" class="col-md-2">+ net</span>
                                             <input value="0" id="txtNetAfterDiscount" class="col-md-5" readonly style="text-align:right">
                                         </div>
-                                        
+
                                     </div>
 
                                     <div class="form-group-new-reservation col-md-12">
                                         <label for="txtTotal">Total</label>
                                         <div class="row" style="margin-left:1px;margin-right:2px">
-                                            <input  value="0" id="txtTotal" class="col-md-5" readonly style="text-align:right">
+                                            <input value="0" id="txtTotal" class="col-md-5" readonly style="text-align:right">
                                             <span style="font-size:12px" class="col-md-2">+ net</span>
-                                            <input  value="0" id="txtTotalNet" class="col-md-5" readonly style="text-align:right">
+                                            <input value="0" id="txtTotalNet" class="col-md-5" readonly style="text-align:right">
                                         </div>
 
                                     </div>
@@ -433,14 +433,14 @@
                                 </div>
                             </div>
                         </div>
-                        <div  class="col-md-4">
+                        <div class="col-md-4">
                             <div class="section-new-reservation" style="margin:5px">
                                 <h3>Booking & Special Requests</h3>
                                 <div class="form-grid-new-reservation row">
                                     <div class="form-group-new-reservation col-md-6">
                                         <label for="txtPreference">Specials</label>
                                         <div class="row" style="margin-left:1px;margin-right:2px">
-                                            <input id="txtPreference" class="col-md-8"/>
+                                            <input id="txtPreference" class="col-md-8" />
                                             <button onclick="openModalSearchPreference()" class="col-md-2"><i class="fa-solid fa-arrow-down"></i></button>
                                             <div class="col-md-1" style="justify-content:center;text-align:center;color:red;" id="clearSpecial" onclick="clearSpecial()">
                                                 <i class="fa-solid fa-xmark" style="padding-top:6px"></i>
@@ -456,7 +456,7 @@
                                     <div class="form-group-new-reservation col-md-6">
                                         <label for="txtItemInventory">Item Inventory</label>
                                         <div class="row" style="margin-left:1px;margin-right:2px">
-                                            <select id="txtItemInventory"  multiple asp-items="ViewBag.cboItem" style="height:24px"></select>
+                                            <select id="txtItemInventory" multiple asp-items="ViewBag.cboItem" style="height:24px"></select>
                                         </div>
                                     </div>
                                     <div class="form-group-new-reservation col-md-6">
@@ -471,7 +471,7 @@
                                             <input type="color" id="txtColor">
                                         </div>
                                     </div>
-                                     <div class="form-group-new-reservation col-md-4" style="display:none">
+                                    <div class="form-group-new-reservation col-md-4" style="display:none">
                                         <label for="txtFolioBal">Folio Balance $</label>
                                         <div class="row" style="margin-left:1px;margin-right:2px">
                                             <input type="number" value="0" id="txtFolioBal" style="text-align:right">
@@ -483,7 +483,7 @@
                                             <input type="number" value="0" id="txtCurrency" style="text-align:right">
                                         </div>
                                     </div>
-                                    
+
                                     <div class=" col-md-6 row mt-1">
                                         <div class="col-md-2" style="margin-left:1px;margin-right:2px">
                                             <input type="checkbox" id="txtPrintRate">
@@ -493,7 +493,7 @@
                                     </div>
                                     <div class="row mt-1 col-md-6">
                                         <div class="col-md-2" style="margin-left:1px;margin-right:2px">
-                                            <input  type="checkbox" id="txtVideoCheckout">
+                                            <input type="checkbox" id="txtVideoCheckout">
                                         </div>
                                         <label class="col-md-9" for="txtVideoCheckout">Video CO</label>
 
@@ -520,8 +520,8 @@
                                 </div>
                             </div>
                         </div>
-  
-                        
+
+
                     </div>
                 </div>
             </div>
@@ -542,7 +542,7 @@
 
                     <a href="#" class="font-semibold col-md-4 mb-1" onclick="openModalCheckOutAll(1);" id="assignRoom">C/O All</a>
                     <a href="#" class="font-semibold col-md-4 mb-1" onclick="openModalCheckOutAll(2);" id="unAssignRoom">C/O Zero</a>
-                    <a href="#"  class="font-semibold col-md-4 mb-1" onclick="openModalCheckOut();" id="unAssignRoom">C/O</a>
+                    <a href="#" class="font-semibold col-md-4 mb-1" onclick="openModalCheckOut();" id="unAssignRoom">C/O</a>
                     <a href="#" class="font-semibold col-md-4 mb-1" onclick="openRoomAssignment();" id="assignRoom">Assignment</a>
                     <a href="#" class="font-semibold col-md-4 mb-1" onclick="openConfirmRoomUnAssign();" id="unAssignRoom">UnAssign</a>
                     <a href="#" class="font-semibold col-md-4 mb-1">Advance</a>
@@ -677,7 +677,7 @@
         $("#txtID").val(result.id);
         $('#txtName').val(result.lastName);
         let arrival = result.arrivalDate.split('T')[0];
-        
+
         $('#arrival').val(arrival);
         let departure = result.departureDate.split('T')[0];
         $('#departure').val(departure);
@@ -703,23 +703,23 @@
             var roomTypeId = parts[3];
             var idReservationRoomplan = parts[4]; // lấy id từ localStorage
 
-         
+
             if (idReservationRoomplan == idReservation) {
                 $("#arrival").val(startDate);
                 $("#departure").val(endDate);
                 $("#roomSelect").val(roomNo);
                 $("#txtRoomType").val(roomTypeId);
 
-                
+
                 localStorage.removeItem("ReservationRoomPlan");
             } else {
-               
+
                 $("#arrival").val(result.arrivalDate.split("T")[0]);
                 $("#departure").val(result.departureDate.split("T")[0]);
                 $("#roomSelect").val(result.roomNo);
                 $("#txtRoomType").val(result.roomTypeId);
             }
-        } 
+        }
         else {
             // fallback nếu localStorage trống
             $("#arrival").val(result.arrivalDate.split("T")[0]);
@@ -782,7 +782,7 @@
         // $("#txtColor").val(result.color);
         if (result.color) {
             // Hiển thị dạng HEX để trình duyệt hiểu
-              
+
             $("#txtColor").val(intToHexColor(result.color));
         } else {
             $("#txtColor").val("");
@@ -1460,7 +1460,7 @@
         let cleanValueDiscountPercent = valueDiscountPercent.replace(/[^0-9]/g, '');
         let valueDiscountAmount = $('#txtDiscountAmount').val();
         let cleanValueDiscountAmount = valueDiscountAmount.replace(/[^0-9]/g, '');
-        
+
         formData.append('reservationID',idReservation);
 
         formData.append('profileAgentID', $('#txtAgentID').val());
@@ -1654,8 +1654,8 @@
             $("#txtAllotment").val('');
             $("#txtPersonInCharge").val('');
             $("#nights").val('');
-            $('#txtName').val(''); 
-            $('#txtID').val(0); 
+            $('#txtName').val('');
+            $('#txtID').val(0);
 
 
             getBusinessDate();

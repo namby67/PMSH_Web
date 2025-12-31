@@ -712,13 +712,14 @@ namespace Billing.Controllers
                         folio.Quantity = int.Parse(Request.Form["quantity"].ToString());
                         folio.Amount = folio.AmountMaster = folio.AmountGross = folio.AmountMasterGross = folio.Price * folio.Quantity;
                         folio.AmountBeforeTax = folio.AmountMasterBeforeTax = folio.Amount - priceVat - priceSvc;
-                    }
-                    else if (folio.RowState == 1)
-                    {
-                        folio.Supplement = Request.Form["supplement"].ToString();
+                        if (folio.RowState == 1)
+                        {
+                            folio.Supplement = Request.Form["supplement"].ToString();
 
-                        folio.Reference = Request.Form["reference"].ToString();
+                            folio.Reference = Request.Form["reference"].ToString();
+                        }
                     }
+                   
                     else
                     {
                         if (folio.SubgroupCode == "Tax")

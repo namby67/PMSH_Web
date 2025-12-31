@@ -1,6 +1,6 @@
-﻿﻿:root {
-    --main-color: #63af90;
-    --secondary-color: ##ebe6e6;
+﻿:root {
+    --main-color: #1f501f;
+    --secondary-color: #ebe6e6;
     --accent-color: #ffffff;
     --text-color: #000000;
     --highlight-color: #e67100;
@@ -148,8 +148,8 @@ body {
     }
 
         .dropdown-submenu-content a:hover {
-            color: var(--main-color);
-            background-color: var(--secondary-color);
+            color: var(--main-color) !important;
+           /* background-color: var(--secondary-color);*/
         }
 
 /* ===== CLASS ĐIỀU KHIỂN BẰNG JS ===== */

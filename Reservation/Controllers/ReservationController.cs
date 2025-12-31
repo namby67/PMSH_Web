@@ -2,10 +2,13 @@
 using BaseBusiness.Model;
 using BaseBusiness.util;
 using DevExpress.Data.Filtering.Helpers;
+using DevExpress.Utils.CommonDialogs.Internal;
 using DevExpress.Web.Internal;
 using DevExpress.XtraReports.UI;
 using DevExpress.XtraRichEdit.Import.Doc;
+using DevExpress.XtraRichEdit.Import.Html;
 using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -20,6 +23,7 @@ using Reservation.Dto;
 using Reservation.Services.Interfaces;
 using System;
 using System.Buffers.Text;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -37,6 +41,7 @@ using System.Xml;
 using static DevExpress.CodeParser.CodeStyle.Formatting.Rules;
 using static log4net.Appender.RollingFileAppender;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Text = DocumentFormat.OpenXml.Wordprocessing.Text;
 namespace Reservation.Controllers
 {
     public class ReservationController : Controller
@@ -56,9 +61,9 @@ namespace Reservation.Controllers
         private readonly string _secretKey;
         private readonly string _iv;
         public ReservationController(ILogger<ReservationController> logger,
-                IMemoryCache cache, IConfiguration configuration, IReservationService iReservationService,IFolioDetailService folioDetailService,
+                IMemoryCache cache, IConfiguration configuration, IReservationService iReservationService, IFolioDetailService folioDetailService,
                 IDepositService iDepositService, IRoutingService iRoutingService, IGroupReservationService iGroupReservationService,
-                IMessageService iMessageService, IShareService iShareService,IGroupAdminService iGroupAdminService
+                IMessageService iMessageService, IShareService iShareService, IGroupAdminService iGroupAdminService
             , IWebHostEnvironment environment)
         {
             _secretKey = configuration["Encryption:Key"] ?? throw new ArgumentNullException("Encryption:Key is missing in configuration");
@@ -214,11 +219,11 @@ namespace Reservation.Controllers
             ViewBag.cboTransportType = ListItemHelper.GetTransportTypeProvider();
             ViewBag.businesDate = businessDateModel[0].BusinessDate;
             ViewBag.cboItem = ListItemHelper.GetItemInventoryProvider();
-            ViewBag.cboTransaction = ListItemHelper.GetTransactionProvider(true,"Choose Transaction");
+            ViewBag.cboTransaction = ListItemHelper.GetTransactionProvider(true, "Choose Transaction");
             return View();
         }
 
-         
+
         public IActionResult GroupReservation()
         {
             List<BusinessDateModel> businessDateModel = PropertyUtils.ConvertToList<BusinessDateModel>(BusinessDateBO.Instance.FindAll());
@@ -236,7 +241,7 @@ namespace Reservation.Controllers
         }
 
 
-        public IActionResult GroupAdmin(string key,string displayType,string name,string roomNo)
+        public IActionResult GroupAdmin(string key, string displayType, string name, string roomNo)
         {
             int? id = null;
             if (!string.IsNullOrEmpty(key))
@@ -254,7 +259,7 @@ namespace Reservation.Controllers
             List<Dictionary<string, object>> reservations = new List<Dictionary<string, object>>();
             if (id.HasValue)
             {
-                DataTable reservationTable = _iGroupAdminService.SearchGroupAdmin(id.ToString(),displayType,name,roomNo);
+                DataTable reservationTable = _iGroupAdminService.SearchGroupAdmin(id.ToString(), displayType, name, roomNo);
                 reservations = reservationTable.AsEnumerable().Select(row =>
                     reservationTable.Columns.Cast<DataColumn>()
                         .ToDictionary(
@@ -346,11 +351,11 @@ namespace Reservation.Controllers
             }
         }
         [HttpGet]
-        public async Task<IActionResult> GetRateCode(DateTime arrivalDate,DateTime departure,int adults,int roomType)
+        public async Task<IActionResult> GetRateCode(DateTime arrivalDate, DateTime departure, int adults, int roomType)
         {
             try
             {
-                DataTable myData = _iReservationService.GetRateCode(arrivalDate, departure, adults,roomType);
+                DataTable myData = _iReservationService.GetRateCode(arrivalDate, departure, adults, roomType);
 
 
                 var result = (from d in myData.AsEnumerable()
@@ -358,7 +363,7 @@ namespace Reservation.Controllers
                               {
                                   RateCodeID = int.Parse(d["RateCodeID"].ToString()),
                                   RoomTypeID = d["RoomTypeID"].ToString(),
-                                  RateCode =d["RateCode"].ToString(),
+                                  RateCode = d["RateCode"].ToString(),
                                   Amount = d["Amount"].ToString(),
                                   AmountAfterTax = d["AmountAfterTax"].ToString()
 
@@ -376,8 +381,8 @@ namespace Reservation.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllRooms(DateTime fromDate, DateTime ToDate,string floor,string roomTypeID,string smoking,string foStatus,
-            string hkStatus,string isDummy,string roomNo)
+        public async Task<IActionResult> GetAllRooms(DateTime fromDate, DateTime ToDate, string floor, string roomTypeID, string smoking, string foStatus,
+            string hkStatus, string isDummy, string roomNo)
         {
             try
             {
@@ -413,7 +418,8 @@ namespace Reservation.Controllers
                     hk = string.Join("','", hkStatus.Split(','));
                 }
                 var list = PropertyUtils.ConvertToList<RoomModel>(RoomBO.Instance.FindAll()).Where(x => x.RoomNo == roomNo).ToList();
-                if (list.Count > 0) {
+                if (list.Count > 0)
+                {
                     roomID = list[0].ID;
                 }
 
@@ -480,7 +486,7 @@ namespace Reservation.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllotmentSearch(string code, string marketID, string allotmentTypeID, string profileID,string isDefault)
+        public async Task<IActionResult> GetAllotmentSearch(string code, string marketID, string allotmentTypeID, string profileID, string isDefault)
         {
             try
             {
@@ -534,7 +540,7 @@ namespace Reservation.Controllers
                                   IsDefault = d["IsDefault"].ToString(),
 
                               }).ToList();
-                
+
                 return Json(result);
             }
             catch (Exception ex)
@@ -548,14 +554,14 @@ namespace Reservation.Controllers
         {
             try
             {
-                List<RoomTypeModel>roomTypeModels = PropertyUtils.ConvertToList<RoomTypeModel>(RoomTypeBO.Instance.FindByAttribute("Inactive", 0));
+                List<RoomTypeModel> roomTypeModels = PropertyUtils.ConvertToList<RoomTypeModel>(RoomTypeBO.Instance.FindByAttribute("Inactive", 0));
                 string allCodes = string.Join(",", roomTypeModels.Select(x => x.Code));
                 DateTime date = new DateTime(1900, 1, 1);
                 DataTable myData = _iReservationService.GetAllotmentDetail(allotmentID, allCodes, date);
 
                 var result = (from d in myData.AsEnumerable()
                               select d.Table.Columns.Cast<DataColumn>()
-                                  .Where(col => col.ColumnName != "AllotmentStageID" && col.ColumnName != "flag" && col.ColumnName != "Total") 
+                                  .Where(col => col.ColumnName != "AllotmentStageID" && col.ColumnName != "flag" && col.ColumnName != "Total")
                                   .ToDictionary(
                                       col => col.ColumnName,
                                       col => d[col.ColumnName]?.ToString()
@@ -571,7 +577,7 @@ namespace Reservation.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllPreference(string code,int preferenceGroup)
+        public async Task<IActionResult> GetAllPreference(string code, int preferenceGroup)
         {
             try
             {
@@ -588,7 +594,7 @@ namespace Reservation.Controllers
                                   PreferenceID = d["PreferenceID"].ToString(),
                                   Code = d["Code"].ToString(),
                                   Description = d["Description"].ToString(),
-  
+
 
                               }).ToList();
 
@@ -602,8 +608,8 @@ namespace Reservation.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ReservationRateQueryDetail(DateTime fromDate, DateTime toDate, int roomType, int adults, int noOfNight, int packageID, 
-            int promotionID,int func,int display,int dayUse, int c1, int c2,int c3, int noOfRoom,string currency)
+        public async Task<IActionResult> ReservationRateQueryDetail(DateTime fromDate, DateTime toDate, int roomType, int adults, int noOfNight, int packageID,
+            int promotionID, int func, int display, int dayUse, int c1, int c2, int c3, int noOfRoom, string currency)
         {
             try
             {
@@ -613,8 +619,8 @@ namespace Reservation.Controllers
                 string onCols = "Code";
                 string sumcol = "A2";
 
-                DataTable myData = _iReservationService.ReservationRateQueryDetail( fromDate,  toDate,  roomType,  adults,  noOfNight,  packageID,
-                 promotionID,  tableName,  onRows,  onRowsAlias,  onCols,  sumcol,  func,  currency,  display,dayUse,  c1,  c2,  c3,  noOfRoom);
+                DataTable myData = _iReservationService.ReservationRateQueryDetail(fromDate, toDate, roomType, adults, noOfNight, packageID,
+                 promotionID, tableName, onRows, onRowsAlias, onCols, sumcol, func, currency, display, dayUse, c1, c2, c3, noOfRoom);
 
                 var result = (from d in myData.AsEnumerable()
                               select d.Table.Columns.Cast<DataColumn>()
@@ -634,8 +640,8 @@ namespace Reservation.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> CaculateNet(DateTime fromDate,DateTime toDate,int rateCodeID,int roomTypeID,
-            string currencyID,int packageID,int day,decimal price,string transactionCode,decimal discountPercent, decimal discountAmount)
+        public async Task<IActionResult> CaculateNet(DateTime fromDate, DateTime toDate, int rateCodeID, int roomTypeID,
+            string currencyID, int packageID, int day, decimal price, string transactionCode, decimal discountPercent, decimal discountAmount)
         {
             try
             {
@@ -724,7 +730,7 @@ namespace Reservation.Controllers
         {
             try
             {
-                List<CommentModel> ressult = PropertyUtils.ConvertToList<CommentModel>(CommentBO.Instance.FindByAttribute("CommentTypeID",3));
+                List<CommentModel> ressult = PropertyUtils.ConvertToList<CommentModel>(CommentBO.Instance.FindByAttribute("CommentTypeID", 3));
 
 
                 return Json(ressult);
@@ -828,7 +834,7 @@ namespace Reservation.Controllers
                     return Json(new { code = 1, msg = "Market cannot be blank" });
 
                 }
-                var nationalitycheck  = Request.Form["nationality"];
+                var nationalitycheck = Request.Form["nationality"];
 
                 if (string.IsNullOrWhiteSpace(nationalitycheck) || nationalitycheck == "0")
                 {
@@ -844,9 +850,9 @@ namespace Reservation.Controllers
 
 
                 string itemInventoryRes = "";
-                if(itemInventory.Count > 0)
+                if (itemInventory.Count > 0)
                 {
-                    foreach(var item in itemInventory)
+                    foreach (var item in itemInventory)
                     {
                         ItemModel itemModel = (ItemModel)ItemBO.Instance.FindByPrimaryKey(item);
                         if (itemModel != null && itemModel.ID != 0)
@@ -1085,7 +1091,7 @@ namespace Reservation.Controllers
                     reservationModel.Party = "";
                     reservationModel.PartyGuest = "";
                     reservationModel.IsPasserBy = false;
-                     string color=  Request.Form["color"].ToString();
+                    string color = Request.Form["color"].ToString();
                     //reservationModel.Color = Request.Form["color"].ToString();
                     reservationModel.Color = "";
 
@@ -1661,7 +1667,7 @@ namespace Reservation.Controllers
                     return Json(new { code = 0, msg = $"Update reservation created successfully. ConfirmationNo : {reservationModel.ConfirmationNo}" });
                 }
 
-                
+
             }
             catch (Exception ex)
             {
@@ -1678,9 +1684,9 @@ namespace Reservation.Controllers
 
         #region DatVP __ search reservation
         [HttpGet]
-        public async Task<IActionResult> SearchReservation2(int searchType,string name,string firstName,string reservationHolder,string confirmationNo,
-            string crsNo,string roomNo,string roomType,string package,string zone,DateTime arrivalFrom, int chooseFromDate, int chooseToDate,DateTime arrivalTo,string roomSharer,string owner)
-       {
+        public async Task<IActionResult> SearchReservation2(int searchType, string name, string firstName, string reservationHolder, string confirmationNo,
+            string crsNo, string roomNo, string roomType, string package, string zone, DateTime arrivalFrom, int chooseFromDate, int chooseToDate, DateTime arrivalTo, string roomSharer, string owner)
+        {
             try
             {
                 string formattedDate = arrivalFrom.ToString("yyyy-MM-dd");
@@ -1693,8 +1699,8 @@ namespace Reservation.Controllers
                 {
                     formattedDate2 = "";
                 }
-                var data = _iReservationService.SearchReservation( searchType,  name,  firstName,  reservationHolder,  confirmationNo,
-                crsNo,  roomNo,  roomType,  package,  zone, formattedDate, formattedDate2,  roomSharer,  owner);
+                var data = _iReservationService.SearchReservation(searchType, name, firstName, reservationHolder, confirmationNo,
+                crsNo, roomNo, roomType, package, zone, formattedDate, formattedDate2, roomSharer, owner);
 
                 var result = (from d in data.AsEnumerable()
                               select d.Table.Columns.Cast<DataColumn>()
@@ -2081,14 +2087,14 @@ namespace Reservation.Controllers
                 RoomTypeModel roomType = (RoomTypeModel)RoomTypeBO.Instance.FindByPrimaryKey(roomTypeID);
                 ReservationModel reservationModel = (ReservationModel)ReservationBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["rsvID"].ToString()));
                 #region edit reservation
-              
+
                 reservationModel.ProfileComment = "";
                 reservationModel.LastName = Request.Form["lastName"].ToString();
                 reservationModel.FirstName = Request.Form["firstName"].ToString();
                 reservationModel.Phone = Request.Form["phone"].ToString();
                 reservationModel.Email = Request.Form["email"].ToString();
-              
-              
+
+
                 reservationModel.ArrivalDate = DateTime.Parse(Request.Form["arrival"].ToString());
                 reservationModel.OriginalArrivalDate = DateTime.Parse(Request.Form["arrival"].ToString());
                 reservationModel.NoOfNight = int.Parse(Request.Form["noOfNight"].ToString());
@@ -2125,7 +2131,7 @@ namespace Reservation.Controllers
                 reservationModel.CheckInDate = DateTime.Parse(Request.Form["arrival"].ToString());
                 reservationModel.Etd = !string.IsNullOrEmpty(Request.Form["etd"].ToString()) ? Request.Form["etd"].ToString() : "";
                 reservationModel.CheckOutDate = DateTime.Parse(Request.Form["arrival"].ToString());
-          
+
                 if (string.IsNullOrEmpty(Request.Form["marketID"].ToString()))
                 {
                     reservationModel.MarketId = 0;
@@ -2136,7 +2142,7 @@ namespace Reservation.Controllers
                     reservationModel.MarketId = int.Parse(Request.Form["marketID"].ToString());
 
                 }
-          
+
                 if (string.IsNullOrEmpty(Request.Form["rateCode"].ToString()))
                 {
                     reservationModel.RateCodeId = 0;
@@ -2267,14 +2273,14 @@ namespace Reservation.Controllers
 
                 #region  check xem Reservation có deposit không
                 var deposit = DepositPaymentBO.Instance.FindByAttribute("ReservationID", rsv.ID);
-                if(deposit.Count > 0)
+                if (deposit.Count > 0)
                 {
                     return Json(new { code = 1, msg = "Payment in advance exist on the reservation. You must balance the amount paid before" });
 
                 }
                 #endregion
 
-                if(rsv.MainGuest == true)
+                if (rsv.MainGuest == true)
                 {
                     // neu la main guest thi update status cac row co conformation no giong no thanh cancel
                     List<ReservationModel> listRsv = PropertyUtils.ConvertToList<ReservationModel>(ReservationBO.Instance.FindByAttribute("ConfirmationNo", rsv.ConfirmationNo));
@@ -2438,7 +2444,7 @@ namespace Reservation.Controllers
                     return Json(new { code = 1, msg = "Please choose booking" });
                 }
                 var checkReservationAccompany = ReservationAccompanyBO.GetReservationAccompany(int.Parse(Request.Form["rsvID"].ToString()), int.Parse(Request.Form["profileAgentID"].ToString()));
-                if(checkReservationAccompany.Count > 0)
+                if (checkReservationAccompany.Count > 0)
                 {
                     return Json(new { code = 1, msg = "This profile has been attached, please choose another profile" });
 
@@ -2512,7 +2518,7 @@ namespace Reservation.Controllers
                 reservation.UpdateBy = Request.Form["userName"].ToString();
                 reservation.UserUpdateId = int.Parse(Request.Form["userID"].ToString());
                 reservation.SpecialUpdateBy = Request.Form["userName"].ToString();
-                reservation.SpecialUpdateDate = reservation.UpdateDate =  DateTime.Now;
+                reservation.SpecialUpdateDate = reservation.UpdateDate = DateTime.Now;
                 ReservationBO.Instance.Update(reservation);
 
 
@@ -2694,7 +2700,8 @@ namespace Reservation.Controllers
 
                 var result = ReservationFixedChargeBO.Instance.FindByAttribute("ReservationID", reservationID);
                 ReservationModel reservation = (ReservationModel)ReservationBO.Instance.FindByPrimaryKey(reservationID);
-                return Json(new {
+                return Json(new
+                {
                     reservationFixedCharge = result,
                     reservation = reservation
                 });
@@ -2712,7 +2719,7 @@ namespace Reservation.Controllers
             try
             {
 
-                 decimal net = _iReservationService.CalculateNetFixedCharge(transactionCode, price);
+                decimal net = _iReservationService.CalculateNetFixedCharge(transactionCode, price);
 
                 return Json(net);
             }
@@ -2768,7 +2775,7 @@ namespace Reservation.Controllers
         }
 
         [HttpPost]
-        public ActionResult SaveReservationFixedChargeDefault(string keyName,int reservationID)
+        public ActionResult SaveReservationFixedChargeDefault(string keyName, int reservationID)
         {
             ProcessTransactions pt = new ProcessTransactions();
             try
@@ -2823,7 +2830,7 @@ namespace Reservation.Controllers
             {
 
                 DataTable myData = _iDepositService.SearchDepositRequest(reservationID);
-                DataTable myData2 = _iDepositService.SearchDepositPayment(reservationID,0);
+                DataTable myData2 = _iDepositService.SearchDepositPayment(reservationID, 0);
 
                 var result = (from d in myData.AsEnumerable()
 
@@ -2846,25 +2853,25 @@ namespace Reservation.Controllers
 
                 var result2 = (from d in myData2.AsEnumerable()
 
-                              select new
-                              {
-                                  PaymentID = d["PaymentID"].ToString(),
-                                  TransactionDate = d["TransactionDate"].ToString(),
-                                  Code = d["Code"].ToString(),
-                                  Description = d["Description"].ToString(),
-                                  Reference = d["Reference"].ToString(),
-                                  Supplement = d["Supplement"].ToString(),
-                                  ReceiptNo = d["ReceiptNo"].ToString(),
-                                  Amount = d["Amount"].ToString(),
-                                  CurrencyID = d["CurrencyID"].ToString(),
-                                  AmountUSD = d["AmountUSD"].ToString(),
-                                  AmountVND = d["AmountVND"].ToString(),
-                                  IsProcess = d["IsProcess"].ToString(),
-                                  ShiftID = d["ShiftID"].ToString(),
-                                  CreateDate = d["CreateDate"].ToString(),
-                                  CreateBy = d["CreatedBy"].ToString(),
+                               select new
+                               {
+                                   PaymentID = d["PaymentID"].ToString(),
+                                   TransactionDate = d["TransactionDate"].ToString(),
+                                   Code = d["Code"].ToString(),
+                                   Description = d["Description"].ToString(),
+                                   Reference = d["Reference"].ToString(),
+                                   Supplement = d["Supplement"].ToString(),
+                                   ReceiptNo = d["ReceiptNo"].ToString(),
+                                   Amount = d["Amount"].ToString(),
+                                   CurrencyID = d["CurrencyID"].ToString(),
+                                   AmountUSD = d["AmountUSD"].ToString(),
+                                   AmountVND = d["AmountVND"].ToString(),
+                                   IsProcess = d["IsProcess"].ToString(),
+                                   ShiftID = d["ShiftID"].ToString(),
+                                   CreateDate = d["CreateDate"].ToString(),
+                                   CreateBy = d["CreatedBy"].ToString(),
 
-                              }).ToList();
+                               }).ToList();
                 return Json(new
                 {
                     request = result,
@@ -2987,9 +2994,9 @@ namespace Reservation.Controllers
                 payment.Reference = Request.Form["reference"].ToString();
                 payment.Description = trans.Description;
                 payment.Supplement = Request.Form["supplement"].ToString();
-                payment.Amount = 0-decimal.Parse(Request.Form["amount"].ToString());
+                payment.Amount = 0 - decimal.Parse(Request.Form["amount"].ToString());
                 payment.CurrencyID = Request.Form["curencyID"].ToString();
-                payment.AmountMaster = 0-decimal.Parse(Request.Form["amount"].ToString());
+                payment.AmountMaster = 0 - decimal.Parse(Request.Form["amount"].ToString());
                 payment.CurrencyMaster = Request.Form["curencyID"].ToString();
                 payment.IsProcess = false;
                 payment.ReceiptNo = "";
@@ -3043,15 +3050,15 @@ namespace Reservation.Controllers
                 DepositPaymentBO.Instance.Insert(paymentDefault);
                 #endregion
 
-                
+
 
                 #region update lại paid và due của các deposit payment
                 decimal totalDepositAmountPayment = decimal.Parse(Request.Form["amount"].ToString());
-                List <DepositRsqModel> listDepositRequest = PropertyUtils.ConvertToList<DepositRsqModel>(DepositRsqBO.Instance.FindByAttribute("ReservationID",paymentModel.ReservationID));
+                List<DepositRsqModel> listDepositRequest = PropertyUtils.ConvertToList<DepositRsqModel>(DepositRsqBO.Instance.FindByAttribute("ReservationID", paymentModel.ReservationID));
                 int i = 0;
-                while(i < listDepositRequest.Count && totalDepositAmountPayment > 0)
+                while (i < listDepositRequest.Count && totalDepositAmountPayment > 0)
                 {
-                    if(totalDepositAmountPayment > listDepositRequest[i].Amount)
+                    if (totalDepositAmountPayment > listDepositRequest[i].Amount)
                     {
                         listDepositRequest[i].PaidAmount = listDepositRequest[i].Amount;
 
@@ -3103,7 +3110,7 @@ namespace Reservation.Controllers
         }
 
         [HttpPost]
-        public ActionResult PrintReceipt(int id,string userName)
+        public ActionResult PrintReceipt(int id, string userName)
         {
             ProcessTransactions pt = new ProcessTransactions();
             try
@@ -3159,7 +3166,7 @@ namespace Reservation.Controllers
 
         #region DatVP __ Reservation: routing
         [HttpGet]
-        public async Task<IActionResult> SearchRouting(string reservationID,string confirmationNo)
+        public async Task<IActionResult> SearchRouting(string reservationID, string confirmationNo)
         {
             try
             {
@@ -3216,7 +3223,7 @@ namespace Reservation.Controllers
                 routing.FromReservationID = int.Parse(Request.Form["rsvID"].ToString());
                 routing.ToReservationID = int.Parse(Request.Form["rsvID"].ToString());
                 routing.ToFolioNo = int.Parse(Request.Form["toFolioNo"].ToString());
-                routing.ToRoomID = int.Parse(Request.Form["toRoom"].ToString()); 
+                routing.ToRoomID = int.Parse(Request.Form["toRoom"].ToString());
                 routing.ProfileID = res.ProfileIndividualId;
                 routing.AccountName = res.LastName;
                 routing.TransactionCodes = Request.Form["transactionCodes"].ToString() + ",";
@@ -3224,7 +3231,7 @@ namespace Reservation.Controllers
                 routing.Percents = 0;
                 routing.FromDate = DateTime.Parse(Request.Form["fromDate"].ToString());
                 routing.ToDate = DateTime.Parse(Request.Form["toDate"].ToString());
-                if(Request.Form["entireDate"].ToString() == "1")
+                if (Request.Form["entireDate"].ToString() == "1")
                 {
                     routing.EntireDate = true;
 
@@ -3349,10 +3356,10 @@ namespace Reservation.Controllers
                 return Json(ex.Message);
             }
         }
-       
+
 
         [HttpGet]
-        public async Task<IActionResult> GetRoomAvailable( DateTime fromDate, DateTime toDate)
+        public async Task<IActionResult> GetRoomAvailable(DateTime fromDate, DateTime toDate)
         {
             try
             {
@@ -3370,7 +3377,7 @@ namespace Reservation.Controllers
         {
             public int ID { get; set; }
             public string RoomTypeCode { get; set; }
-            public int NumberOfRoom {get;set;}
+            public int NumberOfRoom { get; set; }
             public decimal RateCode { get; set; }
         }
 
@@ -3386,7 +3393,7 @@ namespace Reservation.Controllers
                 var rawGridData = Request.Form["gridData"];
                 var gridData = JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(rawGridData);
                 List<GetInfoRoom> listRoom = new List<GetInfoRoom>();
-                if(int.Parse(Request.Form["profileIndividualID"].ToString()) == 0)
+                if (int.Parse(Request.Form["profileIndividualID"].ToString()) == 0)
                 {
                     return Json(new { code = 1, msg = "Please choose profile" });
 
@@ -3433,7 +3440,7 @@ namespace Reservation.Controllers
                     List<BusinessDateModel> businessDate = PropertyUtils.ConvertToList<BusinessDateModel>(BusinessDateBO.Instance.FindAll());
                     string transactionCode = PropertyUtils.ConvertToList<ConfigSystemModel>(ConfigSystemBO.Instance.FindAll()).
                     Where(x => x.KeyName == "RoomCharge").ToList()[0].KeyValue;
-                    var confomationNo =  (ReservationBO.GetTopConfirmationNo() + 1).ToString();
+                    var confomationNo = (ReservationBO.GetTopConfirmationNo() + 1).ToString();
                     foreach (var room in listRoom)
                     {
 
@@ -3714,7 +3721,7 @@ namespace Reservation.Controllers
             {
 
                 ReservationModel reservation = (ReservationModel)ReservationBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["reservationID"].ToString()));
-                if(reservation == null || reservation.ID == 0)
+                if (reservation == null || reservation.ID == 0)
                 {
                     return Json(new { code = 1, msg = "Can not find reservation" });
 
@@ -3739,7 +3746,7 @@ namespace Reservation.Controllers
             {
 
                 ReservationModel reservation = (ReservationModel)ReservationBO.Instance.FindByPrimaryKey(reservationID);
-                if(reservation == null || reservation.ID == 0)
+                if (reservation == null || reservation.ID == 0)
                 {
                     return Json(new
                     {
@@ -3752,11 +3759,11 @@ namespace Reservation.Controllers
                 var dataReservationDetail = _iShareService.ShareReservationDetail(reservationID, reservation.ShareRoom);
 
                 var resultRateDetail = (from d in dataRateDetail.AsEnumerable()
-                              select d.Table.Columns.Cast<DataColumn>()
-                                  .ToDictionary(
-                                      col => col.ColumnName,
-                                      col => d[col.ColumnName]?.ToString()
-                                  )).ToList();
+                                        select d.Table.Columns.Cast<DataColumn>()
+                                            .ToDictionary(
+                                                col => col.ColumnName,
+                                                col => d[col.ColumnName]?.ToString()
+                                            )).ToList();
                 var resultRoomDetail = (from d in dataRoomDetail.AsEnumerable()
                                         select d.Table.Columns.Cast<DataColumn>()
                                             .ToDictionary(
@@ -3764,11 +3771,11 @@ namespace Reservation.Controllers
                                                 col => d[col.ColumnName]?.ToString()
                                             )).ToList();
                 var resultReservationDetail = (from d in dataReservationDetail.AsEnumerable()
-                                        select d.Table.Columns.Cast<DataColumn>()
-                                            .ToDictionary(
-                                                col => col.ColumnName,
-                                                col => d[col.ColumnName]?.ToString()
-                                            )).ToList();
+                                               select d.Table.Columns.Cast<DataColumn>()
+                                                   .ToDictionary(
+                                                       col => col.ColumnName,
+                                                       col => d[col.ColumnName]?.ToString()
+                                                   )).ToList();
                 return Json(new
                 {
                     code = 0,
@@ -3823,7 +3830,7 @@ namespace Reservation.Controllers
                 }
 
                 #region Reinstate booking với đang ở trạng thái cancel -> booking trở về trạng thái reservation và clear room
-                if(statusCode == 3)
+                if (statusCode == 3)
                 {
                     #region update reservation
                     reservation.Status = 0;
@@ -3878,13 +3885,13 @@ namespace Reservation.Controllers
                 #endregion
 
                 #region booking đang ở trạng thái check in -> booking trở về trạng thái due in
-                if(statusCode == 1)
+                if (statusCode == 1)
                 {
                     #region check xem đã có trong folio detail hay chưa, nếu có dịch vụ rồi thì không cho reinstate
-                    List<FolioDetailModel> folioDetails = PropertyUtils.ConvertToList<FolioDetailModel>(FolioDetailBO.Instance.FindByAttribute("ReservationID",reservation.ID));
-                    if(folioDetails.Count > 0)
+                    List<FolioDetailModel> folioDetails = PropertyUtils.ConvertToList<FolioDetailModel>(FolioDetailBO.Instance.FindByAttribute("ReservationID", reservation.ID));
+                    if (folioDetails.Count > 0)
                     {
-                        return Json(new { code = 1, msg = "Can not reinstate"});
+                        return Json(new { code = 1, msg = "Can not reinstate" });
 
                     }
                     #endregion
@@ -3957,7 +3964,7 @@ namespace Reservation.Controllers
 
                 #region insert thêm 1 Profile guest từ profile của reservation
                 ProfileModel profile = (ProfileModel)ProfileBO.Instance.FindByPrimaryKey(reservation.ProfileIndividualId);
-                if(profile == null || profile.ID == 0)
+                if (profile == null || profile.ID == 0)
                 {
                     return Json(new { code = 1, msg = "Can not find profile" });
 
@@ -4003,7 +4010,7 @@ namespace Reservation.Controllers
                     }
                 }
                 reservationGuest.ProfileIndividualId = (int)profileGuestID;
-                reservationGuest.ReservationNo  = (ReservationBO.GetTopID() + 1).ToString();
+                reservationGuest.ReservationNo = (ReservationBO.GetTopID() + 1).ToString();
                 reservationGuest.ShareRoom = ReservationBO.GetTopID() + 1;
                 reservationGuest.PinCode = (ReservationBO.GetTopID() + 1).ToString();
                 reservationGuest.NoOfRoom = 1;
@@ -4052,12 +4059,12 @@ namespace Reservation.Controllers
                 pt.BeginTransaction();
                 string ids = Request.Form["reservationID"].ToString(); // "1,2,3"
                 List<int> idList = ids.Split(',').Select(int.Parse).ToList();
-                if(idList.Count == 0)
+                if (idList.Count == 0)
                 {
                     return Json(new { code = 1, msg = "Can not find reservation" });
 
                 }
-                for(int i = 0; i < idList.Count; i++ )
+                for (int i = 0; i < idList.Count; i++)
                 {
                     ReservationModel reservation = (ReservationModel)ReservationBO.Instance.FindByPrimaryKey(idList[0]);
                     if (reservation == null || reservation.ID == 0)
@@ -4065,7 +4072,7 @@ namespace Reservation.Controllers
                         return Json(new { code = 1, msg = "Can not find reservation" });
 
                     }
-                    if(reservation.NoOfRoom < 2)
+                    if (reservation.NoOfRoom < 2)
                     {
                         continue;
                     }
@@ -4182,7 +4189,7 @@ namespace Reservation.Controllers
                 pt.OpenConnection();
                 pt.BeginTransaction();
                 List<ReservationModel> checkRoomSharer = ReservationBO.GetReservationRoomSharer(int.Parse(Request.Form["reservationID"].ToString()));
-                if(checkRoomSharer.Count > 0)
+                if (checkRoomSharer.Count > 0)
                 {
                     return Json(new { code = 1, msg = "RoomSharer exceed number person" });
 
@@ -4284,7 +4291,7 @@ namespace Reservation.Controllers
                 #endregion
 
                 #region insert thêm các profile room share, reservation room sharer, activity log insert profile room share, activity log insert reservation room sharer
-                foreach(var item in listReservationModel)
+                foreach (var item in listReservationModel)
                 {
                     #region insert thêm Profile room sharer từ profile của reservation
 
@@ -4331,7 +4338,7 @@ namespace Reservation.Controllers
                     }
                     reservationGuest.ProfileIndividualId = (int)profileGuestID;
                     reservationGuest.ReservationNo = (ReservationBO.GetTopID() + 1).ToString();
-                    reservationGuest.NoOfRoom  = reservationGuest.NoOfAdult = reservationGuest.NoOfChild = reservationGuest.NoOfChild1 = reservationGuest.NoOfChild2 = 0;
+                    reservationGuest.NoOfRoom = reservationGuest.NoOfAdult = reservationGuest.NoOfChild = reservationGuest.NoOfChild1 = reservationGuest.NoOfChild2 = 0;
                     reservationGuest.MainGuest = false;
                     long reservationGuestID = ReservationBO.Instance.Insert(reservationGuest);
                     #endregion
@@ -4388,7 +4395,7 @@ namespace Reservation.Controllers
                     return Json(new { code = 1, msg = "Can not find reservation" });
 
                 }
-                for(int i = 0; i < idList.Count; i++)
+                for (int i = 0; i < idList.Count; i++)
                 {
                     List<ReservationModel> checkRoomSharer = ReservationBO.GetReservationRoomSharer(idList[i]);
                     if (checkRoomSharer.Count > 0)
@@ -4402,7 +4409,7 @@ namespace Reservation.Controllers
 
                     }
                     int noOfRoom = reservation.NoOfRoom;
-                    if(noOfRoom < 1)
+                    if (noOfRoom < 1)
                     {
                         continue;
                     }
@@ -4563,7 +4570,7 @@ namespace Reservation.Controllers
                         #endregion
                     }
                 }
-                
+
                 #endregion
                 pt.CommitTransaction();
 
@@ -4595,7 +4602,7 @@ namespace Reservation.Controllers
                 pt.OpenConnection();
                 pt.BeginTransaction();
                 ReservationModel reservation = (ReservationModel)ReservationBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["rsvID"].ToString()));
-                if(reservation == null || reservation.ID == 0)
+                if (reservation == null || reservation.ID == 0)
                 {
                     return Json(new { code = 0, msg = "Can not find Reservation!" });
 
@@ -4611,9 +4618,9 @@ namespace Reservation.Controllers
 
                 #region update lại room sharer
                 List<ReservationModel> reservations = ReservationBO.GetReservationRoomSharer(reservation.ID);
-                if(reservations.Count > 0)
+                if (reservations.Count > 0)
                 {
-                    foreach(var item in reservations)
+                    foreach (var item in reservations)
                     {
                         item.RoomId = int.Parse(Request.Form["roomID"].ToString());
                         item.RoomNo = Request.Form["roomNo"].ToString();
@@ -4705,33 +4712,34 @@ namespace Reservation.Controllers
 
         #region  DatVP __ Reservation: Group check in
         [HttpGet]
-        public async Task<IActionResult> SearchGroupCheckInRoom(string confirmationNo,int type,string name,string roomNo)
+        public async Task<IActionResult> SearchGroupCheckInRoom(string confirmationNo, int type, string name, string roomNo)
         {
             try
             {
                 string @Inspected = "", @Clean = "", @AllRooms = "", @CleanAndInspected = "";
-                if(confirmationNo == null || string.IsNullOrEmpty(confirmationNo))
+                if (confirmationNo == null || string.IsNullOrEmpty(confirmationNo))
                 {
                     return Json(0);
                 }
-                if(type == 1)
+                if (type == 1)
                 {
                     @Inspected = confirmationNo;
                 }
-                else if (type == 2) {
+                else if (type == 2)
+                {
                     @Clean = confirmationNo;
                 }
                 else if (type == 3)
                 {
                     @AllRooms = confirmationNo;
                 }
-                else 
+                else
                 {
                     @CleanAndInspected = confirmationNo;
                 }
-                
+
                 //var data = _iGroupAdminService.SearchGroupCheckInRoom(confirmationNo, @Inspected, @Clean, @AllRooms, @CleanAndInspected);
-                var data = _iGroupAdminService.SearchGroupAdmin(confirmationNo,type.ToString(),name,roomNo);
+                var data = _iGroupAdminService.SearchGroupAdmin(confirmationNo, type.ToString(), name, roomNo);
                 var result = (from d in data.AsEnumerable()
                               select d.Table.Columns.Cast<DataColumn>()
                                   //.Where(col => col.ColumnName != "AllotmentStageID" && col.ColumnName != "flag" && col.ColumnName != "Total")
@@ -4756,10 +4764,10 @@ namespace Reservation.Controllers
             {
                 pt.OpenConnection();
                 pt.BeginTransaction();
-                for(int i = 0;i < ids.Count; i++)
+                for (int i = 0; i < ids.Count; i++)
                 {
                     ReservationModel reservation = (ReservationModel)ReservationBO.Instance.FindByPrimaryKey(ids[i]);
-                    if(reservation == null || reservation.ID == 0)
+                    if (reservation == null || reservation.ID == 0)
                     {
                         return Json(new { code = 1, msg = "Can not find reservation" });
 
@@ -4830,12 +4838,12 @@ namespace Reservation.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> SearchTrace(string departmentID,string resolved,DateTime date,string name,string reservationID)
+        public async Task<IActionResult> SearchTrace(string departmentID, string resolved, DateTime date, string name, string reservationID)
         {
             try
             {
 
-                var data = _iReservationService.SearchTrace(departmentID ?? "",resolved ?? "",date,name ?? "", reservationID );
+                var data = _iReservationService.SearchTrace(departmentID ?? "", resolved ?? "", date, name ?? "", reservationID);
 
                 var result = (from d in data.AsEnumerable()
                               select d.Table.Columns.Cast<DataColumn>()
@@ -4921,7 +4929,7 @@ namespace Reservation.Controllers
             {
                 pt.OpenConnection();
                 pt.BeginTransaction();
-                if(selectedIds.Count <= 0)
+                if (selectedIds.Count <= 0)
                 {
                     return Json(new { code = 1, msg = $"Please choose at least 1 traces" });
                 }
@@ -5026,7 +5034,7 @@ namespace Reservation.Controllers
                 alert.UserInsertID = alert.UserUpdateID = int.Parse(Request.Form["userID"].ToString());
                 alert.CreateDate = alert.UpdateDate = DateTime.Now;
                 alert.WarningDay = int.Parse(Request.Form["warningDay"].ToString());
-                if(int.Parse(Request.Form["actice"].ToString()) == 1)
+                if (int.Parse(Request.Form["actice"].ToString()) == 1)
                 {
                     alert.IsActive = 1;
                 }
@@ -5136,7 +5144,7 @@ namespace Reservation.Controllers
                 }
                 #region update status của reservation về trạng thái wait list
                 rsv.Status = 4;
-                rsv.UserInsertId  = int.Parse(Request.Form["userID"].ToString());
+                rsv.UserInsertId = int.Parse(Request.Form["userID"].ToString());
                 rsv.UpdateBy = rsv.SpecialUpdateBy = Request.Form["userName"].ToString();
                 rsv.UpdateDate = rsv.SpecialUpdateDate = DateTime.Now;
                 ReservationBO.Instance.Update(rsv);
@@ -5162,7 +5170,7 @@ namespace Reservation.Controllers
                 activityLog.UserName = Request.Form["userName"].ToString();
                 activityLog.ChangeDate = DateTime.Now;
                 activityLog.Change = "WaitList";
-                activityLog.OldValue =  "";
+                activityLog.OldValue = "";
                 activityLog.NewValue = $"[ReasonID]{waitList.ReasonID}[PriorityID]{waitList.PriorityID}[TelephoneNumber]{waitList.TelephoneNumber}[Description]{waitList.Description}";
                 activityLog.Description = "";
                 ActivityLogBO.Instance.Insert(activityLog);
@@ -5206,7 +5214,7 @@ namespace Reservation.Controllers
                 pt.OpenConnection();
                 pt.BeginTransaction();
                 WaitListModel waitList = (WaitListModel)WaitListBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["waitListID"].ToString()));
-                if(waitList == null || waitList.ID == 0)
+                if (waitList == null || waitList.ID == 0)
                 {
                     return Json(new { code = 1, msg = "Could not find wait list. Please another waitlist or refresh " });
 
@@ -5247,14 +5255,14 @@ namespace Reservation.Controllers
                 List<BusinessDateModel> businessDateModel = PropertyUtils.ConvertToList<BusinessDateModel>(BusinessDateBO.Instance.FindAll());
 
                 string sqlCommand = $"SELECT Date, RoomType, Quantity, OverBookLevel AS [NotoSell], CASE WHEN [Type] = 0 THEN (OverBookLevel - Quantity) ELSE '' END AS Overbooking, CASE WHEN [Type] = 0 THEN 'Number' ELSE 'Percentage' END AS [Type], CreateBy, CreateDate , UpdateBy, UpdateDate, ID, RoomTypeID FROM OverBooking WITH (NOLOCK)WHERE DATEDIFF(day,Date, '{businessDateModel[0].BusinessDate}') <= 0 ORDER BY Date ";
-                    var data = _iReservationService.SearchOverBooking(sqlCommand);
-                    var result = (from d in data.AsEnumerable()
-                                  select d.Table.Columns.Cast<DataColumn>()
-                                      .ToDictionary(
-                                          col => col.ColumnName,
-                                          col => d[col.ColumnName]?.ToString()
-                                      )).ToList();
-                    return Json(result);
+                var data = _iReservationService.SearchOverBooking(sqlCommand);
+                var result = (from d in data.AsEnumerable()
+                              select d.Table.Columns.Cast<DataColumn>()
+                                  .ToDictionary(
+                                      col => col.ColumnName,
+                                      col => d[col.ColumnName]?.ToString()
+                                  )).ToList();
+                return Json(result);
 
             }
             catch (Exception ex)
@@ -5302,7 +5310,7 @@ namespace Reservation.Controllers
                 {
                     return Json(new { code = 1, msg = "No days selected" });
                 }
-                if(days.Count < 1)
+                if (days.Count < 1)
                 {
                     return Json(new { code = 1, msg = "Please click to checkbox that match with from date and to date" });
 
@@ -5310,9 +5318,9 @@ namespace Reservation.Controllers
                 var fromDateStr = Request.Form["fromDate"].ToString();
                 var toDateStr = Request.Form["toDate"].ToString();
                 var roomType = Request.Form["roomType"].ToString();
-                var obLevel = Request.Form["obLevel"].ToString() ;
+                var obLevel = Request.Form["obLevel"].ToString();
                 var quantity = Request.Form["quantity"].ToString();
-                var noToSell =  Request.Form["noToShell"].ToString();
+                var noToSell = Request.Form["noToShell"].ToString();
                 var type = Request.Form["type"].ToString();
                 var userName = Request.Form["userName"].ToString();
                 var userID = Request.Form["userID"].ToString();
@@ -5351,7 +5359,7 @@ namespace Reservation.Controllers
                         overBooking.UpdateBy = userName;
                         overBooking.CreateDate = DateTime.Now;
                         overBooking.UpdateDate = DateTime.Now;
-                       
+
                         OverbookingBO.Instance.Insert(overBooking);
                     }
 
@@ -5416,14 +5424,14 @@ namespace Reservation.Controllers
         #region DatVP __ Reservation: CheckOutAll/Zero
 
         [HttpPost]
-        public ActionResult CheckOutAll(List<CheckOutDTO> listItem,int userID, string userName)
+        public ActionResult CheckOutAll(List<CheckOutDTO> listItem, int userID, string userName)
         {
             ProcessTransactions pt = new ProcessTransactions();
             try
             {
                 pt.OpenConnection();
                 pt.BeginTransaction();
-                if(listItem.Count > 0)
+                if (listItem.Count > 0)
                 {
                     foreach (var item in listItem)
                     {
@@ -5435,12 +5443,12 @@ namespace Reservation.Controllers
                             item.message = "Today not equal departure date";
                             continue;
                         }
-                        List<FolioModel> folios = PropertyUtils.ConvertToList<FolioModel>(FolioBO.Instance.FindByAttribute("ReservationID",int.Parse(item.id)));
-                        if(folios.Count > 0)
+                        List<FolioModel> folios = PropertyUtils.ConvertToList<FolioModel>(FolioBO.Instance.FindByAttribute("ReservationID", int.Parse(item.id)));
+                        if (folios.Count > 0)
                         {
-                            foreach(var folio in folios)
+                            foreach (var folio in folios)
                             {
-                                if(folio.BalanceVND != 0)
+                                if (folio.BalanceVND != 0)
                                 {
 
                                     item.coStatus = "Not OK";
@@ -5472,7 +5480,7 @@ namespace Reservation.Controllers
                     }
                 }
                 pt.CommitTransaction();
-                return Json(new { code = 0, msg = "Check out all was  successfully",data = listItem });
+                return Json(new { code = 0, msg = "Check out all was  successfully", data = listItem });
             }
             catch (Exception ex)
             {
@@ -5489,7 +5497,7 @@ namespace Reservation.Controllers
         #region DatVP __ Reservation: CheckOutAll
 
         [HttpPost]
-        public ActionResult CheckOut(int userID, string userName,int reservationID)
+        public ActionResult CheckOut(int userID, string userName, int reservationID)
         {
             ProcessTransactions pt = new ProcessTransactions();
             try
@@ -5497,15 +5505,15 @@ namespace Reservation.Controllers
                 pt.OpenConnection();
                 pt.BeginTransaction();
                 ReservationModel rsv = (ReservationModel)ReservationBO.Instance.FindByPrimaryKey(reservationID);
-                if (rsv == null  || rsv.ID == 0)
+                if (rsv == null || rsv.ID == 0)
                 {
-                    return Json(new { code = 1, msg = " Could not find Reservation"});
+                    return Json(new { code = 1, msg = " Could not find Reservation" });
 
                 }
                 List<FolioModel> folios = PropertyUtils.ConvertToList<FolioModel>(FolioBO.Instance.FindByAttribute("ReservationID", rsv.ID));
-                if(folios.Count > 0)
+                if (folios.Count > 0)
                 {
-                    for(int i = 0; i < folios.Count; i++)
+                    for (int i = 0; i < folios.Count; i++)
                     {
                         if (folios[i].BalanceVND < 0 || folios[i].BalanceVND > 5)
                         {
@@ -5562,7 +5570,7 @@ namespace Reservation.Controllers
                     return Json(new { code = 1, msg = " Could not find Reservation" });
 
                 }
-                if(rsv.MainGuest == false)
+                if (rsv.MainGuest == false)
                 {
                     return Json(new { code = 1, msg = " This selected is not main guest reservation" });
 
@@ -5587,7 +5595,7 @@ namespace Reservation.Controllers
                 rsvUpdate.Packages = "";
                 rsvUpdate.MainGuest = false;
                 rsvUpdate.RateCodeId = 0;
-                rsvUpdate.Rate = rsvUpdate.RateAfterTax  = rsvUpdate.TotalAmount = 0;
+                rsvUpdate.Rate = rsvUpdate.RateAfterTax = rsvUpdate.TotalAmount = 0;
                 rsvUpdate.RoutingToProfile = "";
                 ReservationBO.Instance.Update(rsvUpdate);
                 #region thêm log activity log
@@ -5631,8 +5639,8 @@ namespace Reservation.Controllers
 
         #region DatVP __ Group Admin: AutoRoomAssign
         [HttpGet]
-        public async Task<IActionResult> SearchRoomAssign(string smoking,string floor,DateTime arrivalDate,DateTime departureDate,
-            string confirmationNo,string roomTypeID, string hkStatus)
+        public async Task<IActionResult> SearchRoomAssign(string smoking, string floor, DateTime arrivalDate, DateTime departureDate,
+            string confirmationNo, string roomTypeID, string hkStatus)
         {
             try
             {
@@ -5774,9 +5782,9 @@ namespace Reservation.Controllers
 
                 }
                 List<UserRateCodePermissionModel> result = PropertyUtils.ConvertToList<UserRateCodePermissionModel>(UserRateCodePermissionBO.Instance.FindAll())
-                .Where(x => x.UserID == int.Parse(Request.Form["userID"].ToString()) &&  x.RateCodeID == int.Parse(Request.Form["rateCodeID"].ToString()))
+                .Where(x => x.UserID == int.Parse(Request.Form["userID"].ToString()) && x.RateCodeID == int.Parse(Request.Form["rateCodeID"].ToString()))
                 .ToList();
-                if(result.Count > 0)
+                if (result.Count > 0)
                 {
                     return Json(new { code = 1, msg = "User - Rate Code Permisson was invalid" });
 
@@ -6012,28 +6020,28 @@ namespace Reservation.Controllers
                 {
                     return Json(new { code = 1, msg = " Please choose reason" });
                 }
-                if( string.IsNullOrEmpty(Request.Form["moveRoomMove"].ToString()))
+                if (string.IsNullOrEmpty(Request.Form["moveRoomMove"].ToString()))
                 {
                     return Json(new { code = 1, msg = " Please choose new room" });
                 }
 
                 RoomModel roomCurrent = (RoomModel)RoomBO.Instance.FindByPrimaryKey(rsv.RoomId);
-                if(roomCurrent == null || roomCurrent.ID == 0)
+                if (roomCurrent == null || roomCurrent.ID == 0)
                 {
                     return Json(new { code = 1, msg = " Could not find current room" });
                 }
-                var roomNew = PropertyUtils.ConvertToList<RoomModel>(RoomBO.Instance.FindByAttribute("RoomNo", Request.Form["moveRoomMove"].ToString())); 
-                if(roomNew.Count < 1)
+                var roomNew = PropertyUtils.ConvertToList<RoomModel>(RoomBO.Instance.FindByAttribute("RoomNo", Request.Form["moveRoomMove"].ToString()));
+                if (roomNew.Count < 1)
                 {
                     return Json(new { code = 1, msg = " Could not find new room" });
                 }
-                if(roomCurrent.ID == roomNew[0].ID)
+                if (roomCurrent.ID == roomNew[0].ID)
                 {
                     return Json(new { code = 1, msg = " Room was choosen to move have not to equal room current" });
 
                 }
                 ReasonModel reason = (ReasonModel)ReasonBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["reason"].ToString()));
-                if(reason == null || reason.ID == 0)
+                if (reason == null || reason.ID == 0)
                 {
                     return Json(new { code = 1, msg = " Could not find reason" });
                 }
@@ -6054,7 +6062,7 @@ namespace Reservation.Controllers
                 rsv.RoomNo = roomNew[0].RoomNo;
                 ReservationBO.Instance.Update(rsv);
                 pt.CommitTransaction();
-                return Json(new { code = 0, msg = "Room Move was successfully"});
+                return Json(new { code = 0, msg = "Room Move was successfully" });
             }
             catch (Exception ex)
             {
@@ -6113,5 +6121,344 @@ namespace Reservation.Controllers
         }
 
         #endregion
+
+        //#region Nam__Group Admin: CheckinGroup
+        //[HttpPost]
+        //public ActionResult CheckinGroup()
+        //{
+        //    ProcessTransactions pt = new ProcessTransactions();
+        //    try
+        //    {
+        //        pt.OpenConnection();
+        //        pt.BeginTransaction();
+        //        int reservationID = int.Parse(Request.Form["rsvID"].ToString());
+        //        string mg = Request.Form["mg"].ToString(); // Lấy giá trị mg từ form
+
+        //        if (reservationID > 0)
+        //        {
+        //            bool _MainGuest = false;
+
+        //            if (mg.Equals("X", StringComparison.OrdinalIgnoreCase))
+        //                _MainGuest = true;
+        //            else
+        //                _MainGuest = false;
+
+        //            #region 1.CI MG trước
+        //                if (_MainGuest == false && ClassReservation.CheckCheckIn(_ShareRoom) == 1)
+        //                {
+        //                    MessageBox.Show("Main guest must be check in before Room sharer.", "Mesage");
+        //                    return;
+        //                }
+        //                #endregion
+
+        //                #region 2.Kiểm tra thông tin Alert nếu có
+        //                ArrayList arrAlert = ClassReservation.GetReservationAlerts(ReservationID);
+        //                if (arrAlert.Count > 0)
+        //                {
+        //                    for (int i = 0; i < arrAlert.Count; i++)
+        //                    {
+        //                        if (((ReservationAlertsModel)arrAlert[i]).Area == "Check-In")
+        //                        {
+        //                            frmReservationAlertDisplay objRAS = new frmReservationAlertDisplay();
+        //                            objRAS.ReservationAlertID = ((ReservationAlertsModel)arrAlert[i]).ID;
+        //                            objRAS.ShowDialog();
+        //                        }
+        //                    }
+        //                }
+        //                #endregion
+
+        //                #region 3.Kiểm tra nếu ngày đến = BusinessDate thì cho CI - Khách đã CI không cho CI nữa
+        //                int a = TextUtils.CompareDate(_BusDate, Convert.ToDateTime(grvGrid.GetRowCellValue(grvGrid.FocusedRowHandle, "Arrival").ToString()));
+        //                if (a != 0)
+        //                {
+        //                    MessageBox.Show("Arrival Date must be equal Business Date", "Message");
+        //                    return;
+        //                }
+        //                //Khách đã CI không ch2o CI nữa
+        //                if (_Status == 1 || _Status == 2 || _Status == 3 || _Status == 4 || _Status == 6 || _Status == 7)
+        //                {
+        //                    MessageBox.Show("This room checked in, checked out or cancelled. Not check in", TextUtils.Caption_Message);
+        //                    return;
+        //                }
+        //                #endregion
+
+        //                #region 4.Trường hợp chưa có số phòng Ass trước CI sau
+        //                if (_MainGuest == true && _RoomID == 0)
+        //                {
+        //                    if (_NoOfRoom == 1)
+        //                    {
+        //                        ReservationModel mOR = (ReservationModel)ReservationBO.Instance.FindByPK(ReservationID);
+        //                        frmRoomAvailableSearch objR = new frmRoomAvailableSearch(true);
+        //                        objR.RoomTypeID = mOR.RoomTypeID;
+        //                        objR.ArrivalDate = mOR.ArrivalDate;
+        //                        objR.DepartureDate = mOR.DepartureDate;
+        //                        objR.RateCodeID = mOR.RateCodeID;
+        //                        objR.ShowDialog();
+        //                        if (objR.RoomID > 0)
+        //                        {
+        //                            //Assign phòng
+        //                            ClassReservation.RoomAssignment(mOR, ReservationID, objR.RoomID, UserID, RoomSharer);
+        //                            //Clear biến nhớ
+        //                            mOR = null;
+        //                            //Gan gia tri
+        //                            _RoomID = objR.RoomID;
+        //                        }
+        //                    }
+        //                    else
+        //                    {
+        //                        MessageBox.Show("Split first reservation. Please!", TextUtils.Caption_Message);
+        //                        return;
+        //                    }
+        //                }
+        //                #endregion
+
+        //                #region 5.Trường hợp đã có số phòng
+        //                //Chỉ check trạng thái phòng đối với MG
+        //                if (_MainGuest == true && _RoomID > 0)
+        //                {
+        //                    //Nếu phòng bẩn không cho CI. Chỉ có phòng sạch mới cho CI
+        //                    if (ClassReservation.GetFOStatus(_RoomID) == 0 && (ClassReservation.GetHKStatusID(_RoomID) == 4 || bool.Parse(grvGrid.GetRowCellValue(CurrenRowIndex, "IsPseudo").ToString()) == true))
+        //                    {
+        //                        //Hỏi trước khi CI
+        //                        if (MessageBox.Show("Are you sure you want to check in this Room?", SQLCommands.Caption_confirm, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+        //                        {
+        //                            ClassReservation.CreateCheckIn(ReservationID, _RoomID, _NoOfRoom, UserID, 0);
+
+        //                            #region Update lại trạng thái CurrResvStatus trong bảng Room
+        //                            if (_RoomID > 0)
+        //                                ClassReservation.UpdateReservationStatus(null, _RoomID);
+        //                            #endregion
+
+        //                            #region Open, close phone - Bỏ đi
+        //                            //if (_MainGuest == true)
+        //                            //{
+        //                            //    TelephoneSwitchBO.insertToTelephoneSwitch(grvGrid.GetRowCellValue(grvGrid.FocusedRowHandle, "RoomNo").ToString(), grvGrid.GetRowCellValue(grvGrid.FocusedRowHandle, "GuestName").ToString(), true, _SysDate);
+        //                            //}
+        //                            #endregion
+
+        //                            LoadInfoSearch();
+        //                            //Focus con trỏ chuột tại dòng đã select khi load lai dữ liệu
+        //                            if (grvGrid.RowCount > 0)
+        //                            {
+        //                                if (CurrenRowIndex >= grvGrid.RowCount)
+        //                                    CurrenRowIndex = 0;
+        //                                grvGrid.FocusedRowHandle = CurrenRowIndex;
+        //                            }
+        //                        }
+        //                    }
+        //                    // Hiển thị thông báo nếu ko CI được
+        //                    else
+        //                    {
+        //                        if (ClassReservation.GetFOStatus(_RoomID) == 1)
+        //                            MessageBox.Show("Room is Occupied. Not Check In", TextUtils.Caption_Message);
+        //                        else if (ClassReservation.GetHKStatusID(_RoomID) == 1)
+        //                            MessageBox.Show("Room is Clean Non-checked. Not Check In", TextUtils.Caption_Message);
+        //                        else if (ClassReservation.GetHKStatusID(_RoomID) == 2)
+        //                            MessageBox.Show("Room is Dirty. Not Check In", TextUtils.Caption_Message);
+        //                        else if (ClassReservation.GetHKStatusID(_RoomID) == 3)
+        //                            MessageBox.Show("Room is Pickup. Not Check In", TextUtils.Caption_Message);
+        //                        else if (ClassReservation.GetHKStatusID(_RoomID) == 5)
+        //                            MessageBox.Show("Room is Out Of Order. Not Check In", TextUtils.Caption_Message);
+        //                        else if (ClassReservation.GetHKStatusID(_RoomID) == 6)
+        //                            //if(Global.HotelID!=2) //FLC OOS vẫn cho checkin
+        //                            MessageBox.Show("Room is Out Of Service. Not Check In", TextUtils.Caption_Message);
+        //                    }
+        //                }
+        //                //Đối với RS không cần check trạng thái phòng
+        //                else if (_MainGuest == false && _RoomID > 0)
+        //                {
+        //                    //Hỏi trước khi CI
+        //                    if (MessageBox.Show("Are you sure you want to check in this Room?", SQLCommands.Caption_confirm, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+        //                    {
+        //                        ClassReservation.CreateCheckIn(ReservationID, _RoomID, _NoOfRoom, UserID, 0);
+        //                        LoadInfoSearch();
+        //                        //Focus con trỏ chuột tại dòng đã select khi load lai dữ liệu
+        //                        if (grvGrid.RowCount > 0)
+        //                        {
+        //                            if (CurrenRowIndex >= grvGrid.RowCount)
+        //                                CurrenRowIndex = 0;
+        //                            grvGrid.FocusedRowHandle = CurrenRowIndex;
+        //                        }
+        //                    }
+        //                }
+        //                #endregion
+
+
+        //        }
+        //        ReservationModel rsv = (ReservationModel)ReservationBO.Instance.FindByPrimaryKey(reservationID);
+
+        //        pt.CommitTransaction();
+        //        return Json(new { code = 0, msg = "Room Sharer was successfully" });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        pt.RollBack();
+        //        return Json(new { code = 1, msg = ex.Message });
+        //    }
+        //    finally
+        //    {
+        //        pt.CloseConnection();
+        //    }
+        //}
+        //#endregion
+
+        //private void _btnCheckIn_Click(object sender, EventArgs e)
+        //{
+        //    //CSS, 13/12/2009                               
+        //    if (ReservationID > 0)
+        //    {
+        //        //Kiểm tra quyền của User
+        //        if (Permissions.CheckExistsValue("resv_ReservationCheckin") == true)
+        //        {
+        //            bool _MainGuest = false;
+        //            if (grvGrid.GetRowCellValue(grvGrid.FocusedRowHandle, "MG").ToString().Equals("X"))
+        //                _MainGuest = true;
+
+        //            #region 1.CI MG trước
+        //            if (_MainGuest == false && ClassReservation.CheckCheckIn(_ShareRoom) == 1)
+        //            {
+        //                MessageBox.Show("Main guest must be check in before Room sharer.", "Mesage");
+        //                return;
+        //            }
+        //            #endregion
+
+        //            #region 2.Kiểm tra thông tin Alert nếu có
+        //            ArrayList arrAlert = ClassReservation.GetReservationAlerts(ReservationID);
+        //            if (arrAlert.Count > 0)
+        //            {
+        //                for (int i = 0; i < arrAlert.Count; i++)
+        //                {
+        //                    if (((ReservationAlertsModel)arrAlert[i]).Area == "Check-In")
+        //                    {
+        //                        frmReservationAlertDisplay objRAS = new frmReservationAlertDisplay();
+        //                        objRAS.ReservationAlertID = ((ReservationAlertsModel)arrAlert[i]).ID;
+        //                        objRAS.ShowDialog();
+        //                    }
+        //                }
+        //            }
+        //            #endregion
+
+        //            #region 3.Kiểm tra nếu ngày đến = BusinessDate thì cho CI - Khách đã CI không cho CI nữa
+        //            int a = TextUtils.CompareDate(_BusDate, Convert.ToDateTime(grvGrid.GetRowCellValue(grvGrid.FocusedRowHandle, "Arrival").ToString()));
+        //            if (a != 0)
+        //            {
+        //                MessageBox.Show("Arrival Date must be equal Business Date", "Message");
+        //                return;
+        //            }
+        //            //Khách đã CI không ch2o CI nữa
+        //            if (_Status == 1 || _Status == 2 || _Status == 3 || _Status == 4 || _Status == 6 || _Status == 7)
+        //            {
+        //                MessageBox.Show("This room checked in, checked out or cancelled. Not check in", TextUtils.Caption_Message);
+        //                return;
+        //            }
+        //            #endregion
+
+        //            #region 4.Trường hợp chưa có số phòng Ass trước CI sau
+        //            if (_MainGuest == true && _RoomID == 0)
+        //            {
+        //                if (_NoOfRoom == 1)
+        //                {
+        //                    ReservationModel mOR = (ReservationModel)ReservationBO.Instance.FindByPK(ReservationID);
+        //                    frmRoomAvailableSearch objR = new frmRoomAvailableSearch(true);
+        //                    objR.RoomTypeID = mOR.RoomTypeID;
+        //                    objR.ArrivalDate = mOR.ArrivalDate;
+        //                    objR.DepartureDate = mOR.DepartureDate;
+        //                    objR.RateCodeID = mOR.RateCodeID;
+        //                    objR.ShowDialog();
+        //                    if (objR.RoomID > 0)
+        //                    {
+        //                        //Assign phòng
+        //                        ClassReservation.RoomAssignment(mOR, ReservationID, objR.RoomID, UserID, RoomSharer);
+        //                        //Clear biến nhớ
+        //                        mOR = null;
+        //                        //Gan gia tri
+        //                        _RoomID = objR.RoomID;
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    MessageBox.Show("Split first reservation. Please!", TextUtils.Caption_Message);
+        //                    return;
+        //                }
+        //            }
+        //            #endregion
+
+        //            #region 5.Trường hợp đã có số phòng
+        //            //Chỉ check trạng thái phòng đối với MG
+        //            if (_MainGuest == true && _RoomID > 0)
+        //            {
+        //                //Nếu phòng bẩn không cho CI. Chỉ có phòng sạch mới cho CI
+        //                if (ClassReservation.GetFOStatus(_RoomID) == 0 && (ClassReservation.GetHKStatusID(_RoomID) == 4 || bool.Parse(grvGrid.GetRowCellValue(CurrenRowIndex, "IsPseudo").ToString()) == true))
+        //                {
+        //                    //Hỏi trước khi CI
+        //                    if (MessageBox.Show("Are you sure you want to check in this Room?", SQLCommands.Caption_confirm, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+        //                    {
+        //                        ClassReservation.CreateCheckIn(ReservationID, _RoomID, _NoOfRoom, UserID, 0);
+
+        //                        #region Update lại trạng thái CurrResvStatus trong bảng Room
+        //                        if (_RoomID > 0)
+        //                            ClassReservation.UpdateReservationStatus(null, _RoomID);
+        //                        #endregion
+
+        //                        #region Open, close phone - Bỏ đi
+        //                        //if (_MainGuest == true)
+        //                        //{
+        //                        //    TelephoneSwitchBO.insertToTelephoneSwitch(grvGrid.GetRowCellValue(grvGrid.FocusedRowHandle, "RoomNo").ToString(), grvGrid.GetRowCellValue(grvGrid.FocusedRowHandle, "GuestName").ToString(), true, _SysDate);
+        //                        //}
+        //                        #endregion
+
+        //                        LoadInfoSearch();
+        //                        //Focus con trỏ chuột tại dòng đã select khi load lai dữ liệu
+        //                        if (grvGrid.RowCount > 0)
+        //                        {
+        //                            if (CurrenRowIndex >= grvGrid.RowCount)
+        //                                CurrenRowIndex = 0;
+        //                            grvGrid.FocusedRowHandle = CurrenRowIndex;
+        //                        }
+        //                    }
+        //                }
+        //                // Hiển thị thông báo nếu ko CI được
+        //                else
+        //                {
+        //                    if (ClassReservation.GetFOStatus(_RoomID) == 1)
+        //                        MessageBox.Show("Room is Occupied. Not Check In", TextUtils.Caption_Message);
+        //                    else if (ClassReservation.GetHKStatusID(_RoomID) == 1)
+        //                        MessageBox.Show("Room is Clean Non-checked. Not Check In", TextUtils.Caption_Message);
+        //                    else if (ClassReservation.GetHKStatusID(_RoomID) == 2)
+        //                        MessageBox.Show("Room is Dirty. Not Check In", TextUtils.Caption_Message);
+        //                    else if (ClassReservation.GetHKStatusID(_RoomID) == 3)
+        //                        MessageBox.Show("Room is Pickup. Not Check In", TextUtils.Caption_Message);
+        //                    else if (ClassReservation.GetHKStatusID(_RoomID) == 5)
+        //                        MessageBox.Show("Room is Out Of Order. Not Check In", TextUtils.Caption_Message);
+        //                    else if (ClassReservation.GetHKStatusID(_RoomID) == 6)
+        //                        //if(Global.HotelID!=2) //FLC OOS vẫn cho checkin
+        //                        MessageBox.Show("Room is Out Of Service. Not Check In", TextUtils.Caption_Message);
+        //                }
+        //            }
+        //            //Đối với RS không cần check trạng thái phòng
+        //            else if (_MainGuest == false && _RoomID > 0)
+        //            {
+        //                //Hỏi trước khi CI
+        //                if (MessageBox.Show("Are you sure you want to check in this Room?", SQLCommands.Caption_confirm, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+        //                {
+        //                    ClassReservation.CreateCheckIn(ReservationID, _RoomID, _NoOfRoom, UserID, 0);
+        //                    LoadInfoSearch();
+        //                    //Focus con trỏ chuột tại dòng đã select khi load lai dữ liệu
+        //                    if (grvGrid.RowCount > 0)
+        //                    {
+        //                        if (CurrenRowIndex >= grvGrid.RowCount)
+        //                            CurrenRowIndex = 0;
+        //                        grvGrid.FocusedRowHandle = CurrenRowIndex;
+        //                    }
+        //                }
+        //            }
+        //            #endregion
+
+        //        }
+        //    }
+        //}
+        //private void _btnGroupCheckIn_Click(object sender, EventArgs e)
+        //{
+        //}
     }
 }

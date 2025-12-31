@@ -2,7 +2,6 @@
 <style>
 
     .folio-container {
-
         padding: 0;
         overflow: hidden;
     }
@@ -11,7 +10,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: #0055b8;
+        background-color: #1f501f;
         color: white;
         text-align: center;
         padding: 8px;
@@ -57,13 +56,13 @@
     }
 
         .folio-item:hover {
-            background-color: #0055b8;
+            background-color: #1f501f;
             border-color: #003087;
             color: white;
         }
 
         .folio-item.active {
-            background-color: #0055b8;
+            background-color: #1f501f;
             border-color: #003087;
             color: white;
             box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -89,7 +88,7 @@
         z-index: 1000; /* Đảm bảo menu nằm trên bảng */
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         border-radius: 5px;
-        width:200px
+        width: 200px
     }
 </style>
 <!-- Modal billimg-->
@@ -109,7 +108,7 @@
                         <div class="dropdown">
 
                             <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">View</a>
-                            <div class="dropdown-menu-custom">
+                            <div class="dropdown-menu-custom-rsv">
                                 <a href="#" onclick="openBilling0();">By Total</a>
                                 <a href="#" onclick="openBilling1();">By Detail : Include Tax</a>
                                 <a href="#" onclick="openBilling2();">By Detail : Not Include Tax</a>
@@ -119,14 +118,14 @@
                         <a href="#" onclick="openModalEditPosting();">Edit</a>
                         <div class="dropdown">
                             <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">Preview && Print</a>
-                            <div class="dropdown-menu-custom">
+                            <div class="dropdown-menu-custom-rsv">
                                 <a href="#" onclick="PrintAndPreview(1);">Style: Billing Information</a>
                                 <a href="#" onclick="PrintAndPreview(2);">Style: Billing Information (selected transaction)</></a>
                             </div>
                         </div>
                         <div class="dropdown">
                             <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">Screen View</a>
-                            <div class="dropdown-menu-custom">
+                            <div class="dropdown-menu-custom-rsv">
                                 <a href="#">Full</a>
                                 <a href="#">Split</a>
                                 <a href="#">Quad</a>
@@ -145,10 +144,10 @@
                     </div>
                 </div>
 
-                <div class="mui-card" >
+                <div class="mui-card">
 
                     <div class="col-md-12 row ">
-    
+
                         <label class="form-label col-md-4">RSV Status: <span id="rsvStatusBilling"></span></label>
                         <label class="form-label col-md-4">Conf.No: <span id="conNoBilling"></span></label>
                         <label class="form-label col-md-4">Group: <span id="groupBilling"></span></label>
@@ -157,7 +156,7 @@
                         <label class="form-label col-md-4">Departure: <span id="departureBilling"></span></label>
                         <label class="form-label col-md-4">Balance: <span id="balanceBilling"></span></label>
                         <label class="form-label col-md-4">Total: <span id="totalBilling"></span></label>
-  
+
                     </div>
                 </div>
 
@@ -173,7 +172,7 @@
                     <div class="col-md-11" style="padding-left: 15px; ">
                         <div style="justify-content:space-between" class="row">
                             <div class="col-md-12 mui-card">
-                                <span id="infoBillingName" style="font-size:18px;color:#0055b8">
+                                <span id="infoBillingName" style="font-size:18px;color:#1f501f">
                                 </span>
 
                                 <div style="display:flex">
@@ -186,21 +185,21 @@
                             <div class="function-menu col-md-2 overlay-menu mt-2" id="functionMenu" style="display: none;">
                                 <div class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">Lock Folio</a>
-                                    <div class="dropdown-menu-custom">
+                                    <div class="dropdown-menu-custom-rsv">
                                         <a href="#" onclick="LockFolioOnly(folioNoID);">Only One</a>
                                         <a href="#" onclick="LockFolio();">All Folio</a>
                                     </div>
                                 </div>
                                 <div class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">Unlock Folio</a>
-                                    <div class="dropdown-menu-custom">
+                                    <div class="dropdown-menu-custom-rsv">
                                         <a href="#" onclick="UnLockFolioOnly(folioNoID);">Only One</a>
                                         <a href="#" onclick="UnLockFolio();">All Folio</a>
                                     </div>
                                 </div>
                                 <div class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">Posting History</a>
-                                    <div class="dropdown-menu-custom">
+                                    <div class="dropdown-menu-custom-rsv">
                                         <a href="#" onclick="PostingHistory(1);">By Folio</a>
                                         <a href="#" onclick="PostingHistory(2);">By Invoice</a>
                                     </div>
@@ -211,13 +210,13 @@
                                 <a href="#" onclick="ExportExcelBilling();">Export to Excel</a>
                                 <div class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">Transfer to Window</a>
-                                    <div class="dropdown-menu-custom" id="listTransferToWindow"></div>
+                                    <div class="dropdown-menu-custom-rsv" id="listTransferToWindow"></div>
                                 </div>
                                 <a href="#" onclick="openModalTransferTransaction();">Transfer Transaction</a>
                                 <a href="#" onclick="openModalSelectOption();">Option</a>
                             </div>
                         </div>
-                        <div class="mui-card mt-2" >
+                        <div class="mui-card mt-2">
                             <div id="gridContainerBilling" class="mt-2 gridContainer"></div>
                         </div>
                     </div>
@@ -243,8 +242,8 @@
                     <button class="submit-button-clear-reservation" onclick="closeModalConfirmTransaction();">Close</button>
                 </div>
                 <div class="row mt-2">
-                    <label >Reason</label>
-                    <select id="codeDeletionReason" ></select>
+                    <label>Reason</label>
+                    <select id="codeDeletionReason"></select>
                 </div>
                 <div class="mt-2">
                     <textarea class="form-control" id="descriptionDeletionReason" rows="3"></textarea>
@@ -272,9 +271,9 @@
             $("#functionMenu").toggle();
         });
         getDeletionReason();
-          
+
     });
-  
+
     var folioPosting = 1;
     var transactionNoPost = "0";
     var totalAmountBilling = 0;
@@ -786,6 +785,12 @@
         const userID = JSON.parse(localStorage.getItem("userID"));
         var grid = $("#gridContainerBilling").dxDataGrid("instance");
         var selectedRows = grid.getSelectedRowsData();
+
+        // 🔴 BẮT BUỘC chọn đúng 1 dòng
+        if (selectedRows.length !== 1) {
+            showToast('Error', 'Please select exactly one row to transfer', false);
+            return;
+        }
         var selectedIds = selectedRows.map(row => row.id);
         $.ajax({
             url: '/Billing/TransferToWindow',
