@@ -10,8 +10,8 @@ namespace BaseBusiness.Facade
 {
     public class ReservationOptionsFacade : BaseFacadeDB
     {
-        protected static ReservationOptionsFacade instance = new ReservationOptionsFacade(new ActivityLogModel());
-        protected ReservationOptionsFacade(ActivityLogModel model) : base(model)
+        protected static ReservationOptionsFacade instance = new ReservationOptionsFacade(new ReservationOptionsModel());
+        protected ReservationOptionsFacade(ReservationOptionsModel model) : base(model)
         {
         }
         public static ReservationOptionsFacade Instance

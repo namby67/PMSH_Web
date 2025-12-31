@@ -2,95 +2,95 @@
     //
 }
 
-<style>
-    .form-locked {
-        pointer-events: none;
-        opacity: 0.6;
-        background-color: #f9f9f9;
-    }
-
-    .form-unlocked {
-        pointer-events: auto;
-        opacity: 1;
-        background-color: #fff;
-    }
-
-</style>
-
 <div class="text-center" style="font-size: 20px">Reservation Type</div>
 <div class="sticky-header bg-white p-2 shadow-sm z-3">
-    <div id="formContainer" class="p-3 form-locked" style="border: 1px solid #ccc; border-radius: 6px; background-color: #f8f9fa;">
-        <div class="row g-2 align-items-start flex-nowrap overflow-auto py-1" ">
-
-            <div class="col-auto">
-                <label for="code" class="col-form-label fw-bold text-nowrap" style="font-size: 13px;">Res. Type</label>
-            </div>
-            <div class="col-auto">
-                <input type="text" id="code" name="code" class="form-control form-control-sm" style="width: 200px;" placeholder="Code.." />
-                <div class="invalid-feedback"></div>
-            </div>
-
-            <div class="col-auto ms-2">
-                <label for="name" class="col-form-label fw-bold" style="font-size: 13px;">Desc.</label>
-            </div>
-            <div class="col-auto">
-                <input type="text" id="name" name="name" class="form-control form-control-sm" style="width: 230px;" placeholder="Description..." />
-                <div class="invalid-feedback"></div>
-            </div>
-
-            <div class="col-auto ms-2">
-                <label for="seq" class="col-form-label fw-bold" style="font-size: 13px;">Seq.</label>
-            
-            </div>
-            <div class="col-auto">
-                <input type="number" id="seq" name="seq" min="0" max="999" value="0" class="form-control form-control-sm text-center p-1" style="width: 50px;" />
-                <div class="invalid-feedback"></div>
-            </div>
-
-            <div class="col-auto">
-                <div class="vr h-100 mx-2 text-secondary"></div>
-            </div>
-
-            <div class="col-auto d-flex align-items-center gap-3 flex-wrap">
-                <div class="form-check mb-0">
-                    <input type="checkbox" id="inactive" name="inactive" class="form-check-input" />
-                    <label for="inactive" class="form-check-label text-danger fw-bold" style="font-size: 12px;">Inactive</label>
-                </div>
-            </div>
-
-            <div class="col-auto d-flex align-items-center me-3 flex-wrap">
-                <div class="form-check mb-0">
-                    <input type="checkbox" id="deduct" name="deduct" class="form-check-input me-2" />
-                    <label for="deduct" class="form-check-label text-danger mb-0">Deduct</label>
-                </div>
-            </div>
-            <div class="col-auto d-flex align-items-center me-3 flex-wrap">
-                <div class="form-check mb-0">
-                    <input type="checkbox" id="arrivalTimeRequired" name="arrivalTimeRequired" class="form-check-input me-2" />
-                    <label for="arrivalTimeRequired" class="form-check-label text-danger mb-0">Arrival Time Required</label>
-                </div>
-            </div>
-            <div class="col-auto d-flex align-items-center me-3 flex-wrap">
-                <div class="form-check mb-0">
-                    <input type="checkbox" id="creditCardRequired" name="creditCardRequired" class="form-check-input me-2" />
-                    <label for="creditCardRequired" class="form-check-label text-danger mb-0">Credit Card Required</label>
-                </div>
-            </div>
-            <div class="col-auto d-flex align-items-center me-3 flex-wrap">
-                <div class="form-check mb-0">
-                    <input type="checkbox" id="depositRequired" name="depositRequired" class="form-check-input me-2" />
-                    <label for="depositRequired" class="form-check-label text-danger mb-0">Deposit Required</label>
-                </div>
-            </div>
-            <input type="hidden" id="id" name="id" value="0" />
-        </div>
-    </div>
     <div class="mt-2">
         <button id="btnNew" class="mui-button mui-button-new"><i class="fa-solid fa-plus"></i> New</button>
         <button id="btnUpdate" class="mui-button mui-button-edit"><i class="fa-solid fa-pen"></i> Edit</button>
         <button id="btnDelete" class="mui-button mui-button-delete"><i class="fa-solid fa-trash-can"></i> Delete</button>
-        <button id="btnSave" class="mui-button mui-button-save d-none"><i class="fa-solid fa-check"></i> Save</button>
-        <button id="btnCancel" class="mui-button mui-button-cancel d-none"><i class="fa-solid fa-xmark"></i> Cancel</button>
+    </div>
+</div>
+<!-- Modal Popup for New Item -->
+<div class="modal fade" id="itemModal" tabindex="-1" aria-labelledby="itemModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="itemModalLabel">Reservation Type Configuration</h5>
+            </div>
+
+            <div class="modal-footer justify-content-start border-bottom">
+                <button type="button" id="btnSave" class="mui-button mui-button-save"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+                <button type="button" data-bs-dismiss="modal" class="mui-button mui-button-close"><i class="fa-solid fa-xmark"></i> Close</button>
+            </div>
+
+            <div class="modal-body">
+                <form id="formContainer">
+                    <div class="container-fluid">
+
+                        <div class="row mb-4">
+                            <div class="col-md-3">
+                                <label for="code" class="form-label mb-1 fw-bold" style="font-size: 12px;">Res. Type <span class="text-danger">*</span></label>
+                                <input type="text" id="code" name="code" class="form-control form-control-sm" placeholder="Enter code..." required />
+                                <div class="invalid-feedback">Code is required.</div>
+                            </div>
+
+                            <div class="col-md-7">
+                                <label for="name" class="form-label mb-1 fw-bold" style="font-size: 12px;">Description <span class="text-danger">*</span></label>
+                                <textarea  id="name" name="name" style="height:100px" class="form-control" rows="4" placeholder="Enter description..." required></textarea>
+                                <div class="invalid-feedback">Description is required.</div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <label for="seq" class="form-label mb-1 fw-bold" style="font-size: 12px;">Seq.</label>
+                                <input type="number" id="seq" name="seq" min="0" max="999" value="0" class="form-control form-control-sm text-center" />
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+
+                        <h6 class="border-bottom pb-2 mb-3" style="font-size: 13px; color: #666; font-weight: bold;">Configuration Settings</h6>
+
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <input type="checkbox" id="deduct" name="deduct" class="form-check-input" style="cursor: pointer;" />
+                                    <label for="deduct" class="form-check-label" style="cursor: pointer; font-size: 12px;">Deduct Inventory</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <input type="checkbox" id="arrivalTimeRequired" name="arrivalTimeRequired" class="form-check-input" style="cursor: pointer;" />
+                                    <label for="arrivalTimeRequired" class="form-check-label" style="cursor: pointer; font-size: 12px;">Arrival Time Required</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <input type="checkbox" id="creditCardRequired" name="creditCardRequired" class="form-check-input" style="cursor: pointer;" />
+                                    <label for="creditCardRequired" class="form-check-label" style="cursor: pointer; font-size: 12px;">Credit Card Required</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <input type="checkbox" id="depositRequired" name="depositRequired" class="form-check-input" style="cursor: pointer;" />
+                                    <label for="depositRequired" class="form-check-label" style="cursor: pointer; font-size: 12px;">Deposit Required</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <input type="checkbox" id="inactive" name="inactive" class="form-check-input" style="cursor: pointer;" />
+                                    <label for="inactive" class="form-check-label text-danger fw-bold" style="cursor: pointer; font-size: 12px;">Inactive</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <input type="hidden" id="id" name="id" value="0" />
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -120,18 +120,7 @@
              applyValidationErrors([], "#formContainer");
         });
         reloadGrid();
-        lockForm();
     });
-
-    function lockForm() {
-        $("#formContainer").addClass("form-locked").removeClass("form-unlocked");
-        $("#formContainer").find("input, select, checkbox").prop("disabled", true);
-    }
-
-    function unlockForm() {
-        $("#formContainer").removeClass("form-locked").addClass("form-unlocked");
-        $("#formContainer").find("input, select, checkbox").prop("disabled", false);
-    }
 
     function editMember(data) {
         $("#id").val(data.id);
@@ -149,13 +138,14 @@
         const dataSource = data || [];
         $("#gridContainerRateCode").dxDataGrid({
             dataSource: dataSource,
-            height: 500,
+            height: 550,
             width: "100%",
             columnAutoWidth: false,
             allowColumnResizing: true,
             selection: { mode: "single" },
             hoverStateEnabled: true,
             columns: [
+                { dataField: "id", visible: false },
                 { dataField: "code", caption: "Res.Type", width: "10%" },
                 { dataField: "name", caption: "Description", width: "30%" },
                 { dataField: "sequence", caption: "Seq.", width: "10%"},
@@ -194,19 +184,6 @@
         });
     }
 
-    // 4. Button Handlers
-    function switchToEditMode() {
-        $("#btnNew, #btnUpdate, #btnDelete").addClass("d-none");
-        $("#btnSave, #btnCancel").removeClass("d-none");
-        unlockForm();
-    }
-
-    function switchToNormalMode() {
-        $("#btnNew, #btnUpdate, #btnDelete").removeClass("d-none");
-        $("#btnSave, #btnCancel").addClass("d-none");
-        lockForm();
-    }
-
     function clearForm() {
         const $form = $("#formContainer");
         $form.find("input[type='text'], input[type='textarea']").val("");
@@ -219,9 +196,10 @@
 
     // --- NEW ---
     $("#btnNew").click(function () {
-        clearForm();
-        switchToEditMode();
-        $("#content-title").text("New Reservation Type");
+        $("#formContainer")[0].reset();
+        $("#id").val("0");
+        $("#itemModalLabel").text("Add Reservation Type");
+        $("#itemModal").modal("show");
     });
 
     // --- EDIT ---
@@ -230,17 +208,10 @@
             showToast("Warning", "Please select a row to edit.", false);
             return;
         }
-        switchToEditMode();
-        $("#content-title").text("Edit Reservation Type");
+        $("#itemModalLabel").text("Edit Reservation Type");
+        $("#itemModal").modal("show");
 
         editMember(selectedRowData);
-    });
-
-    // --- CANCEL ---
-    $("#btnCancel").click(function () {
-        $("#content-title").text("Reservation Type");
-        clearForm();
-        switchToNormalMode();
     });
 
     // --- SAVE ---
@@ -274,7 +245,8 @@
                 if (res.success) {
                     showToast("Success", res.message, true);
                     reloadGrid();
-                    $("#btnCancel").trigger("click");
+                    clearForm();
+                    $("#itemModal").modal("hide");
                 } else {
                     if (res.errors && res.errors.length > 0) {
                         applyValidationErrors(res.errors, "#formContainer");
@@ -302,7 +274,7 @@
         if (!confirm("Are you sure you want to delete this template?")) return;
 
         $.ajax({
-            url: `/Administration/ReservationTypeDelete/` + selectedRowData.id,
+            url: `/Administration/DeleteReservationType/` + selectedRowData.id,
             type: "POST",
             success: function (res) {
                 if (res.success) {  

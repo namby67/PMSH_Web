@@ -1,4 +1,5 @@
-﻿@{
+﻿
+@{
     //
 }
 
@@ -14,6 +15,7 @@
         opacity: 1;
         background-color: #fff;
     }
+
 </style>
 
 <div class="text-center" style="font-size: 20px">Property Type</div>
@@ -22,8 +24,7 @@
     <div class="mt-2">
         <button id="btnNew" class="mui-button mui-button-new"><i class="fa-solid fa-plus"></i> New</button>
         <button id="btnUpdate" class="mui-button mui-button-edit"><i class="fa-solid fa-pen"></i> Edit</button>
-        <button id="btnDelete" class="mui-button mui-button-delete"><i class="fa-solid fa-trash-can"></i>
-            Delete</button>
+        <button id="btnDelete" class="mui-button mui-button-delete"><i class="fa-solid fa-trash-can"></i> Delete</button>
     </div>
 
 </div>
@@ -35,10 +36,8 @@
                 <h5 class="modal-title" id="itemModalLabel">New Item</h5>
             </div>
             <div class="modal-footer justify-content-start">
-                <button type="button" id="btnSave" class="mui-button mui-button-save"><i
-                        class="fa-solid fa-floppy-disk"></i> Save</button>
-                <button type="button" data-bs-dismiss="modal" class="mui-button mui-button-close"><i
-                        class="fa-solid fa-xmark"></i> Close</button>
+                <button type="button" id="btnSave" class="mui-button mui-button-save"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+                <button type="button" data-bs-dismiss="modal" class="mui-button mui-button-close"><i class="fa-solid fa-xmark"></i> Close</button>
             </div>
             <div class="modal-body">
 
@@ -47,25 +46,20 @@
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="code" class="form-label fw-bold mb-1" style="font-size: 12px;">Code:</label>
-                                <input type="text" id="code" name="code" class="form-control form-control-sm"
-                                    placeholder="Enter code...">
+                                <input type="text" id="code" name="code" class="form-control form-control-sm" placeholder="Enter code...">
                                 <div class="invalid-feedback" id="codeError"></div>
                             </div>
                             <div class="col-md-6">
-                                <label for="sequence" class="form-label fw-bold mb-1"
-                                    style="font-size: 12px;">Sequence:</label>
-                                <input type="number" id="sequence" name="seq" class="form-control form-control-sm"
-                                    placeholder="0">
+                                <label for="sequence" class="form-label fw-bold mb-1" style="font-size: 12px;">Sequence:</label>
+                                <input type="number" id="sequence" name="seq" class="form-control form-control-sm" placeholder="0">
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-12">
-                                <label for="description" class="form-label fw-bold mb-1"
-                                    style="font-size: 12px;">Description:</label>
-                                <textarea id="description" class="form-control form-control-sm" rows="4"
-                                    style="height:100px" placeholder="Enter description..."></textarea>
+                                <label for="description" class="form-label fw-bold mb-1" style="font-size: 12px;">Description:</label>
+                                <textarea id="description" class="form-control form-control-sm" rows="4" style="height:100px" placeholder="Enter description..."></textarea>
                             </div>
                         </div>
                         <input type="hidden" id="id" name="id" value="0" />
@@ -100,7 +94,7 @@
         });
 
         $('#itemModal').on('hidden.bs.modal', function () {
-            applyValidationErrors([], "#formContainer");
+             applyValidationErrors([], "#formContainer");
         });
         reloadGrid();
     });
@@ -183,8 +177,8 @@
 
     // --- SAVE ---
     $("#btnSave").click(function () {
-
-
+        
+       
         const id = parseInt($("#id").val()) || 0;
         let loginName = (localStorage.getItem("Loginname") || "").trim()
             .replace(/^"(.*)"$/, '$1');
