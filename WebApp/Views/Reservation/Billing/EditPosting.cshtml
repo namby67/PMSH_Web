@@ -54,9 +54,17 @@
                     <input type="text"  id="winNoEditPosting" value="1" readonly style="text-align:right">
                 </div>
                 <div class="col-md-4">
-                    <label for="postingDate" class="form-label">Posting Date</label>
-                    <input type="date" id="postingDate" value="2023-08-01" readonly>
+                    <label class="form-label">Posting Date</label>
+                    <div class="row">
+                        <div class="col-6">
+                            <input type="date" id="postingDate" class="form-control" readonly>
+                        </div>
+                        <div class="col-6">
+                            <input type="date" id="additionalDate" class="form-control">
+                        </div>
+                    </div>
                 </div>
+
                 <hr class="hr">
                 <div class="col-md-3">
                     <label  >Article Code</label>
@@ -81,10 +89,24 @@
 <script>
     var checkEditOpen = false;
     function openModalEditPosting(){
-        getFolioDetailMaster();
-        if(checkEditOpen == true){
-            $('#modalEditPosting').modal('show');
+        // getFolioDetailMaster();
+        // if(checkEditOpen == true){
+        //     $('#modalEditPosting').modal('show');
 
+        // }
+
+        localStorage.setItem("currentFromID", "modalEditPosting");
+        const crashierLogin = localStorage.getItem("crashierLogin");
+         getFolioDetailMaster();
+        if(crashierLogin == "NotYet"){
+            openModalShilftLogin();
+        }
+        else{
+      
+            if(checkEditOpen == true){
+                $('#modalEditPosting').modal('show');
+
+            }
         }
     }
     function closeModalEditPosting(){
@@ -101,33 +123,37 @@
             return;
         }
         transactionNoPost = selectedIds[0];
+            console.log(selectedRows);
         checkEditOpen = true;
         $.ajax({
-            url: '/Billing/GetFolioDetailMaster',
+            url: '/Billing/GetFolioDetailMasterEdit',
             type: 'get',
             dataType: 'json',
             data: {
-                transactionNo: transactionNoPost,
+                invoiceNoPosting: selectedRows[0].invoiceNo,
             },
             crossDomain: false,
             headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
             success: function (result) {
-                $("#roomEditPosting").val(roomNo);
-                $("#nameEditPosting").val(lastname);
-                $("#codeEditPosting").val(result.transactionCode);
-                $("#nameTransactionEditPosting").text(result.description);
-                $("#priceEditPosting").val(result.price.toLocaleString('en-US'));
-                $("#quantityEditPosting").val(result.quantity);
-                $("#amountEditPosing").val(result.amountMasterGross.toLocaleString('en-US'));
-                $("#currency").val("VND");
-                $("#crashierEditPosting").val(result.crashierNo);
-                // $("#winNo").val("30,000.00");
-                $("#postingDate").val(result.transactionDate.split('T')[0]);
-                $("#additionalDate").val(result.transactionDate.split('T')[0]);
-                $("#articleCodeEditPosting").val(result.articleCode);
-                $("#supplementEditPosting").val("");
-                $("#referenceEditPosting").val(result.reference);
-                $("#checkNoEditPosting").val(result.checkNo);
+                console.log(result);
+                 $("#roomEditPosting").val(roomNo);
+                 $("#nameEditPosting").val(lastname);
+                 $("#codeEditPosting").val(result.transactionCode);
+                 $("#nameTransactionEditPosting").text(result.description);
+                 $("#priceEditPosting").val(result.price.toLocaleString('en-VN'));
+                 $("#quantityEditPosting").val(result.quantity);
+                const amount = Number(result.price) * Number(result.quantity);
+                $("#amountEditPosing").val(amount.toLocaleString('vi-VN'));
+                 $("#currency").val("VND");
+                 $("#crashierEditPosting").val(result.crashierNo);
+                // // $("#winNo").val("30,000.00");
+                 $("#postingDate").val(result.transactionDate.split('T')[0]);
+                 //$("#additionalDate").val(result.transactionDate.split('T')[0]);
+                  $("#additionalDate").val(result.transactionDate.split('T')[0]);
+                 $("#articleCodeEditPosting").val(result.articleCode);
+                 $("#supplementEditPosting").val(result.supplement);
+                 $("#referenceEditPosting").val(result.reference);
+                 $("#checkNoEditPosting").val(result.checkNo);
             },
             error: function (xhr, statusText, err) {
                 if (xhr.status == 401) {
@@ -136,6 +162,52 @@
             }
         });
     }
+
+    // function getFolioDetailMaster() {
+    //     var grid = $("#gridContainerBilling").dxDataGrid("instance");
+    //     var selectedRows = grid.getSelectedRowsData();
+    //     var selectedIds = selectedRows.map(row => row.transactionNo);
+    //     if(selectedIds.length == 0){
+    //         checkEditOpen = false;
+    //         showToast('Error', 'Please choose service', false);
+    //         return;
+    //     }
+    //     transactionNoPost = selectedIds[0];
+    //     checkEditOpen = true;
+    //     $.ajax({
+    //         url: '/Billing/GetFolioDetailMaster',
+    //         type: 'get',
+    //         dataType: 'json',
+    //         data: {
+    //             transactionNo: transactionNoPost,
+    //         },
+    //         crossDomain: false,
+    //         headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+    //         success: function (result) {
+    //             $("#roomEditPosting").val(roomNo);
+    //             $("#nameEditPosting").val(lastname);
+    //             $("#codeEditPosting").val(result.transactionCode);
+    //             $("#nameTransactionEditPosting").text(result.description);
+    //             $("#priceEditPosting").val(result.price.toLocaleString('en-US'));
+    //             $("#quantityEditPosting").val(result.quantity);
+    //             $("#amountEditPosing").val(result.amountMasterGross.toLocaleString('en-US'));
+    //             $("#currency").val("VND");
+    //             $("#crashierEditPosting").val(result.crashierNo);
+    //             // $("#winNo").val("30,000.00");
+    //             $("#postingDate").val(result.transactionDate.split('T')[0]);
+    //             $("#additionalDate").val(result.transactionDate.split('T')[0]);
+    //             $("#articleCodeEditPosting").val(result.articleCode);
+    //             $("#supplementEditPosting").val("");
+    //             $("#referenceEditPosting").val(result.reference);
+    //             $("#checkNoEditPosting").val(result.checkNo);
+    //         },
+    //         error: function (xhr, statusText, err) {
+    //             if (xhr.status == 401) {
+    //                 sessionTimeout();
+    //             }
+    //         }
+    //     });
+    // }
     function calculateNetPostEdit(transactionCode, price) {
         $.ajax({
             url: '/Billing/CalculateNet',
@@ -206,7 +278,11 @@
         formData.append('quantity', $('#quantityEditPosting').val());
         formData.append('price',  $('#priceEditPosting').val());
         formData.append('amount',  $('#amountEditPosing').val());
-        $.ajax({
+        formData.append('transactionDate',  $('#additionalDate').val());
+        formData.append('supplement',  selectedRows[0].supplement);
+        formData.append('reference', selectedRows[0].reference);
+        formData.append('rowState', selectedRows[0].rowState);
+        $.ajax({ 
             url: '/Billing/EditPosting',
             type: 'POST',
             processData: false,

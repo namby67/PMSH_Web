@@ -5502,11 +5502,12 @@ namespace Reservation.Controllers
                 {
                     for (int i = 0; i < folios.Count; i++)
                     {
-                        if (folios[i].BalanceVND != 0)
+                        if (folios[i].BalanceVND < 0 || folios[i].BalanceVND > 5)
                         {
-                            return Json(new { code = 1, msg = "Folio not balance with currency VND" });
-
+                            return Json(new { code = 1, msg = "Folio not balanced with currency VND" });
                         }
+
+
                     }
                 }
                 rsv.Status = 2;

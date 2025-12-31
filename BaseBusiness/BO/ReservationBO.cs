@@ -63,6 +63,12 @@ namespace BaseBusiness.BO
             string query = $"select * from Reservation where ShareRoom = {reservationID} and MainGuest = 0";
             return instance.GetList<ReservationModel>(query);
         }
+        public static List<ReservationModel> GetBalanceVND(int reservationID)
+        {
+            string query = $"SELECT * FROM Reservation WITH (NOLOCK) WHERE ID = {reservationID}";
+            
+            return instance.GetList<ReservationModel>(query);
+        }
 
         public static List<object> GetRoomTypeAvailable(DateTime fromDate, DateTime toDate)
         {
