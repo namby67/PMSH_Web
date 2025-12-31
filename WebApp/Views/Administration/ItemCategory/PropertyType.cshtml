@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     //
 }
 
@@ -15,39 +14,66 @@
         opacity: 1;
         background-color: #fff;
     }
-
 </style>
 
 <div class="text-center" style="font-size: 20px">Property Type</div>
 <div class="sticky-header bg-white p-2 shadow-sm z-3">
-    <div id="formContainer" class="p-2 form-locked  " style="border: 1px solid #ccc; border-radius: 6px;">
-        <div class="row g-3">
-            
-            <div class="col-md-2">
-                <label for="code" class="form-label mb-1">Code:</label>
-                <input type="text" id="code" name="code" class="form-control form-control-sm">
-                <div class="invalid-feedback" id="codeError"></div>
-            </div>
-            <div class="col-md-4">
-                <label class="form-label mb-1">Description:</label>
-                <input type="text" id="description" class="form-control form-control-sm">
-            </div>
-            <div class="col-md-2">
-                <label for="seq" class="form-label mb-1">Sequence:</label>
-                <input type="number" id="sequence" name="seq" class="form-control form-control-sm">
-                <div class="invalid-feedback"></div>
-            </div>
-            
-            <input type="hidden" id="id" name="id" value="0" />
-        </div>
-    </div>
 
     <div class="mt-2">
         <button id="btnNew" class="mui-button mui-button-new"><i class="fa-solid fa-plus"></i> New</button>
         <button id="btnUpdate" class="mui-button mui-button-edit"><i class="fa-solid fa-pen"></i> Edit</button>
-        <button id="btnDelete" class="mui-button mui-button-delete"><i class="fa-solid fa-trash-can"></i> Delete</button>
-        <button id="btnSave" class="mui-button mui-button-save d-none"><i class="fa-solid fa-check"></i> Save</button>
-        <button id="btnCancel" class="mui-button mui-button-cancel d-none"><i class="fa-solid fa-xmark"></i> Cancel</button>
+        <button id="btnDelete" class="mui-button mui-button-delete"><i class="fa-solid fa-trash-can"></i>
+            Delete</button>
+    </div>
+
+</div>
+<!-- Modal Popup for New Item -->
+<div class="modal fade" id="itemModal" tabindex="-1" aria-labelledby="itemModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="itemModalLabel">New Item</h5>
+            </div>
+            <div class="modal-footer justify-content-start">
+                <button type="button" id="btnSave" class="mui-button mui-button-save"><i
+                        class="fa-solid fa-floppy-disk"></i> Save</button>
+                <button type="button" data-bs-dismiss="modal" class="mui-button mui-button-close"><i
+                        class="fa-solid fa-xmark"></i> Close</button>
+            </div>
+            <div class="modal-body">
+
+                <form id="formContainer">
+                    <div class="container-fluid">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="code" class="form-label fw-bold mb-1" style="font-size: 12px;">Code:</label>
+                                <input type="text" id="code" name="code" class="form-control form-control-sm"
+                                    placeholder="Enter code...">
+                                <div class="invalid-feedback" id="codeError"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="sequence" class="form-label fw-bold mb-1"
+                                    style="font-size: 12px;">Sequence:</label>
+                                <input type="number" id="sequence" name="seq" class="form-control form-control-sm"
+                                    placeholder="0">
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="description" class="form-label fw-bold mb-1"
+                                    style="font-size: 12px;">Description:</label>
+                                <textarea id="description" class="form-control form-control-sm" rows="4"
+                                    style="height:100px" placeholder="Enter description..."></textarea>
+                            </div>
+                        </div>
+                        <input type="hidden" id="id" name="id" value="0" />
+                    </div>
+                </form>
+
+            </div>
+        </div>
     </div>
 </div>
 
@@ -74,27 +100,16 @@
         });
 
         $('#itemModal').on('hidden.bs.modal', function () {
-             applyValidationErrors([], "#formContainer");
+            applyValidationErrors([], "#formContainer");
         });
         reloadGrid();
-        lockForm();
     });
-
-    function lockForm() {
-        $("#formContainer").addClass("form-locked").removeClass("form-unlocked");
-        $("#code, #description, #sequence").prop("disabled", true);
-    }
-
-    function unlockForm() {
-        $("#formContainer").removeClass("form-locked").addClass("form-unlocked");
-        $("#code, #description, #sequence").prop("disabled", false);
-    }
 
     function loadGrid(data) {
         const dataSource = data || [];
         $("#gridContainerRateCode").dxDataGrid({
             dataSource: dataSource,
-            height: 350,
+            height: 550,
             width: "100%",
             columnAutoWidth: true,
             allowColumnResizing: true,
@@ -135,19 +150,6 @@
         });
     }
 
-    // 4. Button Handlers
-    function switchToEditMode() {
-        $("#btnNew, #btnUpdate, #btnDelete").addClass("d-none");
-        $("#btnSave, #btnCancel").removeClass("d-none");
-        unlockForm();
-    }
-
-    function switchToNormalMode() {
-        $("#btnNew, #btnUpdate, #btnDelete").removeClass("d-none");
-        $("#btnSave, #btnCancel").addClass("d-none");
-        lockForm();
-    }
-
     function clearForm() {
         $("#id").val("0");
         $("#code").val("");
@@ -157,9 +159,10 @@
 
     // --- NEW ---
     $("#btnNew").click(function () {
-        clearForm();
-        switchToEditMode();
-        $("#content-title").text("New Property Type");
+        $("#formContainer")[0].reset();
+        $("#id").val("0");
+        $("#itemModalLabel").text("Add Property Type");
+        $("#itemModal").modal("show");
     });
 
     // --- EDIT ---
@@ -168,8 +171,8 @@
             showToast("Warning", "Please select a row to edit.", false);
             return;
         }
-        switchToEditMode();
-        $("#content-title").text("Edit Property Type");
+        $("#itemModalLabel").text("Edit Property Type");
+        $("#itemModal").modal("show");
 
         // Fill Data
         $("#id").val(selectedRowData.id);
@@ -178,18 +181,10 @@
         $("#sequence").val(selectedRowData.sequence);
     });
 
-    // --- CANCEL ---
-    $("#btnCancel").click(function () {
-        $("#content-title").text("Property Type");
-        $(".form-control").removeClass("is-invalid is-valid");
-        clearForm();
-        switchToNormalMode();
-    });
-
     // --- SAVE ---
     $("#btnSave").click(function () {
-        
-       
+
+
         const id = parseInt($("#id").val()) || 0;
         let loginName = (localStorage.getItem("Loginname") || "").trim()
             .replace(/^"(.*)"$/, '$1');
@@ -214,7 +209,8 @@
                 if (res.success) {
                     showToast("Success", res.message, true);
                     reloadGrid();
-                    $("#btnCancel").trigger("click");
+                    clearForm();
+                    $("#itemModal").modal("hide");
                 } else {
                     if (res.errors && res.errors.length > 0) {
                         applyValidationErrors(res.errors, "#formContainer");
