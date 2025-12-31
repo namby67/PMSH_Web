@@ -29,8 +29,7 @@
                                         <label>Name <span style="color:red">*</span></label>
                                         <div class="row" style="margin-left:1px;margin-right:2px">
                                             <input id="txtName" class="col-md-10" />
-                                            <button onclick="openModalSearchProfile()" class="col-md-2"><i
-                                                    class="fa-solid fa-arrow-down"></i></button>
+                                            <button onclick="openModalSearchProfile()" class="col-md-2"><i class="fa-solid fa-arrow-down"></i></button>
                                         </div>
                                         <div id="errorMessage" style="color: red; margin-top: 5px; display: none;">
                                             <strong>Typing format is not correct. Please typing as below: FirstName
@@ -138,11 +137,8 @@
                                         <div class="row" style="margin-left:1px;margin-right:2px">
                                             <input id="txtAgentID" readonly style="display:none" />
                                             <input id="txtAgent" readonly class="col-md-8" />
-                                            <button onclick="openModalSearchAgent()" class="col-md-2"><i
-                                                    class="fa-solid fa-arrow-down"></i></button>
-                                            <div class="col-md-1"
-                                                style="justify-content:center;text-align:center;color:red;"
-                                                id="clearAgent" onclick="clearAgent()">
+                                            <button onclick="openModalSearchAgent()" class="col-md-2"><i class="fa-solid fa-arrow-down"></i></button>
+                                            <div class="col-md-1" style="justify-content:center;text-align:center;color:red;" id="clearAgent" onclick="clearAgent()">
                                                 <i class="fa-solid fa-xmark" style="padding-top:6px"></i>
                                             </div>
                                         </div>
@@ -175,11 +171,8 @@
                                         <div class="row" style="margin-left:1px;margin-right:2px">
                                             <input id="txtContactID" readonly style="display:none" />
                                             <input id="txtContact" readonly class="col-md-8" />
-                                            <button onclick="openModalSearchContact()" class="col-md-2"><i
-                                                    class="fa-solid fa-arrow-down"></i></button>
-                                            <div class="col-md-1"
-                                                style="justify-content:center;text-align:center;color:red;"
-                                                id="clearContact" onclick="clearContact()">
+                                            <button onclick="openModalSearchContact()" class="col-md-2"><i class="fa-solid fa-arrow-down"></i></button>
+                                            <div class="col-md-1" style="justify-content:center;text-align:center;color:red;" id="clearContact" onclick="clearContact()">
                                                 <i class="fa-solid fa-xmark" style="padding-top:6px"></i>
                                             </div>
                                         </div>
@@ -217,8 +210,7 @@
                                         <div class="row" style="margin-left:1px;margin-right:2px">
                                             <input type="date" id="arrival" class="col-md-12">
 
-                                            <span style="font-size:12px;color:#c53030;display:none"
-                                                id="arrival-day"></span>
+                                            <span style="font-size:12px;color:#c53030;display:none" id="arrival-day"></span>
                                         </div>
 
                                     </div>
@@ -227,8 +219,7 @@
                                         <div class="row" style="margin-left:1px;margin-right:2px">
                                             <input type="date" id="departure" class="col-md-12">
 
-                                            <span style="font-size:12px;color:#c53030;display:none"
-                                                id="departure-day"></span>
+                                            <span style="font-size:12px;color:#c53030;display:none" id="departure-day"></span>
                                         </div>
 
                                     </div>
@@ -309,8 +300,7 @@
                                     <div class="form-group-new-reservation col-md-7">
                                         <label for="txtRateCode">Rate Code</label>
                                         <div class="row" style="margin-left:1px;margin-right:2px">
-                                            <input id="txtRateCode" style="text-align:right" readonly
-                                                class="col-md-7" />
+                                            <input id="txtRateCode" style="text-align:right" readonly class="col-md-7" />
                                             <input id="txtRateCodeID" style="display:none" readonly />
                                             <button onclick="openModalRateCode()" class="col-md-2"><i
                                                     class="fa-solid fa-arrow-down"></i></button>
@@ -457,11 +447,9 @@
                                     <div class="form-group-new-reservation col-md-12">
                                         <label for="txtTotal">Total</label>
                                         <div class="row" style="margin-left:1px;margin-right:2px">
-                                            <input value="0" id="txtTotal" class="col-md-5" readonly
-                                                style="text-align:right">
+                                            <input value="0" id="txtTotal" class="col-md-5" readonly style="text-align:right">
                                             <span style="font-size:12px" class="col-md-2">+ net</span>
-                                            <input value="0" id="txtTotalNet" class="col-md-5" readonly
-                                                style="text-align:right">
+                                            <input value="0" id="txtTotalNet" class="col-md-5" readonly style="text-align:right">
                                         </div>
 
                                     </div>
@@ -477,11 +465,8 @@
                                         <label for="txtPreference">Specials</label>
                                         <div class="row" style="margin-left:1px;margin-right:2px">
                                             <input id="txtPreference" class="col-md-8" />
-                                            <button onclick="openModalSearchPreference()" class="col-md-2"><i
-                                                    class="fa-solid fa-arrow-down"></i></button>
-                                            <div class="col-md-1"
-                                                style="justify-content:center;text-align:center;color:red;"
-                                                id="clearSpecial" onclick="clearSpecial()">
+                                            <button onclick="openModalSearchPreference()" class="col-md-2"><i class="fa-solid fa-arrow-down"></i></button>
+                                            <div class="col-md-1" style="justify-content:center;text-align:center;color:red;" id="clearSpecial" onclick="clearSpecial()">
                                                 <i class="fa-solid fa-xmark" style="padding-top:6px"></i>
                                             </div>
                                         </div>
@@ -495,8 +480,7 @@
                                     <div class="form-group-new-reservation col-md-6">
                                         <label for="txtItemInventory">Item Inventory</label>
                                         <div class="row" style="margin-left:1px;margin-right:2px">
-                                            <select id="txtItemInventory" multiple asp-items="ViewBag.cboItem"
-                                                style="height:24px"></select>
+                                            <select id="txtItemInventory" multiple asp-items="ViewBag.cboItem" style="height:24px"></select>
                                         </div>
                                     </div>
                                     <div class="form-group-new-reservation col-md-6">
@@ -581,16 +565,11 @@
             <div class="modal-body">
                 <div class="toolbar-menu mt-2 row" id="functionAndOption">
 
-                    <a href="#" class="font-semibold col-md-4 mb-1" onclick="openModalCheckOutAll(1);"
-                        id="assignRoom">C/O All</a>
-                    <a href="#" class="font-semibold col-md-4 mb-1" onclick="openModalCheckOutAll(2);"
-                        id="unAssignRoom">C/O Zero</a>
-                    <a href="#" class="font-semibold col-md-4 mb-1" onclick="openModalCheckOut();"
-                        id="unAssignRoom">C/O</a>
-                    <a href="#" class="font-semibold col-md-4 mb-1" onclick="openRoomAssignment();"
-                        id="assignRoom">Assignment</a>
-                    <a href="#" class="font-semibold col-md-4 mb-1" onclick="openConfirmRoomUnAssign();"
-                        id="unAssignRoom">UnAssign</a>
+                    <a href="#" class="font-semibold col-md-4 mb-1" onclick="openModalCheckOutAll(1);" id="assignRoom">C/O All</a>
+                    <a href="#" class="font-semibold col-md-4 mb-1" onclick="openModalCheckOutAll(2);" id="unAssignRoom">C/O Zero</a>
+                    <a href="#" class="font-semibold col-md-4 mb-1" onclick="openModalCheckOut();" id="unAssignRoom">C/O</a>
+                    <a href="#" class="font-semibold col-md-4 mb-1" onclick="openRoomAssignment();" id="assignRoom">Assignment</a>
+                    <a href="#" class="font-semibold col-md-4 mb-1" onclick="openConfirmRoomUnAssign();" id="unAssignRoom">UnAssign</a>
                     <a href="#" class="font-semibold col-md-4 mb-1">Advance</a>
                     <a href="#" class="font-semibold col-md-4 mb-1">Clear</a>
                     <a href="#" onclick="editBooking();" class="font-semibold col-md-4 mb-1">Edit</a>
@@ -1509,7 +1488,7 @@
         let valueDiscountAmount = $('#txtDiscountAmount').val();
         let cleanValueDiscountAmount = valueDiscountAmount.replace(/[^0-9]/g, '');
 
-        formData.append('reservationID', idReservation);
+        formData.append('reservationID',idReservation);
 
         formData.append('profileAgentID', $('#txtAgentID').val());
         formData.append('agentName', $('#txtAgent').val());
@@ -1626,84 +1605,84 @@
     function resetForm() {
         checkEdit = false;
 
-        $('#txtAgent').val('');
-        $('#txtAgentID').val('0');
-        $('#txtCompany').val('');
-        $('#txtCompanyID').val('')
-        $("#txtGroupCode").val('');
-        $('#txtContact').val('');
-        $('#txtContactID').val('0');
-        $("#txtContactPhone").val('');
-        $("#txtID").val('0');
-        $("#txtName").val('');
-        $("#txtFirstName").val('');
-        $("#txtTitleID").val(0)
-        $("#txtPhone").val('');
-        $("#txtEmail").val('');
-        $("#txtMemberType").val('');
-        $("#txtCardNo").val('');
-        $("#txtAddress").val('');
-        $("#txtCity").val('');
-        $("#txtNationality").val('');
-        $("#arrival").val('');
-        $("#departure").val('');
-        $("#txtDob").val('');
-        $("#txtRateAfterDiscount").val('0');
-        $("#txtRateAfterDiscount").val('0');
-        $("#txtTotal").val('0');
-        $("#txtTotalNet").val('0');
-        $("#adults").val('2');
-        $("#c").val('0');
-        $("#c1").val('0');
-        $("#c2").val('0');
-        $("#nights").val('');
-        $("#numRooms").val('1');
-        $("#txtRoomType").val('');
-        $("#txtVIP").val('');
-        $("#txtRTC").val('');
-        $("#roomSelect").val('');
-        $("#txtETA").val('6:00');
-        $("#txtETD").val('12:00');
-        $("#txtResType").val('');
-        $("#txtMarketID").val('');
-        $("#txtMarket").val('');
-        $("#txtSource").val('');
-        $("#txtBookerID").val('');
-        $("#txtBooker").val('');
-        $("#txtComment").val('');
-        $("#pickedID").val('');
-        $("#pickUpTransportType").val('');
-        $("#pickUpStationCode").val('');
-        $("#pickUpCarrierCode").val('');
-        $("#pickUpTime").val('');
-        $("#pickUpDate").val('');
-        $("#pickUpTransportNo").val('');
-        $("#pickUpDescription").val('');
-        $("#dropOffId").val('');
-        $("#txtContactNameCOM").val('');
-        $("#txtEmailCOM").val('');
-        $("#txtWebsiteCOM").val('');
-        $("#dropOffTime").val('');
-        $("#dropOffTransportNo").val('');
-        $("#dropOffDate").val('');
-        $("#dropOffDescription").val('');
-        $("#txtPackage").val('');
-        $("#txtPassport").val('');
-        $("#txtIdentityCard").val('');
-        $("#txtRateCodeID").val('');
-        $("#txtRateCode").val('');
-        $("#txtRateAmount").val('');
-        $("#txtNetAmount").val('');
-        $("#txtColor").val('');
-        let select = $('#txtItemInventory')[0].tomselect; // Lấy instance của TomSelect
-        select.clear(); // Xóa giá trị hiện tại
-        $("#txtPreference").val('');
-        $("#txtAllotmentID").val('');
-        $("#txtAllotment").val('');
-        $("#txtPersonInCharge").val('');
-        $("#nights").val('');
-        $('#txtName').val('');
-        $('#txtID').val(0);
+            $('#txtAgent').val('');
+            $('#txtAgentID').val('0');
+            $('#txtCompany').val('');
+            $('#txtCompanyID').val('')
+            $("#txtGroupCode").val('');
+            $('#txtContact').val('');
+            $('#txtContactID').val('0');
+            $("#txtContactPhone").val('');
+            $("#txtID").val('0');
+            $("#txtName").val('');
+            $("#txtFirstName").val('');
+            $("#txtTitleID").val(0)
+            $("#txtPhone").val('');
+            $("#txtEmail").val('');
+            $("#txtMemberType").val('');
+            $("#txtCardNo").val('');
+            $("#txtAddress").val('');
+            $("#txtCity").val('');
+            $("#txtNationality").val('');
+            $("#arrival").val('');
+            $("#departure").val('');
+            $("#txtDob").val('');
+            $("#txtRateAfterDiscount").val('0');
+            $("#txtRateAfterDiscount").val('0');
+            $("#txtTotal").val('0');
+            $("#txtTotalNet").val('0');
+            $("#adults").val('2');
+            $("#c").val('0');
+            $("#c1").val('0');
+            $("#c2").val('0');
+            $("#nights").val('');
+            $("#numRooms").val('1');
+            $("#txtRoomType").val('');
+            $("#txtVIP").val('');
+            $("#txtRTC").val('');
+            $("#roomSelect").val('');
+            $("#txtETA").val('6:00');
+            $("#txtETD").val('12:00');
+            $("#txtResType").val('');
+            $("#txtMarketID").val('');
+            $("#txtMarket").val('');
+            $("#txtSource").val('');
+            $("#txtBookerID").val('');
+            $("#txtBooker").val('');
+            $("#txtComment").val('');
+            $("#pickedID").val('');
+            $("#pickUpTransportType").val('');
+            $("#pickUpStationCode").val('');
+            $("#pickUpCarrierCode").val('');
+            $("#pickUpTime").val('');
+            $("#pickUpDate").val('');
+            $("#pickUpTransportNo").val('');
+            $("#pickUpDescription").val('');
+            $("#dropOffId").val('');
+            $("#txtContactNameCOM").val('');
+            $("#txtEmailCOM").val('');
+            $("#txtWebsiteCOM").val('');
+            $("#dropOffTime").val('');
+            $("#dropOffTransportNo").val('');
+            $("#dropOffDate").val('');
+            $("#dropOffDescription").val('');
+            $("#txtPackage").val('');
+            $("#txtPassport").val('');
+            $("#txtIdentityCard").val('');
+            $("#txtRateCodeID").val('');
+            $("#txtRateCode").val('');
+            $("#txtRateAmount").val('');
+            $("#txtNetAmount").val('');
+            $("#txtColor").val('');
+            let select = $('#txtItemInventory')[0].tomselect; // Lấy instance của TomSelect
+            select.clear(); // Xóa giá trị hiện tại
+            $("#txtPreference").val('');
+            $("#txtAllotmentID").val('');
+            $("#txtAllotment").val('');
+            $("#txtPersonInCharge").val('');
+            $("#nights").val('');
+            $('#txtName').val('');
+            $('#txtID').val(0);
 
 
         getBusinessDate();

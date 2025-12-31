@@ -13,7 +13,7 @@
             <div class="mui-card">
                 <div class="header" style="justify-content:space-between">
                     <div class="header2">
-                        <i class="fa-solid fa-sliders" style="background-color:#2b6cb0;color:white;padding:4px"></i>
+                        <i class="fa-solid fa-sliders" style="background-color:#1f501f;color:white;padding:4px"></i>
                         <h3 id="content-title">
                             Filter
                         </h3>
@@ -151,7 +151,7 @@
             </div>
             <div class="mui-card mt-2">
                 <div class="header">
-                    <i class="fa-solid fa-sliders" style="background-color:#2b6cb0;color:white;padding:4px"></i>
+                    <i class="fa-solid fa-sliders" style="background-color:#1f501f;color:white;padding:4px"></i>
                     <h3 id="content-title">
                         Functions & Options
                     </h3>
@@ -233,15 +233,15 @@
 
 
                             <div class="toolbar-menu max-w-7xl row" id="functionAndOptionTable" style="display:none;column-gap:4px">
-                                <a href="#" class="font-semibold col-md-2 mb-2" style="background-color:#0055b8;color:white" onclick="openModalBilling();">Billing</a>
-                                <a href="#" class="font-semibold col-md-2 mb-2" style="background-color:#0055b8;color:white" onclick="openModalDeposit();">Packages</a>
-                                <a href="#" class="font-semibold col-md-2 mb-2" style="background-color:#0055b8;color:white" onclick="openModalDeposit();">Dep/DXL</a>
-                                <a href="#" class="font-semibold col-md-2 mb-2" style="background-color:#0055b8;color:white" onclick="editBooking();">Edit</a>
-                                <a href="#" id="groupAdmin" class="font-semibold col-md-2 mb-2" onclick="redirectGroupAdmin();" style="background-color:#0055b8;color:white">Gr.Admin</a>
-                                <a href="#" class="font-semibold col-md-2 mb-2" onclick="openRoomAssignment();" id="assignRoom" style="background-color:#0055b8;color:white">Assign</a>
-                                <a href="#" onclick="openModalSplit();" class="font-semibold col-md-2 mb-2" style="background-color:#0055b8;color:white">Split</a>
-                                <a href="#" onclick="checkIn();" class="font-semibold col-md-2 mb-2" style="background-color:#0055b8;color:white">Check In</a>
-                                <a href="#" class="font-semibold col-md-2 mb-2" onclick="openModalCheckOut();" id="unAssignRoom" style="background-color:#0055b8;color:white">C/O</a>
+                                <a href="#" class="font-semibold col-md-2 mb-2" style="background-color:white;color:#1f501f;border: 1px solid #1f501f;" onclick="openModalBilling();">Billing</a>
+                                <a href="#" class="font-semibold col-md-2 mb-2" style="background-color:white;color:#1f501f;border: 1px solid #1f501f;" onclick="openModalDeposit();">Packages</a>
+                                <a href="#" class="font-semibold col-md-2 mb-2" style="background-color:white;color:#1f501f;border: 1px solid #1f501f;" onclick="openModalDeposit();">Dep/DXL</a>
+                                <a href="#" class="font-semibold col-md-2 mb-2" style="background-color:white;color:#1f501f;border: 1px solid #1f501f;" onclick="editBooking();">Edit</a>
+                                <a href="#" id="groupAdmin" class="font-semibold col-md-2 mb-2" onclick="redirectGroupAdmin();" style="background-color:white;color:#1f501f;border: 1px solid #1f501f;">Gr.Admin</a>
+                                <a href="#" class="font-semibold col-md-2 mb-2" onclick="openRoomAssignment();" id="assignRoom" style="background-color:white;color:#1f501f;border: 1px solid #1f501f;">Assign</a>
+                                <a href="#" onclick="openModalSplit();" class="font-semibold col-md-2 mb-2" style="background-color:white;color:#1f501f;border: 1px solid #1f501f;">Split</a>
+                                <a href="#" onclick="checkIn();" class="font-semibold col-md-2 mb-2" style="background-color:white;color:#1f501f;border: 1px solid #1f501f;">Check In</a>
+                                <a href="#" class="font-semibold col-md-2 mb-2" onclick="openModalCheckOut();" id="unAssignRoom" style="background-color:white;color:#1f501f;border: 1px solid #1f501f;">C/O</a>
 
 
                             </div>
@@ -962,7 +962,7 @@
                 if (response.success) {
                     var nameSearch = $('#name').val() ?? '';
                     var roomNoSearch = $('#roomNo').val() ?? '';
-                    window.location.href = '/Reservation/GroupAdmin?key=' + encodeURIComponent(response.encryptedId) + '&displayType=' + $('#searchType').val() + '&name=' + nameSearch + '&roomNo='+ roomNoSearch;
+                    window.location.href = '/Reservation/GroupAdmin?key=' + encodeURIComponent(response.encryptedId) + '&displayType=' + reservationStatus + '&name=' + nameSearch + '&roomNo='+ roomNoSearch;
                 } else {
                     alert('Lỗi khi mã hóa ID');
                 }

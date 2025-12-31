@@ -140,7 +140,7 @@
                  $("#nameEditPosting").val(lastname);
                  $("#codeEditPosting").val(result.transactionCode);
                  $("#nameTransactionEditPosting").text(result.description);
-                 $("#priceEditPosting").val(result.price.toLocaleString('en-VN'));
+                 $("#priceEditPosting").val(result.price.toLocaleString('vi-VN'));
                  $("#quantityEditPosting").val(result.quantity);
                 const amount = Number(result.price) * Number(result.quantity);
                 $("#amountEditPosing").val(amount.toLocaleString('vi-VN'));
@@ -220,8 +220,8 @@
             crossDomain: false,
             headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
             success: function (result) {
-                $('#priceEditPosting').val(price.toLocaleString('en-US'));
-                $('#amountEditPosing').val((price * $('#quantityPostBilling').val()).toLocaleString('en-US'));
+                $('#priceEditPosting').val(price.toLocaleString('vi-VN'));
+                $('#amountEditPosing').val((price * $('#quantityPostBilling').val()).toLocaleString('vi-VN'));
             },
             error: function (xhr, statusText, err) {
                 if (xhr.status == 401) {
@@ -235,16 +235,17 @@
         $.ajax({
             url: '/Billing/CalculatePrice',
             type: 'get',
-            dataType: 'json',
+            dataType: 'json',   
             data: {
                 transactionCode: transactionCode,
                 price: price
             },
             crossDomain: false,
             headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
-            success: function (result) {
-                $('#priceEditPosting').val(result.toLocaleString('en-US'));
-                $('#amountEditPosing').val((result * $('#quantityPostBilling').val()).toLocaleString('en-US'));
+              success: function (result) {
+                var quantity = parseLocaleNumber($('#quantityPostBilling').val()) || 1;
+                $('#priceEditPosting').val(result.toLocaleString('vi-VN'));
+                $('#amountEditPosing').val((result * quantity).toLocaleString('vi-VN'));
             },
             error: function (xhr, statusText, err) {
                 if (xhr.status == 401) {
@@ -253,35 +254,58 @@
             }
         });
     }
+    function parseLocaleNumber(str) {
+        if (!str) return 0;
+        // Loại bỏ dấu phân cách hàng nghìn '.' và đổi ',' thành '.' (nếu có)
+        return parseFloat(str.replace(/\./g, '').replace(',', '.')) || 0;
+    }
+
     $("#priceEditPosting").blur(function() {
-        var price = parseFloat($('#priceEditPosting').val().replace(/,/g, ''));
-        calculateNetPostEdit($('#codeEditPosting').val(), price);
+        var price = parseLocaleNumber($('#priceEditPosting').val());
+        console.log(price); 
+        // calculatePostEdit($('#codeEditPosting').val(), price);
+         var quantity = parseLocaleNumber($('#quantityPostBilling').val()) || 1;
+        $('#priceEditPosting').val(price.toLocaleString('vi-VN'));
+       $('#amountEditPosing').val((price * quantity).toLocaleString('vi-VN'));
     });
+    
 
+    // Khi blur ở ô amount
     $("#amountEditPosing").blur(function() {
-        var price = parseFloat($('#amountEditPosing').val().replace(/,/g, ''));
-        calculateNetPostEdit($('#codeEditPosting').val(), price / $('#quantityEditPosting').val());
+        var amount = parseFloat($('#amountEditPosing').val());
+        var quantity = parseFloat($('#quantityEditPosting').val()) || 1;
+        var price = amount / quantity;
+
+        calculateNetPostEdit($('#codeEditPosting').val(), price);
+
+        // Hiển thị dạng có dấu ','
+        $('#amountEditPosing').val(amount.toLocaleString('vi-VN'));
     });
 
+    // Khi blur ở ô quantity
     $("#quantityPostBilling").blur(function() {
-        var price = parseFloat($('#amountEditPosing').val().replace(/,/g, ''));
-        $('#amountEditPosing').val((price * $("#quantityEditPosting").val()).toLocaleString('en-US'));
+        var price = parseFloat($('#amountEditPosing').val()) || 0;
+        var quantity = parseFloat($("#quantityEditPosting").val()) || 1;
+
+        var newAmount = price * quantity;
+        // Hiển thị dạng có dấu ','
+        $('#amountEditPosing').val(newAmount.toLocaleString('vi-VN'));
     });
+
 
     function EditPosting() {
-        const userName = JSON.parse(localStorage.getItem("Loginname"));
-        const userID = JSON.parse(localStorage.getItem("userID"));
-        var formData = new FormData();
-        formData.append('userName', userName);
-        formData.append('transactionNo', transactionNoPost);
-        formData.append('userID', userID);
-        formData.append('quantity', $('#quantityEditPosting').val());
-        formData.append('price',  $('#priceEditPosting').val());
-        formData.append('amount',  $('#amountEditPosing').val());
-        formData.append('transactionDate',  $('#additionalDate').val());
-        formData.append('supplement',  selectedRows[0].supplement);
-        formData.append('reference', selectedRows[0].reference);
-        formData.append('rowState', selectedRows[0].rowState);
+            const userName = JSON.parse(localStorage.getItem("Loginname"));
+            const userID = JSON.parse(localStorage.getItem("userID"));
+            var formData = new FormData();
+            formData.append('userName', userName);
+            formData.append('transactionNo', transactionNoPost);
+            formData.append('userID', userID);
+            formData.append('quantity', $('#quantityEditPosting').val());
+            formData.append('price',  $('#priceEditPosting').val());
+            formData.append('amount',  $('#amountEditPosing').val());
+            formData.append('transactionDate',  $('#additionalDate').val());
+            formData.append('supplement',  $('#supplementEditPosting').val());
+            formData.append('reference', $('#referenceEditPosting').val()); 
         $.ajax({ 
             url: '/Billing/EditPosting',
             type: 'POST',
@@ -292,6 +316,7 @@
                 if (data.code == 0) {
                     closeModalEditPosting();
                     searchFolioDetail(0);
+                      GetBalanceVND(idReservation);
                     showToast('Success', data.msg, true);
                 } else {
                     showToast('Error', data.msg, false);

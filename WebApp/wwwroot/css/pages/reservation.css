@@ -362,36 +362,48 @@
         gap: 5px;
     }
 
-    .function-menu .dropdown-menu-custom {
-        position: absolute;
-        min-width: 180px;
-        border: 1px solid #e5e7eb;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        display: none;
-        z-index: 1000;
-        border-radius: 8px;
+.function-menu .dropdown-menu-custom-rsv {
+    position: absolute;
+    min-width: 180px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: none;
+    z-index: 1000;
+    border-radius: 8px;
+}
+.dropdown-menu-custom-rsv {
+    color: #000000;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 220px;
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: none;
+    z-index: 1000;
+    border-radius: 8px;
+}
+.function-menu .dropdown:hover .dropdown-menu-custom-rsv {
+    display: block;
+}
+
+.function-menu .dropdown-menu-custom-rsv a {
+    display: block;
+    padding: 10px 15px;
+    text-decoration: none;
+    font-size: 13px;
+    border-bottom: 1px solid #e5e7eb;
+    color: black;
+}
+
+    .function-menu .dropdown-menu-custom-rsv a:last-child {
+        border-bottom: none;
     }
 
-    .function-menu .dropdown:hover .dropdown-menu-custom {
-        display: block;
+    .function-menu .dropdown-menu-custom-rsv a:hover {
+        background-color: var(--secondary-color);
     }
-
-    .function-menu .dropdown-menu-custom a {
-        display: block;
-        padding: 10px 15px;
-        text-decoration: none;
-        font-size: 13px;
-        border-bottom: 1px solid #e5e7eb;
-        color: black;
-    }
-
-        .function-menu .dropdown-menu-custom a:last-child {
-            border-bottom: none;
-        }
-
-        .function-menu .dropdown-menu-custom a:hover {
-            background-color: var(--secondary-color);
-        }
 
 .function-content {
   display: none;
@@ -473,7 +485,7 @@
             display: none;
         }
 
-    .function-menu .dropdown-menu-custom {
+    .function-menu .dropdown-menu-custom-rsv {
         position: static;
         box-shadow: none;
         border: none;
@@ -587,9 +599,9 @@ button:hover {
 }
 
 input[type="checkbox"] {
-  width: 16px;
-  height: 16px;
-  accent-color: #2b6cb0;
+    width: 16px;
+    height: 16px;
+    accent-color: #1f501f;
 }
 
 .specials-section-new-reservation {
@@ -619,7 +631,9 @@ textarea {
     grid-column: span 2;
     padding: 6px 12px;
     font-size: 16px;
-    background-color: #2b6cb0;
+    background-color: white;
+    color: #1f501f;
+    border: 1px solid #1f501f;
 }
 
 .box-function {
@@ -720,10 +734,11 @@ textarea {
   display: block;
 }
 
-.toolbar-menu a:hover {
-  background: #2b6cb0;
-  color: #ffffff;
-}
+        .toolbar-menu a:hover {
+            background: #ffffff;
+            color: #1f501f;
+            border: 1px solid #1f501f;
+        }
 
 .submenu {
   background: #ffffff;

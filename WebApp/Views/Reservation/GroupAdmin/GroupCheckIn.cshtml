@@ -15,20 +15,20 @@
                 <div class="mt-2 row bg-light border rounded" style="margin:0 1px">
                     <div class="row">
                         <div class="radio-group col-md-5">
-                            <input type="radio"  name="grouupCheckInType" checked value="3">
-                            <label  style="text-align:left">All Rooms</label>
+                            <input type="radio" name="grouupCheckInType" checked value="3">
+                            <label style="text-align:left">All Rooms</label>
                         </div>
                         <div class="radio-group col-md-5 ">
-                            <input type="radio"  name="grouupCheckInType" style="flex:0" value="1">
-                            <label  style="text-align:left">Clean Rooms Only</label>
+                            <input type="radio" name="grouupCheckInType" style="flex:0" value="1">
+                            <label style="text-align:left">Clean Rooms Only</label>
                         </div>
                         <div class="radio-group col-md-5 ">
-                            <input type="radio"  name="grouupCheckInType" style="flex:0" value="2">
-                            <label  style="text-align:left">Clean Non-checked Rooms Only</label>
+                            <input type="radio" name="grouupCheckInType" style="flex:0" value="2">
+                            <label style="text-align:left">Clean Non-checked Rooms Only</label>
                         </div>
                         <div class="radio-group col-md-5 ">
-                            <input type="radio"  name="grouupCheckInType" style="flex:0" value="4">
-                            <label  style="text-align:left">Clean Non-checked or Clean Rooms</label>
+                            <input type="radio" name="grouupCheckInType" style="flex:0" value="4">
+                            <label style="text-align:left">Clean Non-checked or Clean Rooms</label>
                         </div>
                     </div>
 
@@ -67,6 +67,7 @@
             crossDomain: false,
             headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
             success: function (result) {
+                console.log(result);
                     initializeDataGridSearchGroupCheckInRoom(result);
 
             },
@@ -77,18 +78,29 @@
             }
         });
     }
-    function initializeDataGridSearchGroupCheckInRoom(data) {
-        // Tự động tạo cột từ data
+     function initializeDataGridSearchGroupCheckInRoom(data) {
         let columns = [];
 
         if (data.length > 0) {
-            columns = Object.keys(data[0]).map(key => ({
-                dataField: key,
-                caption: key
-            }));
+            columns = Object.keys(data[0]).map(key => {
+                const sampleValue = data[0][key];
+
+                // Detect kiểu ngày (ISO string hoặc Date)
+                const isDate =
+                    sampleValue &&
+                    (sampleValue instanceof Date ||
+                     /^\d{4}-\d{2}-\d{2}T/.test(sampleValue));
+
+                return {
+                    dataField: key,
+                    caption: key,
+                    dataType: isDate ? "date" : undefined,
+                    format: isDate ? "dd/MM/yyyy" : undefined
+                };
+            });
         }
 
-        // Thêm cột checkbox đầu tiên
+        // Cột checkbox
         columns.unshift({
             caption: "",
             width: 50,
@@ -104,8 +116,7 @@
                     .appendTo(container);
             }
         });
-
-        // Khởi tạo grid
+         console.log("Columns config:", columns);
         $("#gridContainerSearchGroupCheckInRoom").dxDataGrid({
             dataSource: data,
             columns: columns,
@@ -129,11 +140,12 @@
                 applyFilter: "auto"
             },
             selection: {
-                mode: "multiple", // Cho phép chọn nhiều dòng
-                showCheckBoxesMode: "none" // Không dùng checkbox mặc định
+                mode: "multiple",
+                showCheckBoxesMode: "none"
             }
         });
     }
+
 
     function GroupCheckIn() {
         const dataGrid = $("#gridContainerSearchGroupCheckInRoom").dxDataGrid("instance");
@@ -148,7 +160,7 @@
         const selectedIds = selectedItems.map(item => item.ID);
 
         $.ajax({
-            url: '/Reservation/GroupCheckIn', 
+            url: '/Reservation/GroupCheckIn',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(selectedIds),

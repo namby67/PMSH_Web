@@ -6,16 +6,16 @@
     <div class="row">
         <div class="col-md-12">
             <div class="header" style="justify-content:center">
-                    <h3 id="content-title">Group Admin</h3>
+                <h3 id="content-title">Group Admin</h3>
             </div>
             <div class="function-menu mui-card">
 
-                <a href="#" >Advance</a>
-                <a href="#" >Cancel</a>
+                <a href="#">Advance</a>
+                <a href="#">Cancel</a>
                 <a href="#" onclick="openModalSplit();">Split</a>
                 <div class="dropdown">
                     <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">Room Assignment</a>
-                    <div class="dropdown-menu-custom">
+                    <div class="dropdown-menu-custom-rsv">
                         <a href="#" onclick="openRoomAssignment();" id="assignRoom">Assignment</a>
                         <a href="#" onclick="openConfirmRoomUnAssign();" id="unAssignRoom">UnAssign</a>
                         <a href="#" onclick="openModalAutoRoomAssignment();">Auto Room Assignment</a>
@@ -24,8 +24,8 @@
                 </div>
                 <div class="dropdown">
                     <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">Check In</a>
-                    <div class="dropdown-menu-custom">
-                        <a href="#" >Check In</a>
+                    <div class="dropdown-menu-custom-rsv">
+                        <a href="#" onclick="checkinGroup">Check In</a>
                         <a href="#" onclick="openModalGroupCheckIn();">Group Check In</a>
 
                     </div>
@@ -33,8 +33,8 @@
                 <a href="#" onclick="roomSharer();">Room Sharer</a>
                 <div class="dropdown">
                     <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">Display</a>
-                    <div class="dropdown-menu-custom">
-                        <a href="#" onclick="filterDisplay(2)" >Reservation</a>
+                    <div class="dropdown-menu-custom-rsv">
+                        <a href="#" onclick="filterDisplay(2)">Reservation</a>
                         <a href="#" onclick="filterDisplay(1)">Guest In House</a>
                         <a href="#" onclick="filterDisplay(6)">Checked Out</a>
                         <a href="#" onclick="filterDisplay(7)">Cancellation</a>
@@ -55,6 +55,7 @@
 
 
     var idReservation = 0;
+        var mg ='';
     var status = '';
     var roomStatus = '';
     var roomNo = '';
@@ -70,13 +71,13 @@
         var result = @Json.Serialize(ViewBag.Reservation);
         idReservation = result[0].ID;
         setDateAssign(result[0].Arrival,result[0].Departure);
- 
+
         initializeDataGridSearch(result);
     });
     function setDateAssign(arrivalDate,departure){
         const date = new Date(arrivalDate);
         const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0'); 
+        const month = String(date.getMonth() + 1).padStart(2, '0');
         const year = date.getFullYear();
         const hours = String(date.getHours()).padStart(2, '0');
         const minutes = String(date.getMinutes()).padStart(2, '0');
@@ -104,21 +105,19 @@
         const radio = document.querySelector(`input[type="radio"][name="${name}"]:checked`);
         return radio ? radio.value : null;
     }
-    function initializeDataGridSearch(data) {
+     function initializeDataGridSearch(data) {
         console.log(data);
         listData = data;
+
         $("#gridContainer").dxDataGrid({
             dataSource: data,
             allowColumnResizing: true,
             columnAutoWidth: true,
             columnMinWidth: 90,
             paging: { pageSize: 15 },
-            scrolling: {
-                rowRenderingMode: 'virtual',
-            },
             pager: {
                 visible: true,
-                allowedPageSizes: [15, 20, 'all'],
+                allowedPageSizes: [15, 20, 50, 'all'],
                 showPageSizeSelector: true,
                 showInfo: true,
                 showNavigationButtons: true,
@@ -127,6 +126,7 @@
                 visible: true,
                 applyFilter: "auto"
             },
+            headerFilter: { visible: true },
             scrolling: {
                 mode: 'virtual',
                 showScrollbar: 'always',
@@ -139,33 +139,31 @@
                 openModalEdit(e.data.id);
             },
             onRowClick: function(e) {
+                // Giữ nguyên phần onRowClick của bạn
                 idReservation = e.data.ID;
+                mg = e.data.MG;
                 var html = ``;
                 if(e.data.ProfileComment != ''){
                     html += `<span style="margin:0;padding:0">-${e.data.ProfileComment}</span>`;
                 }
                 if(e.data.CommentGroup != ''){
                     html += `<span style="margin:0;padding:0">-${e.data.CommentGroup}</span>`;
-
                 }
                 if(e.data.DepositRequest != ''){
                     html += `<span style="margin:0;padding:0">-${e.data.DepositRequest}</span>`;
-
                 }
                 if(e.data.FixedCharge != ''){
                     html += `<span style="margin:0;padding:0">-${e.data.FixedCharge}</span>`;
-
                 }
                 if(e.data.ItemInventory != ''){
                     html += `<span style="margin:0;padding:0">-${e.data.ItemInventory}</span>`;
                 }
                 if(e.data.Specials != ''){
-                        html += `<span style="margin:0;padding:0">-${e.data.Specials}</span>`;
+                    html += `<span style="margin:0;padding:0">-${e.data.Specials}</span>`;
                 }
-
                 listReservationByConfirmationNo = listData.filter(item => item.ConfirmationNo === e.data.ConfirmationNo);
                 rateAmount = e.data.PriceNet;
-                night = e.data.NoOfNight
+                night = e.data.NoOfNight;
                 status = e.data.Status;
                 roomStatus = e.data.RoomStatus;
                 roomType = e.data.RoomType;
@@ -174,6 +172,8 @@
                 departureDate = e.data.Departure;
                 confirmationNo = e.data.ConfirmationNo;
                 lastname = e.data.GuestName;
+
+                // Xử lý disable/enable button assign room
                 if(e.data.NoOfRoom != '1'){
                     ['assignRoom', 'unAssignRoom'].forEach(id => {
                         const el = document.getElementById(id);
@@ -183,9 +183,8 @@
                             el.style.cursor = 'not-allowed';
                         }
                     });
-                }
-                else {
-                    ['assignRoom', 'unAssignRoom', ].forEach(id => {
+                } else {
+                    ['assignRoom', 'unAssignRoom'].forEach(id => {
                         const el = document.getElementById(id);
                         if (el) {
                             el.style.pointerEvents = 'auto';
@@ -194,6 +193,7 @@
                         }
                     });
                 }
+
                 if(e.data.roomID == 0){
                     ['unAssignRoom'].forEach(id => {
                         const el = document.getElementById(id);
@@ -203,9 +203,8 @@
                             el.style.cursor = 'not-allowed';
                         }
                     });
-                }
-                else {
-                    ['unAssignRoom', ].forEach(id => {
+                } else {
+                    ['unAssignRoom'].forEach(id => {
                         const el = document.getElementById(id);
                         if (el) {
                             el.style.pointerEvents = 'auto';
@@ -214,7 +213,68 @@
                         }
                     });
                 }
-            }
+            },
+            columns: [
+                { dataField: "ConfirmationNo", caption: "ConfirmationNo", width: 120 },
+                { dataField: "ReservationNo", caption: "ReservationNo", width: 110 },
+                { dataField: "MG", caption: "MG", width: 60, alignment: "center" },
+                { dataField: "PM", caption: "PM", width: 60, alignment: "center" },
+                { dataField: "Rms", caption: "Rms", width: 70, alignment: "center" },
+                { dataField: "RoomStatus", caption: "RoomStatus", width: 120 },
+                { dataField: "RoomNo", caption: "RoomNo", width: 100 },
+                { dataField: "RoomType", caption: "RoomType", width: 110 },
+                { dataField: "Nationality", caption: "Nationality", width: 100 },
+                { dataField: "GuestName", caption: "GuestName", width: 150 },
+                { dataField: "Arrival", caption: "Arrival", dataType: "date", format: "dd/MM/yyyy", width: 110 },
+                { dataField: "NoOfNight", caption: "NoOfNight", width: 80, alignment: "center" },
+                { dataField: "Departure", caption: "Departure", dataType: "date", format: "dd/MM/yyyy", width: 110 },
+                { dataField: "Adults", caption: "Adults", width: 90, alignment: "center" },
+                { dataField: "Child", caption: "Child", width: 80, alignment: "center" },
+                { dataField: "Child1", caption: "Child1", width: 90, alignment: "center" },
+                { dataField: "Child2", caption: "Child2", width: 90, alignment: "center" },
+                { dataField: "Packages", caption: "Packages", width: 120 },
+                { dataField: "Price", caption: "Price", format: "#,##0.##", width: 110, alignment: "right" },
+                { dataField: "PriceNet", caption: "PriceNet", format: "#,##0.##", width: 110, alignment: "right" },
+                { dataField: "Currency", caption: "Currency", width: 80, alignment: "center" },
+                { dataField: "Status", caption: "Status", width: 120 },
+                { dataField: "ReservationType", caption: "ReservationType", width: 120 },
+                { dataField: "ReservationHolder", caption: "ReservationHolder", width: 140 },
+                { dataField: "GroupCode", caption: "GroupCode", width: 100 },
+                { dataField: "MarketID", caption: "MarketID", width: 100 },
+                { dataField: "SourceID", caption: "SourceID", width: 100 },
+                { dataField: "AllotmentCode", caption: "AllotmentCode", width: 110 },
+                { dataField: "Comment", caption: "Comment", width: 150 },
+                { dataField: "ProfileComment", caption: "ProfileComment", width: 150 },
+                { dataField: "BalanceVND", caption: "BalanceVND", format: "#,##0", alignment: "right", width: 120 },
+                { dataField: "BalanceUSD", caption: "BalanceUSD", format: "#,##0.##", alignment: "right", width: 120 },
+                { dataField: "CreateBy", caption: "CreateBy", width: 100 },
+                { dataField: "CreateDate", caption: "CreateDate", dataType: "datetime", format: "dd/MM/yyyy HH:mm", width: 140 },
+                { dataField: "UpdateBy", caption: "UpdateBy", width: 100 },
+                { dataField: "UpdateDate", caption: "UpdateDate", dataType: "datetime", format: "dd/MM/yyyy HH:mm", width: 140 },
+                { dataField: "DepositRequest", caption: "DepositRequest", width: 140 },
+                { dataField: "DepositPayment", caption: "DepositPayment", width: 140 },
+                { dataField: "FixedCharge", caption: "FixedCharge", width: 130 },
+                { dataField: "ItemInventory", caption: "ItemInventory", width: 130 },
+                { dataField: "Specials", caption: "Specials", width: 140 },
+                { dataField: "CRSNo", caption: "CRSNo", width: 110 },
+                { dataField: "Color", caption: "Color", width: 100 },
+                { dataField: "ProfileIndividualID", caption: "ProfileIndividualID", width: 110 },
+                { dataField: "ShareRoom", caption: "ShareRoom", width: 100 },
+                { dataField: "RoomID", caption: "RoomID", width: 90, visible: false },
+                { dataField: "ReservationStatus", caption: "ReservationStatus", width: 140 },
+                { dataField: "ID", caption: "ID", visible: false },
+                { dataField: "IsPseudo", caption: "IsPseudo", width: 80, alignment: "center" },
+                { dataField: "PickupTransportType", caption: "PickupTransportType", width: 120 },
+                { dataField: "PickupTransportNo", caption: "PickupTransportNo", width: 110 },
+                { dataField: "DropOffTransportType", caption: "DropOffTransportType", width: 120 },
+                { dataField: "DropOffTransportNo", caption: "DropOffTransportNo", width: 110 },
+                { dataField: "ETA", caption: "ETA", width: 110 },
+                { dataField: "ETD", caption: "ETD", width: 110 }
+            ],
+            showBorders: true,
+            showRowLines: true,
+            rowAlternationEnabled: true,
+            hoverStateEnabled: true
         });
     }
 
@@ -247,6 +307,37 @@
             }
         });
     }
+     function checkinGroup(){
+        const userName = JSON.parse(localStorage.getItem("Loginname"));
+        const userID = JSON.parse(localStorage.getItem("userID"));
+        var formData = new FormData();
+        formData.append('rsvID', idReservation);
+        formData.append('userName', userName);
+        formData.append('userID',userID);
+        formData.append('mg',mg);
+        formData.append('arivalDate',arivalDate);
+        $.ajax({
+            url: '/Reservation/CheckinGroup',
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            // headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            data: formData,
+            success: function (data) {
+                if (data.code == 0) {
+                    initializeDataGridSearch(data.reservations);
+                    showToast('Success', data.msg, true);
+                } else {
+                    showToast('Error', data.msg, false);
+                }
+
+            },
+            error: function (xhr, statusText, err) {
+
+            }
+        });
+    }
+
     function filterDisplay(type){
         //general
         if(type == 0){

@@ -2,10 +2,13 @@
 using BaseBusiness.Model;
 using BaseBusiness.util;
 using DevExpress.Data.Filtering.Helpers;
+using DevExpress.Utils.CommonDialogs.Internal;
 using DevExpress.Web.Internal;
 using DevExpress.XtraReports.UI;
 using DevExpress.XtraRichEdit.Import.Doc;
+using DevExpress.XtraRichEdit.Import.Html;
 using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -20,6 +23,7 @@ using Reservation.Dto;
 using Reservation.Services.Interfaces;
 using System;
 using System.Buffers.Text;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -37,6 +41,7 @@ using System.Xml;
 using static DevExpress.CodeParser.CodeStyle.Formatting.Rules;
 using static log4net.Appender.RollingFileAppender;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Text = DocumentFormat.OpenXml.Wordprocessing.Text;
 namespace Reservation.Controllers
 {
     public class ReservationController : Controller
@@ -535,6 +540,7 @@ namespace Reservation.Controllers
                                   IsDefault = d["IsDefault"].ToString(),
 
                               }).ToList();
+
                 return Json(result);
             }
             catch (Exception ex)
@@ -588,6 +594,7 @@ namespace Reservation.Controllers
                                   PreferenceID = d["PreferenceID"].ToString(),
                                   Code = d["Code"].ToString(),
                                   Description = d["Description"].ToString(),
+
 
                               }).ToList();
 
@@ -1660,6 +1667,7 @@ namespace Reservation.Controllers
                     return Json(new { code = 0, msg = $"Update reservation created successfully. ConfirmationNo : {reservationModel.ConfirmationNo}" });
                 }
 
+
             }
             catch (Exception ex)
             {
@@ -2079,6 +2087,7 @@ namespace Reservation.Controllers
                 RoomTypeModel roomType = (RoomTypeModel)RoomTypeBO.Instance.FindByPrimaryKey(roomTypeID);
                 ReservationModel reservationModel = (ReservationModel)ReservationBO.Instance.FindByPrimaryKey(int.Parse(Request.Form["rsvID"].ToString()));
                 #region edit reservation
+
                 reservationModel.ProfileComment = "";
                 reservationModel.LastName = Request.Form["lastName"].ToString();
                 reservationModel.FirstName = Request.Form["firstName"].ToString();
@@ -2122,6 +2131,7 @@ namespace Reservation.Controllers
                 reservationModel.CheckInDate = DateTime.Parse(Request.Form["arrival"].ToString());
                 reservationModel.Etd = !string.IsNullOrEmpty(Request.Form["etd"].ToString()) ? Request.Form["etd"].ToString() : "";
                 reservationModel.CheckOutDate = DateTime.Parse(Request.Form["arrival"].ToString());
+
                 if (string.IsNullOrEmpty(Request.Form["marketID"].ToString()))
                 {
                     reservationModel.MarketId = 0;
@@ -2132,6 +2142,7 @@ namespace Reservation.Controllers
                     reservationModel.MarketId = int.Parse(Request.Form["marketID"].ToString());
 
                 }
+
                 if (string.IsNullOrEmpty(Request.Form["rateCode"].ToString()))
                 {
                     reservationModel.RateCodeId = 0;
@@ -5347,6 +5358,7 @@ namespace Reservation.Controllers
                         overBooking.UpdateBy = userName;
                         overBooking.CreateDate = DateTime.Now;
                         overBooking.UpdateDate = DateTime.Now;
+
                         OverbookingBO.Instance.Insert(overBooking);
                     }
 
@@ -6108,5 +6120,344 @@ namespace Reservation.Controllers
         }
 
         #endregion
+
+        //#region Nam__Group Admin: CheckinGroup
+        //[HttpPost]
+        //public ActionResult CheckinGroup()
+        //{
+        //    ProcessTransactions pt = new ProcessTransactions();
+        //    try
+        //    {
+        //        pt.OpenConnection();
+        //        pt.BeginTransaction();
+        //        int reservationID = int.Parse(Request.Form["rsvID"].ToString());
+        //        string mg = Request.Form["mg"].ToString(); // Lấy giá trị mg từ form
+
+        //        if (reservationID > 0)
+        //        {
+        //            bool _MainGuest = false;
+
+        //            if (mg.Equals("X", StringComparison.OrdinalIgnoreCase))
+        //                _MainGuest = true;
+        //            else
+        //                _MainGuest = false;
+
+        //            #region 1.CI MG trước
+        //                if (_MainGuest == false && ClassReservation.CheckCheckIn(_ShareRoom) == 1)
+        //                {
+        //                    MessageBox.Show("Main guest must be check in before Room sharer.", "Mesage");
+        //                    return;
+        //                }
+        //                #endregion
+
+        //                #region 2.Kiểm tra thông tin Alert nếu có
+        //                ArrayList arrAlert = ClassReservation.GetReservationAlerts(ReservationID);
+        //                if (arrAlert.Count > 0)
+        //                {
+        //                    for (int i = 0; i < arrAlert.Count; i++)
+        //                    {
+        //                        if (((ReservationAlertsModel)arrAlert[i]).Area == "Check-In")
+        //                        {
+        //                            frmReservationAlertDisplay objRAS = new frmReservationAlertDisplay();
+        //                            objRAS.ReservationAlertID = ((ReservationAlertsModel)arrAlert[i]).ID;
+        //                            objRAS.ShowDialog();
+        //                        }
+        //                    }
+        //                }
+        //                #endregion
+
+        //                #region 3.Kiểm tra nếu ngày đến = BusinessDate thì cho CI - Khách đã CI không cho CI nữa
+        //                int a = TextUtils.CompareDate(_BusDate, Convert.ToDateTime(grvGrid.GetRowCellValue(grvGrid.FocusedRowHandle, "Arrival").ToString()));
+        //                if (a != 0)
+        //                {
+        //                    MessageBox.Show("Arrival Date must be equal Business Date", "Message");
+        //                    return;
+        //                }
+        //                //Khách đã CI không ch2o CI nữa
+        //                if (_Status == 1 || _Status == 2 || _Status == 3 || _Status == 4 || _Status == 6 || _Status == 7)
+        //                {
+        //                    MessageBox.Show("This room checked in, checked out or cancelled. Not check in", TextUtils.Caption_Message);
+        //                    return;
+        //                }
+        //                #endregion
+
+        //                #region 4.Trường hợp chưa có số phòng Ass trước CI sau
+        //                if (_MainGuest == true && _RoomID == 0)
+        //                {
+        //                    if (_NoOfRoom == 1)
+        //                    {
+        //                        ReservationModel mOR = (ReservationModel)ReservationBO.Instance.FindByPK(ReservationID);
+        //                        frmRoomAvailableSearch objR = new frmRoomAvailableSearch(true);
+        //                        objR.RoomTypeID = mOR.RoomTypeID;
+        //                        objR.ArrivalDate = mOR.ArrivalDate;
+        //                        objR.DepartureDate = mOR.DepartureDate;
+        //                        objR.RateCodeID = mOR.RateCodeID;
+        //                        objR.ShowDialog();
+        //                        if (objR.RoomID > 0)
+        //                        {
+        //                            //Assign phòng
+        //                            ClassReservation.RoomAssignment(mOR, ReservationID, objR.RoomID, UserID, RoomSharer);
+        //                            //Clear biến nhớ
+        //                            mOR = null;
+        //                            //Gan gia tri
+        //                            _RoomID = objR.RoomID;
+        //                        }
+        //                    }
+        //                    else
+        //                    {
+        //                        MessageBox.Show("Split first reservation. Please!", TextUtils.Caption_Message);
+        //                        return;
+        //                    }
+        //                }
+        //                #endregion
+
+        //                #region 5.Trường hợp đã có số phòng
+        //                //Chỉ check trạng thái phòng đối với MG
+        //                if (_MainGuest == true && _RoomID > 0)
+        //                {
+        //                    //Nếu phòng bẩn không cho CI. Chỉ có phòng sạch mới cho CI
+        //                    if (ClassReservation.GetFOStatus(_RoomID) == 0 && (ClassReservation.GetHKStatusID(_RoomID) == 4 || bool.Parse(grvGrid.GetRowCellValue(CurrenRowIndex, "IsPseudo").ToString()) == true))
+        //                    {
+        //                        //Hỏi trước khi CI
+        //                        if (MessageBox.Show("Are you sure you want to check in this Room?", SQLCommands.Caption_confirm, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+        //                        {
+        //                            ClassReservation.CreateCheckIn(ReservationID, _RoomID, _NoOfRoom, UserID, 0);
+
+        //                            #region Update lại trạng thái CurrResvStatus trong bảng Room
+        //                            if (_RoomID > 0)
+        //                                ClassReservation.UpdateReservationStatus(null, _RoomID);
+        //                            #endregion
+
+        //                            #region Open, close phone - Bỏ đi
+        //                            //if (_MainGuest == true)
+        //                            //{
+        //                            //    TelephoneSwitchBO.insertToTelephoneSwitch(grvGrid.GetRowCellValue(grvGrid.FocusedRowHandle, "RoomNo").ToString(), grvGrid.GetRowCellValue(grvGrid.FocusedRowHandle, "GuestName").ToString(), true, _SysDate);
+        //                            //}
+        //                            #endregion
+
+        //                            LoadInfoSearch();
+        //                            //Focus con trỏ chuột tại dòng đã select khi load lai dữ liệu
+        //                            if (grvGrid.RowCount > 0)
+        //                            {
+        //                                if (CurrenRowIndex >= grvGrid.RowCount)
+        //                                    CurrenRowIndex = 0;
+        //                                grvGrid.FocusedRowHandle = CurrenRowIndex;
+        //                            }
+        //                        }
+        //                    }
+        //                    // Hiển thị thông báo nếu ko CI được
+        //                    else
+        //                    {
+        //                        if (ClassReservation.GetFOStatus(_RoomID) == 1)
+        //                            MessageBox.Show("Room is Occupied. Not Check In", TextUtils.Caption_Message);
+        //                        else if (ClassReservation.GetHKStatusID(_RoomID) == 1)
+        //                            MessageBox.Show("Room is Clean Non-checked. Not Check In", TextUtils.Caption_Message);
+        //                        else if (ClassReservation.GetHKStatusID(_RoomID) == 2)
+        //                            MessageBox.Show("Room is Dirty. Not Check In", TextUtils.Caption_Message);
+        //                        else if (ClassReservation.GetHKStatusID(_RoomID) == 3)
+        //                            MessageBox.Show("Room is Pickup. Not Check In", TextUtils.Caption_Message);
+        //                        else if (ClassReservation.GetHKStatusID(_RoomID) == 5)
+        //                            MessageBox.Show("Room is Out Of Order. Not Check In", TextUtils.Caption_Message);
+        //                        else if (ClassReservation.GetHKStatusID(_RoomID) == 6)
+        //                            //if(Global.HotelID!=2) //FLC OOS vẫn cho checkin
+        //                            MessageBox.Show("Room is Out Of Service. Not Check In", TextUtils.Caption_Message);
+        //                    }
+        //                }
+        //                //Đối với RS không cần check trạng thái phòng
+        //                else if (_MainGuest == false && _RoomID > 0)
+        //                {
+        //                    //Hỏi trước khi CI
+        //                    if (MessageBox.Show("Are you sure you want to check in this Room?", SQLCommands.Caption_confirm, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+        //                    {
+        //                        ClassReservation.CreateCheckIn(ReservationID, _RoomID, _NoOfRoom, UserID, 0);
+        //                        LoadInfoSearch();
+        //                        //Focus con trỏ chuột tại dòng đã select khi load lai dữ liệu
+        //                        if (grvGrid.RowCount > 0)
+        //                        {
+        //                            if (CurrenRowIndex >= grvGrid.RowCount)
+        //                                CurrenRowIndex = 0;
+        //                            grvGrid.FocusedRowHandle = CurrenRowIndex;
+        //                        }
+        //                    }
+        //                }
+        //                #endregion
+
+
+        //        }
+        //        ReservationModel rsv = (ReservationModel)ReservationBO.Instance.FindByPrimaryKey(reservationID);
+
+        //        pt.CommitTransaction();
+        //        return Json(new { code = 0, msg = "Room Sharer was successfully" });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        pt.RollBack();
+        //        return Json(new { code = 1, msg = ex.Message });
+        //    }
+        //    finally
+        //    {
+        //        pt.CloseConnection();
+        //    }
+        //}
+        //#endregion
+
+        //private void _btnCheckIn_Click(object sender, EventArgs e)
+        //{
+        //    //CSS, 13/12/2009                               
+        //    if (ReservationID > 0)
+        //    {
+        //        //Kiểm tra quyền của User
+        //        if (Permissions.CheckExistsValue("resv_ReservationCheckin") == true)
+        //        {
+        //            bool _MainGuest = false;
+        //            if (grvGrid.GetRowCellValue(grvGrid.FocusedRowHandle, "MG").ToString().Equals("X"))
+        //                _MainGuest = true;
+
+        //            #region 1.CI MG trước
+        //            if (_MainGuest == false && ClassReservation.CheckCheckIn(_ShareRoom) == 1)
+        //            {
+        //                MessageBox.Show("Main guest must be check in before Room sharer.", "Mesage");
+        //                return;
+        //            }
+        //            #endregion
+
+        //            #region 2.Kiểm tra thông tin Alert nếu có
+        //            ArrayList arrAlert = ClassReservation.GetReservationAlerts(ReservationID);
+        //            if (arrAlert.Count > 0)
+        //            {
+        //                for (int i = 0; i < arrAlert.Count; i++)
+        //                {
+        //                    if (((ReservationAlertsModel)arrAlert[i]).Area == "Check-In")
+        //                    {
+        //                        frmReservationAlertDisplay objRAS = new frmReservationAlertDisplay();
+        //                        objRAS.ReservationAlertID = ((ReservationAlertsModel)arrAlert[i]).ID;
+        //                        objRAS.ShowDialog();
+        //                    }
+        //                }
+        //            }
+        //            #endregion
+
+        //            #region 3.Kiểm tra nếu ngày đến = BusinessDate thì cho CI - Khách đã CI không cho CI nữa
+        //            int a = TextUtils.CompareDate(_BusDate, Convert.ToDateTime(grvGrid.GetRowCellValue(grvGrid.FocusedRowHandle, "Arrival").ToString()));
+        //            if (a != 0)
+        //            {
+        //                MessageBox.Show("Arrival Date must be equal Business Date", "Message");
+        //                return;
+        //            }
+        //            //Khách đã CI không ch2o CI nữa
+        //            if (_Status == 1 || _Status == 2 || _Status == 3 || _Status == 4 || _Status == 6 || _Status == 7)
+        //            {
+        //                MessageBox.Show("This room checked in, checked out or cancelled. Not check in", TextUtils.Caption_Message);
+        //                return;
+        //            }
+        //            #endregion
+
+        //            #region 4.Trường hợp chưa có số phòng Ass trước CI sau
+        //            if (_MainGuest == true && _RoomID == 0)
+        //            {
+        //                if (_NoOfRoom == 1)
+        //                {
+        //                    ReservationModel mOR = (ReservationModel)ReservationBO.Instance.FindByPK(ReservationID);
+        //                    frmRoomAvailableSearch objR = new frmRoomAvailableSearch(true);
+        //                    objR.RoomTypeID = mOR.RoomTypeID;
+        //                    objR.ArrivalDate = mOR.ArrivalDate;
+        //                    objR.DepartureDate = mOR.DepartureDate;
+        //                    objR.RateCodeID = mOR.RateCodeID;
+        //                    objR.ShowDialog();
+        //                    if (objR.RoomID > 0)
+        //                    {
+        //                        //Assign phòng
+        //                        ClassReservation.RoomAssignment(mOR, ReservationID, objR.RoomID, UserID, RoomSharer);
+        //                        //Clear biến nhớ
+        //                        mOR = null;
+        //                        //Gan gia tri
+        //                        _RoomID = objR.RoomID;
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    MessageBox.Show("Split first reservation. Please!", TextUtils.Caption_Message);
+        //                    return;
+        //                }
+        //            }
+        //            #endregion
+
+        //            #region 5.Trường hợp đã có số phòng
+        //            //Chỉ check trạng thái phòng đối với MG
+        //            if (_MainGuest == true && _RoomID > 0)
+        //            {
+        //                //Nếu phòng bẩn không cho CI. Chỉ có phòng sạch mới cho CI
+        //                if (ClassReservation.GetFOStatus(_RoomID) == 0 && (ClassReservation.GetHKStatusID(_RoomID) == 4 || bool.Parse(grvGrid.GetRowCellValue(CurrenRowIndex, "IsPseudo").ToString()) == true))
+        //                {
+        //                    //Hỏi trước khi CI
+        //                    if (MessageBox.Show("Are you sure you want to check in this Room?", SQLCommands.Caption_confirm, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+        //                    {
+        //                        ClassReservation.CreateCheckIn(ReservationID, _RoomID, _NoOfRoom, UserID, 0);
+
+        //                        #region Update lại trạng thái CurrResvStatus trong bảng Room
+        //                        if (_RoomID > 0)
+        //                            ClassReservation.UpdateReservationStatus(null, _RoomID);
+        //                        #endregion
+
+        //                        #region Open, close phone - Bỏ đi
+        //                        //if (_MainGuest == true)
+        //                        //{
+        //                        //    TelephoneSwitchBO.insertToTelephoneSwitch(grvGrid.GetRowCellValue(grvGrid.FocusedRowHandle, "RoomNo").ToString(), grvGrid.GetRowCellValue(grvGrid.FocusedRowHandle, "GuestName").ToString(), true, _SysDate);
+        //                        //}
+        //                        #endregion
+
+        //                        LoadInfoSearch();
+        //                        //Focus con trỏ chuột tại dòng đã select khi load lai dữ liệu
+        //                        if (grvGrid.RowCount > 0)
+        //                        {
+        //                            if (CurrenRowIndex >= grvGrid.RowCount)
+        //                                CurrenRowIndex = 0;
+        //                            grvGrid.FocusedRowHandle = CurrenRowIndex;
+        //                        }
+        //                    }
+        //                }
+        //                // Hiển thị thông báo nếu ko CI được
+        //                else
+        //                {
+        //                    if (ClassReservation.GetFOStatus(_RoomID) == 1)
+        //                        MessageBox.Show("Room is Occupied. Not Check In", TextUtils.Caption_Message);
+        //                    else if (ClassReservation.GetHKStatusID(_RoomID) == 1)
+        //                        MessageBox.Show("Room is Clean Non-checked. Not Check In", TextUtils.Caption_Message);
+        //                    else if (ClassReservation.GetHKStatusID(_RoomID) == 2)
+        //                        MessageBox.Show("Room is Dirty. Not Check In", TextUtils.Caption_Message);
+        //                    else if (ClassReservation.GetHKStatusID(_RoomID) == 3)
+        //                        MessageBox.Show("Room is Pickup. Not Check In", TextUtils.Caption_Message);
+        //                    else if (ClassReservation.GetHKStatusID(_RoomID) == 5)
+        //                        MessageBox.Show("Room is Out Of Order. Not Check In", TextUtils.Caption_Message);
+        //                    else if (ClassReservation.GetHKStatusID(_RoomID) == 6)
+        //                        //if(Global.HotelID!=2) //FLC OOS vẫn cho checkin
+        //                        MessageBox.Show("Room is Out Of Service. Not Check In", TextUtils.Caption_Message);
+        //                }
+        //            }
+        //            //Đối với RS không cần check trạng thái phòng
+        //            else if (_MainGuest == false && _RoomID > 0)
+        //            {
+        //                //Hỏi trước khi CI
+        //                if (MessageBox.Show("Are you sure you want to check in this Room?", SQLCommands.Caption_confirm, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+        //                {
+        //                    ClassReservation.CreateCheckIn(ReservationID, _RoomID, _NoOfRoom, UserID, 0);
+        //                    LoadInfoSearch();
+        //                    //Focus con trỏ chuột tại dòng đã select khi load lai dữ liệu
+        //                    if (grvGrid.RowCount > 0)
+        //                    {
+        //                        if (CurrenRowIndex >= grvGrid.RowCount)
+        //                            CurrenRowIndex = 0;
+        //                        grvGrid.FocusedRowHandle = CurrenRowIndex;
+        //                    }
+        //                }
+        //            }
+        //            #endregion
+
+        //        }
+        //    }
+        //}
+        //private void _btnGroupCheckIn_Click(object sender, EventArgs e)
+        //{
+        //}
     }
 }
