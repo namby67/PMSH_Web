@@ -6,40 +6,38 @@
 
 <div class="text-center" id="reportTitle" style="font-size: 20px">Rate Category</div>
 <div class="sticky-header bg-white p-2 shadow-sm z-3">
-    <div class="d-flex flex-wrap align-items-center gap-2 mb-1"
-        style="border: 1px solid #ccc; border-radius: 6px; padding: 8px;width: fit-content;">
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-1" <div
+        class="d-flex flex-wrap align-items-center gap-2 mb-1">
+        <div class="d-flex align-items-center me-2">
 
-        <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
-            <div class="d-flex align-items-center me-2">
+            <div class="d-flex align-items-center me-4">
+                <label for="tracetime" class="me-2 mb-0">Code:</label>
+                <input type="text" id="codeInput" class="form-control form-control-sm w-auto" />
+            </div>
+            <div class="d-flex align-items-center me-4">
+                <label for="tracetime" class="me-2 mb-0">Name:</label>
+                <input type="text" id="nameInput" class="form-control form-control-sm w-auto" />
+            </div>
 
-                <div class="d-flex align-items-center me-4">
-                    <label for="tracetime" class="me-2 mb-0">Code:</label>
-                    <input type="text" id="codeInput" class="form-control form-control-sm w-auto" />
-                </div>
-                <div class="d-flex align-items-center me-4">
-                    <label for="tracetime" class="me-2 mb-0">Name:</label>
-                    <input type="text" id="nameInput" class="form-control form-control-sm w-auto" />
-                </div>
-
-                <div class="d-flex align-items-center me-3">
-                    <div class="form-check d-flex align-items-center gap-2">
-                        <span class="status-color-box color-clean-uncheck"></span>
-                        <input class="form-check-input" type="checkbox" id="chkShowInactive" name="chkShowInactive">
-                        <label class="form-check-label mb-0" for="chkShowInactive">Show Inactive</label>
-                    </div>
+            <div class="d-flex align-items-center me-3">
+                <div class="form-check d-flex align-items-center gap-2">
+                    <span class="status-color-box color-clean-uncheck"></span>
+                    <input class="form-check-input" type="checkbox" id="chkShowInactive" name="chkShowInactive">
+                    <label class="form-check-label mb-0" for="chkShowInactive">Show Inactive</label>
                 </div>
             </div>
         </div>
     </div>
-    <div>
-        <button id="btnPrint" class="mui-button mui-button-new"><i class="fa-solid fa-eye"></i> View</button>
-        <button id="btnNew" class="mui-button mui-button-new"><i class="fa-solid fa-plus"></i> New</button>
-        <button id="btnUpdate" class="mui-button mui-button-edit"> <i class="fa-solid fa-pen"></i> Edit</button>
-        <button id="btnDelete" class="mui-button button-report-delete"> <i class="fa-solid fa-trash-can"></i>
-            Delete</button>
-        <button id="btnExportExcel" class="mui-button mui-button-export" type="button"> <i
-                class="fa-solid fa-file-excel"></i> Excel</button>
-    </div>
+</div>
+<div>
+    <button id="btnPrint" class="mui-button mui-button-new"><i class="fa-solid fa-eye"></i> View</button>
+    <button id="btnNew" class="mui-button mui-button-new"><i class="fa-solid fa-plus"></i> New</button>
+    <button id="btnUpdate" class="mui-button mui-button-edit"> <i class="fa-solid fa-pen"></i> Edit</button>
+    <button id="btnDelete" class="mui-button button-report-delete"> <i class="fa-solid fa-trash-can"></i>
+        Delete</button>
+    <button id="btnExportExcel" class="mui-button mui-button-export" type="button"> <i
+            class="fa-solid fa-file-excel"></i> Excel</button>
+</div>
 </div>
 <div class="mui-card">
     <div id="gridContainer" class="gridContainer mt-2"></div>

@@ -10,42 +10,40 @@
 
 <div class="text-center" id="reportTitle" style="font-size: 20px">Rate Code User Right </div>
 <div class="sticky-header bg-white p-2 shadow-sm z-3">
-    <div class="d-flex flex-wrap align-items-center gap-2 mb-1"
-        style="border: 1px solid #ccc; border-radius: 6px; padding: 8px;width: fit-content;">
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-1" <div class="d-flex align-items-center me-2">
+        <label class="me-2 mb-0">Rate Code User Right:</label>
 
-        <div class="d-flex align-items-center me-2">
-            <label class="me-2 mb-0">Rate Code User Right:</label>
+        <select id="user" class="form-control form-control-sm w-auto">
+            <option value="">-- Select User --</option>
+            @foreach (dynamic u in ViewBag.UserList)
+            {
+                <option value="@u.LoginName">@u.LoginName \ @u.JobDescription</option>
+            }
+        </select>
+        <label class="me-2 mb-0 ms-4">User:</label>
 
-            <select id="user" class="form-control form-control-sm w-auto">
-                <option value="">-- Select User --</option>
-                @foreach (dynamic u in ViewBag.UserList)
-                {
-                    <option value="@u.LoginName">@u.LoginName \ @u.JobDescription</option>
-                }
-            </select>
-        </div>
-        <div class="d-flex align-items-center me-2">
-            <label class="me-2 mb-0">User:</label>
-
-            <select id="code" class="form-control form-control-sm w-auto">
-                <option value="">-- Rate Code --</option>
-                @foreach (dynamic u in ViewBag.RateCodeList)
-                {
-                    <option value="@u.RateCode">@u.RateCode \ @u.Descripton</option>
-                }
-            </select>
-        </div>
+        <select id="code" class="form-control form-control-sm w-auto">
+            <option value="">-- Rate Code --</option>
+            @foreach (dynamic u in ViewBag.RateCodeList)
+            {
+                <option value="@u.RateCode">@u.RateCode \ @u.Descripton</option>
+            }
+        </select>
     </div>
+    <div class="d-flex align-items-center me-2">
 
-    <div>
-        <button id="btnView" class="mui-button mui-button-new"><i class="fa-solid fa-eye"></i>View</button>
-        <button id="btnNew" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i>
-            New</button>
-        <button id="btnEdit" class="mui-button mui-button-edit " type="button"> <i class="fa-solid fa-file-excel"></i>
-            Edit</button>
-        <button id="btnDelete" class="mui-button button-report-delete" type="button"> <i
-                class="fa-solid fa-file-excel"></i> Delete</button>
     </div>
+</div>
+
+<div>
+    <button id="btnView" class="mui-button mui-button-new"><i class="fa-solid fa-eye"></i>View</button>
+    <button id="btnNew" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-plus"></i>
+        New</button>
+    <button id="btnEdit" class="mui-button mui-button-edit " type="button"> <i class="fa-solid fa-pen"></i>
+        Edit</button>
+    <button id="btnDelete" class="mui-button button-report-delete" type="button"><i class="fa-solid fa-trash-can"></i>
+        Delete</button>
+</div>
 </div>
 <div class="mui-card">
     <div id="gridWrapper" style="max-height: 500px;">
