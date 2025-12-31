@@ -10,7 +10,7 @@ using Microsoft.Data.SqlClient;
 namespace BaseBusiness.BO
 {
     using Dapper;
-    public class NationalityBO: BaseBO
+    public class NationalityBO : BaseBO
     {
         private NationalityFacade facade = NationalityFacade.Instance;
         protected static NationalityBO instance = new NationalityBO();
@@ -23,11 +23,6 @@ namespace BaseBusiness.BO
         public static NationalityBO Instance
         {
             get { return instance; }
-        }
-        public TitleModel GetById(int id, SqlConnection conn, SqlTransaction tx)
-        {
-            const string sql = "SELECT ID, Code, Name, Description, CreatedBy, CreatedDate,  UpdatedBy, UpdatedDate FROM Nationality WHERE ID = @id";
-            return conn.QuerySingleOrDefault<TitleModel>(sql, new { id }, tx);
         }
     }
 }

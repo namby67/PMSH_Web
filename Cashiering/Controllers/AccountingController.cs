@@ -31,7 +31,7 @@ namespace Cashiering.Controllers
         private readonly IMemoryCache _cache;
         private readonly IAccountingService _iAccountingService;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public AccountingController(ILogger<AccountingController> logger, 
+        public AccountingController(ILogger<AccountingController> logger,
                 IMemoryCache cache, IConfiguration configuration, IAccountingService iAccountingService)
         {
             _cache = cache;
@@ -188,12 +188,12 @@ namespace Cashiering.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> SearchMaintenance(string dateCheck,int arID, string folioNo,string isActive,string paymentOnly,string print,DateTime fromDate, DateTime toDate)
+        public async Task<IActionResult> SearchMaintenance(string dateCheck, int arID, string folioNo, string isActive, string paymentOnly, string print, DateTime fromDate, DateTime toDate)
         {
             try
             {
 
-                var data = _iAccountingService.AccountMaintence(dateCheck ?? "", arID,  folioNo ?? "",  isActive ?? "",  paymentOnly ?? "",  print??"",  fromDate,  toDate);
+                var data = _iAccountingService.AccountMaintence(dateCheck ?? "", arID, folioNo ?? "", isActive ?? "", paymentOnly ?? "", print ?? "", fromDate, toDate);
                 var result = (from d in data.AsEnumerable()
                               select d.Table.Columns.Cast<DataColumn>()
                                   .ToDictionary(
@@ -213,7 +213,7 @@ namespace Cashiering.Controllers
 
         #region DatVP __ Inovice: Common infor
         [HttpGet]
-        public async Task<IActionResult> SearchInfoInvoice(int folioID,int arID)
+        public async Task<IActionResult> SearchInfoInvoice(int folioID, int arID)
         {
             try
             {
@@ -228,7 +228,7 @@ namespace Cashiering.Controllers
                                   )).ToList();
 
                 FolioModel folio = (FolioModel)FolioBO.Instance.FindByPrimaryKey(folioID);
-                if(folio == null || folio.ID == 0)
+                if (folio == null || folio.ID == 0)
                 {
                     return Json(new
                     {
@@ -239,22 +239,22 @@ namespace Cashiering.Controllers
                 sqlCommand = $"SELECT ConfirmationNo, ArrivalDate, DepartureDate, LastName, RoomID, RoomNo FROM dbo.Reservation WITH (NOLOCK) WHERE ID = {folio.ReservationID}";
                 var data2 = _iAccountingService.SearchByCommmand(sqlCommand);
                 var result2 = (from d in data2.AsEnumerable()
-                              select d.Table.Columns.Cast<DataColumn>()
-                                  .ToDictionary(
-                                      col => col.ColumnName,
-                                      col => d[col.ColumnName]?.ToString()
-                                  )).ToList();
+                               select d.Table.Columns.Cast<DataColumn>()
+                                   .ToDictionary(
+                                       col => col.ColumnName,
+                                       col => d[col.ColumnName]?.ToString()
+                                   )).ToList();
 
 
 
                 sqlCommand = $"SELECT AccountName,AccountNo FROM dbo.ARAccountReceivable WITH (NOLOCK) WHERE ID = {arID}";
                 var data3 = _iAccountingService.SearchByCommmand(sqlCommand);
                 var result3 = (from d in data3.AsEnumerable()
-                              select d.Table.Columns.Cast<DataColumn>()
-                                  .ToDictionary(
-                                      col => col.ColumnName,
-                                      col => d[col.ColumnName]?.ToString()
-                                  )).ToList();
+                               select d.Table.Columns.Cast<DataColumn>()
+                                   .ToDictionary(
+                                       col => col.ColumnName,
+                                       col => d[col.ColumnName]?.ToString()
+                                   )).ToList();
                 return Json(new
                 {
                     code = 0,
@@ -284,7 +284,7 @@ namespace Cashiering.Controllers
             try
             {
 
-                var data = _iAccountingService.InvoiceSearch(folioID,0);
+                var data = _iAccountingService.InvoiceSearch(folioID, 0);
                 var result = (from d in data.AsEnumerable()
                               select d.Table.Columns.Cast<DataColumn>()
                                   .ToDictionary(
@@ -292,7 +292,6 @@ namespace Cashiering.Controllers
                                       col => d[col.ColumnName]?.ToString()
                                   )).ToList();
 
-                
                 return Json(new
                 {
                     result1 = result,
@@ -315,12 +314,12 @@ namespace Cashiering.Controllers
 
         #region DatVP __ Invoice: Transfer
         [HttpGet]
-        public async Task<IActionResult> SearchARInfo(string accountName,string accountNo,string folioNo,string isActive,string folioID)
+        public async Task<IActionResult> SearchARInfo(string accountName, string accountNo, string folioNo, string isActive, string folioID)
         {
             try
             {
 
-                var data = _iAccountingService.SearchInfoAR(accountName ?? "",accountNo ?? "",folioNo ?? "",isActive ?? "0",folioID );
+                var data = _iAccountingService.SearchInfoAR(accountName ?? "", accountNo ?? "", folioNo ?? "", isActive ?? "0", folioID);
                 var result = (from d in data.AsEnumerable()
                               select d.Table.Columns.Cast<DataColumn>()
                                   .ToDictionary(
@@ -579,7 +578,7 @@ namespace Cashiering.Controllers
                                 folioSub.ShiftID = shiftID;
                                 folioSub.UserName = Request.Form["userID"].ToString();
                                 folioSub.CashierNo = shiftName;
-                                folioSub.ReservationID = folioSub.OriginReservationID =folio.ReservationID;
+                                folioSub.ReservationID = folioSub.OriginReservationID = folio.ReservationID;
                                 folioSub.FolioID = folioSub.OriginFolioID = folio.ID;
                                 folioSub.InvoiceNo = invoiceNo;
                                 folioSub.TransactionNo = transactionNo;
@@ -703,7 +702,7 @@ namespace Cashiering.Controllers
                     #endregion
 
                     #region update lại balance VND của folio và reservation
-                    int reservationID =folio.ReservationID;
+                    int reservationID = folio.ReservationID;
                     decimal balance = FolioDetailBO.CalculateBalance(reservationID);
                     folio.BalanceVND = balance;
                     FolioBO.Instance.Update(folio);
@@ -803,7 +802,7 @@ namespace Cashiering.Controllers
         }
 
         [HttpPost]
-        public IActionResult AccountTypeSave(string typeacc,string descriptionaccty,int creditLimit,string  currencyacc,string statementmode,string remindercycle,int dayofmonth,string check, int dayolderthan  ,int amountorPercentage,string includePayment,string id,string user)
+        public IActionResult AccountTypeSave(string typeacc, string descriptionaccty, int creditLimit, string currencyacc, string statementmode, string remindercycle, int dayofmonth, string check, int dayolderthan, int amountorPercentage, string includePayment, string id, string user)
         {
             try
             {
@@ -817,7 +816,7 @@ namespace Cashiering.Controllers
                 _Model.DayOfMonth = dayofmonth;
                 _Model.DayOrderThan = dayolderthan;
 
-                if (check== "amount")
+                if (check == "amount")
                 {
                     _Model.Amount = amountorPercentage;
                     _Model.Percentage = 0;
@@ -837,7 +836,6 @@ namespace Cashiering.Controllers
                     _Model.UpdatedDate = businessDateModel[0].BusinessDate;
                     _Model.ID = int.Parse(id);
                     ARAccountTypeBO.Instance.Update(_Model);
-              
                 }
                 else
                 {
@@ -857,7 +855,7 @@ namespace Cashiering.Controllers
         }
 
         [HttpPost]
-        public IActionResult AccountTypeDelete( int id)
+        public IActionResult AccountTypeDelete(int id)
         {
             try
             {
@@ -872,7 +870,6 @@ namespace Cashiering.Controllers
         }
         #endregion
 
-        
         #region ARAgingLevels
 
         public IActionResult ARAgingLevels()
@@ -882,7 +879,7 @@ namespace Cashiering.Controllers
             return View(); // View này sẽ chứa DataGrid + script gọi API
         }
         [HttpPost]
-        public IActionResult ARAgingLevelsSave(string level1, string level2, string level3, string level4, string level5,string user)
+        public IActionResult ARAgingLevelsSave(string level1, string level2, string level3, string level4, string level5, string user)
         {
             try
             {
@@ -992,7 +989,7 @@ namespace Cashiering.Controllers
 
 
         [HttpPost]
-        public IActionResult AROpeningSave(string accountName, string accountNo, string arid, string balance, string city, string contactName, string createdBy, string createdDate, string currencyID, string   id, string type, string updatedBy, string updatedDate, string user)
+        public IActionResult AROpeningSave(string accountName, string accountNo, string arid, string balance, string city, string contactName, string createdBy, string createdDate, string currencyID, string id, string type, string updatedBy, string updatedDate, string user)
         {
             List<BusinessDateModel> businessDateModel = PropertyUtils.ConvertToList<BusinessDateModel>(BusinessDateBO.Instance.FindAll());
             try
@@ -1121,7 +1118,7 @@ namespace Cashiering.Controllers
             }
         }
         [HttpPost]
-        public IActionResult ARTraceUpdate(int  idselectedRowData,DateTime tracetime,string tracetext, string user)
+        public IActionResult ARTraceUpdate(int idselectedRowData, DateTime tracetime, string tracetext, string user)
         {
             try
             {
@@ -1134,7 +1131,6 @@ namespace Cashiering.Controllers
                 model.UpdatedDate = businessDateModel[0].BusinessDate;
                 // Gọi Business Object để lưu
                 ARTraceBO.Instance.Update(model);
-                
 
 
                 return Json(new { success = true, message = "Update success!" });
@@ -1161,9 +1157,9 @@ namespace Cashiering.Controllers
                         TraceText = model.tracetext,
                         ResolvedAt = new DateTime(1900, 1, 1),
                         ResolvedBy = "Unresolved",
-                        CreatedBy = model.user ,
+                        CreatedBy = model.user,
                         CreatedDate = businessDateModel[0].BusinessDate,
-                        UpdatedBy = model.user ,
+                        UpdatedBy = model.user,
                         UpdatedDate = businessDateModel[0].BusinessDate
                     };
 
@@ -1213,7 +1209,7 @@ namespace Cashiering.Controllers
         }
 
         [HttpPost]
-        public IActionResult ARTraceResolve(int id,string user)
+        public IActionResult ARTraceResolve(int id, string user)
         {
             List<BusinessDateModel> businessDateModel = PropertyUtils.ConvertToList<BusinessDateModel>(BusinessDateBO.Instance.FindAll());
             DateTime businessDate = businessDateModel[0].BusinessDate;
@@ -1232,7 +1228,6 @@ namespace Cashiering.Controllers
             user = user?.Replace("\"", "").Trim();
             try
             {
-        
                 ARTraceModel model = (ARTraceModel)ARTraceBO.Instance.FindByPrimaryKey(id);
                 model.ResolvedAt = resolvedAt;
                 model.ResolvedBy = user;

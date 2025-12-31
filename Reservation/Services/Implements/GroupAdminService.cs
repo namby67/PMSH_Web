@@ -44,7 +44,8 @@ namespace Reservation.Services.Implements
             }
         }
 
-        public DataTable SearchGroupCheckInRoom(string ConfirmationNo, string Inspected,string Clean, string AllRooms, string CleanAndInspected) {
+        public DataTable SearchGroupCheckInRoom(string ConfirmationNo, string Inspected, string Clean, string AllRooms, string CleanAndInspected)
+        {
             try
             {
                 SqlParameter[] param = new SqlParameter[]

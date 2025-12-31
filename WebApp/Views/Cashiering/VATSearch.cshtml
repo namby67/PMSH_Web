@@ -22,7 +22,6 @@
                     <label>To Date</label>
                     <input type="date" id="toDate">
                 </div>
-                
                 <div class="form-group-new-reservation col-md-1">
                     <label>UserName</label>
                     <input type="text" id="userName">
@@ -38,7 +37,7 @@
 
                 <div class="form-group-new-reservation col-md-2">
                     <label>Printer</label>
-                    <select id="printer" >
+                    <select id="printer">
                         <option value="0">All</option>
                     </select>
                 </div>
@@ -73,7 +72,7 @@
 </div>
 <div id="gridContainer" class="gridContainer mt-2"></div>
 <script>
-    $(document).ready( function () {
+    $(document).ready(function () {
         const today = new Date().toISOString().split('T')[0];
 
         // Set default values for From Date and To Date
@@ -87,27 +86,27 @@
         return radio ? radio.value : null;
     }
     function searchReservation() {
-                // const selectedHKStatus = getSelectedCheckboxes('searchType');
+        // const selectedHKStatus = getSelectedCheckboxes('searchType');
 
         $.ajax({
             url: '/Cashiering/GuestInHouse',
             type: 'get',
             dataType: 'json',
             data: {
-                room : $('#room').val(),
-                name:$('#name').val(),
+                room: $('#room').val(),
+                name: $('#name').val(),
                 block: $('#block').val(),
-                group:$('#group').val(),
-                company:$('#company').val(),
-                confirmationNo:$('#confirmationNo').val(),
-                arrivalDate:$('#fromDate').val(),
-                arrivalTo:$('#toDate').val(),
-                departure:$('#toDate').val(),
-                crsNo:$('#crsNo').val(),
-                package:$('#package').val(),
-                guestName:$('#guestType').val(),
-                zone:$('#zone').val(),
-                typeSearch:$('input[name="searchType"]:checked').val()
+                group: $('#group').val(),
+                company: $('#company').val(),
+                confirmationNo: $('#confirmationNo').val(),
+                arrivalDate: $('#fromDate').val(),
+                arrivalTo: $('#toDate').val(),
+                departure: $('#toDate').val(),
+                crsNo: $('#crsNo').val(),
+                package: $('#package').val(),
+                guestName: $('#guestType').val(),
+                zone: $('#zone').val(),
+                typeSearch: $('input[name="searchType"]:checked').val()
             },
             crossDomain: false,
             headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },

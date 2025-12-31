@@ -1,4 +1,4 @@
-﻿﻿@using Microsoft.Extensions.Options
+﻿﻿﻿@using Microsoft.Extensions.Options
 @using static BaseBusiness.Global
 @inject IOptions<ContactInfo> ContactConfig
 
@@ -405,7 +405,6 @@
                                     <a class="dropdown-submenu-toggle">House Keeping</a>
                                     <div class="dropdown-submenu-content">
                                         <a asp-area="" asp-controller="HouseKeepingAdmin" asp-action="Attendants">Attendants</a>
-                                        <a asp-area="" asp-controller="HouseKeepingAdmin" asp-action="FacilityCode">Facility Code</a>
                                         <a asp-area="" asp-controller="HouseKeepingAdmin" asp-action="FacilityCategory">Facility Category</a>
                                         <a asp-area="" asp-controller="HouseKeepingAdmin" asp-action="FacilityCode">Facility Code</a>
                                         <a asp-area="" asp-controller="Home" asp-action="">Facility Task</a>
@@ -450,7 +449,7 @@
                                         <a asp-area="" asp-controller="Administration" asp-action="Occupancy">Config occupancy</a>
                                         <a asp-area="" asp-controller="Administration" asp-action="ConfirmationConfig">Config confirmation</a>
                                         <a asp-area="" asp-controller="Administration" asp-action="ConfirmationTemp">Confirmation template</a>
-                                        <a asp-area="" asp-controller="Home" asp-action="#">Config Status Color</a>
+                                        <a asp-area="" asp-controller="Administration" asp-action="ConfigStatusColor">Config Status Color</a>
                                     </div>
                                 </div>
 
@@ -507,9 +506,9 @@
                                         <a asp-area="" asp-controller="Administration" asp-action="Source">Source</a>
                                         <a asp-area="" asp-controller="Administration" asp-action="PackageForecastGroup">Package Forecast Group</a>
                                         <a asp-area="" asp-controller="Administration" asp-action="PreferenceGroup">Preference Group</a>
-                                        <a asp-area="" asp-controller="Home" asp-action="#">Priority</a>
-                                        <a asp-area="" asp-controller="Home" asp-action="#">Promotions</a>
-                                        <a asp-area="" asp-controller="Home" asp-action="#">Vouchers</a>
+                                        <a asp-area="" asp-controller="Home" asp-action="">Priority</a>
+                                        <a asp-area="" asp-controller="Home" asp-action="">Promotions</a>
+                                        <a asp-area="" asp-controller="Home" asp-action="">Vouchers</a>
                                     </div>
                                 </div>
 

@@ -35,6 +35,7 @@ namespace BaseBusiness.Model
         public bool Lunch { get; set; }
         public bool Dinner { get; set; }
         public bool VAP { get; set; }
+        public string TextInNightAudit { get; set; }
 
     }
 }

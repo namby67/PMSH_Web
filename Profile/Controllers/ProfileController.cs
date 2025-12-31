@@ -31,7 +31,7 @@ namespace Profile.Controllers
         private readonly IFutureService _iFutureService;
 
         public ProfileController(ILogger<ProfileController> logger,
-             IMemoryCache cache, IConfiguration configuration, IProfileExportService iProfileService,IMembershipService iMembershipService, IFutureService iFutureService)
+             IMemoryCache cache, IConfiguration configuration, IProfileExportService iProfileService, IMembershipService iMembershipService, IFutureService iFutureService)
         {
             _cache = cache;
             _logger = logger;
@@ -40,7 +40,6 @@ namespace Profile.Controllers
             _iMembershipService = iMembershipService;
             _iFutureService = iFutureService;
         }
-        
         public IActionResult Index()
         {
             return View();
@@ -149,7 +148,7 @@ namespace Profile.Controllers
             List<StateModel> list = new List<StateModel>();
             try
             {
-               // list = PropertyUtils.ConvertToList<StateModel>(StateBO.Instance.FindAll()).Where(x => x.Inactive == true).ToList();
+                // list = PropertyUtils.ConvertToList<StateModel>(StateBO.Instance.FindAll()).Where(x => x.Inactive == true).ToList();
                 list = PropertyUtils.ConvertToList<StateModel>(StateBO.Instance.FindAll()).ToList();
             }
             catch (Exception ex)
@@ -467,7 +466,6 @@ namespace Profile.Controllers
                 return Json(ex.Message);
             }
         }
-        
         [HttpGet]
         public ActionResult GetProfileByID(int id)
         {
@@ -575,13 +573,13 @@ namespace Profile.Controllers
 
                     if (Request.Form["CodeIndividual"].ToString() != "")
                     {
-                        if (Request.Form["CodeIndividual"].ToString().Trim().Length > 13 )
+                        if (Request.Form["CodeIndividual"].ToString().Trim().Length > 13)
                         {
                             Message += "Length Code format!\n";
                             return Json(new { code = 1, msg = Message });
                         }
                     }
-                    profile.Type = int.Parse(Request.Form["Type"]); 
+                    profile.Type = int.Parse(Request.Form["Type"]);
                     profile.Code = Request.Form["CodeIndividual"].ToString();
                     profile.Account = Request.Form["AccountIndividual"].ToString();
                     profile.FullAccount = Request.Form["FullAccount"].ToString(); ;
@@ -670,7 +668,6 @@ namespace Profile.Controllers
                     profile.PurposeOfStay = Request.Form["PurposeIndividual"].ToString();
                     profile.MarketID = 0;
                     profile.IsTransfer = false;
-                  
                 }
                 else if (int.Parse(Request.Form["Type"]) == 1 || int.Parse(Request.Form["Type"]) == 2 || int.Parse(Request.Form["Type"]) == 3)
                 {
@@ -784,10 +781,10 @@ namespace Profile.Controllers
                         Message += "Code not blank\n";
                         return Json(new { code = 1, msg = Message });
                     }
-              
+
                     if (Request.Form["CodeGroup"].ToString() != "")
                     {
-                        if (Request.Form["CodeGroup"].ToString().Length >  13)
+                        if (Request.Form["CodeGroup"].ToString().Length > 13)
                         {
                             Message += "Length Code format!\n";
                             return Json(new { code = 1, msg = Message });
@@ -939,17 +936,16 @@ namespace Profile.Controllers
                 int profileType = int.Parse(Request.Form["Type"].ToString());
                 ProfileModel profile = new ProfileModel();
                 profile.Type = profileType;
-       
+
                 string Message = "";
                 if (profileType == 0)
                 {
-              
+
                     if (Request.Form["LastNameIndivdual"].ToString() == "")
                     {
                         Message += "Last name not blank\n";
                         return Json(new { code = 1, msg = Message });
                     }
-                  
                     if (Request.Form["FirstNameIndividual"].ToString() == "")
                     {
                         Message += "First name not blank\n";
@@ -1107,7 +1103,7 @@ namespace Profile.Controllers
 
 
 
-                    if (Request.Form["CodeCOM"].ToString()!= "")
+                    if (Request.Form["CodeCOM"].ToString() != "")
                     {
                         if (Request.Form["CodeCOM"].ToString().Length > 13)
                         {
@@ -1234,13 +1230,13 @@ namespace Profile.Controllers
                 }
                 else if (profileType == 4)
                 {
-                   
-                        if (Request.Form["GroupNameGroup"].ToString() == "")
-                        {
-                            Message += "Group Name not blank\n";
-                            return Json(new { code = 1, msg = Message });
-                        }
-                   
+
+                    if (Request.Form["GroupNameGroup"].ToString() == "")
+                    {
+                        Message += "Group Name not blank\n";
+                        return Json(new { code = 1, msg = Message });
+                    }
+
 
                     string CodeGroup = Request.Form["CodeGroup"].ToString();
 
@@ -1477,7 +1473,7 @@ namespace Profile.Controllers
                 profile.UserInsertID = profile.UserUpdateID = int.Parse(Request.Form["userID"].ToString());
                 profile.CreateDate = profile.UpdateDate = DateTime.Now;
                 long id = ProfileBO.Instance.Insert(profile);
-                return Json(new { code = 0, msg = "New profile created successfully",id = id });
+                return Json(new { code = 0, msg = "New profile created successfully", id = id });
 
             }
             catch (Exception ex)
@@ -1554,7 +1550,7 @@ namespace Profile.Controllers
         {
             try
             {
-                var data = _iProfileService.SearchProfileHistory(profileID,0,"");
+                var data = _iProfileService.SearchProfileHistory(profileID, 0, "");
 
                 var result = (from d in data.AsEnumerable()
                               select d.Table.Columns.Cast<DataColumn>()
@@ -1573,7 +1569,7 @@ namespace Profile.Controllers
 
         #region DatVP __ Profile Membership
         [HttpGet]
-        public async Task<IActionResult> SearchProfileMembership(int profileID,string inactive)
+        public async Task<IActionResult> SearchProfileMembership(int profileID, string inactive)
         {
             try
             {
@@ -1620,7 +1616,7 @@ namespace Profile.Controllers
             }
         }
         [HttpGet]
-        public async Task<IActionResult> DeleteNewMembership(string  id)
+        public async Task<IActionResult> DeleteNewMembership(string id)
         {
             try
             {
@@ -1640,11 +1636,11 @@ namespace Profile.Controllers
             try
             {
                 int profileID = int.Parse(Request.Form["profileID"].ToString());
-                if(profileID == 0 || string.IsNullOrEmpty(Request.Form["profileID"].ToString()))
+                if (profileID == 0 || string.IsNullOrEmpty(Request.Form["profileID"].ToString()))
                 {
                     return Json(new { code = 1, msg = "Profile ID is required" });
                 }
-                if(string.IsNullOrEmpty(Request.Form["memberTypeID"].ToString()) || int.Parse(Request.Form["memberTypeID"].ToString()) == 0)
+                if (string.IsNullOrEmpty(Request.Form["memberTypeID"].ToString()) || int.Parse(Request.Form["memberTypeID"].ToString()) == 0)
                 {
                     return Json(new { code = 1, msg = "Member Type ID is required" });
                 }
@@ -1919,9 +1915,9 @@ namespace Profile.Controllers
                             Result[3] = Result[1].Trim() + "," + " " + Result[0].Trim();
                     else
                         if (Result[2].Trim() != "")
-                        Result[3] = Result[1].Trim() + " " + Result[2].Trim() + ", " + Result[0].Trim() + ", " + ((TitleModel)TitleBO.Instance.FindByPrimaryKey(int.Parse(Result[4].ToString()))).Code;
-                    else
-                        Result[3] = Result[1].Trim() + ", " + Result[0].Trim() + ", " + ((TitleModel)TitleBO.Instance.FindByPrimaryKey(int.Parse(Result[4].ToString()))).Code;
+                            Result[3] = Result[1].Trim() + " " + Result[2].Trim() + ", " + Result[0].Trim() + ", " + ((TitleModel)TitleBO.Instance.FindByPrimaryKey(int.Parse(Result[4].ToString()))).Code;
+                        else
+                            Result[3] = Result[1].Trim() + ", " + Result[0].Trim() + ", " + ((TitleModel)TitleBO.Instance.FindByPrimaryKey(int.Parse(Result[4].ToString()))).Code;
                 }
             }
             return Result;

@@ -31,23 +31,26 @@
         margin: 0px 8px;
     }
 
-        .button_wrapper .fa-solid {
-            margin-right: 5px;
-        }
+    .button_wrapper .fa-solid {
+        margin-right: 5px;
+    }
 
     .selected {
-        background-color: #4CAF50; /* Màu xanh */
+        background-color: #4CAF50;
+        /* Màu xanh */
         color: white;
     }
 
     #gridContainer .dx-datagrid-rowsview .dx-selection {
-        background-color: #01579b !important; /* màu xanh ngọc */
-        color: white !important; /* chữ trắng */
+        background-color: #01579b !important;
+        /* màu xanh ngọc */
+        color: white !important;
+        /* chữ trắng */
     }
 
-        #gridContainer .dx-datagrid-rowsview .dx-selection * {
-            color: white !important;
-        }
+    #gridContainer .dx-datagrid-rowsview .dx-selection * {
+        color: white !important;
+    }
 
     .sticky-header label,
     .sticky-header .form-control-sm {
@@ -65,15 +68,15 @@
         margin-right: .5rem !important;
     }
 
-    #gridContainer .dx-datagrid-headers .dx-header-row > td {
+    #gridContainer .dx-datagrid-headers .dx-header-row>td {
         padding: 5px !important;
         height: 24px !important;
         font-size: 12px !important;
         line-height: 1.1 !important;
     }
 
-    #gridContainer .dx-datagrid-rowsview .dx-row > td,
-    #gridContainer .dx-datagrid .dx-summary-row > td,
+    #gridContainer .dx-datagrid-rowsview .dx-row>td,
+    #gridContainer .dx-datagrid .dx-summary-row>td,
     #gridContainer .dx-datagrid .dx-total-footer td,
     #gridContainer .dx-datagrid .dx-footer-row td {
         font-size: 11px !important;
@@ -81,36 +84,39 @@
 
     .report-bar {
         position: relative;
-        margin-bottom: 1rem; /* = mb-3 của bạn */
+        margin-bottom: 1rem;
+        /* = mb-3 của bạn */
     }
 
-        /* Tiêu đề ở giữa, full width để text-center hoạt động */
-        .report-bar #reportTitle {
-            font-size: 20px;
-            margin: 0; /* bỏ margin dưới h4/h5 mặc định */
-            text-align: center;
-        }
+    /* Tiêu đề ở giữa, full width để text-center hoạt động */
+    .report-bar #reportTitle {
+        font-size: 20px;
+        margin: 0;
+        /* bỏ margin dưới h4/h5 mặc định */
+        text-align: center;
+    }
 
-        /* Nhóm nút cố định góc phải, canh theo chiều dọc */
-        .report-bar .action-buttons {
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-        }
+    /* Nhóm nút cố định góc phải, canh theo chiều dọc */
+    .report-bar .action-buttons {
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+    }
 
     .tomselect-custom {
         width: 300px;
-        min-height: 30px; /* hoặc tùy theo chiều cao bạn muốn */
+        min-height: 30px;
+        /* hoặc tùy theo chiều cao bạn muốn */
         font-size: 0.65rem;
     }
-
 </style>
 <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
 <div class="text-center" id="reportTitle" style="font-size: 20px"></div>
 <div class="sticky-header bg-white p-2 shadow-sm z-3">
-    <div class="d-flex flex-wrap align-items-center gap-2 mb-1" style="border: 1px solid #ced4da; border-radius: 6px; padding: 8px;">
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-1"
+        style="border: 1px solid #ced4da; border-radius: 6px; padding: 8px;">
         <!-- From Date -->
         <div class="d-flex flex-column ">
 
@@ -130,11 +136,13 @@
                     <div class="d-flex align-items-center flex-wrap gap-2">
                         <label class="mb-1">Check Date:</label>
                         <div class="form-check me-3">
-                            <input class="form-check-input" type="checkbox" id="arrvialDates" name="checkdate" value="0">
+                            <input class="form-check-input" type="checkbox" id="arrvialDates" name="checkdate"
+                                value="0">
                             <label class="form-check-label" for="arrvialDates">Arrival Dates</label>
                         </div>
                         <div class="form-check me-3">
-                            <input class="form-check-input" type="checkbox" id="stayDates" name="checkdate" value="1" checked>
+                            <input class="form-check-input" type="checkbox" id="stayDates" name="checkdate" value="1"
+                                checked>
                             <label class="form-check-label" for="stayDates">Stay Dates</label>
                         </div>
                     </div>
@@ -145,24 +153,24 @@
 
             <div class="d-flex align-items-center">
                 <label class="fw-bold me-2">Search Criteria:</label>
-                    <div class="d-flex align-items-center me-3">
-                        <label class="me-2 mb-0">Reservation:</label>
-                        <select id="reservation" name="reservation" class="form-control form-control-sm w-auto">
-                            <option value="0">All Reservation</option>
-                            <option value="1">Reservation with Company</option>
-                            <option value="2">Reservation with Travel Agent</option>
-                            <option value="3">Reservation with Source Profile</option>
-                            <option value="4">Reservation with Group Profile</option>
-                            <option value="5">Reservation with Block Code</option>
-                        </select>
-                    </div>
+                <div class="d-flex align-items-center me-3">
+                    <label class="me-2 mb-0">Reservation:</label>
+                    <select id="reservation" name="reservation" class="form-control form-control-sm w-auto">
+                        <option value="0">All Reservation</option>
+                        <option value="1">Reservation with Company</option>
+                        <option value="2">Reservation with Travel Agent</option>
+                        <option value="3">Reservation with Source Profile</option>
+                        <option value="4">Reservation with Group Profile</option>
+                        <option value="5">Reservation with Block Code</option>
+                    </select>
+                </div>
             </div>
         </div>
 
         <div class="d-flex flex-column">
             <!-- ✅ HÀNG 1: Room Class đến Rate Code -->
             <div class="d-flex align-items-center flex-wrap mb-2">
-                    <label class="me-2 mb-0 fw-bold">Filter: </label>
+                <label class="me-2 mb-0 fw-bold">Filter: </label>
 
                 <div class="d-flex align-items-center me-3">
                     <label class="me-2 mb-0">Room Class:</label>
@@ -205,10 +213,10 @@
                 </div>
             </div>
 
-       
+
             <div class="d-flex align-items-center flex-wrap">
                 <div class="d-flex align-items-center me-3">
-                        <label class="me-2 mb-0 fw-bold">Source:</label>
+                    <label class="me-2 mb-0 fw-bold">Source:</label>
                     <select id="source" name="source" class="tomselect-custom" style="width: 170px;" multiple>
                         @foreach (var item in listsrc)
                         {
@@ -218,11 +226,13 @@
                 </div>
 
                 <div class="d-flex align-items-center me-3" id="vipContainer">
-                        <div class="form-check me-2 mb-0">
-                            <input class="form-check-input include-option" type="checkbox" id="viponlycheck" name="viponlycheck">
+                    <div class="form-check me-2 mb-0">
+                        <input class="form-check-input include-option" type="checkbox" id="viponlycheck"
+                            name="viponlycheck">
                         <label class="form-check-label" for="viponlycheck">Vip Only</label>
                     </div>
-                    <select id="vip" name="vip" class="form-control form-control-sm" style="width: 150px; display: none;">
+                    <select id="vip" name="vip" class="form-control form-control-sm"
+                        style="width: 150px; display: none;">
                         @foreach (var item in vipList)
                         {
                             <option value="@item.Code">@item.Description</option>
@@ -231,7 +241,7 @@
                 </div>
 
                 <div class="form-check">
-                        <input class="form-check-input include-option" type="checkbox" id="noPost" name="noPost">
+                    <input class="form-check-input include-option" type="checkbox" id="noPost" name="noPost">
                     <label class="form-check-label" for="noPost">No Post</label>
                 </div>
             </div>
@@ -245,7 +255,7 @@
                 <!-- Row 1 -->
                 <div class="form-check me-3">
                     <input class="form-check-input " type="checkbox" id="pseudo" name="includeOptions" value="1">
-                        <label class="form-check-label" for="pseudo">Pseudo Rooms</label>
+                    <label class="form-check-label" for="pseudo">Pseudo Rooms</label>
                 </div>
                 <div class="form-check me-3">
                     <input class="form-check-input" type="checkbox" id="checkedInToday" name="includeOptions" value="1">
@@ -260,7 +270,8 @@
                     <label class="form-check-label" for="zeroRateOnly">Zero Rates Only</label>
                 </div>
                 <div class="form-check me-3">
-                    <input class="form-check-input" type="checkbox" id="disRoomSharer" name="includeOptions" value="1" checked>
+                    <input class="form-check-input" type="checkbox" id="disRoomSharer" name="includeOptions" value="1"
+                        checked>
                     <label class="form-check-label" for="disRoomSharer">Display Room Sharer </label>
                 </div>
 
@@ -274,19 +285,19 @@
                 <label class="mb-1 fw-bold">Display :</label>
                 <!-- Row 1 -->
                 <div class="form-check me-3">
-                    <input class="form-check-input" type="checkbox" id="printRate" name="displayOptions" >
+                    <input class="form-check-input" type="checkbox" id="printRate" name="displayOptions">
                     <label class="form-check-label" for="printRate">Print Rate</label>
                 </div>
                 <div class="form-check me-3">
-                    <input class="form-check-input" type="checkbox" id="fixCharges" name="displayOptions" >
+                    <input class="form-check-input" type="checkbox" id="fixCharges" name="displayOptions">
                     <label class="form-check-label" for="fixCharges">Fix Charges</label>
                 </div>
                 <div class="form-check me-3">
-                    <input class="form-check-input" type="checkbox" id="packages" name="displayOptions" >
+                    <input class="form-check-input" type="checkbox" id="packages" name="displayOptions">
                     <label class="form-check-label" for="packages">Packages</label>
                 </div>
                 <div class="form-check me-3">
-                    <input class="form-check-input" type="checkbox" id="paymentMethod" name="displayOptions" >
+                    <input class="form-check-input" type="checkbox" id="paymentMethod" name="displayOptions">
                     <label class="form-check-label" for="paymentMethod">Payment Methods</label>
                 </div>
                 <div class="form-check me-3">
@@ -303,7 +314,7 @@
                 </div>
                 <div class="form-check me-3">
                     <input class="form-check-input" type="checkbox" id="itemsInventorys" name="displayOptions">
-                    <label class="form-check-label" for="itemsInventorys">Items  Inventorys</label>
+                    <label class="form-check-label" for="itemsInventorys">Items Inventorys</label>
                 </div>
                 <div class="form-check me-3">
                     <input class="form-check-input" type="checkbox" id="specials" name="displayOptions">
@@ -311,44 +322,47 @@
                 </div>
                 <div class="form-check me-3">
                     <input class="form-check-input" type="checkbox" id="commnets" name="displayOptions">
-                        <label class="form-check-label" for="commnets">Comments</label>
+                    <label class="form-check-label" for="commnets">Comments</label>
                 </div>
                 <div class="form-check me-3">
                     <input class="form-check-input" type="checkbox" id="profileNote" name="displayOptions">
                     <label class="form-check-label" for="profileNote">Profile Note</label>
                 </div>
             </div>
-      
 
 
-        <div class="d-flex align-items-center me-3">
-            <label class="me-2 mb-0 fw-bold">Sort Order :</label>
-            <select id="viewBy" name="viewBy" class="form-control form-control-sm w-auto">
 
-                <option value="0">Alphabetical</option>
-                <option value="1">Market</option>
-                <option value="2">Reservation Type</option>
-                <option value="3">Room No</option>
-                <option value="4">Source</option>
-                <option value="5">VIP</option>
-            </select>
-        </div>
+            <div class="d-flex align-items-center me-3">
+                <label class="me-2 mb-0 fw-bold">Sort Order :</label>
+                <select id="viewBy" name="viewBy" class="form-control form-control-sm w-auto">
+
+                    <option value="0">Alphabetical</option>
+                    <option value="1">Market</option>
+                    <option value="2">Reservation Type</option>
+                    <option value="3">Room No</option>
+                    <option value="4">Source</option>
+                    <option value="5">VIP</option>
+                </select>
+            </div>
         </div>
     </div>
 
     <div class="">
-        <button   id="btnPrint" class="mui-button mui-button-new"><i class="fa-solid fa-eye"></i>View</button>
-        <button   id="btnExportExcel" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Excel</button>
-        <button  id="btnExportPdf" class="mui-button mui-button-new" type="button"><i class="fas fa-eraser"></i> PDF</button>
+        <button id="btnPrint" class="mui-button mui-button-new"><i class="fa-solid fa-eye"></i>View</button>
+        <button id="btnExportExcel" class="mui-button mui-button-new" type="button"> <i
+                class="fa-solid fa-file-excel"></i> Excel</button>
+        <button id="btnExportPdf" class="mui-button mui-button-new" type="button"><i class="fas fa-eraser"></i>
+            PDF</button>
     </div>
 </div>
 <div class="mui-card">
     @*     <div style="font-size: 20px;" class="mt-1" id="reportTitle"></div> *@
     <div id="gridWrapper" class="mt-2" style="max-height: 500px;">
-        <div  class="gridContainer mt-2" id="gridContainer"></div>
+        <div class="gridContainer mt-2" id="gridContainer"></div>
     </div>
 </div>
-<div id="loadingSpinner" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
+<div id="loadingSpinner"
+    style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
     <i class="fa-solid fa-spinner fa-spin"></i>
 </div>
 <script>
@@ -383,16 +397,16 @@
             updateDateText();
         });
 
-         $('#viponlycheck').on('change', function () {
+        $('#viponlycheck').on('change', function () {
             if ($(this).is(':checked')) {
                 $('#vip').show();
             } else {
                 $('#vip').hide();
-                $('#vip').val(''); 
+                $('#vip').val('');
             }
         });
 
-         document.getElementById("reportTitle").innerText = '@ViewBag.ReportTitle';
+        document.getElementById("reportTitle").innerText = '@ViewBag.ReportTitle';
         const today = new Date();
 
         const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
@@ -408,12 +422,12 @@
         // Gán giá trị cho input date
         document.getElementById('fromDate').value = formattedFirstDay;
         document.getElementById('toDate').value = formattedLastDay;
-         initializeTomSelects();
+        initializeTomSelects();
 
 
     });
     function initializeTomSelects() {
-        const selectors = ["#roomClass", "#roomtype","#market","#rateCode","#source"];
+        const selectors = ["#roomClass", "#roomtype", "#market", "#rateCode", "#source"];
 
         for (const id of selectors) {
             const el = document.querySelector(id);
@@ -444,37 +458,37 @@
             url: '/Report/ArrivalsDetailedData',
             type: 'GET',
             data: {
-                    fromDate: $("#fromDate").val(),
-                    toDate: $("#toDate").val(),
-                    roomClass: $("#roomClass").val().map(r => r.replace( "''")).join("','") + "",
-                    roomtype: $("#roomtype").val().map(r => r.replace( "''")).join("','") + "",
-                    market: $("#market").val().map(r => r.replace( "''")).join("','") + "",
-                    rateCode: $("#rateCode").val().map(r => r.replace( "''")).join("','") + "",
-                    source: $("#source").val().map(r => r.replace( "''")).join("','") + "",                 
-                    vip: $("#vip").val(),
-                    sortOrder: $("#viewBy").val(),
-                    viponlycheck: $("#viponlycheck").is(":checked") ? "1" : "",
-                    noPost: $("#noPost").is(":checked") ? "1" : "",
-                    pseudo: $("#pseudo").is(":checked") ? "1" : "",
-                    checkedInToday: $("#checkedInToday").is(":checked") ? "1" : "",
-                    cancellations: $("#cancellations").is(":checked") ? "3" : "",
-                    zeroRateOnly: $("#zeroRateOnly").is(":checked") ? "111" : "",
-                    disRoomSharer: $("#disRoomSharer").is(":checked") ? "1" : "",
-                    searchCriteria: $("#reservation").val(),
-                    ckhArrivalDate: $("input[name='checkdate']:checked").val(),
+                fromDate: $("#fromDate").val(),
+                toDate: $("#toDate").val(),
+                roomClass: $("#roomClass").val().map(r => r.replace("''")).join("','") + "",
+                roomtype: $("#roomtype").val().map(r => r.replace("''")).join("','") + "",
+                market: $("#market").val().map(r => r.replace("''")).join("','") + "",
+                rateCode: $("#rateCode").val().map(r => r.replace("''")).join("','") + "",
+                source: $("#source").val().map(r => r.replace("''")).join("','") + "",
+                vip: $("#vip").val(),
+                sortOrder: $("#viewBy").val(),
+                viponlycheck: $("#viponlycheck").is(":checked") ? "1" : "",
+                noPost: $("#noPost").is(":checked") ? "1" : "",
+                pseudo: $("#pseudo").is(":checked") ? "1" : "",
+                checkedInToday: $("#checkedInToday").is(":checked") ? "1" : "",
+                cancellations: $("#cancellations").is(":checked") ? "3" : "",
+                zeroRateOnly: $("#zeroRateOnly").is(":checked") ? "111" : "",
+                disRoomSharer: $("#disRoomSharer").is(":checked") ? "1" : "",
+                searchCriteria: $("#reservation").val(),
+                ckhArrivalDate: $("input[name='checkdate']:checked").val(),
 
 
             },
             traditional: true,
-              crossDomain: false,
-                headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
             success: function (result) {
                 // $("#reportViewerContainer").html(result);
                 // $("#loadingSpinner").hide();
-                     console.log(result);
-              const processed = prepareArrivalsGroupedData(result);
-    initializArrivalsDetailedGrid(processed);
-                    $("#loadingSpinner").hide();
+                console.log(result);
+                const processed = prepareArrivalsGroupedData(result);
+                initializArrivalsDetailedGrid(processed);
+                $("#loadingSpinner").hide();
             },
             error: function () {
                 alert("Không thể tải báo cáo.");
@@ -482,7 +496,7 @@
             }
         });
     });
-        function prepareArrivalsGroupedData(data) {
+    function prepareArrivalsGroupedData(data) {
         const groupedData = {};
         const finalData = [];
 
@@ -506,9 +520,9 @@
             const records = groupedData[arrivalDate];
             const formattedDate = new Date(arrivalDate).toLocaleDateString('vi-VN');
             // Thêm dòng tiêu đề nhóm
-             finalData.push({
-                roomNo: `Arrival Date`, 
-                 confirmationNo: formattedDate,                 
+            finalData.push({
+                roomNo: `Arrival Date`,
+                confirmationNo: formattedDate,
                 isTitle: true,
                 cssClass: "custom"
             });
@@ -524,111 +538,111 @@
     function initializArrivalsDetailedGrid(data) {
         const columnWidth = 180;
         $("#gridContainer").dxDataGrid({
-    dataSource: data,         height: 500, allowColumnResizing: true,
+            dataSource: data, height: 500, allowColumnResizing: true,
             columns: [
-               { dataField: "roomNo", caption: "Room No", width: columnWidth-50},
-            { dataField: "name", caption: "Name", width: columnWidth},
-             { dataField: "confirmationNo", caption: "Conf.No", width: columnWidth  },
-               {
-      caption: "Stay No",
-      width: columnWidth + 50,
-      cssClass: "wrap-cell",
-      cellTemplate: function (container, options) {
-        const data = options.data;
-          if (data.isTitle) {
-            container.html(""); // hoặc container.empty();
-            return;
-        }
-        // Kiểm tra các checkbox
-        const showPrintRate = $("#printRate").is(":checked");
-        const showFixedCharge = $("#fixCharges").is(":checked");
-        const showPackages = $("#packages").is(":checked");
-        const showPaymentMethod = $("#paymentMethod").is(":checked");
-        const showRouting = $("#routingInstruction").is(":checked");
-        const showShareName = $("#sharesNames").is(":checked");
-        const showAccompany = $("#accompanying").is(":checked");
-        const showItemInventory = $("#itemsInventorys").is(":checked");
-        const showSpecials = $("#specials").is(":checked");
-        const showComments = $("#commnets").is(":checked");
-        const showProfileNote = $("#profileNote").is(":checked");
+                { dataField: "roomNo", caption: "Room No", width: columnWidth - 50 },
+                { dataField: "name", caption: "Name", width: columnWidth },
+                { dataField: "confirmationNo", caption: "Conf.No", width: columnWidth },
+                {
+                    caption: "Stay No",
+                    width: columnWidth + 50,
+                    cssClass: "wrap-cell",
+                    cellTemplate: function (container, options) {
+                        const data = options.data;
+                        if (data.isTitle) {
+                            container.html(""); // hoặc container.empty();
+                            return;
+                        }
+                        // Kiểm tra các checkbox
+                        const showPrintRate = $("#printRate").is(":checked");
+                        const showFixedCharge = $("#fixCharges").is(":checked");
+                        const showPackages = $("#packages").is(":checked");
+                        const showPaymentMethod = $("#paymentMethod").is(":checked");
+                        const showRouting = $("#routingInstruction").is(":checked");
+                        const showShareName = $("#sharesNames").is(":checked");
+                        const showAccompany = $("#accompanying").is(":checked");
+                        const showItemInventory = $("#itemsInventorys").is(":checked");
+                        const showSpecials = $("#specials").is(":checked");
+                        const showComments = $("#commnets").is(":checked");
+                        const showProfileNote = $("#profileNote").is(":checked");
 
-        let htmlParts = [];
+                        let htmlParts = [];
 
-        if (showItemInventory && data.itemInventory)
-          htmlParts.push(`<div class="wrap-line"><b>ItemInventory:</b> ${data.itemInventory}</div>`);
+                        if (showItemInventory && data.itemInventory)
+                            htmlParts.push(`<div class="wrap-line"><b>ItemInventory:</b> ${data.itemInventory}</div>`);
 
-        if (showSpecials && data.specials)
-          htmlParts.push(`<div class="wrap-line"><b>Specials:</b> ${data.specials}</div>`);
+                        if (showSpecials && data.specials)
+                            htmlParts.push(`<div class="wrap-line"><b>Specials:</b> ${data.specials}</div>`);
 
-             htmlParts.push(`<div class="wrap-line"><b></b> ${data.prevStays}</div>`);
+                        htmlParts.push(`<div class="wrap-line"><b></b> ${data.prevStays}</div>`);
 
-        if (showPrintRate && data.printRate)
-          htmlParts.push(`<div class="wrap-line"><b>Print Rate:</b> ${data.printRate}</div>`);
+                        if (showPrintRate && data.printRate)
+                            htmlParts.push(`<div class="wrap-line"><b>Print Rate:</b> ${data.printRate}</div>`);
 
-        if (showFixedCharge && data.fixedCharge)
-          htmlParts.push(`<div class="wrap-line"><b>Fixed Charge:</b> ${data.fixedCharge}</div>`);
+                        if (showFixedCharge && data.fixedCharge)
+                            htmlParts.push(`<div class="wrap-line"><b>Fixed Charge:</b> ${data.fixedCharge}</div>`);
 
-        if (showPackages && data.packages)
-          htmlParts.push(`<div class="wrap-line"><b>Packages:</b> ${data.packages}</div>`);
+                        if (showPackages && data.packages)
+                            htmlParts.push(`<div class="wrap-line"><b>Packages:</b> ${data.packages}</div>`);
 
-        if (showPaymentMethod && data.paymentMethod)
-          htmlParts.push(`<div class="wrap-line"><b>Payment Method:</b> ${data.paymentMethod}</div>`);
+                        if (showPaymentMethod && data.paymentMethod)
+                            htmlParts.push(`<div class="wrap-line"><b>Payment Method:</b> ${data.paymentMethod}</div>`);
 
-        if (showRouting && data.routingTransaction)
-          htmlParts.push(`<div class="wrap-line"><b>Routing:</b> ${data.routingTransaction}</div>`);
+                        if (showRouting && data.routingTransaction)
+                            htmlParts.push(`<div class="wrap-line"><b>Routing:</b> ${data.routingTransaction}</div>`);
 
-        if (showShareName && data.shareRoomName)
-          htmlParts.push(`<div class="wrap-line"><b>Share Name:</b> ${data.shareRoomName}</div>`);
+                        if (showShareName && data.shareRoomName)
+                            htmlParts.push(`<div class="wrap-line"><b>Share Name:</b> ${data.shareRoomName}</div>`);
 
-        if (showAccompany && data.accompanyName)
-          htmlParts.push(`<div class="wrap-line"><b>Accompanying:</b> ${data.accompanyName}</div>`);
+                        if (showAccompany && data.accompanyName)
+                            htmlParts.push(`<div class="wrap-line"><b>Accompanying:</b> ${data.accompanyName}</div>`);
 
-        if (showComments && data.comment)
-          htmlParts.push(`<div class="wrap-line"><b>Res. Comments:</b> ${data.comment}</div>`);
+                        if (showComments && data.comment)
+                            htmlParts.push(`<div class="wrap-line"><b>Res. Comments:</b> ${data.comment}</div>`);
 
-        if (showProfileNote && data.party)
-          htmlParts.push(`<div class="wrap-line"><b>Profile Note:</b> ${data.party}</div>`);
+                        if (showProfileNote && data.party)
+                            htmlParts.push(`<div class="wrap-line"><b>Profile Note:</b> ${data.party}</div>`);
 
-        container.html(htmlParts.join(""));
-      }
-    },
+                        container.html(htmlParts.join(""));
+                    }
+                },
 
 
-            { dataField: "roomClassID", caption: "Rns", width: columnWidth-70},
-            { dataField: "vIP", caption: "VIP", width: columnWidth-80 },
-            { dataField: "lastRoom", caption: "LastRoom", width: columnWidth-80 },
-            { dataField: "agent", caption: "Reservation Holder", width: columnWidth},
-            { dataField: "businessBlockCode", caption: "BlockCode", width: columnWidth-70 },
-            { dataField: "arrivalDate", caption: "Arr.Date", width: columnWidth-60,  dataType: "date", format: "dd/MM/yyyy"},
-            { dataField: "eta", caption: "ETA", width: columnWidth-70 },
-            { dataField: "departureDate", caption: "Dep.Date",width: columnWidth-60,  dataType: "date", format: "dd/MM/yyyy"},
-            { dataField: "etd", caption: "ETD", width: columnWidth-70 },
-            { dataField: "roomType", caption: "Ro.Type", width:columnWidth-70 },
-            { dataField: "pickupTransportType", caption: "Trans.Type", width:columnWidth-70 },
-            { dataField: "noOfAdult", caption: "A.",width: columnWidth-80 ,dataType: "number", format: "#,##0" },
-            { dataField: "noOfChild", caption: "C.", width: columnWidth-80 ,dataType: "number", format: "#,##0" },
-            { dataField: "noOfChild1", caption: "C1.", width: columnWidth-80 ,dataType: "number", format: "#,##0" },
-            { dataField: "noOfChild2", caption: "C2.", width:columnWidth-80  ,dataType: "number", format: "#,##0" },
-            { dataField: "noOfRoom", caption: "Rms", width:columnWidth-80 ,dataType: "number", format: "#,##0" },
-            { caption: "Mkt.Code", dataField: "MarketCode", width: columnWidth-70},
-            { dataField: "packages", caption: "Packages", width: columnWidth-70},
-            { dataField: "sourceCode", caption: "Source Code", width: columnWidth-70},
-            { dataField: "status", caption: "Status", width: columnWidth-70},
-            { dataField: "paymentMethod", caption: "Pay mth", width: columnWidth-70},
-            { dataField: "creditCardNo", caption: "Credit Card No.", width: columnWidth-30},
-            { dataField: "rateCode", caption: "Rate Code", width:columnWidth-70 },
-            { dataField: "rate", caption: "Rate Amount",  width:columnWidth-70,dataType: "number", format: "#,##0" },
-            { dataField: "currencyID", caption: "Curr.",  width:columnWidth-70 },
-            { dataField: "expirationDate", caption: "Exp.Date",width: columnWidth-60,  dataType: "date", format: "dd/MM/yyyy"},
-            { dataField: "", caption: "Deposit Received",  width:columnWidth-70 },
+                { dataField: "roomClassID", caption: "Rns", width: columnWidth - 70 },
+                { dataField: "vIP", caption: "VIP", width: columnWidth - 80 },
+                { dataField: "lastRoom", caption: "LastRoom", width: columnWidth - 80 },
+                { dataField: "agent", caption: "Reservation Holder", width: columnWidth },
+                { dataField: "businessBlockCode", caption: "BlockCode", width: columnWidth - 70 },
+                { dataField: "arrivalDate", caption: "Arr.Date", width: columnWidth - 60, dataType: "date", format: "dd/MM/yyyy" },
+                { dataField: "eta", caption: "ETA", width: columnWidth - 70 },
+                { dataField: "departureDate", caption: "Dep.Date", width: columnWidth - 60, dataType: "date", format: "dd/MM/yyyy" },
+                { dataField: "etd", caption: "ETD", width: columnWidth - 70 },
+                { dataField: "roomType", caption: "Ro.Type", width: columnWidth - 70 },
+                { dataField: "pickupTransportType", caption: "Trans.Type", width: columnWidth - 70 },
+                { dataField: "noOfAdult", caption: "A.", width: columnWidth - 80, dataType: "number", format: "#,##0" },
+                { dataField: "noOfChild", caption: "C.", width: columnWidth - 80, dataType: "number", format: "#,##0" },
+                { dataField: "noOfChild1", caption: "C1.", width: columnWidth - 80, dataType: "number", format: "#,##0" },
+                { dataField: "noOfChild2", caption: "C2.", width: columnWidth - 80, dataType: "number", format: "#,##0" },
+                { dataField: "noOfRoom", caption: "Rms", width: columnWidth - 80, dataType: "number", format: "#,##0" },
+                { caption: "Mkt.Code", dataField: "MarketCode", width: columnWidth - 70 },
+                { dataField: "packages", caption: "Packages", width: columnWidth - 70 },
+                { dataField: "sourceCode", caption: "Source Code", width: columnWidth - 70 },
+                { dataField: "status", caption: "Status", width: columnWidth - 70 },
+                { dataField: "paymentMethod", caption: "Pay mth", width: columnWidth - 70 },
+                { dataField: "creditCardNo", caption: "Credit Card No.", width: columnWidth - 30 },
+                { dataField: "rateCode", caption: "Rate Code", width: columnWidth - 70 },
+                { dataField: "rate", caption: "Rate Amount", width: columnWidth - 70, dataType: "number", format: "#,##0" },
+                { dataField: "currencyID", caption: "Curr.", width: columnWidth - 70 },
+                { dataField: "expirationDate", caption: "Exp.Date", width: columnWidth - 60, dataType: "date", format: "dd/MM/yyyy" },
+                { dataField: "", caption: "Deposit Received", width: columnWidth - 70 },
 
             ],
             paging: { pageSize: 25 },
-      scrolling:  {
-         
-        useNative: true,
-       showScrollbar: "always"
-    },
+            scrolling: {
+
+                useNative: true,
+                showScrollbar: "always"
+            },
             pager: {
                 visible: true,
                 allowedPageSizes: [25, 50, 'all'],
@@ -637,39 +651,39 @@
                 showNavigationButtons: true,
             },
             selection: { mode: "multiple", showCheckBoxesMode: "none" },
-             
-                filterRow: {
-         visible: true,
-        applyFilter: "auto"
-    },
-    headerFilter: {
-        visible: true
-    },
+
+            filterRow: {
+                visible: true,
+                applyFilter: "auto"
+            },
+            headerFilter: {
+                visible: true
+            },
             showBorders: true,
-                            onRowPrepared: function (e) {
-        if (e.rowType === "data" && e.data?.cssClass) {
-            e.rowElement.addClass(e.data.cssClass);
-        }
-    }
+            onRowPrepared: function (e) {
+                if (e.rowType === "data" && e.data?.cssClass) {
+                    e.rowElement.addClass(e.data.cssClass);
+                }
+            }
 
         });
     }
 
 
 
-       $("#btnExportExcel").click(function () {
-               const grid = $("#gridContainer").dxDataGrid("instance"); var selectedReport2 = '@ViewBag.ReportTitle';
+    $("#btnExportExcel").click(function () {
+        const grid = $("#gridContainer").dxDataGrid("instance"); var selectedReport2 = '@ViewBag.ReportTitle';
         var selectedReport = '@ViewBag.ReportTitle';
         if (!selectedReport) {
             alert("Vui lòng chọn báo cáo trước khi xuất Excel.");
             return;
         }
 
-                     const workbook = new ExcelJS.Workbook();const companyName = localStorage.getItem("CompanyName") || "Tên công ty chưa xác định";
+        const workbook = new ExcelJS.Workbook(); const companyName = localStorage.getItem("CompanyName") || "Tên công ty chưa xác định";
         const worksheet = workbook.addWorksheet("Sheet 1");
 
         // === Tạo header công ty (dòng 1) ===
-       worksheet.addRow([companyName]);
+        worksheet.addRow([companyName]);
         worksheet.mergeCells('A1:E1');
         worksheet.getRow(1).font = { bold: true };
         worksheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'left' };
@@ -718,46 +732,46 @@
 
 
     // Nút xuất PDF
-         $("#btnExportPdf").click(function () {
-         const grid = $("#gridContainer").dxDataGrid("instance");
+    $("#btnExportPdf").click(function () {
+        const grid = $("#gridContainer").dxDataGrid("instance");
 
-         // Lấy đối tượng jsPDF từ window
-         const { jsPDF } = window.jspdf;
-         const doc = new jsPDF({ orientation: "landscape", unit: "pt", format: "A4" });
+        // Lấy đối tượng jsPDF từ window
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({ orientation: "landscape", unit: "pt", format: "A4" });
 
-         const selectedReport = '@ViewBag.ReportTitle';
-         const companyName = localStorage.getItem("CompanyName") || "Tên công ty chưa xác định";
+        const selectedReport = '@ViewBag.ReportTitle';
+        const companyName = localStorage.getItem("CompanyName") || "Tên công ty chưa xác định";
 
-         grid.getDataSource().load().then(data => {
-             const columns = grid.getVisibleColumns();
+        grid.getDataSource().load().then(data => {
+            const columns = grid.getVisibleColumns();
 
-             const head = [columns.map(col => col.caption)];
-             const body = data.map(row =>
-                 columns.map(col =>
-                     col.calculateCellValue ? col.calculateCellValue(row) : row[col.dataField]
-                 )
-             );
+            const head = [columns.map(col => col.caption)];
+            const body = data.map(row =>
+                columns.map(col =>
+                    col.calculateCellValue ? col.calculateCellValue(row) : row[col.dataField]
+                )
+            );
 
-             doc.setFontSize(14);
-             doc.setFont("Helvetica", "bold");
-             doc.text(companyName, doc.internal.pageSize.getWidth() / 2, 40, { align: "center" });
+            doc.setFontSize(14);
+            doc.setFont("Helvetica", "bold");
+            doc.text(companyName, doc.internal.pageSize.getWidth() / 2, 40, { align: "center" });
 
-             doc.setFontSize(12);
-             doc.setFont("Helvetica", "normal");
-             doc.text(selectedReport, doc.internal.pageSize.getWidth() / 2, 60, { align: "center" });
+            doc.setFontSize(12);
+            doc.setFont("Helvetica", "normal");
+            doc.text(selectedReport, doc.internal.pageSize.getWidth() / 2, 60, { align: "center" });
 
-             // AutoTable
-             doc.autoTable({
-                 startY: 80,
-                 head: head,
-                 body: body,
-                  styles: { fontSize: 9, cellPadding: 4 , lineWidth: 0.5, lineColor: [0, 0, 0]    },
-                 headStyles: { fillColor: [41, 128, 185], textColor: 255, fontStyle: 'bold' },
-                 alternateRowStyles: { fillColor: [240, 240, 240] },
-                 margin: { left: 20, right: 20 }
-             });
+            // AutoTable
+            doc.autoTable({
+                startY: 80,
+                head: head,
+                body: body,
+                styles: { fontSize: 9, cellPadding: 4, lineWidth: 0.5, lineColor: [0, 0, 0] },
+                headStyles: { fillColor: [41, 128, 185], textColor: 255, fontStyle: 'bold' },
+                alternateRowStyles: { fillColor: [240, 240, 240] },
+                margin: { left: 20, right: 20 }
+            });
 
-             doc.save(selectedReport + ".pdf");
-         });
-     });
+            doc.save(selectedReport + ".pdf");
+        });
+    });
 </script>

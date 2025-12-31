@@ -24,11 +24,6 @@ namespace BaseBusiness.BO
         {
             get { return instance; }
         }
-        public PropertyPermissionModel GetById(int id, SqlConnection conn, SqlTransaction tx)
-        {
-            const string sql = "SELECT ID, PropertyID, UserID, CreatedBy, CreatedDate,  UpdatedBy, UpdatedDate FROM PropertyPermission WHERE ID = @id";
-            return conn.QuerySingleOrDefault<PropertyPermissionModel>(sql, new { id }, tx);
-        }
     }
 
 }

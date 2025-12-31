@@ -11,7 +11,7 @@ using System.Security.Policy;
 
 namespace HouseKeeping.Services.Implements
 {
-    public class HouseKeepingService: IHouseKeepingService
+    public class HouseKeepingService : IHouseKeepingService
     {
         public DataTable RoomControlPanelData(DateTime fromDate, DateTime toDate, string zone)
         {
@@ -20,7 +20,6 @@ namespace HouseKeeping.Services.Implements
                new SqlParameter("@FromDate", fromDate),
                 new SqlParameter("@ToDate", toDate),
                  new SqlParameter("@ZoneCode", zone),
-          
             };
 
             DataTable myTable = DataTableHelper.getTableData("spRmgRoomControlPanelReport", param);
@@ -40,7 +39,7 @@ namespace HouseKeeping.Services.Implements
             DataTable myTable = DataTableHelper.getTableData("spRmgRoomFacilityForecastReport", param);
             return myTable;
         }
-        public DataTable GuestServiceStatusData(string servicestatsu, string room, string roomStatus,string zone)
+        public DataTable GuestServiceStatusData(string servicestatsu, string room, string roomStatus, string zone)
         {
             SqlParameter[] param = new SqlParameter[]
             {
@@ -82,7 +81,7 @@ namespace HouseKeeping.Services.Implements
             return myTable;
         }
 
-        public DataTable CheckLogStatus(string  RoomNo, DateTime fromDate, DateTime toDate, string username)
+        public DataTable CheckLogStatus(string RoomNo, DateTime fromDate, DateTime toDate, string username)
         {
 
             SqlParameter[] param = new SqlParameter[]
@@ -92,13 +91,12 @@ namespace HouseKeeping.Services.Implements
                  new SqlParameter("@FromDate", fromDate),
                         new SqlParameter("@ToDate", toDate),
 
-                 
             };
 
             DataTable myTable = DataTableHelper.getTableData("spRoomStatusHistory", param);
             return myTable;
         }
-        public DataTable RoomPlanData(DateTime fromDate, DateTime toDate, int  orderbyroom, string owner)
+        public DataTable RoomPlanData(DateTime fromDate, DateTime toDate, int orderbyroom, string owner)
         {
 
             SqlParameter[] param = new SqlParameter[]
@@ -236,7 +234,7 @@ namespace HouseKeeping.Services.Implements
             DataTable myTable = DataTableHelper.getTableData("spRmgStatusActivityArrivalActual", param);
             return myTable;
         }
-        public DataTable TaskSheetStatusData(DateTime fromDate, DateTime toDate, string attendant, string room,string zone)
+        public DataTable TaskSheetStatusData(DateTime fromDate, DateTime toDate, string attendant, string room, string zone)
         {
 
             SqlParameter[] param = new SqlParameter[]
@@ -267,7 +265,7 @@ namespace HouseKeeping.Services.Implements
             return myTable;
         }
 
-        public DataTable RoomAttendentDailyWorksheetData(DateTime fromDate, string attendant, string tasksheet, string roomStatus,string facilityCode)
+        public DataTable RoomAttendentDailyWorksheetData(DateTime fromDate, string attendant, string tasksheet, string roomStatus, string facilityCode)
         {
 
             SqlParameter[] param = new SqlParameter[]
@@ -295,20 +293,19 @@ namespace HouseKeeping.Services.Implements
             DataTable myTable = DataTableHelper.getTableData("spRptTurndownTasksheet", param);
             return myTable;
         }
-        public DataTable AutoMakeupServiceRoom( string roomIDs, string _ListSection)
+        public DataTable AutoMakeupServiceRoom(string roomIDs, string _ListSection)
         {
 
             SqlParameter[] param = new SqlParameter[]
             {
                new SqlParameter("@SectionID", _ListSection),
                 new SqlParameter("@RoomNo",roomIDs) ,
-            
             };
 
             DataTable myTable = DataTableHelper.getTableData("spTurndownTasksheets", param);
             return myTable;
         }
-        public DataTable HKPGetTaskSheets(DateTime BusinessDate, int  page,string zoneexpan,string taskcodeExpanded,string  hkpSectionExpanded)
+        public DataTable HKPGetTaskSheets(DateTime BusinessDate, int page, string zoneexpan, string taskcodeExpanded, string hkpSectionExpanded)
         {
 
             SqlParameter[] param = new SqlParameter[]
@@ -324,14 +321,13 @@ namespace HouseKeeping.Services.Implements
             DataTable myTable = DataTableHelper.getTableData("spHKPGetTaskSheets", param);
             return myTable;
         }
-        public DataTable HKPTurndownTaskSheetGrid( string  taskid, string status)
+        public DataTable HKPTurndownTaskSheetGrid(string taskid, string status)
         {
 
             SqlParameter[] param = new SqlParameter[]
             {
                new SqlParameter("@taskID", taskid),
                 new SqlParameter("@status",status) ,
- 
 
             };
 
@@ -465,14 +461,13 @@ namespace HouseKeeping.Services.Implements
             DataTable myTable = DataTableHelper.getTableData("spRmgStatusActivityDayUseRoom", param);
             return myTable;
         }
-        public DataTable StatusHKInspected( string roomtype, string zone)
+        public DataTable StatusHKInspected(string roomtype, string zone)
         {
 
             SqlParameter[] param = new SqlParameter[]
             {
                new SqlParameter("@RoomTypeID", roomtype),
                 new SqlParameter("@ZoneID",zone) ,
-         
 
 
             };
@@ -932,7 +927,7 @@ namespace HouseKeeping.Services.Implements
             DataTable myTable = DataTableHelper.getTableData("spRmgStatusActivityWalkInRoomDetail", param);
             return myTable;
         }
-        public DataTable StatusHKVacantCleanDetail( string roomtype, string zone)
+        public DataTable StatusHKVacantCleanDetail(string roomtype, string zone)
         {
 
             SqlParameter[] param = new SqlParameter[]
@@ -1066,7 +1061,7 @@ namespace HouseKeeping.Services.Implements
             DataTable myTable = DataTableHelper.getTableData("spTurndownTasksheetSearch", param);
             return myTable;
         }
-        public DataTable TasksheetAutomatically(string HK_FO, DateTime taskdateauto,string floorauto,string roomTypeauto,string zonecodeauto,string subzonecodeauto,string includeroomAS,string arrivalOnly,string _ListRoomNotAss)
+        public DataTable TasksheetAutomatically(string HK_FO, DateTime taskdateauto, string floorauto, string roomTypeauto, string zonecodeauto, string subzonecodeauto, string includeroomAS, string arrivalOnly, string _ListRoomNotAss)
         {
 
             SqlParameter[] param = new SqlParameter[]
@@ -1085,7 +1080,6 @@ namespace HouseKeeping.Services.Implements
 
                          new SqlParameter("@Floor",floorauto) ,
                    new SqlParameter("@subZone",subzonecodeauto) ,
-                   
             };
 
             DataTable myTable = DataTableHelper.getTableData("spTasksheetAutomatically", param);
@@ -1097,7 +1091,6 @@ namespace HouseKeeping.Services.Implements
             {
                new SqlParameter("@FromDate", fromDate),
                new SqlParameter("@ToDate", toDate),
-              
             };
 
             DataTable myTable = DataTableHelper.getTableData("spSearchLostAndFound", param);
@@ -1166,7 +1159,6 @@ namespace HouseKeeping.Services.Implements
             {
                new SqlParameter("@FromDate", fromDate),
                new SqlParameter("@ToDate", toDate)
-             
             };
 
             DataTable myTable = DataTableHelper.getTableData("spSelectAvailibilityColor", param);

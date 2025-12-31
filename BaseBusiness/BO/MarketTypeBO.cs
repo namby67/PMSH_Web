@@ -24,10 +24,5 @@ namespace BaseBusiness.BO
         {
             get { return instance; }
         }
-        public MarketTypeModel GetById(int id, SqlConnection conn, SqlTransaction tx)
-        {
-            const string sql = "SELECT ID, Code, Name, Description, CreatedBy, CreatedDate,  UpdatedBy, UpdatedDate FROM MarketType WHERE ID = @id";
-            return conn.QuerySingleOrDefault<MarketTypeModel>(sql, new { id }, tx);
-        }
     }
 }

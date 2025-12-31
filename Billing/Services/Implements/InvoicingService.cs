@@ -1,4 +1,4 @@
-﻿using BaseBusiness.Model;
+using BaseBusiness.Model;
 using BaseBusiness.util;
 using Billing.Services.Interfaces;
 using Microsoft.Data.SqlClient;
@@ -42,7 +42,7 @@ namespace Billing.Services.Implements
             }
         }
 
-        public  DataTable GetPreviewBillingAmount(int confirmationNo, int folioID)
+        public DataTable GetPreviewBillingAmount(int confirmationNo, int folioID)
         {
             SqlParameter[] param = new SqlParameter[]
                 {

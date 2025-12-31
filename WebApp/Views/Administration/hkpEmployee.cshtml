@@ -11,11 +11,16 @@
 @* <link href="~/css/pages/reservation.css" rel="stylesheet" /> *@
 <style>
     :root {
-        --main-color: #2b6cb0; /* Màu chính (xanh dương) */
-        --secondary-color: #f5f5f5; /* Màu nền thứ cấp (xám nhạt) */
-        --highlight-color: #d65a00; /* Màu nổi bật (cam) */
-        --text-color: #2d3748; /* Màu chữ (xám đậm) */
-        --accent-color: #ffffff; /* Màu bổ sung (trắng) */
+        --main-color: #2b6cb0;
+        /* Màu chính (xanh dương) */
+        --secondary-color: #f5f5f5;
+        /* Màu nền thứ cấp (xám nhạt) */
+        --highlight-color: #d65a00;
+        /* Màu nổi bật (cam) */
+        --text-color: #2d3748;
+        /* Màu chữ (xám đậm) */
+        --accent-color: #ffffff;
+        /* Màu bổ sung (trắng) */
     }
 
     .menu-group-title {
@@ -43,9 +48,9 @@
         z-index: 20;
     }
 
-        .menu-left .submenu.active {
-            display: block !important;
-        }
+    .menu-left .submenu.active {
+        display: block !important;
+    }
 
     /* Đảm bảo các style khác sử dụng biến CSS */
     .menu-item {
@@ -60,15 +65,16 @@
         border-left: 4px solid transparent;
     }
 
-        .menu-item:hover,
-        .menu-item.active {
-            color: var(--text-color);
-            background-color: var(--secondary-color);
-            border-left: 4px solid var(--highlight-color);
-        }
+    .menu-item:hover,
+    .menu-item.active {
+        color: var(--text-color);
+        background-color: var(--secondary-color);
+        border-left: 4px solid var(--highlight-color);
+    }
 
-    .menu-group > .menu-left {
-        display: none; /* ẩn mặc định */
+    .menu-group>.menu-left {
+        display: none;
+        /* ẩn mặc định */
         margin-top: 2px;
         background: var(--accent-color);
         border: 1px solid #d1d5db;
@@ -82,7 +88,7 @@
             <div class="menu-left">
                 <button class="toggle-btn"><i class="fas fa-bars"></i></button>
                 <a class="menu-item active"> HOUSE KEEPPING EMPLOYEE</a>
-              </div>
+            </div>
         </div>
 
         <!-- Nội dung bên phải -->
@@ -96,7 +102,8 @@
                 </div>
 
                 <div class="sticky-header bg-white p-2 shadow-sm z-3">
-                    <div class="d-flex align-items-center gap-3 p-2" style="border: 1px solid #ccc; border-radius: 6px; padding: 8px;">
+                    <div class="d-flex align-items-center gap-3 p-2"
+                        >
 
                         <div class="d-flex align-items-center">
                             <label for="name" class="me-2 mb-0">Name</label>
@@ -109,11 +116,16 @@
                         </div>
                     </div>
                     <div class=" mt-1">
-                        <button id="btnView" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> View</button>
-                        <button  id="btnNew" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> New</button>
-                        <button  id="btnEdit" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Edit</button>
-                        <button  id="btnDelete" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Delete</button>
-                        <button  id="btnExportExcel" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Excel</button>
+                        <button id="btnView" class="mui-button mui-button-new" type="button"> <i
+                                class="fa-solid fa-file-excel"></i> View</button>
+                        <button id="btnNew" class="mui-button mui-button-new" type="button"> <i
+                                class="fa-solid fa-file-excel"></i> New</button>
+                        <button id="btnEdit" class="mui-button mui-button-new" type="button"> <i
+                                class="fa-solid fa-file-excel"></i> Edit</button>
+                        <button id="btnDelete" class="mui-button mui-button-new" type="button"> <i
+                                class="fa-solid fa-file-excel"></i> Delete</button>
+                        <button id="btnExportExcel" class="mui-button mui-button-new" type="button"> <i
+                                class="fa-solid fa-file-excel"></i> Excel</button>
 
                     </div>
                 </div>
@@ -136,7 +148,7 @@
             <div class="modal-body">
 
                 <form id="itemForm">
-                    <div class="container-fluid" style="border: 1px solid #ccc; border-radius: 6px; padding: 8px;">
+                    <div class="container-fluid" >
 
                         <!-- Code + Inactive -->
                         <div class="row mb-1 align-items-center">
@@ -154,7 +166,8 @@
                         <div class="row mb-1">
                             <div class="col">
                                 <label for="txtdescription" class="form-label">Description</label>
-                                <textarea id="txtdescription" name="txtdescription" class="form-control" rows="4" style="background-color:#ffffe6"></textarea>
+                                <textarea id="txtdescription" name="txtdescription" class="form-control" rows="4"
+                                    style="background-color:#ffffe6"></textarea>
                             </div>
                         </div>
                         <input type="hidden" id="id" name="id" value="0" />
@@ -179,37 +192,37 @@
 
 <script>
     DevExpress.localization.locale("vi");
-       let selectedRowData = null;
+    let selectedRowData = null;
 
-        $(document).ready(function () {
+    $(document).ready(function () {
         $(".menu-group-title").on("click", function (event) {
-                const submenu = $(this).next(".menu-left"); // lấy thằng menu-left con
-           const icon = $(this).find("i");
+            const submenu = $(this).next(".menu-left"); // lấy thằng menu-left con
+            const icon = $(this).find("i");
 
-           // toggle submenu
-           submenu.slideToggle(200);
+            // toggle submenu
+            submenu.slideToggle(200);
 
-           // đổi icon
-           icon.toggleClass("fa-chevron-down fa-chevron-up");
-           });
-
-
-         reloadGrid();
-     });
-        $("#btnView").on("click", function() {
-        reloadGrid();
+            // đổi icon
+            icon.toggleClass("fa-chevron-down fa-chevron-up");
         });
 
-        $("#btnNew").click(function () {
+
+        reloadGrid();
+    });
+    $("#btnView").on("click", function () {
+        reloadGrid();
+    });
+
+    $("#btnNew").click(function () {
         $("#itemForm")[0].reset();
         $("#id").val("0");   // 🔥 reset về 0 để phân biệt Insert
         $("#itemModal").modal("show");
     });
 
 
-                $("#btnSaveItem").click(function () {
+    $("#btnSaveItem").click(function () {
         const formData = $("#itemForm").serialize();
-         console.log("FormData:", formData);
+        console.log("FormData:", formData);
         let url = "/Administration/InserthkpEmployee";
         if ($("#id").val() && $("#id").val() !== "0") {
             url = "/Administration/UpdatehkpEmployee"; // nếu có id thì update
@@ -234,7 +247,7 @@
         });
     });
 
-           $("#btnEdit").on("click", function () {
+    $("#btnEdit").on("click", function () {
         if (!selectedRowData) {
             DevExpress.ui.notify("Please select a row first!", "warning", 2000);
             return;
@@ -245,7 +258,7 @@
             url: "/Administration/GethkpEmployeeById",
             type: "GET",
             data: { id: selectedRowData.id },
-            success: function(data) {
+            success: function (data) {
                 if (data.success && data.id) {
                     $("#id").val(data.id);
                     $("#txtdescription").val(data.description);
@@ -256,7 +269,7 @@
                     DevExpress.ui.notify(data.message || "Cannot load data!", "error", 2000);
                 }
             },
-            error: function(xhr) {
+            error: function (xhr) {
                 console.error("Load data error:", xhr.responseText);
                 DevExpress.ui.notify("Cannot load data from server!", "error", 2000);
             }
@@ -274,38 +287,39 @@
             allowColumnResizing: true,
             columnResizingMode: "widget",
             selection: { mode: "single" },
-             columns: [
-                        { dataField: "name", caption: "Name" },
-                        { dataField: "description", caption: "Description" },
-                        { dataField: "inactive", caption: "Inactive",
-                            cellTemplate: function(container, options) {
-                                // ép kiểu: 1 = true, 0 = false
-                                let checked = options.value == 1;
-                                $("<div>")
-                                    .dxCheckBox({
-                                        value: checked,
-                                        readOnly: true
-                                    })
-                                    .css("transform", "scale(0.8)") // thu nhỏ checkbox
-                                    .appendTo(container);
-                            } 
-                        },
-                        { dataField: "createdBy", caption: "Created By" },
-                        { dataField: "createdDate", caption: "Created Date", dataType: "date" },
-                        { dataField: "updatedBy", caption: "Updated By" },
-                        { dataField: "updatedDate", caption: "Updated Date", dataType: "date" },
-                    ],
-            filterRow: { visible:true, applyFilter:"auto" },
-            paging: { pageSize:20 },
+            columns: [
+                { dataField: "name", caption: "Name" },
+                { dataField: "description", caption: "Description" },
+                {
+                    dataField: "inactive", caption: "Inactive",
+                    cellTemplate: function (container, options) {
+                        // ép kiểu: 1 = true, 0 = false
+                        let checked = options.value == 1;
+                        $("<div>")
+                            .dxCheckBox({
+                                value: checked,
+                                readOnly: true
+                            })
+                            .css("transform", "scale(0.8)") // thu nhỏ checkbox
+                            .appendTo(container);
+                    }
+                },
+                { dataField: "createdBy", caption: "Created By" },
+                { dataField: "createdDate", caption: "Created Date", dataType: "date" },
+                { dataField: "updatedBy", caption: "Updated By" },
+                { dataField: "updatedDate", caption: "Updated Date", dataType: "date" },
+            ],
+            filterRow: { visible: true, applyFilter: "auto" },
+            paging: { pageSize: 20 },
             pager: {
-                visible:true,
-                allowedPageSizes:[20,50,'all'],
-                showPageSizeSelector:true,
-                showInfo:true,
-                showNavigationButtons:true
+                visible: true,
+                allowedPageSizes: [20, 50, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true
             },
-            scrolling: { mode:"standard", showScrollbar:"always", scrollByContent:true },
-            onSelectionChanged: function(e){
+            scrolling: { mode: "standard", showScrollbar: "always", scrollByContent: true },
+            onSelectionChanged: function (e) {
                 selectedRowData = e.selectedRowsData.length > 0 ? e.selectedRowsData[0] : null;
                 console.log("Selected Row:", selectedRowData);
             }
@@ -324,12 +338,12 @@
                 name: $("#name").val(),
                 inactive: $("#chkshowInactive").prop("checked") ? 1 : 0
             },
-            success: function(data){
+            success: function (data) {
                 console.log(data);
                 loadGrid(data);
                 $("#loadingSpinnerRateCode").hide();
             },
-            error: function(xhr, status, error){
+            error: function (xhr, status, error) {
                 alert("Không thể tải dữ liệu");
                 $("#loadingSpinnerRateCode").hide();
             }
@@ -337,13 +351,13 @@
     }
 
 
-     $("#btnDelete").on("click", function () {
-         if (!selectedRowData) {
+    $("#btnDelete").on("click", function () {
+        if (!selectedRowData) {
             DevExpress.ui.notify("Please select a row first!", "warning", 2000);
             return;
         }
 
-                Swal.fire({
+        Swal.fire({
             title: 'Are you sure?',
             text: "This action cannot be undone.",
             icon: 'warning',
@@ -363,7 +377,7 @@
 
     });
 
-            function deleteSelectedItem() {
+    function deleteSelectedItem() {
         $.ajax({
             url: "/Administration/DeletehkpEmployee",
             type: "POST",

@@ -69,7 +69,6 @@ namespace RoomManagement.Controllers
                                   HKPersons = !string.IsNullOrEmpty(d["HK Persons"].ToString()) ? d["HK Persons"] : "",
                                   FOPersons = !string.IsNullOrEmpty(d["FO Persons"].ToString()) ? d["FO Persons"] : "",
                                   Discrepancy = !string.IsNullOrEmpty(d["Discrepancy"].ToString()) ? d["Discrepancy"] : "",
-                           
                               }).ToList();
                 return Json(result);
             }
@@ -188,7 +187,6 @@ namespace RoomManagement.Controllers
                                   ThirtheenDate = !string.IsNullOrEmpty(d["ThirtheenDate"].ToString()) ? d["ThirtheenDate"] : "",
                                   FourtheenDate = !string.IsNullOrEmpty(d["FourtheenDate"].ToString()) ? d["FourtheenDate"] : "",
                                   FiftheenDate = !string.IsNullOrEmpty(d["FiftheenDate"].ToString()) ? d["FiftheenDate"] : "",
-                              
                               }).ToList();
                 return Json(result);
             }
@@ -204,7 +202,7 @@ namespace RoomManagement.Controllers
             // return PartialView("_ReportViewerPartial", report);
         }
         public IActionResult ItemDailyInventory()
-        {       
+        {
             return View();
         }
 
@@ -334,7 +332,6 @@ namespace RoomManagement.Controllers
                                   ReservedTo = !string.IsNullOrEmpty(d["Reserved To"].ToString()) ? d["Reserved To"] : "",
                                   Qty = !string.IsNullOrEmpty(d["Qty"].ToString()) ? d["Qty"] : "",
                                   ID = !string.IsNullOrEmpty(d["ID"].ToString()) ? d["ID"] : "",
-                                  
 
                               }).ToList();
                 return Json(result);
@@ -571,11 +568,11 @@ namespace RoomManagement.Controllers
         {
             try
             {
-                DataTable dataTable = _iRoomManagementService.OOOSload(status, roomNo, roomClassID, fromDate, toDate,zone);
+                DataTable dataTable = _iRoomManagementService.OOOSload(status, roomNo, roomClassID, fromDate, toDate, zone);
                 var result = (from d in dataTable.AsEnumerable()
                               select new
                               {
-                                  ID = !string.IsNullOrEmpty(d["ID"].ToString()) ? d["ID"] : "",                         
+                                  ID = !string.IsNullOrEmpty(d["ID"].ToString()) ? d["ID"] : "",
                                   Code = !string.IsNullOrEmpty(d["Code"].ToString()) ? d["Code"] : "",
                                   RoomNo = !string.IsNullOrEmpty(d["Room No"].ToString()) ? d["Room No"] : "",
                                   RoomType = !string.IsNullOrEmpty(d["Room Type"].ToString()) ? d["Room Type"] : "",
@@ -796,7 +793,6 @@ namespace RoomManagement.Controllers
 
                 foreach (var roomId in roomIds)
                 {
-         
                     string name = $"OutOfOrder/Service";
                     string roomNo = RoomBO.Instance.GetRoomNoById(roomId, pt.Connection, pt.Transaction);
                     BusinessBlockModel bb = new BusinessBlockModel()

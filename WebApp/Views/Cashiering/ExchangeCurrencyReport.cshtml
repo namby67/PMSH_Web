@@ -46,46 +46,47 @@
 
     </div>
     <div class="">
-        <button   id="btnPrint" class="mui-button mui-button-new"><i class="fa-solid fa-eye"></i>View</button>
-      
+        <button id="btnPrint" class="mui-button mui-button-new"><i class="fa-solid fa-eye"></i>View</button>
+
     </div>
 </div>
 
 <div class="mui-card">
     <div id="gridContainer" class="gridContainer mt-2"></div>
 </div>
-<div id="loadingSpinner" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
+<div id="loadingSpinner"
+    style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
     <i class="fa-solid fa-spinner fa-spin"></i>
 </div>
 <script>
-        function formatDate(date) {
-            let year = date.getFullYear();
-            let month = (date.getMonth() + 1).toString().padStart(2, '0'); // Ð?m b?o có 2 ch? s?
-            let day = date.getDate().toString().padStart(2, '0'); // Ð?m b?o có 2 ch? s?
-            return `${year}-${month}-${day}`;
-        }
+    function formatDate(date) {
+        let year = date.getFullYear();
+        let month = (date.getMonth() + 1).toString().padStart(2, '0'); // Ð?m b?o có 2 ch? s?
+        let day = date.getDate().toString().padStart(2, '0'); // Ð?m b?o có 2 ch? s?
+        return `${year}-${month}-${day}`;
+    }
 
-            let parsedBusinessDate = null;
-        $(document).ready(function () {
-                $("#btnPrint").trigger("click");
-             document.getElementById("reportTitle").innerText = 'Attendant Point';
-              var businessDateStr = '@ViewBag.BusinessDate'; // Ví dụ: '8/29/2024 12:00:00 AM'
-                   console.log(businessDateStr);
-                    // Lấy phần ngày tháng năm
-                    var dateOnly = businessDateStr.split(' ')[0]; // '8/29/2024'
-                    var dateParts = dateOnly.split('/'); // ['8', '29', '2024']
+    let parsedBusinessDate = null;
+    $(document).ready(function () {
+        $("#btnPrint").trigger("click");
+        document.getElementById("reportTitle").innerText = 'Attendant Point';
+        var businessDateStr = '@ViewBag.BusinessDate'; // Ví dụ: '8/29/2024 12:00:00 AM'
+        console.log(businessDateStr);
+        // Lấy phần ngày tháng năm
+        var dateOnly = businessDateStr.split(' ')[0]; // '8/29/2024'
+        var dateParts = dateOnly.split('/'); // ['8', '29', '2024']
 
-                    // Parse đúng thứ tự: new Date(year, monthIndex, day)
-                     parsedBusinessDate = new Date(dateParts[2], dateParts[0] - 1, dateParts[1]);
+        // Parse đúng thứ tự: new Date(year, monthIndex, day)
+        parsedBusinessDate = new Date(dateParts[2], dateParts[0] - 1, dateParts[1]);
 
-                    // Gán vào input type="date"
-                    $('#fromDate').val(formatDate(parsedBusinessDate));
-                      
-               initializeTomSelects();
+        // Gán vào input type="date"
+        $('#fromDate').val(formatDate(parsedBusinessDate));
+
+        initializeTomSelects();
 
 
-        });
-         function initializeTomSelects() {
+    });
+    function initializeTomSelects() {
         const selectors = ["#zonecode", "#cachier"];
 
         for (const id of selectors) {
@@ -111,7 +112,7 @@
 
         }
     }
-      $(document).off("click", "#btnPrint").on("click", "#btnPrint", function () {
+    $(document).off("click", "#btnPrint").on("click", "#btnPrint", function () {
         $("#loadingSpinner").show();
 
         const fromDate = $("#fromDate").val();

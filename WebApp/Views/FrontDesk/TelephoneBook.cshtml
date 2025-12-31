@@ -4,11 +4,20 @@
 @{
     var selectedReport = @ViewBag.ReportHeader;
 
-    var categories = ViewBag.TelephoneBookCategoryList;
+    var categories = @ViewBag.TelephoneBookCategoryList;
+
 }
 <style>
+    #gridContainer .dx-datagrid-rowsview .dx-selection {
+        background-color: #005f87 !important;
+        /* màu xanh ng?c */
+        color: white !important;
+        /* ch? tr?ng */
+    }
 
- 
+    #gridContainer .dx-datagrid-rowsview .dx-selection * {
+        color: white !important;
+    }
 
     .dx-datagrid-headers .dx-header-row td {
         white-space: pre-line !important;
@@ -17,11 +26,167 @@
     }
 
 
-    .dx-datagrid .dx-editor-with-menu .dx-menu-item-content .dx-icon.dx-icon-filter-operation-default, .dx-datagrid-container .dx-editor-with-menu .dx-menu-item-content .dx-icon.dx-icon-filter-operation-default {
+    .dx-datagrid .dx-editor-with-menu .dx-menu-item-content .dx-icon.dx-icon-filter-operation-default,
+    .dx-datagrid-container .dx-editor-with-menu .dx-menu-item-content .dx-icon.dx-icon-filter-operation-default {
         display: none;
     }
 
- 
+    #gridContainer .dx-datagrid-rowsview .dx-row>td {
+        padding-top: 2px !important;
+        padding-bottom: 2px !important;
+        font-size: 12px !important;
+        line-height: 24px !important;
+    }
+
+    #gridContainer .dx-datagrid-headers {
+        background-color: #3b9ac6 !important;
+        /* Màu xanh duong */
+        color: white !important;
+        /* Ch? tr?ng cho d? d?c */
+    }
+
+    #gridContainer .dx-datagrid-headers .dx-header-row>td {
+        padding-top: 12px !important;
+        padding-bottom: 12px !important;
+        font-size: 12px !important;
+    }
+
+    #gridContainer .dx-datagrid-headers .dx-header-row>td {
+        background-color: #3b9ac6 !important;
+        color: white !important;
+        font-weight: bold;
+        border-right: 1px solid #ddd !important;
+        text-align: center !important;
+    }
+
+    #gridContainer .dx-datagrid-rowsview td,
+    #gridContainer .dx-datagrid-headers td {
+        border-right: 1px solid #ddd !important;
+    }
+
+    /* Lo?i b? vi?n ph?i ? c?t cu?i cùng (tùy ch?n) */
+    #gridContainer .dx-datagrid-rowsview tr td:last-child,
+    #gridContainer .dx-datagrid-headers tr td:last-child {
+        border-right: none !important;
+    }
+
+    #gridContainer .dx-datagrid-rowsview .dx-selection {
+        background-color: #01579b !important;
+        color: white !important;
+    }
+
+    #gridContainer .dx-datagrid-rowsview .dx-selection * {
+        color: white !important;
+    }
+
+    #gridContainer .dx-datagrid-filter-row td .dx-datebox {
+        height: 24px !important;
+        min-height: 24px !important;
+    }
+
+    #gridContainer .dx-datagrid-filter-row td .dx-datebox input {
+        font-size: 12px !important;
+        height: 24px !important;
+    }
+
+    #gridContainer .dx-datagrid-filter-row td .dx-editor-with-menu,
+    #gridContainer .dx-datagrid-filter-row td .dx-texteditor input {
+        height: 24px !important;
+        line-height: 24px !important;
+        padding: 2px 6px !important;
+        font-size: 12px !important;
+        box-sizing: border-box;
+    }
+
+    #gridContainer .dx-datagrid-filter-row td .dx-datebox,
+    #gridContainer .dx-datagrid-filter-row td .dx-dropdowneditor {
+        height: 26px !important;
+        min-height: 26px !important;
+        font-size: 12px !important;
+    }
+
+    #logGridContainer .dx-datagrid-rowsview .dx-selection {
+        background-color: #005f87 !important;
+        /* màu xanh ng?c */
+        color: white !important;
+        /* ch? tr?ng */
+    }
+
+    #logGridContainer .dx-datagrid-rowsview .dx-selection * {
+        color: white !important;
+    }
+
+    #logGridContainer .dx-datagrid-rowsview .dx-row>td {
+        padding-top: 2px !important;
+        padding-bottom: 2px !important;
+        font-size: 12px !important;
+        line-height: 24px !important;
+    }
+
+    #logGridContainer .dx-datagrid-headers {
+        background-color: #3b9ac6 !important;
+        /* Màu xanh duong */
+        color: white !important;
+        /* Ch? tr?ng cho d? d?c */
+    }
+
+    #logGridContainer .dx-datagrid-headers .dx-header-row>td {
+        padding-top: 12px !important;
+        padding-bottom: 12px !important;
+        font-size: 12px !important;
+        background-color: #3b9ac6 !important;
+        color: white !important;
+        font-weight: bold;
+        border-right: 1px solid #ddd !important;
+        text-align: center !important;
+    }
+
+    #logGridContainer .dx-datagrid-rowsview td,
+    #logGridContainer .dx-datagrid-headers td {
+        border-right: 1px solid #ddd !important;
+    }
+
+    /* Lo?i b? vi?n ph?i ? c?t cu?i cùng (tùy ch?n) */
+    #logGridContainer .dx-datagrid-rowsview tr td:last-child,
+    #logGridContainer .dx-datagrid-headers tr td:last-child {
+        border-right: none !important;
+    }
+
+    #logGridContainer .dx-datagrid-rowsview .dx-selection {
+        background-color: #01579b !important;
+        color: white !important;
+    }
+
+    #logGridContainer .dx-datagrid-rowsview .dx-selection * {
+        color: white !important;
+    }
+
+    #logGridContainer .dx-datagrid-filter-row td .dx-datebox {
+        height: 24px !important;
+        min-height: 24px !important;
+    }
+
+    #logGridContainer .dx-datagrid-filter-row td .dx-datebox input {
+        font-size: 12px !important;
+        height: 24px !important;
+    }
+
+    #logGridContainer .dx-datagrid-filter-row td .dx-editor-with-menu,
+    #logGridContainer .dx-datagrid-filter-row td .dx-texteditor input {
+        height: 24px !important;
+        line-height: 24px !important;
+        padding: 2px 6px !important;
+        font-size: 12px !important;
+        box-sizing: border-box;
+    }
+
+    #logGridContainer .dx-datagrid-filter-row td .dx-datebox,
+    #logGridContainer .dx-datagrid-filter-row td .dx-dropdowneditor {
+        height: 26px !important;
+        min-height: 26px !important;
+        font-size: 12px !important;
+    }
+
     .filter_wrapper {
         /*     background-color: #ececec; */
         /*   margin: 0px 8px 14px 8px; */
@@ -39,16 +204,26 @@
         margin: 0px 8px;
     }
 
-        .button_wrapper .fa-solid {
-            margin-right: 5px;
-        }
+    .button_wrapper .fa-solid {
+        margin-right: 5px;
+    }
 
     .selected {
-        background-color: #4CAF50; /* Màu xanh */
+        background-color: #4CAF50;
+        /* Màu xanh */
         color: white;
     }
 
-   
+    #gridContainer .dx-datagrid-rowsview .dx-selection {
+        background-color: #01579b !important;
+        /* màu xanh ng?c */
+        color: white !important;
+        /* ch? tr?ng */
+    }
+
+    #gridContainer .dx-datagrid-rowsview .dx-selection * {
+        color: white !important;
+    }
 
     .sticky-header .form-control-sm {
         padding: .1rem .35rem;
@@ -59,10 +234,18 @@
         margin-right: .5rem !important;
     }
 
+    #gridContainer .dx-datagrid-headers .dx-header-row>td {
+        padding: 5px !important;
+        height: 24px !important;
+        font-size: 12px !important;
+        line-height: 1.1 !important;
+    }
 
     .sticky-header input[type="date"].form-control-sm {
-        font-size: 12px !important; /* dúng 12?px */
-        height: calc(1.1em + .2rem + 2px); /* gi? cùng chi?u cao */
+        font-size: 12px !important;
+        /* dúng 12?px */
+        height: calc(1.1em + .2rem + 2px);
+        /* gi? cùng chi?u cao */
     }
 
     .sticky-header label {
@@ -72,12 +255,14 @@
 
     .tomselect-custom {
         width: 250px;
-        min-height: 30px; /* ho?c tùy theo chi?u cao b?n mu?n */
+        min-height: 30px;
+        /* ho?c tùy theo chi?u cao b?n mu?n */
         font-size: 0.65rem;
     }
 
     .sort-select {
-        max-width: 130px; /* ho?c 100px n?u mu?n nh? hon */
+        max-width: 130px;
+        /* ho?c 100px n?u mu?n nh? hon */
         font-size: 12px;
         padding: 0.15rem 0.5rem;
     }
@@ -89,56 +274,62 @@
         background-image: none !important;
         padding-right: 10px !important;
     }
-
 </style>
 
 <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
 <div class="text-center" id="reportTitle" style="font-size: 20px">Telephone Book</div>
 <div class="sticky-header bg-white p-2 shadow-sm z-3">
-<div class="d-flex flex-wrap align-items-center gap-2 mb-1" style="border: 1px solid #ced4da; border-radius: 6px; padding: 8px;">
-    <div class="d-flex flex-column ">
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-1"
+        style="border: 1px solid #ced4da; border-radius: 6px; padding: 8px;">
+        <div class="d-flex flex-column ">
 
             <div class="d-flex align-items-center me-3">
 
-             <label class ="me-2 mb-0">Category:</label>
+                <label class="me-2 mb-0">Category:</label>
                 <select id="categoryFilter" class="form-control form-control-sm w-auto">
-            @foreach (var c in categories)
-            {
-                <option value="@c.ID">@c.Name</option>
-            }
-        </select>
+                    @foreach (var c in categories)
+                    {
+                        <option value="@c.ID">@c.Name</option>
+                    }
+                </select>
+            </div>
         </div>
-    </div>
-            <div class="d-flex align-items-center me-3">
-             <label class="me-2 mb-0">Telephone Search:</label>
+        <div class="d-flex align-items-center me-3">
+            <label class="me-2 mb-0">Telephone Search:</label>
             <input type="text" id="phoneSearch" class="form-control form-control-sm" style="width: 180px;" />
+        </div>
+
     </div>
-      
-</div>
     <div class="">
-        <button  id="btnView" class="mui-button mui-button-new"><i class="fa-solid fa-eye"></i> View</button>
-        <button  id="btnNew" class="mui-button mui-button-new"><i class="fa-solid fa-plus"></i> New</button>
-        <button  id="btnUpdate" class="mui-button mui-button-edit"><i class="fa-solid fa-pen"></i> Edit</button>
-        <button   id="btnDelete" class="mui-button mui-button-new"><i class="fa-solid fa-trash"></i> Delete</button>
-        <button   id="btnExportExcel" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Excel</button>
+        <button style="border-radius: 4px;  margin-right: 6px;background-color: #6c757d;" id="btnView"
+            class="mui-button mui-button-new"><i class="fa-solid fa-eye"></i> View</button>
+        <button style="border-radius: 4px;  margin-right: 6px;background-color: #28a745 ;" id="btnNew"
+            class="mui-button mui-button-new"><i class="fa-solid fa-plus"></i> New</button>
+        <button style="border-radius: 4px; margin-right: 6px;background-color: #007bff;" id="btnUpdate"
+            class="mui-button mui-button-edit"><i class="fa-solid fa-pen"></i> Edit</button>
+        <button style="border-radius: 4px; margin-right: 6px;background-color: #dc3545;" id="btnDelete"
+            class="mui-button mui-button-new"><i class="fa-solid fa-trash"></i> Delete</button>
+        <button style="border-radius: 4px;  margin-right: 6px;background-color: #1D6F42;" id="btnExportExcel"
+            class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Excel</button>
 
     </div>
 </div>
 <div class="mui-card">
     @*   <div style="font-size: 20px;" class="mt-1" id="reportTitle"></div> *@
     <div id="gridWrapper" class="gridContainer mt-2" style="max-height: 500px;">
-        <div class="gridContainer" id="gridContainer"></div>
+        <div id="gridContainer"></div>
     </div>
 </div>
 <div class="sticky-header bg-white p-2 shadow-sm z-3">
-<div class="sticky-header ms-1 me-1 mt-1">
+    <div class="sticky-header ms-1 me-1 mt-1">
         <label id="remarkInput" class="form-control mt-2">Remark</label>
         <label id="webInput" class="form-control mt-2">Web Address</label>
-</div>
+    </div>
 </div>
 
-<div id="loadingSpinner" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
+<div id="loadingSpinner"
+    style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
     <i class="fa-solid fa-spinner fa-spin"></i>
 </div>
 
@@ -185,14 +376,16 @@
                         </div>
                         <div class="col-md-6">
                             <label>Color:</label>
-                            <input type="color" class="d-flex align-items-center" name="color" id="popupColor" value="#ff0000" />
+                            <input type="color" class="d-flex align-items-center" name="color" id="popupColor"
+                                value="#ff0000" />
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" id="btnSavePopup" ><i class="fa-solid fa-floppy-disk"></i> Save</button>
+                <button type="button" class="btn btn-primary" id="btnSavePopup"><i class="fa-solid fa-floppy-disk"></i>
+                    Save</button>
             </div>
         </div>
     </div>
@@ -206,14 +399,14 @@
     }
     $(document).ready(function () {
         loadTelephoneGrid([]);
-           
+
     });
-        $(document).on("click", "#btnNew", function () {
+    $(document).on("click", "#btnNew", function () {
         $("#popupForm")[0].reset(); // reset form
         $("#telephonePopup").modal("show");
     });
 
-       // Khi bấm nút Update
+    // Khi bấm nút Update
     $("#btnUpdate").click(function () {
 
         const grid = $("#gridContainer").dxDataGrid("instance");
@@ -290,7 +483,7 @@
             });
         }
     });
-        $("#btnDelete").click(function () {
+    $("#btnDelete").click(function () {
         const grid = $("#gridContainer").dxDataGrid("instance");
         const selected = grid.getSelectedRowsData();
 
@@ -314,64 +507,64 @@
     });
 
 
-     $(document).off("click", "#btnView").on("click", "#btnView", function () {
-         $("#loadingSpinner").show();
+    $(document).off("click", "#btnView").on("click", "#btnView", function () {
+        $("#loadingSpinner").show();
 
-            $.ajax({
-                url: '/FrontDesk/GetTelephoneBook',
-                type: 'GET',
-                data: {
-                    categoryId: $("#categoryFilter").val(),
-                    phoneSearch: $("#phoneSearch").val()
-                },
-                success: function (data) {
-                    console.log(data);
-                    loadTelephoneGrid(data);
-                    $("#loadingSpinner").hide();
-                },
-                error: function () {
-                    alert("Không thể tải dữ liệu");
-                    $("#loadingSpinner").hide();
-                }
-            });
+        $.ajax({
+            url: '/FrontDesk/GetTelephoneBook',
+            type: 'GET',
+            data: {
+                categoryId: $("#categoryFilter").val(),
+                phoneSearch: $("#phoneSearch").val()
+            },
+            success: function (data) {
+                console.log(data);
+                loadTelephoneGrid(data);
+                $("#loadingSpinner").hide();
+            },
+            error: function () {
+                alert("Không thể tải dữ liệu");
+                $("#loadingSpinner").hide();
+            }
         });
-        function loadTelephoneGrid(data) {
+    });
+    function loadTelephoneGrid(data) {
 
         $("#gridContainer").dxDataGrid({
-                dataSource: data,
-                keyExpr: "id", 
-                height: 400,
-                allowColumnResizing: true,
-                selection: { mode: "single" },
-                columns: [
+            dataSource: data,
+            keyExpr: "id",
+            height: 400,
+            allowColumnResizing: true,
+            selection: { mode: "single" },
+            columns: [
                 { dataField: "name", caption: "Name" },
                 { dataField: "telephone", caption: "Telephone" },
                 { dataField: "address", caption: "Address" },
                 { dataField: "remark", caption: "Remark" }
-                ],
+            ],
             scrolling: {
-            mode: "standard", // Không dùng virtual để footer hiển thị đúng
-            showScrollbar: "always",
-            scrollByContent: true
-        },
-        paging: {
-            pageSize: 20
-        },
-        pager: {
-            visible: true,
-            allowedPageSizes: [20, 40, 'all'],
-            showPageSizeSelector: true,
-            showInfo: true,
-            showNavigationButtons: true
-        },
+                mode: "standard", // Không dùng virtual để footer hiển thị đúng
+                showScrollbar: "always",
+                scrollByContent: true
+            },
+            paging: {
+                pageSize: 20
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [20, 40, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true
+            },
             filterRow: {
-        visible: true,
-        applyFilter: "auto"
-    },
-        showBorders: true
-    });
+                visible: true,
+                applyFilter: "auto"
+            },
+            showBorders: true
+        });
     }
-       $("#btnExportExcel").click(function () {
+    $("#btnExportExcel").click(function () {
         const grid = $("#gridContainer").dxDataGrid("instance");   // 🔥 khai báo grid
 
         const workbook = new ExcelJS.Workbook();

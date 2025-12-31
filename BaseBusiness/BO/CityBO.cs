@@ -24,10 +24,5 @@ namespace BaseBusiness.BO
         {
             get { return instance; }
         }
-        public CityModel GetById(int id, SqlConnection conn, SqlTransaction tx)
-        {
-            const string sql = "SELECT ID, Code, Name, Description, CreatedBy, CreatedDate,  UpdatedBy, UpdatedDate FROM City WHERE ID = @id";
-            return conn.QuerySingleOrDefault<CityModel>(sql, new { id }, tx);
-        }
     }
 }
