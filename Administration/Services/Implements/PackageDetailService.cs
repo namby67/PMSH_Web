@@ -78,6 +78,8 @@ namespace Administration.Services.Implements
         {
             bool isUpdate = dto.ID > 0;
             PackageDetailModel entity;
+
+            DateTime safeTime = new(1900 - 01 - 01);
             //Get entity
             if (isUpdate)
             {
@@ -111,9 +113,9 @@ namespace Administration.Services.Implements
             var transaction = transactions?.FirstOrDefault()
                 ?? throw new KeyNotFoundException($"Transaction not found (Code = {dto.TransCode})");
 
-            entity.SeasonID = dto.SeasonID;
-            entity.StartDate = dto.StartDate;
-            entity.EndDate = dto.EndDate;
+            entity.SeasonID = dto.SeasonID ?? 0;
+            entity.StartDate = dto.StartDate ?? safeTime;
+            entity.EndDate = dto.EndDate ?? safeTime;
             entity.TransCode = dto.TransCode;
             entity.Description = transaction.Description;
             entity.Price = dto.Price ?? 0;
@@ -123,7 +125,7 @@ namespace Administration.Services.Implements
             entity.PriceAfterTax = dto.PriceAfterTax ?? 0;
             entity.IsTaxInclude = !transaction.TaxInclude;
             entity.UserUpdateID = dto.UserUpdateID ?? 0;
-            entity.UpdateDate = dto.UpdateDate;
+            entity.UpdateDate = dto.UpdateDate ?? safeTime;
 
             //Save
             if (isUpdate)
