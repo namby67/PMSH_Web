@@ -9,7 +9,7 @@ namespace BaseBusiness.util
 {
     public class DataTableHelper
     {
-         static public DataTable getTableData(string procedureName)
+        static public DataTable getTableData(string procedureName)
         {
             DataTable table = new DataTable();
             SqlConnection mySqlConnectionConnFromDB = null;
@@ -77,7 +77,6 @@ namespace BaseBusiness.util
                 }
             }
         }
-
 
         static public DataTable getTableData(string procedureName, SqlParameter[] mySqlParameter)
         {

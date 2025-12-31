@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 
 namespace Billing.Services.Interfaces
 {
-    public interface IInvoicingService
-    {
-        /// <summary>
-        /// DatVP: Lây danh sách folio được assgin theo room No và tên đặt booking
-        /// </summary>
-        /// <param name="room">room no</param>
-        /// <param name="name">tên đặt booking</param>
+        public interface IInvoicingService
+        {
+                /// <summary>
+                /// DatVP: Lây danh sách folio được assgin theo room No và tên đặt booking
+                /// </summary>
+                /// <param name="room">room no</param>
+                /// <param name="name">tên đặt booking</param>
 
-        /// <returns>Data table chứa danh sách folio theo room No và tên đặt booking</returns>
-        DataTable SearchFolio(int guestStatus, int folioStatus,int folioType,string name,string room,string folioNo,string confirmationNo,string date);
+                /// <returns>Data table chứa danh sách folio theo room No và tên đặt booking</returns>
+                DataTable SearchFolio(int guestStatus, int folioStatus, int folioType, string name, string room, string folioNo, string confirmationNo, string date);
 
-        DataTable GetPreviewBillingAmount(int confirmationNo, int folioID);
-    }
+                DataTable GetPreviewBillingAmount(int confirmationNo, int folioID);
+        }
 }

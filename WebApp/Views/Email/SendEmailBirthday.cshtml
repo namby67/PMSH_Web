@@ -25,7 +25,8 @@
     </div>
 </div>
 
-<div class="modal fade" id="modalTemplateEmail" tabindex="-1" aria-labelledby="transactionModalLabel" aria-hidden="true">
+<div class="modal fade" id="modalTemplateEmail" tabindex="-1" aria-labelledby="transactionModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content" style="border: 1px solid #bcbcbc">
             <div class="modal-header">
@@ -44,12 +45,12 @@
     </div>
 </div>
 <script>
-    function openModalChooseTemplate(){
+    function openModalChooseTemplate() {
         var grid = $("#gridContainer").dxDataGrid("instance");
         var selectedRows = grid.getSelectedRowsData();
         var selectedIds = selectedRows.map(row => row.ID);
-        if(selectedIds.length < 1){
-            showToast('Error',"Please choose at least 1 email",false);
+        if (selectedIds.length < 1) {
+            showToast('Error', "Please choose at least 1 email", false);
             return;
         }
         getAllContactEmail();
@@ -95,7 +96,7 @@
                 visible: true,
                 applyFilter: "auto"
             },
-            onRowClick: function(e) {
+            onRowClick: function (e) {
                 const grid = $("#gridContainerContact").dxDataGrid("instance");
                 grid.selectRows([e.key], false);
                 templateID = e.data.id;
@@ -158,7 +159,7 @@
                 showCheckBoxesMode: "always" // Always show checkboxes
             },
             columns: [
-                { dataField: "id", caption: "ID",visible: false },
+                { dataField: "id", caption: "ID", visible: false },
 
                 { dataField: "code", caption: "Code" },
                 { dataField: "account", caption: "Account" },
@@ -170,7 +171,7 @@
                 { dataField: "email", caption: "Email" },
                 { dataField: "dateOfBirth", caption: "Date of Birth", dataType: "date" }
             ],
-            onRowClick: function(e) {
+            onRowClick: function (e) {
                 const grid = $("#gridContainerContact").dxDataGrid("instance");
                 grid.selectRows([e.key], false);
                 templateID = e.data.id;
@@ -199,7 +200,7 @@
         });
     }
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         $.when(
             getBusinessDate()
 
@@ -207,7 +208,6 @@
             // Tất cả bốn lệnh gọi AJAX đã hoàn tất, bây giờ gọi getBusinessDate
             searchProfile();
         });
-        
     });
     function SendEmailGuest() {
         var grid = $("#gridContainer").dxDataGrid("instance");
@@ -220,19 +220,19 @@
             type: 'POST',
             dataType: 'json',
             data: {
-                templateID:templateID,
+                templateID: templateID,
                 profileIDs: selectedIds,
 
             },
             crossDomain: false,
             headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
             success: function (result) {
-                if(result.code == 0){
+                if (result.code == 0) {
                     $('#modalTemplateEmail').modal('hide');
-                    showToast('Succes',result.msg,true);
+                    showToast('Succes', result.msg, true);
                 }
-                else{
-                    showToast('Error',result.msg,false);
+                else {
+                    showToast('Error', result.msg, false);
 
                 }
             },

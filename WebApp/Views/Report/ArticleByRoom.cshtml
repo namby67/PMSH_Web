@@ -28,33 +28,36 @@
         margin: 0px 8px;
     }
 
-        .button_wrapper .fa-solid {
-            margin-right: 5px;
-        }
+    .button_wrapper .fa-solid {
+        margin-right: 5px;
+    }
 
     .selected {
-        background-color: #4CAF50; /* Màu xanh */
+        background-color: #4CAF50;
+        /* Màu xanh */
         color: white;
     }
 
     #gridContainer .dx-datagrid-rowsview .dx-selection {
-        background-color: #01579b !important; /* màu xanh ngọc */
-        color: white !important; /* chữ trắng */
+        background-color: #01579b !important;
+        /* màu xanh ngọc */
+        color: white !important;
+        /* chữ trắng */
     }
 
-        #gridContainer .dx-datagrid-rowsview .dx-selection * {
-            color: white !important;
-        }
+    #gridContainer .dx-datagrid-rowsview .dx-selection * {
+        color: white !important;
+    }
 
-    #gridContainer .dx-datagrid-headers .dx-header-row > td {
+    #gridContainer .dx-datagrid-headers .dx-header-row>td {
         padding: 5px !important;
         height: 24px !important;
         font-size: 12px !important;
         line-height: 1.1 !important;
     }
 
-    #gridContainer .dx-datagrid-rowsview .dx-row > td,
-    #gridContainer .dx-datagrid .dx-summary-row > td,
+    #gridContainer .dx-datagrid-rowsview .dx-row>td,
+    #gridContainer .dx-datagrid .dx-summary-row>td,
     #gridContainer .dx-datagrid .dx-total-footer td,
     #gridContainer .dx-datagrid .dx-footer-row td {
         font-size: 11px !important;
@@ -79,17 +82,17 @@
         margin-bottom: .5rem;
     }
 
-        .filter-row .title {
-            width: 80px;
-            font-weight: 700;
-            line-height: 1.2;
-        }
+    .filter-row .title {
+        width: 80px;
+        font-weight: 700;
+        line-height: 1.2;
+    }
 
-        .filter-row .content {
-            display: flex;
-            flex-wrap: wrap;
-            gap: .5rem 1rem;
-        }
+    .filter-row .content {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .5rem 1rem;
+    }
 
     .filter-panel .form-control-sm,
     .filter-panel .form-select-sm,
@@ -115,15 +118,15 @@
         margin-right: .5rem !important;
     }
 
-    #gridContainer .dx-datagrid-headers .dx-header-row > td {
+    #gridContainer .dx-datagrid-headers .dx-header-row>td {
         padding: 5px !important;
         height: 24px !important;
         font-size: 12px !important;
         line-height: 1.1 !important;
     }
 
-    #gridContainer .dx-datagrid-rowsview .dx-row > td,
-    #gridContainer .dx-datagrid .dx-summary-row > td,
+    #gridContainer .dx-datagrid-rowsview .dx-row>td,
+    #gridContainer .dx-datagrid .dx-summary-row>td,
     #gridContainer .dx-datagrid .dx-total-footer td,
     #gridContainer .dx-datagrid .dx-footer-row td {
         font-size: 11px !important;
@@ -131,45 +134,48 @@
 
     .report-bar {
         position: relative;
-        margin-bottom: 1rem; /* = mb-3 của bạn */
+        margin-bottom: 1rem;
+        /* = mb-3 của bạn */
     }
 
-        /* Tiêu đề ở giữa, full width để text-center hoạt động */
-        .report-bar #reportTitle {
-            font-size: 20px;
-            margin: 0; /* bỏ margin dưới h4/h5 mặc định */
-            text-align: center;
-        }
+    /* Tiêu đề ở giữa, full width để text-center hoạt động */
+    .report-bar #reportTitle {
+        font-size: 20px;
+        margin: 0;
+        /* bỏ margin dưới h4/h5 mặc định */
+        text-align: center;
+    }
 
-        /* Nhóm nút cố định góc phải, canh theo chiều dọc */
-        .report-bar .action-buttons {
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-        }
+    /* Nhóm nút cố định góc phải, canh theo chiều dọc */
+    .report-bar .action-buttons {
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+    }
 
     .tomselect-custom {
         width: 300px;
-        min-height: 30px; /* hoặc tùy theo chiều cao bạn muốn */
+        min-height: 30px;
+        /* hoặc tùy theo chiều cao bạn muốn */
         font-size: 0.65rem;
     }
-        /* Áp dụng font-size nhỏ cho TomSelect dựa vào class gốc .tomselect-custom */
-        .tomselect-custom + .ts-wrapper .ts-control,
-        .tomselect-custom + .ts-wrapper .ts-dropdown,
-        .tomselect-custom + .ts-wrapper .ts-dropdown .option {
-            font-size: 0.65rem !important;
-            min-height: 30px !important;
-        }
 
-
+    /* Áp dụng font-size nhỏ cho TomSelect dựa vào class gốc .tomselect-custom */
+    .tomselect-custom+.ts-wrapper .ts-control,
+    .tomselect-custom+.ts-wrapper .ts-dropdown,
+    .tomselect-custom+.ts-wrapper .ts-dropdown .option {
+        font-size: 0.65rem !important;
+        min-height: 30px !important;
+    }
 </style>
 <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
 <div class="text-center" id="reportTitle" style="font-size: 20px"></div>
 
 <div class="sticky-header bg-white p-2 shadow-sm z-3">
-    <div class="d-flex flex-wrap align-items-center gap-2 mb-1" style="border: 1px solid #ced4da; border-radius: 6px; padding: 8px;">
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-1"
+        style="border: 1px solid #ced4da; border-radius: 6px; padding: 8px;">
         <div class="d-flex flex-column ">
 
             <div class="d-flex align-items-center">
@@ -190,7 +196,7 @@
             <div class="d-flex align-items-center">
                 <label class="fw-bold me-2">Filter:</label>
                 <div class="d-flex align-items-center me-3">
-                   
+
                     <div class="d-flex align-items-center me-3">
                         <label class="me-2 mb-0">Post By:</label>
                         <div style="width: 120px;">
@@ -218,7 +224,7 @@
                             <option value="@item.RoomNo">@item.RoomNo-@item.RoomName</option>
                         }
                     </select>
-                     </div>
+                </div>
 
                 <div class="d-flex align-items-center me-3">
                     <label class="me-2 mb-0">Article:</label>
@@ -234,26 +240,29 @@
 
             </div>
         </div>
-    
+
 
     </div>
     <div class="">
-        <button   id="btnPrint" class="mui-button mui-button-new"><i class="fa-solid fa-eye"></i>View</button>
-        <button  id="btnExportExcel" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Excel</button>
-        <button   id="btnExportPdf" class="mui-button mui-button-new" type="button"><i class="fas fa-eraser"></i> PDF</button>
-    <button   id="btnPrintGrid" class="mui-button mui-button-new" type="button">
-        <i class="fa-solid fa-print"></i> Print
-    </button>
+        <button id="btnPrint" class="mui-button mui-button-new"><i class="fa-solid fa-eye"></i>View</button>
+        <button id="btnExportExcel" class="mui-button mui-button-new" type="button"> <i
+                class="fa-solid fa-file-excel"></i> Excel</button>
+        <button id="btnExportPdf" class="mui-button mui-button-new" type="button"><i class="fas fa-eraser"></i>
+            PDF</button>
+        <button id="btnPrintGrid" class="mui-button mui-button-new" type="button">
+            <i class="fa-solid fa-print"></i> Print
+        </button>
     </div>
 </div>
 
 <div class="mui-card">
     @*     <div style="font-size: 20px;" class="mt-1" id="reportTitle"></div> *@
     <div id="gridWrapper" class="mt-2" style="max-height: 500px;">
-        <div class ="gridContainer mt-2" id="gridContainer"></div>
+        <div class="gridContainer mt-2" id="gridContainer"></div>
     </div>
 </div>
-<div id="loadingSpinner" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
+<div id="loadingSpinner"
+    style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
     <i class="fa-solid fa-spinner fa-spin"></i>
 </div>
 <script>
@@ -263,10 +272,10 @@
         let day = date.getDate().toString().padStart(2, '0'); // Đảm bảo có 2 chữ số
         return `${year}-${month}-${day}`;
     }
-      
+
 
     $(document).ready(function () {
-         document.getElementById("reportTitle").innerText = '@ViewBag.ReportTitle';
+        document.getElementById("reportTitle").innerText = '@ViewBag.ReportTitle';
         const today = new Date();
 
         const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
@@ -282,36 +291,36 @@
         // Gán giá trị cho input date
         document.getElementById('fromDate').value = formattedFirstDay;
         document.getElementById('toDate').value = formattedLastDay;
-             initializeTomSelects();
+        initializeTomSelects();
 
 
     });
-         function initializeTomSelects() {
-            const selectors = ["#room","#article"];
+    function initializeTomSelects() {
+        const selectors = ["#room", "#article"];
 
-            for (const id of selectors) {
-                const el = document.querySelector(id);
-                if (!el) continue;
+        for (const id of selectors) {
+            const el = document.querySelector(id);
+            if (!el) continue;
 
-                // Nếu đã khởi tạo rồi thì destroy
-                if (el.tomselect) el.tomselect.destroy();
+            // Nếu đã khởi tạo rồi thì destroy
+            if (el.tomselect) el.tomselect.destroy();
 
-                const ts = new TomSelect(el, {
-                    plugins: ['remove_button'],
-                    create: false,
-                    maxItems: null,
-                    allowEmptyOption: true,
-                    placeholder: '',
-                    persist: false,
-                    render: {
-                        option: function (data, escape) {
-                            return `<div>${escape(data.text)}</div>`;
-                        }
+            const ts = new TomSelect(el, {
+                plugins: ['remove_button'],
+                create: false,
+                maxItems: null,
+                allowEmptyOption: true,
+                placeholder: '',
+                persist: false,
+                render: {
+                    option: function (data, escape) {
+                        return `<div>${escape(data.text)}</div>`;
                     }
-                });
+                }
+            });
 
-            }
         }
+    }
     $(document).off("click", "#btnPrint").on("click", "#btnPrint", function () {
         $("#loadingSpinner").show();
         $.ajax({
@@ -326,15 +335,15 @@
                 article: $("#article").val(),
             },
             traditional: true,
-              crossDomain: false,
-                headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
             success: function (result) {
                 // $("#reportViewerContainer").html(result);
                 // $("#loadingSpinner").hide();
-            console.log(result);
-                        const processed = prepareArticleByRoomsData(result);
-                        initializeReservationSummaryGrid(processed.data, processed.grandTotal);
-                    $("#loadingSpinner").hide();
+                console.log(result);
+                const processed = prepareArticleByRoomsData(result);
+                initializeReservationSummaryGrid(processed.data, processed.grandTotal);
+                $("#loadingSpinner").hide();
             },
             error: function () {
                 alert("Không thể tải báo cáo.");
@@ -344,59 +353,59 @@
     });
 
 
-       function prepareArticleByRoomsData(data) {
+    function prepareArticleByRoomsData(data) {
         const groupedData = {};
         const finalData = [];
 
-       data.forEach(item => {
-        const key = item.roomNo || ""; // nếu null thì gán rỗng
-        if (!groupedData[key]) groupedData[key] = [];
-        groupedData[key].push(item);
-    });
-
-    const isLeadingZero = (str) => /^0\d+/.test(str); // true nếu có số 0 đầu
-
-    const sortedEntries = Object.entries(groupedData).sort(([a], [b]) => {
-        // Xử lý null hoặc ""
-        if (!a && b) return -1;
-        if (a && !b) return 1;
-        if (!a && !b) return 0;
-
-        const aHasZero = isLeadingZero(a);
-        const bHasZero = isLeadingZero(b);
-
-        // Nếu a có 0 đầu và b không → a đứng sau
-        if (aHasZero && !bHasZero) return 1;
-        if (!aHasZero && bHasZero) return -1;
-
-        // Cả hai cùng nhóm → sắp theo giá trị số
-        return parseInt(a) - parseInt(b);
-    });
-
-    sortedEntries.forEach(([roomNo, records]) => {
-        const firstRecord = records[0];
-
-        finalData.push({
-            articleCode: `Room: ${roomNo || ""}`,
-            articleDescription: `${firstRecord.lastName}`,
-            quantity: ` C: ${firstRecord.confirmationNo} `,
-            price: ` ${toDMY(firstRecord.arrivalDate)}`,
-            amountBeforeTax: ` ${toDMY(firstRecord.departureDate)}`,
-            isTitle: true,
-            cssClass: "custom"
+        data.forEach(item => {
+            const key = item.roomNo || ""; // nếu null thì gán rỗng
+            if (!groupedData[key]) groupedData[key] = [];
+            groupedData[key].push(item);
         });
 
-        finalData.push(...records);
+        const isLeadingZero = (str) => /^0\d+/.test(str); // true nếu có số 0 đầu
 
-        finalData.push({
-            articleDescription: "Sub Total",
-            quantity: sum(records, 'quantity'),
-            amountBeforeTax: sum(records, 'amountBeforeTax'),
-            amount: sum(records, 'amount'),
-            isTotal: true,
-            cssClass: "custom"
+        const sortedEntries = Object.entries(groupedData).sort(([a], [b]) => {
+            // Xử lý null hoặc ""
+            if (!a && b) return -1;
+            if (a && !b) return 1;
+            if (!a && !b) return 0;
+
+            const aHasZero = isLeadingZero(a);
+            const bHasZero = isLeadingZero(b);
+
+            // Nếu a có 0 đầu và b không → a đứng sau
+            if (aHasZero && !bHasZero) return 1;
+            if (!aHasZero && bHasZero) return -1;
+
+            // Cả hai cùng nhóm → sắp theo giá trị số
+            return parseInt(a) - parseInt(b);
         });
-    });
+
+        sortedEntries.forEach(([roomNo, records]) => {
+            const firstRecord = records[0];
+
+            finalData.push({
+                articleCode: `Room: ${roomNo || ""}`,
+                articleDescription: `${firstRecord.lastName}`,
+                quantity: ` C: ${firstRecord.confirmationNo} `,
+                price: ` ${toDMY(firstRecord.arrivalDate)}`,
+                amountBeforeTax: ` ${toDMY(firstRecord.departureDate)}`,
+                isTitle: true,
+                cssClass: "custom"
+            });
+
+            finalData.push(...records);
+
+            finalData.push({
+                articleDescription: "Sub Total",
+                quantity: sum(records, 'quantity'),
+                amountBeforeTax: sum(records, 'amountBeforeTax'),
+                amount: sum(records, 'amount'),
+                isTotal: true,
+                cssClass: "custom"
+            });
+        });
 
 
         // 👉 Tính Grand Total một lần ở đây
@@ -410,7 +419,7 @@
     }
 
 
-      function averageOfSums(arr, fields) {
+    function averageOfSums(arr, fields) {
         if (arr.length === 0) return 0;
         let total = 0;
         fields.forEach(field => {
@@ -420,29 +429,29 @@
     }
 
     // Helper functions
-   function sum(arr, field) {
-    return arr.reduce((total, item) => {
-        let val = field ? item?.[field] : item;
+    function sum(arr, field) {
+        return arr.reduce((total, item) => {
+            let val = field ? item?.[field] : item;
 
-        // loại bỏ null/undefined
-        if (val == null) return total;
+            // loại bỏ null/undefined
+            if (val == null) return total;
 
-        // Nếu là chuỗi, bỏ ký tự không phải số, dấu phẩy, khoảng trắng
-        if (typeof val === "string") {
-            val = val.replace(/[^0-9.-]/g, "");  // giữ lại số, dấu - và .
-        }
+            // Nếu là chuỗi, bỏ ký tự không phải số, dấu phẩy, khoảng trắng
+            if (typeof val === "string") {
+                val = val.replace(/[^0-9.-]/g, "");  // giữ lại số, dấu - và .
+            }
 
-        val = parseFloat(val);
-        return Number.isFinite(val) ? total + val : total;
-    }, 0);
-}
+            val = parseFloat(val);
+            return Number.isFinite(val) ? total + val : total;
+        }, 0);
+    }
 
     function average(arr, field) {
         const valid = arr.filter(x => x[field] != null);
         if (valid.length === 0) return 0;
         return valid.reduce((sum, x) => sum + x[field], 0) / valid.length;
     }
-        function toDMY(date){
+    function toDMY(date) {
         if (!date) return "";
         return new Date(date).toLocaleDateString("vi-VN"); // hoặc format khác tuỳ ý
     }
@@ -451,7 +460,7 @@
         const columnWidth = 180;
 
         $("#gridContainer").dxDataGrid({
-               dataSource: data,         height: 500,
+            dataSource: data, height: 500,
             allowColumnResizing: true,
             columns: [
 
@@ -459,30 +468,30 @@
                 { dataField: "articleDescription", caption: "Description", width: columnWidth + 50 },
                 { dataField: "quantity", caption: "Quantity", width: columnWidth - 40 },
                 { dataField: "price", caption: "Price", width: columnWidth - 50, dataType: "number", format: "#,##0" },
-                { dataField: "amountBeforeTax", caption: "Amount++", width: columnWidth - 50, dataType: "number", format: "#,##0"},
+                { dataField: "amountBeforeTax", caption: "Amount++", width: columnWidth - 50, dataType: "number", format: "#,##0" },
                 { dataField: "amount", caption: "Amount Net", width: columnWidth - 50, dataType: "number", format: "#,##0" }
             ],
-                summary: {
-                      totalItems: [
-                    { name:"arDescription", column:"articleDescription", summaryType:"custom", displayFormat:"Grand Total:" },
-                    { name:"qty",          column:"quantity",        summaryType:"custom", displayFormat:"{0}" },
-                    { name:"amtBeforeTax", column:"amountBeforeTax", summaryType:"custom", valueFormat:"#,##0" },
-                    { name:"amt",          column:"amount",          summaryType:"custom", valueFormat:"#,##0" }
-                  ],
+            summary: {
+                totalItems: [
+                    { name: "arDescription", column: "articleDescription", summaryType: "custom", displayFormat: "Grand Total:" },
+                    { name: "qty", column: "quantity", summaryType: "custom", displayFormat: "{0}" },
+                    { name: "amtBeforeTax", column: "amountBeforeTax", summaryType: "custom", valueFormat: "#,##0" },
+                    { name: "amt", column: "amount", summaryType: "custom", valueFormat: "#,##0" }
+                ],
 
-                  // Đây mới là hàm DevExtreme sẽ gọi khi summaryType="custom"
-                  calculateCustomSummary: function (e) {
-                      if (e.summaryProcess === "finalize") {
-                          if (e.name === "qty")          e.totalValue = grandTotal.quantity;
-                          if (e.name === "amtBeforeTax") e.totalValue = grandTotal.amountBeforeTax;
-                          if (e.name === "amt")          e.totalValue = grandTotal.amount;
-                      }
-                  }
-                },
+                // Đây mới là hàm DevExtreme sẽ gọi khi summaryType="custom"
+                calculateCustomSummary: function (e) {
+                    if (e.summaryProcess === "finalize") {
+                        if (e.name === "qty") e.totalValue = grandTotal.quantity;
+                        if (e.name === "amtBeforeTax") e.totalValue = grandTotal.amountBeforeTax;
+                        if (e.name === "amt") e.totalValue = grandTotal.amount;
+                    }
+                }
+            },
 
             paging: { pageSize: 25 },
             scrolling: {
-                
+
                 useNative: true,
                 showScrollbar: "always"
             },
@@ -497,33 +506,33 @@
             headerFilter: { visible: true },
             selection: { mode: "multiple", showCheckBoxesMode: "none" },
             showBorders: true,
-                onRowPrepared: function (e) {
-        if (e.rowType === "data") {
-            if (e.data?.isTitle) {
-                // Xoá hết nội dung các ô
-                e.rowElement.empty();
+            onRowPrepared: function (e) {
+                if (e.rowType === "data") {
+                    if (e.data?.isTitle) {
+                        // Xoá hết nội dung các ô
+                        e.rowElement.empty();
 
-                // Tạo 1 ô duy nhất chiếm toàn bộ chiều ngang bảng (colspan)
-                const td = $("<td></td>")
-                    .attr("colspan", e.columns.length)
-                    .css({
-                        "font-weight": "bold",
-                        "background-color": "#e0e0e0",
-                        "padding": "6px 12px"
-                    })
-                    .text(`Room: ${e.data.articleCode.replace("Room: ", "")} | ${e.data.articleDescription} | ${e.data.quantity} | ${e.data.price} | ${e.data.amountBeforeTax}`);
+                        // Tạo 1 ô duy nhất chiếm toàn bộ chiều ngang bảng (colspan)
+                        const td = $("<td></td>")
+                            .attr("colspan", e.columns.length)
+                            .css({
+                                "font-weight": "bold",
+                                "background-color": "#e0e0e0",
+                                "padding": "6px 12px"
+                            })
+                            .text(`Room: ${e.data.articleCode.replace("Room: ", "")} | ${e.data.articleDescription} | ${e.data.quantity} | ${e.data.price} | ${e.data.amountBeforeTax}`);
 
-                e.rowElement.append(td);
+                        e.rowElement.append(td);
+                    }
+
+                    if (e.data?.isTotal) {
+                        e.rowElement.css({
+                            "font-weight": "bold",
+                            "background-color": "#f6f6f6"
+                        });
+                    }
+                }
             }
-
-            if (e.data?.isTotal) {
-                e.rowElement.css({
-                    "font-weight": "bold",
-                    "background-color": "#f6f6f6"
-                });
-            }
-        }
-    }
 
         });
     }
@@ -531,18 +540,18 @@
 
 
     $("#btnExportExcel").click(function () {
-               const grid = $("#gridContainer").dxDataGrid("instance"); var selectedReport2 = '@ViewBag.ReportTitle';
+        const grid = $("#gridContainer").dxDataGrid("instance"); var selectedReport2 = '@ViewBag.ReportTitle';
         var selectedReport = '@ViewBag.ReportTitle';
         if (!selectedReport) {
             alert("Vui lòng chọn báo cáo trước khi xuất Excel.");
             return;
         }
 
-                     const workbook = new ExcelJS.Workbook();const companyName = localStorage.getItem("CompanyName") || "Tên công ty chưa xác định";
+        const workbook = new ExcelJS.Workbook(); const companyName = localStorage.getItem("CompanyName") || "Tên công ty chưa xác định";
         const worksheet = workbook.addWorksheet("Sheet 1");
 
         // === Tạo header công ty (dòng 1) ===
-       worksheet.addRow([companyName]);
+        worksheet.addRow([companyName]);
         worksheet.mergeCells('A1:E1');
         worksheet.getRow(1).font = { bold: true };
         worksheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'left' };
@@ -591,7 +600,7 @@
 
 
     // Nút xuất PDF
-       $("#btnExportPdf").click(function () {
+    $("#btnExportPdf").click(function () {
         const { jsPDF } = window.jspdf; // 👈 Bổ sung dòng này
 
         const doc = new jsPDF();
@@ -607,54 +616,54 @@
             doc.save("BaoCao.pdf");
         });
     });
-              $("#btnPrintGrid").on("click", function () {
-                 const grid = $("#gridContainer").dxDataGrid("instance"); var selectedReport2 = '@ViewBag.ReportTitle';
+    $("#btnPrintGrid").on("click", function () {
+        const grid = $("#gridContainer").dxDataGrid("instance"); var selectedReport2 = '@ViewBag.ReportTitle';
 
-          // Lấy toàn bộ data từ dataSource
-          grid.getDataSource().load().then(function (data) {
-              // Tạo bảng HTML từ dữ liệu
-              let tableHTML = '<table border="1" style="border-collapse: collapse; width: 100%;">';
+        // Lấy toàn bộ data từ dataSource
+        grid.getDataSource().load().then(function (data) {
+            // Tạo bảng HTML từ dữ liệu
+            let tableHTML = '<table border="1" style="border-collapse: collapse; width: 100%;">';
 
-              // Header
-              const columns = grid.getVisibleColumns();
-              tableHTML += "<thead><tr>";
-              columns.forEach(col => {
-                  tableHTML += `<th style="padding: 5px; text-align: center;">${col.caption}</th>`;
-              });
-              tableHTML += "</tr></thead>";
+            // Header
+            const columns = grid.getVisibleColumns();
+            tableHTML += "<thead><tr>";
+            columns.forEach(col => {
+                tableHTML += `<th style="padding: 5px; text-align: center;">${col.caption}</th>`;
+            });
+            tableHTML += "</tr></thead>";
 
-              // Body
-              tableHTML += "<tbody>";
-              data.forEach(row => {
-                  tableHTML += "<tr>";
-                  columns.forEach(col => {
-                      let value = col.calculateCellValue ? col.calculateCellValue(row) : row[col.dataField];
-                      tableHTML += `<td style="padding: 5px;">${value ?? ""}</td>`;
-                  });
-                  tableHTML += "</tr>";
-              });
-              tableHTML += "</tbody></table>";
+            // Body
+            tableHTML += "<tbody>";
+            data.forEach(row => {
+                tableHTML += "<tr>";
+                columns.forEach(col => {
+                    let value = col.calculateCellValue ? col.calculateCellValue(row) : row[col.dataField];
+                    tableHTML += `<td style="padding: 5px;">${value ?? ""}</td>`;
+                });
+                tableHTML += "</tr>";
+            });
+            tableHTML += "</tbody></table>";
 
-              // Mở cửa sổ in với nội dung bảng
-              const printWindow = window.open('', '', 'height=800,width=1000');
-              if (!printWindow) {
-                  alert("Trình duyệt đang chặn cửa sổ in.");
-                  return;
-              }
+            // Mở cửa sổ in với nội dung bảng
+            const printWindow = window.open('', '', 'height=800,width=1000');
+            if (!printWindow) {
+                alert("Trình duyệt đang chặn cửa sổ in.");
+                return;
+            }
 
-             printWindow.document.write('<html><head><title>' + selectedReport2 + '</title>');
-              printWindow.document.write('<style>table { font-family: Arial; font-size: 12px; }</style>');
-              printWindow.document.write('</head><body>');
-              printWindow.document.write(tableHTML);
-              printWindow.document.write('</body></html>');
-              printWindow.document.close();
+            printWindow.document.write('<html><head><title>' + selectedReport2 + '</title>');
+            printWindow.document.write('<style>table { font-family: Arial; font-size: 12px; }</style>');
+            printWindow.document.write('</head><body>');
+            printWindow.document.write(tableHTML);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
 
-              // Chờ nội dung render xong rồi in
-              printWindow.onload = function () {
-                  printWindow.focus();
-                  printWindow.print();
-                  printWindow.close();
-              };
-          });
-      });
+            // Chờ nội dung render xong rồi in
+            printWindow.onload = function () {
+                printWindow.focus();
+                printWindow.print();
+                printWindow.close();
+            };
+        });
+    });
 </script>

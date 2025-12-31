@@ -1,0 +1,351 @@
+@using DevExpress.XtraReports.UI
+
+@{
+    dynamic? listRateCode = @ViewBag.RateCodeList;
+    dynamic? listRateCate = @ViewBag.RateCateList;
+    dynamic? listRateClass = @ViewBag.RateClass;
+}
+<link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+
+<div class="text-center" id="reportTitle" style="font-size: 20px">Rate Code </div>
+<div class="sticky-header bg-white p-2 shadow-sm z-3">
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-1"
+        style="border: 1px solid #ced4da; border-radius: 6px; padding: 8px;">
+        <div class="d-flex align-items-center me-2">
+            <label class="me-2 mb-0">Rate Code:</label>
+
+            <select id="code" class="form-control form-control-sm w-auto">
+                <option value="0">-- Rate Code --</option>
+                @foreach (dynamic u in ViewBag.RateCodeList)
+                {
+                    <option value="@u.RateCode">@u.RateCode \ @u.Descripton</option>
+                }
+            </select>
+        </div>
+        <div class="d-flex align-items-center me-2">
+            <label class="me-2 mb-0">Rate Category:</label>
+
+            <select id="category" class="form-control form-control-sm w-auto">
+                <option value="0">-- Select Rate Category --</option>
+                @foreach (dynamic u in ViewBag.RateCateList)
+                {
+                    <option value="@u.Code">@u.Code \ @u.Name</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <div class="">
+        <button id="btnView" class="mui-button mui-button-new"><i class="fa-solid fa-eye"></i>View</button>
+        <button id="btnNew" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-plus"></i>
+            New</button>
+        <button id="btnEdit" class="mui-button mui-button-edit " type="button"> <i class="fa-solid fa-pen"></i>
+            Edit</button>
+        <button id="btnDelete" class="mui-button button-report-delete" type="button"> <i
+                class="fa-solid fa-trash-can"></i> Delete</button>
+        <button id="btnHistory" class="mui-button mui-button-resolve" type="button"> <i
+                class="fa-solid fa-file-excel"></i> History</button>
+    </div>
+</div>
+<div class="mui-card">
+    <div id="gridWrapper" style="max-height: 500px;">
+        <div class="gridContainer mt-2" id="gridContainer"></div>
+    </div>
+    <div id="overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 999;">
+    </div>
+
+    <div class="modal fade" id="itemModal" tabindex="-1" aria-labelledby="itemModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="itemModalLabel">New Rate Code</h5>
+                </div>
+
+                <!-- Modal Footer (nút Save & Close) -->
+                <div class="modal-footer justify-content-start">
+                    <button type="button" id="btnSaveItem" class="mui-button mui-button-save">
+                        <i class="fa-solid fa-floppy-disk"></i> Save
+                    </button>
+                    <button type="button" data-bs-dismiss="modal" class="mui-button mui-button-close">
+                        <i class="fa-solid fa-xmark"></i> Close
+                    </button>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="modal-body">
+                    <form id="itemForm">
+                        <div class="container-fluid" >
+
+                            <!-- Rate Code & Description -->
+                            <div class="row mb-1">
+                                <div class="col">
+                                    <label for="txtRateCode" class="form-label mb-0">Rate Code</label>
+                                    <input type="text" id="txtRateCode" name="txtRateCode"
+                                        class="form-control form-control-sm" />
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                            <div class="row mb-1">
+                                <div class="col">
+                                    <label for="txtDescription" class="form-label mb-0">Description</label>
+                                    <input type="text" id="txtDescription" name="txtDescription"
+                                        class="form-control form-control-sm" />
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+
+                            <!-- Rate Class & Rate Category -->
+                            <div class="row mb-1">
+                                <div class="col">
+                                    <label for="modalRateCodeSel" class="form-label mb-0">Rate Class</label>
+                                    <select id="modalRateCodeSel" name="modalRateCodeSel"
+                                        class="form-control form-control-sm">
+                                        <option value="0">-- Rate Class --</option>
+                                        @foreach (dynamic u in ViewBag.RateClass)
+                                        {
+                                            <option value="@u.ID">@u.Code \ @u.Name</option>
+                                        }
+                                    </select>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                            <div class="row mb-1">
+                                <div class="col">
+                                    <label for="modalRateCategorySel" class="form-label mb-0">Rate Category</label>
+                                    <select id="modalRateCategorySel" name="modalRateCategorySel"
+                                        class="form-control form-control-sm">
+                                        <option value="0">-- Rate Category --</option>
+                                        @foreach (dynamic u in ViewBag.RateCateList)
+                                        {
+                                            <option value="@u.ID">@u.Code \ @u.Name</option>
+                                        }
+                                    </select>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+
+                            <!-- Sequence -->
+                            <div class="row mb-1">
+                                <div class="col">
+                                    <label for="txtSequence" class="form-label mb-0">Sequence</label>
+                                    <input type="number" id="txtSequence" name="txtSequence"
+                                        class="form-control form-control-sm" />
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+
+                            <!-- Default Display Radio -->
+                            <div class="row mb-1">
+                                <div class="col">
+                                    <label class="form-label mb-0">Default Display</label><br />
+                                    <label><input type="radio" name="display" value="1" id="rdonet" checked>
+                                        .Net</label>
+                                    <label><input type="radio" name="display" value="0" id="rdoC++"> C++</label>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                                <div class="invalid-feedback"></div>
+                            </div>
+
+                            <!-- Properties Checkboxes -->
+                            <div class="row mb-1">
+                                <div class="col">
+                                    <label class="form-label mb-0">Properties</label><br />
+                                    <input type="checkbox" id="chkDayUse" name="chkDayUse"> DayUse<br />
+                                    <input type="checkbox" id="chkActive" name="chkActive"> Active<br />
+                                    <input type="checkbox" id="chkNegotiated" name="chkNegotiated"> Negotiated<br />
+                                    <input type="checkbox" id="chkIndividualOnly" name="chkIndividualOnly"> Individual
+                                    Only<br />
+                                    <input type="checkbox" id="chkIsModifiable" name="chkIsModifiable"> Is Modifiable
+                                </div>
+                            </div>
+
+                            <!-- Hidden Item ID -->
+                            <input type="hidden" id="modalItemId" name="modalItemId" value="0" />
+
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<div id="loadingSpinner"
+    style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
+    <i class="fa-solid fa-spinner fa-spin"></i>
+</div>
+<script>
+    var selectedRowData = null;
+
+    $(document).ready(function () {
+        reloadGrid();
+    });
+
+    // =======================
+    // CLEAR FORM
+    // =======================
+    function clearItemForm() {
+        $("#modalItemId").val(0);
+        $("#txtRateCode").val("");
+        $("#txtDescription").val("");
+        $("#modalRateCodeSel").val(0);
+        $("#modalRateCategorySel").val(0);
+        $("#txtSequence").val("");
+        $("#rdonet").prop("checked", true);
+
+        $("#chkDayUse").prop("checked", false);
+        $("#chkActive").prop("checked", false);
+        $("#chkNegotiated").prop("checked", false);
+        $("#chkIndividualOnly").prop("checked", false);
+        $("#chkIsModifiable").prop("checked", false);
+    }
+
+    // =======================
+    // LOAD GRID
+    // =======================
+    function reloadGrid() {
+        $("#loadingSpinner").show();
+
+        $.ajax({
+            url: '/Administration/RateCode/GetAllRateCode',
+            type: 'GET',
+            data: {
+                rateCode: $("#code").val() || "",
+                rateCategory: $("#category").val() || ""
+            },
+            success: function (result) {
+                loadTelephoneGrid(result.data || []);
+                if (!result.data || result.data.length === 0) {
+                    showToast("Warning", "No records.", false);
+                }
+                $("#loadingSpinner").hide();
+            },
+            error: function () {
+                showToast("Error", "Cannot load data.", false);
+                $("#loadingSpinner").hide();
+            }
+        });
+    }
+
+    // =======================
+    // GRID
+    // =======================
+    function loadTelephoneGrid(data) {
+        $("#gridContainer").dxDataGrid({
+            dataSource: data,
+            height: 500,
+            selection: { mode: "single" },
+            columns: [
+                { dataField: "rateCode", caption: "Code", width: "10%" },
+                { dataField: "description", caption: "Description", width: "50%" },
+                { dataField: "category", caption: "Category", width: "40%" }
+            ],
+            filterRow: { visible: true },
+            paging: { pageSize: 20 },
+            pager: { showInfo: true, showNavigationButtons: true },
+            onSelectionChanged: function (e) {
+                selectedRowData = e.selectedRowsData[0] || null;
+            }
+        });
+    }
+
+    // =======================
+    // NEW
+    // =======================
+    $("#btnNew").click(function () {
+        clearItemForm();
+        applyValidationErrors([], "#itemModal");
+        $("#itemModalLabel").text("New Rate Code");
+        $("#itemModal").modal("show");
+    });
+
+    // =======================
+    // EDIT
+    // =======================
+    $(document).on("click", "#btnEdit", function () {
+        if (!selectedRowData) {
+            showToast("Error", "Please select 1 row to update.", false);
+            return;
+        }
+        applyValidationErrors([], "#itemModal");
+        $.ajax({
+            url: '/Administration/RateCode/GetByID',
+            type: 'GET',
+            data: { id: selectedRowData.id },
+            success: function (res) {
+                if (!res.success) {
+                    showToast("Error", res.message, false);
+                    return;
+                }
+
+                let d = res.data;
+                $("#modalItemId").val(d.id);
+                $("#txtRateCode").val(d.rateCode);
+                $("#txtDescription").val(d.description || "");
+                $("#modalRateCodeSel").val(d.rateClassID);
+                $("#modalRateCategorySel").val(d.rateCategoryID);
+                $("#txtSequence").val(d.sequence);
+
+                d.defaultDisplay == 1 ? $("#rdonet").prop("checked", true) : $("#rdoC++").prop("checked", true);
+
+                $("#chkDayUse").prop("checked", d.dayUse == 1);
+                $("#chkActive").prop("checked", d.active == 1);
+                $("#chkNegotiated").prop("checked", d.negotiated == 1);
+                $("#chkIndividualOnly").prop("checked", d.individualOnly == 1);
+                $("#chkIsModifiable").prop("checked", d.isModifiable == 1);
+
+                $("#itemModalLabel").text("Edit Rate Code");
+                $("#itemModal").modal("show");
+            }
+        });
+    });
+
+    // =======================
+    // SAVE
+    // =======================
+    $("#btnSaveItem").click(function () {
+        var data = {
+            id: parseInt($("#modalItemId").val()) || 0,
+            rateCode: $("#txtRateCode").val(),
+            description: $("#txtDescription").val(),
+            rateClass: parseInt($("#modalRateCodeSel").val()) || 0,
+            rateCategory: parseInt($("#modalRateCategorySel").val()) || 0,
+            sequence: parseInt($("#txtSequence").val()) || 0,
+            display: parseInt($("input[name='display']:checked").val()) || 0,
+            dayUse: ($("#chkDayUse").is(":checked") ? 1 : 0),  // Chuyển checkbox thành 0/1
+            active: $("#chkActive").is(":checked"),
+            negotiated: $("#chkNegotiated").is(":checked"),
+            individualOnly: $("#chkIndividualOnly").is(":checked"),
+            isModifiable: $("#chkIsModifiable").is(":checked"),
+            userID: parseInt(localStorage.getItem("userID")) || 0
+        };
+
+        $("#loadingSpinner").show();
+
+        $.ajax({
+            url: "/Administration/RateCode/Save",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            success: function (res) {
+                $("#loadingSpinner").hide();
+                if (res.success) {
+                    showToast("Success", res.message, true);
+                    $("#itemModal").modal("hide");
+                    reloadGrid();
+                } else {
+                    applyValidationErrors(res.errors, "#itemForm");
+                }
+            },
+            error: function (xhr) {
+                showToast("Error", xhr.responseJSON?.message || "Save failed.", false);
+                $("#loadingSpinner").hide();
+            }
+        });
+    });
+</script>

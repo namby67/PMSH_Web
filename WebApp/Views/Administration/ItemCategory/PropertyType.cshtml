@@ -1,0 +1,251 @@
+﻿@{
+    //
+}
+
+<style>
+    .form-locked {
+        pointer-events: none;
+        opacity: 0.6;
+        background-color: #f9f9f9;
+    }
+
+    .form-unlocked {
+        pointer-events: auto;
+        opacity: 1;
+        background-color: #fff;
+    }
+</style>
+
+<div class="text-center" style="font-size: 20px">Property Type</div>
+<div class="sticky-header bg-white p-2 shadow-sm z-3">
+
+    <div class="mt-2">
+        <button id="btnNew" class="mui-button mui-button-new"><i class="fa-solid fa-plus"></i> New</button>
+        <button id="btnUpdate" class="mui-button mui-button-edit"><i class="fa-solid fa-pen"></i> Edit</button>
+        <button id="btnDelete" class="mui-button mui-button-delete"><i class="fa-solid fa-trash-can"></i>
+            Delete</button>
+    </div>
+
+</div>
+<!-- Modal Popup for New Item -->
+<div class="modal fade" id="itemModal" tabindex="-1" aria-labelledby="itemModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="itemModalLabel">New Item</h5>
+            </div>
+            <div class="modal-footer justify-content-start">
+                <button type="button" id="btnSave" class="mui-button mui-button-save"><i
+                        class="fa-solid fa-floppy-disk"></i> Save</button>
+                <button type="button" data-bs-dismiss="modal" class="mui-button mui-button-close"><i
+                        class="fa-solid fa-xmark"></i> Close</button>
+            </div>
+            <div class="modal-body">
+
+                <form id="formContainer">
+                    <div class="container-fluid">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="code" class="form-label fw-bold mb-1" style="font-size: 12px;">Code:</label>
+                                <input type="text" id="code" name="code" class="form-control form-control-sm"
+                                    placeholder="Enter code...">
+                                <div class="invalid-feedback" id="codeError"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="sequence" class="form-label fw-bold mb-1"
+                                    style="font-size: 12px;">Sequence:</label>
+                                <input type="number" id="sequence" name="seq" class="form-control form-control-sm"
+                                    placeholder="0">
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="description" class="form-label fw-bold mb-1"
+                                    style="font-size: 12px;">Description:</label>
+                                <textarea id="description" class="form-control form-control-sm" rows="4"
+                                    style="height:100px" placeholder="Enter description..."></textarea>
+                            </div>
+                        </div>
+                        <input type="hidden" id="id" name="id" value="0" />
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mui-card">
+    <div id="gridContainerRateCode" class="mt-2 gridContainer"></div>
+</div>
+
+<div id="loadingSpinnerRateCode" style="display: none; text-align: center; padding: 20px;">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+
+<script>
+    DevExpress.localization.locale("vi");
+    var selectedRowData = null;
+
+    $(document).ready(function () {
+        $("#formContainer").on("input change", "input, select, textarea", function () {
+            if ($(this).hasClass("is-invalid")) {
+                $(this).removeClass("is-invalid");
+                $(this).next(".invalid-feedback").text("");
+            }
+        });
+
+        $('#itemModal').on('hidden.bs.modal', function () {
+            applyValidationErrors([], "#formContainer");
+        });
+        reloadGrid();
+    });
+
+    function loadGrid(data) {
+        const dataSource = data || [];
+        $("#gridContainerRateCode").dxDataGrid({
+            dataSource: dataSource,
+            height: 550,
+            width: "100%",
+            columnAutoWidth: true,
+            allowColumnResizing: true,
+            selection: { mode: "single" },
+            hoverStateEnabled: true,
+            columns: [
+                { dataField: "id", visible: false },
+                { dataField: "code", caption: "Code", width: "20%" },
+                { dataField: "description", caption: "Description", width: "60%" },
+                { dataField: "sequence", caption: "Squence", width: "20%" },
+            ],
+            filterRow: { visible: true, applyFilter: "auto" },
+            paging: { pageSize: 20 },
+            pager: { showPageSizeSelector: true, allowedPageSizes: [20, 50], showInfo: true },
+            onSelectionChanged: function (e) {
+                selectedRowData = e.selectedRowsData.length > 0 ? e.selectedRowsData[0] : null;
+            }
+        });
+    }
+
+    function reloadGrid() {
+        $("#loadingSpinnerRateCode").show();
+
+        $.ajax({
+            url: "/Administration/GetPropertyType",
+            type: "GET",
+            dataType: "json",
+            cache: false,
+            success: function (data) {
+                loadGrid(data);
+            },
+            error: function (xhr, status, error) {
+                showToast("Error", "Load data failed", false);
+            },
+            complete: function () {
+                $("#loadingSpinnerRateCode").hide();
+            }
+        });
+    }
+
+    function clearForm() {
+        $("#id").val("0");
+        $("#code").val("");
+        $("#description").val("");
+        $("#sequence").val("0");
+    }
+
+    // --- NEW ---
+    $("#btnNew").click(function () {
+        $("#formContainer")[0].reset();
+        $("#id").val("0");
+        $("#itemModalLabel").text("Add Property Type");
+        $("#itemModal").modal("show");
+    });
+
+    // --- EDIT ---
+    $("#btnUpdate").click(function () {
+        if (!selectedRowData) {
+            showToast("Warning", "Please select a row to edit.", false);
+            return;
+        }
+        $("#itemModalLabel").text("Edit Property Type");
+        $("#itemModal").modal("show");
+
+        // Fill Data
+        $("#id").val(selectedRowData.id);
+        $("#code").val(selectedRowData.code);
+        $("#description").val(selectedRowData.description);
+        $("#sequence").val(selectedRowData.sequence);
+    });
+
+    // --- SAVE ---
+    $("#btnSave").click(function () {
+
+
+        const id = parseInt($("#id").val()) || 0;
+        let loginName = (localStorage.getItem("Loginname") || "").trim()
+            .replace(/^"(.*)"$/, '$1');
+
+        const model = {
+            id: id,
+            code: $("#code").val().trim(),
+            description: $("#description").val().trim(),
+            sequence: $("#sequence").val() || 0,
+            createdBy: loginName,
+            updatedBy: loginName,
+        };
+
+
+        $.ajax({
+            url: "/Administration/PropertyTypeSave",
+            type: "POST",
+            cache: false,
+            contentType: "application/json",
+            data: JSON.stringify(model),
+            success: function (res) {
+                if (res.success) {
+                    showToast("Success", res.message, true);
+                    reloadGrid();
+                    clearForm();
+                    $("#itemModal").modal("hide");
+                } else {
+                    if (res.errors && res.errors.length > 0) {
+                        applyValidationErrors(res.errors, "#formContainer");
+                        showToast("Warning", "Please check input fields.", false);
+                    } else {
+                        showToast("Error", res.message || "Save failed", false);
+                    }
+                }
+            },
+            error: function (err) {
+                showToast("Error", "Save failed", false);
+            }
+        });
+    });
+
+    // --- DELETE ---
+    $("#btnDelete").click(function () {
+        if (!selectedRowData) {
+            showToast("Warning", "Select a row to delete.", false);
+            return;
+        }
+        if (!confirm("Are you sure you want to delete this template?")) return;
+
+        $.ajax({
+            url: `/Administration/PropertyTypeDelete/` + selectedRowData.id,
+            type: "POST",
+            success: function (res) {
+                if (res.success) {
+                    showToast("Success", "Deleted successfully", true);
+                    reloadGrid();
+                    $("#btnCancel").trigger("click");
+                } else {
+                    showToast("Error", res.message, false);
+                }
+            }
+        });
+    });
+</script>

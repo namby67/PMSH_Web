@@ -2270,7 +2270,6 @@ namespace Reservation.Controllers
                 {
                     return Json(new { code = 1, msg = "Can not find reservation" });
                 }
-
                 #region  check xem Reservation có deposit không
                 var deposit = DepositPaymentBO.Instance.FindByAttribute("ReservationID", rsv.ID);
                 if (deposit.Count > 0)

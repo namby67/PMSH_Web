@@ -1,0 +1,376 @@
+@using DevExpress.XtraReports.UI
+
+@{
+    var selectedReport = @ViewBag.ReportHeader;
+}
+
+<div class="text-center" id="reportTitle" style="font-size: 20px">Rate Class</div>
+<div class="sticky-header bg-white p-2 shadow-sm z-3">
+
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-1"
+        style="border: 1px solid #ccc; border-radius: 6px; padding: 8px;width: fit-content;">
+        <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
+
+            <div class="d-flex align-items-center me-2">
+                <div class="d-flex align-items-center me-4">
+                    <label for="tracetime" class="me-2 mb-0">Code:</label>
+                    <input type="text" id="codeInput" class="form-control form-control-sm w-auto" />
+                </div>
+                <div class="d-flex align-items-center me-4">
+                    <label for="tracetime" class="me-2 mb-0">Name:</label>
+                    <input type="text" id="nameInput" class="form-control form-control-sm w-auto" />
+                </div>
+
+                <div class="d-flex align-items-center me-3">
+                    <div class="form-check d-flex align-items-center gap-2">
+                        <span class="status-color-box color-clean-uncheck"></span>
+                        <input class="form-check-input" type="checkbox" id="chkShowInactive" name="chkShowInactive">
+                        <label class="form-check-label mb-0" for="chkShowInactive">Show Inactive</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <button id="btnPrint" class="mui-button mui-button-new"><i class="fa-solid fa-eye"></i> View</button>
+        <button id="btnNew" class="mui-button mui-button-new"><i class="fa-solid fa-plus"></i> New</button>
+        <button id="btnUpdate" class="mui-button mui-button-edit"> <i class="fa-solid fa-pen"></i> Edit</button>
+        <button id="btnDelete" class="mui-button button-report-delete"> <i class="fa-solid fa-trash-can"></i>
+            Delete</button>
+        <button id="btnExportExcel" class="mui-button mui-button-export" type="button"> <i
+                class="fa-solid fa-file-excel"></i> Excel</button>
+
+    </div>
+</div>
+<div class="mui-card">
+    <div id="gridContainer" class="gridContainer mt-2"></div>
+</div>
+<div id="overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 999;"></div>
+@*Phần popup*@
+<!-- Popup New / Update Rate Class -->
+<div class="modal fade" id="popupNewRateClass" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+
+            <!-- Header -->
+            <div class="modal-header">
+                <h5 class="modal-title">Rate Class</h5>
+            </div>
+
+            <!-- Footer -->
+            <div class="modal-footer justify-content-start">
+                <button type="button" id="btnOkAuto" class="mui-button mui-button-save">
+                    <i class="fa-solid fa-floppy-disk"></i> Save
+                </button>
+                <button type="button" id="btnClosePopup" data-bs-dismiss="modal" class="mui-button mui-button-close">
+                    <i class="fa-solid fa-xmark"></i> Close
+                </button>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body">
+                <form id="rateClassForm">
+                    <div class="container-fluid border rounded p-2">
+
+                        <input type="hidden" id="idRateClass" name="idRateClass" value="0" />
+
+                        <!-- Code + Inactive -->
+                        <div class="row mb-1 align-items-center">
+                            <div class="col-auto">
+                                <label class="form-label mb-0">Code</label>
+                                <input type="text" id="codeClass" name="code" class="form-control form-control-sm" />
+                                <div class="invalid-feedback"></div>
+
+                            </div>
+
+                            <div class="col-auto d-flex align-items-center">
+                                <input type="checkbox" id="inactive" class="form-check-input me-2" name="ckActive" />
+                                <label class="form-check-label text-danger mb-0">Inactive</label>
+                                <div class="invalid-feedback"></div>
+
+                            </div>
+                        </div>
+
+                        <!-- Name -->
+                        <div class="row mb-1">
+                            <div class="col">
+                                <label class="form-label">Name</label>
+                                <input type="text" id="nameClass" name="name" class="form-control" />
+                                <div class="invalid-feedback"></div>
+
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="row mb-1">
+                            <div class="col">
+                                <label class="form-label">Description</label>
+                                <textarea id="descriptionaccty" class="form-control" name="description"
+                                    rows="3"></textarea>
+                                <div class="invalid-feedback"></div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div id="loadingSpinner"
+    style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
+    <i class="fa-solid fa-spinner fa-spin"></i>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#btnPrint").trigger("click");
+
+        $("#chkShowInactive").on("change", function () {
+            $("#btnPrint").trigger("click");
+        });
+    });
+
+    // =======================
+    // CLEAR FORM
+    // =======================
+    function clearRateClassForm() {
+        $("#idRateClass").val(0);
+        $("#codeClass").val("");
+        $("#nameClass").val("");
+        $("#descriptionaccty").val("");
+        $("#inactive").prop("checked", false);
+    }
+
+    // =======================
+    // SEARCH
+    // =======================
+    $(document).off("click", "#btnPrint").on("click", "#btnPrint", function () {
+        $("#loadingSpinner").show();
+
+        $.ajax({
+            url: "/Administration/RateCode/GetAllRateClass",
+            type: "GET",
+            data: {
+                code: $("#codeInput").val(),
+                name: $("#nameInput").val(),
+                inactive: $("#chkShowInactive").is(":checked") ? 1 : 0
+            },
+            headers: {
+                "X-CSRF-TOKEN-HEADERNAME": $("input[name='__RequestVerificationToken']").val()
+            },
+            success: function (result) {
+                const data = result.data || [];
+                initializeAccountTypeGrid(data);
+
+                if (data.length === 0) {
+                    showToast("Warning", "No records found.", false);
+                }
+
+                $("#loadingSpinner").hide();
+            },
+            error: function () {
+                showToast("Error", "Unable to load data.", false);
+                $("#loadingSpinner").hide();
+            }
+        });
+    });
+
+    // =======================
+    // GRID
+    // =======================
+    var selectedRowData = null;
+
+    function initializeAccountTypeGrid(data) {
+        $("#gridContainer").dxDataGrid({
+            dataSource: data,
+            showBorders: true,
+            selection: { mode: "single" },
+            paging: { pageSize: 50 },
+            pager: {
+                visible: true,
+                allowedPageSizes: [50, 100, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true
+            },
+            width: "100%",
+            filterRow: { visible: true },
+            columns: [
+                { dataField: "id", visible: false },
+                { dataField: "code", caption: "Code", width: "10%" },
+                { dataField: "name", caption: "Name", width: "15%" },
+                { dataField: "description", caption: "Description", width: "40%" },
+                { dataField: "createdBy", caption: "Created By" },
+                {
+                    dataField: "inactive",
+                    caption: "Inactive",
+                    cellTemplate: function (container, options) {
+                        $("<div>").dxCheckBox({
+                            value: options.value == 1,
+                            readOnly: true
+                        }).appendTo(container);
+                    }
+                },
+                { dataField: "createdDate", dataType: "date", format: "dd/MM/yyyy" },
+                { dataField: "updatedBy", caption: "Updated By" },
+                { dataField: "updatedDate", dataType: "date", format: "dd/MM/yyyy" }
+            ],
+            onRowClick: function (e) {
+                selectedRowData = e.data;
+            }
+        });
+    }
+
+    // =======================
+    // NEW
+    // =======================
+    $("#btnNew").on("click", function () {
+        clearRateClassForm();
+        applyValidationErrors([], "#popupNewRateClass");
+
+        $("#popupNewRateClass").modal("show");
+    });
+
+    // =======================
+    // UPDATE
+    // =======================
+    $(document).off("click", "#btnUpdate").on("click", "#btnUpdate", function () {
+        if (!selectedRowData) {
+            showToast("Error", "Please select 1 row to update.", false);
+            return;
+        }
+        applyValidationErrors([], "#popupNewRateClass");
+        $("#idRateClass").val(selectedRowData.id);
+        $("#codeClass").val(selectedRowData.code);
+        $("#nameClass").val(selectedRowData.name);
+        $("#descriptionaccty").val(selectedRowData.description);
+        $("#inactive").prop("checked", selectedRowData.inactive == 1);
+
+        $("#popupNewRateClass").modal("show");
+    });
+
+    // =======================
+    // SAVE
+    // =======================
+    $(document).off("click", "#btnOkAuto").on("click", "#btnOkAuto", function () {
+        $("#loadingSpinner").show();
+
+        $.ajax({
+            url: "/Administration/RateCode/RateClassSave",
+            type: "POST",
+            data: {
+                idRateClass: $("#idRateClass").val(),
+                codeClass: $("#codeClass").val(),
+                nameClass: $("#nameClass").val(),
+                descriptionaccty: $("#descriptionaccty").val(),
+                inactive: $("#inactive").is(":checked") ? 1 : 0,
+                user: localStorage.getItem("Loginname")
+            },
+            headers: {
+                "X-CSRF-TOKEN-HEADERNAME": $("input[name='__RequestVerificationToken']").val()
+            },
+            success: function (result) {
+                if (result.success) {
+                    showToast("Success", result.message, true);
+                    $("#popupNewRateClass").modal("hide");
+                    $("#btnPrint").trigger("click");
+                } else {
+                    applyValidationErrors(result.errors, "#rateClassForm");
+                }
+                $("#loadingSpinner").hide();
+            },
+            error: function (xhr) {
+                showToast("Error", xhr.responseJSON?.message || "Save failed.", false);
+                $("#loadingSpinner").hide();
+            }
+        });
+    });
+
+    // =======================
+    // DELETE
+    // =======================
+    $(document).off("click", "#btnDelete").on("click", "#btnDelete", function () {
+        if (!selectedRowData) {
+            showToast("Error", "Please select 1 row to delete.", false);
+            return;
+        }
+
+        if (!confirm("Are you sure you want to delete this record?")) return;
+
+        $.ajax({
+            url: "/Administration/RateCode/RateClassDelete",
+            type: "POST",
+            data: { id: selectedRowData.id },
+            headers: {
+                "X-CSRF-TOKEN-HEADERNAME": $("input[name='__RequestVerificationToken']").val()
+            },
+            success: function (result) {
+                if (result.success) {
+                    showToast("Success", result.message, true);
+                    $("#btnPrint").trigger("click");
+                } else {
+                    applyValidationErrors(res.errors, "#itemForm");
+                }
+            }
+        });
+    });
+
+    $("#btnExportExcel").click(function () {
+        const grid = $("#gridContainer").dxDataGrid("instance");
+
+        const workbook = new ExcelJS.Workbook();
+        const companyName = localStorage.getItem("CompanyName") || "Tên công ty chưa xác định";
+        const worksheet = workbook.addWorksheet("Sheet 1");
+
+        // === Dòng 1: Tên công ty (merge theo 4 cột) ===
+        worksheet.addRow([companyName]);
+        worksheet.mergeCells('A1:D1');
+        worksheet.getRow(1).font = { bold: true };
+        worksheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'left' };
+
+        // === Dòng 2: Ngày giờ xuất (bên phải) ===
+        const now = new Date();
+        const exportDate = now.toLocaleString("vi-VN");
+        worksheet.addRow(['', '', '', exportDate]);
+        worksheet.mergeCells('D2:D2');  // cột D thôi
+        worksheet.getRow(2).alignment = { vertical: 'middle', horizontal: 'right' };
+
+        // === Dòng 3–4: trống
+        worksheet.addRow([]);
+        worksheet.addRow([]);
+
+        // === Dòng 5: Tiêu đề báo cáo (ở giữa) ===
+        const reportRow = worksheet.addRow(['Rate Class']);
+        worksheet.mergeCells('A5:D5');
+        reportRow.font = { bold: true, size: 14 };
+        reportRow.alignment = { vertical: 'middle', horizontal: 'center' };
+
+        // === Dòng 6: trống
+        worksheet.addRow([]);
+
+        // === Xuất dữ liệu grid bắt đầu từ dòng 7 ===
+        DevExpress.excelExporter.exportDataGrid({
+            component: grid,
+            worksheet: worksheet,
+            autoFilterEnabled: true,
+            topLeftCell: { row: 7, column: 1 }
+        }).then(function () {
+            // Footer (sau cùng)
+            const lastRow = worksheet.lastRow.number + 2;
+            worksheet.mergeCells(`A${lastRow}:D${lastRow}`);
+            worksheet.getCell(`A${lastRow}`).alignment = { horizontal: 'center' };
+            worksheet.getCell(`A${lastRow}`).font = { italic: true };
+
+            // Ghi file
+            let fileName = "RateClass.xlsx";
+            workbook.xlsx.writeBuffer().then(function (buffer) {
+                saveAs(new Blob([buffer], { type: "application/octet-stream" }), fileName);
+            });
+        });
+    });
+
+</script>

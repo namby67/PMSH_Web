@@ -472,7 +472,6 @@ namespace Reservation.Services.Implements
 
                 throw new Exception($"ERROR: {ex.Message}", ex);
             }
-        
         }
 
         public DataTable SearchReservation(int searchType, string name, string firstName, string reservationHolder, string confirmationNo,
@@ -529,7 +528,7 @@ namespace Reservation.Services.Implements
             }
         }
 
-        public DataTable SearchWaitlist(string name, string priority, string market, string roomType,  string reason, string rateCode, string phone, DateTime date)
+        public DataTable SearchWaitlist(string name, string priority, string market, string roomType, string reason, string rateCode, string phone, DateTime date)
         {
             try
             {

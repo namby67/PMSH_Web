@@ -11,11 +11,16 @@
 @* <link href="~/css/pages/reservation.css" rel="stylesheet" /> *@
 <style>
     :root {
-        --main-color: #2b6cb0; /* Màu chính (xanh dương) */
-        --secondary-color: #f5f5f5; /* Màu nền thứ cấp (xám nhạt) */
-        --highlight-color: #d65a00; /* Màu nổi bật (cam) */
-        --text-color: #2d3748; /* Màu chữ (xám đậm) */
-        --accent-color: #ffffff; /* Màu bổ sung (trắng) */
+        --main-color: #2b6cb0;
+        /* Màu chính (xanh dương) */
+        --secondary-color: #f5f5f5;
+        /* Màu nền thứ cấp (xám nhạt) */
+        --highlight-color: #d65a00;
+        /* Màu nổi bật (cam) */
+        --text-color: #2d3748;
+        /* Màu chữ (xám đậm) */
+        --accent-color: #ffffff;
+        /* Màu bổ sung (trắng) */
     }
 
     .menu-group-title {
@@ -43,9 +48,9 @@
         z-index: 20;
     }
 
-        .menu-left .submenu.active {
-            display: block !important;
-        }
+    .menu-left .submenu.active {
+        display: block !important;
+    }
 
     /* Đảm bảo các style khác sử dụng biến CSS */
     .menu-item {
@@ -60,15 +65,16 @@
         border-left: 4px solid transparent;
     }
 
-        .menu-item:hover,
-        .menu-item.active {
-            color: var(--text-color);
-            background-color: var(--secondary-color);
-            border-left: 4px solid var(--highlight-color);
-        }
+    .menu-item:hover,
+    .menu-item.active {
+        color: var(--text-color);
+        background-color: var(--secondary-color);
+        border-left: 4px solid var(--highlight-color);
+    }
 
-    .menu-group > .menu-left {
-        display: none; /* ẩn mặc định */
+    .menu-group>.menu-left {
+        display: none;
+        /* ẩn mặc định */
         margin-top: 2px;
         background: var(--accent-color);
         border: 1px solid #d1d5db;
@@ -79,64 +85,76 @@
 <div class="mt-3">
     <div class="row">
 
-            <div class="content-right">
-                <div class="header">
-                    <h3 id="content-title">
-                         Currency
+        <div class="content-right">
+            <div class="header">
+                <h3 id="content-title">
+                    Currency
 
-                    </h3>
-                </div>
+                </h3>
+            </div>
 
-                <div class="sticky-header bg-white p-2 shadow-sm z-3">
-                    <div class="d-flex align-items-center gap-3 p-2" style="border: 1px solid #ccc; border-radius: 6px; padding: 8px;">
-                        <form id="itemForm">
-                            <div class="d-flex align-items-center">
-                                <div class="d-flex align-items-center me-3">
-                                    <label for="code" class="me-2 mb-0">Code</label>
-                                    <input type="text" id="code" name="code" class="form-control form-control-sm" style="width: 100px;" />
-                                </div>
-
-                                
-                                <div class="d-flex align-items-center me-3">
-                                    <label for="seq" class="me-2 mb-0">Decimals</label>
-                                    <input type="number" id="seq" name="seq" min="0" max="999" value="0" runat="server" class="form-control form-control-sm" style="width: 80px;" />
-                                </div>
-                                <div class="col-auto d-flex align-items-center me-3">
-                                    <input type="checkbox" id="inactive" name="inactive" class="form-check-input me-2" />
-                                    <label for="inactive" class="form-check-label text-danger mb-0">Inactive</label>
-                                </div>
-                                <div class="col-auto d-flex align-items-center me-3">
-                                    <input type="checkbox" id="isShow" name="isShow" class="form-check-input me-2" />
-                                    <label for="isShow" class="form-check-label text-danger mb-0">IsShow</label>
-                                </div>
-                                <div class="col-auto d-flex align-items-center me-3">
-                                    <input type="checkbox" id="masterStatus" name="masterStatus" class="form-check-input me-2" />
-                                    <label for="masterStatus" class="form-check-label text-danger mb-0">Master Status</label>
-                                </div>                                
-                                <div class="d-flex align-items-center me-3">
-                                    <label for="description" class="me-2 mb-0">Description</label>
-                                    <input type="text" id="description" name="description" class="form-control form-control-sm" style="width: 300px;" />
-                                </div>
+            <div class="sticky-header bg-white p-2 shadow-sm z-3">
+                <div class="d-flex align-items-center gap-3 p-2"
+                    >
+                    <form id="itemForm">
+                        <div class="d-flex align-items-center">
+                            <div class="d-flex align-items-center me-3">
+                                <label for="code" class="me-2 mb-0">Code</label>
+                                <input type="text" id="code" name="code" class="form-control form-control-sm"
+                                    style="width: 100px;" />
                             </div>
 
-                        </form>
-                    </div>
-                    <div class=" mt-1">
-                        <button  id="btnView" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> View</button>
-                        <button  id="btnNew" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> New</button>
-                        <button id="btnEdit" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Edit</button>
-                        <button  id="btnSaveItem" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Save</button>
-                        <button  id="btnDelete" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Delete</button>
-                        <button  id="btnCancel" class="mui-button mui-button-new" type="button"> <i class="fa-solid fa-file-excel"></i> Cancel</button>
 
-                    </div>
+                            <div class="d-flex align-items-center me-3">
+                                <label for="seq" class="me-2 mb-0">Decimals</label>
+                                <input type="number" id="seq" name="seq" min="0" max="999" value="0" runat="server"
+                                    class="form-control form-control-sm" style="width: 80px;" />
+                            </div>
+                            <div class="col-auto d-flex align-items-center me-3">
+                                <input type="checkbox" id="inactive" name="inactive" class="form-check-input me-2" />
+                                <label for="inactive" class="form-check-label text-danger mb-0">Inactive</label>
+                            </div>
+                            <div class="col-auto d-flex align-items-center me-3">
+                                <input type="checkbox" id="isShow" name="isShow" class="form-check-input me-2" />
+                                <label for="isShow" class="form-check-label text-danger mb-0">IsShow</label>
+                            </div>
+                            <div class="col-auto d-flex align-items-center me-3">
+                                <input type="checkbox" id="masterStatus" name="masterStatus"
+                                    class="form-check-input me-2" />
+                                <label for="masterStatus" class="form-check-label text-danger mb-0">Master
+                                    Status</label>
+                            </div>
+                            <div class="d-flex align-items-center me-3">
+                                <label for="description" class="me-2 mb-0">Description</label>
+                                <input type="text" id="description" name="description"
+                                    class="form-control form-control-sm" style="width: 300px;" />
+                            </div>
+                        </div>
+
+                    </form>
                 </div>
+                <div class=" mt-1">
+                    <button id="btnView" class="mui-button mui-button-new" type="button"> <i
+                            class="fa-solid fa-file-excel"></i> View</button>
+                    <button id="btnNew" class="mui-button mui-button-new" type="button"> <i
+                            class="fa-solid fa-file-excel"></i> New</button>
+                    <button id="btnEdit" class="mui-button mui-button-new" type="button"> <i
+                            class="fa-solid fa-file-excel"></i> Edit</button>
+                    <button id="btnSaveItem" class="mui-button mui-button-new" type="button"> <i
+                            class="fa-solid fa-file-excel"></i> Save</button>
+                    <button id="btnDelete" class="mui-button mui-button-new" type="button"> <i
+                            class="fa-solid fa-file-excel"></i> Delete</button>
+                    <button id="btnCancel" class="mui-button mui-button-new" type="button"> <i
+                            class="fa-solid fa-file-excel"></i> Cancel</button>
 
-                <div class="mui-card">
-                    <div id="gridContainerRateCode" class="mt-2 gridContainer"></div>
                 </div>
             </div>
-      
+
+            <div class="mui-card">
+                <div id="gridContainerRateCode" class="mt-2 gridContainer"></div>
+            </div>
+        </div>
+
     </div>
 </div>
 
@@ -148,33 +166,33 @@
 
 <script>
     DevExpress.localization.locale("vi");
-       let selectedRowData = null;
+    let selectedRowData = null;
 
-        $(document).ready(function () {
+    $(document).ready(function () {
         $(".menu-group-title").on("click", function (event) {
-                const submenu = $(this).next(".menu-left"); // lấy thằng menu-left con
-           const icon = $(this).find("i");
+            const submenu = $(this).next(".menu-left"); // lấy thằng menu-left con
+            const icon = $(this).find("i");
 
-           // toggle submenu
-           submenu.slideToggle(200);
+            // toggle submenu
+            submenu.slideToggle(200);
 
-           // đổi icon
-           icon.toggleClass("fa-chevron-down fa-chevron-up");
-           });
-           $("#btnEdit").show();
-           $("#btnDelete").show();
-           $("#btnCancel").hide();
-           $("#btnSaveItem").hide();
-           $("#btnNew").show();
-
-         reloadGrid();
-     });
-
-        $("#btnView").on("click", function() {
-        reloadGrid();
+            // đổi icon
+            icon.toggleClass("fa-chevron-down fa-chevron-up");
         });
+        $("#btnEdit").show();
+        $("#btnDelete").show();
+        $("#btnCancel").hide();
+        $("#btnSaveItem").hide();
+        $("#btnNew").show();
 
-        $("#btnNew").click(function () {
+        reloadGrid();
+    });
+
+    $("#btnView").on("click", function () {
+        reloadGrid();
+    });
+
+    $("#btnNew").click(function () {
         $("#itemForm")[0].reset();
         $("#id").val("");
 
@@ -186,7 +204,7 @@
 
 
     $("#btnSaveItem").click(function () {
-        const formData = $("#itemForm").serialize();
+        const formData = $("#formContainer").serialize();
         console.log("FormData:", formData);
 
         let url = "/Administration/InsertCurrency";
@@ -203,7 +221,7 @@
             success: function (res) {
                 if (res.success) {
                     showToast("Success", url.includes("Update") ? "Update success" : "Insert success", true);
-                    $("#itemForm").trigger("reset");
+                    $("#formContainer").trigger("reset");
                     selectedRowData = null;
 
                     $("#btnEdit").show();
@@ -225,7 +243,7 @@
     });
 
 
-           $("#btnEdit").on("click", function () {
+    $("#btnEdit").on("click", function () {
         if (!selectedRowData) {
             DevExpress.ui.notify("Please select a row first!", "warning", 2000);
             return;
@@ -236,7 +254,7 @@
             url: "/Administration/GetCurrencyById",
             type: "GET",
             data: { id: selectedRowData.id },
-            success: function(data) {
+            success: function (data) {
                 if (data.success && data.id) {
                     // Điền dữ liệu lên form
                     $("#code").val(data.id);
@@ -254,7 +272,7 @@
                     DevExpress.ui.notify(data.message || "Cannot load data!", "error", 2000);
                 }
             },
-            error: function(xhr) {
+            error: function (xhr) {
                 console.error("Load data error:", xhr.responseText);
                 DevExpress.ui.notify("Cannot load data from server!", "error", 2000);
             }
@@ -263,7 +281,7 @@
 
 
 
-     $("#btnCancel").click(function () {
+    $("#btnCancel").click(function () {
         $("#itemForm")[0].reset();
         $("#id").val("0");
 
@@ -286,24 +304,24 @@
             allowColumnResizing: true,
             columnResizingMode: "widget",
             selection: { mode: "single" },
-             columns: [
-                        { dataField: "id", caption: "Code" },                     
-                        { dataField: "isMaster", caption: "Master" },
-                        { dataField: "decimals", caption: "Decimals" },
-                        { dataField: "inactive", caption: "Inactive" },
-                        { dataField: "description", caption: "Description" },
-                    ],
-            filterRow: { visible:true, applyFilter:"auto" },
-            paging: { pageSize:20 },
+            columns: [
+                { dataField: "id", caption: "Code" },
+                { dataField: "isMaster", caption: "Master" },
+                { dataField: "decimals", caption: "Decimals" },
+                { dataField: "inactive", caption: "Inactive" },
+                { dataField: "description", caption: "Description" },
+            ],
+            filterRow: { visible: true, applyFilter: "auto" },
+            paging: { pageSize: 20 },
             pager: {
-                visible:true,
-                allowedPageSizes:[20,50,'all'],
-                showPageSizeSelector:true,
-                showInfo:true,
-                showNavigationButtons:true
+                visible: true,
+                allowedPageSizes: [20, 50, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true
             },
-            scrolling: { mode:"standard", showScrollbar:"always", scrollByContent:true },
-            onSelectionChanged: function(e){
+            scrolling: { mode: "standard", showScrollbar: "always", scrollByContent: true },
+            onSelectionChanged: function (e) {
                 selectedRowData = e.selectedRowsData.length > 0 ? e.selectedRowsData[0] : null;
                 console.log("Selected Row:", selectedRowData);
             }
@@ -322,12 +340,12 @@
                 description: $("#description").val(),
                 sequence: $("#seq").val(),
             },
-            success: function(data){
+            success: function (data) {
                 console.log(data);
                 loadGrid(data);
                 $("#loadingSpinnerRateCode").hide();
             },
-            error: function(xhr, status, error){
+            error: function (xhr, status, error) {
                 alert("Không thể tải dữ liệu");
                 $("#loadingSpinnerRateCode").hide();
             }
@@ -335,13 +353,13 @@
     }
 
 
-     $("#btnDelete").on("click", function () {
-         if (!selectedRowData) {
+    $("#btnDelete").on("click", function () {
+        if (!selectedRowData) {
             DevExpress.ui.notify("Please select a row first!", "warning", 2000);
             return;
         }
 
-                Swal.fire({
+        Swal.fire({
             title: 'Are you sure?',
             text: "This action cannot be undone.",
             icon: 'warning',
@@ -361,7 +379,7 @@
 
     });
 
-            function deleteSelectedItem() {
+    function deleteSelectedItem() {
         $.ajax({
             url: "/Administration/DeleteCurrency",
             type: "POST",
@@ -381,7 +399,7 @@
             }
         });
     }
-     $("#btnExportExcel").click(function () {
+    $("#btnExportExcel").click(function () {
         const grid = $("#gridContainerRateCode").dxDataGrid("instance");   // 🔥 khai báo grid
 
         const workbook = new ExcelJS.Workbook();

@@ -35,7 +35,6 @@ namespace Reservation.Services.Implements
                 throw new Exception($"ERROR: {ex.Message}", ex);
             }
         }
-    
 
         public decimal CalculatePriceFromNet(decimal priceAfter, string transactionCode)
         {

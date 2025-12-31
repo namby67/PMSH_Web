@@ -1,5 +1,4 @@
-﻿
-<div class="header" style="justify-content:center;border:none">
+﻿<div class="header" style="justify-content:center;border:none">
     <h3 id="content-title">Accounting Search</h3>
 </div>
 <div class="mb-2">
@@ -37,11 +36,11 @@
                         <label>All</label>
                     </div>
                     <div class="form-group-new-reservation">
-                        <input type="radio" name="searchType"  value="0" style="height:auto">
+                        <input type="radio" name="searchType" value="0" style="height:auto">
                         <label>Open Balance</label>
                     </div>
                     <div class="form-group-new-reservation">
-                        <input type="radio" name="searchType"  value="3" style="height:auto">
+                        <input type="radio" name="searchType" value="3" style="height:auto">
                         <label>No Blance</label>
                     </div>
                 </div>
@@ -58,7 +57,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="button-group">
-                <button type="button" class="mui-button mui-button-search" onclick="AccountAvailableAdd();">Save</button>
+                <button type="button" class="mui-button mui-button-search"
+                    onclick="AccountAvailableAdd();">Save</button>
                 <button type="button" class="mui-button mui-button-clear" data-bs-dismiss="modal">Close</button>
             </div>
             <div class="modal-body">
@@ -68,15 +68,15 @@
                 </div>
                 <div class="row">
                     <div class="form-group-new-reservation col-md-4">
-                        <label >Account Number</label>
+                        <label>Account Number</label>
                         <input type="text" id="accountNumberAdd">
-                    </div >
+                    </div>
                     <div class="form-group-new-reservation col-md-4">
-                        <label >Credit Limit/LOC</label>
+                        <label>Credit Limit/LOC</label>
                         <input type="text" id="creditLimitAdd">
                     </div>
                     <div class="form-group-new-reservation col-md-4">
-                        <label  >Currency</label>
+                        <label>Currency</label>
                         <input type="text" id="currencyAdd" value="VND" readonly>
                     </div>
                 </div>
@@ -86,7 +86,8 @@
                     <div class="row" style="margin-left:1px;margin-right:2px">
                         <input id="profileAdd" class="col-md-10" style="display:none" />
                         <input id="profileAddText" class="col-md-10" />
-                        <button onclick="openModalSearchProfile()" class="col-md-2"><i class="fa-solid fa-arrow-down"></i></button>
+                        <button onclick="openModalSearchProfile()" class="col-md-2"><i
+                                class="fa-solid fa-arrow-down"></i></button>
                     </div>
 
                 </div>
@@ -225,18 +226,18 @@
                 mode: "multiple",
                 showCheckBoxesMode: "always"
             },
-            onRowClick: function(e) {
+            onRowClick: function (e) {
                 const grid = $("#gridContainer").dxDataGrid("instance");
                 grid.selectRows([e.key], false);
             },
         });
     }
 
-    function openModalNew(){
+    function openModalNew() {
         $('#modalNew').modal('show');
     }
-    
-    function closeModalNew(){
+
+    function closeModalNew() {
         $('#modalNew').modal('hide');
         $('#accountTypeAdd').val(0);
         $('#accountNumberAdd').val('');
@@ -257,7 +258,7 @@
 
     }
 
-    function AccountAvailableAdd(){
+    function AccountAvailableAdd() {
         const userName = JSON.parse(localStorage.getItem("Loginname"));
         const userID = JSON.parse(localStorage.getItem("userID"));
 
@@ -266,7 +267,7 @@
         var selectedRows = grid.getSelectedRowsData();
         var selectedIds = selectedRows.map(row => row.ID);
         var id = 0;
-        if(selectedIds.length > 0){
+        if (selectedIds.length > 0) {
             id = selectedIds[0];
         }
         formData.append('id', id);
@@ -311,15 +312,15 @@
         });
     }
 
-    function GetAccountAvailableByID(){
+    function GetAccountAvailableByID() {
         var grid = $("#gridContainer").dxDataGrid("instance");
         var selectedRows = grid.getSelectedRowsData();
         var selectedIds = selectedRows.map(row => row.ID);
         $.ajax({
-         url: '/Accounting/GetAccountReceivable',
+            url: '/Accounting/GetAccountReceivable',
             type: 'get',
             dataType: 'json',
-            data:{
+            data: {
                 id: selectedIds[0]
             },
             crossDomain: false,
@@ -341,10 +342,10 @@
                 $('#postalCode').val(result.postalCode);
                 $('#cityAdd').val(result.cityID);
                 $('#countryAdd').val(result.countryID);
-                if(result.statusFlagged == true){
+                if (result.statusFlagged == true) {
                     document.getElementById("paymentDueAdd").checked = true;
                 }
-                if(result.statusInactive == true){
+                if (result.statusInactive == true) {
                     document.getElementById("inactive").checked = true;
 
                 }

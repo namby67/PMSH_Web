@@ -650,7 +650,7 @@ namespace HouseKeeping.Controllers
             }
         }
         #endregion
-        private string[] getParaDate(DateTime fromDate,DateTime toDate)
+        private string[] getParaDate(DateTime fromDate, DateTime toDate)
         {
             string paraDate = "";
             string paraDateConvert = "";
@@ -1599,7 +1599,6 @@ namespace HouseKeeping.Controllers
                 return Json(new { error = ex.Message });
             }
         }
-       
 
 
         #endregion
@@ -3002,9 +3001,9 @@ namespace HouseKeeping.Controllers
 
         #endregion
 
-     
 
-      
+
+
         private IActionResult ProcessSourceAutoMakeupServiceRoom(DataTable Source, int _secID, string attendantauto, DateTime taskdateauto, string userName, string taskcodeauto, string maxcreditauto)
         {
             var getdetailts = hkpAttendantBO.GethkpAttendantProcessSource(_secID, GetSplitString(attendantauto));
@@ -3164,7 +3163,6 @@ namespace HouseKeeping.Controllers
             _SectionID = _ListSection.Split(',');
         }
 
-            
         private string FormatIdList(string ids)
         {
             if (string.IsNullOrWhiteSpace(ids))
@@ -3176,7 +3174,6 @@ namespace HouseKeeping.Controllers
             return string.Join("','", parts);
         }
 
-   
         [HttpGet]
         public IActionResult ViewTaskAddUserGrid()
         {
@@ -3210,7 +3207,6 @@ namespace HouseKeeping.Controllers
 
 
 
-      
 
         [HttpPost]
         public IActionResult SaveEmployeeTaskAss(List<int> idts, List<int> idau)
@@ -3385,8 +3381,8 @@ namespace HouseKeeping.Controllers
                 }
             }
         }
-    
-  
+
+
         string _ListRoomNotAss = "";
         [HttpPost]
         public IActionResult AutoTasksheet(DateTime taskdateauto, string includeroomAS, string vcAuto, string vcnAuto, string vdAuto, string doAuto, string ocAuto, string ocnAuto, string odAuto, string oooAuto, string oosAuto, string arrivalOnly, string floorauto, string roomTypeauto, string zonecodeauto, string subzonecodeauto, string taskcodeauto, string attendantauto, string maxcreditauto, string descriptionauto, string userName)
@@ -4091,7 +4087,6 @@ namespace HouseKeeping.Controllers
             }
             return paraName;
         }
-     
 
         public static void InsertHistory(string roomNo, string oldValue, string newValue, DateTime systemDate, string computerName, string action, int objectID, string tableName, string loginName)
         {
@@ -4108,8 +4103,8 @@ namespace HouseKeeping.Controllers
             RoomStatusHistoryBO.Instance.Insert(modelH);
         }
 
-  
-     
+
+
         [HttpGet]
         public IActionResult GetLostAndFound(DateTime fromDate, DateTime toDate)
         {
@@ -4320,13 +4315,12 @@ namespace HouseKeeping.Controllers
         public ActionResult UpdateRoomStatus()
         {
             ProcessTransactions pt = new ProcessTransactions();
-  
             try
             {
                 pt.OpenConnection();
                 pt.BeginTransaction();
                 List<BusinessDateModel> businessDateModel = PropertyUtils.ConvertToList<BusinessDateModel>(BusinessDateBO.Instance.FindAll());
-               DateTime GetBusinessDate = businessDateModel[0].BusinessDate;
+                DateTime GetBusinessDate = businessDateModel[0].BusinessDate;
 
                 string sql = "SELECT RoomNo, Status FROM Reservation WITH(NOLOCK)" +
                     " WHERE datediff(day, ArrivalDate, '" + GetBusinessDate.ToString("yyyy/MM/dd") + "') >= 0" +
@@ -4474,7 +4468,7 @@ namespace HouseKeeping.Controllers
                 //    " AND MainGuest = 1" +
                 //    " AND Status NOT IN (3,4,7)" +
                 //    " AND RoomNo <> ''";
-                string query  = "SELECT b.RoomNo,b.NoOfAdult,SUM(ISNULL(b.NoOfChild,0)+ ISNULL(b.NoOfChild1,0)) AS Surcharge, a.Country " +
+                string query = "SELECT b.RoomNo,b.NoOfAdult,SUM(ISNULL(b.NoOfChild,0)+ ISNULL(b.NoOfChild1,0)) AS Surcharge, a.Country " +
                       "FROM dbo.Reservation a WITH (NOLOCK), dbo.ReservationRate b WITH (NOLOCK) " +
 "WHERE a.ID = b.ReservationID AND (datediff(day, b.RateDate, dbo.getBusinessDate()) =  0 OR a.Status = 6) " +
                       "AND a.MainGuest = 1 AND a.ReservationNo > 0 AND b.RoomType <> 'XXX' AND a.Status NOT IN (3,4,7) AND b.RoomID > 0 " +
@@ -4482,7 +4476,7 @@ namespace HouseKeeping.Controllers
 
 
                 var list = RoomBO.UpdateRoomStatus(query);
-                 dt = PropertyUtils.ConvertToDataTable(list);
+                dt = PropertyUtils.ConvertToDataTable(list);
                 //dt = pt.Select(sql);
                 //update db
                 //update db

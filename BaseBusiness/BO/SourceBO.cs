@@ -24,10 +24,5 @@ namespace BaseBusiness.BO
         {
             get { return instance; }
         }
-        public SourceModel GetById(int id, SqlConnection conn, SqlTransaction tx)
-        {
-            const string sql = "SELECT ID, Code, Name, Description, CreatedBy, CreatedDate,  UpdatedBy, UpdatedDate FROM  Source WHERE ID = @id";
-            return conn.QuerySingleOrDefault<SourceModel>(sql, new { id }, tx);
-        }
     }
 }

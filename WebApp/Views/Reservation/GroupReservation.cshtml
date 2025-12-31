@@ -42,7 +42,7 @@
 
 
                     </div>
- 
+
                     <div id="gridContainer" class="mt-2 gridContainer"></div>
                     <div id="loadingSpinner" style="display: none; text-align: center; padding: 20px;">
                         <div class="spinner-border text-primary" role="status">
@@ -55,7 +55,8 @@
     </div>
 </div>
 @* Model edit *@
-<div class="modal fade modal-xl" id="modalEdit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade modal-xl" id="modalEdit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -68,7 +69,8 @@
                     <div class="spinner-border text-primary" role="status">
                         <span class="visually-hidden">Loading...</span>
                     </div>
-                    <div class="progress mt-3" role="progressbar" aria-label="Loading progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress mt-3" role="progressbar" aria-label="Loading progress" aria-valuenow="0"
+                        aria-valuemin="0" aria-valuemax="100">
                         <div class="progress-bar text-bg-primary" style="width: 0%" id="progressBar">0%</div>
                     </div>
                 </div>
@@ -76,8 +78,10 @@
                     <div>
                         <div class="button-group mb-1">
                             <div>
-                                <button class="mui-button mui-button-new" onclick="EditReservation();"><i class="fa-solid fa-floppy-disk"></i></i> Save</button>
-                                <button class="mui-button mui-button-clear" onclick="resetForm()"><i class="fas fa-eraser"></i> Clear</button>
+                                <button class="mui-button mui-button-new" onclick="EditReservation();"><i
+                                        class="fa-solid fa-floppy-disk"></i></i> Save</button>
+                                <button class="mui-button mui-button-clear" onclick="resetForm()"><i
+                                        class="fas fa-eraser"></i> Clear</button>
                             </div>
 
                         </div>
@@ -213,7 +217,8 @@
                                     <input class="col-md-9" type="text" id="txtLastStay" value="1">
                                 </div>
                                 <div class="row col-md-5">
-                                    <button onclick="openModalMoreFields()" style="margin-left:12px">More Fields</button>
+                                    <button onclick="openModalMoreFields()" style="margin-left:12px">More
+                                        Fields</button>
                                 </div>
                             </div>
 
@@ -230,14 +235,16 @@
                                     <input type="date" id="arrival" class="col-md-2">
                                     <button class="col-md-1" onclick="changeDate('arrival', -1)">-</button>
                                     <button class="col-md-1" onclick="changeDate('arrival', 1)">+</button>
-                                    <span class="col-md-1" style="font-size:12px;color:#9F0010;display:none" id="arrival-day"></span>
+                                    <span class="col-md-1" style="font-size:12px;color:#9F0010;display:none"
+                                        id="arrival-day"></span>
                                 </div>
                                 <div class="row col-md-8">
                                     <label class="col-md-1">Departure</label>
                                     <input type="date" id="departure" class="col-md-2">
                                     <button class="col-md-1" onclick="changeDate('departure', -1)">-</button>
                                     <button class="col-md-1" onclick="changeDate('departure', 1)">+</button>
-                                    <span class="col-md-1" style="font-size:12px;color:#9F0010;display:none" id="departure-day"></span>
+                                    <span class="col-md-1" style="font-size:12px;color:#9F0010;display:none"
+                                        id="departure-day"></span>
                                 </div>
                             </div>
                             <div class="row">
@@ -247,7 +254,8 @@
                                 </div>
                                 <div class="col-md-7 row">
                                     <label class="col-md-6">No. of Room</label>
-                                    <input class="col-md-2" type="number" id="numRooms" value="1" min="1" style="text-align:right">
+                                    <input class="col-md-2" type="number" id="numRooms" value="1" min="1"
+                                        style="text-align:right">
                                     <button class="col-md-1" onclick="decreaseRooms()">-</button>
                                     <button class="col-md-1" onclick="increaseRooms()">+</button>
                                 </div>
@@ -285,7 +293,8 @@
                                     <label class="col-md-3">Room</label>
                                     <input class="col-md-10" id="roomSelect" readonly />
                                     <input class="col-md-10" id="roomID" style="display:none" />
-                                    <button class="col-md-1" onclick="openModalSearchRoom()" id="btnRoom"><i class="fa-solid fa-ellipsis"></i></button>
+                                    <button class="col-md-1" onclick="openModalSearchRoom()" id="btnRoom"><i
+                                            class="fa-solid fa-ellipsis"></i></button>
 
 
                                 </div>
@@ -301,7 +310,8 @@
                                     <input class="col-md-4" id="txtRateCode" style="text-align:right" readonly />
                                     <input class="col-md-4" id="txtRateCodeID" style="display:none" readonly />
 
-                                    <button class="col-md-1" onclick="openModalRateCode()"><i class="fa-solid fa-ellipsis"></i></button>
+                                    <button class="col-md-1" onclick="openModalRateCode()"><i
+                                            class="fa-solid fa-ellipsis"></i></button>
                                 </div>
 
                             </div>
@@ -331,17 +341,20 @@
                                     <input class="col-md-8" id="txtAllotment" readonly />
                                     <input class="col-md-8" id="txtAllotmentID" readonly style="display:none" />
 
-                                    <button class="col-md-1" onclick="openModalSearchAllotment()"><i class="fa-solid fa-ellipsis"></i></button>
+                                    <button class="col-md-1" onclick="openModalSearchAllotment()"><i
+                                            class="fa-solid fa-ellipsis"></i></button>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="row col-md-6">
                                     <label class="col-md-3">Disc. Amt</label>
-                                    <input type="text" value="0" class="col-md-3" id="txtDiscountAmount" style="text-align:right">
+                                    <input type="text" value="0" class="col-md-3" id="txtDiscountAmount"
+                                        style="text-align:right">
                                 </div>
                                 <div class="row col-md-6">
                                     <label class="col-md-1">%</label>
-                                    <input type="text" value="0" class="col-md-5" id="txtDiscountPercent" style="text-align:right">
+                                    <input type="text" value="0" class="col-md-5" id="txtDiscountPercent"
+                                        style="text-align:right">
                                 </div>
                             </div>
 
@@ -359,7 +372,8 @@
                                     <label class="col-md-3">Market</label>
                                     <input class="col-md-8" id="txtMarket" />
                                     <input class="col-md-8" id="txtMarketID" style="display:none" />
-                                    <button class="col-md-1" onclick="openModalSearchMarket()"><i class="fa-solid fa-ellipsis"></i></button>
+                                    <button class="col-md-1" onclick="openModalSearchMarket()"><i
+                                            class="fa-solid fa-ellipsis"></i></button>
 
                                 </div>
                             </div>
@@ -371,7 +385,8 @@
                                 </div>
                                 <div class="row col-md-6">
                                     <label class="col-md-3">Sale</label>
-                                    <select class="col-md-9" id="txtPersonInCharge" asp-items="ViewBag.cboPersonInCharge">
+                                    <select class="col-md-9" id="txtPersonInCharge"
+                                        asp-items="ViewBag.cboPersonInCharge">
                                     </select>
                                 </div>
                             </div>
@@ -391,7 +406,8 @@
                                 <label class="col-md-2">Booker</label>
                                 <input class="col-md-8" id="txtBooker" />
                                 <input class="col-md-8" id="txtBookerID" style="display:none" />
-                                <button class="col-md-1" onclick="openModalSearchBooker()"><i class="fa-solid fa-ellipsis"></i></button>
+                                <button class="col-md-1" onclick="openModalSearchBooker()"><i
+                                        class="fa-solid fa-ellipsis"></i></button>
 
                             </div>
                             <div class="row">
@@ -410,9 +426,11 @@
                                 <div class="row col-md-12">
                                     <label class="col-md-3" style="min-width:0">Rate</label>
                                     <div class="col-md-9 row">
-                                        <input type="text" value="0" class="highlighted col-md-5" id="txtRateAfterDiscount" readonly style="text-align:right">
+                                        <input type="text" value="0" class="highlighted col-md-5"
+                                            id="txtRateAfterDiscount" readonly style="text-align:right">
                                         <span class="col-md-2" style="font-size:12px">+ net</span>
-                                        <input type="text" style="font-size:12px;text-align:right" value="0" class="highlighted col-md-5" id="txtNetAfterDiscount" readonly>
+                                        <input type="text" style="font-size:12px;text-align:right" value="0"
+                                            class="highlighted col-md-5" id="txtNetAfterDiscount" readonly>
                                     </div>
                                 </div>
 
@@ -426,9 +444,11 @@
                                 <div class="row col-md-12">
                                     <label class="col-md-3" style="min-width:0">Total</label>
                                     <div class="col-md-9 row">
-                                        <input type="number" value="0" class="highlighted col-md-5" readonly style="text-align:right">
+                                        <input type="number" value="0" class="highlighted col-md-5" readonly
+                                            style="text-align:right">
                                         <span class="col-md-2" style="font-size:12px">+ net</span>
-                                        <input type="number" style="font-size:12px;text-align:right" value="0" class="highlighted col-md-5" readonly>
+                                        <input type="number" style="font-size:12px;text-align:right" value="0"
+                                            class="highlighted col-md-5" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -446,7 +466,8 @@
                                 <div class="row col-md-12">
                                     <label class="col-md-3">Specials</label>
                                     <input class="col-md-8" id="txtPreference" />
-                                    <button class="col-md-1" onclick="openModalSearchPreference()"><i class="fa-solid fa-ellipsis"></i></button>
+                                    <button class="col-md-1" onclick="openModalSearchPreference()"><i
+                                            class="fa-solid fa-ellipsis"></i></button>
 
                                 </div>
                                 <div class="row col-md-12">
@@ -458,7 +479,8 @@
                             <div class="row">
                                 <div class="row col-md-12">
                                     <label class="col-md-3">Item .Inv</label>
-                                    <select class="col-md-7" id="txtItemInventory" asp-items="ViewBag.cboItem" disabled multiple>
+                                    <select class="col-md-7" id="txtItemInventory" asp-items="ViewBag.cboItem" disabled
+                                        multiple>
                                     </select>
                                 </div>
                                 <div class="row col-md-6">
@@ -516,7 +538,8 @@
 
 
 <!-- Modal new group reservation-->
-<div class="modal fade modal-xl" id="modalNew" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade modal-xl" id="modalNew" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -542,7 +565,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group-new-reservation col-md-2" >
+                    <div class="form-group-new-reservation col-md-2">
                         <label>Res.Type</label>
                         <div class="row" style="margin-left:1px;margin-right:2px">
                             <select id="resType" asp-items="ViewBag.cboReservationType">
@@ -556,7 +579,7 @@
                         <div class="row" style="margin-left:1px;margin-right:2px">
                             <input type="date" id="arrival" class="col-md-4" value="2024-08-30" style="display:none">
                             <input type="date" id="arrival2" class="col-md-12">
-                            
+
                         </div>
 
                     </div>
@@ -566,12 +589,12 @@
                             <input type="date" id="departure" class="col-md-4" value="2024-02-09" style="display:none">
 
                             <input type="date" id="departure2" class="col-md-12">
-                            
+
                         </div>
 
                     </div>
 
-                    <div class="form-group-new-reservation col-md-2" >
+                    <div class="form-group-new-reservation col-md-2">
                         <label for="nights2">Nights</label>
                         <div class="row" style="margin-left:1px;margin-right:2px">
                             <input type="text" id="nights2" readonly style="text-align:right">
@@ -584,16 +607,16 @@
                     <div class="form-group-new-reservation col-md-2">
                         <label class="form-label ">Currency</label>
                         <div class="row" style="margin-left:1px;margin-right:2px">
-                            <select id="currency" >
+                            <select id="currency">
                                 <option value="VND" selected>VND</option>
                             </select>
                         </div>
-    
+
                     </div>
                     <div class="form-group-new-reservation col-md-2">
                         <label class="form-label ">Package</label>
                         <div class="row" style="margin-left:1px;margin-right:2px">
-                            <select id="package"  asp-items="ViewBag.cboPackage"></select>
+                            <select id="package" asp-items="ViewBag.cboPackage"></select>
 
                         </div>
                     </div>
@@ -607,11 +630,13 @@
                     <div class="form-group-new-reservation col-md-3">
                         <label class="form-label ">Name</label>
                         <div class="row" style="margin-left:1px;margin-right:2px">
-                            <input id="name" style="height:28px;display:none"  />
-                            <input id="nameText" style="height:28px" class="col-md-9"/>
-                            <button onclick="openModalSearchProfile()" class="col-md-2"><i class="fa-solid fa-arrow-down"></i></button>
+                            <input id="name" style="height:28px;display:none" />
+                            <input id="nameText" style="height:28px" class="col-md-9" />
+                            <button onclick="openModalSearchProfile()" class="col-md-2"><i
+                                    class="fa-solid fa-arrow-down"></i></button>
                             <div id="errorMessage" style="color: red; margin-top: 5px; display: none;">
-                                <strong>Typing format is not correct. Please typing as below: FirstName Middle, LastName </strong>
+                                <strong>Typing format is not correct. Please typing as below: FirstName Middle, LastName
+                                </strong>
                             </div>
                         </div>
                     </div>
@@ -621,7 +646,7 @@
                         <span class="visually-hidden">Loading...</span>
                     </div>
                 </div>
-                <div class="mui-card mt-2" >
+                <div class="mui-card mt-2">
                     <div id="gridContainerRoom" class="mt-2 gridContainer"></div>
                 </div>
             </div>
@@ -657,14 +682,14 @@
 
         }
     });
-    function CreateProfile(account,lastName,firstName,middleName) {
+    function CreateProfile(account, lastName, firstName, middleName) {
         var formData = new FormData();
         const userID = JSON.parse(localStorage.getItem("userID"));
         formData.append('AccountIndividual', account);
         formData.append('LastNameIndivdual', lastName);
         formData.append('FirstNameIndividual', firstName);
         formData.append('MiddleNameIndividual', middleName);
-        formData.append('userID',userID);
+        formData.append('userID', userID);
 
         $.ajax({
             url: '/Profile/SaveProfileInReservation',
@@ -677,7 +702,7 @@
                     showToast('Success', data.msg, true);
                     $('#name').val(data.id);
                 } else {
-                        showToast('Error', data.msg, false);
+                    showToast('Error', data.msg, false);
                 }
 
             },
@@ -1067,62 +1092,62 @@
             }
         });
     }
-         $("#btnExportExcel").click(function () {
-                   const grid = $("#gridContainer").dxDataGrid("instance"); var selectedReport2 = 'Group Reservation';
-            var selectedReport = 'Group Reservation';
-            if (!selectedReport) {
-                alert("Vui lòng chọn báo cáo trước khi xuất Excel.");
-                return;
-            }
+    $("#btnExportExcel").click(function () {
+        const grid = $("#gridContainer").dxDataGrid("instance"); var selectedReport2 = 'Group Reservation';
+        var selectedReport = 'Group Reservation';
+        if (!selectedReport) {
+            alert("Vui lòng chọn báo cáo trước khi xuất Excel.");
+            return;
+        }
 
-                         const workbook = new ExcelJS.Workbook();const companyName = localStorage.getItem("CompanyName") || "Tên công ty chưa xác định";
-            const worksheet = workbook.addWorksheet("Sheet 1");
+        const workbook = new ExcelJS.Workbook(); const companyName = localStorage.getItem("CompanyName") || "Tên công ty chưa xác định";
+        const worksheet = workbook.addWorksheet("Sheet 1");
 
-            // === Tạo header công ty (dòng 1) ===
-           worksheet.addRow([companyName]);
-            worksheet.mergeCells('A1:E1');
-            worksheet.getRow(1).font = { bold: true };
-            worksheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'left' };
+        // === Tạo header công ty (dòng 1) ===
+        worksheet.addRow([companyName]);
+        worksheet.mergeCells('A1:E1');
+        worksheet.getRow(1).font = { bold: true };
+        worksheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'left' };
 
-            // === Dòng 2: Thời gian xuất (phải) ===
-            const now = new Date();
-            const exportDate = now.toLocaleString("vi-VN");
-            worksheet.addRow(['', '', '', '', ' ' + exportDate]);
-            worksheet.mergeCells('E2:H2');
-            worksheet.getRow(2).alignment = { vertical: 'middle', horizontal: 'right' };
+        // === Dòng 2: Thời gian xuất (phải) ===
+        const now = new Date();
+        const exportDate = now.toLocaleString("vi-VN");
+        worksheet.addRow(['', '', '', '', ' ' + exportDate]);
+        worksheet.mergeCells('E2:H2');
+        worksheet.getRow(2).alignment = { vertical: 'middle', horizontal: 'right' };
 
-            // === Dòng 3–4: Trống
-            worksheet.addRow([]);
-            worksheet.addRow([]);
+        // === Dòng 3–4: Trống
+        worksheet.addRow([]);
+        worksheet.addRow([]);
 
-            // === Dòng 5: Tên báo cáo ở giữa ===
-            const reportRow = worksheet.addRow(['', '', selectedReport]);
-            worksheet.mergeCells('C5:F5');
-            reportRow.font = { bold: true, size: 14 };
-            reportRow.alignment = { vertical: 'middle', horizontal: 'center' };
+        // === Dòng 5: Tên báo cáo ở giữa ===
+        const reportRow = worksheet.addRow(['', '', selectedReport]);
+        worksheet.mergeCells('C5:F5');
+        reportRow.font = { bold: true, size: 14 };
+        reportRow.alignment = { vertical: 'middle', horizontal: 'center' };
 
-            // === Dòng 6: Trống trước khi xuất dữ liệu
-            worksheet.addRow([]);
+        // === Dòng 6: Trống trước khi xuất dữ liệu
+        worksheet.addRow([]);
 
-            // === Export dữ liệu từ DevExtreme (bắt đầu từ dòng 7)
-            DevExpress.excelExporter.exportDataGrid({
-                component: grid,
-                worksheet: worksheet,
-                autoFilterEnabled: true,
-                topLeftCell: { row: 7, column: 1 } // dữ liệu bắt đầu từ dòng 7
-            }).then(function () {
-                // Footer
-                const lastRow = worksheet.lastRow.number + 2;
-                worksheet.getCell(`A${lastRow}`).value = "--- END  ---";
-                worksheet.mergeCells(`A${lastRow}:F${lastRow}`);
-                worksheet.getCell(`A${lastRow}`).alignment = { horizontal: 'center' };
-                worksheet.getCell(`A${lastRow}`).font = { italic: true };
+        // === Export dữ liệu từ DevExtreme (bắt đầu từ dòng 7)
+        DevExpress.excelExporter.exportDataGrid({
+            component: grid,
+            worksheet: worksheet,
+            autoFilterEnabled: true,
+            topLeftCell: { row: 7, column: 1 } // dữ liệu bắt đầu từ dòng 7
+        }).then(function () {
+            // Footer
+            const lastRow = worksheet.lastRow.number + 2;
+            worksheet.getCell(`A${lastRow}`).value = "--- END  ---";
+            worksheet.mergeCells(`A${lastRow}:F${lastRow}`);
+            worksheet.getCell(`A${lastRow}`).alignment = { horizontal: 'center' };
+            worksheet.getCell(`A${lastRow}`).font = { italic: true };
 
-                // Ghi file
-                let fileName = selectedReport + ".xlsx";
-                workbook.xlsx.writeBuffer().then(function (buffer) {
-                    saveAs(new Blob([buffer], { type: "application/octet-stream" }), fileName);
-                });
+            // Ghi file
+            let fileName = selectedReport + ".xlsx";
+            workbook.xlsx.writeBuffer().then(function (buffer) {
+                saveAs(new Blob([buffer], { type: "application/octet-stream" }), fileName);
             });
         });
+    });
 </script>

@@ -24,10 +24,5 @@ namespace BaseBusiness.BO
         {
             get { return instance; }
         }
-        public LanguageModel GetById(int id, SqlConnection conn, SqlTransaction tx)
-        {
-            const string sql = "SELECT ID, Code, Name, Description, CreatedBy, CreatedDate,  UpdatedBy, UpdatedDate FROM Language WHERE ID = @id";
-            return conn.QuerySingleOrDefault<LanguageModel>(sql, new { id }, tx);
-        }
     }
 }

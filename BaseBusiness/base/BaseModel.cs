@@ -16,13 +16,13 @@ namespace BaseBusiness.bc
 		{
 			return 0;
 		}
-        public virtual string GetStringID()
-        {
-            return ""; // tr? v? giá tr? m?c ??nh, override ? model con n?u c?n
-        }
+		public virtual string GetStringID()
+		{
+			return ""; // tr? v? giá tr? m?c ??nh, override ? model con n?u c?n
+		}
 
-        protected int userID = 0;
-		public void SetUserID (int id)
+		protected int userID = 0;
+		public void SetUserID(int id)
 		{
 			this.userID = id;
 		}
@@ -32,7 +32,6 @@ namespace BaseBusiness.bc
 			return this.userID;
 		}
 
-		
 
 		/// <summary>
 		/// Clone the object, and returning a reference to a cloned object.
@@ -57,7 +56,7 @@ namespace BaseBusiness.bc
 				if (ICloneType != null)
 				{
 					//Getting the ICloneable interface from the object.
-					ICloneable IClone = (ICloneable) fi.GetValue(this);
+					ICloneable IClone = (ICloneable)fi.GetValue(this);
 
 					if (IClone == null)
 						continue; // Unitialized in source, so skip the copying
@@ -80,7 +79,7 @@ namespace BaseBusiness.bc
 				if (IEnumerableType != null)
 				{
 					//Get the IEnumerable interface from the field.
-					IEnumerable IEnum = (IEnumerable) fi.GetValue(this);
+					IEnumerable IEnum = (IEnumerable)fi.GetValue(this);
 
 					//This version support the IList and the 
 					//IDictionary interfaces to iterate on collections.
@@ -91,7 +90,7 @@ namespace BaseBusiness.bc
 					if (IListType != null)
 					{
 						//Getting the IList interface.
-						IList list = (IList) fields[i].GetValue(newObject);
+						IList list = (IList)fields[i].GetValue(newObject);
 
 						foreach (object obj in IEnum)
 						{
@@ -104,7 +103,7 @@ namespace BaseBusiness.bc
 								//If it does support the ICloneable interface, 
 								//we use it to set the clone of
 								//the object in the list.
-								ICloneable clone = (ICloneable) obj;
+								ICloneable clone = (ICloneable)obj;
 								list[j] = clone.Clone();
 							}
 
@@ -120,7 +119,7 @@ namespace BaseBusiness.bc
 					else if (IDicType != null)
 					{
 						//Getting the dictionary interface.
-						IDictionary dic = (IDictionary) fields[i].GetValue(newObject);
+						IDictionary dic = (IDictionary)fields[i].GetValue(newObject);
 						j = 0;
 
 						foreach (DictionaryEntry de in IEnum)
@@ -131,7 +130,7 @@ namespace BaseBusiness.bc
 
 							if (ICloneType != null)
 							{
-								ICloneable clone = (ICloneable) de.Value;
+								ICloneable clone = (ICloneable)de.Value;
 								dic[de.Key] = clone.Clone();
 							}
 							j++;
@@ -168,11 +167,11 @@ namespace BaseBusiness.bc
 			string modelName = this.GetType().Name;
 			string fID = modelName.Substring(0, modelName.Length - 5) + "ID";
 			string[] fields = GetAuditFields();
-			if(model==null)
+			if (model == null)
 			{
 				foreach (string field in fields)
 				{
-					if(field.Equals(fID)) continue;
+					if (field.Equals(fID)) continue;
 					object value1 = PropertyUtils.GetValue(this, field);
 					result.Append(string.Format("- {0}: {1}<br>", field, value1));
 				}
@@ -180,10 +179,10 @@ namespace BaseBusiness.bc
 			else
 			{
 				if (this.GetType() != model.GetType()) return "None";
-				
+
 				foreach (string field in fields)
 				{
-					if(field.Equals(fID)) continue;
+					if (field.Equals(fID)) continue;
 					object value1 = PropertyUtils.GetValue(this, field);
 					object value2 = PropertyUtils.GetValue(model, field);
 					if (!value1.Equals(value2))
@@ -207,7 +206,7 @@ namespace BaseBusiness.bc
 		}
 
 		protected int auditType = -100;
-		public void SetAuditType (int id)
+		public void SetAuditType(int id)
 		{
 			this.auditType = id;
 		}
@@ -223,7 +222,7 @@ namespace BaseBusiness.bc
 		public string orderFieldName;
 		public string GetOrderFieldName()
 		{
-			if(orderFieldName != null && orderFieldName.Length > 0)
+			if (orderFieldName != null && orderFieldName.Length > 0)
 				return orderFieldName;
 			else
 				return this.GetID().ToString();
@@ -237,15 +236,15 @@ namespace BaseBusiness.bc
 		{
 			return "";
 		}
-        public virtual string GetTableName()
-        {
-            return this.GetType().Name.Replace("Model", "");
-        }
-        public virtual string GetPrimaryKeyName()
-        {
-            return "ID";
-        }
+		public virtual string GetTableName()
+		{
+			return this.GetType().Name.Replace("Model", "");
+		}
+		public virtual string GetPrimaryKeyName()
+		{
+			return "ID";
+		}
 
-    }
-	
+	}
+
 }

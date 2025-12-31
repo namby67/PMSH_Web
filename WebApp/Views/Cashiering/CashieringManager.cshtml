@@ -47,7 +47,6 @@
         <div class="col-md-1 row">
             <label>Zone</label>
             <select id="zone" asp-items="ViewBag.cboZone">
-   
             </select>
         </div>
         <div class="col-md-1 row">
@@ -70,19 +69,19 @@
             <label>Arrival To</label>
             <div class="row">
                 <input type="date" class="col-md-11" id="arrivalTo" disabled>
-                <input type="checkbox" id="chooseArrivalTo" class="col-md-1" >
+                <input type="checkbox" id="chooseArrivalTo" class="col-md-1">
             </div>
-            
+
         </div>
         <div class="col-md-2 row">
             <label>Departure</label>
             <div class="row">
                 <input type="date" id="departure" class="col-md-11" disabled>
-                <input type="checkbox" id="chooseDeparture" class="col-md-1" >
+                <input type="checkbox" id="chooseDeparture" class="col-md-1">
             </div>
-            
+
         </div>
-        <div class="col-md-10 row" >
+        <div class="col-md-10 row">
             <label>Search Type</label>
             <div style="display:flex;column-gap:4px">
                 <div class="form-group-new-reservation">
@@ -112,7 +111,7 @@
 </div>
 <div id="gridContainer" class="gridContainer mt-2"></div>
 <script>
-    $(document).ready( function () {
+    $(document).ready(function () {
         searchReservation();
     });
     function searchReservation() {
@@ -122,23 +121,23 @@
                 type: 'get',
                 dataType: 'json',
                 data: {
-                    room : $('#room').val(),
-                    name:$('#name').val(),
+                    room: $('#room').val(),
+                    name: $('#name').val(),
                     block: $('#block').val(),
-                    group:$('#group').val(),
-                    company:$('#company').val(),
-                    confirmationNo:$('#confirmationNo').val(),
-                    arrivalDate:$('#arrivalForm').val(),
-                    arrivalTo:$('#arrivalTo').val(),
-                    departure:$('#departure').val(),
-                    crsNo:$('#crsNo').val(),
-                    package:$('#package').val(),
-                    guestName:$('#guestType').val(),
-                    zone:$('#zone').val(),
-                    typeSearch:$('input[name="searchType"]:checked').val(),
-                    chooseArrivalFrom:$('#chooseArrivalForm').is(':checked') ? 1 : 0,
-                    chooseArrivalTo:$('#chooseArrivalTo').is(':checked') ? 1 : 0,
-                    chooseDeparture:$('#chooseDeparture').is(':checked') ? 1 : 0,
+                    group: $('#group').val(),
+                    company: $('#company').val(),
+                    confirmationNo: $('#confirmationNo').val(),
+                    arrivalDate: $('#arrivalForm').val(),
+                    arrivalTo: $('#arrivalTo').val(),
+                    departure: $('#departure').val(),
+                    crsNo: $('#crsNo').val(),
+                    package: $('#package').val(),
+                    guestName: $('#guestType').val(),
+                    zone: $('#zone').val(),
+                    typeSearch: $('input[name="searchType"]:checked').val(),
+                    chooseArrivalFrom: $('#chooseArrivalForm').is(':checked') ? 1 : 0,
+                    chooseArrivalTo: $('#chooseArrivalTo').is(':checked') ? 1 : 0,
+                    chooseDeparture: $('#chooseDeparture').is(':checked') ? 1 : 0,
 
                 },
                 crossDomain: false,
@@ -210,7 +209,7 @@
 
     function toggleDateInput(checkboxId, inputId) {
         const $checkbox = $('#' + checkboxId);
-        const $input    = $('#' + inputId);
+        const $input = $('#' + inputId);
 
         // Khi thay đổi trạng thái checkbox
         $checkbox.on('change', function () {
@@ -222,6 +221,6 @@
         });
     }
     toggleDateInput('chooseArrivalForm', 'arrivalForm');
-    toggleDateInput('chooseArrivalTo',   'arrivalTo');
-    toggleDateInput('chooseDeparture',  'departure');
+    toggleDateInput('chooseArrivalTo', 'arrivalTo');
+    toggleDateInput('chooseDeparture', 'departure');
 </script>

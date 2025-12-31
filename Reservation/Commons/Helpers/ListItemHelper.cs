@@ -226,7 +226,7 @@ namespace Reservation.Commons.Helpers
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(textDefault)) textDefault = _textDefault ;
+                if (string.IsNullOrWhiteSpace(textDefault)) textDefault = _textDefault;
 
                 var items = new List<SelectListItem>();
                 List<ProfileModel> list = PropertyUtils.ConvertToList<ProfileModel>(ProfileBO.Instance.FindByAttribute("Type", 2));
@@ -440,7 +440,7 @@ namespace Reservation.Commons.Helpers
                 List<PackageModel> list = PropertyUtils.ConvertToList<PackageModel>(PackageBO.Instance.FindByAttribute("Active", 1));
                 if (list.Count > 0)
                 {
-                    items = list.Select(p => new SelectListItem { Value = p.ID.ToString(), Text =p.Code + " - " + p.Description, Selected = false }).ToList();
+                    items = list.Select(p => new SelectListItem { Value = p.ID.ToString(), Text = p.Code + " - " + p.Description, Selected = false }).ToList();
                 }
                 if (defaultValue)
                     items.Insert(0, new SelectListItem { Text = textDefault, Value = "0", Selected = true });
@@ -860,7 +860,7 @@ namespace Reservation.Commons.Helpers
                 if (string.IsNullOrWhiteSpace(textDefault)) textDefault = _textDefault;
 
                 var items = new List<SelectListItem>();
-                List<TransactionsModel> list = PropertyUtils.ConvertToList<TransactionsModel>(TransactionsBO.Instance.FindByAttribute("IsActive",1));
+                List<TransactionsModel> list = PropertyUtils.ConvertToList<TransactionsModel>(TransactionsBO.Instance.FindByAttribute("IsActive", 1));
                 if (list.Count > 0)
                 {
                     items = list.Select(p => new SelectListItem { Value = p.Code.ToString(), Text = p.Code + " - " + p.Description, Selected = false }).ToList();

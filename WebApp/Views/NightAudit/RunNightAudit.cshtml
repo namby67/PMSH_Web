@@ -6,22 +6,25 @@
         align-items: center;
         min-height: 100vh;
         width: 100%;
-        background: #f5f5f5; /* Dark neon gradient */
+        background: #f5f5f5;
+        /* Dark neon gradient */
         padding: 10px 20px;
         overflow-x: auto;
-        position: relative; /* For overlay positioning */
+        position: relative;
+        /* For overlay positioning */
     }
 
-        /* Header styling */
-        .nightaudit-container h1 {
-            font-size: 3.2rem;
-            font-weight: 700;
-            color: #0055b8; /* Neon cyan */
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            margin-bottom: 10px;
-            animation: neonGlow 1.5s ease-in-out infinite alternate;
-        }
+    /* Header styling */
+    .nightaudit-container h1 {
+        font-size: 3.2rem;
+        font-weight: 700;
+        color: #0055b8;
+        /* Neon cyan */
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        margin-bottom: 10px;
+        animation: neonGlow 1.5s ease-in-out infinite alternate;
+    }
 
     /* Business date styling */
     .nightaudit-business-date2 {
@@ -43,55 +46,58 @@
         margin-bottom: 30px;
     }
 
-        /* Table header */
-        .nightaudit-table_nightaudit th {
-            background: #0055b8;
-            color: #ffffff;
-            padding: 8px 20px;
-            text-align: left;
-            font-weight: 500;
-            text-transform: uppercase;
-            font-size: 0.95rem;
-        }
+    /* Table header */
+    .nightaudit-table_nightaudit th {
+        background: #0055b8;
+        color: #ffffff;
+        padding: 8px 20px;
+        text-align: left;
+        font-weight: 500;
+        text-transform: uppercase;
+        font-size: 0.95rem;
+    }
 
-        /* Table rows */
-        .nightaudit-table_nightaudit tr {
-            background: rgba(255, 255, 255, 0.05);
-            transition: all 0.3s ease;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-        }
+    /* Table rows */
+    .nightaudit-table_nightaudit tr {
+        background: rgba(255, 255, 255, 0.05);
+        transition: all 0.3s ease;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
 
-        /* Table cells */
-        .nightaudit-table_nightaudit td {
-            padding: 8px 20px;
-            font-size: 14px;
-            color: #000000;
-            border: none;
-        }
+    /* Table cells */
+    .nightaudit-table_nightaudit td {
+        padding: 8px 20px;
+        font-size: 14px;
+        color: #000000;
+        border: none;
+    }
 
-        /* Status text styling */
-        .nightaudit-table_nightaudit .status-success {
-            color: #6aa84f;
-            font-weight: bold;
-        }
+    /* Status text styling */
+    .nightaudit-table_nightaudit .status-success {
+        color: #6aa84f;
+        font-weight: bold;
+    }
 
-        .nightaudit-table_nightaudit .status-fail {
-            color: #990000;
-            font-weight: bold;
-        }
+    .nightaudit-table_nightaudit .status-fail {
+        color: #990000;
+        font-weight: bold;
+    }
 
-        /* Process icon styling */
-        .nightaudit-table_nightaudit .fa-spinner {
-            color: #0055b8; /* Blue for in-progress */
-        }
+    /* Process icon styling */
+    .nightaudit-table_nightaudit .fa-spinner {
+        color: #0055b8;
+        /* Blue for in-progress */
+    }
 
-        .nightaudit-table_nightaudit .fa-circle-check {
-            color: #6aa84f; /* Green for success */
-        }
+    .nightaudit-table_nightaudit .fa-circle-check {
+        color: #6aa84f;
+        /* Green for success */
+    }
 
-        .nightaudit-table_nightaudit .fa-circle-xmark {
-            color: #990000; /* Red for fail */
-        }
+    .nightaudit-table_nightaudit .fa-circle-xmark {
+        color: #990000;
+        /* Red for fail */
+    }
 
     /* Buttons container */
     .nightaudit-buttons {
@@ -99,36 +105,36 @@
         gap: 20px;
     }
 
-        /* Button styling */
-        .nightaudit-buttons button {
-            padding: 8px;
-            font-size: 14px;
-            font-weight: 500;
-            border-radius: 4px;
-            color: #0055b8;
-            cursor: pointer;
-            border: none;
-        }
+    /* Button styling */
+    .nightaudit-buttons button {
+        padding: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        border-radius: 4px;
+        color: #0055b8;
+        cursor: pointer;
+        border: none;
+    }
 
-        /* Start button */
-        .nightaudit-buttons #start {
-            background: #0055b8;
-            color: #FFFFFF;
-        }
+    /* Start button */
+    .nightaudit-buttons #start {
+        background: #0055b8;
+        color: #FFFFFF;
+    }
 
-        /* Close button */
-        .nightaudit-buttons #close {
-            background: #ECECEC;
-            color: #000000;
-        }
+    /* Close button */
+    .nightaudit-buttons #close {
+        background: #ECECEC;
+        color: #000000;
+    }
 
-        /* Disabled button state */
-        .nightaudit-buttons button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
+    /* Disabled button state */
+    .nightaudit-buttons button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
 
     /* Progress bar container */
     .progress-bar-container {
@@ -273,7 +279,8 @@
     </table>
 
     <!-- Bootstrap Modal for Progress -->
-    <div class="modal fade" id="progressModal" tabindex="-1" aria-labelledby="progressModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal fade" id="progressModal" tabindex="-1" aria-labelledby="progressModalLabel" aria-hidden="true"
+        data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body">
@@ -413,7 +420,7 @@
             }
         });
     }
-    
+
     function CheckInNotCI() {
         updateProgress(2, 'Arrivals Not Yet Checked In');
         const startTime2 = getCurrentTime();
@@ -594,7 +601,7 @@
                     setStatus('status8', 'Success');
                     ChangeRoomStatus();
                 } else {
-                     console.log(data);
+                    console.log(data);
                     setProcess('process6', '<i class="fa-solid fa-circle-xmark"></i>');
                     setStatus('status6', 'Fail');
                     setProcess('process7', '<i class="fa-solid fa-circle-xmark"></i>');
@@ -607,7 +614,7 @@
             },
             error: function (xhr, statusText, err) {
                 const endTime = getCurrentTime();
-                 console.log(endTime);
+                console.log(endTime);
                 $('#timeEnd6').text(endTime);
                 $('#timeEnd7').text(endTime);
                 $('#timeEnd8').text(endTime);

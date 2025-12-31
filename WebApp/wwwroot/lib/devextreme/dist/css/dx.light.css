@@ -108,9 +108,9 @@
   font-weight: 800;
   font-size: 12px;
 }
-    .dx-theme-generic-typography a {
-        color: #000000;
-    }
+.dx-theme-generic-typography a {
+  color: #337ab7;
+}
 .dx-icon-add,
 .dx-icon-addcolumnleft,
 .dx-icon-addcolumnright,

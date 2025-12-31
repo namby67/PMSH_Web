@@ -26,11 +26,6 @@ namespace BaseBusiness.BO
         {
             get { return instance; }
         }
-        public PropertyTypeModel GetById(int id, SqlConnection conn, SqlTransaction tx)
-        {
-            const string sql = "SELECT ID, Code,Description, CreatedBy, CreatedDate,  UpdatedBy, UpdatedDate FROM PropertyType WHERE ID = @id";
-            return conn.QuerySingleOrDefault<PropertyTypeModel>(sql, new { id }, tx);
-        }
-    
-}
+
+    }
 }

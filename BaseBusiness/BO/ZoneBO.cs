@@ -26,12 +26,7 @@ namespace BaseBusiness.BO
             get { return instance; }
         
         }
-        public ZoneModel GetById(int id, SqlConnection conn, SqlTransaction tx)
-        {
-            const string sql = "SELECT ID, Code, Name, Description, CreatedBy, CreatedDate,  UpdatedBy, UpdatedDate FROM Zone WHERE ID = @id";
-            return conn.QuerySingleOrDefault<ZoneModel>(sql, new { id }, tx);
-        }
-        public static List<RoomAvailabilitySummaryDTO> TotalRoomNight(string  code )
+        public static List<RoomAvailabilitySummaryDTO> TotalRoomNight(string code)
         {
 
             string query = $"SELECT TotalRoomNight, TotalAvail FROM dbo.Zone where Code IN (" + code + ")";
