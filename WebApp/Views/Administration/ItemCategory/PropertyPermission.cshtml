@@ -44,7 +44,7 @@
     }
 
         .ts-control::-webkit-scrollbar-thumb:hover {
-            background: #a8a8a8;
+            background: #63af90 !important;
         }
 
     .ts-dropdown {
@@ -65,25 +65,27 @@
         right: 10px;
         top: 50%;
         transform: translateY(-50%);
+        border-radius: 0.575rem;
         cursor: pointer;
         font-size: 1.2rem;
-        color: #adb9bd !important;
+        color: #dc3545 !important;
         font-weight: bold;
         z-index: 10;
         transition: color 0.2s;
         line-height: 1;
+        background-color: #d3e8df !important;
     }
 
     .tomselect-custom .clear-button:hover {
-        color: #dc3545 !important;
+            color: #d3e8df !important;
+            background-color: #dc3545 !important;
     }
 </style>
 
 <div class="text-center" style="font-size: 20px">Property Permission</div>
 <div class="sticky-header bg-white p-2 shadow-sm z-3">
-    <div class="d-flex align-items-center gap-3 p-2"
-         >
-        <div class="d-flex align-items-center" style="min-width: 300px; flex: 1;">
+    <div class="d-flex align-items-center gap-3 p-2">
+        <div class="d-flex align-items-center" style="min-width: 200px; flex: 1;">
             <label for="user" class="me-2 mb-0 fw-bold text-nowrap">User:</label>
             <div class="w-100">
                 <select id="user" name="user" class="tomselect-custom m-2" multiple>
@@ -217,7 +219,7 @@
                     valueField: 'value',
                     labelField: 'text',
                     searchField: ['text'],
-                    placeholder: 'Enter or select options...',
+                    placeholder: ' Enter or select options...',
                     render: {
                         option: function(data, escape) {
                             return '<div class="p-2">' + escape(data.text) + '</div>';
