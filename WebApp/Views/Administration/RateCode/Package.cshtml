@@ -25,16 +25,23 @@
 <div class="text-center" id="reportTitle" style="font-size: 20px">Package</div>
 <div class="sticky-header bg-white p-2 shadow-sm z-3">
     <div class="">
-        <button style="border-radius: 4px;  margin-right: 6px;" id="btnView" onclick="openModalSearchUser()"
-            class="mui-button mui-button-search"><i class="fa-solid fa-search"></i>Search</button>
-        <button style="border-radius: 4px;  margin-right: 6px;" id="btnNew" class="mui-button mui-button-new"
-            type="button"><i class="fa-solid fa-plus"></i> New</button>
-        <button style="border-radius: 4px;  margin-right: 6px;" id="btnEdit" class="mui-button mui-button-edit "
-            type="button"><i class="fa-solid fa-pen"></i> Edit</button>
-        <button style="border-radius: 4px;  margin-right: 6px;" id="btnSave" class="mui-button mui-button-export "
-            type="button"> <i class="fa-solid fa-floppy-disk"></i> Save</button>
-        <button style="border-radius: 4px;  margin-right: 6px;" id="btnDelete" class="mui-button button-report-delete"
-            type="button"> <i class="fa-solid fa-trash-can"></i> Delete</button>
+        <button id="btnView" onclick="openModalSearchUser()" class="mui-button mui-button-search"><i
+                class="fa-solid fa-search"></i>Search</button>
+        <button id="btnNew" class="mui-button mui-button-new" type="button"><i class="fa-solid fa-plus"></i>
+            New</button>
+        <button id="btnEdit" class="mui-button mui-button-edit " type="button"><i class="fa-solid fa-pen"></i>
+            Edit</button>
+        <button id="btnSave" class="mui-button mui-button-export " type="button"> <i
+                class="fa-solid fa-floppy-disk"></i> Save</button>
+        <button id="btnDelete" class="mui-button button-report-delete" type="button"> <i
+                class="fa-solid fa-trash-can"></i> Delete</button>
+        <button class="mui-button mui-button-clear" id="btnClear"><i class="fa-solid fa-arrows-rotate"></i>
+            Refresh</button>
+        <button class="mui-button mui-button-new" id="addDetailPackage"><i class="fa-solid fa-floppy-disk"></i>
+            Save</button>
+        <button class="mui-button button-report-delete" id="btnRemove"><i class="fa-solid fa-trash-can"></i>
+            Delete</button>
+
     </div>
 </div>
 <div class="mui-card"></div>
@@ -256,9 +263,6 @@
 
             <!-- Buttons -->
             <div class="mt-3 d-flex gap-2">
-                <button class="mui-button mui-button-clear" id="btnClear">Clear</button>
-                <button class="mui-button mui-button-new" id="addDetailPackage">Add</button>
-                <button class="mui-button button-report-delete" id="btnRemove">Remove</button>
             </div>
         </div>
 
@@ -326,6 +330,9 @@
     });
     const txtCode = document.getElementById("txtCode");
     const targetCode = document.getElementById("targetCode");
+    $('#btnClear').hide();
+    $('#addDetailPackage').hide();   // Detail → hide Save
+    $('#btnRemove').hide();
 
     txtCode.addEventListener("input", function () {
         targetCode.value = this.value;
@@ -359,10 +366,16 @@
                 $('#btnNew').hide();
                 $('#btnSave').hide();   // Detail → hide Save
                 $('#btnDelete').hide();
+                $('#btnClear').show()
+                $('#addDetailPackage').show()
+                $('#btnRemove').show()
             } else {
                 $('#btnNew').show();
                 $('#btnSave').show();   // Header → show Save
                 $('#btnDelete').show()
+                $('#btnClear').hide();
+                $('#addDetailPackage').hide();   // Detail → hide Save
+                $('#btnRemove').hide();
             }
         }
     }).dxTabs('instance');
