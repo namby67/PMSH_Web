@@ -1,201 +1,471 @@
-﻿<link href="~/css/pages/posting.css" rel="stylesheet" />
+﻿
+<link href="~/css/pages/Posting.css" rel="stylesheet" />
 <div class="modal fade" id="modalPosting" tabindex="-1">
     <div class="modal-dialog modal-xl modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">POS Order Screen</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <h5 class="modal-title">Posting Transaction - Article</h5>
             </div>
             <div class="modal-body">
-                <div class="mb-3">
-                    <button class="btn btn-primary btn-primary-post-billing" style="padding: 4px 8px;" onclick="PostingService();">Post</button>
-                </div>
                 <div class="row g-3">
-                    <!-- LEFT -->
-                    <div class="col-lg-5">
-                        <div class="card p-3">
-                            <div class="filter-bar-post-billing-2">
-                                <i class="fa-solid fa-filter filter-icon-post-billing-2" onclick="toggleFilters()"></i>
-                                <input type="text" class="form-control form-control-sm" id="productSearch" placeholder="Tìm kiếm sản phẩm...">
-                            </div>
-                            <div class="filters-container-post-billing-2" id="filtersContainer">
-                                <select class="form-select form-select-sm" id="transactionGroupIDPosting">
-                                </select>
-                                <select class="form-select form-select-sm" id="subTransactionGroupIDPosting">
-                                </select>
-                            </div>
-                            <div class="product-list-post-billing-2" id="listTransactionPosting">
-                            </div>
-                            <div class="sub-product-list-post-billing-2" id="subProductList"></div>
-                        </div>
+                    <div class="main-toolbar d-flex">
+                        <button class="mui-button mui-button-export" id="btn-print">
+                            <i class="fa-solid fa-print"></i><span> Print</span>
+                        </button>
+                        <button class="mui-button mui-button-save" id="btn-post" onclick="PostingService();">
+                            <i class="fa-solid fa-save"></i><span> Post</span>
+                        </button>
+                        <button class="mui-button mui-button-new" id="btn-add" style="display: none">
+                            <i class="fa-solid fa-plus"></i><span> Add</span>
+                        </button>
+                        <button class="mui-button mui-button-close" data-bs-dismiss="modal" id="btn-close">
+                            <i class="fa-solid fa-xmark"></i><span> Close</span>
+                        </button>
                     </div>
-                    <!-- MIDDLE -->
-                    <div class="col-lg-4">
-                        <div class="card p-3">
-                            <div class="section-card-post-billing-2">
-                                <div class="row mb-1">
-                                    <div class="col-6">
-                                        <div class="input-group-post-billing-2">
-                                            <label>T/A Code</label>
-                                            <input type="text" class="form-control-post-billing-2" id="taCode1PostBilling" placeholder="Enter T/A Code">
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="input-group-post-billing-2">
-                                            <label>&nbsp;</label>
-                                            <input type="text" class="form-control-post-billing-2" id="taCode2PostBilling" placeholder="Enter Bill No">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row mb-1">
-                                    <label id="articleCodePostBilling"></label>
-                                </div>
-                                <div class="row mb-1">
-                                    <div class="col-6">
-                                        <div class="input-group-post-billing-2">
-                                            <label>Quantity</label>
-                                            <input type="number" class="form-control-post-billing-2" id="quantityPostBilling" style="text-align:right" value="1" min="1">
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="input-group-post-billing-2">
-                                            <label>Price++</label>
-                                            <input type="text" step="0.01" class="form-control-post-billing-2" id="pricePostBilling" style="text-align:right" value="0" placeholder="0.00">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row mb-1">
-                                    <div class="col-6">
-                                        <div class="input-group-post-billing-2">
-                                            <label>Amount++</label>
-                                            <input type="text" step="0.01" class="form-control-post-billing-2" id="amountPostBilling" style="text-align:right" value="0" placeholder="0.00" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="input-group-post-billing-2">
-                                            <label>Price.net</label>
-                                            <input type="text" step="0.01" class="form-control-post-billing-2" id="priceNetPostBilling" style="text-align:right" value="0" placeholder="0.00">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row mb-1">
-                                    <div class="col-6">
-                                        <div class="input-group-post-billing-2">
-                                            <label>Amount.net</label>
-                                            <input type="text" step="0.01" class="form-control-post-billing-2" id="amountNetPostBilling" style="text-align:right" value="0" placeholder="0.00" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="input-group-post-billing-2">
-                                            <label>Currency</label>
-                                            <input type="text" class="form-control-post-billing-2" id="currencyPostBilling" value="VND" disabled>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row mb-1">
-                                    <div class="col-6">
-                                        <div class="input-group-post-billing-2">
-                                            <label>Win.No</label>
-                                            <input type="text" class="form-control-post-billing-2" id="winNoPostBilling" style="text-align:right" readonly />
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="input-group-post-billing-2">
-                                            <label>Bill No</label>
-                                            <input type="text" class="form-control-post-billing-2" id="billNoPostBilling" placeholder="Enter Bill No">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row mb-1">
-                                    <div class="col">
-                                        <button class="btn btn-primary-post-billing-2" onclick="addItemToCart();">Push To List</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="cart-header-post-billing-2">
-                                <span class="ta-selected-post-billing-2" id="taSelected">T/A Selected</span>
-                                <a href="#" class="delete-all-post-billing-2" onclick="deleteAllCartItems()">Delete All</a>
-                            </div>
-                            <div class="table-responsive-post-billing-2">
-                                <ul class="cart-list-post-billing-2" id="cartList">
-                                </ul>
-                            </div>
-                        </div>
+
+                    <div class="mobile-nav">
+                        <button onclick="switchView('group')" id="nav-group">1. Group Trans.</button>
+                        <button onclick="switchView('trans')" id="nav-trans">2. List Trans.</button>
+                        <button onclick="switchView('form')" id="nav-form" class="active">3. Posting (F2/F3)</button>
                     </div>
-                    <!-- RIGHT -->
-                    <div class="col-lg-3">
-                        <div class="card p-3 mb-2">
-                            <div class="section-card section-card-post-billing has-overlap-post-billing">
-                                <h8 class="section-heading section-heading-post-billing">
-                                    <input class="form-check-input form-check-input-post-billing me-1" type="checkbox" id="expressService-post-billing">
-                                    Express Service
-                                </h8>
-                                <div class="row mt-1">
-                                    <div class="col">
-                                        <div class="input-group input-group-post-billing">
-                                            <label>Percentage</label>
-                                            <input type="number" class="form-control form-control-post-billing" id="percentageInput-post-billing" step="0.01">
+
+                    <div class="container-fluid main-content">
+                        <div class="row g-1 h-100">
+
+                            <div class="col-md-3 h-100" id="view-group">
+                                <div class="split-column">
+                                    <div class="split-item">
+                                        <div class="app-header">Group Transaction</div>
+                                        <div class="scroll-area list-group list-group-flush" id="list-group-container">
                                         </div>
                                     </div>
-                                    <div style="display: flex; column-gap: 8px;" class="col">
-                                        <div class="form-check">
-                                            <input class="form-check-input form-check-input-post-billing" type="radio" name="percentage-post-billing" id="percent10-post-billing" value="10">
-                                            <label class="form-check-label form-check-label-post-billing" for="percent10-post-billing">10%</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input form-check-input-post-billing" type="radio" name="percentage-post-billing" id="percent50-post-billing" value="50">
-                                            <label class="form-check-label form-check-label-post-billing" for="percent50-post-billing">50%</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input form-check-input-post-billing" type="radio" name="percentage-post-billing" id="percent100-post-billing" value="100">
-                                            <label class="form-check-label form-check-label-post-billing" for="percent100-post-billing">100%</label>
+                                    <div class="split-item">
+                                        <div class="app-header">Subgroup Transaction</div>
+                                        <div class="scroll-area list-group list-group-flush" id="list-subgroup-container">
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="card p-3">
-                            <div class="radio-group-post-billing-2">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="detailsToggle" id="post-details-radio" value="post-details" checked>
-                                    <label class="form-check-label" for="post-details-radio">Post Details</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="detailsToggle" id="invoice-details-radio" value="invoice-details">
-                                    <label class="form-check-label" for="invoice-details-radio">Post Invoice</label>
+
+                            <div class="col-md-3 h-100" id="view-trans">
+                                <div class="split-column">
+                                    <div class="split-item">
+                                        <div class="app-header">Transaction List</div>
+                                        <div class="scroll-area list-group list-group-flush" id="list-transaction-container">
+                                        </div>
+                                    </div>
+                                    <div class="split-item">
+                                        <div class="app-header">Article List</div>
+                                        <div class="scroll-area list-group list-group-flush" id="list-article-container">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="right-tab-content-post-billing-2" id="rightTabContent">
-                                <div class="right-tab-pane-post-billing-2 active post-details-tab-post-billing-2" id="post-details">
-                                    <div class="input-group-post-billing-2 mb-1">
-                                        <label>Rmt.Charge</label>
-                                        <input type="text" class="form-control-post-billing-2" id="rmtChargePostBilling">
+
+                            <div class="col-md-6 h-100 active-view" id="view-form">
+                                <div class="form-container">
+                                    <div class="d-flex bg-dark align-items-center justify-content-between pe-2">
+                                        <ul class="nav nav-tabs" role="tablist">
+                                            <li class="nav-item"><button class="nav-link active" id="detail-tab" data-bs-toggle="tab" data-bs-target="#detail-pane" type="button">Post Detail (F2)</button></li>
+                                            <li class="nav-item"><button class="nav-link" id="invoice-tab" data-bs-toggle="tab" data-bs-target="#invoice-pane" type="button">Post Invoice (F3)</button></li>
+                                        </ul>
                                     </div>
-                                    <div class="input-group-post-billing-2 mb-1">
-                                        <label>Reference</label>
-                                        <input type="text" class="form-control-post-billing-2" id="referencePostBilling">
-                                    </div>
-                                    <div class="input-group-post-billing-2 mb-1">
-                                        <label>Supplement</label>
-                                        <input type="text" class="form-control-post-billing-2" id="supplementPostBilling">
-                                    </div>
-                                </div>
-                                <div class="right-tab-pane-post-billing-2 invoice-details-tab-post-billing-2" id="invoice-details">
-                                    <div class="input-group-post-billing-2 mb-1">
-                                        <label>Description</label>
-                                        <input type="text" class="form-control-post-billing-2" id="desInvoicePostBilling">
-                                    </div>
-                                    <div class="input-group-post-billing-2 mb-1">
-                                        <label>Reference</label>
-                                        <input type="text" class="form-control-post-billing-2" id="referenceInvoiceBilling">
-                                    </div>
-                                    <div class="input-group-post-billing-2 mb-1">
-                                        <label>Supplement</label>
-                                        <input type="text" class="form-control-post-billing-2" id="supplementInvoiceBilling">
-                                    </div>
-                                    <div class="input-group-post-billing-2 mb-1">
-                                        <label>Check No</label>
-                                        <input type="text" class="form-control-post-billing-2" id="checkNoInvoicePostBilling">
+
+                                    <div class="tab-content" id="postingTabsContent">
+                                        <div class="tab-pane fade show active" id="detail-pane" role="tabpanel">
+                                            <form class="d-flex flex-column h-100">
+                                                <div class="form-body-scroll">
+                                                    <div class="row g-1 mb-1 align-items-center">
+                                                        <div class="col-12 col-sm-2">
+                                                            <label class="form-label">T/A .Code</label>
+                                                        </div>
+                                                        <div class="col-12 col-sm-3">
+                                                            <input type="text" class="form-control form-control-sm js-trans-code" id="input-tacode" />
+                                                        </div>
+                                                        <div class="col-12 col-sm-7">
+                                                            <input type="text" class="form-control form-control-sm js-trans-desc" id="input-desc" />
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row g-1 mb-1 align-items-center js-row-article d-none">
+                                                        <div class="col-12 col-sm-2">
+                                                            <label class="form-label text-primary fw-bold">↳ Article</label>
+                                                        </div>
+                                                        <div class="col-12 col-sm-3">
+                                                            <input type="text" class="form-control form-control-sm text-primary js-art-code" readonly />
+                                                        </div>
+                                                        <div class="col-12 col-sm-7">
+                                                            <input type="text" class="form-control form-control-sm text-primary js-art-desc" readonly />
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row g-1 mb-1">
+                                                        <div class="col-12 col-sm-2">
+                                                            <label class="form-label">Quantity</label>
+                                                        </div>
+                                                        <div class="col-12 col-sm-3">
+                                                            <input type="text"
+                                                                   id="input-quantity"
+                                                                   class="form-control form-control-sm fw-bold text-end" value="1" />
+                                                        </div>
+                                                        <div class="col-12 col-sm-3 text-sm-end pe-2">
+                                                            <label class="form-label">Bill No</label>
+                                                        </div>
+                                                        <div class="col-12 col-sm-4">
+                                                            <input type="text" class="form-control form-control-sm" />
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row g-1 mb-1">
+                                                        <div class="col-12 col-sm-2">
+                                                            <label class="form-label">Price ++</label>
+                                                        </div>
+                                                        <div class="col-12 col-sm-3">
+                                                            <input type="text"
+                                                                   id="input-price"
+                                                                   class="form-control form-control-sm amount-display"
+                                                                   value="0.00" />
+                                                        </div>
+                                                        <div class="col-12 col-sm-3 text-sm-end pe-2">
+                                                            <label class="form-label fw-bold">Amount ++</label>
+                                                        </div>
+                                                        <div class="col-12 col-sm-4">
+                                                            <input type="text" class="form-control form-control-sm amount-display bg-white" value="0.00" readonly />
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row g-1 mb-1">
+                                                        <div class="col-12 col-sm-2">
+                                                            <label class="form-label">Price.Net</label>
+                                                        </div>
+                                                        <div class="col-12 col-sm-3">
+                                                            <input type="text" class="form-control form-control-sm text-end text-muted js-price-input"
+                                                                   id="input-price-net"
+                                                                    value="0.00" />
+                                                        </div>
+                                                        <div class="col-12 col-sm-3 text-sm-end pe-2">
+                                                            <label class="form-label fw-bold">Amount.Net</label>
+                                                        </div>
+                                                        <div class="col-12 col-sm-4">
+                                                            <input type="text" class="form-control form-control-sm text-end text-muted bg-white" value="0.00" readonly />
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row g-1 mb-1">
+                                                        <div class="col-12 col-sm-2">
+                                                            <label class="form-label">Currency</label>
+                                                        </div>
+                                                        <div class="col-12 col-sm-3">
+                                                            <select name="currencyID" class="form-select form-select-sm currency-select">
+                                                                <option value="">-- Loading... --</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-12 col-sm-3 text-sm-end pe-2">
+                                                            <label class="form-label fw-bold">Win.No</label>
+                                                        </div>
+                                                        <div class="col-12 col-sm-4">
+                                                            <input type="text" class="form-control form-control-sm text-end text-muted bg-white" value="1" readonly />
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row g-1 mb-1 align-items-center">
+                                                        <div class="col-12 col-sm-2">
+                                                            <label class="form-label">RmT.Charge</label>
+                                                        </div>
+                                                        <div class="col-12 col-sm-3">
+                                                            <input type="text" class="form-control form-control-sm" />
+                                                        </div>
+                                                        <div class="col-12 col-sm-7">
+                                                            <input type="text" class="form-control form-control-sm" />
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row g-1 mb-1 align-items-center">
+                                                        <div class="col-12 col-sm-2">
+                                                            <label class="form-label">Reference</label>
+                                                        </div>
+                                                        <div class="col-12 col-sm-10">
+                                                            <input type="text" class="form-control form-control-sm" />
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row g-1 mb-1 align-items-center">
+                                                        <div class="col-12 col-sm-2">
+                                                            <label class="form-label">Supplement</label>
+                                                        </div>
+                                                        <div class="col-12 col-sm-10">
+                                                            <input type="text" class="form-control form-control-sm" />
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="section-header">More Information</div>
+                                                    <div class="express-box">
+                                                        <div class="d-flex align-items-center gap-2 mb-1">
+                                                            <input type="checkbox" class="form-check-input mt-0"/>
+                                                            <label class="text-danger fw-bold small">Express Service</label>
+                                                        </div>
+                                                        <div class="d-flex align-items-center flex-wrap">
+                                                            <div class="input-group input-group-sm w-50 me-2" style="min-width: 150px;">
+                                                                <span class="input-group-text">Pct</span>
+                                                                <input type="text" class="form-control text-primary fw-bold text-end" value="50.00" />
+                                                                <span class="input-group-text">%</span>
+                                                            </div>
+                                                            <div class="small mt-1 mt-sm-0">
+                                                                <input type="radio" name="r1" /> 10%
+                                                                <input type="radio" name="r1" checked /> 50%
+                                                                <input type="radio" name="r1" /> 100%
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <fieldset class="border p-1 mt-1">
+                                                        <legend class="float-none w-auto p-0 m-0 text-danger small fw-bold px-1">
+                                                            Invoice Infor
+                                                        </legend>
+                                                        <div class="row g-1 mb-1">
+                                                            <div class="col-12 col-sm-2">
+                                                                <label class="form-label">Description</label>
+                                                            </div>
+                                                            <div class="col-12 col-sm-10">
+                                                                <input type="text" class="form-control form-control-sm" value="Invoicing Package" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-1 mb-1">
+                                                            <div class="col-12 col-sm-2">
+                                                                <label class="form-label">Reference</label>
+                                                            </div>
+                                                            <div class="col-12 col-sm-10">
+                                                                <input type="text" class="form-control form-control-sm" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-1 mb-1">
+                                                            <div class="col-12 col-sm-2">
+                                                                <label class="form-label">Supplement</label>
+                                                            </div>
+                                                            <div class="col-12 col-sm-10">
+                                                                <input type="text" class="form-control form-control-sm" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-1 mb-1">
+                                                            <div class="col-12 col-sm-2">
+                                                                <label class="form-label">Check.No</label>
+                                                            </div>
+                                                            <div class="col-12 col-sm-10">
+                                                                <input type="text" class="form-control form-control-sm" />
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+
+                                                <div class="form-footer-fixed">
+                                                    <div class="footer-list-area">
+                                                        <div class="footer-header text-danger">
+                                                            <span class="fw-bold">Posted List</span>
+                                                        </div>
+                                                        <div class="d-flex justify-content-between px-2 py-1 bg-light border-bottom border-secondary">
+                                                            <div class="small fw-bold">
+                                                                Amount posted : <span class="text-primary">0.00</span>
+                                                            </div>
+                                                            <a class="clear-btn">Clear Posted</a>
+                                                        </div>
+                                                        <div class="footer-content"></div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+
+                                        <div class="tab-pane fade" id="invoice-pane" role="tabpanel">
+                                            <form class="d-flex flex-column h-100">
+                                                <div class="form-body-scroll">
+                                                    <div class="row g-1 mb-1 align-items-center">
+                                                        <div class="col-12 col-sm-2">
+                                                            <label class="form-label">T/A .Code</label>
+                                                        </div>
+                                                        <div class="col-12 col-sm-3">
+                                                            <input type="text" class="form-control form-control-sm js-trans-code" id="input-tacode" />
+                                                        </div>
+                                                        <div class="col-12 col-sm-7">
+                                                            <input type="text" class="form-control form-control-sm js-trans-desc" id="input-desc" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="row g-1 mb-1 align-items-center js-row-article d-none">
+                                                        <div class="col-12 col-sm-2">
+                                                            <label class="form-label text-primary fw-bold">↳ Article</label>
+                                                        </div>
+                                                        <div class="col-12 col-sm-3">
+                                                            <input type="text" class="form-control form-control-sm text-primary js-art-code" readonly />
+                                                        </div>
+                                                        <div class="col-12 col-sm-7">
+                                                            <input type="text" class="form-control form-control-sm text-primary js-art-desc" readonly />
+                                                        </div>
+                                                    </div>
+                                                    <div class="row g-1 mb-1">
+                                                        <div class="col-12 col-sm-2">
+                                                            <label class="form-label">Quantity</label>
+                                                        </div>
+                                                        <div class="col-12 col-sm-3">
+                                                            <input type="text"
+                                                                   id="input-quantity"
+                                                                   class="form-control form-control-sm fw-bold text-end" value="1" />
+                                                        </div>
+                                                        <div class="col-12 col-sm-3 text-sm-end pe-2">
+                                                            <label class="form-label">Bill No</label>
+                                                        </div>
+                                                        <div class="col-12 col-sm-4">
+                                                            <input type="text" class="form-control form-control-sm" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="row g-1 mb-1">
+                                                        <div class="col-12 col-sm-2">
+                                                            <label class="form-label">Price ++</label>
+                                                        </div>
+                                                        <div class="col-12 col-sm-3">
+                                                            <input type="text"
+                                                                   id="input-price"
+                                                                   class="form-control form-control-sm amount-display"
+                                                                   value="0.00" />
+                                                        </div>
+                                                        <div class="col-12 col-sm-3 text-sm-end pe-2">
+                                                            <label class="form-label fw-bold">Amount ++</label>
+                                                        </div>
+                                                        <div class="col-12 col-sm-4">
+                                                            <input type="text" class="form-control form-control-sm amount-display bg-white" value="0.00" readonly />
+                                                        </div>
+                                                    </div>
+                                                    <div class="row g-1 mb-1">
+                                                        <div class="col-12 col-sm-2">
+                                                            <label class="form-label">Price.Net</label>
+                                                        </div>
+                                                        <div class="col-12 col-sm-3">
+                                                            <input type="text" class="form-control form-control-sm text-end text-muted js-price-input"
+                                                                   id="input-price-net"
+                                                                   value="0.00" />
+                                                        </div>
+                                                        <div class="col-12 col-sm-3 text-sm-end pe-2">
+                                                            <label class="form-label fw-bold">Amount.Net</label>
+                                                        </div>
+                                                        <div class="col-12 col-sm-4">
+                                                            <input type="number" class="form-control form-control-sm text-end text-muted bg-white" value="0.00" readonly />
+                                                        </div>
+                                                    </div>
+                                                    <div class="row g-1 mb-1">
+                                                        <div class="col-12 col-sm-2">
+                                                            <label class="form-label">Currency</label>
+                                                        </div>
+                                                        <div class="col-12 col-sm-3">
+                                                            <select name="currencyID" class="form-select form-select-sm currency-select">
+                                                                <option value="">-- Loading... --</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-12 col-sm-3 text-sm-end pe-2">
+                                                            <label class="form-label fw-bold">Win.No</label>
+                                                        </div>
+                                                        <div class="col-12 col-sm-4">
+                                                            <input type="text" class="form-control form-control-sm text-end text-muted bg-white" value="1" readonly />
+                                                        </div>
+                                                    </div>
+                                                    <div class="row g-1 mb-1 align-items-center">
+                                                        <div class="col-12 col-sm-2">
+                                                            <label class="form-label">RmT.Charge</label>
+                                                        </div>
+                                                        <div class="col-12 col-sm-3">
+                                                            <input type="text" class="form-control form-control-sm" />
+                                                        </div>
+                                                        <div class="col-12 col-sm-7">
+                                                            <input type="text" class="form-control form-control-sm" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="row g-1 mb-1 align-items-center">
+                                                        <div class="col-12 col-sm-2">
+                                                            <label class="form-label">Reference</label>
+                                                        </div>
+                                                        <div class="col-12 col-sm-10">
+                                                            <input type="text" class="form-control form-control-sm" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="row g-1 mb-1 align-items-center">
+                                                        <div class="col-12 col-sm-2">
+                                                            <label class="form-label">Supplement</label>
+                                                        </div>
+                                                        <div class="col-12 col-sm-10">
+                                                            <input type="text" class="form-control form-control-sm" />
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="section-header">More Information</div>
+                                                    <div class="express-box">
+                                                        <div class="d-flex align-items-center gap-2 mb-1">
+                                                            <input type="checkbox" class="form-check-input mt-0"/>
+                                                            <label class="text-danger fw-bold small">Express Service</label>
+                                                        </div>
+                                                        <div class="d-flex align-items-center flex-wrap">
+                                                            <div class="input-group input-group-sm w-50 me-2" style="min-width: 150px;">
+                                                                <span class="input-group-text">Pct</span>
+                                                                <input type="text" class="form-control text-primary fw-bold text-end" value="50.00" />
+                                                                <span class="input-group-text">%</span>
+                                                            </div>
+                                                            <div class="small mt-1 mt-sm-0">
+                                                                <input type="radio" name="r2" /> 10%
+                                                                <input type="radio" name="r2" checked /> 50%
+                                                                <input type="radio" name="r2" /> 100%
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <fieldset class="border p-1 mt-1">
+                                                        <legend class="float-none w-auto p-0 m-0 text-danger small fw-bold px-1">
+                                                            Invoice Infor
+                                                        </legend>
+                                                        <div class="row g-1 mb-1">
+                                                            <div class="col-12 col-sm-2">
+                                                                <label class="form-label">Description</label>
+                                                            </div>
+                                                            <div class="col-12 col-sm-10">
+                                                                <input type="text" class="form-control form-control-sm" value="Invoicing Package" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-1 mb-1">
+                                                            <div class="col-12 col-sm-2">
+                                                                <label class="form-label">Reference</label>
+                                                            </div>
+                                                            <div class="col-12 col-sm-10">
+                                                                <input type="text" class="form-control form-control-sm" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-1 mb-1">
+                                                            <div class="col-12 col-sm-2">
+                                                                <label class="form-label">Supplement</label>
+                                                            </div>
+                                                            <div class="col-12 col-sm-10">
+                                                                <input type="text" class="form-control form-control-sm" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-1 mb-1">
+                                                            <div class="col-12 col-sm-2">
+                                                                <label class="form-label">Check.No</label>
+                                                            </div>
+                                                            <div class="col-12 col-sm-10">
+                                                                <input type="text" class="form-control form-control-sm" />
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+
+                                                <div class="form-footer-fixed">
+                                                    <div class="footer-list-area">
+                                                        <div class="footer-header text-danger">
+                                                            <span class="fw-bold">Transactions Posted to Invoice</span>
+                                                        </div>
+                                                        <div class="d-flex justify-content-between px-2 py-1 bg-light border-bottom border-secondary">
+                                                            <div class="small fw-bold">
+                                                                Total Amount : <span class="text-primary">0.00</span>
+                                                            </div>
+                                                            <a class="clear-btn">Clear Invoice</a>
+                                                        </div>
+                                                        <div class="footer-content"></div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -206,7 +476,383 @@
         </div>
     </div>
 </div>
+<script>
+    //  CÁC HÀM FORMAT SỐ 
+    function formatNumberWithComma(num) {
+        if (num === null || num === undefined || isNaN(num) || num === '') return '0.00';
+        return parseFloat(num).toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+    }
 
+    function parseNumberWithComma(str) {
+        if (!str) return 0;
+        // Xóa dấu phẩy, giữ dấu chấm
+        let cleanStr = str.toString().replace(/,/g, '');
+        return parseFloat(cleanStr) || 0;
+    }
+
+    //  CÁC HÀM GỌI API TÍNH TOÁN
+
+    // Hàm A: Nhập Net -> Gọi API -> Ra Gross (Price ++)
+    function apiCalcPlusFromNet() {
+        let tCode = $('#input-tacode').val();
+        let rawNet = $('#input-price-net').val();
+        let netVal = parseNumberWithComma(rawNet);
+
+        if (!tCode) return; 
+
+        $.ajax({
+            url: '/Billing/CalculatePricePlusPlus',
+            type: 'GET',
+            data: { transactionCode: tCode, netPrice: netVal },
+            success: function (res) {
+                if (!isNaN(res)) {
+                    let fmtGross = formatNumberWithComma(res);
+                    $('#input-price').val(fmtGross);
+                    $('.amount-display[readonly]').val(fmtGross);
+
+                    $('#input-price-net').val(formatNumberWithComma(netVal));
+
+                    calculateLineTotal();
+                } else {
+                    console.error("Lỗi tính toán từ server: " + res);
+                }
+            },
+            error: function(err) { console.error(err); }
+        });
+    }
+
+    // Hàm B: Nhập Gross (Price ++) -> Gọi API -> Ra Net
+    function apiCalcNetFromPlus() {
+        let tCode = $('#input-tacode').val();
+        let rawGross = $('#input-price').val();
+        let grossVal = parseNumberWithComma(rawGross);
+
+        if (!tCode) return;
+
+        $.ajax({
+            url: '/Billing/CalculatePriceNet',
+            type: 'GET',
+            data: { transactionCode: tCode, grossPrice: grossVal },
+            success: function (res) {
+                if (!isNaN(res)) {
+                    let fmtNet = formatNumberWithComma(res);
+                    $('#input-price-net').val(fmtNet);
+
+                    $('#input-price').val(formatNumberWithComma(grossVal));
+
+                    calculateLineTotal();
+                } else {
+                    console.error("Lỗi tính toán từ server: " + res);
+                }
+            },
+            error: function(err) { console.error(err); }
+        });
+    }
+
+    // Hàm C: Tính tổng tiền (Amount = Qty * Price)
+    function calculateLineTotal() {
+        let qty = parseFloat($('#input-quantity').val()) || 0;
+
+        let priceGross = parseNumberWithComma($('#input-price').val());
+        let priceNet   = parseNumberWithComma($('#input-price-net').val());
+
+        let totalGross = qty * priceGross;
+        let totalNet   = qty * priceNet;
+
+        $('.amount-display.bg-white').val(formatNumberWithComma(totalGross));
+
+        // Amount Net (Tìm ô input readonly trong cùng dòng với Price Net)
+        let $netRow = $('#input-price-net').closest('.row');
+        $netRow.find('input[readonly]').val(formatNumberWithComma(totalNet));
+    }
+
+    // ============================================================
+    //  XỬ LÝ SỰ KIỆN (MAIN)
+    // ============================================================
+    $(document).ready(function() {
+
+        // --- XỬ LÝ Ô PRICE ++ (#input-price) ---
+        $(document).on('blur keypress', '#input-price', function(e) {
+            if (e.type === 'keypress' && e.which !== 13) return;
+
+            if (e.type === 'keypress') {
+                e.preventDefault(); 
+                $(this).blur();     
+                return;
+            }
+
+            apiCalcNetFromPlus();
+        });
+
+        // --- XỬ LÝ Ô PRICE NET (#input-price-net) ---
+        $(document).on('blur keypress', '#input-price-net', function(e) {
+            if (e.type === 'keypress' && e.which !== 13) return;
+
+            if (e.type === 'keypress') {
+                e.preventDefault();
+                $(this).blur();
+                return;
+            }
+
+            apiCalcPlusFromNet();
+        });
+
+        // --- XỬ LÝ Ô QUANTITY (Tính lại tổng tiền khi thay đổi số lượng) ---
+        $(document).on('blur keypress', '#input-quantity', function(e) {
+             if (e.type === 'keypress' && e.which !== 13) return;
+
+             if (e.type === 'keypress') {
+                 e.preventDefault();
+                 $(this).blur();
+                 return;
+             }
+
+             calculateLineTotal();
+        });
+
+        $('#input-price').on('focus click', function() {
+            $(this).addClass('active-user-input');
+            $('#input-price-net').removeClass('active-user-input');
+        });
+
+        $('#input-price-net').on('focus click', function() {
+            $(this).addClass('active-user-input');
+            $('#input-price').removeClass('active-user-input');
+        });
+    });
+
+    //  các hàm hỗ trợ mở modal chuyển view v.v
+
+    function openModalPosting() {
+        localStorage.setItem("currentFromID", "modalPosting");
+        const crashierLogin = localStorage.getItem("crashierLogin");
+        if(crashierLogin == "NotYet"){
+            openModalShilftLogin();
+        } else {
+            $('#modalPosting').modal('show');
+        }
+    }
+
+    function switchView(viewName) {
+        document.querySelectorAll(".mobile-nav button").forEach((btn) => btn.classList.remove("active"));
+        document.getElementById("nav-" + viewName).classList.add("active");
+        const cols = ["view-trans", "view-group", "view-form"];
+        cols.forEach((id) => {
+            const el = document.getElementById(id);
+            if (id === "view-" + viewName) el.classList.add("active-view");
+            else el.classList.remove("active-view");
+        });
+    }
+
+    // Logic nút Add
+    document.addEventListener("DOMContentLoaded", function () {
+        const btnAdd = document.getElementById("btn-add");
+        const tabEls = document.querySelectorAll('button[data-bs-toggle="tab"]');
+        tabEls.forEach((tabEl) => {
+            tabEl.addEventListener("shown.bs.tab", function (event) {
+                if (event.target.id === "detail-tab") btnAdd.style.display = "none";
+                else if (event.target.id === "invoice-tab") btnAdd.style.display = "flex";
+                resetForm();
+            });
+        });
+    });
+
+    // F2/F3
+    document.addEventListener("keydown", function (event) {
+        if (event.key === "F2") {
+            event.preventDefault();
+            switchView("form");
+            bootstrap.Tab.getOrCreateInstance(document.querySelector("#detail-tab")).show();
+        }
+        if (event.key === "F3") {
+            event.preventDefault();
+            switchView("form");
+            bootstrap.Tab.getOrCreateInstance(document.querySelector("#invoice-tab")).show();
+        }
+    });
+
+    // Load Data
+    function loadCurrencies() {
+        var $selects = $('.currency-select');
+        $.ajax({
+            url: '/Billing/GetCurrencies',
+            type: 'GET',
+            success: function (data) {
+                if(data.error) return console.error(data.error);
+                let html = '<option value="">-- Select --</option>';
+                data.forEach(item => { html += `<option value="${item.id}">${item.id}</option>`; });
+                $selects.html(html).val('VND');
+            }
+        });
+    }
+
+    function loadGroups() {
+        $('#list-group-container').html('<div class="p-2">Loading...</div>');
+        $.ajax({
+            url: '/Billing/GetTransactionGroups',
+            type: 'GET',
+            success: function (data) {
+                if (data.error) { alert(data.error); return; }
+                let html = '';
+                data.forEach(item => {
+                    html += `<a href="javascript:void(0)" onclick="loadSubGroups(${item.id}, this)" class="list-group-item list-group-item-action">${item.description}</a>`;
+                });
+                $('#list-group-container').html(html);
+            }
+        });
+    }
+
+    function loadSubGroups(groupId, element) {
+        highlightItem(element, '#list-group-container');
+        $('#view-group').data('selected-group-id', groupId);
+        $('#list-subgroup-container').html('Loading...');
+        $('#list-transaction-container').empty();
+        $('#list-article-container').empty();
+
+        $.ajax({
+            url: '/Billing/GetTransactionSubGroups',
+            type: 'GET',
+            data: { groupId: groupId },
+            success: function (data) {
+                let html = data.length === 0 ? '<div class="p-2 small text-muted">No Data</div>' : '';
+                data.forEach(item => {
+                    html += `<a href="javascript:void(0)" onclick="loadTransactions(${item.id}, this)" class="list-group-item list-group-item-action">${item.description}</a>`;
+                });
+                $('#list-subgroup-container').html(html);
+            }
+        });
+    }
+
+    function loadTransactions(subGroupId, element) {
+        highlightItem(element, '#list-subgroup-container');
+        let groupId = $('#view-group').data('selected-group-id');
+        $('#list-transaction-container').html('<div class="p-2">Loading...</div>');
+        $('#list-article-container').empty();
+
+        $.ajax({
+            url: '/Billing/GetTransactions',
+            type: 'GET',
+            data: { groupId: groupId, subGroupId: subGroupId },
+            success: function (data) {
+                let html = data.length === 0 ? '<div class="p-2 text-muted small">No Transactions</div>' : '';
+                data.forEach(item => {
+                    html += `<a href="javascript:void(0)" onclick="checkAndLoadArticles('${item.code}', '${item.description}', ${item.defaultPrice}, this)" class="list-group-item list-group-item-action">
+                                <span class="text-danger fw-bold me-2">${item.code}</span> ${item.description}
+                             </a>`;
+                });
+                $('#list-transaction-container').html(html);
+            }
+        });
+    }
+
+    function checkAndLoadArticles(transCode, transName, transPrice, element) {
+        highlightItem(element, '#list-transaction-container');
+        $('#list-article-container').html('<div class="p-2 text-muted">Loading...</div>');
+
+        $.ajax({
+            url: '/Billing/GetArticles',
+            type: 'GET',
+            data: { transactionCode: transCode },
+            success: function (data) {
+                if (data.length === 0) {
+                    $('#list-article-container').html('<div class="p-2 small text-muted">No Articles. Selected Transaction.</div>');
+                    // Không có article -> Load TransPrice vào và tính Net
+                    fillToForm(transCode, transName, null, null, transPrice, null);
+                } else {
+                    let html = '';
+                    data.forEach(item => {
+                        let artPrice = item.defaultPrice || 0;
+                        html += `<a href="javascript:void(0)"
+                                    onclick="fillToForm('${transCode}', '${transName}', '${item.code}', '${item.description}', ${artPrice}, this)"
+                                    class="list-group-item list-group-item-action">
+                                    <span class="text-danger fw-bold me-2">${item.code}</span>
+                                    <span>${item.description}</span>
+                                    <span class="float-end text-danger small fw-bold">${formatNumberWithComma(artPrice)}</span>
+                                 </a>`;
+                    });
+                    $('#list-article-container').html(html);
+                }
+            }
+        });
+    }
+
+    // --- Cập nhật hàm fillToForm để trigger tính Net ngay khi chọn ---
+    function fillToForm(tCode, tDesc, aCode, aDesc, price, element) {
+        if (element) highlightItem(element, '#list-article-container');
+        const activeForm = $('.tab-pane.active');
+
+        activeForm.find('.js-trans-code').val(tCode);
+        activeForm.find('.js-trans-desc').val(tDesc);
+
+        if (aCode) {
+            activeForm.find('.js-row-article').removeClass('d-none').addClass('d-flex');
+            activeForm.find('.js-art-code').val(aCode);
+            activeForm.find('.js-art-desc').val(aDesc);
+        } else {
+            activeForm.find('.js-row-article').addClass('d-none').removeClass('d-flex');
+            activeForm.find('.js-art-code').val('');
+            activeForm.find('.js-art-desc').val('');
+        }
+
+        $('#input-quantity').val('1');
+
+        // Điền giá Gross (Price ++)
+        let formattedPrice = formatNumberWithComma(price);
+        activeForm.find('#input-price').val(formattedPrice);
+
+        activeForm.find('#input-price').addClass('active-user-input');
+        activeForm.find('#input-price-net').removeClass('active-user-input');
+
+        apiCalcNetFromPlus();
+
+        if (window.innerWidth < 768) switchView('form');
+        setTimeout(function() {
+            $('#input-quantity').focus().select();
+        }, 100);
+
+    }
+
+    function highlightItem(element, containerId) {
+        $(containerId + ' .list-group-item').removeClass('active-item-custom');
+        $(element).addClass('active-item-custom');
+    }
+
+    function resetForm() {
+        $('.tab-pane.active input[type="text"]').val('');
+
+        $('#input-quantity').val('1');
+
+        $('#input-price, #input-price-net').val('0.00');
+        $('.amount-display').val('0.00');
+
+        $('#input-price, #input-price-net').removeClass('active-user-input');
+
+        $('.js-row-article').addClass('d-none').removeClass('d-flex');
+
+        $('.list-group-item').removeClass('active-item-custom');
+
+        $('.tab-pane.active .js-trans-code').focus();
+    }
+
+    $('#modalPosting').on('hidden.bs.modal', function () {
+        resetForm(); 
+        $('#list-subgroup-container').empty();
+        $('#list-transaction-container').empty();
+        $('#list-article-container').empty();
+
+        var triggerEl = document.querySelector('#detail-tab');
+        if(triggerEl) bootstrap.Tab.getOrCreateInstance(triggerEl).show();
+    });
+
+    $('#modalPosting').on('shown.bs.modal', function () {
+        loadGroups();
+        loadCurrencies();
+    });
+</script>
+@* 
 <script>
     var postType = 1;
 
@@ -648,4 +1294,5 @@
             error: function () { }
         });
     }
-</script>
+</script> 
+*@

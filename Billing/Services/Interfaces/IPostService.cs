@@ -25,7 +25,8 @@ namespace Billing.Services.Interfaces
         /// <returns>Giá trị net</returns>
         decimal CalculatePrice(string transactionCode, decimal price);
 
-
+        decimal CalculatePriceNet(string transactionCode, decimal grossPrice);
+        decimal CalculatePricePlusPlus(string transactionCode, decimal netPrice);
 
     }
 }
