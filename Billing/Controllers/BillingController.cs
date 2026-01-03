@@ -2285,5 +2285,167 @@ namespace Billing.Controllers
             }
         }
         #endregion
+
+        #region PhucLX __ Billing: Posting
+        [HttpGet]
+        public IActionResult GetCurrencies()
+        {
+            try
+            {
+                string sql = "select ID from Currency";
+
+                DataTable dt = TextUtils.Select(sql);
+
+                var result = (from r in dt.AsEnumerable()
+                              select new
+                              {
+                                  ID = r["ID"],
+                              }).ToList();
+
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { error = ex.Message });
+            }
+        }
+        [HttpGet]
+        public IActionResult GetTransactionGroups()
+        {
+            try
+            {
+                string sql = "select ID, Description from TransactionGroup where Description like N'%%' and Type != 1 order by Description";
+
+                DataTable dt = TextUtils.Select(sql);
+
+                var result = (from r in dt.AsEnumerable()
+                              select new
+                              {
+                                  ID = r["ID"], 
+                                  Description = !string.IsNullOrEmpty(r["Description"].ToString()) ? r["Description"] : ""
+                              }).ToList();
+
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { error = ex.Message });
+            }
+        }
+        [HttpGet]
+        public IActionResult GetTransactionSubGroups(int groupId)
+        {
+            try
+            {
+                string sql = string.Format("select ID, Description from TransactionSubgroup where TransactionGroupID={0} and Description like N'%%' order by Description", groupId);
+
+                DataTable dt = TextUtils.Select(sql);
+
+                var result = (from r in dt.AsEnumerable()
+                              select new
+                              {
+                                  ID = r["ID"],
+                                  Description = !string.IsNullOrEmpty(r["Description"].ToString()) ? r["Description"] : ""
+                              }).ToList();
+
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { error = ex.Message });
+            }
+        }
+        [HttpGet]
+        public IActionResult GetTransactions(int groupId, int subGroupId)
+        {
+            try
+            {
+                string sql = string.Format(@"
+            select Code, Description, DefaultPrice 
+            from Transactions 
+            where TransactionGroupID={0} 
+              and TransactionSubGroupID={1} 
+              and (Code like N'%%' or Description like N'%%') 
+              and ((GroupType != 1) AND (ManualPosting = 1)) 
+              and (IsActive = 1) 
+            order by Code", groupId, subGroupId);
+
+
+                DataTable dt = TextUtils.Select(sql);
+
+                var result = (from r in dt.AsEnumerable()
+                              select new
+                              {
+                                  Code = !string.IsNullOrEmpty(r["Code"].ToString()) ? r["Code"] : "",
+                                  Description = !string.IsNullOrEmpty(r["Description"].ToString()) ? r["Description"] : "",
+                                  DefaultPrice = dt.Columns.Contains("DefaultPrice") && r["DefaultPrice"] != DBNull.Value ? r["DefaultPrice"] : 0
+                              }).ToList();
+
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { error = ex.Message });
+            }
+        }
+        [HttpGet]
+        public IActionResult GetArticles(string transactionCode)
+        {
+            try
+            {
+                string safeCode = transactionCode.Replace("'", "''");
+
+                string sql = string.Format(@"
+                    select Code, Description, DefaultPrice 
+                    from Article 
+                    where (Code like N'%%' or Description like N'%%') 
+                      and Code in (select ArticleCode from TransactionArticleLnk where TransactionCode='{0}') 
+                    order by Code", safeCode);
+
+                DataTable dt = TextUtils.Select(sql);
+
+                var result = (from r in dt.AsEnumerable()
+                              select new
+                              {
+                                  Code = !string.IsNullOrEmpty(r["Code"].ToString()) ? r["Code"] : "",
+                                  Description = !string.IsNullOrEmpty(r["Description"].ToString()) ? r["Description"] : "",
+                                  DefaultPrice = r["DefaultPrice"] != DBNull.Value ? r["DefaultPrice"] : 0
+                              }).ToList();
+
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { error = ex.Message });
+            }
+        }
+        [HttpGet]
+        public async Task<IActionResult> CalculatePricePlusPlus(string transactionCode, decimal netPrice)
+        {
+            try
+            {
+                decimal gross = _iPostService.CalculatePricePlusPlus(transactionCode, netPrice);
+                return Json(gross);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message);
+            }
+        }
+        [HttpGet]
+        public async Task<IActionResult> CalculatePriceNet(string transactionCode, decimal grossPrice)
+        {
+            try
+            {
+                decimal net = _iPostService.CalculatePriceNet(transactionCode, grossPrice);
+                return Json(net);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message);
+            }
+        }
+       
+        #endregion
     }
 }

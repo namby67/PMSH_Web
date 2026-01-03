@@ -98,5 +98,77 @@ namespace Billing.Services.Implements
                 throw new Exception($"Error: {ex.Message}", ex);
             }
         }
+
+        /// <summary>
+        /// Phuc Hàm tính từ Giá Net ra Giá ++ (Gross)
+        /// </summary>
+        public decimal CalculatePricePlusPlus(string transactionCode, decimal netPrice)
+        {
+            try
+            {
+                decimal svcPercent = 0;
+                decimal vatPercent = 0;
+
+                var transactionConfigs = PropertyUtils.ConvertToList<GenerateTransactionModel>(GenerateTransactionBO.Instance.FindAll())
+                                        .Where(x => x.TransactionCode == transactionCode).ToList();
+
+                if (transactionConfigs.Count > 0)
+                {
+                    foreach (var item in transactionConfigs)
+                    {
+                        if (item.SubgroupCode == "SVC") svcPercent = item.Percentage;
+                        if (item.SubgroupCode == "Tax") vatPercent = item.Percentage;
+                    }
+                }
+
+                decimal amountSVC = netPrice * (svcPercent / 100m);
+
+                decimal amountVAT = (netPrice + amountSVC) * (vatPercent / 100m);
+
+                decimal grossPrice = netPrice + amountSVC + amountVAT;
+
+                return Math.Round(grossPrice, 2); //làm tròn 2 số thập phân
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error CalculatePricePlusPlus: {ex.Message}", ex);
+            }
+        }
+
+        /// <summary>
+        /// Phuc Hàm tính từ Giá ++ (Gross) về Giá Net
+        /// </summary>
+        public decimal CalculatePriceNet(string transactionCode, decimal grossPrice)
+        {
+            try
+            {
+                decimal svcPercent = 0;
+                decimal vatPercent = 0;
+
+                var transactionConfigs = PropertyUtils.ConvertToList<GenerateTransactionModel>(GenerateTransactionBO.Instance.FindAll())
+                                        .Where(x => x.TransactionCode == transactionCode).ToList();
+
+                if (transactionConfigs.Count > 0)
+                {
+                    foreach (var item in transactionConfigs)
+                    {
+                        if (item.SubgroupCode == "SVC") svcPercent = item.Percentage;
+                        if (item.SubgroupCode == "Tax") vatPercent = item.Percentage;
+                    }
+                }
+
+                // (Net + SVC) = Gross / (1 + VAT%)
+                decimal priceWithoutVAT = grossPrice / (1 + (vatPercent / 100m));
+
+                // Net = (Net + SVC) / (1 + SVC%)
+                decimal netPrice = priceWithoutVAT / (1 + (svcPercent / 100m));
+
+                return Math.Round(netPrice, 2);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error CalculateNet: {ex.Message}", ex);
+            }
+        }
     }
 }
