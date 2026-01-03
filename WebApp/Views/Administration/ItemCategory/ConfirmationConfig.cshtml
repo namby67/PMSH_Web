@@ -1,10 +1,11 @@
-﻿@{
+﻿
+@{
     //
 }
 
 <div class="text-center" style="font-size: 20px">Confirmation Config</div>
 <div class="sticky-header bg-white p-2 shadow-sm z-3">
-    <div id="formContainer" class="d-flex align-items-center gap-3 p-2 ">
+    <div id="formContainer" class="d-flex align-items-center gap-3 p-2 " >
         <div class="row g-3">
             <div class="">
                 <button type="button" id="btnSave" class="mui-button mui-button-save">
@@ -13,59 +14,59 @@
             </div>
             <div class="col-md-4">
                 <label for="emailAddress" class="form-label mb-1">Email address:</label>
-                <input type="text" id="emailAdressInput" name="emailAddress" class="form-control form-control-sm">
-                <div class="invalid-feedback"></div>
+                <input type="text" id="emailAdressInput" name="emailAddress"
+                       class="form-control form-control-sm"><div class="invalid-feedback"></div>
             </div>
 
             <div class="col-md-4">
                 <label for="userMail" class="form-label mb-1">Mail user:</label>
-                <input type="text" id="mailUserInput" name="userMail" class="form-control form-control-sm">
-                <div class="invalid-feedback"></div>
+                <input type="text" id="mailUserInput" name="userMail"
+                       class="form-control form-control-sm"><div class="invalid-feedback"></div>
             </div>
 
             <div class="col-md-4">
                 <label for="passMail" class="form-label mb-1 fw-bold">Password:</label>
 
-                <input type="password" id="passInput" name="passMail" class="form-control form-control-sm">
-                <div class="invalid-feedback"></div>
+                <input type="password" id="passInput" name="passMail"
+                       class="form-control form-control-sm"><div class="invalid-feedback"></div>
             </div>
 
             <div class="col-md-4">
                 <label for="serverName" class="form-label mb-1">Server Name:</label>
-                <input type="text" id="serverNameInput" name="serverName" class="form-control form-control-sm">
-                <div class="invalid-feedback"></div>
+                <input type="text" id="serverNameInput" name="serverName"
+                       class="form-control form-control-sm"><div class="invalid-feedback"></div>
             </div>
 
             <div class="col-md-4">
                 <label for="serverPort" class="form-label mb-1">Server Port:</label>
-                <input type="email" id="serverPortInput" name="serverPort" class="form-control form-control-sm">
-                <div class="invalid-feedback"></div>
+                <input type="email" id="serverPortInput" name="serverPort"
+                       class="form-control form-control-sm"><div class="invalid-feedback"></div>
             </div>
 
             <div class="col-md-4">
                 <label for="subMail" class="form-label mb-1">Subject:</label>
-                <input type="text" id="subjectInput" rows="2" name="subMail" class="form-control form-control-sm" />
-                <div class="invalid-feedback"></div>
+                <input type="text" id="subjectInput" rows="2" name="subMail"
+                       class="form-control form-control-sm" /><div class="invalid-feedback"></div>
             </div>
 
             <div class="col-md-4">
                 <label for="bodyMail" class="form-label mb-1">Body:</label>
-                <textarea id="bodyInput" rows="2" name="bodyMail" style="height:100px"
-                    class="form-control form-control-sm"></textarea>
-                <div class="invalid-feedback"></div>
+                <textarea id="bodyInput" rows="2" name="bodyMail"
+                          style="height:100px" class="form-control form-control-sm"></textarea>
+                          <div class="invalid-feedback"></div>
             </div>
 
             <div class="col-md-4">
                 <label class="form-label mb-1">Subject ENG:</label>
-                <input type="text" id="subjectEInput" rows="2" name="subEngMail" class="form-control form-control-sm" />
-                <div class="invalid-feedback"></div>
+                <input type="text" id="subjectEInput" rows="2" name="subEngMail"
+                       class="form-control form-control-sm" /><div class="invalid-feedback"></div>
             </div>
 
             <div class="col-md-4">
                 <label class="form-label mb-1">Body ENG:</label>
-                <textarea id="bodyEInput" rows="4" name="bodyEngMail" style="height:100px"
-                    class="form-control form-control-sm"></textarea>
-                <div class="invalid-feedback"></div>
+                <textarea id="bodyEInput" rows="4" name="bodyEngMail"
+                   style="height:100px" class="form-control form-control-sm"></textarea>
+<div class="invalid-feedback"></div>
             </div>
             <input type="hidden" id="id" name="id" value="0" />
         </div>
@@ -91,77 +92,77 @@
         });
 
         $('#itemModal').on('hidden.bs.modal', function () {
-            applyValidationErrors([], "#formContainer");
+             applyValidationErrors([], "#formContainer");
         });
-        loadConfirmationConfig();
+       loadConfirmationConfig();
     });
 
-    function loadForm(config) {
-        $("#id").val(config.id);
-        $("#emailAdressInput").val(config.emailAddress);
-        $("#mailUserInput").val(config.mailUser);
-        $("#passInput").val(config.mailPassword);
-        $("#serverNameInput").val(config.serverName);
-        $("#serverPortInput").val(config.serverPort);
-        $("#subjectInput").val(config.mailSubject);
-        $("#bodyInput").val(config.mailBody);
-        $("#subjectEInput").val(config.mailSubjectENG);
-        $("#bodyEInput").val(config.mailBodyENG);
+    function loadForm(config){
+         $("#id").val(config.id);
+         $("#emailAdressInput").val(config.emailAddress);
+         $("#mailUserInput").val(config.mailUser);
+         $("#passInput").val(config.mailPassword);
+         $("#serverNameInput").val(config.serverName);
+         $("#serverPortInput").val(config.serverPort);
+         $("#subjectInput").val(config.mailSubject);
+         $("#bodyInput").val(config.mailBody);
+         $("#subjectEInput").val(config.mailSubjectENG);
+         $("#bodyEInput").val(config.mailBodyENG);
     };
-    function loadConfirmationConfig() {
-        $.ajax({
-            url: "/Administration/GetConfirmationConfig",
-            type: "GET",
-            traditional: true,
-            crossDomain: false,
-            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
-            success: function (res) {
-                // console.log("data:", res[0]);
-                if (res && res.length > 0) {
-                    loadForm(res[0]);
-                } else {
-                    showToast("Error", "Không có dữ liệu", false);
-                }
-            },
-            error: function (jqXHR, status) {
-                $("loadingSpinnerRateCode").hide();
-                showToast("Error", "Error load data", false);
-            },
-        });
-    }
+     function loadConfirmationConfig(){
+            $.ajax({
+                url: "/Administration/GetConfirmationConfig",
+                type: "GET",
+                traditional: true,
+                   crossDomain: false,
+                     headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+                success: function(res){
+                    // console.log("data:", res[0]);
+                    if (res && res.length > 0) {
+                        loadForm(res[0]);
+                    } else {
+                        showToast("Error", "Không có dữ liệu", false);
+                    }
+                },
+                error: function(jqXHR,status){
+                    $("loadingSpinnerRateCode").hide();
+                     showToast("Error","Error load data",false);
+                },
+            });
+        }
+    
+        $("#btnSave").click(function(){
 
-    $("#btnSave").click(function () {
-
-        const id = parseInt($("#id").val()) || 0;
-        let loginName = (localStorage.getItem("Loginname") || "").trim()
+            const id = parseInt($("#id").val()) || 0;
+            let loginName = (localStorage.getItem("Loginname") || "").trim()
             .replace(/^"(.*)"$/, '$1');
-        const model = {
-            id: id,
-            emailAddress: $("#emailAdressInput").val(),
-            mailUser: $("#mailUserInput").val(),
-            mailPassword: $("#passInput").val(),
-            serverName: $("#serverNameInput").val(),
-            serverPort: $("#serverPortInput").val() || 0,
-            mailSubject: $("#subjectInput").val(),
-            mailBody: $("#bodyInput").val(),
-            mailSubjectENG: $("#subjectEInput").val(),
-            mailBodyENG: $("#bodyEInput").val(),
-            updatedBy: loginName,
-        };
-
-        $.ajax({
-            url: "/Administration/ConfirmationConfigSave",
-            type: "POST",
-            contentType: "application/json",
-            data: JSON.stringify(model),
-            traditional: true,
-            crossDomain: false,
-            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
-            success: function (res) {
-                if (res.success) {
+            const model = {
+                id: id,
+                emailAddress:  $("#emailAdressInput").val(),
+                mailUser: $("#mailUserInput").val(),
+                mailPassword:$("#passInput").val(),
+                serverName: $("#serverNameInput").val(),
+                serverPort: $("#serverPortInput").val() || 0,
+                mailSubject: $("#subjectInput").val(),
+                mailBody: $("#bodyInput").val(),
+                mailSubjectENG: $("#subjectEInput").val(),
+                mailBodyENG: $("#bodyEInput").val(),
+                updatedBy: loginName,
+            };
+        
+            $.ajax({
+                url: "/Administration/ConfirmationConfigSave",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(model),
+                traditional: true,
+                crossDomain: false,
+                headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+                success: function (res) {
+                  if (res.success) {
                     showToast("Success", res.message, true);
                     loadConfirmationConfig();
-                } else {
+                  } else {
                     if (res.errors && res.errors.length > 0) {
                         applyValidationErrors(res.errors, "#formContainer");
                         showToast("Warning", "Please check input fields.", false);
@@ -176,11 +177,11 @@
                             showToast("Error", res.message || "Save failed", false);
                         }
                     }
+                  }
+                },
+                error: function (xhr, status, error) {
+                  showToast("Error",error.message, false);
                 }
-            },
-            error: function (xhr, status, error) {
-                showToast("Error", error.message, false);
-            }
+           });
         });
-    });
 </script>
