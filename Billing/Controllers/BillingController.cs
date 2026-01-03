@@ -2424,7 +2424,7 @@ namespace Billing.Controllers
         {
             try
             {
-                decimal gross = _iPostService.CalculatePricePlusPlus(transactionCode, netPrice);
+                decimal gross = _iPostService.CalculatePriceNet(transactionCode, netPrice);
                 return Json(gross);
             }
             catch (Exception ex)
@@ -2437,7 +2437,7 @@ namespace Billing.Controllers
         {
             try
             {
-                decimal net = _iPostService.CalculatePriceNet(transactionCode, grossPrice);
+                decimal net = _iPostService.CalculatePricePlusPlus(transactionCode, grossPrice);
                 return Json(net);
             }
             catch (Exception ex)
