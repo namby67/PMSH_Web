@@ -3,6 +3,13 @@
 }
 @* <link href="~/css/pages/reservation.css" rel="stylesheet" asp-append-version="true" /> *@
 
+
+<style>
+    .note-textarea {
+        height: 280px;
+    }
+</style>
+
 <!--Model chose product type-->
 <div class="modal fade bd-example-modal-sm" id="profileTypeModal" tabindex="-1" role="dialog"
     aria-labelledby="profileTypeModal" aria-hidden="true">
@@ -12,37 +19,36 @@
                 <h5 class="modal-title" id="profileTypeModalLabel">Choose Profile Type</h5>
 
             </div>
-            <div class="modal-body">
+            <div class="modal-body p-2">
                 <div class="form-check d-block">
-                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="0"
-                        checked>
+                    <input class=" " type="radio" name="inlineRadioOptions" id="inlineRadio1" value="0" checked>
                     <label class="form-check-label" for="inlineRadio1"><b>Individual</b></label>
                 </div>
                 <div class="form-check d-block">
-                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="2">
+                    <input class=" " type="radio" name="inlineRadioOptions" id="inlineRadio2" value="2">
                     <label class="form-check-label" for="inlineRadio2"><b>Company</b></label>
                 </div>
                 <div class="form-check d-block">
-                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="1">
+                    <input class=" " type="radio" name="inlineRadioOptions" id="inlineRadio3" value="1">
                     <label class="form-check-label" for="inlineRadio3"><b>Travel Agent</b></label>
                 </div>
                 <div class="form-check d-block">
-                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="3">
+                    <input class=" " type="radio" name="inlineRadioOptions" id="inlineRadio4" value="3">
                     <label class="form-check-label" for="inlineRadio4"><b>Source</b></label>
                 </div>
                 <div class="form-check d-block">
-                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio5" value="4">
+                    <input class="" type="radio" name="inlineRadioOptions" id="inlineRadio5" value="4">
                     <label class="form-check-label" for="inlineRadio5"><b>Group</b></label>
                 </div>
                 <div class="form-check d-block">
-                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio6" value="5">
+                    <input class=" " type="radio" name="inlineRadioOptions" id="inlineRadio6" value="5">
                     <label class="form-check-label" for="inlineRadio6"><b>Contract</b></label>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                <button type="button" class="mui-button mui-button-close" data-dismiss="modal"
                     onclick="$('#profileTypeModal').modal('hide');">Close</button>
-                <button type="button" class="btn btn-primary" onclick="chooseProfileType();">OK</button>
+                <button type="button" class="mui-button mui-button-new" onclick="chooseProfileType();">OK</button>
             </div>
         </div>
     </div>
@@ -73,800 +79,885 @@
         </div>
 
         <!--profile individual-->
-        <div class="main-infor mt-4 row" style="justify-content:space-between" id="profile_individual">
-            <div class="col-md-6 mui-card" style="position: relative;padding-left: 17px;">
-                <div
-                    style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
-                    <b>Address Information</b>
+        <div class="main-infor mt-3" id="profile_individual">
+            <div class="row justify-content-center">
+                <!-- Tabs -->
+                <div class="d-flex justify-content-center">
+                    <ul class="nav nav-tabs mb-2 col-12 col-lg-10" role="tablist">
+                        <li class="nav-item">
+                            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-ind-address"
+                                type="button">
+                                Address & Communications
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-ind-internal"
+                                type="button">
+                                Tax / Internal / Status
+                            </button>
+                        </li>
+                    </ul>
                 </div>
-                <div class="row mt-4">
 
-                    <div class="col-md-4" id="image_wrapper">
-                        <div class="form-group-new-reservation ">
-                            <label for="txtFirstName">Image</label>
-                            <div class="row" style="margin-left:1px;margin-right:2px">
-                                <div class="mt-2" style="height: 240px;box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;background-color:#ececec"></div>
+                <div class="row">
+                    <div class="col-lg-1">
+                        <div class="mb-2 d-flex justify-content-center">
+                            <label for="">Image</label>
+                        </div>
+                        <div class="mb-4 d-flex justify-content-center">
+                            <img id="selectedImage" src="https://mdbootstrap.com/img/Photos/Others/placeholder.jpg"
+                                alt="example placeholder" style="width: 140px;" />
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <div data-mdb-ripple-init class="mui-button mui-button-new">
+                                <label class="form-label text-black m-1" for="customFile1">Choose
+                                    file</label>
+                                <input type="file" class="form-control d-none" id="customFile1"
+                                    onchange="displaySelectedImage(event, 'selectedImage')" />
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-8 ">
-                        <div class="form-group row">
-                            <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Code<span style="color:red">*</span></b></label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="txtCodeIndividual">
-                            </div>
-                        </div>
-                        <div class="form-group row mt-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Full
-                                    Name</b></label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="txtFullNameIndividual">
-                                <div id="errorMessage" style="color: red; margin-top: 5px; display: none;">
-                                    <strong>Typing format is not correct. Please typing as below: FirstName Middle,
-                                        LastName </strong>
+                    <div class="tab-content col-12 col-lg-10">
+
+                        <!-- ================= TAB 1 ================= -->
+                        <div class="tab-pane fade show active " id="tab-ind-address">
+                            <div class="row ">
+                                <!-- LEFT COLUMN (Image + Address) -->
+                                <div class="col-md-6 mui-card">
+
+                                    <!-- Personal / Address info -->
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-4 col-form-label text-end">
+                                            Code <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="col-sm-6 d-flex gap-1">
+                                            <input type="text" class="form-control" id="txtCodeIndividual">
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-4 col-form-label text-end">Full Name</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtFullNameIndividual">
+                                            <div id="errorMessage" style="display:none;color:red">
+                                                <strong>Typing format is not correct. Please typing as below:
+                                                    FirstName
+                                                    Middle, LastName</strong>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-4 col-form-label text-end">First / Last
+                                            Name</label>
+                                        <div class="col-sm-6 d-flex gap-1">
+                                            <input type="text" class="form-control" id="txtFirstNameIndividual">
+                                            <input type="text" class="form-control" id="txtLastNameIndividual">
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-4 col-form-label text-end">Middle Name</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtMiddleNameIndividual">
+                                        </div>
+                                    </div>
+
+
+                                    <hr class="my-2">
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-4 col-form-label text-end">Language / Title</label>
+                                        <div class="col-sm-3">
+                                            <select id="txtLanguageIndividual" class="ms-2"
+                                                data-placeholder="Please select Language"></select>
+                                        </div>
+                                        <div class="col-sm-3 ">
+                                            <select id="txtTitleIndividual"
+                                                data-placeholder="Please select Title"></select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-4 col-form-label text-end">
+                                            Nationality / Country <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="col-sm-3 ">
+                                            <select id="txtNationalityIndividual" class="ms-2"
+                                                data-placeholder="Please select Nationality"></select>
+                                        </div>
+                                        <div class="col-sm-3 ">
+                                            <select id="txtCountryIndividual"
+                                                data-placeholder="Please select Country"></select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-4 col-form-label text-end">City</label>
+                                        <div class="col-sm-6">
+                                            <select id="txtCityIndividual" class="ms-2"
+                                                data-placeholder="Please select City"></select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-4 col-form-label text-end">Postal / State</label>
+                                        <div class="col-sm-3">
+                                            <input type="text" id="txtPostalIndividual">
+                                        </div>
+                                        <div class="col-sm-3 ">
+                                            <select id="txtStateIndividual"
+                                                data-placeholder="Please select State"></select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-4 col-form-label text-end">Religion / Nation</label>
+                                        <div class="col-sm-6 d-flex gap-1">
+                                            <input type="text" class="form-control" id="txtReligionIndividual">
+                                            <input type="text" class="form-control" id="txtNationIndividual">
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-4 col-form-label text-end">Purpose Of Stay</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtPurposeIndividual">
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+
+                                <!-- RIGHT COLUMN (Communications) -->
+                                <div class="col-md-6 mui-card">
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-2 col-form-label text-end">Address</label>
+                                        <div class="col-sm-6">
+                                            <textarea class="form-control" rows="10" id="txtAddressIndividual"
+                                                style="height: 85px;"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-2 col-form-label text-end">Telephone</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtTelephoneIndividual">
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-2 col-form-label text-end">Hand Phone</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtHandPhoneIndividual">
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-2 col-form-label text-end">Fax</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtFaxIndividual">
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-2 col-form-label text-end">Email</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtEmailIndividual">
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-2 col-form-label text-end">Website</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtWebsiteIndividual">
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-2 col-form-label text-end">Company</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtCompany2Individual">
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center">
+                                        <label class="col-sm-2 col-form-label text-end">Business Title</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtBusinessTitleIndividual">
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group row  mt-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label text-right">First/Last
-                                Name</label>
-                            <div class="col-sm-8" style="display:flex;column-gap:8px">
-                                <input type="text" class="form-control" id="txtFirstNameIndividual">
-                                <input type="text" class="form-control" id="txtLastNameIndividual">
-                            </div>
-                        </div>
-                        <div class="form-group row  mt-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label text-right">Middle Name</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="txtMiddleNameIndividual">
-                            </div>
-                        </div>
-                        <div class="form-group row  mt-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label text-right">Language/Title</label>
-                            <div class="col-sm-8" style="display:flex;column-gap:8px">
-                                <select type="text" id="txtLanguageIndividual">
-                                </select>
 
-                                <select type="text" id="txtTitleIndividual">
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group row  mt-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label text-right">Nationality/Country <span style="color:red">*</span></label>
-                            <div class="col-sm-8" style="display:flex;column-gap:8px">
-                                <select type="text" id="txtNationalityIndividual">
-                                </select>
-                                <select type="text" id="txtCountryIndividual">
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group row  mt-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label text-right">City</label>
-                            <div class="col-sm-8">
+                        <!-- ================= TAB 2 ================= -->
+                        <div class="tab-pane fade" id="tab-ind-internal">
 
-                                <select id="txtCityIndividual">
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group row  mt-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label text-right">Postal/State</label>
-                            <div class="col-sm-8 " style="display:flex;column-gap:8px">
-                                <input type="text" class="form-control" style="width:50%;" id="txtPostalIndividual">
-                                <select type="text" id="txtStateIndividual" style="width:50%;">
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group row  mt-1">
-                            <label for="inputPassword"
-                                class="col-sm-4 col-form-label text-right">Religion/Nation</label>
-                            <div class="col-sm-8" style="display:flex;column-gap:8px">
-                                <input type="text" class="form-control" id="txtReligionIndividual">
-                                <input type="text" class="form-control" id="txtNationIndividual">
-                            </div>
-                        </div>
-                        <div class="form-group row  mt-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label text-right">Purpose Of
-                                Stay</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="txtPurposeIndividual">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group mb-4">
-                    <label for="textArea" class="col-form-labe"><b>Address</b></label>
-                    <div>
-                        <textarea id="txtAddressIndividual" class="form-control" rows="4"></textarea>
-                    </div>
-                </div>
-                @*                <div class="row">
-                    <div class="col-md-2">Searh Name</div>
-                    <div class="col-md-3">
-                        <input type="text" class="form-control">
+                            <div class="row">
 
-                    </div>
-                    <div class="col-md-1">First</div>
-                    <div class="col-md-3">
-                        <input type="text" class="form-control">
+                                <!-- LEFT -->
+                                <div class="col-md-6 mui-card">
 
-                    </div>
-                </div>
-                <div class="form-group mt-3">
-                    <div>
-                        <textarea id="textArea" class="form-control" rows="4"></textarea>
-                    </div>
-                </div> *@
-            </div>
-            <div class="col-md-6 row" style="justify-content:space-between;display: flex;
-                align-items: flex-start;">
-                <div class="col-md-5 mui-card" style="position: relative">
-                    <div
-                        style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
-                        <b>Internal Information</b>
-                    </div>
-                    <div class="form-group row mt-4">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Salutation</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="txtSalutationIndividual">
-                        </div>
-                    </div>
-                    <div class="form-group row mt-1">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">VIP</label>
-                        <div class="col-sm-8">
-                            <select type="text" id="txtVIPIndividual">
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group row mt-1">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">VIP Reason</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="txtReasonIndividual">
-                        </div>
-                    </div>
-                    <div class="form-group row mt-1">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Pref Room</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="txtPrefRoomIndividual">
-                        </div>
-                    </div>
-                    <div class="form-group row mt-1">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Other</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="txtOtherIndividual">
-                        </div>
-                    </div>
-                    <div class="form-group row mt-1">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Passport</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="txtPassportIndividual">
-                        </div>
-                    </div>
-                    <div class="form-group row mt-1">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Identity Card</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="txtCardIndividual">
-                        </div>
-                    </div>
-                    <div class="form-group row mt-1">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Date of birth</label>
-                        <div class="col-sm-6">
-                            <input type="date" class="form-control" id="txtDobIndividual" disabled>
-                        </div>
-                        <div class="col-sm-2" style="padding:4px 0px 4px 14px">
-                            <input type="checkbox" class="form-check-input" checked id="txtCheckboxDobIndividual">
-                        </div>
-                    </div>
-                    <div class="form-group row mt-1" style="justify-content:center">
-                        <div class="col-sm-6 text-start">
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="txtActiveIndividual" checked>
-                                <label class="form-check-label" for="termsCheckbox">Active</label>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="txtContactIndividual">
-                                <label class="form-check-label" for="termsCheckbox">Contact</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group row mt-1 mb-4">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Key word</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="txtKeywordIndividual">
-                        </div>
-                    </div>
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-4 col-form-label text-end">Company</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtCompanyIndividual">
+                                        </div>
+                                    </div>
 
-                </div>
-                <div class="col-md-7 row">
-                    <div class="col-md-12 mui-card" style="position: relative">
-                        <div class="mb-4"
-                            style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
-                            <b>Tax</b>
-                        </div>
-                        <div class="form-group mt-4 row">
-                            <label for="inputPassword" class="col-sm-4 col-form-label text-right">Company</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="txtCompanyIndividual">
-                            </div>
-                        </div>
-                        <div class="form-group row mt-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label text-right">Tax code</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="txtTaxIndividual">
-                            </div>
-                        </div>
-                        <div class="form-group row mt-1 mb-4">
-                            <label for="inputPassword" class="col-sm-4 col-form-label text-right">Bus .Address</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="txtBusAddressIndividual">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12 mt-4 mui-card" style="position: relative">
-                        <div class="mb-4"
-                            style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
-                            <b>Communications</b>
-                        </div>
-                        <div class="form-group mt-4 row">
-                            <label for="inputPassword" class="col-sm-4 col-form-label text-right">Telephone</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="txtTelephoneIndividual">
-                            </div>
-                        </div>
-                        <div class="form-group row mt-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label text-right">Hand Phone</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="txtHandPhoneIndividual">
-                            </div>
-                        </div>
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-4 col-form-label text-end">Tax Code</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtTaxIndividual">
+                                        </div>
+                                    </div>
 
-                        <div class="form-group mt-1 row">
-                            <label for="inputPassword" class="col-sm-4 col-form-label text-right">Fax</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="txtFaxIndividual">
-                            </div>
-                        </div>
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-4 col-form-label text-end">Bus. Address</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtBusAddressIndividual">
+                                        </div>
+                                    </div>
 
-                        <div class="form-group row mt-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label text-right">Email</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="txtEmailIndividual">
-                            </div>
-                        </div>
-                        <div class="form-group row mt-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label text-right">Website</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="txtWebsiteIndividual">
-                            </div>
-                        </div>
-                        <div class="form-group row mt-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label text-right">Company</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="txtCompany2Individual">
-                            </div>
-                        </div>
-                        <div class="form-group row mt-1 mb-4">
-                            <label for="inputPassword" class="col-sm-4 col-form-label text-right">Business Title</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="txtBusinessTitleIndividual">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mt-4" style="justify-content:space-between">
-                        <div class="col-sm-3">Black list</div>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="blackListIndividual">
-                        </div>
-                        <div class="col-sm-1 text-end" style="padding: 4px 0px">
-                            <input type="checkbox" class="form-check-input" id="txtBlackListIndividual">
-                        </div>
-                    </div>
-                </div>
-                <div class="row mt-4" style="justify-content:space-between">
-                    <div class="col-sm-2" style="color:red">Notes</div>
-                    <div class="col-sm-10">
-                        <textarea class="form-control" rows="4" id="txtNoteIndividual"></textarea>
-                    </div>
-                </div>
-                <div class="col-md-12 row mt-4" style="justify-content:space-between">
-                    <div class="col-md-5 mui-card" style="position: relative">
-                        <div class="mb-4"
-                            style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
-                            <b>Attributes</b>
-                        </div>
-                        <div class="form-group row mt-4">
-                            <label for="inputPassword" class="col-sm-4 col-form-label text-right">Rate code</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control">
-                            </div>
-                        </div>
-                        <div class="form-group row mt-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label text-right">A/R No</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control">
-                            </div>
-                        </div>
-                        <div class="form-group row mt-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label text-right">Member No</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-7 mui-card" style="position: relative">
-                        <div class="mb-4"
-                            style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
-                            <b>History Information</b>
-                        </div>
-                        <div class="row mt-4">
-                            <div class="col-md-4 text-right">Last Room</div>
-                            <div class="col-md-3">
-                                <input type="text" class="form-control">
+                                    <hr class="my-2">
 
-                            </div>
-                            <div class="col-md-1">On</div>
-                            <div class="col-md-3">
-                                <input type="text" class="form-control">
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-4 col-form-label text-end">Salutation</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtSalutationIndividual">
+                                        </div>
+                                    </div>
 
-                            </div>
-                        </div>
-                        <div class="form-group row mt-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label text-right">Last Rate</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control">
-                            </div>
-                        </div>
-                        <div class="form-group row mt-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label text-right">Stay</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-4 col-form-label text-end">VIP</label>
+                                        <div class="col-sm-6">
+                                            <select id="txtVIPIndividual" class="ms-2"
+                                                data-placeholder="Please select VIP"></select>
+                                        </div>
+                                    </div>
 
-        </div>
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-4 col-form-label text-end">VIP Reason</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtReasonIndividual">
+                                        </div>
+                                    </div>
 
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-4 col-form-label text-end">Passport</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtPassportIndividual">
+                                        </div>
+                                    </div>
 
-        <!--Profile company,ta,source-->
-        <div class="main-infor mt-4 row" style="justify-content:space-between;display:none" id="profile_com_ta_source">
-            <div class="col-md-6 row">
-                <div
-                    style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative;">
-                    <div
-                        style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
-                        <b>Address Information</b>
-                    </div>
-                    <div class="row mt-4">
-                        <div class="col-md-12">
-                            <div class="form-group row">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Code <span style="color:red">*</span></b></label>
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="txtCodeCOM">
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-4 col-form-label text-end">Identity Card</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtCardIndividual">
+                                        </div>
+                                    </div>
+
                                 </div>
-                            </div>
-                            <div class="form-group row mt-1">
-                                <label for="inputPassword"
-                                    class="col-sm-4 col-form-label text-right"><b>Account</b></label>
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="txtAccountCOM">
-                                </div>
-                            </div>
-                            <div class="form-group row mt-1">
-                                <label for="inputPassword"
-                                    class="col-sm-4 col-form-label text-right"><b>Address</b></label>
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="txtAddressCOM">
-                                </div>
-                            </div>
-                            <div class="form-group row mt-1">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">City/Country <span style="color:red">*</span></label>
-                                <div class="col-sm-8" style="display:flex;column-gap:8px">
-                                    <select type="text" id="txtCityCOM">
-                                        <option value="value">text</option>
-                                    </select>
 
-                                    <select type="text" id="txtCountryCOM">
-                                        <option value="value">text</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group row mt-1 mb-4">
-                                <label for="inputPassword"
-                                    class="col-sm-4 col-form-label text-right">Postal/State</label>
-                                <div class="col-sm-8" style="display:flex;column-gap:8px">
-                                    <input type="text" class="form-control" style="width:50%" id="txtPostalCOM">
-                                    <select type="text" id="txtStateCOM" style="width:50%">
-                                        <option value="value">text</option>
-                                    </select>
+                                <!-- RIGHT -->
+                                <div class="col-md-6 mui-card">
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-2 col-form-label text-end">Date of Birth</label>
+                                        <div class="col-sm-3">
+                                            <input type="date" class="form-control" id="txtDobIndividual" disabled>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input type="checkbox" class="form-check-input"
+                                                id="txtCheckboxDobIndividual" checked>
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-md-2 col-form-label text-end">Active</label>
+                                        <div class="col-md-2">
+                                            <input type="checkbox" class="form-check-input" id="txtActiveIndividual"
+                                                checked>
+                                        </div>
+                                        <label class="col-md-2 col-form-label text-end">Contact</label>
+                                        <div class="col-md-2">
+                                            <input type="checkbox" class="form-check-input" id="txtContactIndividual">
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-2 col-form-label text-end">Keyword</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtKeywordIndividual">
+                                        </div>
+                                    </div>
+
+                                    <hr class="my-2">
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-2 col-form-label text-end">Black list</label>
+                                        <div class="col-sm-7">
+                                            <input type="text" class="form-control" id="blackListIndividual">
+                                        </div>
+                                        <div class="col-sm-1">
+                                            <input type="checkbox" class="form-check-input" id="txtBlackListIndividual">
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-start">
+                                        <label class="col-sm-2 col-form-label text-end">Notes</label>
+                                        <div class="col-sm-6">
+                                            <textarea class="form-control form-control-sm note-textarea" rows="3"
+                                                id="txtNoteIndividual"></textarea>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="mt-4"
-                    style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
-                    <div class="mb-4"
-                        style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
-                        <b>Tax</b>
-                    </div>
-                    <div class="form-group mt-4 row">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Company</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="txtCompanyCOM">
-                        </div>
-                    </div>
-                    <div class="form-group row mt-1">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Tax code</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="txtTaxCOM">
-                        </div>
-                    </div>
-                    <div class="form-group row mt-1 mb-4">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Bus .Address</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="txtBusAddressCOM">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-12 mt-4"
-                    style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
-                    <div class="mb-4"
-                        style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
-                        <b>Communications</b>
-                    </div>
-                    <div class="form-group mt-4 row">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Telephone</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="txtTelephoneCOM">
-                        </div>
-                    </div>
-                    <div class="form-group row mt-1">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Contract Name</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="txtContactNameCOM">
-                        </div>
-                    </div>
 
-                    <div class="form-group mt-1 row">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Email</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="txtEmailCOM">
-                        </div>
                     </div>
-                    <div class="form-group row mt-1">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Website</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="txtWebsiteCOM">
-                        </div>
-                    </div>
-                    <div class="form-group row mt-1">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Hand Phone</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="txtHandPhoneCOM">
-                        </div>
-                    </div>
-                    <div class="form-group row mt-1">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Company</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="txtCompany2COM">
-                        </div>
-                    </div>
-                    <div class="form-group row mt-1 mb-4">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Business Title</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="txtBusTitleCOM">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 row" style="justify-content:space-between;display: flex;
-                align-items: flex-start;">
-                <div class="col-md-12"
-                    style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
-                    <div
-                        style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
-                        <b>Internal Information</b>
-                    </div>
-                    <div class="form-group row mt-4">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Owner</label>
-                        <div class="col-sm-8">
-                            <select type="text" id="txtOwnerCOM">
-                                <option value="value">text</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group row mt-1">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Territory</label>
-                        <div class="col-sm-8">
-                            <select type="text" id="txtTerritoryCOM">
-                                <option value="value">text</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group row mt-1">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Keyword</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="txtKeywordCOM">
-                        </div>
-                    </div>
-                    <div class="form-group row mt-1">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Type</label>
-                        <div class="col-sm-8">
-                            <select id="txtCompanyTypeCOM">
-                                <option value="value">text</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group row mt-1">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">A/R No</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="txtARCOM">
-                        </div>
-                    </div>
-
-                    <div class="form-group row mt-1">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Rref .Curr</label>
-                        <div class="col-sm-8">
-                            <select type="text" id="txtCurrencyCOM">
-                                <option value="value">text</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group row mt-1">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Sale In Charge</label>
-                        <div class="col-sm-8">
-                            <select type="text" id="txtSaleInChargeCOM">
-                                <option value="value">text</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group row mt-1">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Market Type</label>
-                        <div class="col-sm-8">
-                            <select type="text" id="txtMarketTypeCOM">
-                                <option value="value">text</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group row mt-1 mb-4">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Market</label>
-                        <div class="col-sm-8">
-                            <select type="text" id="txtMarketCOM">
-                                <option value="value">text</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 text-end mt-1">
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="txtActiveCOM">
-                        <label class="form-check-label" for="termsCheckbox">Active</label>
-                    </div>
-                </div>
-                <div class="row mt-1" style="justify-content:space-between">
-                    <div class="col-sm-3">Black list</div>
-                    <div class="col-sm-8">
-                        <input type="text" class="form-control" id="blackListCOM">
-                    </div>
-                    <div class="col-sm-1 text-end" style="padding: 4px 0px">
-                        <input type="checkbox" class="form-check-input" id="txtBlackListCOM">
-                    </div>
-                </div>
-                <div class="row mt-1">
-                    <div class="col-sm-12">Notes</div>
-                    <div class="col-sm-12">
-                        <textarea id="txtNoteCOM" class="form-control" rows="4"></textarea>
-                    </div>
-
                 </div>
             </div>
         </div>
+
+
+
+        <!-- Profile Company / TA / Source -->
+        <div class="main-infor mt-3" id="profile_com_ta_source" style="display:none">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-10">
+
+                    <!-- Tabs -->
+                    <ul class="nav nav-tabs mb-2" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-main"
+                                type="button" role="tab">
+                                Address & Communications
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-internal" type="button"
+                                role="tab">
+                                Tax / Internal / Status
+                            </button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content">
+
+                        <!-- TAB 1 : Address & Communications -->
+                        <div class="tab-pane fade show active" id="tab-main" role="tabpanel">
+                            <div class="row">
+
+                                <!-- Left column : Address -->
+                                <div class="col-md-6 mui-card">
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-md-4 col-form-label text-end fw-semibold">
+                                            Code <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="col-md-5">
+                                            <input type="text" class="form-control form-control-sm" id="txtCodeCOM">
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-md-4 col-form-label text-end">Account</label>
+                                        <div class="col-md-7">
+                                            <input type="text" class="form-control form-control-sm" id="txtAccountCOM">
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-md-4 col-form-label text-end">Address</label>
+                                        <div class="col-md-7">
+                                            <input type="text" class="form-control form-control-sm" id="txtAddressCOM">
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-md-4 col-form-label text-end">
+                                            City / Country <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="col-md-4">
+                                            <select id="txtCityCOM" class="form-select-sm"
+                                                data-placeholder="Please select City">
+                                                <option value="value">text</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <select id="txtCountryCOM" class="form-select-sm"
+                                                data-placeholder="Please select Country">
+                                                <option value="value">text</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-md-4 col-form-label text-end">Postal / State</label>
+                                        <div class="col-md-3">
+                                            <input type="text" class="form-control form-control-sm" id="txtPostalCOM">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select id="txtStateCOM" class="form-select-sm"
+                                                data-placeholder="Please select State">
+                                                <option value="value">text</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Right column : Communications -->
+                                <div class="col-md-6 mui-card">
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-md-2 col-form-label text-end">Telephone</label>
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control form-control-sm"
+                                                id="txtTelephoneCOM">
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-md-2 col-form-label text-end">Hand Phone</label>
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control form-control-sm"
+                                                id="txtHandPhoneCOM">
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-md-2 col-form-label text-end">Contact Name</label>
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control form-control-sm"
+                                                id="txtContactNameCOM">
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-md-2 col-form-label text-end">Email</label>
+                                        <div class="col-md-7">
+                                            <input type="text" class="form-control form-control-sm" id="txtEmailCOM">
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-md-2 col-form-label text-end">Website</label>
+                                        <div class="col-md-7">
+                                            <input type="text" class="form-control form-control-sm" id="txtWebsiteCOM">
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-md-2 col-form-label text-end">Company</label>
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control form-control-sm" id="txtCompany2COM">
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center">
+                                        <label class="col-md-2 col-form-label text-end">Business Title</label>
+                                        <div class="col-md-7">
+                                            <input type="text" class="form-control form-control-sm" id="txtBusTitleCOM">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TAB 2 : Tax / Internal / Status -->
+                        <div class="tab-pane fade" id="tab-internal" role="tabpanel">
+                            <div class="row">
+
+                                <!-- Left column : Tax + Internal -->
+                                <div class="col-md-6 mui-card">
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-md-4 col-form-label text-end">Company</label>
+                                        <div class="col-md-7">
+                                            <input type="text" class="form-control form-control-sm" id="txtCompanyCOM">
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-md-4 col-form-label text-end">Tax Code</label>
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control form-control-sm" id="txtTaxCOM">
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-2">
+                                        <label class="col-md-4 col-form-label text-end">Bus. Address</label>
+                                        <div class="col-md-7">
+                                            <input type="text" class="form-control form-control-sm"
+                                                id="txtBusAddressCOM">
+                                        </div>
+                                    </div>
+
+                                    <hr class="my-2">
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-md-4 col-form-label text-end">Owner</label>
+                                        <div class="col-md-6">
+                                            <select id="txtOwnerCOM" class="form-select-sm"
+                                                data-placeholder="Please select Owner">
+                                                <option value="value">text</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-md-4 col-form-label text-end">Territory</label>
+                                        <div class="col-md-6">
+                                            <select id="txtTerritoryCOM" class="form-select-sm"
+                                                data-placeholder="Please select Territory">
+                                                <option value="value">text</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-md-4 col-form-label text-end">Type</label>
+                                        <div class="col-md-6">
+                                            <select id="txtCompanyTypeCOM" class="form-select-sm"
+                                                data-placeholder="Please select Type">
+                                                <option value="value">text</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-md-4 col-form-label text-end">A/R No</label>
+                                        <div class="col-md-5">
+                                            <input type="text" class="form-control form-control-sm" id="txtARCOM">
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-md-4 col-form-label text-end">Currency</label>
+                                        <div class="col-md-5">
+                                            <select id="txtCurrencyCOM" class="form-select-sm"
+                                                data-placeholder="Please select Currency">
+                                                <option value="value">text</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-md-4 col-form-label text-end">Sale In Charge</label>
+                                        <div class="col-md-6">
+                                            <select id="txtSaleInChargeCOM" class="form-select-sm"
+                                                data-placeholder="Please select Sale In Charge">
+                                                <option value="value">text</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center">
+                                        <label class="col-md-4 col-form-label text-end">Market Type</label>
+                                        <div class="col-md-6">
+                                            <select id="txtMarketTypeCOM" class="form-select-sm"
+                                                data-placeholder="Please select Market Type">
+                                                <option value="value">text</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Right column : Status + Notes -->
+                                <div class="col-md-6 mui-card">
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-md-2 col-form-label text-end">Market</label>
+                                        <div class="col-md-6">
+                                            <select id="txtMarketCOM" class="form-select-sm"
+                                                data-placeholder="Please select Market">
+                                                <option value="value">text</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-md-2 col-form-label text-end">Active</label>
+                                        <div class="col-md-6">
+                                            <input type="checkbox" class="form-check-input" id="txtActiveCOM">
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-md-2 col-form-label text-end">Black list</label>
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control form-control-sm" id="blackListCOM">
+                                        </div>
+                                        <div class="col-md-1">
+                                            <input type="checkbox" class="form-check-input" id="txtBlackListCOM">
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-start">
+                                        <label class="col-md-2 col-form-label text-end">Notes</label>
+                                        <div class="col-md-10">
+                                            <textarea id="txtNoteCOM" class="form-control form-control-sm note-textarea"
+                                                rows="20"></textarea>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
 
         <!--Profile group-->
-        <div class="main-infor mt-4 row" style="justify-content:space-between;display:none" id="profile_group">
-            <div class="col-md-6 row">
-                <div
-                    style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative;">
-                    <div
-                        style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
-                        <b>Address Information</b>
-                    </div>
-                    <div class="row mt-4">
-                        <div class="col-md-12">
-                            <div class="form-group row">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Code <span style="color:red">*</span></b></label>
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="txtCodeGroup">
+        <div class="main-infor mt-3" id="profile_group" style="display:none">
+
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-10">
+                    <ul class="nav nav-tabs mb-2">
+                        <li class="nav-item">
+                            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#group-tab-address"
+                                type="button">
+                                Address Information
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#group-tab-internal"
+                                type="button">
+                                Internal / Communications / Attributes
+                            </button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content">
+
+                        <!-- TAB 1 -->
+                        <div class="tab-pane fade show active" id="group-tab-address">
+
+                            <div class="row">
+
+                                <!-- LEFT COLUMN -->
+                                <div class="col-md-6 mui-card">
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-4 col-form-label text-end">
+                                            Code <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtCodeGroup">
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-4 col-form-label text-end">Group Name</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtGroupNameGroup">
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-4 col-form-label text-end">Language</label>
+                                        <div class="col-sm-6">
+                                            <select id="txtLanguageGroup" class="ms-2 me-2">
+                                                <option value="value">text</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-4 col-form-label text-end">Address</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtAddressGroup">
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-4 col-form-label text-end">Home Address</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtHomeAddressGroup">
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-4 col-form-label text-end">City</label>
+                                        <div class="col-sm-6">
+                                            <select id="txtCityGroup" class="ms-2 me-2">
+                                                <option value="value">text</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-4 col-form-label text-end">Postal Code</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtPostalCodeGroup">
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-4 col-form-label text-end">
+                                            Country / State <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="col-sm-6 d-flex gap-2">
+                                            <select id="txtCountryGroup">
+                                                <option value="value">text</option>
+                                            </select>
+                                            <select id="txtStateGroup">
+                                                <option value="value">text</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
                                 </div>
-                            </div>
-                            <div class="form-group row mt-1">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Group Name</label>
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="txtGroupNameGroup">
+
+                                <!-- RIGHT COLUMN -->
+                                <div class="col-md-6 mui-card">
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-2 col-form-label text-end">Search Name</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control">
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-start">
+                                        <label class="col-sm-2 col-form-label text-end">Notes</label>
+                                        <div class="col-md-8">
+                                            <div id="packageDetailGrid" class="gridContainer"></div>
+                                        </div>
+                                    </div>
+
                                 </div>
+
                             </div>
-                            <div class="form-group row mt-1">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Language</label>
-                                <div class="col-sm-8">
-                                    <select type="text" id="txtLanguageGroup">
-                                        <option value="value">text</option>
-                                    </select>
+                        </div>
+
+                        <!-- TAB 2 -->
+                        <div class="tab-pane fade" id="group-tab-internal">
+
+                            <div class="row">
+
+                                <div class="col-md-6 mui-card">
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-4 col-form-label text-end">Acct .Contact</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtContactGroup">
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-4 col-form-label text-end">Pref .Curr</label>
+                                        <div class="col-sm-6">
+                                            <select id="txtCurrencyGroup">
+                                                <option value="value">text</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-4 col-form-label text-end">Account Type</label>
+                                        <div class="col-sm-6">
+                                            <select class="form-select"></select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-4 col-form-label text-end">VIP</label>
+                                        <div class="col-sm-6">
+                                            <select id="txtVIPGroup">
+                                                <option value="value">text</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-4 col-form-label text-end">VIP Reason</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtVIPReasonGroup">
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-4 col-form-label text-end">Notes</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtNotesGroup">
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-2">
+                                        <label class="col-sm-4 col-form-label text-end">History</label>
+                                        <div class="col-sm-6">
+                                            <input type="checkbox" class="form-check-input" id="txtHistory">
+                                        </div>
+                                    </div>
+
+                                    <hr class="my-2">
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-4 col-form-label text-end">Telephone</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtTelephongGroup">
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-4 col-form-label text-end">Email</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtEmailGroup">
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-4 col-form-label text-end">Website</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtWebsiteGroup">
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center mb-2">
+                                        <label class="col-sm-4 col-form-label text-end">Hand Phone</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtHandPhoneGroup">
+                                        </div>
+                                    </div>
+
+                                    <hr class="my-2">
+
+                                    <div class="row align-items-center mb-1">
+                                        <label class="col-sm-4 col-form-label text-end">Rate Code</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" disabled>
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center">
+                                        <label class="col-sm-4 col-form-label text-end">A/R No</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" disabled>
+                                        </div>
+                                    </div>
+
                                 </div>
-                            </div>
-                            <div class="form-group row mt-1">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Address</b></label>
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="txtAddressGroup">
-                                </div>
-                            </div>
 
-                            <div class="form-group row mt-1">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Home
-                                    Address</label>
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="txtHomeAddressGroup">
-                                </div>
-                            </div>
-                            <div class="form-group row mt-1">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">City</label>
-                                <div class="col-sm-8">
-                                    <select type="text" id="txtCityGroup">
-                                        <option value="value">text</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group row mt-1">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Postal
-                                    Code</label>
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="txtPostalCodeGroup">
-                                </div>
-                            </div>
-                            <div class="form-group row mt-1 mb-4">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Country/State <span style="color:red">*</span></label>
-                                <div class="col-sm-8" style="display:flex;column-gap:8px">
-                                    <select type="text" id="txtCountryGroup">
-                                        <option value="value">text</option>
-                                    </select>
-
-                                    <select type="text" id="txtStateGroup">
-                                        <option value="value">text</option>
-                                    </select>
-                                </div>
                             </div>
                         </div>
-                        @* <div class="form-group row col-md-12">
-                            <label for="inputPassword" class="col-sm-4 col-form-label text-right">Search Name</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control">
-                            </div>
-                        </div>
-                        <div class="form-group mt-3">
-                            <div>
-                                <textarea id="textArea" class="form-control" rows="4"></textarea>
-                            </div>
-                        </div> *@
-                    </div>
-                </div>
-
-            </div>
-            <div class="col-md-6 row" style="justify-content:space-between;display: flex;
-                align-items: flex-start;">
-                <div class="col-md-12"
-                    style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
-                    <div
-                        style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
-                        <b>Internal Information</b>
-                    </div>
-                    <div class="form-group row mt-4">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Acct .Contact</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="txtContactGroup">
-                        </div>
-                    </div>
-                    <div class="form-group row mt-1">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Pref .Curr</label>
-                        <div class="col-sm-8">
-                            <select type="text" id="txtCurrencyGroup">
-                                <option value="value">text</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group row mt-1">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Account Type</label>
-                        <div class="col-sm-8">
-                            <select type="text" class="form-select">
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group row mt-1">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">VIP</label>
-                        <div class="col-sm-8">
-                            <select type="text" id="txtVIPGroup">
-                                <option value="value">text</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group row mt-1">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">VIP Reason</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="txtVIPReasonGroup">
-                        </div>
-                    </div>
-                    <div class="form-group row mt-1">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Notes</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="txtNotesGroup">
-                        </div>
-                    </div>
-                    <div class="form-group row mt-1 mb-4">
-                        <label class="form-check-label col-sm-4" for="termsCheckbox">History</label>
-                        <div class="col-sm-8">
-                            <input type="checkbox" class="form-check-input" id="txtHistory">
-                        </div>
 
                     </div>
-                </div>
-
-                <div class="col-md-12 mt-4"
-                    style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
-                    <div class="mb-4"
-                        style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
-                        <b>Communications</b>
-                    </div>
-                    <div class="form-group mt-4 row">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Telephone</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="txtTelephongGroup">
-                        </div>
-                    </div>
-
-
-                    <div class="form-group mt-1 row">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Email</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="txtEmailGroup">
-                        </div>
-                    </div>
-                    <div class="form-group row mt-1">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Website</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="txtWebsiteGroup">
-                        </div>
-                    </div>
-                    <div class="form-group row mt-1 mb-4">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Hand Phone</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="txtHandPhoneGroup">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-12 mt-4"
-                    style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
-                    <div class="mb-4"
-                        style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
-                        <b>Attributes</b>
-                    </div>
-                    <div class="form-group mt-4 row">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Rate Code</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" disabled>
-                        </div>
-                    </div>
-                    <div class="form-group mt-1 mb-4 row">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">A/R No</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" disabled>
-                        </div>
-                    </div>
-
                 </div>
             </div>
         </div>
+
 
         <!--Profile contact-->
         <div class="main-infor mt-4 row" style="justify-content:space-between;" id="profile_contact">
@@ -880,13 +971,15 @@
                     <div class="row mt-4">
                         <div class="col-md-12">
                             <div class="form-group row">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Code <span style="color:red">*</span></b></label>
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Code <span
+                                            style="color:red">*</span></b></label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="txtCodeContact">
                                 </div>
                             </div>
                             <div class="form-group row mb-1">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Full Name <span style="color:red">*</span></b></label>
+                                <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Full Name <span
+                                            style="color:red">*</span></b></label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="txtFullNameContact">
                                     <div id="errorMessageContact" style="color: red; margin-top: 5px; display: none;">
@@ -922,7 +1015,8 @@
                                 </div>
                             </div>
                             <div class="form-group row mt-1">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Language/Title</label>
+                                <label for="inputPassword"
+                                    class="col-sm-4 col-form-label text-right">Language/Title</label>
                                 <div class="col-sm-8 d-flex ts-inline" style="display:flex;column-gap:8px">
                                     <select type="text" id="txtLanguageContact">
                                         <option value="value">text</option>
@@ -1077,6 +1171,22 @@
 
 
 <script>
+    // Founction chọn ảnh
+    function displaySelectedImage(event, elementId) {
+        const selectedImage = document.getElementById(elementId);
+        const fileInput = event.target;
+
+        if (fileInput.files && fileInput.files[0]) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                selectedImage.src = e.target.result;
+            };
+
+            reader.readAsDataURL(fileInput.files[0]);
+        }
+    }
+
 
     $(document).ready(async function () {
         var today = new Date().toISOString().split('T')[0];
@@ -1171,6 +1281,7 @@
                 new TomSelect(id, {
                     allowEmptyOption: true,
                     create: true,
+                    plugins: ['clear_button'], // nút xoá tất cả
 
                 });
             }
@@ -1279,7 +1390,6 @@
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa danh sách options cũ
 
-                    select.addOption({ value: '0', text: 'Please select language' });
                     result.forEach(item => {
                         select.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
                     });
@@ -1290,7 +1400,6 @@
                     select2.clear(); // Xóa giá trị hiện tại
                     select2.clearOptions(); // Xóa danh sách options cũ
 
-                    select2.addOption({ value: '0', text: 'Please select language' });
                     result.forEach(item => {
                         select2.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
                     });
@@ -1301,7 +1410,6 @@
                     select3.clear(); // Xóa giá trị hiện tại
                     select3.clearOptions(); // Xóa danh sách options cũ
 
-                    select3.addOption({ value: '0', text: 'Please select language' });
                     result.forEach(item => {
                         select3.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
                     });
@@ -1331,7 +1439,6 @@
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
 
-                    select.addOption({ value: '0', text: 'Please select title' });
                     result.forEach(item => {
                         select.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
                     });
@@ -1342,7 +1449,6 @@
                     select3.clear(); // Xóa giá trị hiện tại
                     select3.clearOptions(); // Xóa tất cả option cũ
 
-                    select3.addOption({ value: '0', text: 'Please select title' });
                     result.forEach(item => {
                         select3.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
                     });
@@ -1372,7 +1478,6 @@
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
 
-                    select.addOption({ value: '0', text: 'Please select nationality' });
                     result.forEach(item => {
                         select.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
                     });
@@ -1402,7 +1507,6 @@
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
 
-                    select.addOption({ value: '0', text: 'Please select country' });
                     result.forEach(item => {
                         select.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
                     });
@@ -1413,7 +1517,6 @@
                     select2.clear(); // Xóa giá trị hiện tại
                     select2.clearOptions(); // Xóa tất cả option cũ
 
-                    select2.addOption({ value: '0', text: 'Please select country' });
                     result.forEach(item => {
                         select2.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
                     });
@@ -1424,7 +1527,6 @@
                     select3.clear(); // Xóa giá trị hiện tại
                     select3.clearOptions(); // Xóa tất cả option cũ
 
-                    select3.addOption({ value: '0', text: 'Please select country' });
                     result.forEach(item => {
                         select3.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
                     });
@@ -1434,7 +1536,6 @@
                     select4.clear(); // Xóa giá trị hiện tại
                     select4.clearOptions(); // Xóa tất cả option cũ
 
-                    select4.addOption({ value: '0', text: 'Please select country' });
                     result.forEach(item => {
                         select4.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
                     });
@@ -1463,7 +1564,6 @@
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
 
-                    select.addOption({ value: '0', text: 'Please select state' });
                     result.forEach(item => {
                         // select.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
                         select.addOption({ value: item.id, text: `${item.stateName}` });
@@ -1473,7 +1573,6 @@
                     let select2 = $('#txtStateCOM')[0].tomselect; // Lấy instance của TomSelect
                     select2.clear(); // Xóa giá trị hiện tại
                     select2.clearOptions(); // Xóa tất cả option cũ
-                    select2.addOption({ value: '0', text: 'Please select state' });
                     result.forEach(item => {
                         select2.addOption({ value: item.id, text: `${item.stateName}` });
                     });
@@ -1482,7 +1581,6 @@
                     let select3 = $('#txtStateGroup')[0].tomselect; // Lấy instance của TomSelect
                     select3.clear(); // Xóa giá trị hiện tại
                     select3.clearOptions(); // Xóa tất cả option cũ
-                    select3.addOption({ value: '0', text: 'Please select state' });
                     result.forEach(item => {
                         select.addOption({ value: item.id, text: `${item.stateName}` });
                     });
@@ -1491,7 +1589,6 @@
                     let select4 = $('#txtStateContact')[0].tomselect; // Lấy instance của TomSelect
                     select4.clear(); // Xóa giá trị hiện tại
                     select4.clearOptions(); // Xóa tất cả option cũ
-                    select4.addOption({ value: '0', text: 'Please select state' });
                     result.forEach(item => {
                         select.addOption({ value: item.id, text: `${item.stateName}` });
                     });
@@ -1501,25 +1598,21 @@
                     let select = $('#txtStateIndividual')[0].tomselect; // Lấy instance của TomSelect
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
-                    select.addOption({ value: '0', text: 'Please select state' });
                     select.setValue('0');
 
                     let select2 = $('#txtStateCOM')[0].tomselect; // Lấy instance của TomSelect
                     select2.clear(); // Xóa giá trị hiện tại
                     select2.clearOptions(); // Xóa tất cả option cũ
-                    select2.addOption({ value: '0', text: 'Please select state' });
                     select2.setValue('0');
 
                     let select3 = $('#txtStateGroup')[0].tomselect; // Lấy instance của TomSelect
                     select3.clear(); // Xóa giá trị hiện tại
                     select3.clearOptions(); // Xóa tất cả option cũ
-                    select3.addOption({ value: '0', text: 'Please select state' });
                     select3.setValue('0');
 
                     let select4 = $('#txtStateContact')[0].tomselect; // Lấy instance của TomSelect
                     select4.clear(); // Xóa giá trị hiện tại
                     select4.clearOptions(); // Xóa tất cả option cũ
-                    select4.addOption({ value: '0', text: 'Please select state' });
                     select4.setValue('0');
                 }
             },
@@ -1540,13 +1633,12 @@
             crossDomain: false,
             headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
             success: function (result) {
-                console.log(result);
+                console.log("log", result);
                 if (result.length > 0) {
                     let select = $('#txtSaleInChargeCOM')[0].tomselect; // Lấy instance của TomSelect
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
 
-                    select.addOption({ value: '0', text: 'Please select SaleInCharge' });
                     result.forEach(item => {
                         select.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
                     });
@@ -1558,7 +1650,6 @@
                     // select2.clear(); // Xóa giá trị hiện tại
                     // select2.clearOptions(); // Xóa tất cả option cũ
 
-                    // select2.addOption({ value: '0', text: 'Please select Currency' });
                     // result.forEach(item => {
                     //     select2.addOption({ value: item.id, text: `${item.description}` });
                     // });
@@ -1569,13 +1660,11 @@
                     let select = $('#txtSaleInChargeCOM')[0].tomselect; // Lấy instance của TomSelect
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
-                    select.addOption({ value: '0', text: 'Please select SaleInCharge' });
                     select.setValue('0');
 
                     // let select2 = $('#txtCurrencyGroup')[0].tomselect; // Lấy instance của TomSelect
                     // select2.clear(); // Xóa giá trị hiện tại
                     // select2.clearOptions(); // Xóa tất cả option cũ
-                    // select2.addOption({ value: '0', text: 'Please select Currency' });
                     // select2.setValue('0');
                 }
 
@@ -1602,7 +1691,6 @@
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
 
-                    select.addOption({ value: '0', text: 'Please select city' });
                     result.forEach(item => {
                         select.addOption({ value: item.code, text: `${item.code} - ${item.name}` });
                     });
@@ -1613,7 +1701,6 @@
                     select2.clear(); // Xóa giá trị hiện tại
                     select2.clearOptions(); // Xóa tất cả option cũ
 
-                    select2.addOption({ value: '0', text: 'Please select city' });
                     result.forEach(item => {
                         select2.addOption({ value: item.code, text: `${item.code} - ${item.name}` });
                     });
@@ -1624,7 +1711,6 @@
                     select3.clear(); // Xóa giá trị hiện tại
                     select3.clearOptions(); // Xóa tất cả option cũ
 
-                    select3.addOption({ value: '0', text: 'Please select city' });
                     result.forEach(item => {
                         select3.addOption({ value: item.code, text: `${item.code} - ${item.name}` });
                     });
@@ -1635,7 +1721,6 @@
                     select4.clear(); // Xóa giá trị hiện tại
                     select4.clearOptions(); // Xóa tất cả option cũ
 
-                    select4.addOption({ value: '0', text: 'Please select city' });
                     result.forEach(item => {
                         select4.addOption({ value: item.code, text: `${item.code} - ${item.name}` });
                     });
@@ -1665,7 +1750,6 @@
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
 
-                    select.addOption({ value: '0', text: 'Please select VIP' });
                     result.forEach(item => {
                         select.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
                     });
@@ -1676,7 +1760,6 @@
                     select2.clear(); // Xóa giá trị hiện tại
                     select2.clearOptions(); // Xóa tất cả option cũ
 
-                    select2.addOption({ value: '0', text: 'Please select VIP' });
                     result.forEach(item => {
                         select2.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
                     });
@@ -1724,7 +1807,6 @@
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
 
-                    select.addOption({ value: '0', text: 'Please select Owner' });
                     result.forEach(item => {
                         select.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
                     });
@@ -1735,7 +1817,6 @@
                     select2.clear(); // Xóa giá trị hiện tại
                     select2.clearOptions(); // Xóa tất cả option cũ
 
-                    select2.addOption({ value: '0', text: 'Please select Owner' });
                     result.forEach(item => {
                         select2.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
                     });
@@ -1765,7 +1846,6 @@
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
 
-                    select.addOption({ value: '0', text: 'Please select Territory' });
                     result.forEach(item => {
                         select.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
                     });
@@ -1776,7 +1856,6 @@
                     select2.clear(); // Xóa giá trị hiện tại
                     select2.clearOptions(); // Xóa tất cả option cũ
 
-                    select2.addOption({ value: '0', text: 'Please select Territory' });
                     result.forEach(item => {
                         select2.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
                     });
@@ -1787,13 +1866,11 @@
                     let select = $('#txtTerritoryCOM')[0].tomselect; // Lấy instance của TomSelect
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
-                    select.addOption({ value: '0', text: 'Please select Territory' });
                     select.setValue('0');
 
                     let select2 = $('#txtTerritoryContact')[0].tomselect; // Lấy instance của TomSelect
                     select2.clear(); // Xóa giá trị hiện tại
                     select2.clearOptions(); // Xóa tất cả option cũ
-                    select2.addOption({ value: '0', text: 'Please select Territory' });
                     select2.setValue('0');
                 }
 
@@ -1819,8 +1896,6 @@
                     let select = $('#txtCompanyTypeCOM')[0].tomselect; // Lấy instance của TomSelect
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
-
-                    select.addOption({ value: '0', text: 'Please select Company Type' });
                     result.forEach(item => {
                         select.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
                     });
@@ -1831,7 +1906,6 @@
                     let select = $('#txtCompanyTypeCOM')[0].tomselect; // Lấy instance của TomSelect
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
-                    select.addOption({ value: '0', text: 'Please select Company Type' });
                     select.setValue('0');
                 }
 
@@ -1858,7 +1932,6 @@
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
 
-                    select.addOption({ value: '0', text: 'Please select Currency' });
                     result.forEach(item => {
                         select.addOption({ value: item.id, text: `${item.description}` });
                     });
@@ -1870,7 +1943,6 @@
                     select2.clear(); // Xóa giá trị hiện tại
                     select2.clearOptions(); // Xóa tất cả option cũ
 
-                    select2.addOption({ value: '0', text: 'Please select Currency' });
                     result.forEach(item => {
                         select2.addOption({ value: item.id, text: `${item.description}` });
                     });
@@ -1881,13 +1953,11 @@
                     let select = $('#txtCurrencyCOM')[0].tomselect; // Lấy instance của TomSelect
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
-                    select.addOption({ value: '0', text: 'Please select Currency' });
                     select.setValue('0');
 
                     let select2 = $('#txtCurrencyGroup')[0].tomselect; // Lấy instance của TomSelect
                     select2.clear(); // Xóa giá trị hiện tại
                     select2.clearOptions(); // Xóa tất cả option cũ
-                    select2.addOption({ value: '0', text: 'Please select Currency' });
                     select2.setValue('0');
                 }
 
@@ -1916,7 +1986,6 @@
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
 
-                    select.addOption({ value: '0', text: 'Please select Market Type' });
                     result.forEach(item => {
                         select.addOption({ value: item.id, text: `${item.description}` });
                     });
@@ -1927,7 +1996,6 @@
                     let select = $('#txtMarketTypeCOM')[0].tomselect; // Lấy instance của TomSelect
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
-                    select.addOption({ value: '0', text: 'Please select Currency' });
                     select.setValue('0');
                 }
 
@@ -1959,7 +2027,6 @@
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
 
-                    select.addOption({ value: '0', text: 'Please select Market' });
                     result.forEach(item => {
                         select.addOption({ value: item.id, text: `${item.description}` });
                     });
@@ -1970,7 +2037,6 @@
                     let select = $('#txtMarketCOM')[0].tomselect; // Lấy instance của TomSelect
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
-                    select.addOption({ value: '0', text: 'Please select Market' });
                     select.setValue('0');
                 }
 
