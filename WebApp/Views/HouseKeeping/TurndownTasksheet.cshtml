@@ -185,10 +185,10 @@
         padding: 18px 0px 0px 14px;
         border-radius: 8px;
     }
-
+/* 
     .gridContainer {
         margin: 0px 8px;
-    }
+    } */
 
     .button_wrapper {
         display: flex;
@@ -211,10 +211,10 @@
             color: white !important;
         } */
 
-    #gridContainer .dx-datagrid-rowsview .dx-selection * {
+  /*   #gridContainer .dx-datagrid-rowsview .dx-selection * {
         color: white !important;
     }
-
+ */
     .sticky-header .form-control-sm {
         padding: .1rem .35rem;
         height: calc(1.1em + .2rem + 2px);
@@ -223,14 +223,14 @@
     .sticky-header label[class*="me-"] {
         margin-right: .5rem !important;
     }
-
+/* 
     #gridContainer .dx-datagrid-headers .dx-header-row>td {
         padding: 5px !important;
         height: 24px !important;
         font-size: 12px !important;
         line-height: 1.1 !important;
     }
-
+ */
     .sticky-header input[type="date"].form-control-sm {
         font-size: 12px !important;
         /* dúng 12?px */
@@ -578,7 +578,7 @@
     });
 
     function initializeTurndownTasksheetDataGrid(data) {
-        const columnWidth = 120;
+        const columnWidth = 130;
 
         $("#gridContainer").dxDataGrid({
             dataSource: data,
@@ -634,7 +634,7 @@
                 { dataField: "foStatus", caption: "FO Status", width: columnWidth },
                 { dataField: "timeIn", caption: "Time In", width: columnWidth },
                 { dataField: "timeOut", caption: "Time Out", width: columnWidth },
-                { dataField: "Description", caption: "Description", width: columnWidth },
+                { dataField: "Description", caption: "Description", width: columnWidth+columnWidth },
             ],
 
 
