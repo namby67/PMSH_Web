@@ -1,14 +1,14 @@
 ﻿﻿﻿.confirm-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.4);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
 }
 
 .confirm-box {
@@ -63,17 +63,12 @@
   opacity: 0.9;
 }
 
-﻿
-
-
-
-
-.menu-left {
-    background-color: #e5e5e5;
-    border: 1px solid #e5e7eb;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    transition: width 0.3s ease;
+﻿ .menu-left {
+  background-color: #e5e5e5;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: width 0.3s ease;
 }
 
 .menu-left.collapsed {
@@ -320,90 +315,89 @@
   position: relative;
 }
 
+.function-menu a,
+.function-menu .dropdown-toggle {
+  color: var(--text-color);
+  text-decoration: none;
+  padding: 8px 15px;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  position: relative;
+}
 
-    .function-menu a,
-    .function-menu .dropdown-toggle {
-        color: var(--text-color);
-        text-decoration: none;
-        padding: 8px 15px;
-        font-size: 14px;
-        font-weight: 500;
-        white-space: nowrap;
-        position: relative;
-    }
+.function-menu a:not(:last-child)::after,
+.function-menu .dropdown:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 60%;
+  margin-top: 6px;
+}
 
-        .function-menu a:not(:last-child)::after,
-        .function-menu .dropdown:not(:last-child)::after {
-            content: "";
-            position: absolute;
-            top: 50%;
-            right: 0;
-            transform: translateY(-50%);
-            width: 1px;
-            height: 60%;
-            margin-top: 6px;
-        }
+.function-menu a:hover,
+.function-menu a.active,
+.function-menu .dropdown-toggle:hover {
+  color: var(--main-color);
+  border-bottom: 2px solid var(--main-color);
+}
 
-        .function-menu a:hover,
-        .function-menu a.active,
-        .function-menu .dropdown-toggle:hover {
-            color: var(--main-color);
-            border-bottom: 2px solid var(--main-color);
-        }
+.function-menu .dropdown {
+  position: relative;
+}
 
-    .function-menu .dropdown {
-        position: relative;
-    }
-
-    .function-menu .dropdown-toggle {
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 5px;
-    }
+.function-menu .dropdown-toggle {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
 
 .function-menu .dropdown-menu-custom-rsv {
-    position: absolute;
-    min-width: 180px;
-    border: 1px solid #e5e7eb;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    display: none;
-    z-index: 1000;
-    border-radius: 8px;
+  position: absolute;
+  min-width: 180px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: none;
+  z-index: 1000;
+  border-radius: 8px;
 }
 .dropdown-menu-custom-rsv {
-    color: #000000;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    min-width: 220px;
-    background-color: white;
-    border: 1px solid #e5e7eb;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    display: none;
-    z-index: 1000;
-    border-radius: 8px;
+  color: #000000;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 220px;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: none;
+  z-index: 1000;
+  border-radius: 8px;
 }
 .function-menu .dropdown:hover .dropdown-menu-custom-rsv {
-    display: block;
+  display: block;
 }
 
 .function-menu .dropdown-menu-custom-rsv a {
-    display: block;
-    padding: 10px 15px;
-    text-decoration: none;
-    font-size: 13px;
-    border-bottom: 1px solid #e5e7eb;
-    color: black;
+  display: block;
+  padding: 10px 15px;
+  text-decoration: none;
+  font-size: 13px;
+  border-bottom: 1px solid #e5e7eb;
+  color: black;
 }
 
-    .function-menu .dropdown-menu-custom-rsv a:last-child {
-        border-bottom: none;
-    }
+.function-menu .dropdown-menu-custom-rsv a:last-child {
+  border-bottom: none;
+}
 
-    .function-menu .dropdown-menu-custom-rsv a:hover {
-        background-color: var(--secondary-color);
-    }
+.function-menu .dropdown-menu-custom-rsv a:hover {
+  background-color: var(--secondary-color);
+}
 
 .function-content {
   display: none;
@@ -462,35 +456,33 @@
     text-align: center;
   }
 
-    .filter-section {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    }
+  .filter-section {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
 
+  .top-bar {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
 
+  .function-menu a,
+  .function-menu .dropdown-toggle {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
 
-    .top-bar {
-        flex-direction: column;
-        gap: 8px;
-        text-align: center;
-    }
+  .function-menu a:not(:last-child)::after,
+  .function-menu .dropdown:not(:last-child)::after {
+    display: none;
+  }
 
-    .function-menu a,
-    .function-menu .dropdown-toggle {
-        padding: 6px 10px;
-        font-size: 12px;
-    }
-
-        .function-menu a:not(:last-child)::after,
-        .function-menu .dropdown:not(:last-child)::after {
-            display: none;
-        }
-
-    .function-menu .dropdown-menu-custom-rsv {
-        position: static;
-        box-shadow: none;
-        border: none;
-        padding-left: 15px;
-    }
+  .function-menu .dropdown-menu-custom-rsv {
+    position: static;
+    box-shadow: none;
+    border: none;
+    padding-left: 15px;
+  }
 }
 
 @media (max-width: 576px) {
@@ -506,21 +498,20 @@
     font-size: 16px;
   }
 
-    .header h3 {
-        font-size: 16px;
-    }
+  .header h3 {
+    font-size: 16px;
+  }
 
+  .top-bar,
+  .app-download h4 {
+    font-size: 12px;
+  }
 
-    .top-bar,
-    .app-download h4 {
-        font-size: 12px;
-    }
-
-    .function-menu a,
-    .function-menu .dropdown-toggle {
-        padding: 4px 8px;
-        font-size: 10px;
-    }
+  .function-menu a,
+  .function-menu .dropdown-toggle {
+    padding: 4px 8px;
+    font-size: 10px;
+  }
 }
 
 /*css new reservation*/
@@ -540,13 +531,12 @@ h1 {
   margin-bottom: 20px;
   font-weight: 600;
 }
-.new-reservation-wrapper {
-    padding: 15px; /* padding chung */
-    padding-top: 0; /* bỏ padding phía trên */
-    background: #ffffff;
-    border: 1px solid #e2e8f0; /* border duy nhất */
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+
+.section-new-reservation {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 .section-new-reservation {
     background: transparent !important;
@@ -557,9 +547,9 @@ h1 {
     margin: 5px !important; /* giữ margin nhỏ nếu muốn khoảng cách */
 }
 
-    .section-new-reservation:hover {
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-    }
+.section-new-reservation:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
 
     .section-new-reservation h3 {
         margin: 0 0 15px 0;
@@ -569,37 +559,9 @@ h1 {
         border-bottom: 1px solid #e2e8f0;
         padding-bottom: 8px;
     }
-.input-with-button {
-    align-items: start; /* tránh label bị kéo dãn theo input cao */
-    margin-bottom: 3px; /* khoảng cách giữa các field */
-}
 
-    .input-with-button .col-form-label {
-        font-weight: 500;
-        color: #4a5568;
-        padding-top: 8px; /* căn giữa theo chiều dọc với input */
-        font-size: 14px;
-        text-align: left;
-    }
-
-
-    /* Nút mũi tên nhỏ gọn */
-    .input-with-button .btn-outline-secondary {
-        height: 36px;
-        width: 36px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-color: #d1d5db;
-    }
-
-        .input-with-button .btn-outline-secondary:hover {
-            background-color: #f7fafc;
-            border-color: #2b6cb0;
-            color: #2b6cb0;
-        }
 .stay-details-grid-new-reservation {
-    align-items: center;
+  align-items: center;
 }
 
 .guest-count-row-new-reservation {
@@ -622,7 +584,7 @@ label {
 }
 
 button {
-    padding: 3px;
+  padding: 3px;
 }
 
 button:hover {
@@ -636,9 +598,9 @@ button:hover {
 }
 
 input[type="checkbox"] {
-    width: 16px;
-    height: 16px;
-    accent-color: #1f501f;
+  width: 16px;
+  height: 16px;
+  accent-color: #1f501f;
 }
 
 .specials-section-new-reservation {
@@ -658,38 +620,38 @@ textarea {
 }
 
 .submit-button-new-reservation {
-    grid-column: span 2;
-    padding: 6px 12px;
-    font-size: 16px;
-    background-color: #bcbcbc;
+  grid-column: span 2;
+  padding: 6px 12px;
+  font-size: 16px;
+  background-color: #bcbcbc;
 }
 
 .submit-button-clear-reservation {
-    grid-column: span 2;
-    padding: 6px 12px;
-    font-size: 16px;
-    background-color: white;
-    color: #1f501f;
-    border: 1px solid #1f501f;
+  grid-column: span 2;
+  padding: 6px 12px;
+  font-size: 16px;
+  background-color: white;
+  color: #1f501f;
+  border: 1px solid #1f501f;
 }
 
 .box-function {
-    grid-column: span 2;
-    padding: 6px 12px;
-    font-size: 16px;
-    border: 1px solid #ececec;
-    background-color: #ffffff;
+  grid-column: span 2;
+  padding: 6px 12px;
+  font-size: 16px;
+  border: 1px solid #ececec;
+  background-color: #ffffff;
 }
 
-    .box-function:hover {
-        color: #ffffff;
-        background-color: #2b6cb0;
-    }
+.box-function:hover {
+  color: #ffffff;
+  background-color: #2b6cb0;
+}
 
-    .box-function:active {
-        color: #ffffff;
-        background-color: #2b6cb0;
-    }
+.box-function:active {
+  color: #ffffff;
+  background-color: #2b6cb0;
+}
 
 .checkbox-row-new-reservation {
   display: grid;
@@ -713,8 +675,9 @@ textarea {
   .stay-details-grid-new-reservation {
   }
 
-    .form-grid-new-reservation, .stay-details-grid-new-reservation {
-    }
+  .form-grid-new-reservation,
+  .stay-details-grid-new-reservation {
+  }
 
   .checkbox-row-new-reservation {
     grid-template-columns: repeat(2, 1fr);
@@ -753,8 +716,8 @@ textarea {
 }
 
 .toolbar-menu {
-    margin: 0 1px;
-    top: 0;
+  margin: 0 1px;
+  top: 0;
 }
 
 .toolbar-menu a,
@@ -771,11 +734,11 @@ textarea {
   display: block;
 }
 
-        .toolbar-menu a:hover {
-            background: #ffffff;
-            color: #1f501f;
-            border: 1px solid #1f501f;
-        }
+.toolbar-menu a:hover {
+  background: #ffffff;
+  color: #1f501f;
+  border: 1px solid #1f501f;
+}
 
 .submenu {
   background: #ffffff;

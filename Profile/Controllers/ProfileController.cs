@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Security.Principal;
@@ -12,6 +13,7 @@ using System.Xml;
 using BaseBusiness.BO;
 using BaseBusiness.Model;
 using BaseBusiness.util;
+using DevExpress.Web.Internal;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
@@ -1921,6 +1923,34 @@ namespace Profile.Controllers
                 }
             }
             return Result;
+        }
+
+        #endregion
+
+        #region Tuan_ProfileGroupSreach
+        public async Task<IActionResult> ProfileGroupSreach(string GroupName)
+        {
+            try
+            {
+                Microsoft.Data.SqlClient.SqlParameter[] param = [
+                    new Microsoft.Data.SqlClient.SqlParameter("@GroupName", GroupName ?? string.Empty)];
+                DataTable myTable = DataTableHelper.getTableData("spProfileGroupSearchName", param);
+                var relust = (from d in myTable.AsEnumerable()
+                              select new
+                              {
+                                  Account = d["Account"]?.ToString() ?? ""
+                              }).ToList();
+                return Json(new
+                {
+                    data = relust
+                });
+
+            }
+            catch (System.Exception)
+            {
+
+                throw;
+            }
         }
 
         #endregion
