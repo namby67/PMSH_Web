@@ -237,13 +237,14 @@ body {
 .banner-col-left {
   flex: 1;
   display: flex;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
 }
 
 .banner-icon-left {
     height: 110px;
     width: auto;
+    margin-left: 17%;
     max-width: 100%;
     object-fit: contain;
     filter: drop-shadow(0px 0px 8px rgba(255, 255, 255, 2));
@@ -252,6 +253,7 @@ body {
 .banner-icon-right {
     height: 110px;
     width: auto;
+    margin-right:17%;
     max-width: 100%;
     object-fit: contain;
     filter: drop-shadow(0px 0px 8px rgba(255, 255, 255, 2));
@@ -268,7 +270,7 @@ body {
 .banner-col-right {
   flex: 1;
   display: flex;
-  justify-content: center;
+  justify-content: end;
   align-items: center;
 }
 /* end css banner*/
