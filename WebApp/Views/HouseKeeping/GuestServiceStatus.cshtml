@@ -513,7 +513,7 @@
     let selectedRowData = null;
     let selectedRowsData = [];
     function initializeGuestServiceStatusGrid(data) {
-        const columnWidth = 120;
+        const columnWidth = 125;
         $("#gridContainer").dxDataGrid({
             dataSource: data,
             allowColumnResizing: true,
@@ -564,9 +564,9 @@
                 },
                 { dataField: "fostatus", caption: "FO Status", width: columnWidth },
 
-                { dataField: "guestServiceStatus", caption: "Service Status", width: columnWidth },
+                { dataField: "guestServiceStatus", caption: "Service Status", width: columnWidth+ 70  },
                 { dataField: "floor", caption: "Floor", width: columnWidth, dataType: "number", format: "#,##0" },
-                { dataField: "reservationStatus", caption: "Reservation Status", width: columnWidth + 30 },
+                { dataField: "reservationStatus", caption: "Reservation Status", width: columnWidth + 70 },
                 { dataField: "updatedBy", caption: "Updated By", width: columnWidth },
                 { dataField: "updatedDate", caption: "Updated Date", width: columnWidth, dataType: "date", format: "dd/MM/yyyy" },
                 { dataField: "createdBy", caption: "Created By", width: columnWidth },

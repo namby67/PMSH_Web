@@ -540,12 +540,21 @@ h1 {
   margin-bottom: 20px;
   font-weight: 600;
 }
-
+.new-reservation-wrapper {
+    padding: 15px; /* padding chung */
+    padding-top: 0; /* bỏ padding phía trên */
+    background: #ffffff;
+    border: 1px solid #e2e8f0; /* border duy nhất */
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+}
 .section-new-reservation {
-  background: #ffffff;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    margin: 5px !important; /* giữ margin nhỏ nếu muốn khoảng cách */
 }
 
     .section-new-reservation:hover {
@@ -560,7 +569,35 @@ h1 {
         border-bottom: 1px solid #e2e8f0;
         padding-bottom: 8px;
     }
+.input-with-button {
+    align-items: start; /* tránh label bị kéo dãn theo input cao */
+    margin-bottom: 3px; /* khoảng cách giữa các field */
+}
 
+    .input-with-button .col-form-label {
+        font-weight: 500;
+        color: #4a5568;
+        padding-top: 8px; /* căn giữa theo chiều dọc với input */
+        font-size: 14px;
+        text-align: left;
+    }
+
+
+    /* Nút mũi tên nhỏ gọn */
+    .input-with-button .btn-outline-secondary {
+        height: 36px;
+        width: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-color: #d1d5db;
+    }
+
+        .input-with-button .btn-outline-secondary:hover {
+            background-color: #f7fafc;
+            border-color: #2b6cb0;
+            color: #2b6cb0;
+        }
 .stay-details-grid-new-reservation {
     align-items: center;
 }
@@ -613,7 +650,7 @@ input[type="checkbox"] {
 
 textarea {
   resize: vertical;
-  min-height: 80px;
+  min-height: 66px;
 }
 
 .fa-ellipsis {

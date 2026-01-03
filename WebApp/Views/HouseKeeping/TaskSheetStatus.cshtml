@@ -281,7 +281,7 @@
 
                 <div class="d-flex align-items-center me-3">
                     <label class="me-2 mb-0">Attendant ID:</label>
-                    <select id="attendant" name="attendant" class="tomselect-custom" multiple>
+                    <select id="attendant" name="attendant" class="tomselect-custom" >
                         @foreach (var item in listatt)
                         {
                             <option value="@item.ID">@item.Name</option>
@@ -296,7 +296,7 @@
                 </div>
                 <div class="d-flex align-items-center me-1">
                     <label class="me-2 mb-0">Zone:</label>
-                    <select id="zone" name="zone" class="tomselect-custom" style="width: 70px;" multiple>
+                    <select id="zone" name="zone" class="tomselect-custom" >
                         @foreach (var item in zoneList)
                         {
                             <option value="@item.Code">@item.Code</option>
@@ -304,12 +304,12 @@
                     </select>
 
                 </div>
-                <div class="d-flex align-items-center me-3">
+                <div class="d-flex align-items-center me-1">
                     <label class="me-2 mb-0">From Date:</label>
                     <input type="date" id="fromDate" name="fromDate" class="form-control form-control-sm w-auto" />
                 </div>
 
-                <div class="d-flex align-items-center me-3">
+                <div class="d-flex align-items-center me-1">
                     <label class="me-2 mb-0">To Date:</label>
                     <input type="date" id="toDate" name="toDate" class="form-control form-control-sm w-auto" />
                 </div>
@@ -490,14 +490,14 @@
             columnAutoWidth: true,
             columns: [
                 { dataField: "colIndex", caption: "No", width: columnWidth - 20, dataType: "number", format: "#,##0" },
-                { dataField: "roomNo", caption: "RoomNo", width: columnWidth },
+                { dataField: "roomNo", caption: "RoomNo", width: columnWidth},
                 { dataField: "roomType", caption: "RoomType", width: columnWidth },
                 { dataField: "hkstatusID", caption: "Room Status", width: columnWidth },
                 { dataField: "fostatus", caption: "FOStatus", width: columnWidth },
                 { dataField: "attendant", caption: "Attendant", width: columnWidth },
                 { dataField: "taskDate", caption: "Task Date", width: columnWidth, dataType: "date", format: "dd/MM/yyyy" },
-                { dataField: "timeIn", caption: "TimeIn", width: columnWidth },
-                { dataField: "timeOut", caption: "Time Out", width: columnWidth },
+                { dataField: "timeIn", caption: "TimeIn", width: columnWidth  },
+                { dataField: "timeOut", caption: "Time Out", width: columnWidth  },
                 { dataField: "complete", caption: "Status", width: columnWidth }
             ],
 
@@ -537,7 +537,7 @@
     }
 
     function initializeTaskSheetStatusGrid(data) {
-        const columnWidth = 120;
+        const columnWidth = 160;
 
         $("#gridContainer").dxDataGrid({
             dataSource: data,
