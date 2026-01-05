@@ -2420,7 +2420,7 @@ namespace Billing.Controllers
             }
         }
         [HttpGet]
-        public async Task<IActionResult> CalculatePricePlusPlus(string transactionCode, decimal netPrice)
+        public IActionResult CalculatePricePlusPlus(string transactionCode, decimal netPrice)
         {
             try
             {
@@ -2433,7 +2433,7 @@ namespace Billing.Controllers
             }
         }
         [HttpGet]
-        public async Task<IActionResult> CalculatePriceNet(string transactionCode, decimal grossPrice)
+        public IActionResult CalculatePriceNet(string transactionCode, decimal grossPrice)
         {
             try
             {
@@ -2445,7 +2445,66 @@ namespace Billing.Controllers
                 return Json(ex.Message);
             }
         }
-       
+        [HttpPost]
+        public IActionResult PostingSave([FromBody] List<FolioDetailModel> models)
+        {
+            try
+            {
+                if (models == null || models.Count == 0)
+                {
+                    return BadRequest("No data received.");
+                }
+
+                int nextInvoiceNo = FolioDetailBO.GetTopInvoiceNo() + 1;
+                string batchInvoiceNo = nextInvoiceNo.ToString();
+
+                int nextTransNo = FolioDetailBO.GetTopTransactioNo(); 
+                                                                     
+                string baseTransactionNo = nextTransNo.ToString();
+
+                int count = 0;
+                foreach (var item in models)
+                {
+                    var transList = TransactionsBO.Instance.FindByAttribute("Code", item.TransactionCode);
+
+                    if (transList != null && transList.Count > 0)
+                    {
+                        var transInfo = (TransactionsModel)transList[0];
+
+                        if (transInfo != null)
+                        {
+                            item.TransactionGroupID = transInfo.TransactionGroupID;
+                            item.GroupCode = transInfo.GroupCode;
+
+                            item.TransactionSubgroupID = transInfo.TransactionSubGroupID;
+                            item.SubgroupCode = transInfo.SubgroupCode;
+
+                        }
+                    }
+
+                    item.CreateDate = DateTime.Now;
+                    item.UpdateDate = DateTime.Now;
+                    item.TransactionDate = DateTime.Now.Date;
+
+                    item.InvoiceNo = batchInvoiceNo;
+
+                    item.TransactionNo = (nextTransNo + count).ToString();
+                    count++;
+
+                    item.Status = true;
+                    item.RowState = 1;
+                    item.IsPostedAR = false;
+
+                    FolioDetailBO.Instance.Insert(item);
+                }
+
+                return Ok(new { success = true, message = "Posting successful!", invoiceNo = batchInvoiceNo });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { success = false, message = ex.Message });
+            }
+        }
         #endregion
     }
 }
