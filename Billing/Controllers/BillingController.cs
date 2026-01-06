@@ -2333,6 +2333,30 @@ namespace Billing.Controllers
             }
         }
         [HttpGet]
+        public IActionResult GetFolioNoByReservationID(int reservationID)
+        {
+            try
+            {
+                string sql = $"select ID,FolioNo, Status from Folio where ReservationID = {reservationID} Order By FolioNo";
+
+                DataTable dt = TextUtils.Select(sql);
+
+                var result = (from r in dt.AsEnumerable()
+                              select new
+                              {
+                                  ID = r["ID"],
+                                  FolioNo = r["FolioNo"],
+                                  Status = r["Status"] != DBNull.Value ? Convert.ToBoolean(r["Status"]) : false
+                              }).ToList();
+
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { error = ex.Message });
+            }
+        }
+        [HttpGet]
         public IActionResult GetTransactionSubGroups(int groupId)
         {
             try

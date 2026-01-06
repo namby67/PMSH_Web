@@ -10,47 +10,7 @@
 }
 
 /* ==========================================================================
-   1. MODAL STYLES
-   ========================================================================== */
-.modal-backdrop.show {
-    opacity: 0.85 !important;
-    background-color: #d5e0d1 !important;
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-}
-
-.modal-dialog {
-    margin-top: 15px !important;
-    margin-bottom: 0px !important;
-}
-
-.modal-header {
-    padding: 4px 10px !important;
-    min-height: unset !important;
-    border-bottom: 1px solid var(--primary-light);
-    background-color: var(--primary-dark);
-    color: white;
-}
-
-.modal-title {
-    font-size: 1rem !important;
-    line-height: 1.2;
-    margin: 0;
-}
-
-.modal-body {
-    padding-top: 5px !important;
-    padding-bottom: 5px !important;
-}
-
-.modal-header .btn-close {
-    padding: 0.5rem;
-    margin: -0.5rem -0.5rem -0.5rem auto;
-    filter: invert(1);
-}
-
-/* ==========================================================================
-   2. FORM ELEMENTS (COMPACT)
+  . FORM ELEMENTS (COMPACT)
    ========================================================================== */
 
 .form-label {
@@ -78,7 +38,7 @@
 }
 
 /* ==========================================================================
-   3. EXPRESS SERVICE UI
+    EXPRESS SERVICE UI
    ========================================================================== */
 
 .express-box {
@@ -172,7 +132,7 @@
     }
 
 /* ==========================================================================
-   4. FOOTER AREA (ĐÃ SỬA CHO FULL WIDTH)
+    FOOTER AREA 
    ========================================================================== */
 /* Khung bao ngoài cùng của footer */
 .form-footer-fixed {
@@ -238,7 +198,7 @@
 
 
 /* ==========================================================================
-   5. GENERAL LAYOUT & COLORS (GIỮ NGUYÊN)
+  . GENERAL LAYOUT & COLORS
    ========================================================================== */
 
 /* --- TOOLBAR --- */

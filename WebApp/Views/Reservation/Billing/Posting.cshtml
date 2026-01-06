@@ -1,6 +1,6 @@
 ﻿<link href="~/css/pages/posting.css" rel="stylesheet" />
 
-<div class="modal fade" id="modalPosting" tabindex="-1">
+<div class="modal fade" id="modalPosting" data-bs-backdrop="static" tabindex="-1">
     <div class="modal-dialog modal-xl modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
@@ -100,7 +100,11 @@
                                                             <select name="currencyID" class="form-select form-select-sm currency-select"><option value="">-- Loading... --</option></select>
                                                         </div>
                                                         <div class="col-12 col-sm-3 text-sm-end pe-2"><label class="form-label fw-bold">Win.No</label></div>
-                                                        <div class="col-12 col-sm-4"><input type="text" class="form-control form-control-sm text-end text-muted bg-white" value="1" readonly /></div>
+                                                        <div class="col-12 col-sm-4">
+                                                            <select class="form-select form-select-sm js-window-select">
+                                                                <option value="">Loading...</option>
+                                                            </select>
+                                                        </div>
                                                     </div>
 
                                                     <div class="row g-1 mb-1 align-items-center">
@@ -227,7 +231,11 @@
                                                             <select name="currencyID" class="form-select form-select-sm currency-select"><option value="">-- Loading... --</option></select>
                                                         </div>
                                                         <div class="col-12 col-sm-3 text-sm-end pe-2"><label class="form-label fw-bold">Win.No</label></div>
-                                                        <div class="col-12 col-sm-4"><input type="text" class="form-control form-control-sm text-end text-muted bg-white" value="1" readonly /></div>
+                                                        <div class="col-12 col-sm-4">
+                                                            <select class="form-select form-select-sm js-window-select">
+                                                                <option value="">Loading...</option>
+                                                            </select>
+                                                        </div>
                                                     </div>
 
                                                     <div class="row g-1 mb-1 align-items-center">
@@ -327,7 +335,12 @@
         </div>
     </div>
 </div>
-
+<div id="loadingOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
+    <div style="text-align:center; color:white;">
+        <i class="fas fa-circle-notch fa-spin fa-3x"></i>
+        <div style="margin-top:10px; font-weight:600; font-size: 1rem;">Processing...</div>
+    </div>
+</div>
 <script>
     // --- UTILS ---
     function formatNumberWithComma(num) {
@@ -720,6 +733,33 @@
         });
     }
 
+    function loadFolioWindows() {
+        var $selects = $('.js-window-select');
+        if (typeof idReservation === 'undefined' || !idReservation) return;
+
+        $.ajax({
+            url: '/Billing/GetFolioNoByReservationID',
+            type: 'GET',
+            data: { reservationID: idReservation },
+            success: function (data) {
+                if (data.error) { console.error(data.error); return; }
+
+                let html = '';
+                data.forEach(item => {
+                    let isLocked = item.status === true ? 'true' : 'false';
+                    let lockText = item.status === true ? ' (Locked)' : '';
+
+                    html += `<option value="${item.id}" data-locked="${isLocked}">${item.folioNo}${lockText}</option>`;
+                });
+                $selects.html(html);
+
+                if (typeof folioNoID !== 'undefined' && folioNoID) {
+                    $selects.val(folioNoID);
+                }
+            }
+        });
+    }
+
     function loadGroups() {
         $('#list-group-container').html('<div class="p-2">Loading...</div>');
         $.ajax({
@@ -859,6 +899,7 @@
     $('#modalPosting').on('shown.bs.modal', function () {
         loadGroups();
         loadCurrencies();
+        loadFolioWindows();
     });
 
 
@@ -915,7 +956,6 @@
         var remarkInvoice = $activePane.find('.js-invoice-desc').val();
         var checkNo = $activePane.find('.js-invoice-checkNo').val();
 
-
         var itemObj = {
             id: Date.now(),
             code: transCode,
@@ -967,7 +1007,7 @@
         $('#invoice-pane .footer-bottom-bar span.text-primary').text(formatNumberWithComma(grandTotal));
     }
 
-    // ---  HÀM XÓA 1 DÒNG KHỎI LIST ---
+    // ---  HÀM XÓA 1 DÒNG KHỎI LIST INVOICE ---
     function removeInvoiceItem(index) {
         invoiceList.splice(index, 1);
         renderInvoiceFooter(); 
@@ -998,14 +1038,30 @@
         const loginUser = parseInt(localStorage.getItem("userID")) || 0;
         const loginName = (localStorage.getItem("Loginname") || "").trim().replace(/^"(.*)"$/, '$1');
         const shiftID = parseInt(localStorage.getItem("shiftID")) || 0;
-        // const cashierNo = localStorage.getItem("crashierLogin");
 
         const currentFolioID = parseInt(localStorage.getItem("CurrentFolioID")) || 0;
         const currentRoomID = parseInt(localStorage.getItem("CurrentRoomID")) || 0;
 
         //  Xác định Tab đang active
-        var activeTabId = $('.tab-pane.active').attr('id');
+        var $activePane = $('.tab-pane.active');
+        var activeTabId = $activePane.attr('id');
         var dataToSend = []; 
+
+        var $selectBox = $activePane.find('.js-window-select');
+        var selectedFolioID = parseInt($selectBox.val());
+
+        if (!selectedFolioID) {
+            showToast('Error', "Please select a Window No (Folio)!", false);
+            return;
+        }
+
+        var $selectedOption = $selectBox.find('option:selected');
+        var isLocked = $selectedOption.attr('data-locked');
+
+        if (isLocked === 'true') {
+            showToast('Error', "This Folio is Locked. Cannot Post Transaction!", false);
+            return; 
+        }
 
         if (activeTabId === 'detail-pane') {
             var $pane = $('#detail-pane');
@@ -1026,8 +1082,8 @@
                 UserName: loginName,
                 ShiftID: shiftID,
                 CashierNo: loginName,
-                FolioID: folioNoID,
-                OriginFolioID: folioNoID,
+                FolioID: selectedFolioID,
+                OriginFolioID: selectedFolioID,
                 ReservationID: idReservation,
                 OriginReservationID: idReservation,
                 RoomType: roomType,
@@ -1075,15 +1131,15 @@
             var invDesc = $pane.find('.js-invoice-desc').val();
             var invRef = $pane.find('.js-invoice-ref').val(); 
             var invSuppl = $pane.find('.js-invoice-supp').val();
-
+           
             invoiceList.forEach(function(item) {
                 var model = {
                     UserID: loginUser,
                     UserName: loginName,
                     ShiftID: shiftID,
                     CashierNo: loginName,
-                    FolioID: folioNoID,
-                    OriginFolioID: folioNoID,
+                    FolioID: selectedFolioID,
+                    OriginFolioID: selectedFolioID,
                     ReservationID: idReservation,
                     OriginReservationID: idReservation,
                     RoomType: roomType,
@@ -1099,8 +1155,8 @@
                     Price: item.price,
                     Amount: item.amount,
                     AmountMaster: item.amount,
-                    AmountBeforeTax: item.amountBeforeTax,
-                    AmountMasterBeforeTax: item.amountBeforeTax,
+                    AmountBeforeTax: parseNumberWithComma(item.amountBeforeTax),
+                    AmountMasterBeforeTax:parseNumberWithComma( item.amountBeforeTax),
                     AmountMasterGross: amount,
                     AmountGross: item.amount,
 
@@ -1124,13 +1180,12 @@
             });
         }
 
-        submitToDB(dataToSend);
+        submitToDB(dataToSend,selectedFolioID);
     }
 
     // Hàm gửi Ajax
-    function submitToDB(dataList) {
-        // Hiển thị loading
-        // $('#loading').show();
+    function submitToDB(dataList,targetFolioID) {
+        $('#loadingOverlay').css("display", "flex").hide().fadeIn(200);
 
         $.ajax({
             url: '/Billing/PostingSave',
@@ -1138,8 +1193,9 @@
             contentType: 'application/json',
             data: JSON.stringify(dataList),
             success: function (res) {
+                $('#loadingOverlay').fadeOut(200);
                 if (res.success) {
-                    alert("Posted Successfully! Invoice No: " + res.invoiceNo);
+                    showToast("Success","Posted Successfully! Invoice No: " + res.invoiceNo,true);
 
                     if(typeof invoiceList !== 'undefined') {
                         invoiceList = [];
@@ -1147,15 +1203,24 @@
                     }
 
                     resetForm(); 
-                    searchFolioDetail(0);
                     $('#modalPosting').modal('hide');
+                    if (typeof listFolioNoID !== 'undefined' && typeof filterByFolioNo === 'function') {
+                        // Tìm index của folioID vừa post trong danh sách folio của trang billing
+                        var index = listFolioNoID.indexOf(targetFolioID);
+                        if (index !== -1) {
+                            filterByFolioNo(targetFolioID, index);
+                        } else {
+                            searchFolioDetail(0);
+                        }
+                    }
                 } else {
-                    alert("Error: " + res.message);
+                    showToast('Error', res.message || "Posting Failed", false);
                 }
             },
             error: function (err) {
+                $('#loadingOverlay').fadeOut(200);
                 console.error(err);
-                alert("System error when posting data.");
+                showToast('Error', "System Error: " + error, false);
             }
         });
     }

@@ -123,7 +123,6 @@
         <div class="modal-content billing-module">
             <div class="modal-header">
                 <h5 class="modal-title">Deletion Reason</h5>
-                <button type="button" class="btn-close" onclick="closeModalConfirmTransaction()"></button>
             </div>
             <div class="modal-body">
                 <div class="mb-3">
@@ -135,8 +134,8 @@
                     <textarea class="form-control form-control-sm" id="descriptionDeletionReason" rows="3"></textarea>
                 </div>
                 <div class="d-flex justify-content-end gap-2">
-                    <button class="mui-button-option border" onclick="closeModalConfirmTransaction();">Close</button>
-                    <button class="mui-button-option mui-button-close border" onclick="confirmDelete();">Confirm Delete</button>
+                    <button class="mui-button mui-button-option border" onclick="closeModalConfirmTransaction();"><i class="fa-solid fa-xmark"></i> Close</button>
+                    <button class="mui-button mui-button-delete border" onclick="confirmDelete();"><i class="fa-solid fa-trash-can"></i>Confirm Delete</button>
                 </div>
             </div>
         </div>
@@ -211,7 +210,9 @@
     var listFolioNoID = [];
     function getFolioNo() {
         if(typeof lastname !== 'undefined' && typeof idReservation !== 'undefined'){
-             $('#infoBillingName').text('[1]  ' +  lastname + '(' + idReservation + ')');
+             if(folioNoID === 0) {
+                 $('#infoBillingName').text('[1]  ' +  lastname + '(' + idReservation + ')');
+             }
         }
 
         $.ajax({
@@ -230,24 +231,38 @@
                 var html = '';
                 var htmlWindow = '';
 
+                var isCurrentFolioFound = false;
+                var foundIndex = 0;
+                var needInitialLoad = false; 
+
                 if(result.length > 0){
                     for(var i = 0; i < result.length; i++){
                         listFolioNoID.push(result[i].id);
 
-                        // Tạo danh sách chuyển cửa sổ (Transfer Window)
                         htmlWindow += `<a class="dropdown-item" href="#" onclick="transferToWindow(${result[i].id});">Window ${i+1}</a>`;
 
-                        // Xử lý trạng thái Active
-                        var activeClass = (i === 0) ? 'active' : ''; // Mặc định cái đầu tiên active khi load lại
+                        var activeClass = '';
 
-                        // Xử lý Icon
+                        if (folioNoID !== 0 && folioNoID === result[i].id) {
+                            activeClass = 'active';
+                            isCurrentFolioFound = true;
+                            foundIndex = i;
+                        }
+                        else if (folioNoID === 0 && i === 0) {
+                            activeClass = 'active';
+                            isCurrentFolioFound = true;
+                            folioNoID = result[i].id;
+                            foundIndex = 0;
+                            needInitialLoad = true;  
+                        }
+
                         var lockIcon = result[i].status ? '<i class="fas fa-lock lock-icon"></i>' : '';
                         var deleteClass = result[i].status ? 'disabled' : '';
-                        var deleteAction = result[i].status ? '' : `onclick="deleteFolioNo(${result[i].id}); event.stopPropagation();"`; // stopPropagation để không kích hoạt click cha
+                        var deleteAction = result[i].status ? '' : `onclick="deleteFolioNo(${result[i].id}); event.stopPropagation();"`;
 
                         html += `
                         <li class="folio-row">
-                            <div class="folio-item ${activeClass}" onclick="filterByFolioNo(${result[i].id}, ${i})">
+                            <div class="folio-item ${activeClass}" onclick="filterByFolioNo(${result[i].id}, ${i}, this)">
                                 ${result[i].folioNo}
                             </div>
                             ${lockIcon}
@@ -257,15 +272,30 @@
                             </i>
                         </li>`;
                     }
-
-                    // Mặc định chọn folio đầu tiên
-                    folioNoID = listFolioNoID[0];
-                    // Cập nhật text hiển thị folio 1
-                    filterByFolioNo(folioNoID, 0);
                 }
 
                 $('#listFolioNo').append(html);
                 $('#listTransferToWindow').append(htmlWindow);
+
+                if (result.length > 0) {
+                    if (!isCurrentFolioFound) {
+                        folioNoID = listFolioNoID[0];
+                        setTimeout(function(){
+                            $('#listFolioNo .folio-item').first().addClass('active');
+                            filterByFolioNo(folioNoID, 0);
+                        }, 50);
+                    }
+                    else if (needInitialLoad) {
+                        filterByFolioNo(folioNoID, 0);
+                    }
+                    else {
+                        if(typeof lastname !== 'undefined'){
+                            $('#infoBillingName').text('[' + (foundIndex + 1) + ']  ' +  lastname + '(' + idReservation + ')');
+                        }
+
+                        searchFolioDetail(0);
+                    }
+                }
             },
             error: function (xhr, statusText, err) {
                 if (xhr.status == 401) sessionTimeout();
@@ -273,12 +303,17 @@
         });
     }
 
-    function filterByFolioNo(folioNo, index){
-        // Cập nhật UI Active
+    function filterByFolioNo(folioNo, index, element){
         $('.folio-item').removeClass('active');
-        $(`#listFolioNo .folio-row:eq(${index}) .folio-item`).addClass('active');
 
-        // Cập nhật Header Text
+        if (element) {
+            // Người dùng Click trực tiếp -> Dùng 'this'
+            $(element).addClass('active');
+        } else {
+            // Gọi tự động bằng code -> Dùng Index
+            $('#listFolioNo .folio-row').eq(index).find('.folio-item').addClass('active');
+        }
+
         if(typeof lastname !== 'undefined' && typeof idReservation !== 'undefined'){
             $('#infoBillingName').text('[' + (index + 1) + ']  ' +  lastname + '(' + idReservation + ')');
         }
@@ -532,16 +567,6 @@
                 }
             }
         });
-    }
-    function filterByFolioNo(folioNo,i){
-                        $('#infoBillingName').text('[' + (i + 1) + ']  ' +  lastname + '(' + idReservation + ')');
-
-        folioNoID = folioNo;
-        $('.folio-item').removeClass('active');
-        // Add 'active' class to the clicked folio item
-        $(`.folio-item[onclick="filterByFolioNo(${folioNo},${i})"]`).addClass('active');
-        folioPosting = i + 1;
-        searchFolioDetail(0);
     }
     function deleteFolioNo(folioID){
         var formData = new FormData();
