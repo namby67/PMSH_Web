@@ -2482,6 +2482,16 @@ namespace Billing.Controllers
                         }
                     }
 
+                    var roomTypeList = RoomTypeBO.Instance.FindByAttribute("Code", item.RoomType);
+
+                    if (roomTypeList != null && roomTypeList.Count > 0)
+                    {
+                        var roomTypeInfo = (RoomTypeModel)roomTypeList[0];
+                        if (roomTypeInfo != null)
+                        {
+                            item.RoomTypeID = roomTypeInfo.ID;
+                        }
+                    }
                     item.CreateDate = DateTime.Now;
                     item.UpdateDate = DateTime.Now;
                     item.TransactionDate = DateTime.Now.Date;
@@ -2491,9 +2501,13 @@ namespace Billing.Controllers
                     item.TransactionNo = (nextTransNo + count).ToString();
                     count++;
 
-                    item.Status = true;
+                    item.Status = false;
+                    item.ProfitCenterID = 2;
+                    item.ProfitCenterCode = "";
                     item.RowState = 1;
                     item.IsPostedAR = false;
+                    item.ARTransID = 0;
+                    item.IsTransfer = false;
 
                     FolioDetailBO.Instance.Insert(item);
                 }

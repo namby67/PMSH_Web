@@ -432,6 +432,43 @@
             });
         });
 
+        // Chỉ cho phép nhập số dương và dấu chấm/phẩy (cho Price, Percent, Quantity)
+        $(document).on('keypress', '.js-input-qty, .js-input-price, .js-input-price-net, .js-input-express-pct, .js-input-discount-pct', function(e) {
+            // Mã ký tự (char code)
+            var charCode = (e.which) ? e.which : e.keyCode;
+
+            if ((charCode >= 48 && charCode <= 57) || charCode === 46 || charCode === 44) {
+                return true;
+            }
+
+            return false;
+        });
+
+        // Xử lý sự kiện Paste (Dán) 
+        $(document).on('paste', '.js-input-qty, .js-input-price, .js-input-price-net, .js-input-express-pct, .js-input-discount-pct', function(e) {
+            e.preventDefault();
+
+            var pastedData = (e.originalEvent || e).clipboardData.getData('text/plain');
+
+            var cleanData = pastedData.replace(/[^0-9.,]/g, '');
+
+            document.execCommand("insertText", false, cleanData);
+        });
+
+        //  Kiểm tra input để đảm bảo không âm khi blur
+        $(document).on('blur', '.js-input-qty, .js-input-price, .js-input-price-net', function() {
+            var valStr = $(this).val();
+            // Chuyển dấu phẩy thành chấm để parse
+            var cleanStr = valStr.replace(/\./g, '').replace(/,/g, '.');
+            var valNum = parseFloat(cleanStr);
+
+            if (valNum < 0) {
+                alert("Negative numbers are not allowed!");
+                $(this).val(0); 
+                if($(this).hasClass('js-input-qty')) $(this).val(1);
+            }
+        });
+
         //  INPUT PRICE ++
         $(document).on('blur keypress', '.js-input-price', function(e) {
             if (e.type === 'keypress' && e.which !== 13) return;
@@ -876,6 +913,8 @@
 
         var reference = $activePane.find('.js-ref-main').val();
         var remarkInvoice = $activePane.find('.js-invoice-desc').val();
+        var checkNo = $activePane.find('.js-invoice-checkNo').val();
+
 
         var itemObj = {
             id: Date.now(),
@@ -889,7 +928,8 @@
             servicePct: pctVal,
             amount: finalTotal,
             reference: reference,
-            remark: remarkInvoice
+            remark: remarkInvoice,
+            checkNo: checkNo
         };
 
         invoiceList.push(itemObj);
@@ -953,7 +993,7 @@
         }
     });
 
-        // ---  HÀM POSTING SERVICE (NÚT SAVE CHÍNH) ---
+        // ---  HÀM POSTING SERVICE  ---
     function PostingService() {
         const loginUser = parseInt(localStorage.getItem("userID")) || 0;
         const loginName = (localStorage.getItem("Loginname") || "").trim().replace(/^"(.*)"$/, '$1');
@@ -979,6 +1019,7 @@
 
             var reference = $pane.find('.js-ref-main').val();
             var supplement = $pane.find('.js-sup-folio').val() || "";
+            var receiptNo = $pane.find('.js-invoice-checkNo').val() || "";
 
             var model = {
                 UserID: loginUser,
@@ -986,8 +1027,13 @@
                 ShiftID: shiftID,
                 CashierNo: loginName,
                 FolioID: folioNoID,
+                OriginFolioID: folioNoID,
                 ReservationID: idReservation,
+                OriginReservationID: idReservation,
                 RoomType: roomType,
+                ReceiptNo: receiptNo,
+                CheckNo: receiptNo,
+                RoomID: roomID,
 
                 TransactionCode: tCode,
                 Description: $pane.find('.js-trans-desc').val(),
@@ -1007,7 +1053,8 @@
                 Reference: reference,
                 Supplement: supplement,
 
-                PostType: 1,
+                PostType: 2,
+                RowState: 2,
                 GroupType: 1,
                 UserInsertID: loginUser,
                 UserUpdateID: loginUser
@@ -1036,8 +1083,13 @@
                     ShiftID: shiftID,
                     CashierNo: loginName,
                     FolioID: folioNoID,
+                    OriginFolioID: folioNoID,
                     ReservationID: idReservation,
+                    OriginReservationID: idReservation,
                     RoomType: roomType,
+                    ReceiptNo: item.checkNo,
+                    CheckNo: item.checkNo,
+                    RoomID: roomID,
 
                     TransactionCode: item.code,
                     Description: item.description, 
@@ -1061,11 +1113,12 @@
                     Supplement: supplement, 
                     CheckNo: invCheckNo,
 
-                    PostType: 1,
+                    PostType: 3,
+                    RowState: 3,
                     GroupType: 1,
                     UserInsertID: loginUser,
                     UserUpdateID: loginUser
-                };
+                };  
 
                 dataToSend.push(model);
             });

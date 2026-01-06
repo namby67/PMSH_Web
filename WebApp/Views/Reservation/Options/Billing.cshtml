@@ -35,7 +35,7 @@
                     </div>
 
                     <div class="function-menu ms-auto">
-                        <a href="#" class="mui-button mui-button-option" id="toggleFunctionMenu"><i class="fa-solid fa-sliders"></i> Options</a>
+                        <a href="#" class="mui-button mui-button-option" id="toggleFunctionMenu"><i class="fa-solid fa-sliders"></i> Show Func.</a>
                         <a href="#" class="mui-button mui-button-close" data-bs-dismiss="modal" id="btn-close"><i class="fa-solid fa-xmark"></i> Close</a>
                     </div>
                 </div>
@@ -88,8 +88,13 @@
                                     <a class="dropdown-item" href="#" onclick="UnLockFolio();">All Folio</a>
                                 </div>
                             </div>
-
-                            <a href="#" onclick="PostingHistory(1);">Posting History</a>
+                            <div class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">Posting History</a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="#" onclick="PostingHistory(1);">By Folio</a>
+                                    <a class="dropdown-item" href="#" onclick="PostingHistory(2);">By Invoice</a>
+                                </div>
+                            </div>
                             <a href="#" onclick="openModalSplitTransaction();">Split Transaction</a>
                             <a href="#" onclick="adjustTransaction();">Adjust Transaction</a>
                             <a href="#" id="deleteTransactionBilling" style="color:var(--danger-color);">Delete Transactions</a>
@@ -340,7 +345,7 @@
                 {
                     dataField: "description",
                     caption: "Description",
-                    width: "27%",
+                    width: "26%",
                     cellTemplate: function(container, options) {
                         $("<div>")
                             .addClass("text-truncate")
@@ -359,7 +364,7 @@
                 {
                     dataField: "amount",
                     caption: "Amount",
-                    width: "9%",
+                    width: "8%",
                     dataType: "number",
                     cssClass: "text-danger fw-bold",
                     format: { type: "fixedPoint", precision: 0 },
@@ -380,7 +385,7 @@
                 {
                     dataField: "subgroupCode",
                     caption: "Sub",
-                    width: "4%",
+                    width: "6%",
                     hidingPriority: 1
                 },
                 {
