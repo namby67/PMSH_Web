@@ -16,7 +16,7 @@
                         <label for="passwordInput" class="form-label">Password</label>
                         <input type="password" class="form-control" id="passwordInput"  >
                     </div>
-                    <button type="submit" class="btn btn-primary w-100" onclick="crashierLogin();">Login</button>
+                    <button type="submit" class="btn-login" onclick="crashierLogin();">Login</button>
                 </div>
             </div>
         </div>
@@ -60,8 +60,16 @@
 
             }
         });
-
     }
+
+    $(document).ready(function () {
+
+        $('#crashierNoInput, #passwordInput').on('keypress', function (e) {
+            if (e.which === 13) { // phím Enter
+                crashierLogin();
+            }
+        });
+    });
     function getCrashierInShift(){
         var formData = new FormData();
         const userID = JSON.parse(localStorage.getItem("userID"));

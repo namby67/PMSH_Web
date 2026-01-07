@@ -108,7 +108,7 @@
     <div class="container-fluid">
         <div class="banner">
             <div class="banner-col-left">
-                <img src="/images/logo.png" class="banner-icon-left" alt="Logo oneS">
+                <img src="/images/logo-company.png" class="banner-icon-left" alt="Logo company">
             </div>
 
             <div class="banner-col-center">
@@ -118,7 +118,7 @@
             </div>
 
             <div class="banner-col-right">
-                <img src="/images/athena.png" class="banner-icon-right" alt="Logo zalo">
+                <img src="/images/logo-parner.png" class="banner-icon-right" alt="Logo parner">
             </div>
         </div>
 
@@ -190,7 +190,8 @@
                                 asp-action="SearchReservation">RESERVATION</a>
                             <div class="dropdown-menu-custom">
                                 <a asp-area="" asp-controller="HouseKeeping" asp-action="RoomAvailability">Room Availability</a>
-                                <a asp-area="" asp-controller="Reservation" asp-action="NewReservation">New reservation</a>
+                   @*              <a asp-area="" asp-controller="Reservation" asp-action="NewReservation">New reservation</a> *@
+                                 <a href="javascript:void(0);" class="open-new-reservation-modal">New reservation</a>
                                 <a asp-area="" asp-controller="Reservation" asp-action="SearchReservation">Search reservation</a>
                                 <a asp-area="" asp-controller="Home" asp-action="">Room assigment</a>
                                 <a asp-area="" asp-controller="Home" asp-action="">Allotment</a>
@@ -970,6 +971,8 @@
                         let percentageInputs = "";
                           let roomSelect = "";
                         let numRoomsRateCodeInput = "";
+                                let logGrid;
+                                let isAllSelected = false;
                         modal.find('.modal-body').html(data);
                         isFormLoaded = true; // Đánh dấu đã load xong
                     },
