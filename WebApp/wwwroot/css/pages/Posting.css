@@ -1,5 +1,5 @@
 ﻿:root {
-    --primary-dark: #009444;
+    --primary-dark: #1f501f;
     --primary-medium: #356b35;
     --primary-light: #a3c4a3;
     --bg-body: #f4f8f4;
@@ -9,10 +9,202 @@
     --text-light: #ffffff;
 }
 
+/* ==========================================================================
+  . FORM ELEMENTS (COMPACT)
+   ========================================================================== */
+
+.form-label {
+    font-size: 0.7rem !important;
+    margin-bottom: 0px !important;
+    white-space: nowrap;
+    line-height: 1.8;
+}
+
+.form-control-sm, .form-select-sm, .input-group-text {
+    font-size: 0.75rem !important;
+    padding: 1px 4px !important;
+    min-height: 24px !important;
+    height: 24px !important;
+}
+
+.form-check-input {
+    width: 0.8em;
+    height: 0.8em;
+    margin-top: 0.2em;
+}
+
+.row.g-1 {
+    --bs-gutter-y: 0.15rem !important;
+}
+
+/* ==========================================================================
+    EXPRESS SERVICE UI
+   ========================================================================== */
+
+.express-box {
+    border: 1px solid var(--primary-light);
+    background: var(--bg-white-green);
+    padding: 2px 8px !important;
+    margin-bottom: 5px !important;
+    display: flex;
+    align-items: center;
+    gap: 15px; 
+    border-radius: 4px;
+    height: 32px; 
+}
+
+.express-check-group {
+    display: flex;
+    align-items: center; 
+    gap: 6px;
+    height: 100%;
+}
+
+    .express-check-group .form-check-input {
+        margin-top: 0 !important; 
+        width: 1em;
+        height: 1em;
+        cursor: pointer;
+    }
+
+.lbl-express {
+    color: #d32f2f;
+    font-weight: bold;
+    font-size: 0.75rem;
+    cursor: pointer;
+    margin-bottom: 0 !important;
+    line-height: 1; 
+    padding-top: 1px; 
+}
+
+.lbl-discount {
+    color: #d32f2f;
+    font-weight: bold;
+    font-size: 0.75rem;
+    cursor: pointer;
+    margin-bottom: 0 !important;
+    line-height: 1;
+    padding-top: 1px;
+}
+
+.express-input-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 100%;
+    flex-grow: 1;
+}
+
+    .express-input-group .input-group {
+        align-items: center;
+    }
+
+    .express-input-group .input-group-text,
+    .express-input-group .input-express-pct {
+        height: 24px !important;
+        min-height: 24px !important;
+        padding: 0 6px !important;
+        font-size: 0.75rem !important;
+        display: flex;
+        align-items: center;
+        border-color: #ced4da;
+    }
+
+    /* Căn chỉnh các nút Radio tròn */
+    .express-input-group .small {
+        display: flex;
+        align-items: center;
+        gap: 8px !important;
+    }
+
+    .express-input-group label {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        cursor: pointer;
+        margin-bottom: 0;
+    }
+
+    .express-input-group input[type="radio"] {
+        margin-top: 0 !important; 
+        vertical-align: middle;
+        cursor: pointer;
+    }
+
+/* ==========================================================================
+    FOOTER AREA 
+   ========================================================================== */
+/* Khung bao ngoài cùng của footer */
+.form-footer-fixed {
+    flex-shrink: 0;
+    background-color: var(--bg-container);
+    border-top: 1px solid var(--primary-medium);
+    padding: 1px !important;
+}
+
+.footer-list-area {
+    font-size: 0.7rem;
+    display: flex;
+    flex-direction: column;
+    padding: 0 !important;
+    border: 1px solid var(--primary-medium);
+    background-color: white;
+    overflow: hidden;
+}
+
+.footer-header {
+    font-size: 0.7rem !important;
+    line-height: 1.4;
+    background-color: #e9ecef;
+    color: var(--text-dark);
+    flex-shrink: 0;
+}
+
+/* Thanh tổng tiền (Total Amount) */
+.footer-bottom-bar {
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 5px !important;
+    height: 24px;
+    align-items: center;
+    font-size: 0.7rem !important;
+    background-color: var(--bg-white-green);
+    border-bottom: 1px solid var(--primary-medium);
+    flex-shrink: 0;
+}
+
+.footer-content {
+    background-color: #e9e9e9;
+    flex-grow: 1;
+    width: 100%;
+    height: 110px;
+    margin: 0 !important;
+    border: none !important;
+    overflow-y: auto;
+}
+
+.clear-btn {
+    color: #c62828 !important;
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.7rem !important;
+}
+
+.section-header {
+    padding: 2px 8px !important;
+    font-size: 0.7rem !important;
+}
+
+
+/* ==========================================================================
+  . GENERAL LAYOUT & COLORS
+   ========================================================================== */
+
 /* --- TOOLBAR --- */
 .main-toolbar {
-    background-color: var(--bg-container); /* ĐỔI MÀU NỀN */
-    border-bottom: 1px solid var(--primary-light); /* ĐỔI MÀU VIỀN */
+    background-color: var(--bg-container);
+    border-bottom: 1px solid var(--primary-light);
     padding: 4px 10px;
     flex-shrink: 0;
 }
@@ -44,7 +236,7 @@
 /* --- MOBILE NAVIGATION --- */
 .mobile-nav {
     display: none;
-    background-color: var(--primary-dark); /* ĐỔI MÀU NỀN MOBILE NAV */
+    background-color: var(--primary-dark);
     padding: 5px;
     justify-content: space-around;
 }
@@ -81,6 +273,11 @@
 }
 
 @media (max-width: 767.98px) {
+    .split-item {
+        flex: 1 1 auto !important;
+        height: 200px;
+    }
+
     .mobile-nav {
         display: flex;
     }
@@ -104,18 +301,17 @@
 }
 
 .split-item {
-    flex: 1;
+    flex: 1 1 0px;
     display: flex;
     flex-direction: column;
-    border: 1px solid var(--primary-medium); /* ĐỔI MÀU VIỀN */
+    border: 1px solid var(--primary-medium);
     background: white;
     min-height: 0;
     overflow: hidden;
 }
 
-/* HEADERS (Sử dụng màu chính #009444) */
 .app-header, .section-header {
-    background-color: var(--primary-dark); /* ĐỔI MÀU NỀN HEADER */
+    background-color: var(--primary-dark);
     color: var(--text-light);
     padding: 4px 8px;
     font-weight: bold;
@@ -126,7 +322,7 @@
 .scroll-area {
     flex-grow: 1;
     overflow-y: auto;
-    background-color: var(--bg-white-green); /* ĐỔI MÀU NỀN LIST */
+    background-color: var(--bg-white-green);
 }
 
 .list-group-item {
@@ -139,19 +335,18 @@
 }
 
     .list-group-item:hover {
-        background-color: var(--primary-light); /* ĐỔI MÀU HOVER */
+        background-color: var(--primary-light);
     }
 
-/* --- FORM STYLES (DIV 3) --- */
+/* --- FORM STYLES --- */
 .form-container {
-    border: 1px solid var(--primary-medium); /* ĐỔI MÀU VIỀN */
-    background-color: var(--bg-container); /* ĐỔI MÀU NỀN FORM */
+    border: 1px solid var(--primary-medium);
+    background-color: var(--bg-container);
     display: flex;
     flex-direction: column;
     height: 100%;
 }
 
-/* TABS (Thay đổi màu sắc mạnh mẽ) */
 .nav-tabs {
     border: none;
     background-color: var(--primary-medium);
@@ -165,20 +360,19 @@
         margin-right: 2px;
         padding: 4px 12px;
         font-weight: bold;
-        color: var(--primary-light); /* Màu chữ tab chưa active */
+        color: var(--primary-light);
         border: 1px solid var(--primary-medium);
-        background-color: var(--primary-medium); /* Nền tab chưa active */
+        background-color: var(--primary-medium);
         font-size: 0.8rem;
     }
 
         .nav-tabs .nav-link.active {
-            background-color: var(--primary-dark) !important; /* Nền tab active (#009444) */
-            color: var(--text-light) !important; /* Chữ tab active (Trắng) */
+            background-color: var(--primary-dark) !important;
+            color: var(--text-light) !important;
             border: 1px solid var(--primary-dark);
             border-bottom: none;
         }
 
-/* Form Body & Footer */
 .tab-content {
     flex-grow: 1;
     display: flex;
@@ -190,6 +384,7 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+    padding:1px 0px;
 }
 
 .form-body-scroll {
@@ -199,101 +394,21 @@
     min-height: 0;
 }
 
-.form-footer-fixed {
-    flex-shrink: 0;
-    background-color: var(--bg-container); /* ĐỔI MÀU NỀN FOOTER */
-    border-top: 1px solid var(--primary-medium);
-    padding: 0;
-}
-
-/* Inputs & Controls */
-.form-label {
-    margin-bottom: 0px;
-    font-size: 0.75rem;
-    color: var(--text-dark);
-}
-
-.form-control-sm, .form-select-sm {
-    font-size: 0.8rem;
-    padding: 2px 5px;
-    border-radius: 2px;
-    border: 1px solid var(--primary-light) !important; /* ĐỔI MÀU VIỀN INPUT */
-    background-color: var(--bg-white-green); /* ĐỔI MÀU NỀN INPUT */
-    color: var(--text-dark);
-}
-
-    .form-control-sm:focus {
-        border-color: var(--primary-dark);
-        box-shadow: 0 0 0 0.2rem rgba(31, 80, 31, 0.25);
-    }
-
-/* Thay đổi màu hiển thị số tiền từ Xanh dương sang Xanh đậm */
+/* --- INPUT HIGHLIGHT & COLORS --- */
 .amount-display {
     text-align: right;
     color: var(--primary-dark);
     font-weight: bold;
 }
-/* ĐỔI MÀU */
+
 .text-primary {
     color: var(--primary-dark) !important;
 }
-/* Override Bootstrap text-primary */
 
-.express-box {
-    border: 1px solid var(--primary-light);
-    padding: 5px;
-    margin-bottom: 5px;
-    background: var(--bg-white-green); /* ĐỔI MÀU NỀN BOX */
-}
-
-/* Footer List Areas */
-.footer-list-area {
-    height: 120px;
-    display: flex;
-    flex-direction: column;
-    border: 1px solid var(--primary-medium);
-    margin: 2px;
-}
-
-.footer-header {
-    display: flex;
-    justify-content: space-between;
-    padding: 2px 5px;
-    font-size: 0.75rem;
-    border-bottom: 1px solid var(--primary-medium);
-    background: var(--bg-container);
-    color: var(--text-dark); /* ĐỔI MÀU */
-}
-
-.footer-bottom-bar {
-    display: flex;
-    justify-content: space-between;
-    px-2;
-    py-1;
-    background-color: var(--bg-white-green);
-    border-bottom: 1px solid var(--primary-medium);
-}
-
-.footer-content {
-    background-color: #e9e9e9;
-    flex-grow: 1;
-    border: 2px solid var(--primary-light);
-    margin: 2px;
-}
-
-.clear-btn {
-    color: #c62828 !important;
-    text-decoration: underline;
-    cursor: pointer;
-    font-weight: bold;
-}
-/* Giữ màu đỏ cho nút xóa */
-
-/* Override một số class của Bootstrap để hợp màu */
 .text-warning {
     color: #ffc107 !important;
 }
-/* Giữ màu vàng cho text warning */
+
 .bg-dark {
     background-color: var(--primary-medium) !important;
 }
@@ -302,33 +417,35 @@
     border-color: var(--primary-light) !important;
 }
 
-/* CSS highlight dòng chọn */
 .active-item-custom {
-    background-color: #a3c4a3 !important; /* Xanh nhạt */
-    color: #009444 !important; /* Xanh đậm */
+    background-color: #a3c4a3 !important;
+    color: #1f501f !important;
     font-weight: bold;
-    border-left: 4px solid #009444;
+    border-left: 4px solid #1f501f;
 }
 
-
-#input-price,
-#input-price-net {
+.js-input-price,
+.js-input-price-net {
     color: #000 !important; 
-    font-weight: normal !important; 
-    transition: all 0.15s ease-in-out; 
+    font-weight: normal !important;
+    transition: all 0.15s ease-in-out;
 }
 
-    #input-price:focus,
-    #input-price-net:focus {
-        color: #d32f2f !important;
-        font-weight: bold !important; 
+    /* Hiệu ứng khi đang gõ (Focus) */
+    .js-input-price:focus,
+    .js-input-price-net:focus {
+        color: #d32f2f !important; 
+        font-weight: bold !important;
         border-color: #d32f2f !important;
         box-shadow: 0 0 0 0.2rem rgba(211, 47, 47, 0.1);
-        background-color: #fffafa; 
+        background-color: #fffafa;
     }
-input#input-price.active-user-input,
-input#input-price-net.active-user-input {
-    color: #d32f2f !important;
-    font-weight: bold !important;
-    background-color: #fff !important;
-}
+
+    /* Hiệu ứng khi đã được chọn là Active (sau khi blur ra ngoài vẫn giữ màu đỏ) */
+    .js-input-price.active-user-input,
+    .js-input-price-net.active-user-input {
+        color: #d32f2f !important;
+        font-weight: bold !important;
+        background-color: #fff !important;
+        border-color: #ced4da;
+    }

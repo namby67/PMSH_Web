@@ -1,26 +1,18 @@
-﻿
-<link href="~/css/pages/Posting.css" rel="stylesheet" />
-<div class="modal fade" id="modalPosting" tabindex="-1">
+﻿<link href="~/css/pages/posting.css" rel="stylesheet" />
+
+<div class="modal fade" id="modalPosting" data-bs-backdrop="static" tabindex="-1">
     <div class="modal-dialog modal-xl modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Posting Transaction - Article</h5>
+                <strong class="modal-title" style="font-size: 1rem;">Posting Transaction - Article</strong>
             </div>
             <div class="modal-body">
                 <div class="row g-3">
                     <div class="main-toolbar d-flex">
-                        <button class="mui-button mui-button-export" id="btn-print">
-                            <i class="fa-solid fa-print"></i><span> Print</span>
-                        </button>
-                        <button class="mui-button mui-button-save" id="btn-post" onclick="PostingService();">
-                            <i class="fa-solid fa-save"></i><span> Post</span>
-                        </button>
-                        <button class="mui-button mui-button-new" id="btn-add" style="display: none">
-                            <i class="fa-solid fa-plus"></i><span> Add</span>
-                        </button>
-                        <button class="mui-button mui-button-close" data-bs-dismiss="modal" id="btn-close">
-                            <i class="fa-solid fa-xmark"></i><span> Close</span>
-                        </button>
+                        <button class="mui-button mui-button-export me-1" id="btn-print"><i class="fa-solid fa-print"></i><span> Print</span></button>
+                        <button class="mui-button mui-button-save me-1" id="btn-post" onclick="PostingService();"><i class="fa-solid fa-save"></i><span> Post</span></button>
+                        <button class="mui-button mui-button-new me-1" id="btn-add" style="display: none"><i class="fa-solid fa-plus"></i><span>Add</span></button>
+                        <button class="mui-button mui-button-close me-1" data-bs-dismiss="modal" id="btn-close"><i class="fa-solid fa-xmark"></i><span> Close</span></button>
                     </div>
 
                     <div class="mobile-nav">
@@ -31,34 +23,32 @@
 
                     <div class="container-fluid main-content">
                         <div class="row g-1 h-100">
-
                             <div class="col-md-3 h-100" id="view-group">
                                 <div class="split-column">
-                                    <div class="split-item">
-                                        <div class="app-header">Group Transaction</div>
-                                        <div class="scroll-area list-group list-group-flush" id="list-group-container">
+                                    <div class="split-item"><div class="app-header">Group Transaction</div>
+                                        <div class="p-1 border-bottom bg-light">
+                                            <input type="text" class="form-control form-control-sm js-search-box" data-target="#list-group-container" placeholder="Search Group..." />
                                         </div>
-                                    </div>
-                                    <div class="split-item">
-                                        <div class="app-header">Subgroup Transaction</div>
-                                        <div class="scroll-area list-group list-group-flush" id="list-subgroup-container">
+                                    <div class="scroll-area list-group list-group-flush" id="list-group-container"></div></div>
+                                    <div class="split-item"><div class="app-header">Subgroup Transaction</div>
+                                        <div class="p-1 border-bottom bg-light">
+                                            <input type="text" class="form-control form-control-sm js-search-box" data-target="#list-subgroup-container" placeholder="Search Subgroup..." />
                                         </div>
-                                    </div>
+                                    <div class="scroll-area list-group list-group-flush" id="list-subgroup-container"></div></div>
                                 </div>
                             </div>
-
                             <div class="col-md-3 h-100" id="view-trans">
                                 <div class="split-column">
-                                    <div class="split-item">
-                                        <div class="app-header">Transaction List</div>
-                                        <div class="scroll-area list-group list-group-flush" id="list-transaction-container">
+                                    <div class="split-item"><div class="app-header">Transaction List</div>
+                                        <div class="p-1 border-bottom bg-light">
+                                            <input type="text" class="form-control form-control-sm js-search-box" data-target="#list-transaction-container" placeholder="Search Trans..." />
                                         </div>
-                                    </div>
-                                    <div class="split-item">
-                                        <div class="app-header">Article List</div>
-                                        <div class="scroll-area list-group list-group-flush" id="list-article-container">
+                                    <div class="scroll-area list-group list-group-flush" id="list-transaction-container"></div></div>
+                                    <div class="split-item"><div class="app-header">Article List</div>
+                                        <div class="p-1 border-bottom bg-light">
+                                            <input type="text" class="form-control form-control-sm js-search-box" data-target="#list-article-container" placeholder="Search Article..." />
                                         </div>
-                                    </div>
+                                    <div class="scroll-area list-group list-group-flush" id="list-article-container"></div></div>
                                 </div>
                             </div>
 
@@ -72,200 +62,130 @@
                                     </div>
 
                                     <div class="tab-content" id="postingTabsContent">
+
                                         <div class="tab-pane fade show active" id="detail-pane" role="tabpanel">
-                                            <form class="d-flex flex-column h-100">
+                                            <form class="d-flex flex-column h-100 posting-form-content">
                                                 <div class="form-body-scroll">
                                                     <div class="row g-1 mb-1 align-items-center">
-                                                        <div class="col-12 col-sm-2">
-                                                            <label class="form-label">T/A .Code</label>
-                                                        </div>
-                                                        <div class="col-12 col-sm-3">
-                                                            <input type="text" class="form-control form-control-sm js-trans-code" id="input-tacode" />
-                                                        </div>
-                                                        <div class="col-12 col-sm-7">
-                                                            <input type="text" class="form-control form-control-sm js-trans-desc" id="input-desc" />
-                                                        </div>
+                                                        <div class="col-12 col-sm-2"><label class="form-label">T/A .Code</label></div>
+                                                        <div class="col-12 col-sm-3"><input type="text" class="form-control form-control-sm js-trans-code" /></div>
+                                                        <div class="col-12 col-sm-7"><input type="text" class="form-control form-control-sm js-trans-desc" /></div>
                                                     </div>
-
                                                     <div class="row g-1 mb-1 align-items-center js-row-article d-none">
-                                                        <div class="col-12 col-sm-2">
-                                                            <label class="form-label text-primary fw-bold">↳ Article</label>
-                                                        </div>
-                                                        <div class="col-12 col-sm-3">
-                                                            <input type="text" class="form-control form-control-sm text-primary js-art-code" readonly />
-                                                        </div>
-                                                        <div class="col-12 col-sm-7">
-                                                            <input type="text" class="form-control form-control-sm text-primary js-art-desc" readonly />
-                                                        </div>
+                                                        <div class="col-12 col-sm-2"><label class="form-label text-primary fw-bold">↳ Article</label></div>
+                                                        <div class="col-12 col-sm-3"><input type="text" class="form-control form-control-sm text-primary js-art-code" readonly /></div>
+                                                        <div class="col-12 col-sm-7"><input type="text" class="form-control form-control-sm text-primary js-art-desc" readonly /></div>
                                                     </div>
-
                                                     <div class="row g-1 mb-1">
-                                                        <div class="col-12 col-sm-2">
-                                                            <label class="form-label">Quantity</label>
-                                                        </div>
+                                                        <div class="col-12 col-sm-2"><label class="form-label">Quantity</label></div>
+                                                        <div class="col-12 col-sm-3"><input type="text" class="form-control form-control-sm fw-bold text-end js-input-qty" value="1" /></div>
+                                                        <div class="col-12 col-sm-3 text-sm-end pe-2"><label class="form-label">Bill No</label></div>
+                                                        <div class="col-12 col-sm-4"><input type="text" class="form-control form-control-sm" /></div>
+                                                    </div>
+                                                    <div class="row g-1 mb-1">
+                                                        <div class="col-12 col-sm-2"><label class="form-label">Price ++</label></div>
+                                                        <div class="col-12 col-sm-3"><input type="text" class="form-control form-control-sm amount-display js-input-price" value="0.00" /></div>
+                                                        <div class="col-12 col-sm-3 text-sm-end pe-2"><label class="form-label fw-bold">Amount ++</label></div>
+                                                        <div class="col-12 col-sm-4"><input type="text" class="form-control form-control-sm amount-display bg-white js-amount-gross" value="0.00" readonly /></div>
+                                                    </div>
+                                                    <div class="row g-1 mb-1">
+                                                        <div class="col-12 col-sm-2"><label class="form-label">Price.Net</label></div>
+                                                        <div class="col-12 col-sm-3"><input type="text" class="form-control form-control-sm text-end text-muted js-input-price-net" value="0.00" /></div>
+                                                        <div class="col-12 col-sm-3 text-sm-end pe-2"><label class="form-label fw-bold">Amount.Net</label></div>
+                                                        <div class="col-12 col-sm-4"><input type="text" class="form-control form-control-sm text-end text-muted bg-white js-amount-net" value="0,00" readonly /></div>
+                                                    </div>
+                                                    <div class="row g-1 mb-1">
+                                                        <div class="col-12 col-sm-2"><label class="form-label">Currency</label></div>
                                                         <div class="col-12 col-sm-3">
-                                                            <input type="text"
-                                                                   id="input-quantity"
-                                                                   class="form-control form-control-sm fw-bold text-end" value="1" />
+                                                            <select name="currencyID" class="form-select form-select-sm currency-select"><option value="">-- Loading... --</option></select>
                                                         </div>
-                                                        <div class="col-12 col-sm-3 text-sm-end pe-2">
-                                                            <label class="form-label">Bill No</label>
-                                                        </div>
+                                                        <div class="col-12 col-sm-3 text-sm-end pe-2"><label class="form-label fw-bold">Win.No</label></div>
                                                         <div class="col-12 col-sm-4">
-                                                            <input type="text" class="form-control form-control-sm" />
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="row g-1 mb-1">
-                                                        <div class="col-12 col-sm-2">
-                                                            <label class="form-label">Price ++</label>
-                                                        </div>
-                                                        <div class="col-12 col-sm-3">
-                                                            <input type="text"
-                                                                   id="input-price"
-                                                                   class="form-control form-control-sm amount-display"
-                                                                   value="0.00" />
-                                                        </div>
-                                                        <div class="col-12 col-sm-3 text-sm-end pe-2">
-                                                            <label class="form-label fw-bold">Amount ++</label>
-                                                        </div>
-                                                        <div class="col-12 col-sm-4">
-                                                            <input type="text" class="form-control form-control-sm amount-display bg-white" value="0.00" readonly />
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="row g-1 mb-1">
-                                                        <div class="col-12 col-sm-2">
-                                                            <label class="form-label">Price.Net</label>
-                                                        </div>
-                                                        <div class="col-12 col-sm-3">
-                                                            <input type="text" class="form-control form-control-sm text-end text-muted js-price-input"
-                                                                   id="input-price-net"
-                                                                    value="0.00" />
-                                                        </div>
-                                                        <div class="col-12 col-sm-3 text-sm-end pe-2">
-                                                            <label class="form-label fw-bold">Amount.Net</label>
-                                                        </div>
-                                                        <div class="col-12 col-sm-4">
-                                                            <input type="text" class="form-control form-control-sm text-end text-muted bg-white" value="0.00" readonly />
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="row g-1 mb-1">
-                                                        <div class="col-12 col-sm-2">
-                                                            <label class="form-label">Currency</label>
-                                                        </div>
-                                                        <div class="col-12 col-sm-3">
-                                                            <select name="currencyID" class="form-select form-select-sm currency-select">
-                                                                <option value="">-- Loading... --</option>
+                                                            <select class="form-select form-select-sm js-window-select">
+                                                                <option value="">Loading...</option>
                                                             </select>
                                                         </div>
-                                                        <div class="col-12 col-sm-3 text-sm-end pe-2">
-                                                            <label class="form-label fw-bold">Win.No</label>
-                                                        </div>
-                                                        <div class="col-12 col-sm-4">
-                                                            <input type="text" class="form-control form-control-sm text-end text-muted bg-white" value="1" readonly />
-                                                        </div>
                                                     </div>
 
                                                     <div class="row g-1 mb-1 align-items-center">
-                                                        <div class="col-12 col-sm-2">
-                                                            <label class="form-label">RmT.Charge</label>
-                                                        </div>
-                                                        <div class="col-12 col-sm-3">
-                                                            <input type="text" class="form-control form-control-sm" />
-                                                        </div>
-                                                        <div class="col-12 col-sm-7">
-                                                            <input type="text" class="form-control form-control-sm" />
-                                                        </div>
+                                                        <div class="col-12 col-sm-2"><label class="form-label">RmT.Charge</label></div>
+                                                        <div class="col-12 col-sm-3"><input type="text" class="form-control form-control-sm" disabled /></div>
+                                                        <div class="col-12 col-sm-7"><input type="text" class="form-control form-control-sm" disabled /></div>
                                                     </div>
 
                                                     <div class="row g-1 mb-1 align-items-center">
-                                                        <div class="col-12 col-sm-2">
-                                                            <label class="form-label">Reference</label>
-                                                        </div>
-                                                        <div class="col-12 col-sm-10">
-                                                            <input type="text" class="form-control form-control-sm" />
-                                                        </div>
+                                                        <div class="col-12 col-sm-2"><label class="form-label">Reference</label></div>
+                                                        <div class="col-12 col-sm-10"><input type="text" class="form-control form-control-sm js-ref-main" /></div>
                                                     </div>
 
                                                     <div class="row g-1 mb-1 align-items-center">
-                                                        <div class="col-12 col-sm-2">
-                                                            <label class="form-label">Supplement</label>
-                                                        </div>
-                                                        <div class="col-12 col-sm-10">
-                                                            <input type="text" class="form-control form-control-sm" />
-                                                        </div>
+                                                        <div class="col-12 col-sm-2"><label class="form-label">Supplement</label></div>
+                                                        <div class="col-12 col-sm-10"><input type="text" class="form-control form-control-sm js-sup-folio" /></div>
                                                     </div>
 
                                                     <div class="section-header">More Information</div>
                                                     <div class="express-box">
-                                                        <div class="d-flex align-items-center gap-2 mb-1">
-                                                            <input type="checkbox" class="form-check-input mt-0"/>
-                                                            <label class="text-danger fw-bold small">Express Service</label>
+                                                        <div class="express-check-group">
+                                                            <input type="checkbox" class="form-check-input mt-0 js-chk-express" />
+                                                            <label class="lbl-express ms-1">Express Service</label>
                                                         </div>
-                                                        <div class="d-flex align-items-center flex-wrap">
-                                                            <div class="input-group input-group-sm w-50 me-2" style="min-width: 150px;">
-                                                                <span class="input-group-text">Pct</span>
-                                                                <input type="text" class="form-control text-primary fw-bold text-end" value="50.00" />
+                                                        <div class="express-input-group">
+                                                            <div class="input-group input-group-sm" style="width: auto;">
+                                                                <span class="input-group-text">Percent</span>
+                                                                <input type="text" class="form-control input-express-pct js-input-express-pct" value="50.00" disabled />
                                                                 <span class="input-group-text">%</span>
                                                             </div>
-                                                            <div class="small mt-1 mt-sm-0">
-                                                                <input type="radio" name="r1" /> 10%
-                                                                <input type="radio" name="r1" checked /> 50%
-                                                                <input type="radio" name="r1" /> 100%
+                                                            <div class="small d-flex align-items-center gap-2">
+                                                                <label><input type="radio" name="r_express_f2" value="10" class="js-express-radio" disabled /> 10%</label>
+                                                                <label><input type="radio" name="r_express_f2" value="50" class="js-express-radio" checked disabled /> 50%</label>
+                                                                <label><input type="radio" name="r_express_f2" value="100" class="js-express-radio" disabled /> 100%</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="express-box">
+                                                        <div class="express-check-group">
+                                                            <input type="checkbox" class="form-check-input mt-0 js-chk-discount" />
+                                                            <label class="lbl-discount ms-1">Disct. Service</label>
+                                                        </div>
+                                                        <div class="express-input-group">
+                                                            <div class="input-group input-group-sm" style="width: auto;">
+                                                                <span class="input-group-text">Percent</span>
+                                                                <input type="text" class="form-control input-express-pct js-input-discount-pct" value="10.00" disabled />
+                                                                <span class="input-group-text">%</span>
+                                                            </div>
+                                                            <div class="small d-flex align-items-center gap-2">
+                                                                <label><input type="radio" name="r_discount_f2" value="10" class="js-discount-radio" checked disabled /> 10%</label>
+                                                                <label><input type="radio" name="r_discount_f2" value="20" class="js-discount-radio" disabled /> 20%</label>
+                                                                <label><input type="radio" name="r_discount_f2" value="50" class="js-discount-radio" disabled /> 50%</label>
                                                             </div>
                                                         </div>
                                                     </div>
 
-                                                    <fieldset class="border p-1 mt-1">
-                                                        <legend class="float-none w-auto p-0 m-0 text-danger small fw-bold px-1">
-                                                            Invoice Infor
-                                                        </legend>
+                                                    <fieldset class="border p-1 mt-1" disabled>
+                                                        <legend class="float-none w-auto p-0 m-0 text-danger small fw-bold px-1">Invoice Infor</legend>
                                                         <div class="row g-1 mb-1">
-                                                            <div class="col-12 col-sm-2">
-                                                                <label class="form-label">Description</label>
-                                                            </div>
-                                                            <div class="col-12 col-sm-10">
-                                                                <input type="text" class="form-control form-control-sm" value="Invoicing Package" />
-                                                            </div>
+                                                            <div class="col-12 col-sm-2"><label class="form-label">Description</label></div>
+                                                            <div class="col-12 col-sm-10"><input type="text" class="form-control form-control-sm js-invoice-desc" value="Invoicing Package" /></div>
                                                         </div>
                                                         <div class="row g-1 mb-1">
-                                                            <div class="col-12 col-sm-2">
-                                                                <label class="form-label">Reference</label>
-                                                            </div>
-                                                            <div class="col-12 col-sm-10">
-                                                                <input type="text" class="form-control form-control-sm" />
-                                                            </div>
+                                                            <div class="col-12 col-sm-2"><label class="form-label">Reference</label></div>
+                                                            <div class="col-12 col-sm-10"><input type="text" class="form-control form-control-sm js-invoice-ref" /></div>
                                                         </div>
                                                         <div class="row g-1 mb-1">
-                                                            <div class="col-12 col-sm-2">
-                                                                <label class="form-label">Supplement</label>
-                                                            </div>
-                                                            <div class="col-12 col-sm-10">
-                                                                <input type="text" class="form-control form-control-sm" />
-                                                            </div>
+                                                            <div class="col-12 col-sm-2"><label class="form-label">Supplement</label></div>
+                                                            <div class="col-12 col-sm-10"><input type="text" class="form-control form-control-sm js-invoice-supp" /></div>
                                                         </div>
                                                         <div class="row g-1 mb-1">
-                                                            <div class="col-12 col-sm-2">
-                                                                <label class="form-label">Check.No</label>
-                                                            </div>
-                                                            <div class="col-12 col-sm-10">
-                                                                <input type="text" class="form-control form-control-sm" />
-                                                            </div>
+                                                            <div class="col-12 col-sm-2"><label class="form-label">Check.No</label></div>
+                                                            <div class="col-12 col-sm-10"><input type="text" class="form-control form-control-sm js-invoice-checkNo" /></div>
                                                         </div>
                                                     </fieldset>
                                                 </div>
-
                                                 <div class="form-footer-fixed">
                                                     <div class="footer-list-area">
-                                                        <div class="footer-header text-danger">
-                                                            <span class="fw-bold">Posted List</span>
-                                                        </div>
-                                                        <div class="d-flex justify-content-between px-2 py-1 bg-light border-bottom border-secondary">
-                                                            <div class="small fw-bold">
-                                                                Amount posted : <span class="text-primary">0.00</span>
-                                                            </div>
+                                                        <div class="footer-header text-danger"><span class="fw-bold">Posted List</span></div>
+                                                        <div class="footer-bottom-bar">
+                                                            <div class="small fw-bold">Amount posted : <span class="text-primary">0.00</span></div>
                                                             <a class="clear-btn">Clear Posted</a>
                                                         </div>
                                                         <div class="footer-content"></div>
@@ -275,190 +195,128 @@
                                         </div>
 
                                         <div class="tab-pane fade" id="invoice-pane" role="tabpanel">
-                                            <form class="d-flex flex-column h-100">
+                                            <form class="d-flex flex-column h-100 posting-form-content">
                                                 <div class="form-body-scroll">
                                                     <div class="row g-1 mb-1 align-items-center">
-                                                        <div class="col-12 col-sm-2">
-                                                            <label class="form-label">T/A .Code</label>
-                                                        </div>
-                                                        <div class="col-12 col-sm-3">
-                                                            <input type="text" class="form-control form-control-sm js-trans-code" id="input-tacode" />
-                                                        </div>
-                                                        <div class="col-12 col-sm-7">
-                                                            <input type="text" class="form-control form-control-sm js-trans-desc" id="input-desc" />
-                                                        </div>
+                                                        <div class="col-12 col-sm-2"><label class="form-label">T/A .Code</label></div>
+                                                        <div class="col-12 col-sm-3"><input type="text" class="form-control form-control-sm js-trans-code" /></div>
+                                                        <div class="col-12 col-sm-7"><input type="text" class="form-control form-control-sm js-trans-desc" /></div>
                                                     </div>
                                                     <div class="row g-1 mb-1 align-items-center js-row-article d-none">
-                                                        <div class="col-12 col-sm-2">
-                                                            <label class="form-label text-primary fw-bold">↳ Article</label>
-                                                        </div>
-                                                        <div class="col-12 col-sm-3">
-                                                            <input type="text" class="form-control form-control-sm text-primary js-art-code" readonly />
-                                                        </div>
-                                                        <div class="col-12 col-sm-7">
-                                                            <input type="text" class="form-control form-control-sm text-primary js-art-desc" readonly />
-                                                        </div>
+                                                        <div class="col-12 col-sm-2"><label class="form-label text-primary fw-bold">↳ Article</label></div>
+                                                        <div class="col-12 col-sm-3"><input type="text" class="form-control form-control-sm text-primary js-art-code" readonly /></div>
+                                                        <div class="col-12 col-sm-7"><input type="text" class="form-control form-control-sm text-primary js-art-desc" readonly /></div>
                                                     </div>
                                                     <div class="row g-1 mb-1">
-                                                        <div class="col-12 col-sm-2">
-                                                            <label class="form-label">Quantity</label>
-                                                        </div>
+                                                        <div class="col-12 col-sm-2"><label class="form-label">Quantity</label></div>
+                                                        <div class="col-12 col-sm-3"><input type="text" class="form-control form-control-sm fw-bold text-end js-input-qty" value="1" /></div>
+                                                        <div class="col-12 col-sm-3 text-sm-end pe-2"><label class="form-label">Bill No</label></div>
+                                                        <div class="col-12 col-sm-4"><input type="text" class="form-control form-control-sm" /></div>
+                                                    </div>
+                                                    <div class="row g-1 mb-1">
+                                                        <div class="col-12 col-sm-2"><label class="form-label">Price ++</label></div>
+                                                        <div class="col-12 col-sm-3"><input type="text" class="form-control form-control-sm amount-display js-input-price" value="0.00" /></div>
+                                                        <div class="col-12 col-sm-3 text-sm-end pe-2"><label class="form-label fw-bold">Amount ++</label></div>
+                                                        <div class="col-12 col-sm-4"><input type="text" class="form-control form-control-sm amount-display bg-white js-amount-gross" value="0.00" readonly /></div>
+                                                    </div>
+                                                    <div class="row g-1 mb-1">
+                                                        <div class="col-12 col-sm-2"><label class="form-label">Price.Net</label></div>
+                                                        <div class="col-12 col-sm-3"><input type="text" class="form-control form-control-sm text-end text-muted js-input-price-net" value="0.00" /></div>
+                                                        <div class="col-12 col-sm-3 text-sm-end pe-2"><label class="form-label fw-bold">Amount.Net</label></div>
+                                                        <div class="col-12 col-sm-4"><input type="text" class="form-control form-control-sm text-end text-muted bg-white js-amount-net" value="0,00" readonly /></div>
+                                                    </div>
+                                                    <div class="row g-1 mb-1">
+                                                        <div class="col-12 col-sm-2"><label class="form-label">Currency</label></div>
                                                         <div class="col-12 col-sm-3">
-                                                            <input type="text"
-                                                                   id="input-quantity"
-                                                                   class="form-control form-control-sm fw-bold text-end" value="1" />
+                                                            <select name="currencyID" class="form-select form-select-sm currency-select"><option value="">-- Loading... --</option></select>
                                                         </div>
-                                                        <div class="col-12 col-sm-3 text-sm-end pe-2">
-                                                            <label class="form-label">Bill No</label>
-                                                        </div>
+                                                        <div class="col-12 col-sm-3 text-sm-end pe-2"><label class="form-label fw-bold">Win.No</label></div>
                                                         <div class="col-12 col-sm-4">
-                                                            <input type="text" class="form-control form-control-sm" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="row g-1 mb-1">
-                                                        <div class="col-12 col-sm-2">
-                                                            <label class="form-label">Price ++</label>
-                                                        </div>
-                                                        <div class="col-12 col-sm-3">
-                                                            <input type="text"
-                                                                   id="input-price"
-                                                                   class="form-control form-control-sm amount-display"
-                                                                   value="0.00" />
-                                                        </div>
-                                                        <div class="col-12 col-sm-3 text-sm-end pe-2">
-                                                            <label class="form-label fw-bold">Amount ++</label>
-                                                        </div>
-                                                        <div class="col-12 col-sm-4">
-                                                            <input type="text" class="form-control form-control-sm amount-display bg-white" value="0.00" readonly />
-                                                        </div>
-                                                    </div>
-                                                    <div class="row g-1 mb-1">
-                                                        <div class="col-12 col-sm-2">
-                                                            <label class="form-label">Price.Net</label>
-                                                        </div>
-                                                        <div class="col-12 col-sm-3">
-                                                            <input type="text" class="form-control form-control-sm text-end text-muted js-price-input"
-                                                                   id="input-price-net"
-                                                                   value="0.00" />
-                                                        </div>
-                                                        <div class="col-12 col-sm-3 text-sm-end pe-2">
-                                                            <label class="form-label fw-bold">Amount.Net</label>
-                                                        </div>
-                                                        <div class="col-12 col-sm-4">
-                                                            <input type="number" class="form-control form-control-sm text-end text-muted bg-white" value="0.00" readonly />
-                                                        </div>
-                                                    </div>
-                                                    <div class="row g-1 mb-1">
-                                                        <div class="col-12 col-sm-2">
-                                                            <label class="form-label">Currency</label>
-                                                        </div>
-                                                        <div class="col-12 col-sm-3">
-                                                            <select name="currencyID" class="form-select form-select-sm currency-select">
-                                                                <option value="">-- Loading... --</option>
+                                                            <select class="form-select form-select-sm js-window-select">
+                                                                <option value="">Loading...</option>
                                                             </select>
                                                         </div>
-                                                        <div class="col-12 col-sm-3 text-sm-end pe-2">
-                                                            <label class="form-label fw-bold">Win.No</label>
-                                                        </div>
-                                                        <div class="col-12 col-sm-4">
-                                                            <input type="text" class="form-control form-control-sm text-end text-muted bg-white" value="1" readonly />
-                                                        </div>
                                                     </div>
+
                                                     <div class="row g-1 mb-1 align-items-center">
-                                                        <div class="col-12 col-sm-2">
-                                                            <label class="form-label">RmT.Charge</label>
-                                                        </div>
-                                                        <div class="col-12 col-sm-3">
-                                                            <input type="text" class="form-control form-control-sm" />
-                                                        </div>
-                                                        <div class="col-12 col-sm-7">
-                                                            <input type="text" class="form-control form-control-sm" />
-                                                        </div>
+                                                        <div class="col-12 col-sm-2"><label class="form-label">RmT.Charge</label></div>
+                                                        <div class="col-12 col-sm-3"><input type="text" class="form-control form-control-sm" disabled /></div>
+                                                        <div class="col-12 col-sm-7"><input type="text" class="form-control form-control-sm" disabled /></div>
                                                     </div>
+
                                                     <div class="row g-1 mb-1 align-items-center">
-                                                        <div class="col-12 col-sm-2">
-                                                            <label class="form-label">Reference</label>
-                                                        </div>
-                                                        <div class="col-12 col-sm-10">
-                                                            <input type="text" class="form-control form-control-sm" />
-                                                        </div>
+                                                        <div class="col-12 col-sm-2"><label class="form-label">Reference</label></div>
+                                                        <div class="col-12 col-sm-10"><input type="text" class="form-control form-control-sm js-ref-main" /></div>
                                                     </div>
+
                                                     <div class="row g-1 mb-1 align-items-center">
-                                                        <div class="col-12 col-sm-2">
-                                                            <label class="form-label">Supplement</label>
-                                                        </div>
-                                                        <div class="col-12 col-sm-10">
-                                                            <input type="text" class="form-control form-control-sm" />
-                                                        </div>
+                                                        <div class="col-12 col-sm-2"><label class="form-label">Supplement</label></div>
+                                                        <div class="col-12 col-sm-10"><input type="text" class="form-control form-control-sm js-sup-folio" /></div>
                                                     </div>
 
                                                     <div class="section-header">More Information</div>
                                                     <div class="express-box">
-                                                        <div class="d-flex align-items-center gap-2 mb-1">
-                                                            <input type="checkbox" class="form-check-input mt-0"/>
-                                                            <label class="text-danger fw-bold small">Express Service</label>
+                                                        <div class="express-check-group">
+                                                            <input type="checkbox" class="form-check-input mt-0 js-chk-express" />
+                                                            <label class="lbl-express ms-1">Express Service</label>
                                                         </div>
-                                                        <div class="d-flex align-items-center flex-wrap">
-                                                            <div class="input-group input-group-sm w-50 me-2" style="min-width: 150px;">
-                                                                <span class="input-group-text">Pct</span>
-                                                                <input type="text" class="form-control text-primary fw-bold text-end" value="50.00" />
+                                                        <div class="express-input-group">
+                                                            <div class="input-group input-group-sm" style="width: auto;">
+                                                                <span class="input-group-text">Percent</span>
+                                                                <input type="text" class="form-control input-express-pct js-input-express-pct" value="50.00" disabled />
                                                                 <span class="input-group-text">%</span>
                                                             </div>
-                                                            <div class="small mt-1 mt-sm-0">
-                                                                <input type="radio" name="r2" /> 10%
-                                                                <input type="radio" name="r2" checked /> 50%
-                                                                <input type="radio" name="r2" /> 100%
+                                                            <div class="small d-flex align-items-center gap-2">
+                                                                <label><input type="radio" name="r_express_f3" value="10" class="js-express-radio" disabled /> 10%</label>
+                                                                <label><input type="radio" name="r_express_f3" value="50" class="js-express-radio" checked disabled /> 50%</label>
+                                                                <label><input type="radio" name="r_express_f3" value="100" class="js-express-radio" disabled /> 100%</label>
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <div class="express-box">
+                                                        <div class="express-check-group">
+                                                            <input type="checkbox" class="form-check-input mt-0 js-chk-discount" />
+                                                            <label class="lbl-discount ms-1">Disct. Service</label>
+                                                        </div>
+                                                        <div class="express-input-group">
+                                                            <div class="input-group input-group-sm" style="width: auto;">
+                                                                <span class="input-group-text">Percent</span>
+                                                                <input type="text" class="form-control input-express-pct js-input-discount-pct" value="10.00" disabled />
+                                                                <span class="input-group-text">%</span>
+                                                            </div>
+                                                            <div class="small d-flex align-items-center gap-2">
+                                                                <label><input type="radio" name="r_discount_f3" value="10" class="js-discount-radio" checked disabled /> 10%</label>
+                                                                <label><input type="radio" name="r_discount_f3" value="20" class="js-discount-radio" disabled /> 20%</label>
+                                                                <label><input type="radio" name="r_discount_f3" value="50" class="js-discount-radio" disabled /> 50%</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
                                                     <fieldset class="border p-1 mt-1">
-                                                        <legend class="float-none w-auto p-0 m-0 text-danger small fw-bold px-1">
-                                                            Invoice Infor
-                                                        </legend>
+                                                        <legend class="float-none w-auto p-0 m-0 text-danger small fw-bold px-1">Invoice Infor</legend>
                                                         <div class="row g-1 mb-1">
-                                                            <div class="col-12 col-sm-2">
-                                                                <label class="form-label">Description</label>
-                                                            </div>
-                                                            <div class="col-12 col-sm-10">
-                                                                <input type="text" class="form-control form-control-sm" value="Invoicing Package" />
-                                                            </div>
+                                                            <div class="col-12 col-sm-2"><label class="form-label">Description</label></div>
+                                                            <div class="col-12 col-sm-10"><input type="text" class="form-control form-control-sm js-invoice-desc" value="Invoicing Package" /></div>
                                                         </div>
                                                         <div class="row g-1 mb-1">
-                                                            <div class="col-12 col-sm-2">
-                                                                <label class="form-label">Reference</label>
-                                                            </div>
-                                                            <div class="col-12 col-sm-10">
-                                                                <input type="text" class="form-control form-control-sm" />
-                                                            </div>
+                                                            <div class="col-12 col-sm-2"><label class="form-label">Reference</label></div>
+                                                            <div class="col-12 col-sm-10"><input type="text" class="form-control form-control-sm js-invoice-ref" /></div>
                                                         </div>
                                                         <div class="row g-1 mb-1">
-                                                            <div class="col-12 col-sm-2">
-                                                                <label class="form-label">Supplement</label>
-                                                            </div>
-                                                            <div class="col-12 col-sm-10">
-                                                                <input type="text" class="form-control form-control-sm" />
-                                                            </div>
+                                                            <div class="col-12 col-sm-2"><label class="form-label">Supplement</label></div>
+                                                            <div class="col-12 col-sm-10"><input type="text" class="form-control form-control-sm js-invoice-supp" /></div>
                                                         </div>
                                                         <div class="row g-1 mb-1">
-                                                            <div class="col-12 col-sm-2">
-                                                                <label class="form-label">Check.No</label>
-                                                            </div>
-                                                            <div class="col-12 col-sm-10">
-                                                                <input type="text" class="form-control form-control-sm" />
-                                                            </div>
+                                                            <div class="col-12 col-sm-2"><label class="form-label">Check.No</label></div>
+                                                            <div class="col-12 col-sm-10"><input type="text" class="form-control form-control-sm js-invoice-checkNo" /></div>
                                                         </div>
                                                     </fieldset>
                                                 </div>
-
                                                 <div class="form-footer-fixed">
                                                     <div class="footer-list-area">
-                                                        <div class="footer-header text-danger">
-                                                            <span class="fw-bold">Transactions Posted to Invoice</span>
-                                                        </div>
-                                                        <div class="d-flex justify-content-between px-2 py-1 bg-light border-bottom border-secondary">
-                                                            <div class="small fw-bold">
-                                                                Total Amount : <span class="text-primary">0.00</span>
-                                                            </div>
+                                                        <div class="footer-header text-danger"><span class="fw-bold">Transactions Posted to Invoice</span></div>
+                                                        <div class="footer-bottom-bar">
+                                                            <div class="small fw-bold">Total Amount : <span class="text-primary">0.00</span></div>
                                                             <a class="clear-btn">Clear Invoice</a>
                                                         </div>
                                                         <div class="footer-content"></div>
@@ -466,6 +324,7 @@
                                                 </div>
                                             </form>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -476,11 +335,17 @@
         </div>
     </div>
 </div>
+<div id="loadingOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
+    <div style="text-align:center; color:white;">
+        <i class="fas fa-circle-notch fa-spin fa-3x"></i>
+        <div style="margin-top:10px; font-weight:600; font-size: 1rem;">Processing...</div>
+    </div>
+</div>
 <script>
-    //  CÁC HÀM FORMAT SỐ 
+    // --- UTILS ---
     function formatNumberWithComma(num) {
-        if (num === null || num === undefined || isNaN(num) || num === '') return '0.00';
-        return parseFloat(num).toLocaleString('en-US', {
+        if (num === null || num === undefined || isNaN(num) || num === '') return '0,00';
+        return parseFloat(num).toLocaleString('vi-VN', {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2
         });
@@ -488,20 +353,25 @@
 
     function parseNumberWithComma(str) {
         if (!str) return 0;
-        // Xóa dấu phẩy, giữ dấu chấm
-        let cleanStr = str.toString().replace(/,/g, '');
+        let strVal = str.toString();
+        let cleanStr = strVal.replace(/\./g, '').replace(/,/g, '.');
         return parseFloat(cleanStr) || 0;
     }
 
-    //  CÁC HÀM GỌI API TÍNH TOÁN
+    // --- HELPER: Lấy element trong Tab đang active ---
+    function getActiveEl(selector) {
+        return $('.tab-pane.active').find(selector);
+    }
 
-    // Hàm A: Nhập Net -> Gọi API -> Ra Gross (Price ++)
+    // --- API CALCULATIONS  ---
+
+    // Nhập Net -> Ra Gross
     function apiCalcPlusFromNet() {
-        let tCode = $('#input-tacode').val();
-        let rawNet = $('#input-price-net').val();
-        let netVal = parseNumberWithComma(rawNet);
+        let tCode = getActiveEl('.js-trans-code').val();
+        let $netInput = getActiveEl('.js-input-price-net');
+        let netVal = parseNumberWithComma($netInput.val());
 
-        if (!tCode) return; 
+        if (!tCode) return;
 
         $.ajax({
             url: '/Billing/CalculatePricePlusPlus',
@@ -510,25 +380,20 @@
             success: function (res) {
                 if (!isNaN(res)) {
                     let fmtGross = formatNumberWithComma(res);
-                    $('#input-price').val(fmtGross);
-                    $('.amount-display[readonly]').val(fmtGross);
+                    getActiveEl('.js-input-price').val(fmtGross);
 
-                    $('#input-price-net').val(formatNumberWithComma(netVal));
-
+                    $netInput.val(formatNumberWithComma(netVal));
                     calculateLineTotal();
-                } else {
-                    console.error("Lỗi tính toán từ server: " + res);
                 }
-            },
-            error: function(err) { console.error(err); }
+            }
         });
     }
 
-    // Hàm B: Nhập Gross (Price ++) -> Gọi API -> Ra Net
+    // Nhập Gross -> Ra Net
     function apiCalcNetFromPlus() {
-        let tCode = $('#input-tacode').val();
-        let rawGross = $('#input-price').val();
-        let grossVal = parseNumberWithComma(rawGross);
+        let tCode = getActiveEl('.js-trans-code').val();
+        let $grossInput = getActiveEl('.js-input-price');
+        let grossVal = parseNumberWithComma($grossInput.val());
 
         if (!tCode) return;
 
@@ -539,90 +404,269 @@
             success: function (res) {
                 if (!isNaN(res)) {
                     let fmtNet = formatNumberWithComma(res);
-                    $('#input-price-net').val(fmtNet);
+                    getActiveEl('.js-input-price-net').val(fmtNet);
 
-                    $('#input-price').val(formatNumberWithComma(grossVal));
-
+                    // Format lại ô Gross
+                    $grossInput.val(formatNumberWithComma(grossVal));
                     calculateLineTotal();
-                } else {
-                    console.error("Lỗi tính toán từ server: " + res);
                 }
-            },
-            error: function(err) { console.error(err); }
+            }
         });
     }
 
-    // Hàm C: Tính tổng tiền (Amount = Qty * Price)
+    // Tính tổng tiền
     function calculateLineTotal() {
-        let qty = parseFloat($('#input-quantity').val()) || 0;
-
-        let priceGross = parseNumberWithComma($('#input-price').val());
-        let priceNet   = parseNumberWithComma($('#input-price-net').val());
+        let qty = parseFloat(getActiveEl('.js-input-qty').val()) || 0;
+        let priceGross = parseNumberWithComma(getActiveEl('.js-input-price').val());
+        let priceNet   = parseNumberWithComma(getActiveEl('.js-input-price-net').val());
 
         let totalGross = qty * priceGross;
         let totalNet   = qty * priceNet;
 
-        $('.amount-display.bg-white').val(formatNumberWithComma(totalGross));
-
-        // Amount Net (Tìm ô input readonly trong cùng dòng với Price Net)
-        let $netRow = $('#input-price-net').closest('.row');
-        $netRow.find('input[readonly]').val(formatNumberWithComma(totalNet));
+        getActiveEl('.js-amount-gross').val(formatNumberWithComma(totalGross));
+        getActiveEl('.js-amount-net').val(formatNumberWithComma(totalNet));
     }
 
-    // ============================================================
-    //  XỬ LÝ SỰ KIỆN (MAIN)
-    // ============================================================
+    // --- EVENTS ---
     $(document).ready(function() {
+        //  Search List (transGroup,...,article)
+        $(document).on('keyup', '.js-search-box', function() {
+            var value = $(this).val().toLowerCase();
+            var valueNoTone = removeVietnameseTones(value); 
+            var targetId = $(this).data('target'); 
 
-        // --- XỬ LÝ Ô PRICE ++ (#input-price) ---
-        $(document).on('blur keypress', '#input-price', function(e) {
-            if (e.type === 'keypress' && e.which !== 13) return;
+            // Duyệt qua tất cả các thẻ <a> (item) trong danh sách tương ứng
+            $(targetId + ' .list-group-item').filter(function() {
+                var itemText = $(this).text().toLowerCase();
+                var itemTextNoTone = removeVietnameseTones(itemText);
 
-            if (e.type === 'keypress') {
-                e.preventDefault(); 
-                $(this).blur();     
-                return;
+                var isMatch = itemText.indexOf(value) > -1 || itemTextNoTone.indexOf(valueNoTone) > -1;
+                $(this).toggle(isMatch);
+            });
+        });
+
+        // Chỉ cho phép nhập số dương và dấu chấm/phẩy (cho Price, Percent, Quantity)
+        $(document).on('keypress', '.js-input-qty, .js-input-price, .js-input-price-net, .js-input-express-pct, .js-input-discount-pct', function(e) {
+            // Mã ký tự (char code)
+            var charCode = (e.which) ? e.which : e.keyCode;
+
+            if ((charCode >= 48 && charCode <= 57) || charCode === 46 || charCode === 44) {
+                return true;
             }
 
+            return false;
+        });
+
+        // Xử lý sự kiện Paste (Dán) 
+        $(document).on('paste', '.js-input-qty, .js-input-price, .js-input-price-net, .js-input-express-pct, .js-input-discount-pct', function(e) {
+            e.preventDefault();
+
+            var pastedData = (e.originalEvent || e).clipboardData.getData('text/plain');
+
+            var cleanData = pastedData.replace(/[^0-9.,]/g, '');
+
+            document.execCommand("insertText", false, cleanData);
+        });
+
+        //  Kiểm tra input để đảm bảo không âm khi blur
+        $(document).on('blur', '.js-input-qty, .js-input-price, .js-input-price-net', function() {
+            var valStr = $(this).val();
+            // Chuyển dấu phẩy thành chấm để parse
+            var cleanStr = valStr.replace(/\./g, '').replace(/,/g, '.');
+            var valNum = parseFloat(cleanStr);
+
+            if (valNum < 0) {
+                alert("Negative numbers are not allowed!");
+                $(this).val(0); 
+                if($(this).hasClass('js-input-qty')) $(this).val(1);
+            }
+        });
+
+        //  INPUT PRICE ++
+        $(document).on('blur keypress', '.js-input-price', function(e) {
+            if (e.type === 'keypress' && e.which !== 13) return;
+            if (e.type === 'keypress') { e.preventDefault(); $(this).blur(); return; }
             apiCalcNetFromPlus();
         });
 
-        // --- XỬ LÝ Ô PRICE NET (#input-price-net) ---
-        $(document).on('blur keypress', '#input-price-net', function(e) {
+        //  INPUT PRICE NET
+        $(document).on('blur keypress', '.js-input-price-net', function(e) {
             if (e.type === 'keypress' && e.which !== 13) return;
-
-            if (e.type === 'keypress') {
-                e.preventDefault();
-                $(this).blur();
-                return;
-            }
-
+            if (e.type === 'keypress') { e.preventDefault(); $(this).blur(); return; }
             apiCalcPlusFromNet();
         });
 
-        // --- XỬ LÝ Ô QUANTITY (Tính lại tổng tiền khi thay đổi số lượng) ---
-        $(document).on('blur keypress', '#input-quantity', function(e) {
+        //  QUANTITY
+        $(document).on('blur keypress', '.js-input-qty', function(e) {
              if (e.type === 'keypress' && e.which !== 13) return;
-
-             if (e.type === 'keypress') {
-                 e.preventDefault();
-                 $(this).blur();
-                 return;
-             }
-
+             if (e.type === 'keypress') { e.preventDefault(); $(this).blur(); return; }
              calculateLineTotal();
         });
 
-        $('#input-price').on('focus click', function() {
+        //  FOCUS EFFECT
+        $(document).on('focus click', '.js-input-price', function() {
             $(this).addClass('active-user-input');
-            $('#input-price-net').removeClass('active-user-input');
+            getActiveEl('.js-input-price-net').removeClass('active-user-input');
         });
 
-        $('#input-price-net').on('focus click', function() {
+        $(document).on('focus click', '.js-input-price-net', function() {
             $(this).addClass('active-user-input');
-            $('#input-price').removeClass('active-user-input');
+            getActiveEl('.js-input-price').removeClass('active-user-input');
         });
+
+        // --- EXPRESS SERVICE LOGIC ---
+        //  Sự kiện Radio & Input Express và Discount
+        $(document).on('change', '.js-express-radio, .js-discount-radio', function() {
+            var val = parseFloat($(this).val()).toFixed(2);
+            $(this).closest('.express-input-group').find('input[type="text"]').val(val);
+            updateReferenceText();
+        });
+
+        $(document).on('input blur propertychange', '.js-input-express-pct, .js-input-discount-pct', function() {
+            var valNum = parseFloat($(this).val());
+            var $container = $(this).closest('.express-box');
+
+            $container.find('input[type="radio"]').prop('checked', false);
+
+            if ([10, 20, 50, 100].includes(valNum)) {
+                $container.find(`input[value="${valNum}"]`).prop('checked', true);
+            }
+            updateReferenceText();
+        });
+          
+        function updateReferenceText() {
+        var $activePane = $('.tab-pane.active');
+        var $refInput = $activePane.find('.js-ref-main');
+
+        var $chkExpress = $activePane.find('.js-chk-express');
+        var pctExpress = $activePane.find('.js-input-express-pct').val();
+
+        var $chkDiscount = $activePane.find('.js-chk-discount');
+        var pctDiscount = $activePane.find('.js-input-discount-pct').val();
+
+        var currentRef = $refInput.val();
+
+        var cleanRef = currentRef.replace(/ Express Service : .*?%/g, '')
+                                 .replace(/ Discount Service : .*?%/g, '');
+
+        if ($chkExpress.is(':checked') && pctExpress) {
+            cleanRef = cleanRef + " Express Service : " + pctExpress + "%";
+        }
+        else if ($chkDiscount.is(':checked') && pctDiscount) {
+            cleanRef = cleanRef + " Discount Service : " + pctDiscount + "%";
+        }
+
+            $refInput.val(cleanRef);
+        }
+
+        function toggleInputs($container, isChecked) {
+            $container.find('input[type="text"], input[type="radio"]').prop('disabled', !isChecked);
+        }
+
+        //  Sự kiện Checkbox EXPRESS
+        $(document).on('change', '.js-chk-express', function() {
+            var isChecked = $(this).is(':checked');
+            var $activePane = $(this).closest('.tab-pane');
+            var $container = $(this).closest('.express-box');
+
+            toggleInputs($container, isChecked);
+
+            if(isChecked) {
+                var $chkDiscount = $activePane.find('.js-chk-discount');
+                if ($chkDiscount.is(':checked')) {
+                    $chkDiscount.prop('checked', false).trigger('change'); 
+                }
+                updateReferenceText();
+                getActiveEl('.js-ref-main').focus();
+            } else {
+                updateReferenceText();
+            }
+        });
+
+        //  Sự kiện Checkbox DISCOUNT
+        $(document).on('change', '.js-chk-discount', function() {
+            var isChecked = $(this).is(':checked');
+            var $activePane = $(this).closest('.tab-pane');
+            var $container = $(this).closest('.express-box');
+
+            toggleInputs($container, isChecked);
+
+            if(isChecked) {
+                var $chkExpress = $activePane.find('.js-chk-express');
+                if ($chkExpress.is(':checked')) {
+                    $chkExpress.prop('checked', false).trigger('change');
+                }
+                updateReferenceText();
+                getActiveEl('.js-ref-main').focus();
+            } else {
+                updateReferenceText();
+            }
+        });
+
+        function removeExpressText() {
+            var $refInput = getActiveEl('.js-ref-main');
+            var currentRef = $refInput.val();
+            var cleanRef = currentRef.replace(/ Express Service : \d+(\.\d+)?%/g, '');
+            $refInput.val(cleanRef);
+        }
     });
+
+    // --- DATA LOADING & FORM FILLING ---
+
+    function fillToForm(tCode, tDesc, aCode, aDesc, price, element) {
+        if (element) highlightItem(element, '#list-article-container');
+
+        const activeForm = $('.tab-pane.active');
+
+        activeForm.find('.js-trans-code').val(tCode);
+        activeForm.find('.js-trans-desc').val(tDesc);
+
+        if (aCode) {
+            activeForm.find('.js-row-article').removeClass('d-none').addClass('d-flex');
+            activeForm.find('.js-art-code').val(aCode);
+            activeForm.find('.js-art-desc').val(aDesc);
+        } else {
+            activeForm.find('.js-row-article').addClass('d-none').removeClass('d-flex');
+            activeForm.find('.js-art-code').val('');
+            activeForm.find('.js-art-desc').val('');
+        }
+
+        activeForm.find('.js-input-qty').val('1');
+
+        let formattedPrice = formatNumberWithComma(price);
+        // Sửa lại selector ID thành Class
+        activeForm.find('.js-input-price').val(formattedPrice);
+        activeForm.find('.js-input-price').addClass('active-user-input');
+        activeForm.find('.js-input-price-net').removeClass('active-user-input');
+
+        apiCalcNetFromPlus();
+
+        if (window.innerWidth < 768) switchView('form');
+        setTimeout(function() {
+            activeForm.find('.js-input-qty').focus().select();
+        }, 100);
+    }
+
+    function resetForm() {
+        let $activePane = $('.tab-pane.active');
+        $activePane.find('input[type="text"]').val('');
+        $activePane.find('.js-invoice-desc').val('Invoicing Package');
+        $activePane.find('.js-input-qty').val('1');
+        $activePane.find('.js-input-price, .js-input-price-net').val('0,00');
+        $activePane.find('.amount-display').val('0,00');
+        $activePane.find('.js-row-article').addClass('d-none').removeClass('d-flex');
+
+        // Reset Express
+        $activePane.find('.js-chk-express').prop('checked', false).trigger('change');
+        $activePane.find('.js-input-express-pct').val('50.00');
+
+        // Reset Discount
+        $activePane.find('.js-chk-discount').prop('checked', false).trigger('change');
+        $activePane.find('.js-input-discount-pct').val('10.00'); 
+
+        $('.list-group-item').removeClass('active-item-custom');
+        $activePane.find('.js-trans-code').focus();
+    }
 
     //  các hàm hỗ trợ mở modal chuyển view v.v
 
@@ -647,7 +691,7 @@
         });
     }
 
-    // Logic nút Add
+    // Logic view button
     document.addEventListener("DOMContentLoaded", function () {
         const btnAdd = document.getElementById("btn-add");
         const tabEls = document.querySelectorAll('button[data-bs-toggle="tab"]');
@@ -689,6 +733,33 @@
         });
     }
 
+    function loadFolioWindows() {
+        var $selects = $('.js-window-select');
+        if (typeof idReservation === 'undefined' || !idReservation) return;
+
+        $.ajax({
+            url: '/Billing/GetFolioNoByReservationID',
+            type: 'GET',
+            data: { reservationID: idReservation },
+            success: function (data) {
+                if (data.error) { console.error(data.error); return; }
+
+                let html = '';
+                data.forEach(item => {
+                    let isLocked = item.status === true ? 'true' : 'false';
+                    let lockText = item.status === true ? ' (Locked)' : '';
+
+                    html += `<option value="${item.id}" data-locked="${isLocked}">${item.folioNo}${lockText}</option>`;
+                });
+                $selects.html(html);
+
+                if (typeof folioNoID !== 'undefined' && folioNoID) {
+                    $selects.val(folioNoID);
+                }
+            }
+        });
+    }
+
     function loadGroups() {
         $('#list-group-container').html('<div class="p-2">Loading...</div>');
         $.ajax({
@@ -701,6 +772,9 @@
                     html += `<a href="javascript:void(0)" onclick="loadSubGroups(${item.id}, this)" class="list-group-item list-group-item-action">${item.description}</a>`;
                 });
                 $('#list-group-container').html(html);
+                if (data.length > 0) {
+                    $('#list-group-container .list-group-item:first-child').trigger('click');
+                }
             }
         });
     }
@@ -722,6 +796,10 @@
                     html += `<a href="javascript:void(0)" onclick="loadTransactions(${item.id}, this)" class="list-group-item list-group-item-action">${item.description}</a>`;
                 });
                 $('#list-subgroup-container').html(html);
+                $('.js-search-box[data-target="#list-subgroup-container"]').val('');
+                if (data.length > 0) {
+                    $('#list-subgroup-container .list-group-item:first-child').trigger('click');
+                }
             }
         });
     }
@@ -744,6 +822,7 @@
                              </a>`;
                 });
                 $('#list-transaction-container').html(html);
+                $('.js-search-box[data-target="#list-transaction-container"]').val('');
             }
         });
     }
@@ -774,71 +853,41 @@
                                  </a>`;
                     });
                     $('#list-article-container').html(html);
+                    $('.js-search-box[data-target="#list-article-container"]').val('');
                 }
             }
         });
     }
 
-    // --- Cập nhật hàm fillToForm để trigger tính Net ngay khi chọn ---
-    function fillToForm(tCode, tDesc, aCode, aDesc, price, element) {
-        if (element) highlightItem(element, '#list-article-container');
-        const activeForm = $('.tab-pane.active');
-
-        activeForm.find('.js-trans-code').val(tCode);
-        activeForm.find('.js-trans-desc').val(tDesc);
-
-        if (aCode) {
-            activeForm.find('.js-row-article').removeClass('d-none').addClass('d-flex');
-            activeForm.find('.js-art-code').val(aCode);
-            activeForm.find('.js-art-desc').val(aDesc);
-        } else {
-            activeForm.find('.js-row-article').addClass('d-none').removeClass('d-flex');
-            activeForm.find('.js-art-code').val('');
-            activeForm.find('.js-art-desc').val('');
-        }
-
-        $('#input-quantity').val('1');
-
-        // Điền giá Gross (Price ++)
-        let formattedPrice = formatNumberWithComma(price);
-        activeForm.find('#input-price').val(formattedPrice);
-
-        activeForm.find('#input-price').addClass('active-user-input');
-        activeForm.find('#input-price-net').removeClass('active-user-input');
-
-        apiCalcNetFromPlus();
-
-        if (window.innerWidth < 768) switchView('form');
-        setTimeout(function() {
-            $('#input-quantity').focus().select();
-        }, 100);
-
+    // --- UTILS: Hàm bỏ dấu tiếng Việt để tìm kiếm ---
+    function removeVietnameseTones(str) {
+        str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+        str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+        str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+        str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+        str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+        str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+        str = str.replace(/đ/g, "d");
+        str = str.replace(/À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ/g, "A");
+        str = str.replace(/È|É|Ẹ|Ẻ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ/g, "E");
+        str = str.replace(/Ì|Í|Ị|Ỉ|Ĩ/g, "I");
+        str = str.replace(/Ò|Ó|Ọ|Ỏ|Õ|Ô|Ồ|Ố|Ộ|Ổ|Ỗ|Ơ|Ờ|Ớ|Ợ|Ở|Ỡ/g, "O");
+        str = str.replace(/Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ/g, "U");
+        str = str.replace(/Ỳ|Ý|Ỵ|Ỷ|Ỹ/g, "Y");
+        str = str.replace(/Đ/g, "D");
+        // Một số ký tự đặc biệt
+        str = str.replace(/\u0300|\u0301|\u0303|\u0309|\u0323/g, "");
+        str = str.replace(/\u02C6|\u0306|\u031B/g, "");
+        return str;
     }
 
-    function highlightItem(element, containerId) {
+       function highlightItem(element, containerId) {
         $(containerId + ' .list-group-item').removeClass('active-item-custom');
         $(element).addClass('active-item-custom');
     }
 
-    function resetForm() {
-        $('.tab-pane.active input[type="text"]').val('');
-
-        $('#input-quantity').val('1');
-
-        $('#input-price, #input-price-net').val('0.00');
-        $('.amount-display').val('0.00');
-
-        $('#input-price, #input-price-net').removeClass('active-user-input');
-
-        $('.js-row-article').addClass('d-none').removeClass('d-flex');
-
-        $('.list-group-item').removeClass('active-item-custom');
-
-        $('.tab-pane.active .js-trans-code').focus();
-    }
-
     $('#modalPosting').on('hidden.bs.modal', function () {
-        resetForm(); 
+        resetForm();
         $('#list-subgroup-container').empty();
         $('#list-transaction-container').empty();
         $('#list-article-container').empty();
@@ -850,449 +899,331 @@
     $('#modalPosting').on('shown.bs.modal', function () {
         loadGroups();
         loadCurrencies();
-    });
-</script>
-@* 
-<script>
-    var postType = 1;
-
-    // === ĐỊNH DẠNG SỐ TIỀN DÙNG DẤU CHẤM ===
-    function formatNumberWithDot(num) {
-        if (isNaN(num)) return '0';
-        return num.toLocaleString('vi-VN', { minimumFractionDigits: 0 });
-    }
-
-    function parseNumberWithDot(str) {
-        if (!str) return 0;
-        return parseFloat(str.replace(/\./g, '').replace(',', '.')) || 0;
-    }
-
-    function openModalPosting() {
-        localStorage.setItem("currentFromID", "modalPosting");
-        const crashierLogin = localStorage.getItem("crashierLogin");
-        $('#winNoPostBilling').val(folioPosting);
-        setGroupTransactionPosting();
-        setSubGroupTransactionPosting($('#transactionGroupIDPosting').val());
-        getTransactionPosting($('#transactionGroupIDPosting').val(), $('#subTransactionGroupIDPosting').val());
-        if(crashierLogin == "NotYet"){
-            openModalShilftLogin();
-        }
-        else{
-            $('#modalPosting').modal('show');
-        }
-    }
-
-    let selectedProductName = '';
-    let isFiltersVisible = false;
-
-    function toggleFilters() {
-      const filtersContainer = document.getElementById('filtersContainer');
-      const filterBar = document.querySelector('.filter-bar-post-billing-2');
-      const productSearch = document.getElementById('productSearch');
-      isFiltersVisible = !isFiltersVisible;
-      filtersContainer.classList.toggle('filters-visible-post-billing-2', isFiltersVisible);
-      if (isFiltersVisible) {
-        if (!filtersContainer.contains(productSearch)) {
-          filtersContainer.appendChild(productSearch);
-        }
-      } else {
-        if (!filterBar.contains(productSearch)) {
-          filterBar.appendChild(productSearch);
-        }
-      }
-    }
-
-    document.querySelectorAll('input[name="detailsToggle"]').forEach(radio => {
-        radio.addEventListener('change', function () {
-            const postDetails = document.getElementById('post-details');
-            const invoiceDetails = document.getElementById('invoice-details');
-            const postRadio = document.getElementById('post-details-radio');
-            if (postRadio.checked) {
-                postDetails.classList.add('active');
-                invoiceDetails.classList.remove('active');
-            } else {
-                postDetails.classList.remove('active');
-                invoiceDetails.classList.add('active');
-            }
-            const selectedValue = this.value;
-            listCart = [];
-            listSelected();
-            resetInfoPost();
-            postType = selectedValue === 'post-details' ? 1 : 2;
-        });
+        loadFolioWindows();
     });
 
-    function getTransactionPosting(groupTransactionID, subGroupTransactionID) {
-         let filteredSubGroupTransaction = transactionList.filter(function (item) {
-            if (groupTransactionID == 0 && subGroupTransactionID == 0) return true;
-            if (groupTransactionID != 0 && subGroupTransactionID == 0) return item.transactionGroupID == groupTransactionID;
-            return item.transactionSubGroupID == subGroupTransactionID && item.transactionGroupID == groupTransactionID;
-         });
-        if (filteredSubGroupTransaction.length > 0) {
-            $('#listTransactionPosting').empty();
-            var html = '';
-            for (var i = 0; i < filteredSubGroupTransaction.length; i++) {
-                var filterArticlePosting = articleList.filter(function (item) {
-                    return item.transactionCode == filteredSubGroupTransaction[i].code;
-                });
-                const subProducts = filterArticlePosting.map(item => ({
-                    code: item.code,
-                    name: item.description,
-                    id: item.id
-                }));
-                html += `<div class="product-item-post-billing-2" data-subproducts='${JSON.stringify(subProducts)}'>
-                        <span class="product-code-post-billing-2">${filteredSubGroupTransaction[i].code}</span>
-                        <div class="product-name-row-post-billing-2">
-                            <span class="product-name-post-billing-2">${filteredSubGroupTransaction[i].description}</span>
-                            <button class="btn-add-post-billing-2" data-id="${filteredSubGroupTransaction[i].code}" onclick="addItem(1,this)">+</button>
-                        </div>
-                    </div>`;
-            }
-            $('#listTransactionPosting').append(html);
+
+
+    // nut add and post
+    var invoiceList = []; 
+
+    // ---. XỬ LÝ NÚT ADD (CHỈ DÙNG CHO F3) ---
+    $('#btn-add').click(function() {
+        var $activePane = $('#invoice-pane');
+        var transCode = $activePane.find('.js-trans-code').val();
+
+        if (!transCode) { alert("Please select a transaction first!"); return; }
+
+        var qty = parseFloat($activePane.find('.js-input-qty').val()) || 0;
+        var price = parseNumberWithComma($activePane.find('.js-input-price-net').val()); 
+
+        var desc = $activePane.find('.js-trans-desc').val();
+        var artDesc = $activePane.find('.js-art-desc').val();
+        var finalDesc = artDesc ? artDesc : desc;
+
+        var artCode = $activePane.find('.js-art-code').val() || "";
+        
+        var amountBeforeTax = $activePane.find('.js-amount-gross').val() || "";
+
+        var isExpress = $activePane.find('.js-chk-express').is(':checked');
+        var isDiscount = $activePane.find('.js-chk-discount').is(':checked');
+
+        var pctVal = 0;
+        var serviceType = '';
+
+        if (isExpress) {
+            pctVal = parseFloat($activePane.find('.js-input-express-pct').val()) || 0;
+            serviceType = 'EXP';
+        } else if (isDiscount) {
+            pctVal = parseFloat($activePane.find('.js-input-discount-pct').val()) || 0;
+            serviceType = 'DIS';
         }
-        document.querySelectorAll('.product-item-post-billing-2').forEach(item => {
-            item.addEventListener('click', (e) => {
-                if (!e.target.classList.contains('btn-add-post-billing-2') && !e.target.closest('.btn-add-post-billing-2')) {
-                    const isActive = item.classList.contains('active');
-                    closeSubProductList();
-                    if (!isActive) showSubProductList(item);
-                }
-            });
-        });
-    }
 
-    function setGroupTransactionPosting() {
-        $('#transactionGroupIDPosting').empty();
-        var html = `<option value='0' selected>Group Transaction</option>`;
-        groupTransaction.forEach(g => {
-            html += `<option value='${g.id}'>${g.description}</option>`;
-        });
-        $('#transactionGroupIDPosting').append(html);
-    }
+        // --- TÍNH TOÁN TIỀN ---
+        var rawTotal = qty * price;
+        var adjustAmount = rawTotal * (pctVal / 100);
+        var finalTotal = 0;
 
-    function setSubGroupTransactionPosting(transactionGroupID) {
-        $('#subTransactionGroupIDPosting').empty();
-        var html = `<option value='0' selected>Sub Group Transaction</option>`;
-        const filtered = transactionGroupID != 0
-            ? subGroupTransaction.filter(s => s.transactionGroupID == transactionGroupID)
-            : subGroupTransaction;
-        filtered.forEach(s => {
-            html += `<option value='${s.id}'>${s.description}</option>`;
-        });
-        $('#subTransactionGroupIDPosting').append(html);
-    }
-
-    $('#transactionGroupIDPosting').change(function () {
-        setSubGroupTransactionPosting($(this).val());
-        getTransactionPosting($(this).val(), $('#subTransactionGroupIDPosting').val());
-    });
-
-    $('#subTransactionGroupIDPosting').change(function () {
-        getTransactionPosting($('#transactionGroupIDPosting').val(), $(this).val());
-    });
-
-    function showSubProductList(element) {
-      try {
-        const subProducts = JSON.parse(element.getAttribute('data-subproducts') || '[]');
-        const productName = element.querySelector('.product-name-post-billing-2').textContent.trim();
-        const productCode = element.querySelector('.product-code-post-billing-2').textContent.trim();
-        const subProductList = document.getElementById('subProductList');
-        document.querySelectorAll('.product-item-post-billing-2').forEach(item => item.classList.remove('active'));
-        element.classList.add('active');
-        selectedProductName = `${productName} (${productCode})`;
-        document.getElementById('taCode1PostBilling').value = productCode;
-
-        subProductList.innerHTML = subProducts.length > 0 ? `
-            <div class="list-header-post-billing-2">
-              <h6>Articles for ${productName}</h6>
-              <button class="btn-close-list-post-billing-2" onclick="closeSubProductList()">✕</button>
-            </div>
-            ${subProducts.map(sub => `
-              <div class="sub-product-post-billing-2">
-                <span>${sub.name} - Code: ${sub.code}</span>
-                <button class="btn-add-post-billing-2" data-id="${sub.id}" onclick="addItem(2,this)">+</button>
-              </div>
-            `).join('')}
-        ` : `
-            <div class="list-header-post-billing-2">
-              <h6>Articles for ${productName}</h6>
-              <button class="btn-close-list-post-billing-2" onclick="closeSubProductList()">✕</button>
-            </div>
-            <div class="sub-product-post-billing-2">No articles available</div>
-        `;
-        subProductList.classList.add('active');
-      } catch (error) {
-        console.error('Error displaying articles:', error);
-      }
-    }
-
-    function closeSubProductList() {
-      const subProductList = document.getElementById('subProductList');
-      subProductList.classList.remove('active');
-      subProductList.innerHTML = '';
-      document.querySelectorAll('.product-item-post-billing-2').forEach(item => item.classList.remove('active'));
-      selectedProductName = '';
-      resetInputs();
-    }
-
-    function resetInputs() {
-      $('#taCode1PostBilling').val('');
-      $('#quantityPostBilling').val('1');
-      $('#billNoPostBilling').val('');
-      $('#pricePostBilling').val('0');
-      $('#amountPostBilling').val('0');
-      $('#priceNetPostBilling').val('0');
-      $('#amountNetPostBilling').val('0');
-    }
-
-    var cartArrticle;
-    function addItem(type, button) {
-        const dataId = button.getAttribute('data-id');
-        let article = [], transaction = [];
-        if (type == 2) {
-            article = articleList.filter(a => a.id == dataId);
-            transaction = transactionList.filter(t => t.code == article[0]?.transactionCode);
+        if (serviceType === 'EXP') {
+            finalTotal = rawTotal + adjustAmount; 
+        } else if (serviceType === 'DIS') {
+            finalTotal = rawTotal - adjustAmount; 
         } else {
-            transaction = transactionList.filter(t => t.code == dataId);
+            finalTotal = rawTotal;
         }
-        cartArrticle = article[0];
-        setValueFormPostArticle(cartArrticle, transaction[0]);
+
+        var reference = $activePane.find('.js-ref-main').val();
+        var remarkInvoice = $activePane.find('.js-invoice-desc').val();
+        var checkNo = $activePane.find('.js-invoice-checkNo').val();
+
+        var itemObj = {
+            id: Date.now(),
+            code: transCode,
+            articleCode: artCode,
+            description: finalDesc,
+            amountBeforeTax: amountBeforeTax,
+            quantity: qty,
+            price: price,
+            serviceType: serviceType,
+            servicePct: pctVal,
+            amount: finalTotal,
+            reference: reference,
+            remark: remarkInvoice,
+            checkNo: checkNo
+        };
+
+        invoiceList.push(itemObj);
+        renderInvoiceFooter();
+        resetFormKeepInvoiceInfo();
+    });
+
+    // ---  HÀM RENDER DANH SÁCH XUỐNG FOOTER ---
+    function renderInvoiceFooter() {
+        var $footerContent = $('#invoice-pane .footer-content');
+        var html = '<table class="table table-sm table-striped mb-0" style="font-size: 0.7rem;">';
+
+        html += '<thead class="table-light"><tr><th>Code</th><th>Desc</th><th class="text-end">Qty</th><th class="text-end">Price</th><th class="text-end">Total</th><th>Ref</th><th>Action</th></tr></thead><tbody>';
+
+        var grandTotal = 0;
+
+        invoiceList.forEach(function(item, index) {
+            grandTotal += item.amount;
+            html += `<tr>
+                        <td>${item.code}</td>
+                        <td>${item.description}</td>
+                        <td class="text-end">${item.quantity}</td>
+                        <td class="text-end">${formatNumberWithComma(item.price)}</td>
+                        <td class="text-end fw-bold">${formatNumberWithComma(item.amount)}</td>
+                        <td>${item.reference}</td>
+                        <td><a href="javascript:void(0)" onclick="removeInvoiceItem(${index})" class="text-danger">Delete</a></td>
+                     </tr>`;
+        });
+
+        html += '</tbody></table>';
+
+        $footerContent.html(html);
+
+        // Cập nhật Tổng tiền ở thanh Footer Bar
+        $('#invoice-pane .footer-bottom-bar span.text-primary').text(formatNumberWithComma(grandTotal));
     }
 
-    function setValueFormPostArticle(article, transaction) {
-        if (article) {
-            $('#articleCodePostBilling').text(`${article.code} - ${article.description}`);
-            const price = article.defaultPrice || 0;
-            $('#pricePostBilling').val(formatNumberWithDot(price));
-            $('#priceNetPostBilling').val(formatNumberWithDot(price));
-            $('#amountPostBilling').val(formatNumberWithDot(price * 1));
-            $('#amountNetPostBilling').val(formatNumberWithDot(price * 1));
+    // ---  HÀM XÓA 1 DÒNG KHỎI LIST INVOICE ---
+    function removeInvoiceItem(index) {
+        invoiceList.splice(index, 1);
+        renderInvoiceFooter(); 
+    }
+
+    // ---. HÀM RESET FORM NHƯNG GIỮ INVOICE DESC (CHO NÚT ADD) ---
+    function resetFormKeepInvoiceInfo() {
+        var $activePane = $('#invoice-pane');
+        var currentDesc = $activePane.find('.js-invoice-desc').val(); 
+
+        resetForm(); 
+
+        $activePane.find('.js-invoice-desc').val(currentDesc);
+
+        $activePane.find('.js-trans-code').focus();
+    }
+
+    // ---  NÚT CLEAR INVOICE ---
+    $('.clear-btn').click(function() {
+        if(confirm('Are you sure you want to clear all items?')) {
+            invoiceList = [];
+            renderInvoiceFooter();
         }
-        $('#taCode1PostBilling').val(transaction?.code || '');
-        $('#taCode2PostBilling').val(transaction?.description || '');
-        $('#quantityPostBilling').val('1');
-    }
+    });
 
-    function resetInfoPost() {
-        $('#taCode1PostBilling, #taCode2PostBilling, #billNoPostBilling, #referencePostBilling, #supplementPostBilling, #desInvoicePostBilling, #checkNoInvoicePostBilling').val('');
-        $('#pricePostBilling, #amountPostBilling, #priceNetPostBilling, #amountNetPostBilling').val('0');
-        $('#quantityPostBilling').val('1');
-        $('#articleCodePostBilling').text('');
-        $('#rmtChargePostBilling').val('');
-        $('#expressService-post-billing').prop('checked', false);
-        $('#percentageInput-post-billing').val('');
-        $('input[name="percentage-post-billing"]').prop('checked', false);
-    }
+        // ---  HÀM POSTING SERVICE  ---
+    function PostingService() {
+        const loginUser = parseInt(localStorage.getItem("userID")) || 0;
+        const loginName = (localStorage.getItem("Loginname") || "").trim().replace(/^"(.*)"$/, '$1');
+        const shiftID = parseInt(localStorage.getItem("shiftID")) || 0;
 
-    var listCart = [];
-    class CartItem {
-        constructor(transCode, transName, articleCode, articleName, quantity, priceNet, price, amount, amountNet) {
-            this.transCode = transCode;
-            this.transName = transName;
-            this.articleCode = articleCode;
-            this.articleName = articleName;
-            this.quantity = quantity;
-            this.priceNet = priceNet;
-            this.price = price;
-            this.amount = amount;
-            this.amountNet = amountNet;
-        }
-    }
+        const currentFolioID = parseInt(localStorage.getItem("CurrentFolioID")) || 0;
+        const currentRoomID = parseInt(localStorage.getItem("CurrentRoomID")) || 0;
 
-    function addItemToCart() {
-        if (postType == 1 && listCart.length >= 1) {
-            showToast('Error', "Posted transaction! Please create another post", false);
+        //  Xác định Tab đang active
+        var $activePane = $('.tab-pane.active');
+        var activeTabId = $activePane.attr('id');
+        var dataToSend = []; 
+
+        var $selectBox = $activePane.find('.js-window-select');
+        var selectedFolioID = parseInt($selectBox.val());
+
+        if (!selectedFolioID) {
+            showToast('Error', "Please select a Window No (Folio)!", false);
             return;
         }
 
-        const articleText = $('#articleCodePostBilling').text();
-        const [articleCode, articleName] = articleText.split(' - ');
+        var $selectedOption = $selectBox.find('option:selected');
+        var isLocked = $selectedOption.attr('data-locked');
 
-        listCart.push(new CartItem(
-            $('#taCode1PostBilling').val(),
-            $('#taCode2PostBilling').val(),
-            articleCode?.trim() || '',
-            articleName?.trim() || '',
-            $('#quantityPostBilling').val(),
-            $('#priceNetPostBilling').val(),
-            $('#pricePostBilling').val(),
-            $('#amountPostBilling').val(),
-            $('#amountNetPostBilling').val()
-        ));
-        listSelected();
-        resetInfoPost();
-    }
-
-    // === HIỂN THỊ DANH SÁCH GIỎ HÀNG VỚI DẤU CHẤM ===
-    function listSelected() {
-        $('#cartList').empty();
-        let html = '';
-        if (listCart.length > 0) {
-            listCart.forEach((item, i) => {
-                html += `
-                    <li>
-                        <span class="item-name-post-billing-2">${item.transName} - ${item.transCode}</span>
-                        <span class="item-quantity-post-billing-2">${item.quantity}</span>
-                        <span class="item-subtotal-post-billing-2">${item.amountNet}</span>
-                        <span class="item-remove-post-billing-2"><button data-id="${i}" onclick="removeCartItem(this)">x</button></span>
-                    </li>`;
-            });
-        } else {
-            html = '<li class="list-group-item list-group-item-post-billing">No items in list</li>';
+        if (isLocked === 'true') {
+            showToast('Error', "This Folio is Locked. Cannot Post Transaction!", false);
+            return; 
         }
-        $('#cartList').append(html);
-    }
 
-    function deleteAllCartItems() {
-        listCart = [];
-        listSelected();
-    }
+        if (activeTabId === 'detail-pane') {
+            var $pane = $('#detail-pane');
+            var tCode = $pane.find('.js-trans-code').val();
 
-    function calculateNetPost(transactionCode, price) {
-        $.ajax({
-            url: '/Billing/CalculateNet',
-            type: 'get',
-            data: { transactionCode, price },
-            headers: { "X-CSRF-TOKEN-HEADERNAME": $("input[name='__RequestVerificationToken']").val() },
-            success: function (result) {
-                const qty = parseFloat($('#quantityPostBilling').val()) || 1;
-                $('#pricePostBilling').val(formatNumberWithDot(price));
-                $('#priceNetPostBilling').val(formatNumberWithDot(result));
-                $('#amountPostBilling').val(formatNumberWithDot(price * qty));
-                $('#amountNetPostBilling').val(formatNumberWithDot(result * qty));
-            },
-            error: function (xhr) { if (xhr.status == 401) sessionTimeout(); }
-        });
-    }
+            if (!tCode) { alert("No transaction selected!"); return; }
 
-    function calculatePost(transactionCode, price) {
-        $.ajax({
-            url: '/Billing/CalculatePrice',
-            type: 'get',
-            data: { transactionCode, price },
-            headers: { "X-CSRF-TOKEN-HEADERNAME": $("input[name='__RequestVerificationToken']").val() },
-            success: function (result) {
-                const qty = parseFloat($('#quantityPostBilling').val()) || 1;
-                $('#pricePostBilling').val(formatNumberWithDot(result));
-                $('#priceNetPostBilling').val(formatNumberWithDot(price));
-                $('#amountPostBilling').val(formatNumberWithDot(result * qty));
-                $('#amountNetPostBilling').val(formatNumberWithDot(price * qty));
-            },
-            error: function (xhr) { if (xhr.status == 401) sessionTimeout(); }
-        });
-    }
+            var qty = parseFloat($pane.find('.js-input-qty').val()) || 0;
+            var price = parseNumberWithComma($pane.find('.js-input-price-net').val());
+            var amount = parseNumberWithComma($pane.find('.js-amount-net').val());
 
-    // === XỬ LÝ BLUR CHO CÁC Ô NHẬP TIỀN ===
-    $("#pricePostBilling").blur(function () {
-        const price = parseNumberWithDot($(this).val());
-        calculateNetPost($('#taCode1PostBilling').val(), price);
-    });
+            var reference = $pane.find('.js-ref-main').val();
+            var supplement = $pane.find('.js-sup-folio').val() || "";
+            var receiptNo = $pane.find('.js-invoice-checkNo').val() || "";
 
-    $("#priceNetPostBilling").blur(function () {
-        const price = parseNumberWithDot($(this).val());
-        calculatePost($('#taCode1PostBilling').val(), price);
-    });
+            var model = {
+                UserID: loginUser,
+                UserName: loginName,
+                ShiftID: shiftID,
+                CashierNo: loginName,
+                FolioID: selectedFolioID,
+                OriginFolioID: selectedFolioID,
+                ReservationID: idReservation,
+                OriginReservationID: idReservation,
+                RoomType: roomType,
+                ReceiptNo: receiptNo,
+                CheckNo: receiptNo,
+                RoomID: roomID,
 
-    $("#amountPostBilling").blur(function () {
-        const amount = parseNumberWithDot($(this).val());
-        const qty = parseFloat($('#quantityPostBilling').val()) || 1;
-        if (qty > 0) calculateNetPost($('#taCode1PostBilling').val(), amount / qty);
-    });
+                TransactionCode: tCode,
+                Description: $pane.find('.js-trans-desc').val(),
+                ArticleCode: $pane.find('.js-art-code').val(),
 
-    $("#amountNetPostBilling").blur(function () {
-        const amount = parseNumberWithDot($(this).val());
-        const qty = parseFloat($('#quantityPostBilling').val()) || 1;
-        if (qty > 0) calculatePost($('#taCode1PostBilling').val(), amount / qty);
-    });
+                Quantity: qty,
+                Price: price,
+                Amount: amount,
+                AmountMaster: amount,
+                AmountBeforeTax:parseNumberWithComma( $pane.find('.js-amount-gross').val()),
+                AmountMasterBeforeTax:parseNumberWithComma( $pane.find('.js-amount-gross').val()),
+                AmountGross: amount,
+                AmountMasterGross: amount,
 
-    $("#quantityPostBilling").blur(function () {
-        const qty = parseFloat($(this).val()) || 1;
-        const price = parseNumberWithDot($('#pricePostBilling').val());
-        const priceNet = parseNumberWithDot($('#priceNetPostBilling').val());
-        $('#amountPostBilling').val(formatNumberWithDot(price * qty));
-        $('#amountNetPostBilling').val(formatNumberWithDot(priceNet * qty));
-    });
+                CurrencyID: $pane.find('.currency-select').val(),
+                CurrencyMaster: $pane.find('.currency-select').val(),
+                Reference: reference,
+                Supplement: supplement,
 
-    function removeCartItem(button) {
-        const index = parseInt(button.getAttribute('data-id'));
-        if (index >= 0 && index < listCart.length) {
-            listCart.splice(index, 1);
-            listSelected();
-        }
-    }
+                PostType: 2,
+                RowState: 2,
+                GroupType: 1,
+                UserInsertID: loginUser,
+                UserUpdateID: loginUser
 
-    const expressServiceCheckbox = document.getElementById('expressService-post-billing');
-    const percentageInput = document.getElementById('percentageInput-post-billing');
-    const radioButtons = document.querySelectorAll('input[name="percentage-post-billing"]');
-    expressServiceCheckbox.addEventListener('change', () => {
-        if (expressServiceCheckbox.checked) {
-            percentageInput.value = '50.00';
-            $('#referencePostBilling').val('Express Service: 50%');
-            document.getElementById('percent50-post-billing').checked = true;
-        } else {
-            percentageInput.value = '';
-            $('#referencePostBilling').val('');
-            radioButtons.forEach(r => r.checked = false);
-        }
-    });
+            };
 
-    radioButtons.forEach(radio => {
-        radio.addEventListener('change', () => {
-            if (radio.checked) {
-                percentageInput.value = parseFloat(radio.value).toFixed(2);
-                $('#referencePostBilling').val('Express Service: ' + percentageInput.value + '%');
+            dataToSend.push(model);
+
+        } else if (activeTabId === 'invoice-pane') {
+            if (invoiceList.length === 0) {
+                alert("Invoice list is empty! Please 'Add' items first.");
+                return;
             }
-        });
-    });
 
-    percentageInput.addEventListener('input', () => {
-        const val = percentageInput.value;
-        radioButtons.forEach(r => r.checked = false);
-        $('#referencePostBilling').val('Express Service: ' + val + '%');
-        if (['10', '50', '100'].includes(val)) {
-            document.getElementById(`percent${val.replace('.', '')}-post-billing`).checked = true;
+            // Lấy thông tin chung của cả Invoice (Invoice Info Header)
+            var $pane = $('#invoice-pane');
+            var invCheckNo = $pane.find('.js-invoice-checkNo').val();
+            var invDesc = $pane.find('.js-invoice-desc').val();
+            var invRef = $pane.find('.js-invoice-ref').val(); 
+            var invSuppl = $pane.find('.js-invoice-supp').val();
+           
+            invoiceList.forEach(function(item) {
+                var model = {
+                    UserID: loginUser,
+                    UserName: loginName,
+                    ShiftID: shiftID,
+                    CashierNo: loginName,
+                    FolioID: selectedFolioID,
+                    OriginFolioID: selectedFolioID,
+                    ReservationID: idReservation,
+                    OriginReservationID: idReservation,
+                    RoomType: roomType,
+                    ReceiptNo: item.checkNo,
+                    CheckNo: item.checkNo,
+                    RoomID: roomID,
+
+                    TransactionCode: item.code,
+                    Description: item.description, 
+                    ArticleCode: item.articleCode,
+
+                    Quantity: item.quantity,
+                    Price: item.price,
+                    Amount: item.amount,
+                    AmountMaster: item.amount,
+                    AmountBeforeTax: parseNumberWithComma(item.amountBeforeTax),
+                    AmountMasterBeforeTax:parseNumberWithComma( item.amountBeforeTax),
+                    AmountMasterGross: amount,
+                    AmountGross: item.amount,
+
+                    CurrencyID: $pane.find('.currency-select').val(),
+                    CurrencyMaster: $pane.find('.currency-select').val(),
+
+                    // Kết hợp Reference riêng của món + Reference chung của Invoice
+                    Reference: item.reference ? (item.reference + ". " + invRef) : invRef,
+
+                    Supplement: supplement, 
+                    CheckNo: invCheckNo,
+
+                    PostType: 3,
+                    RowState: 3,
+                    GroupType: 1,
+                    UserInsertID: loginUser,
+                    UserUpdateID: loginUser
+                };  
+
+                dataToSend.push(model);
+            });
         }
-    });
 
-    function PostingService() {
-        const userName = JSON.parse(localStorage.getItem("Loginname"));
-        const userID = JSON.parse(localStorage.getItem("userID"));
-        const shiftID = localStorage.getItem("shiftID");
-        const shiftName = localStorage.getItem("shiftName");
+        submitToDB(dataToSend,selectedFolioID);
+    }
 
-        const formData = new FormData();
-        formData.append('rsvID', idReservation);
-        formData.append('description', $('#taCode2PostBilling').val());
-        formData.append('roomID', roomID);
-        formData.append('referencePost', $('#referencePostBilling').val());
-        formData.append('listItem', JSON.stringify(listCart));
-        formData.append('userName', userName);
-        formData.append('userID', userID);
-        formData.append('postType', postType);
-        formData.append('window', $('#winNoPostBilling').val());
-        formData.append('shiftID', shiftID);
-        formData.append('shiftName', shiftName);
+    // Hàm gửi Ajax
+    function submitToDB(dataList,targetFolioID) {
+        $('#loadingOverlay').css("display", "flex").hide().fadeIn(200);
 
         $.ajax({
-            url: '/Billing/PostArticle',
+            url: '/Billing/PostingSave',
             type: 'POST',
-            processData: false,
-            contentType: false,
-            data: formData,
-            success: function (data) {
-                if (data.code == 0) {
-                    resetInfoPost();
-                    listCart = [];
-                    listSelected();
-                    searchFolioDetail(0);
-                     GetBalanceVND(idReservation);
-                    showToast('Success', data.msg, true);
+            contentType: 'application/json',
+            data: JSON.stringify(dataList),
+            success: function (res) {
+                $('#loadingOverlay').fadeOut(200);
+                if (res.success) {
+                    showToast("Success","Posted Successfully! Invoice No: " + res.invoiceNo,true);
+
+                    if(typeof invoiceList !== 'undefined') {
+                        invoiceList = [];
+                        renderInvoiceFooter(); 
+                    }
+
+                    resetForm(); 
+                    $('#modalPosting').modal('hide');
+                    if (typeof listFolioNoID !== 'undefined' && typeof filterByFolioNo === 'function') {
+                        // Tìm index của folioID vừa post trong danh sách folio của trang billing
+                        var index = listFolioNoID.indexOf(targetFolioID);
+                        if (index !== -1) {
+                            filterByFolioNo(targetFolioID, index);
+                        } else {
+                            searchFolioDetail(0);
+                        }
+                    }
                 } else {
-                    showToast('Error', data.msg, false);
+                    showToast('Error', res.message || "Posting Failed", false);
                 }
             },
-            error: function () { }
+            error: function (err) {
+                $('#loadingOverlay').fadeOut(200);
+                console.error(err);
+                showToast('Error', "System Error: " + error, false);
+            }
         });
     }
-</script> 
-*@
+
+
+</script>
