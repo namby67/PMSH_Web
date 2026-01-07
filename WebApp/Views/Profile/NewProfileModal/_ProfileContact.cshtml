@@ -4,7 +4,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">New Profile - Contact</h5>
-                <button type="button" class="btn-close" onclick="closeFormProfile()" aria-label="Close"></button>
+              @*   <button type="button" class="btn-close" onclick="closeFormProfile()" aria-label="Close"></button> *@
             </div>
             <div class="modal-body">
                 <div class="mb-2">
@@ -12,6 +12,7 @@
                     <button type="button" class="submit-button-clear-reservation" onclick="closeFormProfile()">Change
                         Profile Type</button>
                     <button type="button" class="submit-button-new-reservation" onclick="resetForm()">Clear</button>
+                    <button type="button" class="submit-button-clear-reservation" onclick="closeFormProfile();">Close</button>
                 </div>
                 <div style="display:flex">
                     <div
@@ -205,4 +206,7 @@
         </div>
     </div>
 </div>
-</div>
+<script>
+    $('#txtCheckboxDobContact').on('change', function () { $('#txtDobContact').prop('disabled', $(this).is(':checked')); });
+
+</script>

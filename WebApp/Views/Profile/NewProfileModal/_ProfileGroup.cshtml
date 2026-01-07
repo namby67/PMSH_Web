@@ -4,7 +4,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">New Profile - Group</h5>
-                <button type="button" class="btn-close" onclick="closeFormProfile()" aria-label="Close"></button>
+@*                 <button type="button" class="btn-close" onclick="closeFormProfile()" aria-label="Close"></button> *@
             </div>
             <div class="modal-body">
                 <div class="mb-2">
@@ -12,6 +12,7 @@
                     <button type="button" class="submit-button-clear-reservation" onclick="closeFormProfile()">Change
                         Profile Type</button>
                     <button type="button" class="submit-button-new-reservation" onclick="resetForm()">Clear</button>
+                    <button type="button" class="submit-button-clear-reservation" onclick="closeFormProfile();">Close</button>
                 </div>
                 <div class="profile_input">
                     <div style="display:flex">
@@ -202,10 +203,44 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
-</div>
-</div>
-</div>
+<script>
+
+    // --- GLOBAL EVENT BINDINGS (Unchanged Logic) ---
+    document.getElementById("searchName").addEventListener("keydown", async function (event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            const value = event.target.value;
+            await getProfileGroupSreach(value);
+        }
+    });
+
+    async function getProfileGroupSreach(value) {
+        try {
+            $("#loadingSpinner").show();
+            const res = await $.ajax({ url: '/ProfileGroupSreach/', method: "GET", data: { GroupName: value } });
+            if (!res?.success) { showToast('Error', res?.message || 'Failed.', false); return; }
+            initializeProfileGroupGrid(res.data);
+            $("#loadingSpinner").hide();
+        } catch (error) { console.error(error); $("#loadingSpinner").hide(); }
+    }
+
+    async function initializeProfileGroupGrid(data) {
+        $("#profileGroupGrid").dxDataGrid({
+            dataSource: data || [],
+            showBorders: true,
+            selection: { mode: "single" },
+            paging: { pageSize: 20 },
+            height: "300px",
+            pager: { showPageSizeSelector: true, allowedPageSizes: [5, 10, 20], showInfo: true },
+            filterRow: { visible: true },
+            columns: [{ dataField: "id", caption: "ID", visible: false }, { dataField: "account", caption: "Group Name" }],
+            scrolling: { mode: "standard", showScrollbar: "always", scrollByContent: true },
+            onRowClick: function (e) { selectedRowData = e.data; },
+            noDataText: "No records to display"
+        });
+    }
+
+</script>
