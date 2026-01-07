@@ -3753,6 +3753,11 @@ namespace Report.Controllers
         {
             try
             {
+                var businessDates = PropertyUtils.ConvertToList<BusinessDateModel>(
+                    BusinessDateBO.Instance.FindAll()
+                );
+
+                 businessDate = businessDates[0].BusinessDate;
                 int totalDueinCheckedint = 0;
                 int guestInHouseCount = 0;
                 int dueoutCount = 0;
