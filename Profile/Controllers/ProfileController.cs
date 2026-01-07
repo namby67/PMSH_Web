@@ -1970,7 +1970,10 @@ SELECT DateOfBirth, Firstname
 FROM Profile WITH (NOLOCK)
 WHERE DAY(DateOfBirth)   = DAY('{businessDate:yyyy-MM-dd}')
   AND MONTH(DateOfBirth) = MONTH('{businessDate:yyyy-MM-dd}')
-  AND YEAR(DateOfBirth) BETWEEN 2023 AND YEAR(GETDATE())";
+  AND YEAR(DateOfBirth) BETWEEN 2023 AND YEAR(GETDATE())
+  AND Firstname IS NOT NULL
+  AND LTRIM(RTRIM(Firstname)) <> ''";
+
 
 
 
