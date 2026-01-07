@@ -1507,11 +1507,18 @@ namespace Profile.Controllers
         {
             try
             {
-                var relust = ProfileBO.Instance.FindByPrimaryKey(id);
+                if (ProfileBO.Instance.FindByPrimaryKey(id) is not ProfileModel result)
+                {
+                    return Json(new
+                    {
+                        success = false,
+                        message = "Profile not found or invalid type"
+                    });
+                }
                 return Json(new
                 {
                     success = true,
-                    data = relust
+                    data = result
                 });
             }
             catch (Exception ex)

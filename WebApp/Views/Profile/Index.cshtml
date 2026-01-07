@@ -397,7 +397,7 @@
 
                                     <div class="row align-items-center mb-1">
                                         <label class="col-sm-2 col-form-label text-end">Date of Birth</label>
-                                        <div class="col-sm-3">
+                                        <div class="col-sm-4">
                                             <input type="date" class="form-control" id="txtDobIndividual" disabled
                                                 data-business-date>
                                         </div>
@@ -1281,16 +1281,17 @@
             <!-- Header -->
             <div class="modal-header py-2">
                 <h6 class="modal-title mb-0">Search</h6>
-                <button type="button" class="btn-close" onclick="closeModalSearch()"></button>
             </div>
 
             <!-- Body -->
             <div class="modal-body pt-2">
+                <button type="button" class="mui-button mui-button-close " onclick="closeModalSearch()"><i
+                        class="fa-solid fa-xmark"></i> Close</button>
 
                 <!-- Search box -->
                 <div class="row mb-1 align-items-center">
                     <label class="col-sm-2 col-form-label text-end">Search Name</label>
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         <input type="text" id="nameIndividual" class="form-control form-control-sm"
                             placeholder="Enter user name" />
                     </div>
@@ -1299,19 +1300,17 @@
                         <input type="text" id="firstNameIndividual" class="form-control form-control-sm"
                             placeholder="Enter user name" />
                     </div>
+                    <div class="col-sm-1">
+                        <button id="btnViewIndividual" class="mui-button mui-button-search">
+                            <i class="fa-solid fa-search"></i>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Result table -->
                 <div id="profileIndividualGrid" class="gridContainer"></div>
 
-
             </div>
-
-            <!-- Footer -->
-            <div class="modal-footer py-2">
-                <button type="button" class="btn btn-sm btn-secondary" onclick="closeModalSearch()">Close</button>
-            </div>
-
         </div>
     </div>
 </div>
@@ -1337,6 +1336,16 @@
 
         }
     });
+
+    //Lấy data search individual
+    async function blindValue() {
+        const searchModel = {
+            name: document.getElementById('nameIndividual').value.trim(),
+            firstName: document.getElementById('firstNameIndividual').value.trim()
+        };
+
+        await getProfileIndividualSreach(searchModel);
+    }
     function bindIndividualSearch() {
         const inputs = ['nameIndividual', 'firstNameIndividual'];
 
@@ -1347,19 +1356,115 @@
             el.addEventListener('keydown', async function (event) {
                 if (event.key === 'Enter') {
                     event.preventDefault();
+                    await blindValue();
 
-                    const searchModel = {
-                        name: document.getElementById('nameIndividual').value.trim(),
-                        firstName: document.getElementById('firstNameIndividual').value.trim()
-                    };
-
-                    await getProfileIndividualSreach(searchModel);
                 }
             });
         });
     }
+    async function bindIndividualSearchButton() {
+        const btn = document.getElementById('btnViewIndividual');
+
+        btn.addEventListener('click', async function () {
+            await blindValue();
+        });
+    }
+
 
     bindIndividualSearch();
+
+    //Fill dữ liệu cho Individual
+    function selectGroup(selectedRowData) {
+        if (!selectedRowData) return;
+
+        // ===== BASIC INFO =====
+        $('#txtCodeIndividual').val(selectedRowData.code ?? '');
+        $('#txtFullNameIndividual').val(selectedRowData.account ?? '');
+        $('#txtFirstNameIndividual').val(selectedRowData.firstname ?? '');
+        $('#txtLastNameIndividual').val(selectedRowData.lastName ?? '');
+        $('#txtMiddleNameIndividual').val(selectedRowData.middleName ?? '');
+
+        // ===== LANGUAGE / TITLE =====
+        $('#txtLanguageIndividual').val(selectedRowData.languageID || '').trigger('change');
+        $('#txtTitleIndividual').val(selectedRowData.titleID || '').trigger('change');
+
+        // ===== NATIONALITY / COUNTRY =====
+        $('#txtNationalityIndividual').val(selectedRowData.nationalityID || '').trigger('change');
+        $('#txtCountryIndividual').val(selectedRowData.countryID || '').trigger('change');
+
+        // ===== CITY / POSTAL / STATE =====
+        $('#txtCityIndividual').val(selectedRowData.city ?? '').trigger('change');
+        $('#txtPostalIndividual').val(selectedRowData.postalCode ?? '');
+        $('#txtStateIndividual').val(selectedRowData.stateID || '').trigger('change');
+
+        // ===== RELIGION / NATION / PURPOSE =====
+        $('#txtReligionIndividual').val(selectedRowData.religion ?? '');
+        $('#txtNationIndividual').val(selectedRowData.nation ?? '');
+        $('#txtPurposeIndividual').val(selectedRowData.purposeOfStay ?? '');
+
+        // ===== ADDRESS =====
+        $('#txtAddressIndividual').val(selectedRowData.address ?? '');
+        $('#txtBusAddressIndividual').val(selectedRowData.homeAddress ?? '');
+
+        // ===== COMMUNICATION =====
+        $('#txtTelephoneIndividual').val(selectedRowData.telephone ?? '');
+        $('#txtHandPhoneIndividual').val(selectedRowData.handPhone ?? '');
+        $('#txtFaxIndividual').val(selectedRowData.fax ?? '');
+        $('#txtEmailIndividual').val(selectedRowData.email ?? '');
+        $('#txtWebsiteIndividual').val(selectedRowData.website ?? '');
+
+        // ===== COMPANY / BUSINESS =====
+        $('#txtCompany2Individual').val(selectedRowData.company ?? '');
+        $('#txtBusinessTitleIndividual').val(selectedRowData.businessTitle ?? '');
+        $('#txtCompanyIndividual').val(selectedRowData.company ?? '');
+
+        // ===== TAX / PASSPORT / CARD =====
+        $('#txtTaxIndividual').val(selectedRowData.taxCode ?? '');
+        $('#txtPassportIndividual').val(selectedRowData.passPort ?? '');
+        $('#txtCardIndividual').val(selectedRowData.identityCard ?? '');
+
+        // ===== SALUTATION / VIP =====
+        $('#txtSalutationIndividual').val(selectedRowData.salutation ?? '');
+        $('#txtVIPIndividual').val(selectedRowData.vipid || '').trigger('change');
+        $('#txtReasonIndividual').val(selectedRowData.vipReason ?? '');
+
+        // ===== DATE OF BIRTH =====
+        if (selectedRowData.dateOfBirth && selectedRowData.dateOfBirth !== '1900-01-01T00:00:00') {
+            $('#txtDobIndividual')
+                .val(selectedRowData.dateOfBirth.substring(0, 10))
+                .prop('disabled', false);
+            $('#txtCheckboxDobIndividual').prop('checked', true);
+        } else {
+            $('#txtDobIndividual').val('').prop('disabled', true);
+            $('#txtCheckboxDobIndividual').prop('checked', false);
+        }
+
+        // ===== STATUS =====
+        $('#txtActiveIndividual').prop('checked', !!selectedRowData.active);
+        $('#txtContactIndividual').prop('checked', !!selectedRowData.contact);
+
+        // ===== KEYWORD / NOTE =====
+        $('#txtKeywordIndividual').val(selectedRowData.keyword ?? '');
+        $('#txtNoteIndividual').val(selectedRowData.description ?? '');
+
+        // ===== BLACK LIST =====
+        $('#blackListIndividual').prop('checked', !!selectedRowData.isBlackList);
+
+        if (selectedRowData.isBlackList) {
+            $('#blackListReasonIndividual')
+                .val(selectedRowData.blackListReason ?? '')
+                .prop('disabled', false);
+        } else {
+            $('#blackListReasonIndividual')
+                .val('')
+                .prop('disabled', true);
+        }
+
+        // ===== OPTIONAL: CLOSE SEARCH MODAL =====
+        if (typeof closeModalSearch === 'function') {
+            closeModalSearch();
+        }
+    }
 
 
     // Function Load Grid
@@ -1392,7 +1497,7 @@
                 applyFilter: "auto"
             },
             // 🔥 Quan trọng: gán selectedRowData khi click chọn
-            onRowClick: async function ( e ) {
+            onRowClick: async function (e) {
                 selectedRowData = e.data.id; // 🔥 lấy data của row vừa click
                 console.log("Selected Row (RowClick):", selectedRowData);
                 await selectIndividual(selectedRowData);
@@ -1433,7 +1538,6 @@
             onRowClick: function (e) {
                 selectedRowData = e.data; // 🔥 lấy data của row vừa click
                 console.log("Selected Row (RowClick):", selectedRowData);
-                selectGroup(selectedRowData);
             },
             noDataText: "No records to display" // hiển thị text khi chưa có dữ liệu
         });
@@ -1454,8 +1558,7 @@
             }
 
             const pkg = res.data;
-            console.log('data', pkg);
-
+            selectGroup(pkg);
             initializeProfileGroupGrid(pkg);
             $("#loadingSpinner").hide();
 
@@ -1570,36 +1673,42 @@
                     $('#profile_com_ta_source').hide();
                     $('#profile_group').hide();
                     $('#profile_contact').hide();
+                    $('#btnView').show();
                 }
                 else if (profileTypeValue == '1') {
                     $('#profile_individual').hide();
                     $('#profile_com_ta_source').show();
                     $('#profile_group').hide();
                     $('#profile_contact').hide();
+                    $('#btnView').hide();
                 }
                 else if (profileTypeValue == '2') {
                     $('#profile_individual').hide();
                     $('#profile_com_ta_source').show();
                     $('#profile_group').hide();
                     $('#profile_contact').hide();
+                    $('#btnView').hide();
                 }
                 else if (profileTypeValue == '3') {
                     $('#profile_individual').hide();
                     $('#profile_com_ta_source').show();
                     $('#profile_group').hide();
                     $('#profile_contact').hide();
+                    $('#btnView').hide();
                 }
                 else if (profileTypeValue == '4') {
                     $('#profile_individual').hide();
                     $('#profile_com_ta_source').hide();
                     $('#profile_group').show();
                     $('#profile_contact').hide();
+                    $('#btnView').hide();
                 }
                 else if (profileTypeValue == '5') {
                     $('#profile_individual').hide();
                     $('#profile_com_ta_source').hide();
                     $('#profile_group').hide();
                     $('#profile_contact').show();
+                    $('#btnView').hide();
                 }
                 $('#form_profile').show();
                 return;
