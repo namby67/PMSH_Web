@@ -1,5 +1,5 @@
 ﻿:root {
-    --primary-dark: #1f501f;
+    --primary-dark: #009444;
     --primary-medium: #356b35;
     --primary-light: #a3c4a3;
     --bg-body: #f4f8f4;
@@ -113,7 +113,7 @@
     overflow: hidden;
 }
 
-/* HEADERS (Sử dụng màu chính #1f501f) */
+/* HEADERS (Sử dụng màu chính #009444) */
 .app-header, .section-header {
     background-color: var(--primary-dark); /* ĐỔI MÀU NỀN HEADER */
     color: var(--text-light);
@@ -172,7 +172,7 @@
     }
 
         .nav-tabs .nav-link.active {
-            background-color: var(--primary-dark) !important; /* Nền tab active (#1f501f) */
+            background-color: var(--primary-dark) !important; /* Nền tab active (#009444) */
             color: var(--text-light) !important; /* Chữ tab active (Trắng) */
             border: 1px solid var(--primary-dark);
             border-bottom: none;
@@ -305,9 +305,9 @@
 /* CSS highlight dòng chọn */
 .active-item-custom {
     background-color: #a3c4a3 !important; /* Xanh nhạt */
-    color: #1f501f !important; /* Xanh đậm */
+    color: #009444 !important; /* Xanh đậm */
     font-weight: bold;
-    border-left: 4px solid #1f501f;
+    border-left: 4px solid #009444;
 }
 
 

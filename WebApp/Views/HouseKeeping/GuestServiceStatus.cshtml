@@ -622,29 +622,57 @@
         }
         goReview(idReservation);
     });
-    function goReview(idReservation) {
+
+       function goReview(idReservation) {
+        var modal = $('#newReservationModal');
+
+        // Luôn hiển thị loading
+        modal.find('.modal-body').html(`
+            <div class="text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-3">Loading reservation...</p>
+            </div>
+        `);
+
+        modal.modal('show');
+
         $.ajax({
             url: '/Reservation/EncryptId',
             type: 'POST',
             data: { id: idReservation },
             success: function (response) {
                 if (response.success) {
-                    // Chuyển hướng đến trang chỉnh sửa
-                    window.location.href = '/Reservation/NewReservation?key=' + encodeURIComponent(response.encryptedId);
+                    $.ajax({
+                        url: '/Reservation/NewReservation',
+                        type: 'GET',
+                        data: { key: response.encryptedId },
+                        cache: false,
+                        success: function (html) {
+                            modal.find('.modal-body').html(html);
+                           
+                        },
+                        error: function () {
+                            modal.find('.modal-body').html(`
+                                <div class="alert alert-danger m-4">
+                                    <strong>Lỗi!</strong> Không thể tải thông tin đặt chỗ.
+                                </div>
+                            `);
+                        }
+                    });
                 } else {
-                    // Nếu mã hóa thất bại, hiển thị thông báo và xóa lớp phủ
+                    modal.modal('hide');
                     alert('Lỗi khi mã hóa ID');
-
                 }
             },
             error: function () {
-                // Nếu API thất bại, hiển thị thông báo và xóa lớp phủ
-                alert('Lỗi khi gọi API mã hóa');
-                $('#overlay').hide();
-                $('body').css('pointer-events', 'auto');
+                modal.modal('hide');
+                alert('Lỗi kết nối server');
             }
         });
     }
+
     $('#btnClosePopup, #overlay').click(function () {
         $('#popupNewGrid').fadeOut(200);
         $('#overlay').fadeOut(200);

@@ -1954,5 +1954,42 @@ namespace Profile.Controllers
         }
 
         #endregion
+        #region Nam showNotification
+        [HttpGet]
+        public async Task<IActionResult> ShowNotification()
+        {
+            try
+            {
+                var businessDates = PropertyUtils.ConvertToList<BusinessDateModel>(
+                    BusinessDateBO.Instance.FindAll()
+                );
+
+                DateTime businessDate = businessDates[0].BusinessDate;
+                string sql = $@"
+SELECT DateOfBirth, Firstname
+FROM Profile WITH (NOLOCK)
+WHERE DAY(DateOfBirth)   = DAY('{businessDate:yyyy-MM-dd}')
+  AND MONTH(DateOfBirth) = MONTH('{businessDate:yyyy-MM-dd}')
+  AND YEAR(DateOfBirth) BETWEEN 2023 AND YEAR(GETDATE())";
+
+
+
+                DataTable dataTable = TextUtils.Select(sql);
+
+                var result = (from d in dataTable.AsEnumerable()
+                              select d.Table.Columns.Cast<DataColumn>()
+                                  .ToDictionary(
+                                      col => col.ColumnName,
+                                      col => d[col.ColumnName]?.ToString()
+                                  )).ToList();
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        #endregion
     }
 }
