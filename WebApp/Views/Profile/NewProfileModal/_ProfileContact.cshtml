@@ -1,0 +1,208 @@
+<div class="modal fade profile-modal" id="modalProfileContact" tabindex="-1" aria-labelledby="modalProfileContactLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">New Profile - Contact</h5>
+                <button type="button" class="btn-close" onclick="closeFormProfile()" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-2">
+                    <button type="button" class="submit-button-clear-reservation" onclick="saveProfile();">Save</button>
+                    <button type="button" class="submit-button-clear-reservation" onclick="closeFormProfile()">Change
+                        Profile Type</button>
+                    <button type="button" class="submit-button-new-reservation" onclick="resetForm()">Clear</button>
+                </div>
+                <div style="display:flex">
+                    <div
+                        style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;padding:4px;background-color:#ececec">
+                        Stats Infor
+                    </div>
+                    <div
+                        style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;padding:4px;background-color:#ececec;margin-left:4px">
+                        Contact
+                    </div>
+                </div>
+
+                <div class="main-infor mt-2" id="profile_contact">
+                    <div class="row justify-content-center">
+                        <div class="d-flex justify-content-center">
+                            <ul class="nav nav-tabs mb-2">
+                                <li class="nav-item">
+                                    <button class="nav-link active" data-bs-toggle="tab"
+                                        data-bs-target="#contact-tab-address" type="button">
+                                        Address Information
+                                    </button>
+                                </li>
+                                <li class="nav-item">
+                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#contact-tab-other"
+                                        type="button">
+                                        Other Information
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="contact-tab-address">
+                                <div class="row ">
+                                    <div class="col-md-6 mui-card">
+                                        <div class="row mb-1 align-items-center"><label
+                                                class="col-sm-4 col-form-label text-end">Code <span
+                                                    class="text-danger">*</span></label>
+                                            <div class="col-sm-5"><input type="text" class="form-control"
+                                                    id="txtCodeContact" name="CodeContact" data-bs-toggle="tooltip"
+                                                    title="The contact code will have a fixed length of 13 characters."
+                                                    data-bs-placement="right">
+                                                <div class="invalid-feedback"></div>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-1 align-items-center"><label
+                                                class="col-sm-4 col-form-label text-end">Full Name <span
+                                                    class="text-danger">*</span></label>
+                                            <div class="col-sm-6"><input type="text" class="form-control"
+                                                    id="txtFullNameContact" name="fullNameContact"
+                                                    data-bs-toggle="tooltip"
+                                                    title="Please typing as below: LastName MiddleName, FirstName, Mr. OR LastName MiddleName, FirstName."
+                                                    data-bs-placement="right">
+                                                <div class="invalid-feedback"></div>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-1 align-items-center"><label
+                                                class="col-sm-4 col-form-label text-end">First / Last Name <span
+                                                    class="text-danger">* </span> </label>
+                                            <div class="col-sm-3"><input type="text" class="form-control"
+                                                    id="txtFirstNameContact" name="firstNameContact">
+                                                <div class="invalid-feedback"></div>
+                                            </div>
+                                            <div class="col-sm-3"><input type="text" class="form-control"
+                                                    id="txtLastContact" name="lastNameContact">
+                                                <div class="invalid-feedback"></div>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-1 align-items-center"><label
+                                                class="col-sm-4 col-form-label text-end">Middle Name</label>
+                                            <div class="col-sm-6"><input type="text" class="form-control"
+                                                    id="txtMiddleNameContact"></div>
+                                        </div>
+                                        <div class="row mb-1 align-items-center"><label
+                                                class="col-sm-4 col-form-label text-end">Position / Dept</label>
+                                            <div class="col-sm-6 d-flex gap-2"><input type="text" class="form-control"
+                                                    id="txtPositionContact"><input type="text" class="form-control"
+                                                    id="txtDeptContact"></div>
+                                        </div>
+                                        <div class="row mb-1 align-items-center"><label
+                                                class="col-sm-4 col-form-label text-end">Language / Title</label>
+                                            <div class="col-sm-3"><select id="txtLanguageContact" class="ms-2"
+                                                    data-placeholder="Please select Language"></select></div>
+                                            <div class="col-sm-3"><select id="txtTitleContact"
+                                                    data-placeholder="Please select Title"></select></div>
+                                        </div>
+                                        <div class="row mb-1 align-items-center"><label
+                                                class="col-sm-4 col-form-label text-end">Salutation</label>
+                                            <div class="col-sm-6"><input type="text" class="form-control"
+                                                    id="txtSalulationContact"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 mui-card">
+                                        <div class="row mb-1 align-items-center"><label
+                                                class="col-sm-2 col-form-label text-end">Address</label>
+                                            <div class="col-sm-6"><input type="text" class="form-control"
+                                                    id="txtAddressContact"></div>
+                                        </div>
+                                        <div class="row mb-1 align-items-center"><label
+                                                class="col-sm-2 col-form-label text-end">Home Address</label>
+                                            <div class="col-sm-6"><input type="text" class="form-control"
+                                                    id="txtHomeAddressContact"></div>
+                                        </div>
+                                        <div class="row mb-1 align-items-center"><label
+                                                class="col-sm-2 col-form-label text-end">City</label>
+                                            <div class="col-sm-6"><select id="txtCityContact" class="ms-2"
+                                                    data-placeholder="Please select City"></select></div>
+                                        </div>
+                                        <div class="row mb-1 align-items-center"><label
+                                                class="col-sm-2 col-form-label text-end">Postal Code</label>
+                                            <div class="col-sm-6"><input type="text" class="form-control"
+                                                    id="txtPostalCodeContact"></div>
+                                        </div>
+                                        <div class="row mb-1 align-items-center"><label
+                                                class="col-sm-2 col-form-label text-end">Country / State</label>
+                                            <div class="col-sm-3"><select id="txtCountryContact" class="ms-2"
+                                                    data-placeholder="Please select Country"></select></div>
+                                            <div class="col-sm-3"><select id="txtStateContact"
+                                                    data-placeholder="Please select State"></select></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="contact-tab-other">
+                                <div class="row">
+                                    <div class="col-md-6 mui-card">
+                                        <div class="row mb-1 align-items-center"><label
+                                                class="col-sm-4 col-form-label text-end">Owner</label>
+                                            <div class="col-sm-6"><select id="txtOwnerContact" class="ms-2"
+                                                    data-placeholder="Please select Owner"></select></div>
+                                        </div>
+                                        <div class="row mb-1 align-items-center"><label
+                                                class="col-sm-4 col-form-label text-end">Territory</label>
+                                            <div class="col-sm-6"><select id="txtTerritoryContact" class="ms-2"
+                                                    data-placeholder="Please select Territory"></select></div>
+                                        </div>
+                                        <div class="row mb-1 align-items-center"><label
+                                                class="col-sm-4 col-form-label text-end">A/R No</label>
+                                            <div class="col-sm-6"><input type="text" class="form-control"
+                                                    id="txtARContact"></div>
+                                        </div>
+                                        <div class="row mb-1 align-items-center"><label
+                                                class="col-sm-4 col-form-label text-end">Date of birth</label>
+                                            <div class="col-sm-6"><input type="date" class="form-control"
+                                                    id="txtDobContact" disabled data-business-date></div>
+                                            <div class="col-sm-2"><input type="checkbox" class="form-check-input mt-2"
+                                                    checked id="txtCheckboxDobContact"></div>
+                                        </div>
+                                        <div class="row mb-2 align-items-center"><label
+                                                class="col-sm-4 col-form-label text-end">Active</label>
+                                            <div class="col-sm-6">
+                                                <div class="form-check"><input type="checkbox" class="form-check-input"
+                                                        id="txtActiveContact"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mui-card">
+                                        <div class="row mb-1 align-items-center"><label
+                                                class="col-sm-2 col-form-label text-end">Telephone</label>
+                                            <div class="col-sm-6"><input type="text" class="form-control"
+                                                    id="txtTelephoneContact"></div>
+                                        </div>
+                                        <div class="row mb-1 align-items-center"><label
+                                                class="col-sm-2 col-form-label text-end">Fax</label>
+                                            <div class="col-sm-6"><input type="text" class="form-control"
+                                                    id="txtFaxContact"></div>
+                                        </div>
+                                        <div class="row mb-1 align-items-center"><label
+                                                class="col-sm-2 col-form-label text-end">Email</label>
+                                            <div class="col-sm-6"><input type="text" class="form-control"
+                                                    id="txtEmailContact"></div>
+                                        </div>
+                                        <div class="row mb-1 align-items-center"><label
+                                                class="col-sm-2 col-form-label text-end">Website</label>
+                                            <div class="col-sm-6"><input type="text" class="form-control"
+                                                    id="txtWebsiteContact"></div>
+                                        </div>
+                                        <div class="row mb-1 align-items-center"><label
+                                                class="col-sm-2 col-form-label text-end">Hand Phone</label>
+                                            <div class="col-sm-6"><input type="text" class="form-control"
+                                                    id="txtHandPhoneContact"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
