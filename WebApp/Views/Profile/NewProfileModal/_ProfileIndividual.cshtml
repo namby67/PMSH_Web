@@ -1,0 +1,340 @@
+<div class="modal fade profile-modal" id="modalProfileIndividual" tabindex="-1"
+    aria-labelledby="modalProfileIndividualLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="content-title-ind">New Profile - Individual</h5>
+                <button type="button" class="btn-close" onclick="closeFormProfile()" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-2">
+                    <button id="btnView" onclick="openModalSearch()"
+                        class="submit-button-clear-reservation">Search</button>
+                    <button type="button" class="submit-button-clear-reservation" onclick="saveProfile();">Save</button>
+                    <button type="button" class="submit-button-clear-reservation" onclick="closeFormProfile()">Change
+                        Profile Type</button>
+                    <button type="button" class="submit-button-new-reservation" onclick="resetForm()">Clear</button>
+                </div>
+
+                <div class="profile_input">
+                    <div style="display:flex">
+                        <div
+                            style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;padding:4px;background-color:#ececec">
+                            Stats Infor
+                        </div>
+                        <div
+                            style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;padding:4px;background-color:#ececec;margin-left:4px">
+                            Contact
+                        </div>
+                    </div>
+
+                    <div class="main-infor mt-2" id="profile_individual">
+                        <div class="row justify-content-center">
+                            <div class="d-flex justify-content-center">
+                                <ul class="nav nav-tabs mb-2 " role="tablist">
+                                    <li class="nav-item">
+                                        <button class="nav-link active" data-bs-toggle="tab"
+                                            data-bs-target="#tab-ind-address" type="button">
+                                            Address & Communications
+                                        </button>
+                                    </li>
+                                    <li class="nav-item">
+                                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-ind-internal"
+                                            type="button">
+                                            Tax / Internal / Status
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="tab-content ">
+                                <div class="tab-pane fade show active " id="tab-ind-address">
+                                    <div class="row ">
+                                        <div class="col-md-6 mui-card">
+                                            <div class="row align-items-center mb-1">
+                                                <label class="col-sm-4 col-form-label text-sm-end">
+                                                    Code <span class="text-danger">*</span>
+                                                </label>
+                                                <div class="col-sm-4 ">
+                                                    <input type="text" class="form-control" id="txtCodeIndividual"
+                                                        name="codeIndividual" data-bs-toggle="tooltip"
+                                                        title="The contact code will have a fixed length of 13 characters."
+                                                        data-bs-placement="right">
+                                                    <div class="invalid-feedback"></div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row align-items-center mb-1">
+                                                <label class="col-sm-4 col-form-label text-sm-end">Full Name <span
+                                                        class="text-danger">*</span></label>
+                                                <div class="col-sm-6 position-relative">
+                                                    <input type="text" class="form-control" id="txtFullNameIndividual"
+                                                        name="fullNameIndividual" data-bs-toggle="tooltip"
+                                                        title="Please typing as below: LastName MiddleName, FirstName, Mr. OR LastName MiddleName, FirstName."
+                                                        data-bs-placement="right">
+                                                    <div class="invalid-feedback"></div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row align-items-center mb-1">
+                                                <label class="col-sm-4 col-form-label text-sm-end">First / Last Name
+                                                    <span class="text-danger">*</span></label>
+                                                <div class="col-sm-3">
+                                                    <input type="text" class="form-control" id="txtFirstNameIndividual"
+                                                        name="firstNameIndividual">
+                                                    <div class="invalid-feedback"></div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <input type="text" class="form-control" id="txtLastNameIndividual"
+                                                        name="lastNameIndivdual">
+                                                    <div class="invalid-feedback"></div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row align-items-center mb-1">
+                                                <label class="col-sm-4 col-form-label text-sm-end">Middle Name <span
+                                                        class="text-danger">*</span></label>
+                                                <div class="col-sm-6">
+                                                    <input type="text" class="form-control"
+                                                        id="txtMiddleNameIndividual">
+                                                </div>
+                                            </div>
+
+                                            <hr class="my-2">
+
+                                            <div class="row align-items-center mb-1">
+                                                <label class="col-sm-4 col-form-label text-sm-end">Language /
+                                                    Title</label>
+                                                <div class="col-sm-3">
+                                                    <select id="txtLanguageIndividual" class="ms-2"
+                                                        data-placeholder="Please select Language"></select>
+                                                </div>
+                                                <div class="col-sm-3 ">
+                                                    <select id="txtTitleIndividual"
+                                                        data-placeholder="Please select Title"></select>
+                                                </div>
+                                            </div>
+                                            <div class="row align-items-center mb-1">
+                                                <label class="col-sm-4 col-form-label text-end">
+                                                    Nationality <span class="text-danger">*</span>/ Country
+                                                </label>
+                                                <div class="col-sm-3 ">
+                                                    <select id="txtNationalityIndividual" class="ms-2"
+                                                        name="nationalityIndividual"
+                                                        data-placeholder="Please select Nationality"></select>
+                                                    <div class="invalid-feedback"></div>
+                                                </div>
+                                                <div class="col-sm-3 ">
+                                                    <select id="txtCountryIndividual"
+                                                        data-placeholder="Please select Country"></select>
+                                                </div>
+                                            </div>
+
+                                            <div class="row align-items-center mb-1">
+                                                <label class="col-sm-4 col-form-label text-end">City</label>
+                                                <div class="col-sm-6">
+                                                    <select id="txtCityIndividual" class="ms-2"
+                                                        data-placeholder="Please select City"></select>
+                                                </div>
+                                            </div>
+
+                                            <div class="row align-items-center mb-1">
+                                                <label class="col-sm-4 col-form-label text-end">Postal /
+                                                    State</label>
+                                                <div class="col-sm-3">
+                                                    <input type="text" id="txtPostalIndividual">
+                                                </div>
+                                                <div class="col-sm-3 ">
+                                                    <select id="txtStateIndividual"
+                                                        data-placeholder="Please select State"></select>
+                                                </div>
+                                            </div>
+
+                                            <div class="row align-items-center mb-1">
+                                                <label class="col-sm-4 col-form-label text-end">Religion /
+                                                    Nation</label>
+                                                <div class="col-sm-6 d-flex gap-1">
+                                                    <input type="text" class="form-control" id="txtReligionIndividual">
+                                                    <input type="text" class="form-control" id="txtNationIndividual">
+                                                </div>
+                                            </div>
+
+                                            <div class="row align-items-center mb-1">
+                                                <label class="col-sm-4 col-form-label text-end">Purpose Of
+                                                    Stay</label>
+                                                <div class="col-sm-6">
+                                                    <input type="text" class="form-control" id="txtPurposeIndividual">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- RIGHT COLUMN (Communications) -->
+                                        <div class="col-md-4 mui-card">
+                                            <div class="row align-items-center mb-1"><label
+                                                    class="col-sm-4 col-form-label text-sm-end">Address</label>
+                                                <div class="col-sm-8"><textarea class="form-control" rows="10"
+                                                        id="txtAddressIndividual" style="height: 85px;"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="row align-items-center mb-1"><label
+                                                    class="col-sm-4 col-form-label text-sm-end">Telephone</label>
+                                                <div class="col-sm-8"><input type="text" class="form-control"
+                                                        id="txtTelephoneIndividual"></div>
+                                            </div>
+                                            <div class="row align-items-center mb-1"><label
+                                                    class="col-sm-4 col-form-label text-sm-end">Hand Phone</label>
+                                                <div class="col-sm-8"><input type="text" class="form-control"
+                                                        id="txtHandPhoneIndividual"></div>
+                                            </div>
+                                            <div class="row align-items-center mb-1"><label
+                                                    class="col-sm-4 col-form-label text-sm-end">Fax</label>
+                                                <div class="col-sm-8"><input type="text" class="form-control"
+                                                        id="txtFaxIndividual"></div>
+                                            </div>
+                                            <div class="row align-items-center mb-1"><label
+                                                    class="col-sm-4 col-form-label text-sm-end">Email</label>
+                                                <div class="col-sm-8"><input type="text" class="form-control"
+                                                        id="txtEmailIndividual"></div>
+                                            </div>
+                                            <div class="row align-items-center mb-1"><label
+                                                    class="col-sm-4 col-form-label text-sm-end">Website</label>
+                                                <div class="col-sm-8"><input type="text" class="form-control"
+                                                        id="txtWebsiteIndividual"></div>
+                                            </div>
+                                            <div class="row align-items-center mb-1"><label
+                                                    class="col-sm-4 col-form-label text-sm-end">Company</label>
+                                                <div class="col-sm-8"><input type="text" class="form-control"
+                                                        id="txtCompany2Individual"></div>
+                                            </div>
+                                            <div class="row align-items-center"><label
+                                                    class="col-sm-4 col-form-label text-sm-end">Business
+                                                    Title</label>
+                                                <div class="col-sm-8"><input type="text" class="form-control"
+                                                        id="txtBusinessTitleIndividual"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 mui-card">
+                                            <div class="mb-2 d-flex justify-content-center">
+                                                <label>Image</label>
+                                            </div>
+                                            <div class="mb-4 d-flex justify-content-center">
+                                                <img id="selectedImage"
+                                                    src="https://scontent.fhan17-1.fna.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=dst-png_s200x200&_nc_cat=1&ccb=1-7&_nc_sid=136b72&_nc_ohc=G84eH8GGiWgQ7kNvwE83FZy&_nc_oc=AdkGZKo_VUsRFqDslroz75QLB3Dsqx1BeohdoUOZ6zkLarvZ9pxrPuqg-y7FG7kBPmI&_nc_zt=24&_nc_ht=scontent.fhan17-1.fna&oh=00_Afo1Syqr5y_VZWchyn3cKinAvCYq8vQueUv0Rf2qAV7nyw&oe=6984227A"
+                                                    alt="example placeholder" style="width: 140px;" />
+                                            </div>
+                                            <div class="d-flex justify-content-center">
+                                                <div data-mdb-ripple-init class="mui-button mui-button-new">
+                                                    <label class="form-label text-black m-1" for="customFile1">Choose
+                                                        file</label>
+                                                    <input type="file" class="form-control d-none" id="customFile1"
+                                                        onchange="displaySelectedImage(event, 'selectedImage')" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- ================= TAB 2 ================= -->
+
+
+                                <div class="tab-pane fade" id="tab-ind-internal">
+                                    <div class="row">
+                                        <div class="col-md-6 mui-card">
+                                            <div class="row align-items-center mb-1"><label
+                                                    class="col-sm-4 col-form-label text-sm-end">Company</label>
+                                                <div class="col-sm-6"><input type="text" class="form-control"
+                                                        id="txtCompanyIndividual"></div>
+                                            </div>
+                                            <div class="row align-items-center mb-1"><label
+                                                    class="col-sm-4 col-form-label text-sm-end">Tax Code</label>
+                                                <div class="col-sm-6"><input type="text" class="form-control"
+                                                        id="txtTaxIndividual"></div>
+                                            </div>
+                                            <div class="row align-items-center mb-1"><label
+                                                    class="col-sm-4 col-form-label text-sm-end">Bus.
+                                                    Address</label>
+                                                <div class="col-sm-6"><input type="text" class="form-control"
+                                                        id="txtBusAddressIndividual"></div>
+                                            </div>
+                                            <hr class="my-2">
+                                            <div class="row align-items-center mb-1"><label
+                                                    class="col-sm-4 col-form-label text-sm-end">Salutation</label>
+                                                <div class="col-sm-6"><input type="text" class="form-control"
+                                                        id="txtSalutationIndividual"></div>
+                                            </div>
+                                            <div class="row align-items-center mb-1"><label
+                                                    class="col-sm-4 col-form-label text-sm-end">VIP</label>
+                                                <div class="col-sm-6"><select id="txtVIPIndividual"></select>
+                                                </div>
+                                            </div>
+                                            <div class="row align-items-center mb-1"><label
+                                                    class="col-sm-4 col-form-label text-sm-end">VIP
+                                                    Reason</label>
+                                                <div class="col-sm-6"><input type="text" class="form-control"
+                                                        id="txtReasonIndividual"></div>
+                                            </div>
+                                            <div class="row align-items-center mb-1"><label
+                                                    class="col-sm-4 col-form-label text-sm-end">Passport</label>
+                                                <div class="col-sm-6"><input type="text" class="form-control"
+                                                        id="txtPassportIndividual"></div>
+                                            </div>
+                                            <div class="row align-items-center mb-1"><label
+                                                    class="col-sm-4 col-form-label text-sm-end">Identity
+                                                    Card</label>
+                                                <div class="col-sm-6"><input type="text" class="form-control"
+                                                        id="txtCardIndividual"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mui-card">
+                                            <div class="row align-items-center mb-1"><label
+                                                    class="col-sm-2 col-form-label text-sm-end">Date of
+                                                    Birth</label>
+                                                <div class="col-sm-4"><input type="date" class="form-control"
+                                                        id="txtDobIndividual" disabled data-business-date></div>
+                                                <div class="col-sm-2"><input type="checkbox" class="form-check-input"
+                                                        id="txtCheckboxDobIndividual" checked></div>
+                                            </div>
+                                            <div class="row align-items-center mb-1"><label
+                                                    class="col-md-2 col-form-label text-sm-end">Active</label>
+                                                <div class="col-md-2"><input type="checkbox" class="form-check-input"
+                                                        id="txtActiveIndividual" checked>
+                                                </div><label class="col-md-2 col-form-label text-sm-end">Contact</label>
+                                                <div class="col-md-2"><input type="checkbox" class="form-check-input"
+                                                        id="txtContactIndividual">
+                                                </div>
+                                            </div>
+                                            <div class="row align-items-center mb-1"><label
+                                                    class="col-sm-2 col-form-label text-sm-end">Keyword</label>
+                                                <div class="col-sm-6"><input type="text" class="form-control"
+                                                        id="txtKeywordIndividual"></div>
+                                            </div>
+                                            <hr class="my-2">
+                                            <div class="row align-items-center mb-1"><label
+                                                    class="col-sm-2 col-form-label text-sm-end">Black
+                                                    list</label>
+                                                <div class="col-sm-6"><input type="text" class="form-control"
+                                                        id="blackListReasonIndividual" name="blackListReasonIndividual"
+                                                        disabled>
+                                                    <div class="invalid-feedback"></div>
+                                                </div>
+                                                <div class="col-sm-1"><input type="checkbox" class="form-check-input"
+                                                        id="blackListIndividual" name="blackListIndividual"></div>
+                                            </div>
+                                            <div class="row align-items-start"><label
+                                                    class="col-sm-2 col-form-label text-sm-end">Notes</label>
+                                                <div class="col-sm-6"><textarea
+                                                        class="form-control form-control-sm note-textarea" rows="3"
+                                                        id="txtNoteIndividual"></textarea></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
