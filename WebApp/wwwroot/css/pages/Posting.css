@@ -1,6 +1,6 @@
 ﻿:root {
     --primary-dark: #009444;
-    --primary-medium: #6cb296;
+    --primary-medium: #428936;
     --primary-light: #a3c4a3;
     --bg-body: #f4f8f4;
     --bg-container: #f4f8f4;
@@ -9,12 +9,6 @@
     --text-light: #ffffff;
 }
 
-.modal-backdrop.show {
-    opacity: 0.75 !important;
-    background-color: #d5e0d1 !important;
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-}
 /* ==========================================================================
   . FORM ELEMENTS (COMPACT)
    ========================================================================== */
