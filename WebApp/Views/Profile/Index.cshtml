@@ -6,7 +6,16 @@
 
 <style>
     .note-textarea {
-        height: 280px;
+        height: 160px;
+    }
+
+    .ts-wrapper .ts-control {
+        margin: 0 0 0 -8px !important;
+        padding: 0px 0px 0px 5px !important;
+    }
+
+    .nav-link {
+        color: #009444 !important;
     }
 </style>
 
@@ -55,7 +64,10 @@
 </div>
 
 
-
+<div id="loadingSpinner"
+    style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
+    <i class="fa-solid fa-spinner fa-spin"></i>
+</div>
 
 <div id="form_profile" class="form_profile">
 
@@ -63,6 +75,8 @@
         <h3 id="content-title">New Profile</h3>
     </div>
     <div class="mt-4">
+        <button id="btnView" onclick="openModalSearch()" class="submit-button-clear-reservation">Search</button>
+
         <button type="button" class="submit-button-clear-reservation" onclick="saveProfile();">Save</button>
         <button type="button" class="submit-button-clear-reservation" onclick="closeFormProfile()">Change Profile
             Type</button>
@@ -105,7 +119,8 @@
                             <label for="">Image</label>
                         </div>
                         <div class="mb-4 d-flex justify-content-center">
-                            <img id="selectedImage" src="https://mdbootstrap.com/img/Photos/Others/placeholder.jpg"
+                            <img id="selectedImage"
+                                src="https://scontent.fhan17-1.fna.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=dst-png_s200x200&_nc_cat=1&ccb=1-7&_nc_sid=136b72&_nc_ohc=G84eH8GGiWgQ7kNvwE83FZy&_nc_oc=AdkGZKo_VUsRFqDslroz75QLB3Dsqx1BeohdoUOZ6zkLarvZ9pxrPuqg-y7FG7kBPmI&_nc_zt=24&_nc_ht=scontent.fhan17-1.fna&oh=00_Afo1Syqr5y_VZWchyn3cKinAvCYq8vQueUv0Rf2qAV7nyw&oe=6984227A"
                                 alt="example placeholder" style="width: 140px;" />
                         </div>
                         <div class="d-flex justify-content-center">
@@ -131,34 +146,45 @@
                                         <label class="col-sm-4 col-form-label text-end">
                                             Code <span class="text-danger">*</span>
                                         </label>
-                                        <div class="col-sm-6 d-flex gap-1">
-                                            <input type="text" class="form-control" id="txtCodeIndividual">
+                                        <div class="col-sm-4 ">
+                                            <input type="text" class="form-control" id="txtCodeIndividual"
+                                                name="codeIndividual" data-bs-toggle="tooltip"
+                                                title="The contact code will have a fixed length of 13 characters."
+                                                data-bs-placement="right">
+                                            <div class="invalid-feedback"></div>
                                         </div>
                                     </div>
 
                                     <div class="row align-items-center mb-1">
-                                        <label class="col-sm-4 col-form-label text-end">Full Name</label>
-                                        <div class="col-sm-6">
-                                            <input type="text" class="form-control" id="txtFullNameIndividual">
-                                            <div id="errorMessage" style="display:none;color:red">
-                                                <strong>Typing format is not correct. Please typing as below:
-                                                    FirstName
-                                                    Middle, LastName</strong>
-                                            </div>
+                                        <label class="col-sm-4 col-form-label text-end">Full Name <span
+                                                class="text-danger">*</span></label>
+                                        <div class="col-sm-6 position-relative">
+                                            <input type="text" class="form-control" id="txtFullNameIndividual"
+                                                name="fullNameIndividual" data-bs-toggle="tooltip"
+                                                title="Please typing as below: LastName MiddleName, FirstName, Mr. OR LastName MiddleName, FirstName."
+                                                data-bs-placement="right">
+                                            <div class="invalid-feedback"></div>
                                         </div>
                                     </div>
 
                                     <div class="row align-items-center mb-1">
                                         <label class="col-sm-4 col-form-label text-end">First / Last
-                                            Name</label>
-                                        <div class="col-sm-6 d-flex gap-1">
-                                            <input type="text" class="form-control" id="txtFirstNameIndividual">
-                                            <input type="text" class="form-control" id="txtLastNameIndividual">
+                                            Name <span class="text-danger">*</span></label>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control" id="txtFirstNameIndividual"
+                                                name="firstNameIndividual">
+                                            <div class="invalid-feedback"></div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control" id="txtLastNameIndividual"
+                                                name="lastNameIndivdual">
+                                            <div class="invalid-feedback"></div>
                                         </div>
                                     </div>
 
                                     <div class="row align-items-center mb-1">
-                                        <label class="col-sm-4 col-form-label text-end">Middle Name</label>
+                                        <label class="col-sm-4 col-form-label text-end">Middle Name <span
+                                                class="text-danger">*</span></label>
                                         <div class="col-sm-6">
                                             <input type="text" class="form-control" id="txtMiddleNameIndividual">
                                         </div>
@@ -181,11 +207,13 @@
 
                                     <div class="row align-items-center mb-1">
                                         <label class="col-sm-4 col-form-label text-end">
-                                            Nationality / Country <span class="text-danger">*</span>
+                                            Nationality <span class="text-danger">*</span>/ Country
                                         </label>
                                         <div class="col-sm-3 ">
                                             <select id="txtNationalityIndividual" class="ms-2"
+                                                name="nationalityIndividual"
                                                 data-placeholder="Please select Nationality"></select>
+                                            <div class="invalid-feedback"></div>
                                         </div>
                                         <div class="col-sm-3 ">
                                             <select id="txtCountryIndividual"
@@ -370,7 +398,8 @@
                                     <div class="row align-items-center mb-1">
                                         <label class="col-sm-2 col-form-label text-end">Date of Birth</label>
                                         <div class="col-sm-3">
-                                            <input type="date" class="form-control" id="txtDobIndividual" disabled>
+                                            <input type="date" class="form-control" id="txtDobIndividual" disabled
+                                                data-business-date>
                                         </div>
                                         <div class="col-sm-2">
                                             <input type="checkbox" class="form-check-input"
@@ -401,13 +430,19 @@
 
                                     <div class="row align-items-center mb-1">
                                         <label class="col-sm-2 col-form-label text-end">Black list</label>
-                                        <div class="col-sm-7">
-                                            <input type="text" class="form-control" id="blackListIndividual">
+
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="blackListReasonIndividual"
+                                                name="blackListReasonIndividual" disabled>
+                                            <div class="invalid-feedback"></div>
                                         </div>
+
                                         <div class="col-sm-1">
-                                            <input type="checkbox" class="form-check-input" id="txtBlackListIndividual">
+                                            <input type="checkbox" class="form-check-input" id="blackListIndividual"
+                                                name="blackListIndividual">
                                         </div>
                                     </div>
+
 
                                     <div class="row align-items-start">
                                         <label class="col-sm-2 col-form-label text-end">Notes</label>
@@ -463,21 +498,27 @@
                                             Code <span class="text-danger">*</span>
                                         </label>
                                         <div class="col-md-5">
-                                            <input type="text" class="form-control form-control-sm" id="txtCodeCOM">
+                                            <input type="text" class="form-control " id="txtCodeCOM" name="codeCOM"
+                                                data-bs-toggle="tooltip"
+                                                title="The contact code will have a fixed length of 13 characters."
+                                                data-bs-placement="right">
+                                            <div class="invalid-feedback"></div>
                                         </div>
                                     </div>
 
                                     <div class="row align-items-center mb-1">
                                         <label class="col-md-4 col-form-label text-end">Account</label>
-                                        <div class="col-md-7">
-                                            <input type="text" class="form-control form-control-sm" id="txtAccountCOM">
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control " id="txtAccountCOM"
+                                                name="accountCOM">
+                                            <div class="invalid-feedback"></div>
                                         </div>
                                     </div>
 
                                     <div class="row align-items-center mb-1">
                                         <label class="col-md-4 col-form-label text-end">Address</label>
-                                        <div class="col-md-7">
-                                            <input type="text" class="form-control form-control-sm" id="txtAddressCOM">
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control " id="txtAddressCOM">
                                         </div>
                                     </div>
 
@@ -485,29 +526,29 @@
                                         <label class="col-md-4 col-form-label text-end">
                                             City / Country <span class="text-danger">*</span>
                                         </label>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <select id="txtCityCOM" class="form-select-sm"
                                                 data-placeholder="Please select City">
-                                                <option value="value">text</option>
+
                                             </select>
                                         </div>
                                         <div class="col-md-3">
                                             <select id="txtCountryCOM" class="form-select-sm"
                                                 data-placeholder="Please select Country">
-                                                <option value="value">text</option>
+
                                             </select>
                                         </div>
                                     </div>
 
                                     <div class="row align-items-center mb-1">
                                         <label class="col-md-4 col-form-label text-end">Postal / State</label>
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <input type="text" class="form-control form-control-sm" id="txtPostalCOM">
                                         </div>
                                         <div class="col-md-4">
                                             <select id="txtStateCOM" class="form-select-sm"
                                                 data-placeholder="Please select State">
-                                                <option value="value">text</option>
+
                                             </select>
                                         </div>
                                     </div>
@@ -542,14 +583,14 @@
 
                                     <div class="row align-items-center mb-1">
                                         <label class="col-md-2 col-form-label text-end">Email</label>
-                                        <div class="col-md-7">
+                                        <div class="col-md-6">
                                             <input type="text" class="form-control form-control-sm" id="txtEmailCOM">
                                         </div>
                                     </div>
 
                                     <div class="row align-items-center mb-1">
                                         <label class="col-md-2 col-form-label text-end">Website</label>
-                                        <div class="col-md-7">
+                                        <div class="col-md-6">
                                             <input type="text" class="form-control form-control-sm" id="txtWebsiteCOM">
                                         </div>
                                     </div>
@@ -563,7 +604,7 @@
 
                                     <div class="row align-items-center">
                                         <label class="col-md-2 col-form-label text-end">Business Title</label>
-                                        <div class="col-md-7">
+                                        <div class="col-md-6">
                                             <input type="text" class="form-control form-control-sm" id="txtBusTitleCOM">
                                         </div>
                                     </div>
@@ -580,7 +621,7 @@
 
                                     <div class="row align-items-center mb-1">
                                         <label class="col-md-4 col-form-label text-end">Company</label>
-                                        <div class="col-md-7">
+                                        <div class="col-md-6">
                                             <input type="text" class="form-control form-control-sm" id="txtCompanyCOM">
                                         </div>
                                     </div>
@@ -594,7 +635,7 @@
 
                                     <div class="row align-items-center mb-2">
                                         <label class="col-md-4 col-form-label text-end">Bus. Address</label>
-                                        <div class="col-md-7">
+                                        <div class="col-md-6">
                                             <input type="text" class="form-control form-control-sm"
                                                 id="txtBusAddressCOM">
                                         </div>
@@ -607,7 +648,7 @@
                                         <div class="col-md-6">
                                             <select id="txtOwnerCOM" class="form-select-sm"
                                                 data-placeholder="Please select Owner">
-                                                <option value="value">text</option>
+
                                             </select>
                                         </div>
                                     </div>
@@ -617,7 +658,7 @@
                                         <div class="col-md-6">
                                             <select id="txtTerritoryCOM" class="form-select-sm"
                                                 data-placeholder="Please select Territory">
-                                                <option value="value">text</option>
+
                                             </select>
                                         </div>
                                     </div>
@@ -627,24 +668,24 @@
                                         <div class="col-md-6">
                                             <select id="txtCompanyTypeCOM" class="form-select-sm"
                                                 data-placeholder="Please select Type">
-                                                <option value="value">text</option>
+
                                             </select>
                                         </div>
                                     </div>
 
                                     <div class="row align-items-center mb-1">
                                         <label class="col-md-4 col-form-label text-end">A/R No</label>
-                                        <div class="col-md-5">
+                                        <div class="col-md-6">
                                             <input type="text" class="form-control form-control-sm" id="txtARCOM">
                                         </div>
                                     </div>
 
                                     <div class="row align-items-center mb-1">
                                         <label class="col-md-4 col-form-label text-end">Currency</label>
-                                        <div class="col-md-5">
+                                        <div class="col-md-6">
                                             <select id="txtCurrencyCOM" class="form-select-sm"
                                                 data-placeholder="Please select Currency">
-                                                <option value="value">text</option>
+
                                             </select>
                                         </div>
                                     </div>
@@ -654,7 +695,7 @@
                                         <div class="col-md-6">
                                             <select id="txtSaleInChargeCOM" class="form-select-sm"
                                                 data-placeholder="Please select Sale In Charge">
-                                                <option value="value">text</option>
+
                                             </select>
                                         </div>
                                     </div>
@@ -664,7 +705,7 @@
                                         <div class="col-md-6">
                                             <select id="txtMarketTypeCOM" class="form-select-sm"
                                                 data-placeholder="Please select Market Type">
-                                                <option value="value">text</option>
+
                                             </select>
                                         </div>
                                     </div>
@@ -678,7 +719,7 @@
                                         <div class="col-md-6">
                                             <select id="txtMarketCOM" class="form-select-sm"
                                                 data-placeholder="Please select Market">
-                                                <option value="value">text</option>
+
                                             </select>
                                         </div>
                                     </div>
@@ -692,10 +733,12 @@
                                     <div class="row align-items-center mb-1">
                                         <label class="col-md-2 col-form-label text-end">Black list</label>
                                         <div class="col-md-6">
-                                            <input type="text" class="form-control form-control-sm" id="blackListCOM">
+                                            <input type="text" class="form-control form-control-sm"
+                                                id="blackListReasonCOM" name="blackListReasonCOM" disabled>
+                                            <div class="invalid-feedback"></div>
                                         </div>
                                         <div class="col-md-1">
-                                            <input type="checkbox" class="form-check-input" id="txtBlackListCOM">
+                                            <input type="checkbox" class="form-check-input" id="blackListCOM">
                                         </div>
                                     </div>
 
@@ -706,11 +749,9 @@
                                                 rows="20"></textarea>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -754,22 +795,30 @@
                                             Code <span class="text-danger">*</span>
                                         </label>
                                         <div class="col-sm-6">
-                                            <input type="text" class="form-control" id="txtCodeGroup">
+                                            <input type="text" class="form-control" id="txtCodeGroup" name="codeGroup"
+                                                data-bs-toggle="tooltip"
+                                                title="The contact code will have a fixed length of 13 characters."
+                                                data-bs-placement="right">
+                                            <div class="invalid-feedback"></div>
                                         </div>
                                     </div>
 
                                     <div class="row align-items-center mb-1">
-                                        <label class="col-sm-4 col-form-label text-end">Group Name</label>
+                                        <label class="col-sm-4 col-form-label text-end">Group Name <span
+                                                class="text-danger">*</label>
                                         <div class="col-sm-6">
-                                            <input type="text" class="form-control" id="txtGroupNameGroup">
+                                            <input type="text" class="form-control" id="txtGroupNameGroup"
+                                                name="groupNameGroup">
+                                            <div class="invalid-feedback"></div>
                                         </div>
                                     </div>
 
                                     <div class="row align-items-center mb-1">
                                         <label class="col-sm-4 col-form-label text-end">Language</label>
                                         <div class="col-sm-6">
-                                            <select id="txtLanguageGroup" class="ms-2 me-2">
-                                                <option value="value">text</option>
+                                            <select id="txtLanguageGroup" data-placeholder="Please select Language"
+                                                class="ms-2 ">
+
                                             </select>
                                         </div>
                                     </div>
@@ -791,8 +840,9 @@
                                     <div class="row align-items-center mb-1">
                                         <label class="col-sm-4 col-form-label text-end">City</label>
                                         <div class="col-sm-6">
-                                            <select id="txtCityGroup" class="ms-2 me-2">
-                                                <option value="value">text</option>
+                                            <select id="txtCityGroup" data-placeholder="Please select City"
+                                                class="ms-2 ">
+
                                             </select>
                                         </div>
                                     </div>
@@ -808,13 +858,18 @@
                                         <label class="col-sm-4 col-form-label text-end">
                                             Country / State <span class="text-danger">*</span>
                                         </label>
-                                        <div class="col-sm-6 d-flex gap-2">
-                                            <select id="txtCountryGroup">
-                                                <option value="value">text</option>
+                                        <div class="col-sm-3">
+                                            <select id="txtCountryGroup" class="ms-2"
+                                                data-placeholder="Please select Country">
+
                                             </select>
-                                            <select id="txtStateGroup">
-                                                <option value="value">text</option>
+
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <select id="txtStateGroup" data-placeholder="Please select State">
+
                                             </select>
+
                                         </div>
                                     </div>
 
@@ -826,14 +881,14 @@
                                     <div class="row align-items-center mb-1">
                                         <label class="col-sm-2 col-form-label text-end">Search Name</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control">
+                                            <input type="text" class="form-control" id="searchName">
                                         </div>
                                     </div>
 
                                     <div class="row align-items-start">
-                                        <label class="col-sm-2 col-form-label text-end">Notes</label>
+                                        <label class="col-sm-2 col-form-label text-end"></label>
                                         <div class="col-md-8">
-                                            <div id="packageDetailGrid" class="gridContainer"></div>
+                                            <div id="profileGroupGrid" class="gridContainer"></div>
                                         </div>
                                     </div>
 
@@ -859,8 +914,9 @@
                                     <div class="row align-items-center mb-1">
                                         <label class="col-sm-4 col-form-label text-end">Pref .Curr</label>
                                         <div class="col-sm-6">
-                                            <select id="txtCurrencyGroup">
-                                                <option value="value">text</option>
+                                            <select id="txtCurrencyGroup" class="ms-2"
+                                                data-placeholder="Please select Currency">
+
                                             </select>
                                         </div>
                                     </div>
@@ -875,8 +931,8 @@
                                     <div class="row align-items-center mb-1">
                                         <label class="col-sm-4 col-form-label text-end">VIP</label>
                                         <div class="col-sm-6">
-                                            <select id="txtVIPGroup">
-                                                <option value="value">text</option>
+                                            <select id="txtVIPGroup" class="ms-2" data-placeholder="Please select VIP">
+
                                             </select>
                                         </div>
                                     </div>
@@ -902,31 +958,32 @@
                                         </div>
                                     </div>
 
-                                    <hr class="my-2">
+                                </div>
 
+                                <div class="col-md-6 mui-card">
                                     <div class="row align-items-center mb-1">
-                                        <label class="col-sm-4 col-form-label text-end">Telephone</label>
+                                        <label class="col-sm-2 col-form-label text-end">Telephone</label>
                                         <div class="col-sm-6">
                                             <input type="text" class="form-control" id="txtTelephongGroup">
                                         </div>
                                     </div>
 
                                     <div class="row align-items-center mb-1">
-                                        <label class="col-sm-4 col-form-label text-end">Email</label>
+                                        <label class="col-sm-2 col-form-label text-end">Email</label>
                                         <div class="col-sm-6">
                                             <input type="text" class="form-control" id="txtEmailGroup">
                                         </div>
                                     </div>
 
                                     <div class="row align-items-center mb-1">
-                                        <label class="col-sm-4 col-form-label text-end">Website</label>
+                                        <label class="col-sm-2 col-form-label text-end">Website</label>
                                         <div class="col-sm-6">
                                             <input type="text" class="form-control" id="txtWebsiteGroup">
                                         </div>
                                     </div>
 
                                     <div class="row align-items-center mb-2">
-                                        <label class="col-sm-4 col-form-label text-end">Hand Phone</label>
+                                        <label class="col-sm-2 col-form-label text-end">Hand Phone</label>
                                         <div class="col-sm-6">
                                             <input type="text" class="form-control" id="txtHandPhoneGroup">
                                         </div>
@@ -935,14 +992,14 @@
                                     <hr class="my-2">
 
                                     <div class="row align-items-center mb-1">
-                                        <label class="col-sm-4 col-form-label text-end">Rate Code</label>
+                                        <label class="col-sm-2 col-form-label text-end">Rate Code</label>
                                         <div class="col-sm-6">
                                             <input type="text" class="form-control" disabled>
                                         </div>
                                     </div>
 
                                     <div class="row align-items-center">
-                                        <label class="col-sm-4 col-form-label text-end">A/R No</label>
+                                        <label class="col-sm-2 col-form-label text-end">A/R No</label>
                                         <div class="col-sm-6">
                                             <input type="text" class="form-control" disabled>
                                         </div>
@@ -960,207 +1017,254 @@
 
 
         <!--Profile contact-->
-        <div class="main-infor mt-4 row" style="justify-content:space-between;" id="profile_contact">
-            <div class="col-md-6 row">
-                <div
-                    style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative;">
-                    <div
-                        style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
-                        <b>Address Information</b>
-                    </div>
-                    <div class="row mt-4">
-                        <div class="col-md-12">
-                            <div class="form-group row">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Code <span
-                                            style="color:red">*</span></b></label>
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="txtCodeContact">
+        <div class="main-infor mt-3" id="profile_contact">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-10">
+                    <!-- Tabs -->
+                    <ul class="nav nav-tabs mb-2">
+                        <li class="nav-item">
+                            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#contact-tab-address"
+                                type="button">
+                                Address Information
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#contact-tab-other"
+                                type="button">
+                                Other Information
+                            </button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content">
+
+                        <!-- TAB 1: ADDRESS INFORMATION -->
+                        <div class="tab-pane fade show active" id="contact-tab-address">
+                            <div class="row ">
+
+                                <!-- LEFT COLUMN -->
+                                <div class="col-md-6 mui-card">
+
+                                    <div class="row mb-1 align-items-center">
+                                        <label class="col-sm-4 col-form-label text-end">
+                                            Code <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="col-sm-5">
+                                            <input type="text" class="form-control" id="txtCodeContact"
+                                                name="CodeContact" data-bs-toggle="tooltip"
+                                                title="The contact code will have a fixed length of 13 characters."
+                                                data-bs-placement="right">
+                                            <div class="invalid-feedback"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-1 align-items-center">
+                                        <label class="col-sm-4 col-form-label text-end">
+                                            Full Name <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtFullNameContact"
+                                                name="fullNameContact" data-bs-toggle="tooltip"
+                                                title="Please typing as below: LastName MiddleName, FirstName, Mr. OR LastName MiddleName, FirstName."
+                                                data-bs-placement="right">
+                                            <div class="invalid-feedback"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-1 align-items-center">
+                                        <label class="col-sm-4 col-form-label text-end">First / Last Name <span
+                                                class="text-danger">* </span> </label>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control" id="txtFirstNameContact"
+                                                name="firstNameContact">
+                                            <div class="invalid-feedback"></div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control" id="txtLastContact"
+                                                name="lastNameContact">
+                                            <div class="invalid-feedback"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-1 align-items-center">
+                                        <label class="col-sm-4 col-form-label text-end">Middle Name</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtMiddleNameContact">
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-1 align-items-center">
+                                        <label class="col-sm-4 col-form-label text-end">Position / Dept</label>
+                                        <div class="col-sm-6 d-flex gap-2">
+                                            <input type="text" class="form-control" id="txtPositionContact">
+                                            <input type="text" class="form-control" id="txtDeptContact">
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-1 align-items-center">
+                                        <label class="col-sm-4 col-form-label text-end">Language / Title</label>
+                                        <div class="col-sm-3">
+                                            <select id="txtLanguageContact" class="ms-2"
+                                                data-placeholder="Please select Language">
+
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <select id="txtTitleContact" data-placeholder="Please select Title">
+
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-1 align-items-center">
+                                        <label class="col-sm-4 col-form-label text-end">Salutation</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtSalulationContact">
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group row mb-1">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right"><b>Full Name <span
-                                            style="color:red">*</span></b></label>
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="txtFullNameContact">
-                                    <div id="errorMessageContact" style="color: red; margin-top: 5px; display: none;">
-                                        <strong>Typing format is not correct. Please typing as below: FirstName Middle,
-                                            LastName </strong>
+
+                                <!-- RIGHT COLUMN -->
+                                <div class="col-md-6 mui-card">
+                                    <div class="row mb-1 align-items-center">
+                                        <label class="col-sm-2 col-form-label text-end">Address</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtAddressContact">
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-1 align-items-center">
+                                        <label class="col-sm-2 col-form-label text-end">Home Address</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtHomeAddressContact">
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-1 align-items-center">
+                                        <label class="col-sm-2 col-form-label text-end">City</label>
+                                        <div class="col-sm-6">
+                                            <select id="txtCityContact" class="ms-2"
+                                                data-placeholder="Please select City">
+
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-1 align-items-center">
+                                        <label class="col-sm-2 col-form-label text-end">Postal Code</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtPostalCodeContact">
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-1 align-items-center">
+                                        <label class="col-sm-2 col-form-label text-end">Country / State</label>
+                                        <div class="col-sm-3">
+                                            <select id="txtCountryContact" class="ms-2"
+                                                data-placeholder="Please select Country">
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <select id="txtStateContact" data-placeholder="Please select State">
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
 
                             </div>
-                            <div class="form-group row mt-1">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">First/Last
-                                    Name</label>
-                                <div class="col-sm-8" style="display:flex;column-gap:8px">
-                                    <input type="text" class="form-control" id="txtFirstNameContact">
-                                    <input type="text" class="form-control" id="txtLastContact">
-                                </div>
-                            </div>
-                            <div class="form-group row mt-1">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Middle
-                                    Name</label>
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="txtMiddleNameContact">
-                                </div>
-                            </div>
-                            <div class="form-group row mt-1">
-                                <label for="inputPassword"
-                                    class="col-sm-4 col-form-label text-right">Position/Dept</label>
-                                <div class="col-sm-8" style="display:flex;column-gap:8px">
-                                    <input type="text" class="form-control" id="txtPositionContact">
+                        </div>
 
-                                    <input type="text" class="form-control" id="txtDeptContact">
+                        <!-- TAB 2: OTHER INFORMATION -->
+                        <div class="tab-pane fade" id="contact-tab-other">
+                            <div class="row">
+
+                                <div class="col-md-6 mui-card">
+
+                                    <div class="row mb-1 align-items-center">
+                                        <label class="col-sm-4 col-form-label text-end">Owner</label>
+                                        <div class="col-sm-6">
+                                            <select id="txtOwnerContact" class="ms-2"
+                                                data-placeholder="Please select Owner">
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-1 align-items-center">
+                                        <label class="col-sm-4 col-form-label text-end">Territory</label>
+                                        <div class="col-sm-6">
+                                            <select id="txtTerritoryContact" class="ms-2"
+                                                data-placeholder="Please select Territory">
+
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-1 align-items-center">
+                                        <label class="col-sm-4 col-form-label text-end">A/R No</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtARContact">
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-1 align-items-center">
+                                        <label class="col-sm-4 col-form-label text-end">Date of birth</label>
+                                        <div class="col-sm-6">
+                                            <input type="date" class="form-control" id="txtDobContact" disabled
+                                                data-business-date>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input type="checkbox" class="form-check-input mt-2" checked
+                                                id="txtCheckboxDobContact">
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-2 align-items-center">
+                                        <label class="col-sm-4 col-form-label text-end">Active</label>
+                                        <div class="col-sm-6">
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="txtActiveContact">
+                                            </div>
+                                        </div>
+                                    </div>
 
                                 </div>
-                            </div>
-                            <div class="form-group row mt-1">
-                                <label for="inputPassword"
-                                    class="col-sm-4 col-form-label text-right">Language/Title</label>
-                                <div class="col-sm-8 d-flex ts-inline" style="display:flex;column-gap:8px">
-                                    <select type="text" id="txtLanguageContact">
-                                        <option value="value">text</option>
-                                    </select>
+                                <div class="col-md-6 mui-card">
+                                    <div class="row mb-1 align-items-center">
+                                        <label class="col-sm-2 col-form-label text-end">Telephone</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtTelephoneContact">
+                                        </div>
+                                    </div>
 
-                                    <select type="text" id="txtTitleContact">
-                                        <option value="value">text</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group row mt-1">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Salulation</label>
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="txtSalulationContact">
-                                </div>
-                            </div>
-                            <div class="form-group row mt-1">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Address</label>
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="txtAddressContact">
-                                </div>
-                            </div>
-                            <div class="form-group row mt-1">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Home
-                                    Address</label>
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="txtHomeAddressContact">
-                                </div>
-                            </div>
-                            <div class="form-group row mt-1">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">City</label>
-                                <div class="col-sm-8">
-                                    <select type="text" id="txtCityContact">
-                                        <option value="value">text</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group row mt-1">
-                                <label for="inputPassword" class="col-sm-4 col-form-label text-right">Postal
-                                    Code</label>
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="txtPostalCodeContact">
-                                </div>
-                            </div>
-                            <div class="form-group row mt-1 mb-4">
-                                <label for="inputPassword"
-                                    class="col-sm-4 col-form-label text-right">Country/State</label>
-                                <div class="col-sm-8" style="display:flex;column-gap:8px">
-                                    <select type="text" id="txtCountryContact">
-                                        <option value="value">text</option>
-                                    </select>
-                                    <select type="text" id="txtStateContact">
-                                        <option value="value">text</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 row" style="justify-content:space-between;display: flex;
-                align-items: flex-start;">
-                <div class="col-md-12"
-                    style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
-                    <div
-                        style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
-                        <b>Internal Information</b>
-                    </div>
-                    <div class="form-group row mt-4">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Owner</label>
-                        <div class="col-sm-8">
-                            <select type="text" id="txtOwnerContact">
-                                <option value="value">text</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group row mt-1">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Territory</label>
-                        <div class="col-sm-8">
-                            <select type="text" id="txtTerritoryContact">
-                                <option value="value">text</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group row mt-1">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">A/R No</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="txtARContact">
-                        </div>
-                    </div>
-                    <div class="form-group row mt-1">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Date of birth</label>
-                        <div class="col-sm-6">
-                            <input type="date" class="form-control" id="txtDobIndividual" disabled>
-                        </div>
-                        <div class="col-sm-1" style="padding:4px 0px 4px 14px">
-                            <input type="checkbox" class="form-check-input" id="txtCheckboxDobIndividual">
-                        </div>
-                    </div>
-                    <div class="form-group row mt-1 mb-4" style="justify-content:center">
-                        <div class="col-sm-6 text-end">
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="txtActiveContact">
-                                <label class="form-check-label" for="termsCheckbox">Active</label>
-                            </div>
-                        </div>
-                    </div>
+                                    <div class="row mb-1 align-items-center">
+                                        <label class="col-sm-2 col-form-label text-end">Fax</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtFaxContact">
+                                        </div>
+                                    </div>
 
-                </div>
-                <div class="col-md-12 mt-4"
-                    style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; position: relative">
-                    <div class="mb-4"
-                        style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 5px;color:#9F0010">
-                        <b>Communications</b>
-                    </div>
-                    <div class="form-group mt-4 row">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Telephone</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="txtTelephoneContact">
-                        </div>
-                    </div>
-                    <div class="form-group row mt-1">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Fax</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="txtFaxContact">
-                        </div>
-                    </div>
+                                    <div class="row mb-1 align-items-center">
+                                        <label class="col-sm-2 col-form-label text-end">Email</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtEmailContact">
+                                        </div>
+                                    </div>
 
-                    <div class="form-group mt-1 row">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Email</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="txtEmailContact">
-                        </div>
-                    </div>
-                    <div class="form-group row mt-1">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Website</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="txtWebsiteContact">
-                        </div>
-                    </div>
-                    <div class="form-group row mt-1 mb-4">
-                        <label for="inputPassword" class="col-sm-4 col-form-label text-right">Hand Phone</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="txtHandPhoneContact">
+                                    <div class="row mb-1 align-items-center">
+                                        <label class="col-sm-2 col-form-label text-end">Website</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtWebsiteContact">
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-1 align-items-center">
+                                        <label class="col-sm-2 col-form-label text-end">Hand Phone</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtHandPhoneContact">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1169,9 +1273,201 @@
     </div>
 </div>
 
+<!-- Modal Search -->
+<div class="modal fade modal-search" id="modalIndividualSearch" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content">
+
+            <!-- Header -->
+            <div class="modal-header py-2">
+                <h6 class="modal-title mb-0">Search</h6>
+                <button type="button" class="btn-close" onclick="closeModalSearch()"></button>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body pt-2">
+
+                <!-- Search box -->
+                <div class="row mb-1 align-items-center">
+                    <label class="col-sm-2 col-form-label text-end">Search Name</label>
+                    <div class="col-sm-4">
+                        <input type="text" id="nameIndividual" class="form-control form-control-sm"
+                            placeholder="Enter user name" />
+                    </div>
+                    <label class="col-sm-1 col-form-label text-end">First</label>
+                    <div class="col-sm-4">
+                        <input type="text" id="firstNameIndividual" class="form-control form-control-sm"
+                            placeholder="Enter user name" />
+                    </div>
+                </div>
+
+                <!-- Result table -->
+                <div id="profileIndividualGrid" class="gridContainer"></div>
+
+
+            </div>
+
+            <!-- Footer -->
+            <div class="modal-footer py-2">
+                <button type="button" class="btn btn-sm btn-secondary" onclick="closeModalSearch()">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 
 <script>
-    // Founction chọn ảnh
+    // Mở Modal Search
+    function openModalSearch() {
+        $('#modalIndividualSearch').modal('show');
+    }
+
+    function closeModalSearch() {
+        $('#firstNameIndividual').val('');
+        $('#modalIndividualSearch').modal('hide');
+    }
+
+    // Gọi function getProfileGroupSreach khi bấm enter
+    document.getElementById("searchName").addEventListener("keydown", async function (event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            const value = event.target.value;
+            await getProfileGroupSreach(value);
+
+        }
+    });
+    function bindIndividualSearch() {
+        const inputs = ['nameIndividual', 'firstNameIndividual'];
+
+        inputs.forEach(id => {
+            const el = document.getElementById(id);
+            if (!el) return;
+
+            el.addEventListener('keydown', async function (event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+
+                    const searchModel = {
+                        name: document.getElementById('nameIndividual').value.trim(),
+                        firstName: document.getElementById('firstNameIndividual').value.trim()
+                    };
+
+                    await getProfileIndividualSreach(searchModel);
+                }
+            });
+        });
+    }
+
+    bindIndividualSearch();
+
+
+    // Function Load Grid
+
+    async function initializeProfileIndividualGrid(data) {
+        $("#profileIndividualGrid").dxDataGrid({
+            dataSource: data || [],
+            showBorders: true,
+            selection: { mode: "single" },
+            paging: { pageSize: 20 },
+            height: "300px",
+            pager: {
+                showPageSizeSelector: true,
+                allowedPageSizes: [5, 10, 20],
+                showInfo: true
+            },
+            filterRow: { visible: true },
+            columns: [
+                { dataField: "id", caption: "ID", visible: false },
+                { dataField: "name", caption: "Name" },
+
+            ],
+            scrolling: {
+                mode: "standard", // Không dùng virtual để footer hiển thị đúng
+                showScrollbar: "always",
+                scrollByContent: true
+            },
+            filterRow: {
+                visible: true,
+                applyFilter: "auto"
+            },
+            // 🔥 Quan trọng: gán selectedRowData khi click chọn
+            onRowClick: async function ( e ) {
+                selectedRowData = e.data.id; // 🔥 lấy data của row vừa click
+                console.log("Selected Row (RowClick):", selectedRowData);
+                await selectIndividual(selectedRowData);
+            },
+            noDataText: "No records to display" // hiển thị text khi chưa có dữ liệu
+        });
+    }
+
+    // Function Load Grid
+    async function initializeProfileGroupGrid(data) {
+        $("#profileGroupGrid").dxDataGrid({
+            dataSource: data || [],
+            showBorders: true,
+            selection: { mode: "single" },
+            paging: { pageSize: 20 },
+            height: "300px",
+            pager: {
+                showPageSizeSelector: true,
+                allowedPageSizes: [5, 10, 20],
+                showInfo: true
+            },
+            filterRow: { visible: true },
+            columns: [
+                { dataField: "id", caption: "ID", visible: false },
+                { dataField: "account", caption: "Group Name" },
+
+            ],
+            scrolling: {
+                mode: "standard", // Không dùng virtual để footer hiển thị đúng
+                showScrollbar: "always",
+                scrollByContent: true
+            },
+            filterRow: {
+                visible: true,
+                applyFilter: "auto"
+            },
+            // 🔥 Quan trọng: gán selectedRowData khi click chọn
+            onRowClick: function (e) {
+                selectedRowData = e.data; // 🔥 lấy data của row vừa click
+                console.log("Selected Row (RowClick):", selectedRowData);
+                selectGroup(selectedRowData);
+            },
+            noDataText: "No records to display" // hiển thị text khi chưa có dữ liệu
+        });
+    }
+
+    // Function Fill by ID
+    async function selectIndividual(id) {
+        try {
+            $("#loadingSpinner").show();
+            const res = await $.ajax({
+                url: 'FindIndividualByID/',
+                method: "GET",
+                data: { id: id },
+            });
+            if (!res?.success) {
+                showToast('Error', res?.message || 'Failed to load Group Name.', false);
+                return;
+            }
+
+            const pkg = res.data;
+            console.log('data', pkg);
+
+            initializeProfileGroupGrid(pkg);
+            $("#loadingSpinner").hide();
+
+        } catch (error) {
+            console.error(error);
+            $("#loadingSpinner").hide();
+
+        }
+
+    }
+
+    // Function chọn ảnh
     function displaySelectedImage(event, elementId) {
         const selectedImage = document.getElementById(elementId);
         const fileInput = event.target;
@@ -1188,9 +1484,57 @@
     }
 
 
+    // Function ProfileGroupSreach
+    async function getProfileGroupSreach(value) {
+        try {
+            $("#loadingSpinner").show();
+            const res = await $.ajax({
+                url: '/ProfileGroupSreach/',
+                method: "GET",
+                data: { GroupName: value },
+            });
+            if (!res?.success) {
+                showToast('Error', res?.message || 'Failed to load Group Name.', false);
+                return;
+            }
+
+            const pkg = res.data;
+            initializeProfileGroupGrid(pkg);
+            $("#loadingSpinner").hide();
+
+        } catch (error) {
+            console.error(error);
+            $("#loadingSpinner").hide();
+
+        }
+
+    }
+    async function getProfileIndividualSreach(value) {
+        try {
+            $("#loadingSpinner").show();
+            const res = await $.ajax({
+                url: '/ProfileIndividualSreach/',
+                method: "GET",
+                data: { LastName: value.name, FirstName: value.firstName },
+            });
+            if (!res?.success) {
+                showToast('Error', res?.message || 'Failed to load Group Name.', false);
+                return;
+            }
+
+            const pkg = res.data;
+            initializeProfileIndividualGrid(pkg);
+            $("#loadingSpinner").hide();
+
+        } catch (error) {
+            console.error(error);
+            $("#loadingSpinner").hide();
+
+        }
+
+    }
+
     $(document).ready(async function () {
-        var today = new Date().toISOString().split('T')[0];
-        $('#txtDobIndividual').val(today);
         await setSelect2();
         getAllLanguage();
         getAllTitle();
@@ -1207,9 +1551,8 @@
         getMarketType();
         $('#form_profile').hide();
         $('#profileTypeModal').modal('show');
-
-
-
+        initializeProfileGroupGrid();
+        initializeProfileIndividualGrid();
     });
 
     var profileTypeValue = 0;
@@ -1292,88 +1635,100 @@
         $('#profileTypeModal').modal('show');
 
     }
-    $('#txtFullNameContact').on('blur', function () {
-        var input = $(this).val().trim();
-        var regex = /^[a-zA-Z]+(?:\s[a-zA-Z]+)*,\s*[a-zA-Z]+(?:\s[a-zA-Z]+)*$/i;
-        // Ví dụ: Nguyen Van, Tuan Anh
+    // Hàm dùng tách name dùng chung có thể tái sử dụng 
+    function checkFullName(options) {
+        return new Promise(function (resolve, reject) {
 
-        if (regex.test(input)) {
-            $('#errorMessageContact').hide();
-            $(this).removeClass('is-invalid').addClass('is-valid');
+            const {
+                fullNameSelector,
+                firstNameSelector,
+                middleNameSelector,
+                lastNameSelector,
+                salutationSelector,
+                titleSelector, // optional (TomSelect)
+                idForm // ID Form
+            } = options;
 
-            // Tách chuỗi theo định dạng "LastName, FirstName MiddleName"
-            var parts = input.split(',');
-            var lastName = parts[0].trim();          // "Nguyen Van"
-            var firstMiddlePart = parts[1].trim();   // "Tuan Anh"
-            var nameTokens = firstMiddlePart.split(/\s+/); // ["Tuan", "Anh"]
-
-            var firstName = nameTokens[0];
-            var middleName = nameTokens.slice(1).join(' '); // Có thể là rỗng
-
-            $('#txtFirstNameContact').val(firstName);
-            $('#txtMiddleNameContact').val(middleName);
-            $('#txtLastContact').val(lastName);
-            $('#txtSalulationContact').val('Dear ' + firstName);
-
-        } else {
-            $('#errorMessageContact').show();
-            $(this).removeClass('is-valid').addClass('is-invalid');
-
-            $('#txtFirstNameContact').val('');
-            $('#txtMiddleNameContact').val('');
-            $('#txtLastContact').val('');
-            $('#txtSalulationContact').val('');
-        }
-    });
-    $('#txtFullNameIndividual').on('blur', function () {
-        var input = $(this).val().trim();
-
-        if (input === '') return;
-
-        $.ajax({
-            url: '/Profile/FullNameChange',
-            type: 'POST',
-            dataType: 'json',
-            crossDomain: false,
-            headers: {
-                "X-CSRF-TOKEN-HEADERNAME": $('input[name="__RequestVerificationToken"]').val()
-            },
-            data: {
-                fullName: input
-            },
-            success: function (res) {
-                console.log(res);
-                if (res && res.success) {
-
-                    // Full name đã chuẩn hóa
-                    if (res.FullName) {
-                        $('#txtFullNameIndividual').val(res.fullName);
-                    }
-
-                    // Các field khác (nếu có)
-                    if ($('#txtFirstNameIndividual').length)
-                        $('#txtFirstNameIndividual').val(res.firstName);
-
-                    if ($('#txtMiddleNameIndividual').length)
-                        $('#txtMiddleNameIndividual').val(res.middleName);
-
-                    if ($('#txtLastNameIndividual').length)
-                        $('#txtLastNameIndividual').val(res.lastName);
-
-                    if ($('#txtSalutationIndividual').length)
-                        $('#txtSalutationIndividual').val(res.salutation);
-
-
-                    // Title (nếu có dropdown)
-                    if (res.titleID) {
-                        let selectTitle = $('#txtTitleIndividual')[0].tomselect;
-                        selectTitle.setValue(res.titleID);
-                    }
-                }
-            },
-            error: function (xhr) {
-                console.error('FullNameChange API error', xhr);
+            const $fullName = $(fullNameSelector);
+            if (!$fullName.length) {
+                resolve(true);
+                return;
             }
+
+            const input = $fullName.val().trim();
+            if (input === '') {
+                resolve(true);
+                return;
+            }
+
+            $.ajax({
+                url: '/Profile/FullNameChange',
+                type: 'POST',
+                dataType: 'json',
+                headers: {
+                    "X-CSRF-TOKEN-HEADERNAME": $('input[name="__RequestVerificationToken"]').val()
+                },
+                data: {
+                    fullName: input
+                },
+                success: function (res) {
+
+                    if (res && res.success) {
+
+                        // Gán lại FullName
+                        $fullName.val(res.fullName);
+
+                        if (firstNameSelector)
+                            $(firstNameSelector).val(res.firstName || '');
+
+                        if (middleNameSelector)
+                            $(middleNameSelector).val(res.middleName || '');
+
+                        if (lastNameSelector)
+                            $(lastNameSelector).val(res.lastName || '');
+
+                        if (salutationSelector)
+                            $(salutationSelector).val(res.salutation || '');
+
+                        if (res.titleID && titleSelector) {
+                            let select = $(titleSelector)[0]?.tomselect;
+                            if (select) select.setValue(res.titleID);
+                        }
+
+                        resolve(true);
+                    } else {
+                        applyValidationErrors(res.errors, idForm);
+                        resolve(false);
+                    }
+                },
+                error: function () {
+                    reject(false);
+                }
+            });
+        });
+    }
+
+    // Gọi hàm tách name 
+    $('#txtFullNameIndividual').on('blur', function () {
+        checkFullName({
+            fullNameSelector: '#txtFullNameIndividual',
+            firstNameSelector: '#txtFirstNameIndividual',
+            middleNameSelector: '#txtMiddleNameIndividual',
+            lastNameSelector: '#txtLastNameIndividual',
+            salutationSelector: '#txtSalutationIndividual',
+            titleSelector: '#txtTitleIndividual',
+            idForm: "#profile_individual"
+        });
+    });
+    $('#txtFullNameContact').on('blur', function () {
+        checkFullName({
+            fullNameSelector: '#txtFullNameContact',
+            firstNameSelector: '#txtFirstNameContact',
+            middleNameSelector: '#txtMiddleNameContact',
+            lastNameSelector: '#txtLastContact',
+            salutationSelector: '#txtSalulationContact',
+            titleSelector: '#txtTitleContact',
+            idForm: "#profile_contact"
         });
     });
 
@@ -1582,7 +1937,7 @@
                     select3.clear(); // Xóa giá trị hiện tại
                     select3.clearOptions(); // Xóa tất cả option cũ
                     result.forEach(item => {
-                        select.addOption({ value: item.id, text: `${item.stateName}` });
+                        select3.addOption({ value: item.id, text: `${item.stateName}` });
                     });
                     select3.setValue('0'); // Chọn giá trị mặc định
 
@@ -1590,7 +1945,7 @@
                     select4.clear(); // Xóa giá trị hiện tại
                     select4.clearOptions(); // Xóa tất cả option cũ
                     result.forEach(item => {
-                        select.addOption({ value: item.id, text: `${item.stateName}` });
+                        select4.addOption({ value: item.id, text: `${item.stateName}` });
                     });
                     select4.setValue('0'); // Chọn giá trị mặc định
                 }
@@ -1633,7 +1988,7 @@
             crossDomain: false,
             headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
             success: function (result) {
-                console.log("log", result);
+
                 if (result.length > 0) {
                     let select = $('#txtSaleInChargeCOM')[0].tomselect; // Lấy instance của TomSelect
                     select.clear(); // Xóa giá trị hiện tại
@@ -2050,43 +2405,78 @@
             }
         });
     }
+
+    // Check box của BlackList
+
+    $('#blackListIndividual').on('change', function () {
+        const isChecked = this.checked;
+
+        $('#blackListReasonIndividual')
+            .prop('disabled', !isChecked)
+            .toggleClass('is-invalid', false);
+    });
+    $('#blackListCOM').on('change', function () {
+        const isChecked = this.checked;
+
+        $('#blackListReasonCOM')
+            .prop('disabled', !isChecked)
+            .toggleClass('is-invalid', false);
+    });
+
+
+
     $('#txtCheckboxDobIndividual').on('change', function () {
         $('#txtDobIndividual').prop('disabled', $(this).is(':checked'));
     });
     $('#txtCheckboxDobContact').on('change', function () {
+        console.log('changed', this.checked);
         $('#txtDobContact').prop('disabled', $(this).is(':checked'));
     });
-    $('#txtBlackListIndividual').change(function () {
+    $('#blackListIndividual').change(function () {
         if ($(this).is(':checked')) {
-            $('#blackListIndividual').css({
+            $('#blackListReasonIndividual').css({
                 'background-color': 'black',
                 'color': 'white'
             });
         } else {
-            $('#blackListIndividual').css({
+            $('#blackListReasonIndividual').css({
                 'background-color': '',
                 'color': ''
             });
         }
     });
-    $('#txtBlackListCOM').change(function () {
+    $('#blackListCOM').change(function () {
         if ($(this).is(':checked')) {
-            $('#blackListCOM').css({
+            $('#blackListReasonCOM').css({
                 'background-color': 'black',
                 'color': 'white'
             });
         } else {
-            $('#blackListCOM').css({
+            $('#blackListReasonCOM').css({
                 'background-color': '',
                 'color': ''
             });
         }
     });
-    function saveProfile() {
+    async function saveProfile() {
         var formData = new FormData();
         formData.append('Type', profileTypeValue);
         // individual profile
         if (profileTypeValue == 0) {
+            //Valid full name lần cuối trước khi call api
+            const individualValid = await checkFullName({
+                fullNameSelector: '#txtFullNameIndividual',
+                firstNameSelector: '#txtFirstNameIndividual',
+                middleNameSelector: '#txtMiddleNameIndividual',
+                lastNameSelector: '#txtLastNameIndividual',
+                salutationSelector: '#txtSalutationIndividual',
+                titleSelector: '#txtTitleIndividual',
+                idForm: "#profile_individual"
+            });
+
+            if (!individualValid) {
+                return;
+            }
             formData.append('CodeIndividual', $("#txtCodeIndividual").val());
             formData.append('AccountIndividual', $("#txtFullNameIndividual").val());
             formData.append('LastNameIndivdual', $("#txtLastNameIndividual").val());
@@ -2124,8 +2514,8 @@
             formData.append('CompanyIndividual', $("#txtCompanyIndividual").val());
             formData.append('Company2Individual', $("#txtCompany2Individual").val());
             formData.append('BusinessTitleIndividual', $("#txtBusinessTitleIndividual").val());
-            formData.append('BlackListIndividual', $("#txtBlackListIndividual").is(":checked"));
-            formData.append('BlackListReasonIndividual', $("#blackListIndividual").val());
+            formData.append('BlackListIndividual', $("#blackListIndividual").is(":checked"));
+            formData.append('BlackListReasonIndividual', $("#blackListReasonIndividual").val());
             formData.append('NoteIndividual', $("#txtNoteIndividual").val());
         }
 
@@ -2156,8 +2546,8 @@
             formData.append('SaleInChargeCOM', $("#txtSaleInChargeCOM").val());
             formData.append('MarketCOM', $("#txtMarketCOM").val());
             formData.append('ActiveCOM', $("#txtActiveCOM").is(":checked"));
-            formData.append('BlackListCOM', $("#txtBlackListCOM").is(":checked"));
-            formData.append('BlackListReasonCOM', $("#blackListCOM").val());
+            formData.append('BlackListCOM', $("#blackListCOM").is(":checked"));
+            formData.append('BlackListReasonCOM', $("#blackListReasonCOM").val());
             formData.append('NoteCOM', $("#txtNotECOM").val());
         }
         else if (profileTypeValue == 4) {
@@ -2185,6 +2575,20 @@
 
         }
         else {
+            //Valid full name lần cuối trước khi call api
+            const individualValid = await checkFullName({
+                fullNameSelector: '#txtFullNameContact',
+                firstNameSelector: '#txtFirstNameContact',
+                middleNameSelector: '#txtMiddleNameContact',
+                lastNameSelector: '#txtLastContact',
+                salutationSelector: '#txtSalulationContact',
+                titleSelector: '#txtTitleContact',
+                idForm: "#profile_contact"
+            });
+
+            if (!individualValid) {
+                return;
+            }
             formData.append('CodeContact', $("#txtCodeContact").val());
             formData.append('AccountContact', $("#txtFullNameContact").val());
             formData.append('LastNameContact', $("#txtLastContact").val());
@@ -2219,13 +2623,25 @@
             contentType: false,
             // headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
             data: formData,
-            success: function (data) {
-                if (data.code == 0) {
+            success: function (res) {
+                if (res.success) {
                     resetForm();
-                    showToast("Success", data.msg, true);
+                    showToast("Success", res.msg, true);
 
                 } else {
-                    showToast("Error", data.msg, false);
+                    var form = res.type;
+                    if (form == 0) {
+                        applyValidationErrors(res.errors, "#profile_individual");
+                    }
+                    else if (form == 1 || form == 2 || form == 3) {
+                        applyValidationErrors(res.errors, "#profile_com_ta_source");
+                    }
+                    else if (form == 4) {
+                        applyValidationErrors(res.errors, "#profile_group");
+                    }
+                    else {
+                        applyValidationErrors(res.errors, "#profile_contact");
+                    }
                 }
 
             },

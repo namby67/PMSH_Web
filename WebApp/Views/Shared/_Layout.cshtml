@@ -170,9 +170,12 @@
                             <a class="nav-link" asp-controller="Reservation"
                                 asp-action="SearchReservation">RESERVATION</a>
                             <div class="dropdown-menu-custom">
-                                <a asp-area="" asp-controller="HouseKeeping" asp-action="RoomAvailability">Room Availability</a>
-                                <a asp-area="" asp-controller="Reservation" asp-action="NewReservation">New reservation</a>
-                                <a asp-area="" asp-controller="Reservation" asp-action="SearchReservation">Search reservation</a>
+                                <a asp-area="" asp-controller="HouseKeeping" asp-action="RoomAvailability">Room
+                                    Availability</a>
+                                <a asp-area="" asp-controller="Reservation" asp-action="NewReservation">New
+                                    reservation</a>
+                                <a asp-area="" asp-controller="Reservation" asp-action="SearchReservation">Search
+                                    reservation</a>
                                 <a asp-area="" asp-controller="Home" asp-action="">Room assigment</a>
                                 <a asp-area="" asp-controller="Home" asp-action="">Allotment</a>
                                 <a asp-area="" asp-controller="Home" asp-action="">Allotment search</a>
@@ -182,7 +185,7 @@
                                 <a asp-area="" asp-controller="Reservation" asp-action="OverBooking">Over Booking</a>
                                 <a asp-area="" asp-controller="Reservation" asp-action="WaitList">Waiting List</a>
                                 <a asp-area="" asp-controller="Reservation" asp-action="RateCodeAuthor">Rate Query</a>
-                               @*  <a asp-area="" asp-controller="Home" asp-action="">Send mail</a> *@
+                                @*  <a asp-area="" asp-controller="Home" asp-action="">Send mail</a> *@
 
                             </div>
                         </li>
@@ -203,11 +206,11 @@
                         <li class="nav-item">
                             <a class="nav-link" href="#">FRONTDESK</a>
                             <div class="dropdown-menu-custom">
-                            @*     <a asp-area="" asp-controller="Home" asp-action="">Arrivals</a>
+                                @*     <a asp-area="" asp-controller="Home" asp-action="">Arrivals</a>
                                 <a asp-area="" asp-controller="Home" asp-action="">Guest in House</a>
                                 <a asp-area="" asp-controller="Home" asp-action="">Walk in</a> *@
                                 <a asp-area="" asp-controller="FrontDesk" asp-action="WakeUpCall">Wake up calls</a>
-     @*                            <a asp-area="" asp-controller="Home" asp-action="">AssignRoom</a> *@
+                                @*                            <a asp-area="" asp-controller="Home" asp-action="">AssignRoom</a> *@
                                @*  <a asp-area="" asp-controller="FrontDesk" asp-action="TelephoneBook">Telephone book</a> *@
                             @*     <a asp-area="" asp-controller="Home" asp-action="">Account Management (FolioDummy) </a>
                                 <a asp-area="" asp-controller="Home" asp-action="">Hotel door lock</a>
@@ -215,7 +218,7 @@
                                 <a asp-area="" asp-controller="Home" asp-action="">Report of Staying</a>
                                 <a asp-area="" asp-controller="Home" asp-action="">Recalculate Revenue </a> *@
                                 <a class="dropdown-item">Update Room Status</a>
-                            @*     <div class="dropdown-submenu">
+                                @*     <div class="dropdown-submenu">
                                     <a class="dropdown-submenu-toggle">
                                         End of day
                                     </a>
@@ -265,11 +268,16 @@
                             <a class="nav-link" href="#">HOUSE KEEPING</a>
                             <div class="dropdown-menu-custom">
                                 <a asp-area="" asp-controller="HouseKeeping" asp-action="TaskSheetStatus">Task sheet</a>
-                                <a asp-area="" asp-controller="HouseKeeping" asp-action="RoomAttendentDailyWorksheet">Daily worksheet</a>
-                                <a asp-area="" asp-controller="HouseKeeping" asp-action="TaskAssignment">Task assignment</a>
-                                <a asp-area="" asp-controller="HouseKeeping" asp-action="TurndownTasksheet">Turndown Management</a>
-                                <a asp-area="" asp-controller="HouseKeeping" asp-action="GuestServiceStatus">Guest service status</a>
-                                <a asp-area="" asp-controller="HouseKeeping" asp-action="AttendantPoint">Attendant point</a>
+                                <a asp-area="" asp-controller="HouseKeeping"
+                                    asp-action="RoomAttendentDailyWorksheet">Daily worksheet</a>
+                                <a asp-area="" asp-controller="HouseKeeping" asp-action="TaskAssignment">Task
+                                    assignment</a>
+                                <a asp-area="" asp-controller="HouseKeeping" asp-action="TurndownTasksheet">Turndown
+                                    Management</a>
+                                <a asp-area="" asp-controller="HouseKeeping" asp-action="GuestServiceStatus">Guest
+                                    service status</a>
+                                <a asp-area="" asp-controller="HouseKeeping" asp-action="AttendantPoint">Attendant
+                                    point</a>
                                 <a class="dropdown-item">Update Room Status</a>
                                 @* 
                                 <a class="dropdown-item" asp-area="" asp-controller="HouseKeeping" asp-action="AttendantPoint">Attendant Point</a>
@@ -294,7 +302,7 @@
 
                                         <a asp-area="" asp-controller="Cashiering" asp-action="PostingJournal">Posting
                                             journal</a>
-                                      @*   <a asp-area="" asp-controller="Home" asp-action="">Deposit and Cancellation
+                                        @*   <a asp-area="" asp-controller="Home" asp-action="">Deposit and Cancellation
                                             charge</a>
                                         <a asp-area="" asp-controller="Home" asp-action="">Deposit transfering</a>
                                         <a asp-area="" asp-controller="Home" asp-action="">E Profile upload</a>
@@ -304,20 +312,24 @@
                                 <a asp-area="" asp-controller="Cashiering" asp-action="CashierAudit">Cashier audit</a>
                                 <a asp-area="" asp-controller="Cashiering" asp-action="FolioHistoryView">Folio
                                     history</a>
-                               @*  <a asp-area="" asp-controller="Home" asp-action="">Cashier login</a> *@
+                                @*  <a asp-area="" asp-controller="Home" asp-action="">Cashier login</a> *@
                                 <a asp-area="" asp-controller="Cashiering" asp-action="CloseShift">Close shift</a>
                                 <a asp-area="" asp-controller="Home" asp-action="">Search VAT invoice</a>
                                 <a asp-area="" asp-controller="Cashiering" asp-action="ExchangeRate">Exchange rate</a>
-                                <a asp-area="" asp-controller="Cashiering" asp-action="ExchangeCurrency">Exchange currency</a>
-                                <a asp-area="" asp-controller="Cashiering" asp-action="ExchangeCurrencyReport">Exchange Report</a>
+                                <a asp-area="" asp-controller="Cashiering" asp-action="ExchangeCurrency">Exchange
+                                    currency</a>
+                                <a asp-area="" asp-controller="Cashiering" asp-action="ExchangeCurrencyReport">Exchange
+                                    Report</a>
                                 <div class="dropdown-submenu">
                                     <a class="dropdown-submenu-toggle">Account Receivable</a>
                                     <div class="dropdown-submenu-content">
                                         @* <a asp-area="" asp-controller="Home" asp-action="">AR search</a> *@
                                         @* <a asp-area="" asp-controller="Accounting" asp-action="AccountType">Account Type</a> *@
                                         @* <a asp-area="" asp-controller="Accounting" asp-action="ARAgingLevels">AR Aging Levels</a> *@
-                                        <a asp-area="" asp-controller="Accounting" asp-action="AROpening">AR opening balance</a>
-                                        <a asp-area="" asp-controller="Accounting" asp-action="ARAgingLevels">Aging level</a>
+                                        <a asp-area="" asp-controller="Accounting" asp-action="AROpening">AR opening
+                                            balance</a>
+                                        <a asp-area="" asp-controller="Accounting" asp-action="ARAgingLevels">Aging
+                                            level</a>
                                         <a asp-area="" asp-controller="Home" asp-action="">AR Type</a>
                                         @* <a asp-area="" asp-controller="Accounting" asp-action="AccountingSearch">Search account receivable</a> *@
                                         <a asp-area="" asp-controller="Accounting" asp-action="ARTraces">AR Traces</a>
@@ -351,7 +363,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="#">MISCELLANEOUS</a>
                             <div class="dropdown-menu-custom">
-                               @*  <a asp-area="" asp-controller="Home" asp-action="">Guest card & meal</a>
+                                @*  <a asp-area="" asp-controller="Home" asp-action="">Guest card & meal</a>
                                 <a asp-area="" asp-controller="Home" asp-action="">Meal Management</a> *@
                                 @* <a asp-area="" asp-controller="Miscellaneous" asp-action="CardManagement">Card Management</a> *@
                                 <a asp-area="" asp-controller="Miscellaneous" asp-action="MealReport">Meal report</a>
@@ -427,7 +439,7 @@
                                             asp-action="FacilityCategory">Facility Category</a>
                                         <a asp-area="" asp-controller="HouseKeepingAdmin"
                                             asp-action="FacilityCode">Facility Code</a>
-                                       @*  <a asp-area="" asp-controller="Home" asp-action="">Facility Task</a> *@
+                                        @*  <a asp-area="" asp-controller="Home" asp-action="">Facility Task</a> *@
                                         <a asp-area="" asp-controller="HouseKeepingAdmin"
                                             asp-action="Section">Section</a>
                                         <a asp-area="" asp-controller="HouseKeepingAdmin"
@@ -457,7 +469,7 @@
                                 <div class="dropdown-submenu">
                                     <a class="dropdown-submenu-toggle">Report</a>
                                     <div class="dropdown-submenu-content">
-                                  @*       <a asp-area="" asp-controller="Home" asp-action="">Report Group</a>
+                                        @*       <a asp-area="" asp-controller="Home" asp-action="">Report Group</a>
                                         <a asp-area="" asp-controller="Home" asp-action="">Create Report</a>
                                         <a asp-area="" asp-controller="Home" asp-action="">Add Report To Group</a>
                                         <a asp-area="" asp-controller="Home" asp-action="">View Report</a>
@@ -469,7 +481,7 @@
                                 <div class="dropdown-submenu">
                                     <a class="dropdown-submenu-toggle">Config System</a>
                                     <div class="dropdown-submenu-content">
-                               @*          <a asp-area="" asp-controller="Home" asp-action="">Room List</a>
+                                        @*          <a asp-area="" asp-controller="Home" asp-action="">Room List</a>
                                         <a asp-area="" asp-controller="Home" asp-action="">Load Room Inventory</a>
                                         <a asp-area="" asp-controller="Home" asp-action="">Change room type</a>
                                         <a asp-area="" asp-controller="Home" asp-action="">Setup email</a>
@@ -540,7 +552,7 @@
                                             asp-action="PackageForecastGroup">Package Forecast Group</a>
                                         <a asp-area="" asp-controller="Administration"
                                             asp-action="PreferenceGroup">Preference Group</a>
-                                     @*    <a asp-area="" asp-controller="Home" asp-action="">Priority</a>
+                                        @*    <a asp-area="" asp-controller="Home" asp-action="">Priority</a>
                                         <a asp-area="" asp-controller="Home" asp-action="">Promotions</a>
                                         <a asp-area="" asp-controller="Home" asp-action="">Vouchers</a> *@
                                     </div>
@@ -565,7 +577,7 @@
                                             asp-action="Department">Department</a>
                                         <a asp-area="" asp-controller="Administration" asp-action="Season">Season</a>
                                         <a asp-area="" asp-controller="Administration" asp-action="Zone">Zone</a>
-                                  @*       <a asp-area="" asp-controller="#" asp-action="">Sub Zone</a>
+                                        @*       <a asp-area="" asp-controller="#" asp-action="">Sub Zone</a>
                                         <a asp-area="" asp-controller="Home" asp-action="">Floor</a>
                                         <a asp-area="" asp-controller="Home" asp-action="">Telephone Book Category</a>
                                         <a asp-area="" asp-controller="Home" asp-action="">Computer Type</a>
@@ -624,7 +636,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="#">SECURITY</a>
                             <div class="dropdown-menu-custom">
-                               @*  <a asp-area="" asp-controller="Home" asp-action="">User management</a>
+                                @*  <a asp-area="" asp-controller="Home" asp-action="">User management</a>
                                 <a asp-area="" asp-controller="Home" asp-action="">User role</a>
                                 <a asp-area="" asp-controller="Home" asp-action="">User's group</a>
                                 <a asp-area="" asp-controller="Home" asp-action="">Group user's permission</a>
