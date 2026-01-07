@@ -1,7 +1,7 @@
 ﻿<link href="~/css/pages/Posting.css" rel="stylesheet" />
 
 <div class="modal fade" id="modalPosting" data-bs-backdrop="static" tabindex="-1">
-    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <strong class="modal-title" style="font-size: 1rem;">Posting Transaction - Article</strong>
@@ -365,7 +365,7 @@
 
     // --- API CALCULATIONS  ---
 
-    // Nhập Net -> Ra Gross
+    // Nhập Net -> Ra Gross (amount++)
     function apiCalcPlusFromNet() {
         let tCode = getActiveEl('.js-trans-code').val();
         let $netInput = getActiveEl('.js-input-price-net');
@@ -389,7 +389,7 @@
         });
     }
 
-    // Nhập Gross -> Ra Net
+    // Nhập Gross(price++) -> Ra Net
     function apiCalcNetFromPlus() {
         let tCode = getActiveEl('.js-trans-code').val();
         let $grossInput = getActiveEl('.js-input-price');
@@ -508,13 +508,12 @@
             $(this).addClass('active-user-input');
             getActiveEl('.js-input-price-net').removeClass('active-user-input');
         });
-
         $(document).on('focus click', '.js-input-price-net', function() {
             $(this).addClass('active-user-input');
             getActiveEl('.js-input-price').removeClass('active-user-input');
         });
 
-        // --- EXPRESS SERVICE LOGIC ---
+        // --- EXPRESS/DISCOUNT SERVICE ---
         //  Sự kiện Radio & Input Express và Discount
         $(document).on('change', '.js-express-radio, .js-discount-radio', function() {
             var val = parseFloat($(this).val()).toFixed(2);
@@ -603,12 +602,6 @@
             }
         });
 
-        function removeExpressText() {
-            var $refInput = getActiveEl('.js-ref-main');
-            var currentRef = $refInput.val();
-            var cleanRef = currentRef.replace(/ Express Service : \d+(\.\d+)?%/g, '');
-            $refInput.val(cleanRef);
-        }
     });
 
     // --- DATA LOADING & FORM FILLING ---
@@ -691,7 +684,7 @@
         });
     }
 
-    // Logic view button
+    // Logic view button next tab f2/f3
     document.addEventListener("DOMContentLoaded", function () {
         const btnAdd = document.getElementById("btn-add");
         const tabEls = document.querySelectorAll('button[data-bs-toggle="tab"]');
@@ -881,11 +874,12 @@
         return str;
     }
 
-       function highlightItem(element, containerId) {
+    function highlightItem(element, containerId) {
         $(containerId + ' .list-group-item').removeClass('active-item-custom');
         $(element).addClass('active-item-custom');
     }
 
+    // sự kiện đóng modal
     $('#modalPosting').on('hidden.bs.modal', function () {
         resetForm();
         $('#list-subgroup-container').empty();
@@ -896,13 +890,12 @@
         if(triggerEl) bootstrap.Tab.getOrCreateInstance(triggerEl).show();
     });
 
+    // sự kiện mở modal
     $('#modalPosting').on('shown.bs.modal', function () {
         loadGroups();
         loadCurrencies();
         loadFolioWindows();
     });
-
-
 
     // nut add and post
     var invoiceList = []; 
@@ -977,7 +970,7 @@
         resetFormKeepInvoiceInfo();
     });
 
-    // ---  HÀM RENDER DANH SÁCH XUỐNG FOOTER ---
+    // ---  HÀM RENDER LIST XUỐNG FOOTER F3 ---
     function renderInvoiceFooter() {
         var $footerContent = $('#invoice-pane .footer-content');
         var html = '<table class="table table-sm table-striped mb-0" style="font-size: 0.7rem;">';
@@ -1013,7 +1006,15 @@
         renderInvoiceFooter(); 
     }
 
-    // ---. HÀM RESET FORM NHƯNG GIỮ INVOICE DESC (CHO NÚT ADD) ---
+    // ---  NÚT CLEAR INVOICE ---
+    $('.clear-btn').click(function() {
+        if(confirm('Are you sure you want to clear all items?')) {
+            invoiceList = [];
+            renderInvoiceFooter();
+        }
+    });
+
+    // ---. HÀM RESET FORM NHƯNG GIỮ INPUT FIELD INVOICE DESC (CHO NÚT ADD) ---
     function resetFormKeepInvoiceInfo() {
         var $activePane = $('#invoice-pane');
         var currentDesc = $activePane.find('.js-invoice-desc').val(); 
@@ -1025,15 +1026,7 @@
         $activePane.find('.js-trans-code').focus();
     }
 
-    // ---  NÚT CLEAR INVOICE ---
-    $('.clear-btn').click(function() {
-        if(confirm('Are you sure you want to clear all items?')) {
-            invoiceList = [];
-            renderInvoiceFooter();
-        }
-    });
-
-        // ---  HÀM POSTING SERVICE  ---
+    // ---  HÀM POSTING SERVICE  ---
     function PostingService() {
         const loginUser = parseInt(localStorage.getItem("userID")) || 0;
         const loginName = (localStorage.getItem("Loginname") || "").trim().replace(/^"(.*)"$/, '$1');
