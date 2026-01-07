@@ -128,7 +128,9 @@
                 <span class="contact-item">
                     <i class="fas fa-envelope"></i> Email: @ContactConfig.Value.Email
                 </span>
-
+                <span class="contact-item hotel-name">
+                    @ContactConfig.Value.HotelName
+                </span>
                 <span class="contact-item">
                     <i class="fas fa-phone"></i> Hotline: @ContactConfig.Value.Hotline
                 </span>
@@ -136,15 +138,32 @@
             </div>
             <div class="user-info">
                 <i class="fa-solid fa-compress fullscreen-icon" title="Toàn màn hình"></i>
+                <span class="divider">|</span>
+
                 <span class="business-date" id="businessDate"></span>
+                <span class="divider">|</span>
+
                 <span class="user-name" id="user-display"></span>
-                <div class="notification-icon">
-                    <i class="fas fa-bell"></i>
-                    <span class="notification-badge">3</span>
+                <span class="divider">|</span>
+
+                <div class="notification-wrapper">
+                    <div class="notification-icon" onclick="showNotification()">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">0</span>
+                    </div>
+
+                    <div id="notificationDropdown" class="notification-dropdown" style="display:none;">
+                        <ul id="notificationList"></ul>
+                    </div>
                 </div>
-                <i class="fas fa-sign-out-alt logout-icon" title="Logout"
-                    onclick="window.location.href='/User/Index'"></i>
+
+                <span class="divider">|</span>
+
+                <i class="fas fa-sign-out-alt logout-icon"
+                   title="Logout"
+                   onclick="window.location.href='/User/Index'"></i>
             </div>
+
         </div>
         <!-- Navbar -->
         <nav class="navbar navbar-expand-lg navbar-custom sticky-top" style="display:block;z-index: 999 !important">
@@ -170,12 +189,9 @@
                             <a class="nav-link" asp-controller="Reservation"
                                 asp-action="SearchReservation">RESERVATION</a>
                             <div class="dropdown-menu-custom">
-                                <a asp-area="" asp-controller="HouseKeeping" asp-action="RoomAvailability">Room
-                                    Availability</a>
-                                <a asp-area="" asp-controller="Reservation" asp-action="NewReservation">New
-                                    reservation</a>
-                                <a asp-area="" asp-controller="Reservation" asp-action="SearchReservation">Search
-                                    reservation</a>
+                                <a asp-area="" asp-controller="HouseKeeping" asp-action="RoomAvailability">Room Availability</a>
+                                <a asp-area="" asp-controller="Reservation" asp-action="NewReservation">New reservation</a>
+                                <a asp-area="" asp-controller="Reservation" asp-action="SearchReservation">Search reservation</a>
                                 <a asp-area="" asp-controller="Home" asp-action="">Room assigment</a>
                                 <a asp-area="" asp-controller="Home" asp-action="">Allotment</a>
                                 <a asp-area="" asp-controller="Home" asp-action="">Allotment search</a>
@@ -374,7 +390,7 @@
                             </div>
                         </li>
 
-                        @* <li class="nav-item">
+                        <li class="nav-item">
                             <a class="nav-link" href="#">NIGHT AUDIT</a>
                             <div class="dropdown-menu-custom">
                                 <a asp-area="" asp-controller="NightAudit" asp-action="RoomRate">Room Rate</a>
@@ -382,7 +398,7 @@
                                 <a asp-area="" asp-controller="NightAudit" asp-action="RunNightAudit">Run Night
                                     Audit</a>
                             </div>
-                        </li> *@
+                        </li>
 
                         <li class="nav-item">
                             <a class="nav-link" href="#">ADMIN</a>
@@ -667,6 +683,28 @@
         </div>
 
     </div>
+    <!-- Modal New Reservation -->
+    <!-- Modal New Reservation - PHIÊN BẢN RỘNG HƠN, ĐẸP HƠN -->
+    <div class="modal fade" id="newReservationModal" tabindex="-1" aria-labelledby="newReservationModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="max-width: 92vw;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="newReservationModalLabel">New Reservation</h5>
+                    @* <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> *@
+                </div>
+                <div class="modal-body px-4 pt-3 pb-4">
+                    <!-- Thêm pb-4 để có padding dưới vừa phải -->
+                    <!-- Nội dung sẽ được load bằng AJAX -->
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-3">Loading new reservation form...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
@@ -841,8 +879,125 @@
             }
         });
     });
+      function showNotification() {
+        $("#loadingSpinner").show();
 
+        $.ajax({
+            url: '/Profile/ShowNotification',
+            type: 'GET',
+            success: function (result) {
+
+                let html = "";
+
+                if (result && result.length > 0) {
+                    result.forEach(function (item) {
+                        html += `
+                            <li>
+                                🎂 <strong>${item.Firstname}</strong><br/>
+                                <small>Today's Birthday</small>
+                            </li>`;
+                    });
+                } else {
+                    html = `<li>Không có sinh nhật hôm nay</li>`;
+                }
+
+                $("#notificationList").html(html);
+                $("#notificationDropdown").toggle();
+            },
+            error: function () {
+                alert("Không thể tải thông báo sinh nhật.");
+            },
+            complete: function () {
+                $("#loadingSpinner").hide();
+            }
+        });
+    }
+        function loadBirthdayCount() {
+        $.ajax({
+            url: '/Profile/ShowNotification',
+            type: 'GET',
+            success: function (result) {
+                let count = result ? result.length : 0;
+                const $badge = $(".notification-badge");
+
+                if (count > 0) {
+                    $badge.text(count).show();
+                } else {
+                    $badge.hide();
+                }
+            }
+        });
+    }
+
+    let isFormLoaded = false;
     $(document).ready(function () {
+        $('.open-new-reservation-modal').on('click', function (e) {
+           e.preventDefault();
+            var modal = $('#newReservationModal');
+
+            // Nếu chưa load form lần nào → load từ server
+            if (!isFormLoaded) {
+                // Hiển thị loading
+                modal.find('.modal-body').html(`
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-3">Loading new reservation form...</p>
+                    </div>
+                `);
+
+                modal.modal('show');
+
+                $.ajax({
+                    url: '/Reservation/NewReservation',
+                    type: 'GET',
+                    cache: false,
+                    success: function (data) {
+                             let amountRadio = "";
+                              let $radioButtons = "";
+                             let percentageRadio = "";
+                             let selectedCodesFromResult = "";
+                               let checkedIds = "";
+                                 let selectedRowsData = "";
+                                   let numRoomsInput = "";
+                          let selectedRowsDataGs = [];
+                              let $dateInput = "";
+                        let $dayInput = "";
+                        let $beginDateFixedCharge = "";
+                        let $endDateFixedCharge = "";
+                           let amountInputs = "";
+                        let percentageInputs = "";
+                          let roomSelect = "";
+                        let numRoomsRateCodeInput = "";
+                        modal.find('.modal-body').html(data);
+                        isFormLoaded = true; // Đánh dấu đã load xong
+                    },
+                    error: function () {
+                        modal.find('.modal-body').html(`
+                            <div class="alert alert-danger m-4">
+                                <strong>Error!</strong> Unable to load reservation form. Please try again.
+                            </div>
+                        `);
+                    }
+                });
+            } else {
+                // Đã load rồi → chỉ mở modal, giữ nguyên dữ liệu cũ
+                modal.modal('show');
+            }
+        });
+            loadBirthdayCount();
+    //     // Khi đóng modal → có thể reset nếu cần
+    // $('#newReservationModal').on('hidden.bs.modal', function () {
+    //     const modal = $(this);
+
+    //     // Xóa toàn bộ form cũ
+    //     modal.find('.modal-body').empty();
+
+    //     // Reset trạng thái load
+    //     isFormLoaded = false;
+    // });
+
         // Hàm kiểm tra và áp dụng trạng thái biểu tượng
         function updateFullscreenIcon() {
             const isFullscreen = !!(
@@ -980,6 +1135,8 @@
                 }
             });
         });
+     
+
 
 
         // Lắng nghe sự kiện thay đổi trạng thái toàn màn hình

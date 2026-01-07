@@ -505,7 +505,7 @@
                  toDate: $("#toDate").val(),
                  fromDate: $("#fromDate").val(),
                  timeDaily: $("#timeDaily").val(),
-                 selectedRows: selectedRowsData  ,
+                 selectedRows: selectedRowsDataGs  ,
                  userID: localStorage.getItem("userID")
              };
 
@@ -555,7 +555,7 @@
                  toDate: $("#toDate").val(),
                  fromDate: $("#fromDate").val(),
                  timeDaily: $("#timeDaily").val(),
-                 selectedRows: selectedRowsData  ,
+                 selectedRows: selectedRowsDataGs  ,
                  userID: localStorage.getItem("userID")
              };
 
@@ -698,7 +698,7 @@
          });
      });
 
-     let selectedRowsData = []; // lưu danh sách các dòng được chọn
+     // lưu danh sách các dòng được chọn
      let logGrid;
      let isAllSelected = false;
      function initializeWakeUpCallFindRoomGrid(data) {
@@ -741,8 +741,8 @@
 
              // bắt sự kiện khi select/deselect
              onSelectionChanged: function (e) {
-                 selectedRowsData = e.selectedRowsData;
-                 console.log("Các dòng được chọn:", selectedRowsData);
+                 selectedRowsDataGs = e.selectedRowsDataGs;
+                 console.log("Các dòng được chọn:", selectedRowsDataGs);
              },
 
              onRowPrepared: function (e) {
@@ -918,8 +918,8 @@
 
              // bắt sự kiện khi select/deselect
              onSelectionChanged: function (e) {
-                 selectedRowsData = e.selectedRowsData;
-                 console.log("Các dòng được chọn:", selectedRowsData);
+                 selectedRowsDataGs = e.selectedRowsDataGs;
+                 console.log("Các dòng được chọn:", selectedRowsDataGs);
              },
 
              onRowPrepared: function (e) {
@@ -960,13 +960,13 @@
          }
      });
          $(document).off("click", "#btnOke").on("click", "#btnOke", function () {
-         if (selectedRowsData.length === 0) {
+         if (selectedRowsDataGs.length === 0) {
              alert("Vui lòng chọn ít nhất 1 phòng!");
              return;
          }
 
          // Lấy danh sách room
-         let rooms = selectedRowsData.map(x => x.room); // chú ý: dataField trong grid phải là "room"
+         let rooms = selectedRowsDataGs.map(x => x.room); // chú ý: dataField trong grid phải là "room"
 
          // Ghép lại thành chuỗi cách nhau bằng dấu ,
          $("#roomno").val(rooms.join(", "));

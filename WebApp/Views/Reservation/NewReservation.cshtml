@@ -9,6 +9,7 @@
                     <h3 id="content-title">New reservation</h3>
                 </div>
                 <div class="mb-2">
+                    <button class="submit-button-clear-reservation" onclick="OkReservation(0)">Ok</button>
                     <button class="submit-button-clear-reservation" onclick="SaveReservation(0)">Save</button>
                     <button class="submit-button-clear-reservation" onclick="openModalOption();"
                         id="btnOption">Option</button>
@@ -16,7 +17,9 @@
                         fields</button>
                     <button class="submit-button-new-reservation" onclick="resetForm()" id="btnClear">Clear</button>
                     <button class="submit-button-clear-reservation"
-                        onclick="window.location.href='/Home/Index'">Home</button>
+                            onclick="closeForm()">
+                        Close
+                    </button>
 
                 </div>
                 <div id="partial-content">
@@ -310,34 +313,43 @@
                             <div class="section-new-reservation" style="margin:5px">
                                 <div class="stay-details-grid-new-reserva8tion row">
                                     <!-- Arrival -->
-                                    <div class="form-group-new-reservation col-md-6">
+                                    <div class="form-group-new-reservation col-md-5">
                                         <div class="input-with-button row g-0 align-items-start">
                                             <label class="col-md-4 col-form-label text-start pe-0" for="arrival">Arrival</label>
                                             <div class="col-md-7">
-                                                <input type="date" id="arrival" class="form-control" />
+                                                <input type="date" id="arrival" class="form-control" style=" width: 113px; " />
                                                 <span style="font-size:12px;color:#c53030;display:none" id="arrival-day"></span>
                                             </div>
                                         </div>
                                     </div>
 
                                     <!-- Departure -->
-                                    <div class="form-group-new-reservation col-md-6">
+                                    <div class="form-group-new-reservation col-md-5" style=" width: 188px; ">
                                         <div class="input-with-button row g-0 align-items-start">
                                             <label class="col-md-4 col-form-label text-start pe-0" for="departure">Departure</label>
                                             <div class="col-md-7">
-                                                <input type="date" id="departure" class="form-control" />
+                                                <input type="date" id="departure" class="form-control" style=" width: 113px; " />
                                                 <span style="font-size:12px;color:#c53030;display:none" id="departure-day"></span>
                                             </div>
                                         </div>
                                     </div>
-
+                                    <!-- Nights -->
+                                    <div class="form-group-new-reservation col-md-2">
+                                        <div class="input-with-button row g-0 align-items-start">
+                                            <label class="col-md-6 col-form-label text-start pe-0" for="nights">Nights</label>
+                                            <div class="col-md-6">
+                                                <input type="text" id="nights" class="form-control" readonly style="text-align:right" />
+                                            </div>
+                                        </div>
+                                    </div>
+                             
                                   
 
                                     <!-- Adults -->
                                     <div class="form-group-new-reservation col-md-3">
                                         <div class="input-with-button row g-0 align-items-start">
-                                            <label class="col-md-5 col-form-label text-start pe-0" for="adults">Adults</label>
-                                            <div class="col-md-7">
+                                            <label class="col-md-8 col-form-label text-start pe-0" for="adults">Adults</label>
+                                            <div class="col-md-4">
                                                 <input  value="2" id="adults" class="form-control" style="text-align:right" />
                                             </div>
                                         </div>
@@ -347,7 +359,7 @@
                                     <div class="form-group-new-reservation col-md-3">
                                         <div class="input-with-button row g-0 align-items-start">
                                             <label class="col-md-4 col-form-label text-start pe-0" for="c">C</label>
-                                            <div class="col-md-7">
+                                            <div class="col-md-5">
                                                 <input  value="0" id="c" class="form-control" style="text-align:right" />
                                             </div>
                                         </div>
@@ -357,7 +369,7 @@
                                     <div class="form-group-new-reservation col-md-3">
                                         <div class="input-with-button row g-0 align-items-start">
                                             <label class="col-md-4 col-form-label text-start pe-0" for="c1">C1</label>
-                                            <div class="col-md-7">
+                                            <div class="col-md-5">
                                                 <input  value="0" id="c1" class="form-control" style="text-align:right" />
                                             </div>
                                         </div>
@@ -367,7 +379,7 @@
                                     <div class="form-group-new-reservation col-md-3">
                                         <div class="input-with-button row g-0 align-items-start">
                                             <label class="col-md-4 col-form-label text-start pe-0" for="c2">C2</label>
-                                            <div class="col-md-7">
+                                            <div class="col-md-5">
                                                 <input value="0" id="c2" class="form-control" style="text-align:right;width: 52px;" />
                                             </div>
                                         </div>
@@ -382,7 +394,15 @@
                                             </div>
                                         </div>
                                     </div>
-
+                                    <!-- RN -->
+                                    <div class="form-group-new-reservation col-md-6">
+                                        <div class="input-with-button row g-0 align-items-start">
+                                            <label class="col-md-4 col-form-label text-start pe-0" for="txtRN">RN</label>
+                                            <div class="col-md-7">
+                                                <input type="text" id="txtRN" value="1" class="form-control" style="text-align:right" />
+                                            </div>
+                                        </div>
+                                    </div>
                                     <!-- Room Type -->
                                     <div class="form-group-new-reservation col-md-6">
                                         <div class="input-with-button row g-0 align-items-start">
@@ -404,15 +424,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- Nights -->
-                                    <div class="form-group-new-reservation col-md-6">
-                                        <div class="input-with-button row g-0 align-items-start">
-                                            <label class="col-md-4 col-form-label text-start pe-0" for="nights">Nights</label>
-                                            <div class="col-md-7">
-                                                <input type="text" id="nights" class="form-control" readonly style="text-align:right" />
-                                            </div>
-                                        </div>
-                                    </div>
+                                 
                                     <!-- Room -->
                                     <div class="form-group-new-reservation col-md-6">
                                         <div class="input-with-button row g-0 align-items-start">
@@ -432,15 +444,6 @@
                                         </div>
                                     </div>
 
-                                    <!-- RN -->
-                                    <div class="form-group-new-reservation col-md-6">
-                                        <div class="input-with-button row g-0 align-items-start">
-                                            <label class="col-md-4 col-form-label text-start pe-0" for="txtRN">RN</label>
-                                            <div class="col-md-7">
-                                                <input type="text" id="txtRN" value="1" class="form-control" style="text-align:right" />
-                                            </div>
-                                        </div>
-                                    </div>
 
                                     <!-- Rate Code -->
                                     <div class="form-group-new-reservation col-md-6">
@@ -482,9 +485,9 @@
                                     </div>
 
                                     <!-- Disc. Amt -->
-                                    <div class="form-group-new-reservation col-md-3">
+                                    <div class="form-group-new-reservation col-md-6">
                                         <div class="input-with-button row g-0 align-items-start">
-                                            <label class="col-md-5 col-form-label text-start pe-0" for="txtDiscountAmount">Disc.</label>
+                                            <label class="col-md-4 col-form-label text-start pe-0" for="txtDiscountAmount">Disc.</label>
                                             <div class="col-md-7">
                                                 <input type="text" id="txtDiscountAmount" value="0" class="form-control" style="text-align:right" />
                                             </div>
@@ -492,11 +495,11 @@
                                     </div>
 
                                     <!-- Disc. % -->
-                                    <div class="form-group-new-reservation col-md-3">
+                                    <div class="form-group-new-reservation col-md-6">
                                         <div class="input-with-button row g-0 align-items-start">
-                                            <label class="col-md-5 col-form-label text-start pe-0" for="txtDiscountPercent">Disc.%</label>
+                                            <label class="col-md-4 col-form-label text-start pe-0" for="txtDiscountPercent">Disc.%</label>
                                             <div class="col-md-7">
-                                                <input type="text" id="txtDiscountPercent" value="0" class="form-control" style="text-align:right;width: 44px;" />
+                                                <input type="text" id="txtDiscountPercent" value="0" class="form-control" style="text-align:right;" />
                                             </div>
                                         </div>
                                     </div>
@@ -638,7 +641,7 @@
                                     <!-- Rate After Discount -->
                                     <div class="form-group-new-reservation col-md-6">
                                         <div class="input-with-button row g-0 align-items-start">
-                                            <label class="col-md-4 col-form-label text-start pe-0" for="txtRateAfterDiscount">Rate</label>
+                                            <label class="col-md-4 col-form-label text-start pe-0" for="txtRateAfterDiscount">+</label>
                                             <div class="col-md-7">
                                                 <div class="d-flex align-items-center">
                                                     <input type="text" id="txtRateAfterDiscount" value="0" readonly class="form-control me-1" style="text-align:right" />
@@ -651,7 +654,7 @@
 
                                     <div class="form-group-new-reservation col-md-6">
                                         <div class="input-with-button row g-0 align-items-start">
-                                            <label class="col-md-4 col-form-label text-start pe-0" for="txtRateAfterDiscount">+ net</label>
+                                            <label class="col-md-4 col-form-label text-start pe-0" for="txtRateAfterDiscount"> net</label>
                                             <div class="col-md-7">
                                                 <div class="d-flex align-items-center">
                                                @*      <input type="text" id="txtRateAfterDiscount" value="0" readonly class="form-control me-1" style="text-align:right" />
@@ -664,7 +667,7 @@
                                     <!-- Total -->
                                     <div class="form-group-new-reservation col-md-6">
                                         <div class="input-with-button row g-0 align-items-start">
-                                            <label class="col-md-4 col-form-label text-start pe-0" for="txtTotal">Total</label>
+                                            <label class="col-md-4 col-form-label text-start pe-0" for="txtTotal">+</label>
                                             <div class="col-md-7">
                                                 <div class="d-flex align-items-center">
                                                     <input type="text" id="txtTotal" value="0" readonly class="form-control me-1" style="text-align:right" />
@@ -676,7 +679,7 @@
                                     </div>
                                     <div class="form-group-new-reservation col-md-6">
                                         <div class="input-with-button row g-0 align-items-start">
-                                            <label class="col-md-4 col-form-label text-start pe-0" for="txtRateAfterDiscount">+ net</label>
+                                            <label class="col-md-4 col-form-label text-start pe-0" for="txtRateAfterDiscount"> net</label>
                                             <div class="col-md-7">
                                                 <div class="d-flex align-items-center">
                                                         <input type="text" id="txtTotalNet" value="0" readonly class="form-control" style="text-align:right" />
@@ -763,7 +766,7 @@
                                     <!-- Folio Balance -->
                                     <div class="form-group-new-reservation col-md-6">
                                         <div class="input-with-button row g-0 align-items-start">
-                                            <label class="col-md-4 col-form-label text-start pe-0" for="txtCurrency">Fo. Balance</label>
+                                            <label class="col-md-4 col-form-label text-start pe-0" for="txtCurrency">F. Balance</label>
                                             <div class="col-md-7">
                                                 <input  id="txtCurrency" value="0" class="form-control" style="text-align:right" />
                                             </div>
@@ -774,10 +777,10 @@
                                     <div class="col-md-3 mt-2">
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" id="txtPrintRate">
-                                            <label class="form-check-label" for="txtPrintRate">Print Rate</label>
+                                            <label class="form-check-label" for="txtPrintRate" style="padding-top: 4px;">Print Rate</label>
                                         </div>
                                     </div>
-                                    <div class="col-md-3 mt-2">
+                                @*     <div class="col-md-3 mt-2">
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" id="txtVideoCheckout">
                                             <label class="form-check-label" for="txtVideoCheckout">Video CO</label>
@@ -788,11 +791,11 @@
                                             <input class="form-check-input" type="checkbox" id="txtNoPost">
                                             <label class="form-check-label" for="txtNoPost">No Post</label>
                                         </div>
-                                    </div>
+                                    </div> *@
                                     <div class="col-md-3 mt-2">
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" id="txtConfirmation">
-                                            <label class="form-check-label" for="txtConfirmation">Confirmation</label>
+                                            <label class="form-check-label" for="txtConfirmation" style="padding-top: 4px;">Confirmation</label>
                                         </div>
                                     </div>
 
@@ -1420,10 +1423,10 @@
         updateDates();
     });
 
-    const numRoomsInput = document.getElementById('numRooms');
-    const roomSelect = document.getElementById('roomSelect');
-    const numRoomsRateCodeInput = document.getElementById('numRoomsRateCode');
-
+     numRoomsInput = document.getElementById('numRooms');
+     roomSelect = document.getElementById('roomSelect');
+     numRoomsRateCodeInput = document.getElementById('numRoomsRateCode');
+       
     // Hàm kiểm tra và cập nhật trạng thái select
     function updateRoomSelect() {
         if (parseInt(numRoomsInput.value) > 1) {
@@ -1860,6 +1863,140 @@
         });
 
     }
+    function OkReservation(type) {
+
+        let WalkIn = "0";
+        if (type == 1) {
+            WalkIn = "1";
+        }
+        const userName = JSON.parse(localStorage.getItem("Loginname"));
+        const userID = JSON.parse(localStorage.getItem("userID"));
+        var formData = new FormData();
+        let valueDiscountPercent = $('#txtDiscountPercent').val();
+        let cleanValueDiscountPercent = valueDiscountPercent.replace(/[^0-9]/g, '');
+        let valueDiscountAmount = $('#txtDiscountAmount').val();
+        let cleanValueDiscountAmount = valueDiscountAmount.replace(/[^0-9]/g, '');
+
+        formData.append('reservationID',idReservation);
+
+        formData.append('profileAgentID', $('#txtAgentID').val());
+        formData.append('agentName', $('#txtAgent').val());
+        formData.append('profileCompanyID', $('#txtCompanyID').val());
+        formData.append('companyName', $('#txtCompany').val());
+        formData.append('groupCode', $("#txtGroupCode").val());
+        formData.append('profileContactID', $('#txtContactID').val());
+        formData.append('contactName', $('#txtContact').val());
+        formData.append('contactPhone', $("#txtContactPhone").val());
+        formData.append('profileIndividualID', $("#txtID").val());
+        formData.append('firstName', $("#txtFirstName").val());
+        formData.append('lastName', $('#txtName').val());
+        formData.append('title', $("#txtTitle").val() ?? '');
+        formData.append('phone', $("#txtPhone").val());
+        formData.append('email', $("#txtEmail").val());
+        formData.append('memberType', $("#txtMemberType").val());
+        formData.append('memberNo', $("#txtCardNo").val());
+        formData.append('address', $("#txtAddress").val());
+        formData.append('city', $("#txtCity").val());
+        formData.append('identityCard', $("#txtIdentityCard").val());
+        formData.append('dateOfBirth', $("#txtDob").val());
+
+        formData.append('nationality', $("#txtNationality").val());
+        formData.append('arrival', $("#arrival").val());
+        formData.append('departure', $("#departure").val());
+        formData.append('noOfAdult', $("#adults").val());
+        formData.append('noOfChild', $("#c").val());
+        formData.append('noOfChild1', $("#c1").val());
+        formData.append('noOfChild2', $("#c2").val());
+        formData.append('noOfNight', $("#nights").val());
+        formData.append('noOfRoom', $("#numRooms").val());
+        formData.append('roomTypeID', $("#txtRoomType").val());
+        formData.append('vipID', $("#txtVIP").val() ?? '');
+        formData.append('rtcID', $("#txtRTC").val());
+        formData.append('roomID', $("#roomID").val());
+        formData.append('roomNo', $('#roomSelect').val());
+        formData.append('eta', $("#txtETA").val());
+        formData.append('etd', $("#txtETD").val());
+        formData.append('reservationType', $("#txtResType").val());
+        formData.append('reservationTypeCode', $('#txtResType').find('option:selected').text());
+        formData.append('marketID', $("#txtMarketID").val());
+        formData.append('marketCode', $("#txtMarket").val());
+        formData.append('sourceID', $("#txtSource").val());
+        formData.append('sourceCode', $('#txtSource').find('option:selected').text());
+        formData.append('bookerID', $("#txtBookerID").val());
+        formData.append('bookerName', $("#txtBooker").val());
+        formData.append('discountAmount', cleanValueDiscountAmount);
+        formData.append('discountRate', cleanValueDiscountPercent);
+        formData.append('comment', $("#txtComment").val());
+        formData.append('pickedId', $("#pickedID").val());
+        formData.append('pickUpTransportType', $("#pickUpTransportType").val());
+        formData.append('pickUpStationCode', $("#pickUpStationCode").val());
+        formData.append('pickUpCarrierCode', $("#pickUpCarrierCode").val());
+        formData.append('pickUpTime', $("#pickUpTime").val());
+        formData.append('pickUpDate', $("#pickUpDate").val());
+        formData.append('pickUpTransportNo', $("#pickUpTransportNo").val());
+        formData.append('pickUpDescription', $("#pickUpDescription").val());
+        formData.append('dropOffId', $("#dropOffId").val());
+        formData.append('dropOffCarrierCode', $("#dropOffCarrierCode").val());
+        formData.append('dropOffTransportType', $("#dropOffTransportType").val());
+        formData.append('dropOffStationCode', $("#dropOffStationCode").val());
+        formData.append('dropOffTime', $("#dropOffTime").val());
+        formData.append('dropOffTransportNo', $("#dropOffTransportNo").val());
+        formData.append('dropOffDate', $("#dropOffDate").val());
+        formData.append('dropOffDescription', $("#dropOffDescription").val());
+        formData.append('packageID', $("#txtPackage").val());
+        formData.append('passport', $("#txtPassport").val());
+        formData.append('packages', $('#txtPackage').find('option:selected').text());
+        formData.append('rateCodeID', $("#txtRateCodeID").val());
+        formData.append('rateCode', $("#txtRateCode").val());
+        formData.append('rateAmount', $("#txtRateAmount").val());
+        formData.append('rateAfter', $("#txtNetAmount").val());
+        formData.append('color', $("#txtColor").val());
+        formData.append('itemInventory', $("#txtItemInventory").val());
+        // const selectedValues = $("#txtItemInventory").val();
+        // selectedValues.forEach(value => {
+        //     formData.append('itemInventory', value);
+        // });
+        formData.append('specials', $("#txtPreference").val());
+        formData.append('allotmentID', $("#txtAllotmentID").val());
+        formData.append('allotmentCode', $("#txtAllotment").val());
+        formData.append('perrsonInCharge', $("#txtPersonInCharge").val());
+        formData.append('roomNight', $("#nights").val());
+        formData.append('userName', userName);
+        formData.append('userID', userID);
+        formData.append('walkIn', WalkIn);
+        let valuePrint = $('#txtPrintRate').is(':checked') ? 1 : 0;
+        formData.append('printRate', valuePrint);
+
+        let valueNoPost = $('#txtNoPost').is(':checked') ? 1 : 0;
+        formData.append('noPost', valueNoPost);
+
+        $.ajax({
+            url: '/Reservation/SaveReservation',
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            data: formData,
+            success: function (data) {
+                if (data.code == 0) {
+                    showToast('Success', data.msg, true);
+                    resetForm();
+                     $('#newReservationModal').modal('hide');
+
+                } else {
+                    showToast('Error', data.msg, false);
+                }
+
+            },
+            error: function (xhr, statusText, err) {
+
+            }
+        });
+
+    }
+     function closeForm() {
+             $('#newReservationModal').modal('hide');
+    }
+
     function resetForm() {
         checkEdit = false;
 

@@ -18,7 +18,7 @@
     .nightaudit-container h1 {
         font-size: 3.2rem;
         font-weight: 700;
-        color: #0055b8;
+        color: #009444;
         /* Neon cyan */
         text-transform: uppercase;
         letter-spacing: 4px;
@@ -48,7 +48,7 @@
 
     /* Table header */
     .nightaudit-table_nightaudit th {
-        background: #0055b8;
+        background: #009444;
         color: #ffffff;
         padding: 8px 20px;
         text-align: left;
@@ -85,7 +85,7 @@
 
     /* Process icon styling */
     .nightaudit-table_nightaudit .fa-spinner {
-        color: #0055b8;
+        color: #009444;
         /* Blue for in-progress */
     }
 
@@ -103,22 +103,24 @@
     .nightaudit-buttons {
         display: flex;
         gap: 20px;
+        width: 100%;
+        max-width: 500px;
     }
 
     /* Button styling */
     .nightaudit-buttons button {
-        padding: 8px;
-        font-size: 14px;
-        font-weight: 500;
-        border-radius: 4px;
-        color: #0055b8;
-        cursor: pointer;
-        border: none;
-    }
+            flex: 1;
+            padding: 10px 0;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 4px;
+            cursor: pointer;
+            border: none;
+        }
 
     /* Start button */
     .nightaudit-buttons #start {
-        background: #0055b8;
+        background: #009444;
         color: #FFFFFF;
     }
 
@@ -150,7 +152,7 @@
     .progress-bar {
         width: 0%;
         height: 30px;
-        background: #0055b8;
+        background: #009444;
         transition: width 0.3s ease;
         text-align: center;
         line-height: 30px;
@@ -163,12 +165,17 @@
         color: #000000;
         font-size: 1.5rem;
     }
+
+    .nightaudit-table_nightaudit th,
+    .nightaudit-table_nightaudit td {
+        border-right: 1px solid rgba(0, 0, 0, 0.2);
+    }
 </style>
 <div class="nightaudit-container">
     <h1>END OF DAY</h1>
     <div class="nightaudit-business-date2">Business Date: <span id="value"></span></div>
     <div class="nightaudit-buttons">
-        <button id="start" onclick="RunNightAudit();">Start Night Audit</button>
+        <button id="start" onclick="RunNightAudit();">Start</button>
         <button id="close" onclick="window.location.href='/Home/Index'">Close</button>
     </div>
     <table class="nightaudit-table_nightaudit">

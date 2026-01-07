@@ -1,9 +1,9 @@
 ﻿:root {
-  --main-color: #1f501f;
-  --secondary-color: #ebe6e6;
-  --accent-color: #ffffff;
-  --text-color: #000000;
-  --highlight-color: #e67100;
+    --main-color: #009444;
+    --secondary-color: #ebe6e6;
+    --accent-color: #ffffff;
+    --text-color: #000000;
+    --highlight-color: #e67100;
 }
 
 body {
@@ -237,24 +237,26 @@ body {
 .banner-col-left {
   flex: 1;
   display: flex;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
 }
 
 .banner-icon-left {
-  height: 110px;
-  width: auto;
-  max-width: 100%;
-  object-fit: contain;
-  filter: drop-shadow(0px 0px 8px rgba(255, 255, 255, 2));
+    height: 110px;
+    width: auto;
+    margin-left: 17%;
+    max-width: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0px 0px 8px rgba(255, 255, 255, 2));
 }
 
 .banner-icon-right {
-  height: 110px;
-  width: auto;
-  max-width: 100%;
-  object-fit: contain;
-  filter: drop-shadow(0px 0px 8px rgba(255, 255, 255, 2));
+    height: 110px;
+    width: auto;
+    margin-right:17%;
+    max-width: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0px 0px 8px rgba(255, 255, 255, 2));
 }
 
 .banner-col-center {
@@ -268,7 +270,7 @@ body {
 .banner-col-right {
   flex: 1;
   display: flex;
-  justify-content: center;
+  justify-content: end;
   align-items: center;
 }
 /* end css banner*/
@@ -288,10 +290,14 @@ body {
 }
 
 .contact-item {
-  font-size: 13px;
-  color: var(--text-color);
+    font-size: 13px;
+    color: var(--text-color);
 }
-
+.hotel-name {
+    text-align: center;
+    font-weight: bold;
+    text-transform: uppercase;
+}
 .contact-item i {
   margin-right: 5px;
   color: var(--main-color);
@@ -331,6 +337,54 @@ body {
   display: flex;
   flex-direction: column;
 }
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.divider {
+    color: #999;
+    font-weight: 500;
+}
+.notification-wrapper {
+    position: relative; /* mốc định vị cho dropdown */
+}
+
+.notification-icon {
+    cursor: pointer;
+}
+
+.notification-dropdown {
+    position: absolute;
+    top: 100%; /* nằm ngay dưới icon */
+    right: 0; /* canh phải theo icon */
+    margin-top: 6px;
+    width: 280px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+#notificationList {
+    list-style: none;
+    margin: 0;
+    padding: 8px;
+}
+
+    #notificationList li {
+        padding: 8px;
+        border-bottom: 1px solid #eee;
+    }
+
+        #notificationList li:last-child {
+            border-bottom: none;
+        }
+
 
 @media (max-width: 768px) {
   .contact-user-section {

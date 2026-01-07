@@ -143,6 +143,11 @@ namespace Reservation.Controllers
                 reservation = (ReservationModel)ReservationBO.Instance.FindByPrimaryKey(id.Value);
             }
             ViewBag.Reservation = reservation;
+
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView(); // hoặc PartialView("_NewReservationPartial")
+            }
             return View();
         }
 
