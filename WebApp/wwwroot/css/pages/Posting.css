@@ -1,6 +1,6 @@
 ﻿:root {
     --primary-dark: #009444;
-    --primary-medium: #428936;
+    --primary-medium: #70b094;
     --primary-light: #a3c4a3;
     --bg-body: #f4f8f4;
     --bg-container: #f4f8f4;
@@ -361,15 +361,15 @@
         padding: 4px 12px;
         font-weight: bold;
         color: var(--primary-light);
-        border: 1px solid var(--primary-medium);
-        background-color: var(--primary-medium);
+        border: 1px solid var(--primary-dark);
+        background-color: var(--primary-dark);
         font-size: 0.8rem;
     }
 
         .nav-tabs .nav-link.active {
-            background-color: var(--primary-dark) !important;
+            background-color: var(--primary-medium) !important;
             color: var(--text-light) !important;
-            border: 1px solid var(--primary-dark);
+            border: 1px solid var(--primary-medium);
             border-bottom: none;
         }
 
@@ -410,7 +410,7 @@
 }
 
 .bg-dark {
-    background-color: var(--primary-medium) !important;
+    background-color: var(--primary-dark) !important;
 }
 
 .border-secondary {

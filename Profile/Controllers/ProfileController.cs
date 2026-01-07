@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using BaseBusiness.BO;
+using BaseBusiness.Contants;
 using BaseBusiness.Model;
 using BaseBusiness.util;
 using DevExpress.Web.Internal;
@@ -20,6 +21,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Profile.Commons.Helpers;
+using Profile.DTO;
 using Profile.Services.Interfaces;
 namespace Profile.Controllers
 {
@@ -32,8 +34,11 @@ namespace Profile.Controllers
         private readonly IMembershipService _iMembershipService;
         private readonly IFutureService _iFutureService;
 
+        private readonly INewProfileService _newProfile;
+
         public ProfileController(ILogger<ProfileController> logger,
-             IMemoryCache cache, IConfiguration configuration, IProfileExportService iProfileService, IMembershipService iMembershipService, IFutureService iFutureService)
+             IMemoryCache cache, IConfiguration configuration, IProfileExportService iProfileService, IMembershipService iMembershipService, IFutureService iFutureService
+             , INewProfileService newProfile)
         {
             _cache = cache;
             _logger = logger;
@@ -41,6 +46,7 @@ namespace Profile.Controllers
             _iProfileService = iProfileService;
             _iMembershipService = iMembershipService;
             _iFutureService = iFutureService;
+            _newProfile = newProfile;
         }
         public IActionResult Index()
         {
@@ -929,531 +935,20 @@ namespace Profile.Controllers
         #endregion
 
         #region new profile
-        //[ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult SaveProfile()
+        public ActionResult SaveProfile(SaveProfileRequestDto dto)
         {
-            try
+            if (dto == null)
             {
-                int profileType = int.Parse(Request.Form["Type"].ToString());
-                ProfileModel profile = new ProfileModel();
-                profile.Type = profileType;
-
-                string Message = "";
-                if (profileType == 0)
+                return Json(new ApiResponse
                 {
-
-                    if (Request.Form["LastNameIndivdual"].ToString() == "")
-                    {
-                        Message += "Last name not blank\n";
-                        return Json(new { code = 1, msg = Message });
-                    }
-                    if (Request.Form["FirstNameIndividual"].ToString() == "")
-                    {
-                        Message += "First name not blank\n";
-                        return Json(new { code = 1, msg = Message });
-                    }
-                    if (Request.Form["NationalityIndividual"].ToString() == "" || int.Parse(Request.Form["NationalityIndividual"].ToString()) == 0)
-                    {
-                        Message += "Nationality not blank\n";
-                        return Json(new { code = 1, msg = Message });
-                    }
-                    if (Request.Form["BlackListIndividual"].ToString().ToLower() == "true")
-                    {
-                        if (Request.Form["BlackListReasonIndividual"].ToString() == "")
-                        {
-                            Message += "Reason Black list not blank\n";
-                            return Json(new { code = 1, msg = Message });
-                        }
-                    }
-
-                    string codeIndividual = Request.Form["CodeIndividual"].ToString();
-
-                    if (!string.IsNullOrEmpty(codeIndividual))
-                    {
-                        List<ProfileModel> tran =
-                            PropertyUtils.ConvertToList<ProfileModel>(
-                                ProfileBO.Instance.FindByAttribute("Code", codeIndividual)
-                            );
-
-                        if (tran != null && tran.Count > 0)
-                        {
-                            Message += "Profile code existing in system!\n";
-                            return Json(new { code = 1, msg = Message });
-                        }
-                    }
-
-
-                    if (Request.Form["CodeIndividual"].ToString() != "")
-                    {
-                        if (Request.Form["CodeIndividual"].ToString().Trim().Length > 13)
-                        {
-                            Message += "Length Code format!\n";
-                            return Json(new { code = 1, msg = Message });
-                        }
-                    }
-                    profile.Code = Request.Form["CodeIndividual"].ToString();
-                    profile.Account = Request.Form["AccountIndividual"].ToString();
-                    profile.FullAccount = "";
-                    profile.LastName = Request.Form["LastNameIndivdual"].ToString();
-                    profile.Firstname = Request.Form["FirstNameIndividual"].ToString();
-                    profile.MiddleName = Request.Form["MiddleNameIndividual"].ToString();
-                    profile.LanguageID = int.Parse(Request.Form["LanguageIndividual"].ToString());
-                    profile.TitleID = int.Parse(Request.Form["TitleIndividual"].ToString());
-                    profile.Address = Request.Form["AddressIndividual"].ToString();
-                    profile.HomeAddress = Request.Form["BusAddressIndividual"].ToString();
-                    profile.City = Request.Form["CityIndividual"].ToString();
-                    profile.PostalCode = Request.Form["PostalIndividual"].ToString();
-                    profile.CountryID = int.Parse(Request.Form["CountryIndividual"].ToString());
-                    profile.StateID = int.Parse(Request.Form["StateIndividual"].ToString());
-                    profile.Salutation = Request.Form["SalutationIndividual"].ToString();
-                    profile.VIPID = int.Parse(Request.Form["VIPIndividual"].ToString());
-                    profile.VIPReason = Request.Form["ReasonIndividual"].ToString();
-                    profile.PrefRoom = Request.Form["PrefRoomIndividual"].ToString();
-                    profile.PassPort = Request.Form["PassportIndividual"].ToString();
-                    profile.Keyword = Request.Form["KeywordIndividual"].ToString();
-                    profile.DateOfBirth = DateTime.Parse(Request.Form["DobIndividual"].ToString());
-                    profile.NationalityID = int.Parse(Request.Form["NationalityIndividual"].ToString());
-                    profile.Description = "";
-                    profile.Telephone = Request.Form["TelephoneIndividual"].ToString();
-                    profile.Email = Request.Form["EmailIndividual"].ToString();
-                    profile.Website = Request.Form["WebsiteIndividual"].ToString();
-                    profile.HandPhone = Request.Form["HandPhoneIndividual"].ToString();
-                    profile.MailList = false;
-                    profile.Active = Request.Form["ActiveIndividual"].ToString().ToLower() == "true";
-                    profile.Contact = Request.Form["ContactIndividual"].ToString().ToLower() == "true";
-                    profile.History = false;
-                    profile.ContactProfileID = 0;
-                    profile.ARNo = "";
-                    profile.Position = "";
-                    profile.Department = "";
-                    profile.EnvelopGreeting = "";
-                    profile.OwnerID = 0;
-                    profile.TerritoryID = 0;
-                    profile.PersonInChargeID = 0;
-                    profile.AcctContact = "";
-                    profile.CurrencyID = "";
-                    profile.TaxCode = Request.Form["TaxIndividual"].ToString();
-                    profile.Type = 0;
-                    profile.IdentityCard = Request.Form["CardIndividual"].ToString();
-                    profile.MemberType = "";
-                    profile.MemberNo = "";
-                    profile.LastRoom = "";
-                    profile.Lastvisit = DateTime.Now;
-                    profile.LastRate = "";
-                    profile.LastRateCode = "";
-                    profile.LastARNo = "";
-                    profile.LastMemberNo = "";
-                    profile.ReturnGuest = -1;
-                    profile.IsBlackList = Request.Form["BlackListIndividual"].ToString().ToLower() == "true";
-                    profile.BlackListReason = Request.Form["BlackListReasonIndividual"].ToString();
-                    profile.SpecialUpdateBy = "";
-                    profile.SpecialUpdateDate = DateTime.Now;
-                    profile.UserInsertID = profile.UserUpdateID = 136;
-                    profile.CreateDate = profile.UpdateDate = DateTime.Now;
-                    profile.StayNo = 0;
-                    profile.GuestNo = "";
-                    profile.Occupation = "";
-                    profile.BonusPoints = 0;
-                    profile.GuestGroupID = 0;
-                    profile.Birthplace = "";
-                    profile.ExpressCheckout = false;
-                    profile.PayTV = false;
-                    profile.FirstReservation = profile.LastReservation = profile.WeddingAnniversary = profile.Firstvisit = profile.Expiry = profile.LastContact = DateTime.MinValue;
-                    profile.CreditCard = "";
-                    profile.RateCode = "";
-                    profile.RoomNights = 0;
-                    profile.BedNights = 0;
-                    profile.TotalTurnover = 0;
-                    profile.LodgePackageTurover = 0;
-                    profile.LodgeTurnover = 0;
-                    profile.FBTurnover = 0;
-                    profile.EventTurnover = 0;
-                    profile.OtherTurnover = 0;
-                    profile.Company = Request.Form["Company2Individual"].ToString();
-                    profile.FullAccount = Request.Form["CompanyIndividual"].ToString();
-                    profile.BusinessTitle = Request.Form["BusinessTitleIndividual"].ToString();
-                    profile.Other = Request.Form["OtherIndividual"].ToString();
-                    profile.Religion = Request.Form["ReligionIndividual"].ToString();
-                    profile.Nation = Request.Form["NationIndividual"].ToString(); ;
-                    profile.PurposeOfStay = Request.Form["PurposeIndividual"].ToString();
-                    profile.MarketID = 0;
-                    profile.IsTransfer = false;
-                    profile.Fax = Request.Form["PurposeIndividual"].ToString();
-
-                }
-                else if (profileType == 1 || profileType == 2 || profileType == 3)
-                {
-                    if (Request.Form["CodeCOM"].ToString() == "")
-                    {
-                        Message += "Code not blank\n";
-                        return Json(new { code = 1, msg = Message });
-                    }
-                    if (Request.Form["AccountCOM"].ToString() == "")
-                    {
-                        Message += "Account not blank\n";
-                        return Json(new { code = 1, msg = Message });
-                    }
-                    if (Request.Form["BlackListCOM"].ToString().ToLower() == "true")
-                    {
-                        if (Request.Form["BlackListReasonCOM"].ToString() == "")
-                        {
-                            Message += "Reason Black list not blank\n";
-                            return Json(new { code = 1, msg = Message });
-                        }
-                    }
-
-
-
-                    if (Request.Form["CodeCOM"].ToString() != "")
-                    {
-                        if (Request.Form["CodeCOM"].ToString().Length > 13)
-                        {
-                            Message += "Length Code format!\n";
-                            return Json(new { code = 1, msg = Message });
-                        }
-                    }
-                    if (Request.Form["TaxCOM"].ToString() != "")
-                    {
-                        if (Request.Form["TaxCOM"].ToString().Length > 13)
-                        {
-                            Message += "Length Code format!\n";
-                            return Json(new { code = 1, msg = Message });
-                        }
-                    }
-
-                    string codeIndividual = Request.Form["CodeCOM"].ToString();
-
-                    if (!string.IsNullOrEmpty(codeIndividual))
-                    {
-                        List<ProfileModel> tran =
-                            PropertyUtils.ConvertToList<ProfileModel>(
-                                ProfileBO.Instance.FindByAttribute("Code", codeIndividual)
-                            );
-
-                        if (tran != null && tran.Count > 0)
-                        {
-                            Message += "Profile code existing in system!\n";
-                            return Json(new { code = 1, msg = Message });
-                        }
-                    }
-                    profile.Code = Request.Form["CodeCOM"].ToString();
-                    profile.Account = Request.Form["AccountCOM"].ToString();
-                    profile.FullAccount = Request.Form["FullAccount"].ToString(); ;
-                    profile.LastName = "";
-                    profile.Firstname = "";
-                    profile.MiddleName = "";
-                    profile.LanguageID = 0;
-                    profile.TitleID = 0;
-                    profile.Address = Request.Form["AddressCOM"].ToString();
-                    profile.HomeAddress = Request.Form["BusAddressCOM"].ToString();
-                    profile.City = Request.Form["CityCOM"].ToString();
-                    profile.PostalCode = Request.Form["PostalCOM"].ToString();
-                    profile.CountryID = !string.IsNullOrEmpty(Request.Form["CountryCOM"])
-                        ? int.Parse(Request.Form["CountryCOM"])
-                        : 0; ;
-                    profile.StateID = int.Parse(Request.Form["StateCOM"].ToString());
-                    profile.Salutation = "";
-                    profile.VIPID = 0;
-                    profile.VIPReason = "";
-                    profile.PrefRoom = "";
-                    profile.PassPort = "";
-                    profile.Keyword = Request.Form["KeywordCOM"].ToString();
-                    profile.DateOfBirth = DateTime.MinValue;
-                    profile.NationalityID = 0;
-                    profile.Description = Request.Form["NoteCOM"].ToString(); ;
-                    profile.Telephone = Request.Form["TelephoneCOM"].ToString();
-                    profile.Fax = "";
-                    profile.Email = Request.Form["EmailCOM"].ToString();
-                    profile.Website = Request.Form["WebsiteCOM"].ToString();
-                    profile.HandPhone = Request.Form["HandPhoneCOM"].ToString();
-                    profile.MailList = false;
-                    profile.Active = Request.Form["ActiveCOM"].ToString().ToLower() == "true";
-                    profile.Contact = false;
-                    profile.History = false;
-                    profile.ContactProfileID = 0;
-                    profile.ARNo = Request.Form["ARCOM"].ToString();
-                    profile.Position = "";
-                    profile.Department = "";
-                    profile.EnvelopGreeting = "";
-                    profile.OwnerID = int.Parse(Request.Form["OwnerCOM"].ToString());
-                    profile.TerritoryID = int.Parse(Request.Form["TerritoryCOM"].ToString());
-                    profile.PersonInChargeID = !string.IsNullOrEmpty(Request.Form["SaleInChargeCOM"])
-                        ? int.Parse(Request.Form["SaleInChargeCOM"])
-                        : 0;
-                    profile.AcctContact = Request.Form["ContactNameCOM"].ToString();
-                    profile.CurrencyID = Request.Form["CurrencyCOM"].ToString();
-                    profile.TaxCode = Request.Form["TaxCOM"].ToString();
-                    profile.Type = int.Parse(Request.Form["Type"].ToString());
-                    profile.IdentityCard = "";
-                    profile.MemberType = Request.Form["CompanyTypeCOM"].ToString();
-                    profile.MemberNo = "";
-                    profile.LastRoom = "";
-                    profile.Lastvisit = DateTime.Now;
-                    profile.LastRate = "";
-                    profile.LastRateCode = "";
-                    profile.LastARNo = "";
-                    profile.LastMemberNo = "";
-                    profile.ReturnGuest = -1;
-                    profile.IsBlackList = Request.Form["BlackListCOM"].ToString().ToLower() == "true";
-                    profile.BlackListReason = Request.Form["BlackListReasonCOM"].ToString();
-                    profile.SpecialUpdateBy = "";
-                    profile.SpecialUpdateDate = DateTime.Now;
-                    profile.UserInsertID = profile.UserUpdateID = 136;
-                    profile.CreateDate = profile.UpdateDate = DateTime.Now;
-                    profile.StayNo = 0;
-                    profile.GuestNo = "";
-                    profile.Occupation = "";
-                    profile.BonusPoints = 0;
-                    profile.GuestGroupID = 0;
-                    profile.Birthplace = "";
-                    profile.ExpressCheckout = false;
-                    profile.PayTV = false;
-                    profile.FirstReservation = profile.LastReservation = profile.WeddingAnniversary = profile.Firstvisit = profile.Expiry = profile.LastContact = DateTime.MinValue;
-                    profile.CreditCard = "";
-                    profile.RateCode = "";
-                    profile.RoomNights = 0;
-                    profile.BedNights = 0;
-                    profile.TotalTurnover = 0;
-                    profile.LodgePackageTurover = 0;
-                    profile.LodgeTurnover = 0;
-                    profile.FBTurnover = 0;
-                    profile.EventTurnover = 0;
-                    profile.OtherTurnover = 0;
-                    profile.Company = Request.Form["Company2COM"].ToString();
-                    profile.BusinessTitle = Request.Form["BusinessTitleCOM"].ToString();
-                    profile.Other = "";
-                    profile.Religion = "";
-                    profile.Nation = "";
-                    profile.PurposeOfStay = "";
-                    profile.MarketID = int.Parse(Request.Form["MarketCOM"].ToString());
-                    profile.IsTransfer = false;
-
-                }
-                else if (profileType == 4)
-                {
-
-                    if (Request.Form["GroupNameGroup"].ToString() == "")
-                    {
-                        Message += "Group Name not blank\n";
-                        return Json(new { code = 1, msg = Message });
-                    }
-
-
-                    string CodeGroup = Request.Form["CodeGroup"].ToString();
-
-                    if (!string.IsNullOrEmpty(CodeGroup))
-                    {
-                        List<ProfileModel> tran =
-                            PropertyUtils.ConvertToList<ProfileModel>(
-                                ProfileBO.Instance.FindByAttribute("Code", CodeGroup)
-                            );
-
-                        if (tran != null && tran.Count > 0)
-                        {
-                            Message += "Profile code existing in system!\n";
-                            return Json(new { code = 1, msg = Message });
-                        }
-                    }
-
-
-                    if (Request.Form["CodeGroup"].ToString() != "")
-                    {
-                        if (Request.Form["CodeGroup"].ToString().Trim().Length > 13)
-                        {
-                            Message += "Length Code format!\n";
-                            return Json(new { code = 1, msg = Message });
-                        }
-                    }
-                    profile.Code = Request.Form["CodeGroup"].ToString();
-                    profile.Account = Request.Form["GroupNameGroup"].ToString(); ;
-                    profile.FullAccount = "";
-                    profile.LastName = "";
-                    profile.Firstname = "";
-                    profile.MiddleName = "";
-                    profile.LanguageID = int.Parse(Request.Form["LanguageGruop"].ToString());
-                    profile.TitleID = 0;
-                    profile.Address = Request.Form["AddressGroup"].ToString();
-                    profile.HomeAddress = Request.Form["HomeAddressGroup"].ToString();
-                    profile.City = Request.Form["CityGroup"].ToString();
-                    profile.PostalCode = Request.Form["PostalGroup"].ToString();
-                    profile.CountryID = !string.IsNullOrEmpty(Request.Form["CountryGroup"])
-                        ? int.Parse(Request.Form["CountryGroup"])
-                        : 0;
-                    profile.StateID = int.Parse(Request.Form["StateGroup"].ToString());
-                    profile.Salutation = "";
-                    profile.VIPID = int.Parse(Request.Form["VIPGroup"].ToString());
-                    profile.VIPReason = Request.Form["VIPReasonGroup"].ToString();
-                    profile.PrefRoom = "";
-                    profile.PassPort = "";
-                    profile.Keyword = "";
-                    profile.DateOfBirth = DateTime.MinValue;
-                    profile.NationalityID = 0;
-                    profile.Description = Request.Form["NotesGroup"].ToString();
-                    profile.Telephone = Request.Form["TelephoneGroup"].ToString();
-                    profile.Fax = Request.Form["FaxGroup"].ToString();
-                    profile.Email = Request.Form["EmailGroup"].ToString();
-                    profile.Website = Request.Form["WebsiteGroup"].ToString();
-                    profile.HandPhone = Request.Form["HandPhoneGroup"].ToString();
-                    profile.MailList = false;
-                    profile.Active = false;
-                    profile.Contact = false;
-                    profile.History = Request.Form["HistoryGroup"].ToString().ToLower() == "true";
-                    profile.ContactProfileID = 0;
-                    profile.ARNo = "";
-                    profile.Position = "";
-                    profile.Department = "";
-                    profile.EnvelopGreeting = "";
-                    profile.OwnerID = 0;
-                    profile.TerritoryID = 0;
-                    profile.PersonInChargeID = 0;
-                    profile.AcctContact = Request.Form["AcctContact"].ToString();
-                    profile.CurrencyID = Request.Form["CurrencyGroup"].ToString();
-                    profile.TaxCode = "";
-                    profile.Type = int.Parse(Request.Form["Type"].ToString());
-                    profile.IdentityCard = "";
-                    profile.MemberType = "";
-                    profile.MemberNo = "";
-                    profile.LastRoom = "";
-                    profile.Lastvisit = DateTime.Now;
-                    profile.LastRate = "";
-                    profile.LastRateCode = "";
-                    profile.LastARNo = "";
-                    profile.LastMemberNo = "";
-                    profile.ReturnGuest = -1;
-                    profile.IsBlackList = false;
-                    profile.BlackListReason = "";
-                    profile.SpecialUpdateBy = "";
-                    profile.SpecialUpdateDate = DateTime.Now;
-                    profile.UserInsertID = profile.UserUpdateID = 136;
-                    profile.CreateDate = profile.UpdateDate = DateTime.Now;
-                    profile.StayNo = 0;
-                    profile.GuestNo = "";
-                    profile.Occupation = "";
-                    profile.BonusPoints = 0;
-                    profile.GuestGroupID = 0;
-                    profile.Birthplace = "";
-                    profile.ExpressCheckout = false;
-                    profile.PayTV = false;
-                    profile.FirstReservation = profile.LastReservation = profile.WeddingAnniversary = profile.Firstvisit = profile.Expiry = profile.LastContact = DateTime.MinValue;
-                    profile.CreditCard = "";
-                    profile.RateCode = "";
-                    profile.RoomNights = 0;
-                    profile.BedNights = 0;
-                    profile.TotalTurnover = 0;
-                    profile.LodgePackageTurover = 0;
-                    profile.LodgeTurnover = 0;
-                    profile.FBTurnover = 0;
-                    profile.EventTurnover = 0;
-                    profile.OtherTurnover = 0;
-                    profile.Company = "";
-                    profile.BusinessTitle = "";
-                    profile.Other = "";
-                    profile.Religion = "";
-                    profile.Nation = "";
-                    profile.PurposeOfStay = "";
-                    profile.MarketID = 0;
-                    profile.IsTransfer = false;
-                }
-                else
-                {
-                    profile.Code = Request.Form["CodeContact"].ToString();
-                    profile.Account = Request.Form["AccountContact"].ToString();
-                    profile.FullAccount = "";
-                    profile.LastName = Request.Form["LastNameContact"].ToString();
-                    profile.Firstname = Request.Form["FirstNameContact"].ToString();
-                    profile.MiddleName = Request.Form["MiddleNameContact"].ToString();
-                    profile.LanguageID = int.Parse(Request.Form["LanguageContact"].ToString());
-                    profile.TitleID = int.Parse(Request.Form["TitleContact"].ToString());
-                    profile.Address = Request.Form["AddressContact"].ToString();
-                    profile.HomeAddress = Request.Form["HomeAddressContact"].ToString();
-                    profile.City = Request.Form["CityContact"].ToString();
-                    profile.PostalCode = Request.Form["PostalContact"].ToString();
-                    profile.CountryID = int.Parse(Request.Form["CountryContact"].ToString());
-                    profile.StateID = int.Parse(Request.Form["StateContact"].ToString());
-                    profile.Salutation = Request.Form["SalutationContact"].ToString();
-                    profile.VIPID = 0;
-                    profile.VIPReason = "";
-                    profile.PrefRoom = "";
-                    profile.PassPort = "";
-                    profile.Keyword = "";
-                    profile.DateOfBirth = DateTime.Parse(Request.Form["DobContact"].ToString());
-                    profile.NationalityID = 0;
-                    profile.Description = "";
-                    profile.Telephone = Request.Form["TelephoneContact"].ToString();
-                    profile.Fax = Request.Form["FaxContact"].ToString();
-                    profile.Email = Request.Form["EmaiContact"].ToString();
-                    profile.Website = Request.Form["WebsiteContact"].ToString();
-                    profile.HandPhone = Request.Form["HandPhoneContact"].ToString();
-                    profile.MailList = false;
-                    profile.Active = false;
-                    profile.Contact = false;
-                    profile.History = false;
-                    profile.ContactProfileID = 0;
-                    profile.ARNo = Request.Form["HandPhoneContact"].ToString();
-                    profile.Position = Request.Form["PositionContact"].ToString();
-                    profile.Department = Request.Form["DeptContact"].ToString();
-                    profile.EnvelopGreeting = "";
-                    profile.OwnerID = int.Parse(Request.Form["OwnerContact"].ToString());
-                    profile.TerritoryID = int.Parse(Request.Form["TerritoryContact"].ToString());
-                    profile.PersonInChargeID = 0;
-                    profile.AcctContact = "";
-                    profile.CurrencyID = "";
-                    profile.TaxCode = "";
-                    profile.Type = 0;
-                    profile.IdentityCard = "";
-                    profile.MemberType = "";
-                    profile.MemberNo = "";
-                    profile.LastRoom = "";
-                    profile.Lastvisit = DateTime.Now;
-                    profile.LastRate = "";
-                    profile.LastRateCode = "";
-                    profile.LastARNo = "";
-                    profile.LastMemberNo = "";
-                    profile.ReturnGuest = -1;
-                    profile.IsBlackList = false;
-                    profile.BlackListReason = "";
-                    profile.SpecialUpdateBy = "";
-                    profile.SpecialUpdateDate = DateTime.Now;
-                    profile.UserInsertID = profile.UserUpdateID = 136;
-                    profile.CreateDate = profile.UpdateDate = DateTime.Now;
-                    profile.StayNo = 0;
-                    profile.GuestNo = "";
-                    profile.Occupation = "";
-                    profile.BonusPoints = 0;
-                    profile.GuestGroupID = 0;
-                    profile.Birthplace = "";
-                    profile.ExpressCheckout = false;
-                    profile.PayTV = false;
-                    profile.FirstReservation = profile.LastReservation = profile.WeddingAnniversary = profile.Firstvisit = profile.Expiry = profile.LastContact = DateTime.MinValue;
-                    profile.CreditCard = "";
-                    profile.RateCode = "";
-                    profile.RoomNights = 0;
-                    profile.BedNights = 0;
-                    profile.TotalTurnover = 0;
-                    profile.LodgePackageTurover = 0;
-                    profile.LodgeTurnover = 0;
-                    profile.FBTurnover = 0;
-                    profile.EventTurnover = 0;
-                    profile.OtherTurnover = 0;
-                    profile.Company = "";
-                    profile.BusinessTitle = "";
-                    profile.Other = "";
-                    profile.Religion = "";
-                    profile.Nation = "";
-                    profile.PurposeOfStay = "";
-                    profile.MarketID = 0;
-                    profile.IsTransfer = false;
-                }
-                ProfileBO.Instance.Insert(profile);
-                return Json(new { code = 0, msg = "New profile created successfully" });
-
-            }
-            catch (Exception ex)
-            {
-                return Json(new { code = 1, msg = ex.Message });
+                    Success = false,
+                    Message = "Invalid request"
+                });
             }
 
+            var result = _newProfile.CreateProfile(dto);
+            return Json(result);
         }
         #endregion
 
@@ -1735,7 +1230,16 @@ namespace Profile.Controllers
 
                 if (Name == null || Name.Length < 5 || Name[0] == null)
                 {
-                    return Json(new { success = false });
+                    return Json(new
+                    {
+                        success = false,
+                        message = "Validation failed",
+                        errors = new[]
+                                            {
+                            new { field = "fullNameIndividual", message = "Typing format is not correct." },
+                            new { field = "fullNameContact", message = "Typing format is not correct." }
+                        }
+                    });
                 }
 
                 // Giữ nguyên logic cũ
@@ -1927,7 +1431,45 @@ namespace Profile.Controllers
 
         #endregion
 
-        #region Tuan_ProfileGroupSreach
+        #region Tuan_ProfileSreach
+        [HttpGet("ProfileIndividualSreach")]
+        public async Task<IActionResult> ProfileIndividualSreach(string LastName, string FirstName)
+        {
+            try
+            {
+                Microsoft.Data.SqlClient.SqlParameter[] param = [
+                    new Microsoft.Data.SqlClient.SqlParameter("@LastName", LastName ?? string.Empty),
+                    new Microsoft.Data.SqlClient.SqlParameter("@FirstName", FirstName ?? string.Empty)
+                    ];
+                DataTable myTable = DataTableHelper.getTableData("spProfileIndividualSearchName", param);
+
+
+                var relust = myTable.AsEnumerable()
+                    .Select(d => new
+                    {
+                        ID = d.Field<int?>("ID") ?? 0,
+                        Name = d.Field<string>("Name") ?? "",
+                    })
+                    .ToList();
+                return Json(new
+                {
+                    success = true,
+                    data = relust
+                });
+            }
+            catch (Exception ex)
+            {
+
+                return Json(new
+                {
+                    success = false,
+                    message = "Error: " + ex.Message
+                });
+            }
+        }
+
+
+        [HttpGet("ProfileGroupSreach")]
         public async Task<IActionResult> ProfileGroupSreach(string GroupName)
         {
             try
@@ -1935,21 +1477,58 @@ namespace Profile.Controllers
                 Microsoft.Data.SqlClient.SqlParameter[] param = [
                     new Microsoft.Data.SqlClient.SqlParameter("@GroupName", GroupName ?? string.Empty)];
                 DataTable myTable = DataTableHelper.getTableData("spProfileGroupSearchName", param);
-                var relust = (from d in myTable.AsEnumerable()
-                              select new
-                              {
-                                  Account = d["Account"]?.ToString() ?? ""
-                              }).ToList();
+
+
+                var relust = myTable.AsEnumerable()
+                    .Select(d => new
+                    {
+                        ID = d.Field<int?>("ID") ?? 0,
+                        Account = d.Field<string>("Account") ?? "",
+                    })
+                    .ToList();
                 return Json(new
                 {
+                    success = true,
                     data = relust
                 });
-
             }
-            catch (System.Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                return Json(new
+                {
+                    success = false,
+                    message = "Error: " + ex.Message
+                });
+            }
+        }
+        [HttpGet("FindIndividualByID")]
+        public async Task<IActionResult> FindIndividualByID(int id)
+        {
+            try
+            {
+                if (ProfileBO.Instance.FindByPrimaryKey(id) is not ProfileModel result)
+                {
+                    return Json(new
+                    {
+                        success = false,
+                        message = "Profile not found or invalid type"
+                    });
+                }
+                return Json(new
+                {
+                    success = true,
+                    data = result
+                });
+            }
+            catch (Exception ex)
+            {
+
+                return Json(new
+                {
+                    success = false,
+                    message = "Error: " + ex.Message
+                });
             }
         }
 

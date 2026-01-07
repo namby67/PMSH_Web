@@ -166,6 +166,7 @@ builder.Services.AddSingleton<IRateCodeUserRightService, RateCodeUserRightServic
 builder.Services.AddSingleton<IPackageDetailService, PackageDetailService>();
 builder.Services.AddSingleton<IPackageService, PackageService>();
 builder.Services.AddSingleton<ITransactionArticleLinkService, TransactionArticleLinkService>();
+builder.Services.AddSingleton<INewProfileService, NewProfileService>();
 
 builder.Services.AddAuthentication(options =>
 {
