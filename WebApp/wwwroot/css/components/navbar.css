@@ -1,5 +1,5 @@
 ﻿:root {
-    --main-color: #1f501f;
+    --main-color: #009444;
     --secondary-color: #ebe6e6;
     --accent-color: #ffffff;
     --text-color: #000000;
@@ -290,10 +290,14 @@ body {
 }
 
 .contact-item {
-  font-size: 13px;
-  color: var(--text-color);
+    font-size: 13px;
+    color: var(--text-color);
 }
-
+.hotel-name {
+    text-align: center;
+    font-weight: bold;
+    text-transform: uppercase;
+}
 .contact-item i {
   margin-right: 5px;
   color: var(--main-color);
@@ -333,6 +337,54 @@ body {
   display: flex;
   flex-direction: column;
 }
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.divider {
+    color: #999;
+    font-weight: 500;
+}
+.notification-wrapper {
+    position: relative; /* mốc định vị cho dropdown */
+}
+
+.notification-icon {
+    cursor: pointer;
+}
+
+.notification-dropdown {
+    position: absolute;
+    top: 100%; /* nằm ngay dưới icon */
+    right: 0; /* canh phải theo icon */
+    margin-top: 6px;
+    width: 280px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+#notificationList {
+    list-style: none;
+    margin: 0;
+    padding: 8px;
+}
+
+    #notificationList li {
+        padding: 8px;
+        border-bottom: 1px solid #eee;
+    }
+
+        #notificationList li:last-child {
+            border-bottom: none;
+        }
+
 
 @media (max-width: 768px) {
   .contact-user-section {

@@ -560,7 +560,48 @@ h1 {
         border-bottom: 1px solid #e2e8f0;
         padding-bottom: 8px;
     }
+/* BỎ PADDING TRÁI/PHẢI CỦA CÁC CỘT TRONG FORM NEW RESERVATION */
+#newReservationModal .form-group-new-reservation,
+.form-group-new-reservation {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
 
+/* Hoặc nếu muốn chính xác hơn, chỉ áp dụng cho các col bên trong row g-0 */
+#newReservationModal .input-with-button .col-md-4,
+#newReservationModal .input-with-button .col-md-7,
+.input-with-button .col-md-4,
+.input-with-button .col-md-7 {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+/* Đảm bảo label và input vẫn căn chỉnh đẹp mà không bị lệch */
+#newReservationModal .input-with-button .col-form-label {
+    padding-right: 0;
+}
+
+#newReservationModal .input-with-button > div {
+    padding-left: 0;
+    padding-right: 0;
+}
+/* Loại bỏ khoảng trắng thừa và làm modal vừa khít nội dung */
+#newReservationModal .modal-content {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+#newReservationModal .modal-body {
+    min-height: auto;
+    max-height: 80vh; /* Giới hạn chiều cao tối đa, cho phép cuộn dọc nếu form dài */
+    overflow-y: auto; /* Cuộn dọc bên trong body nếu cần */
+    padding-bottom: 1.5rem !important;
+}
+
+/* Đảm bảo nội dung form không bị đẩy xuống quá xa */
+#newReservationModal #partial-content {
+    margin-bottom: 0;
+}
 .stay-details-grid-new-reservation {
   align-items: center;
 }
@@ -601,7 +642,7 @@ button:hover {
 input[type="checkbox"] {
   width: 16px;
   height: 16px;
-  accent-color: #1f501f;
+  accent-color: #009444;
 }
 
 .specials-section-new-reservation {
@@ -632,8 +673,8 @@ textarea {
   padding: 6px 12px;
   font-size: 16px;
   background-color: white;
-  color: #1f501f;
-  border: 1px solid #1f501f;
+  color: #009444;
+  border: 1px solid #009444;
 }
 
 .box-function {
@@ -737,8 +778,8 @@ textarea {
 
 .toolbar-menu a:hover {
   background: #ffffff;
-  color: #1f501f;
-  border: 1px solid #1f501f;
+  color: #009444;
+  border: 1px solid #009444;
 }
 
 .submenu {
