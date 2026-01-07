@@ -55,7 +55,8 @@ namespace Profile.Services.Implements
                 return new ApiResponseAddError<ValidationErrorDto>
                 {
                     Success = true,
-                    Message = "New profile created successfully"
+                    Message = "New profile created successfully",
+                    Type = dto.Type
                 };
             }
             catch (Exception ex)

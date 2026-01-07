@@ -338,3 +338,231 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade modal-search" id="modalIndividualSearch" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content">
+            <div class="modal-header py-2">
+                <h6 class="modal-title mb-0">Search</h6>
+            </div>
+            <div class="modal-body pt-2">
+                <button type="button" class="mui-button mui-button-close " onclick="closeModalSearch()"><i
+                        class="fa-solid fa-xmark"></i> Close</button>
+
+                <div class="row mb-1 align-items-center">
+                    <label class="col-sm-2 col-form-label text-end">Search Name</label>
+                    <div class="col-sm-3">
+                        <input type="text" id="nameIndividual" class="form-control form-control-sm"
+                            placeholder="Enter user name" />
+                    </div>
+                    <label class="col-sm-1 col-form-label text-end">First</label>
+                    <div class="col-sm-4">
+                        <input type="text" id="firstNameIndividual" class="form-control form-control-sm"
+                            placeholder="Enter user name" />
+                    </div>
+                    <div class="col-sm-1">
+                        <button id="btnViewIndividual" class="mui-button mui-button-search">
+                            <i class="fa-solid fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                <div id="profileIndividualGrid" class="gridContainer"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).on('keydown', '#nameIndividual, #firstNameIndividual', async function (e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            await blindValue();
+        }
+    });
+
+    // Blacklist Logic
+    $('#blackListIndividual').on('change', function () {
+        const isChecked = this.checked;
+        $('#blackListReasonIndividual').prop('disabled', !isChecked).toggleClass('is-invalid', false);
+        if (isChecked) { $('#blackListReasonIndividual').css({ 'background-color': 'black', 'color': 'white' }); }
+        else { $('#blackListReasonIndividual').css({ 'background-color': '', 'color': '' }); }
+    });
+    $('#txtCheckboxDobIndividual').on('change', function () { $('#txtDobIndividual').prop('disabled', $(this).is(':checked')); });
+
+    // --- UI HELPERS ---
+    function openModalSearch() {
+        $('#modalIndividualSearch').modal('show');
+    }
+
+    function closeModalSearch() {
+        $('#firstNameIndividual').val('');
+        $('#modalIndividualSearch').modal('hide');
+    }
+
+    //Fill dữ liệu cho Individual
+    function selectGroup(selectedRowData) {
+        if (!selectedRowData) return;
+
+        // ===== BASIC INFO =====
+        $('#txtCodeIndividual').val(selectedRowData.code ?? '');
+        $('#txtFullNameIndividual').val(selectedRowData.account ?? '');
+        $('#txtFirstNameIndividual').val(selectedRowData.firstname ?? '');
+        $('#txtLastNameIndividual').val(selectedRowData.lastName ?? '');
+        $('#txtMiddleNameIndividual').val(selectedRowData.middleName ?? '');
+
+        // ===== LANGUAGE / TITLE =====
+        $('#txtLanguageIndividual').val(selectedRowData.languageID || '').trigger('change');
+        $('#txtTitleIndividual').val(selectedRowData.titleID || '').trigger('change');
+
+        // ===== NATIONALITY / COUNTRY =====
+        $('#txtNationalityIndividual').val(selectedRowData.nationalityID || '').trigger('change');
+        $('#txtCountryIndividual').val(selectedRowData.countryID || '').trigger('change');
+
+        // ===== CITY / POSTAL / STATE =====
+        $('#txtCityIndividual').val(selectedRowData.city ?? '').trigger('change');
+        $('#txtPostalIndividual').val(selectedRowData.postalCode ?? '');
+        $('#txtStateIndividual').val(selectedRowData.stateID || '').trigger('change');
+
+        // ===== RELIGION / NATION / PURPOSE =====
+        $('#txtReligionIndividual').val(selectedRowData.religion ?? '');
+        $('#txtNationIndividual').val(selectedRowData.nation ?? '');
+        $('#txtPurposeIndividual').val(selectedRowData.purposeOfStay ?? '');
+
+        // ===== ADDRESS =====
+        $('#txtAddressIndividual').val(selectedRowData.address ?? '');
+        $('#txtBusAddressIndividual').val(selectedRowData.homeAddress ?? '');
+
+        // ===== COMMUNICATION =====
+        $('#txtTelephoneIndividual').val(selectedRowData.telephone ?? '');
+        $('#txtHandPhoneIndividual').val(selectedRowData.handPhone ?? '');
+        $('#txtFaxIndividual').val(selectedRowData.fax ?? '');
+        $('#txtEmailIndividual').val(selectedRowData.email ?? '');
+        $('#txtWebsiteIndividual').val(selectedRowData.website ?? '');
+
+        // ===== COMPANY / BUSINESS =====
+        $('#txtCompany2Individual').val(selectedRowData.company ?? '');
+        $('#txtBusinessTitleIndividual').val(selectedRowData.businessTitle ?? '');
+        $('#txtCompanyIndividual').val(selectedRowData.company ?? '');
+
+        // ===== TAX / PASSPORT / CARD =====
+        $('#txtTaxIndividual').val(selectedRowData.taxCode ?? '');
+        $('#txtPassportIndividual').val(selectedRowData.passPort ?? '');
+        $('#txtCardIndividual').val(selectedRowData.identityCard ?? '');
+
+        // ===== SALUTATION / VIP =====
+        $('#txtSalutationIndividual').val(selectedRowData.salutation ?? '');
+        $('#txtVIPIndividual').val(selectedRowData.vipid || '').trigger('change');
+        $('#txtReasonIndividual').val(selectedRowData.vipReason ?? '');
+
+        // ===== DATE OF BIRTH =====
+        if (selectedRowData.dateOfBirth && selectedRowData.dateOfBirth !== '1900-01-01T00:00:00') {
+            $('#txtDobIndividual')
+                .val(selectedRowData.dateOfBirth.substring(0, 10))
+                .prop('disabled', false);
+            $('#txtCheckboxDobIndividual').prop('checked', true);
+        } else {
+            $('#txtDobIndividual').val('').prop('disabled', true);
+            $('#txtCheckboxDobIndividual').prop('checked', false);
+        }
+
+        // ===== STATUS =====
+        $('#txtActiveIndividual').prop('checked', !!selectedRowData.active);
+        $('#txtContactIndividual').prop('checked', !!selectedRowData.contact);
+
+        // ===== KEYWORD / NOTE =====
+        $('#txtKeywordIndividual').val(selectedRowData.keyword ?? '');
+        $('#txtNoteIndividual').val(selectedRowData.description ?? '');
+
+        // ===== BLACK LIST =====
+        $('#blackListIndividual').prop('checked', !!selectedRowData.isBlackList);
+
+        if (selectedRowData.isBlackList) {
+            $('#blackListReasonIndividual')
+                .val(selectedRowData.blackListReason ?? '')
+                .prop('disabled', false);
+        } else {
+            $('#blackListReasonIndividual')
+                .val('')
+                .prop('disabled', true);
+        }
+
+        // ===== OPTIONAL: CLOSE SEARCH MODAL =====
+        if (typeof closeModalSearch === 'function') {
+            closeModalSearch();
+        }
+    }
+
+
+    async function selectIndividual(id) {
+        try {
+            $("#loadingSpinner").show();
+            const res = await $.ajax({ url: 'FindIndividualByID/', method: "GET", data: { id: id } });
+            if (!res?.success) { showToast('Error', res?.message || 'Failed.', false); return; }
+            const pkg = res.data;
+            selectGroup(pkg);
+            initializeProfileGroupGrid(pkg);
+            $("#loadingSpinner").hide();
+        } catch (error) { console.error(error); $("#loadingSpinner").hide(); }
+    }
+
+    async function initializeProfileIndividualGrid(data) {
+        $("#profileIndividualGrid").dxDataGrid({
+            dataSource: data || [],
+            showBorders: true,
+            selection: { mode: "single" },
+            paging: { pageSize: 20 },
+            height: "300px",
+            pager: { showPageSizeSelector: true, allowedPageSizes: [5, 10, 20], showInfo: true },
+            filterRow: { visible: true },
+            columns: [{ dataField: "id", caption: "ID", visible: false }, { dataField: "name", caption: "Name" }],
+            scrolling: { mode: "standard", showScrollbar: "always", scrollByContent: true },
+            onRowClick: async function (e) {
+                selectedRowData = e.data.id;
+                await selectIndividual(selectedRowData);
+            },
+            noDataText: "No records to display"
+        });
+    }
+
+    async function getProfileIndividualSreach(value) {
+        try {
+            $("#loadingSpinner").show();
+            const res = await $.ajax({ url: '/ProfileIndividualSreach/', method: "GET", data: { LastName: value.name, FirstName: value.firstName } });
+            if (!res?.success) { showToast('Error', res?.message || 'Failed.', false); return; }
+            initializeProfileIndividualGrid(res.data);
+            $("#loadingSpinner").hide();
+        } catch (error) { console.error(error); $("#loadingSpinner").hide(); }
+    }
+
+    async function blindValue() {
+        const searchModel = {
+            name: document.getElementById('nameIndividual').value.trim(),
+            firstName: document.getElementById('firstNameIndividual').value.trim()
+        };
+        await getProfileIndividualSreach(searchModel);
+    }
+
+    function bindIndividualSearch() {
+        const inputs = ['nameIndividual', 'firstNameIndividual'];
+        inputs.forEach(id => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.addEventListener('keydown', async function (event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    await blindValue();
+                }
+            });
+        });
+    }
+
+    async function bindIndividualSearchButton() {
+        const btn = document.getElementById('btnViewIndividual');
+        if (btn) {
+            btn.addEventListener('click', async function () {
+                await blindValue();
+            });
+        }
+    }
+
+    bindIndividualSearch();
+</script>

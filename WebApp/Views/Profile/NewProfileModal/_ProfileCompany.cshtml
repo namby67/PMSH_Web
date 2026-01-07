@@ -97,7 +97,8 @@
                                             </div>
 
                                             <div class="row align-items-center mb-1">
-                                                <label class="col-md-4 col-form-label text-sm-end">Postal / State</label>
+                                                <label class="col-md-4 col-form-label text-sm-end">Postal /
+                                                    State</label>
                                                 <div class="col-md-2">
                                                     <input type="text" class="form-control form-control-sm"
                                                         id="txtPostalCOM">
@@ -163,7 +164,8 @@
                                             </div>
 
                                             <div class="row align-items-center">
-                                                <label class="col-md-2 col-form-label text-sm-end">Business Title</label>
+                                                <label class="col-md-2 col-form-label text-sm-end">Business
+                                                    Title</label>
                                                 <div class="col-md-6">
                                                     <input type="text" class="form-control form-control-sm"
                                                         id="txtBusTitleCOM">
@@ -253,7 +255,8 @@
                                             </div>
 
                                             <div class="row align-items-center mb-1">
-                                                <label class="col-md-4 col-form-label text-sm-end">Sale In Charge</label>
+                                                <label class="col-md-4 col-form-label text-sm-end">Sale In
+                                                    Charge</label>
                                                 <div class="col-md-6">
                                                     <select id="txtSaleInChargeCOM" class="form-select-sm"
                                                         data-placeholder="Please select Sale In Charge">
@@ -323,3 +326,11 @@
         </div>
     </div>
 </div>
+<script>
+    $('#blackListCOM').on('change', function () {
+        const isChecked = this.checked;
+        $('#blackListReasonCOM').prop('disabled', !isChecked).toggleClass('is-invalid', false);
+        if (isChecked) { $('#blackListReasonCOM').css({ 'background-color': 'black', 'color': 'white' }); }
+        else { $('#blackListReasonCOM').css({ 'background-color': '', 'color': '' }); }
+    });
+</script>
