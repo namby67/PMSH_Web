@@ -595,7 +595,8 @@ h1 {
     min-height: auto;
     max-height: 80vh; /* Giới hạn chiều cao tối đa, cho phép cuộn dọc nếu form dài */
     overflow-y: auto; /* Cuộn dọc bên trong body nếu cần */
-    padding-bottom: 1.5rem !important;
+    padding-top: 2.5rem !important;
+    padding-bottom: 3.5rem !important;
 }
 
 /* Đảm bảo nội dung form không bị đẩy xuống quá xa */
@@ -642,7 +643,7 @@ button:hover {
 input[type="checkbox"] {
   width: 16px;
   height: 16px;
-  accent-color: #009444;
+  accent-color: #027C75;
 }
 
 .specials-section-new-reservation {
@@ -673,8 +674,8 @@ textarea {
   padding: 6px 12px;
   font-size: 16px;
   background-color: white;
-  color: #009444;
-  border: 1px solid #009444;
+  color: #027C75;
+  border: 1px solid #027C75;
 }
 
 .box-function {
@@ -778,8 +779,8 @@ textarea {
 
 .toolbar-menu a:hover {
   background: #ffffff;
-  color: #009444;
-  border: 1px solid #009444;
+  color: #027C75;
+  border: 1px solid #027C75;
 }
 
 .submenu {

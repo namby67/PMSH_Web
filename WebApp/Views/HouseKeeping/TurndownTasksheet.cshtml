@@ -409,14 +409,13 @@
 
     </div>
     <div class="">
-        <button style="border-radius: 4px;  margin-right: 6px" id="btnPrint" class="mui-button mui-button-new"><i
-                class="fa-solid fa-eye"></i>View</button>
+        <button style="border-radius: 4px;  margin-right: 6px" id="btnPrint" class="mui-button mui-button-new"> View</button>
         <button style="border-radius: 4px;  margin-right: 6px;" id="btnCheckAll" class="mui-button mui-button-advance"
-            type="button"> <i class="fa-solid fa-check-double"></i> Check All</button>
+            type="button">  Check All</button>
         <button style="border-radius: 4px;  margin-right: 6px;" id="btnDailytasksheet"
-            class="mui-button mui-button-profile" type="button"><i class="fa-solid fa-calendar-check"></i>Daily</button>
+            class="mui-button mui-button-profile" type="button">Daily</button>
         <button style="border-radius: 4px;  margin-right: 6px" id="btnExportExcel" class="mui-button mui-button-new"
-            type="button"> <i class="fa-solid fa-file-excel"></i> Excel</button>
+            type="button">  Excel</button>
 
     </div>
 </div>
@@ -433,11 +432,10 @@
 
     </div>
     <div class="d-flex justify-content-start mb-3 gap-2">
-        <button id="btnExportpopExcel" class="mui-button mui-button-new" type="button"> <i
-                class="fa-solid fa-file-excel"></i> Excel</button>
+        <button id="btnExportpopExcel" class="mui-button mui-button-new" type="button">  Excel</button>
 
         <button onclick="$('#popupNewGrid').hide()" id="btnClosePopup" class="btn btn-sm btn-danger">
-            <i class="fa-solid fa-xmark me-1"></i> Close
+             Close
         </button>
     </div>
 
@@ -764,11 +762,11 @@
         if (!toggleSelectAll) {
             grid.selectAll();   // chọn hết
             toggleSelectAll = true;
-            $(this).html('<i class="fa-solid fa-xmark"></i> Uncheck All'); // đổi text/icon
+            $(this).html(' Uncheck All'); // đổi text/icon
         } else {
             grid.deselectAll(); // bỏ chọn hết
             toggleSelectAll = false;
-            $(this).html('<i class="fa-solid fa-check-double"></i> Check All');
+            $(this).html(' Check All');
         }
     });
     $(document).on("click", "#btnDailytasksheet", function () {

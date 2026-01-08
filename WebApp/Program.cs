@@ -227,10 +227,8 @@ app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseResponseCompression(); // ??t sau UseStaticFiles và tr??c UseRouting
-app.MapStaticAssets();
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=User}/{action=Index}/{id?}")
-    .WithStaticAssets();
+    pattern: "{controller=User}/{action=Index}/{id?}");
 
 app.Run();
