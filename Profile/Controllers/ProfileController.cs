@@ -1531,6 +1531,35 @@ namespace Profile.Controllers
                 });
             }
         }
+        [HttpGet("FindGroupByID")]
+        public async Task<IActionResult> FindGroupByID(int id)
+        {
+            try
+            {
+                if (ProfileBO.Instance.FindByPrimaryKey(id) is not ProfileModel result)
+                {
+                    return Json(new
+                    {
+                        success = false,
+                        message = "Profile not found or invalid type"
+                    });
+                }
+                return Json(new
+                {
+                    success = true,
+                    data = result
+                });
+            }
+            catch (Exception ex)
+            {
+
+                return Json(new
+                {
+                    success = false,
+                    message = "Error: " + ex.Message
+                });
+            }
+        }
 
         #endregion
         #region Nam showNotification

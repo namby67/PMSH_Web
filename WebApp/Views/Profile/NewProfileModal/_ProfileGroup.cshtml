@@ -4,15 +4,15 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">New Profile - Group</h5>
-@*                 <button type="button" class="btn-close" onclick="closeFormProfile()" aria-label="Close"></button> *@
+                @*                 <button type="button" class="btn-close" onclick="closeFormProfile()" aria-label="Close"></button> *@
             </div>
             <div class="modal-body">
                 <div class="mb-2">
-                    <button type="button" class="submit-button-clear-reservation" onclick="saveProfile();">Save</button>
-                    <button type="button" class="submit-button-clear-reservation" onclick="closeFormProfile()">Change
+                    <button type="button" class="mui-button mui-button-new" onclick="saveProfile();">Save</button>
+                    <button type="button" class="mui-button mui-button-new" onclick="closeFormProfile()">Change
                         Profile Type</button>
-                    <button type="button" class="submit-button-new-reservation" onclick="resetForm()">Clear</button>
-                    <button type="button" class="submit-button-clear-reservation" onclick="closeFormProfile();">Close</button>
+                    <button type="button" class="mui-button mui-button-new" onclick="resetForm()">Clear</button>
+                    <button type="button" class="mui-button mui-button-new" onclick="closeFormProfile();">Close</button>
                 </div>
                 <div class="profile_input">
                     <div style="display:flex">
@@ -47,6 +47,7 @@
                                 <div class="tab-pane fade show active" id="group-tab-address">
                                     <div class="row">
                                         <div class="col-md-6 mui-card">
+                                            <input hidden id="idGroup" />
                                             <div class="row align-items-center mb-1"><label
                                                     class="col-sm-4 col-form-label text-sm-end">Code <span
                                                         class="text-danger">*</span></label>
@@ -84,8 +85,8 @@
                                             </div>
                                             <div class="row align-items-center mb-1"><label
                                                     class="col-sm-4 col-form-label text-sm-end">City</label>
-                                                <div class="col-sm-6"><select id="txtCityGroup"
-                                                        data-placeholder="Please select City" class="ms-2 "></select>
+                                                <div class="col-sm-6">
+                                                    <input type="text" class="form-control" id="txtCityGroup">
                                                 </div>
                                             </div>
                                             <div class="row align-items-center mb-1"><label
@@ -130,7 +131,7 @@
                                                         id="txtContactGroup"></div>
                                             </div>
                                             <div class="row align-items-center mb-1"><label
-                                                    class="col-sm-4 col-form-label text-sm-end">Pref .Curr</label>
+                                                    class="col-sm-4 col-form-label text-sm-end">Rref .Curr</label>
                                                 <div class="col-sm-6"><select id="txtCurrencyGroup" class="ms-2"
                                                         data-placeholder="Please select Currency"></select>
                                                 </div>
@@ -167,7 +168,7 @@
                                             <div class="row align-items-center mb-1"><label
                                                     class="col-sm-2 col-form-label text-sm-end">Telephone</label>
                                                 <div class="col-sm-6"><input type="text" class="form-control"
-                                                        id="txtTelephongGroup"></div>
+                                                        id="txtTelephoneGroup"></div>
                                             </div>
                                             <div class="row align-items-center mb-1"><label
                                                     class="col-sm-2 col-form-label text-sm-end">Email</label>
@@ -207,6 +208,38 @@
     </div>
 </div>
 <script>
+    $(document).ready(async function () {
+        await setSelectGroup();
+        initializeProfileGroupGrid([]);
+    });
+
+    const tomSelectGroup = {};
+    async function setSelectGroup() {
+        const configs = [
+            "#select-beast-empty", "#txtStateGroup",
+            "#txtCountryGroup", "#txtLanguageGroup", "#txtCurrencyGroup",
+            "#txtVIPGroup",
+        ];
+
+        for (const id of configs) {
+            const el = document.querySelector(id);
+            if (!el) continue;
+
+            // Destroy nếu đã tồn tại (tránh duplicate khi mở modal nhiều lần)
+            if (tomSelectInstances[id]) {
+                tomSelectInstances[id].destroy();
+            }
+
+            tomSelectInstances[id] = new TomSelect(el, {
+                valueField: 'value',
+                labelField: 'text',
+                searchField: 'text',
+                create: false,
+                allowEmptyOption: true,
+                plugins: ['clear_button']
+            });
+        }
+    }
 
     // --- GLOBAL EVENT BINDINGS (Unchanged Logic) ---
     document.getElementById("searchName").addEventListener("keydown", async function (event) {
@@ -227,6 +260,7 @@
         } catch (error) { console.error(error); $("#loadingSpinner").hide(); }
     }
 
+
     async function initializeProfileGroupGrid(data) {
         $("#profileGroupGrid").dxDataGrid({
             dataSource: data || [],
@@ -238,9 +272,88 @@
             filterRow: { visible: true },
             columns: [{ dataField: "id", caption: "ID", visible: false }, { dataField: "account", caption: "Group Name" }],
             scrolling: { mode: "standard", showScrollbar: "always", scrollByContent: true },
-            onRowClick: function (e) { selectedRowData = e.data; },
+            onRowClick: function (e) {
+                selectedRowData = e.data;
+                selectGroupPro(selectedRowData.id);
+
+            },
             noDataText: "No records to display"
         });
+    }
+
+    async function selectGroupPro(id) {
+        try {
+            $("#loadingSpinner").show();
+            const res = await $.ajax({ url: 'FindGroupByID/', method: "GET", data: { id: id } });
+            if (!res?.success) { showToast('Error', res?.message || 'Failed.', false); return; }
+            const pkg = res.data;
+            selectGroupGrid(pkg);
+            $("#loadingSpinner").hide();
+        } catch (error) { console.error(error); $("#loadingSpinner").hide(); }
+    }
+
+    function selectGroupGrid(data) {
+
+        $('#idGroup').val(data.id ?? '');
+
+        // --- TAB 1: ADDRESS INFORMATION ---
+        $("#txtCodeGroup").val(data.code);
+        $("#txtGroupNameGroup").val(data.account);
+
+        setTomSelectValue('#txtLanguageGroup',
+            data.languageID,
+            data.languageName
+        );
+        $("#txtAddressGroup").val(data.address);
+        $("#txtHomeAddressGroup").val(data.homeAddress);
+        // Nếu city là select2/dropdown
+        $("#txtCityGroup").val(data.city);
+        $("#txtPostalCodeGroup").val(data.postalCode);
+
+        // Country & State
+        setTomSelectValue('#txtCountryGroup',
+            data.countryID,
+            data.countryName
+        );
+        setTomSelectValue('#txtStateGroup',
+            data.stateID,
+            data.stateName
+        );
+        // --- TAB 2: INTERNAL / COMMUNICATIONS / ATTRIBUTES ---
+        // Cột bên trái (Internal)
+        $("#txtContactGroup").val(data.acctContact);
+        setTomSelectValue('#txtCurrencyGroup',
+            data.currencyID,
+            data.currencyName
+        );
+        // Account Type: Trong HTML của bạn chưa có ID cụ thể cho select này, 
+        // bạn nên thêm id="txtAccountType" để dễ gán data.type
+        $(".tab-pane#group-tab-internal select.form-select").val(data.type);
+
+        $("#txtVIPGroup").val(data.vipid).trigger('change');
+        setTomSelectValue('#txtVIPGroup',
+            data.vipid,
+            data.languageName
+        );
+        $("#txtVIPReasonGroup").val(data.vipReason);
+        $("#txtNotesGroup").val(data.description); // Map 'description' vào 'Notes'
+
+        // Checkbox History
+        $("#txtHistory").prop('checked', data.history);
+
+        // Cột bên phải (Communications)
+        $("#txtTelephoneGroup").val(data.telephone);
+        $("#txtEmailGroup").val(data.email);
+        $("#txtWebsiteGroup").val(data.website);
+        $("#txtHandPhoneGroup").val(data.handPhone);
+
+        // Các trường Disabled (Rate Code / AR No)
+        // Giả sử lấy từ dữ liệu cuối cùng
+        $("input[disabled]").eq(0).val(data.lastRateCode);
+        $("input[disabled]").eq(1).val(data.arNo);
+
+        // Chuyển về tab đầu tiên mặc định (nếu cần)
+        // $('.nav-tabs button[data-bs-target="#group-tab-address"]').tab('show');
     }
 
 </script>
