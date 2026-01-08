@@ -402,17 +402,17 @@
     </div>
     <div class="">
         <button style="border-radius: 4px;  margin-right: 6px;" id="btnViewTurndown" class="mui-button mui-button-new"
-            type="button"><i class="fa-solid fa-eye"></i> View</button>
+            type="button"> View</button>
         <button style="border-radius: 4px;  margin-right: 6px;" id="btnCheckAll" class="mui-button mui-button-advance"
-            type="button"> <i class="fa-solid fa-check-double"></i> Check All</button>
+            type="button">  Check All</button>
         <button style="border-radius: 4px;  margin-right: 6px;" id="btnExportExcel" class="mui-button mui-button-new"
-            type="button"> <i class="fa-solid fa-file-excel"></i> Excel</button>
+            type="button">  Excel</button>
         <button style="border-radius: 4px; margin-right: 6px; " id="btnResvGuest" class="mui-button mui-button-search"
             type="button">
-            <i class="fa-solid fa-calendar-week"></i> Resv
+             Resv
         </button>
         <button style="border-radius: 4px; margin-right: 6px; " id="btnTsheet" class="mui-button mui-button-card"
-            type="button"><i class="fa-solid fa-list"></i> T.sheet</button>
+            type="button">  T.sheet</button>
         <button style="border-radius: 4px;  margin-right: 6px;" id="btnAutotasksheet"
             class="mui-button mui-button-option" type="button"><i class="fa-solid fa-gear"></i>Auto</button>
     </div>
@@ -435,10 +435,10 @@
     </div>
     <div class="d-flex justify-content-start mb-3 gap-2">
         <button style="border-radius: 4px;  margin-right: 6px;" id="btnSaveAuto" class="mui-button mui-button-new"
-            type="button"><i class="fa-solid fa-floppy-disk"></i> Ok</button>
+            type="button"> Ok</button>
         <button onclick="$('#popupAuTo').hide()" id="btnClosePopup" class="btn btn-sm btn-danger"
             style=" border-radius: 4px;">
-            <i class="fa-solid fa-xmark me-1"></i> Close
+             Close
         </button>
     </div>
     <div class="sticky-header bg-white p-2 shadow-sm z-3">
@@ -785,11 +785,11 @@
         if (!toggleSelectAll) {
             grid.selectAll();   // chọn hết
             toggleSelectAll = true;
-            $(this).html('<i class="fa-solid fa-xmark"></i> Uncheck All'); // đổi text/icon
+            $(this).html(' Uncheck All'); // đổi text/icon
         } else {
             grid.deselectAll(); // bỏ chọn hết
             toggleSelectAll = false;
-            $(this).html('<i class="fa-solid fa-check-double"></i> Check All');
+            $(this).html(' Check All');
         }
     });
 

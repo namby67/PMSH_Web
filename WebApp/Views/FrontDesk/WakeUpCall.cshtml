@@ -269,13 +269,13 @@
 
 <div class="btn-row">
     <button style="border-radius: 4px;  margin-right: 6px;" id="btnCancelwakeup" class="mui-button mui-button-cancel"
-        type="button"><i class="fa-solid fa-trash"></i> Delete</button>
+        type="button"> Delete</button>
     <button style="border-radius: 4px;  margin-right: 6px;" id="btnSetwakeup" class="mui-button mui-button-card"
         type="button"><i class="fa-solid fa-gear"></i> Set</button>
     <button style="border-radius: 4px;  margin-right: 6px;" id="btnViewwakeup" class="mui-button mui-button-new"
-        type="button"><i class="fa-solid fa-eye"></i> View</button>
+        type="button"> View</button>
 @*     <button style="border-radius: 4px;  margin-right: 6px;" id="btnCheckAll" class="mui-button mui-button-close"
-        type="button"> <i class="fa-solid fa-xmark me-1"></i> Close</button> *@
+        type="button">  Close</button> *@
 
 </div>
 <div id="overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 999;"></div>
@@ -289,17 +289,15 @@
 
     </div>
     <div class="d-flex justify-content-start mb-3 gap-2">
-        <button style="border-radius: 4px;  margin-right: 6px;" id="btnSearch" class="mui-button mui-button-new"><i
-                class="fa-solid fa-magnifying-glass"></i>Search</button>
-        <button style="border-radius: 4px;  margin-right: 6px" id="btnOke" class="mui-button mui-button-edit"><i
-                class="fa-solid fa-thumbs-up"></i>Ok</button>
+        <button style="border-radius: 4px;  margin-right: 6px;" id="btnSearch" class="mui-button mui-button-new"> Search</button>
+        <button style="border-radius: 4px;  margin-right: 6px" id="btnOke" class="mui-button mui-button-edit"> Ok</button>
         <button style="border-radius: 4px;  margin-right: 6px;" id="btnCheckAll" class="mui-button mui-button-advance"
-            type="button"> <i class="fa-solid fa-check-double"></i> Select All</button>
+            type="button">   Select All</button>
         <button style="border-radius: 4px;  margin-right: 6px;" id="btnCheckone" class="mui-button mui-button-advance"
-            type="button"> <i class="fa-solid fa-check-double"></i> Select</button>
+            type="button">   Select</button>
         <button onclick="$('#popupLogGrid').hide()" id="btnClosePopup" class="mui-button mui-button-advance"
             style=" border-radius: 4px;">
-            <i class="fa-solid fa-xmark me-1"></i> Close
+             Close
         </button>
     </div>
     <div class="container mb-2">
@@ -343,14 +341,13 @@
 
     </div>
     <div class="d-flex justify-content-start mb-3 gap-2">
-        <button style="border-radius: 4px;  margin-right: 6px" id="btnOke" class="mui-button mui-button-edit"><i
-                class="fa-solid fa-thumbs-up"></i>Ok</button>
+        <button style="border-radius: 4px;  margin-right: 6px" id="btnOke" class="mui-button mui-button-edit"> Ok</button>
         <button style="border-radius: 4px;  margin-right: 6px;" id="btnCheckAllcalcel"
-            class="mui-button mui-button-advance" type="button"> <i class="fa-solid fa-check-double"></i> Select
+            class="mui-button mui-button-advance" type="button">  Select
             All</button>
         <button onclick="$('#popupcancleGrid').hide()" id="btnClosePopup" class="mui-button mui-button-advance"
             style=" border-radius: 4px;">
-            <i class="fa-solid fa-xmark me-1"></i> Close
+             Close
         </button>
     </div>
     <div class="container mb-2">
@@ -378,11 +375,10 @@
     <div class="d-flex justify-content-start mb-3 gap-2">
 
 
-        <button id="btnExportExcel" class="mui-button mui-button-export" type="button"> <i
-                class="fa-solid fa-file-excel"></i> Excel</button>
+        <button id="btnExportExcel" class="mui-button mui-button-export" type="button">  Excel</button>
         <button onclick="$('#popupviewGrid').hide()" id="btnClosePopup" class="mui-button mui-button-advance"
             style=" border-radius: 4px;">
-            <i class="fa-solid fa-xmark me-1"></i> Close
+             Close
             <div class="row" style="height: calc(100% - 120px);">
                 <div id="logviewContainer" class="gridContainer col-10 border p-2 overflow-auto">
                     <!-- nội dung list -->
@@ -1016,13 +1012,13 @@
                 isAllSelected = true;
 
                 // đổi text & icon
-                $(this).html('<i class="fa-solid fa-xmark"></i> Unselect All');
+                $(this).html(' Unselect All');
             } else {
                 logGrid.clearSelection(); // bỏ chọn hết
                 isAllSelected = false;
 
                 // đổi lại text & icon ban đầu
-                $(this).html('<i class="fa-solid fa-check-double"></i> Select All');
+                $(this).html(' Select All');
             }
         });
 

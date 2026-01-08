@@ -1,5 +1,5 @@
 ﻿:root {
-    --main-color: #009444;
+    --main-color: #027C75;
     --secondary-color: #ebe6e6;
     --accent-color: #ffffff;
     --text-color: #000000;
@@ -228,7 +228,7 @@ body {
   text-transform: uppercase;
   letter-spacing: 1px;
   font-size: 20px;
-  color: #009444;
+  color: #027C75;
   text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff,
     1px 1px 0 #fff, 3px 4px 5px rgba(0, 0, 0, 0.3);
   line-height: 1.3;
