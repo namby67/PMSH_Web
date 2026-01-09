@@ -267,7 +267,7 @@
     // =======================
     $(document).on("click", "#btnEdit", function () {
         if (!selectedRowData) {
-            showToast("Error", "Please select 1 row to update.", false);
+            showToast("Warning", "Please select 1 row to update.", false);
             return;
         }
         applyValidationErrors([], "#itemModal");

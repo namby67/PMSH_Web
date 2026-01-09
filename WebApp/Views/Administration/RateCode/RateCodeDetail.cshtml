@@ -175,7 +175,7 @@
     <button id="btnUpdate" class="mui-button mui-button-edit"> Edit</button>
     <button id="btnDelete" class="mui-button button-report-delete">
         Delete</button>
-    <button id="btnExportExcel" class="mui-button mui-button-export" type="button">  Excel</button>
+    <button id="btnExportExcel" class="mui-button mui-button-export" type="button"> Excel</button>
 </div>
 </div>
 <div class="mui-card">
@@ -212,17 +212,17 @@
         <h5 class="mb-0" id="popupTitle">Rate Code Detail</h5>
         <button id="btnClosePopup" onclick="closePopup()" class="btn btn-sm btn-outline-secondary"
             style="border-radius: 4px;">
-            
+
         </button>
     </div>
 
     <!-- Buttons -->
     <div class="d-flex justify-content-start mb-3 gap-2">
         <button id="btnSave" class="mui-button mui-button-new" type="button">
-             Save
+            Save
         </button>
         <button id="btnSaveClose" class="mui-button mui-button-new" type="button">
-             Save and Close
+            Save and Close
         </button>
     </div>
 
@@ -641,7 +641,7 @@
 
     $(document).off("click", "#btnUpdate").on("click", "#btnUpdate", function () {
         if (!selectedRowData) {
-            showToast('Error', 'Please select a row to edit.', false);
+            showToast('Warning', 'Please select a row to edit.', false);
             return;
         }
 

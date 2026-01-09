@@ -343,6 +343,7 @@
                     else if (form == 1 || form == 2 || form == 3) applyValidationErrors(res.errors, "#profile_com_ta_source");
                     else if (form == 4) applyValidationErrors(res.errors, "#profile_group");
                     else applyValidationErrors(res.errors, "#profile_contact");
+                    showToast("Error", res.message, false)
                 }
             }
         });
