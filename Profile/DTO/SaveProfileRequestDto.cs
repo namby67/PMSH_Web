@@ -2,6 +2,7 @@ namespace Profile.DTO
 {
     public class SaveProfileRequestDto
     {
+        public int ID { get; set; } = 0;
         public int Type { get; set; }
 
         // -------- Individual --------

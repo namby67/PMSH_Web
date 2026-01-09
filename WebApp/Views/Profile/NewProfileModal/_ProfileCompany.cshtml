@@ -4,15 +4,16 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">New Profile - Company / TA / Source</h5>
-@*                 <button type="button" class="btn-close" onclick="closeFormProfile()" aria-label="Close"></button> *@
+                @*                 <button type="button" class="btn-close" onclick="closeFormProfile()" aria-label="Close"></button> *@
             </div>
             <div class="modal-body">
                 <div class="mb-2">
                     <button type="button" class="submit-button-clear-reservation" onclick="saveProfile();">Save</button>
                     <button type="button" class="submit-button-clear-reservation" onclick="closeFormProfile()">Change
                         Profile Type</button>
-                    <button type="button" class="submit-button-new-reservation" onclick="resetForm()">Clear</button>
-                    <button type="button" class="submit-button-clear-reservation" onclick="closeFormProfile();">Close</button>
+                    <button type="button" class="submit-button-clear-reservation" onclick="resetForm()">Clear</button>
+                    <button type="button" class="submit-button-clear-reservation"
+                        onclick="closeFormProfile();">Close</button>
                 </div>
 
                 <div class="profile_input">
@@ -284,7 +285,7 @@
                                                 <label class="col-md-2 col-form-label text-sm-end">Market</label>
                                                 <div class="col-md-6">
                                                     <select id="txtMarketCOM" class="form-select-sm"
-                                                        data-placeholder="Please select Market">
+                                                        data-placeholder="Please select Market" disabled>
 
                                                     </select>
                                                 </div>
@@ -328,6 +329,38 @@
     </div>
 </div>
 <script>
+    $(document).ready(async function () {
+        await setSelectCompany();
+    });
+    const tomSelectCompany = {};
+    async function setSelectCompany() {
+        const configs = [
+            "#select-beast-empty", "#txtCityCOM", "#txtCountryCOM",
+            "#txtStateCOM", "#txtOwnerCOM", "#txtTerritoryCOM",
+            "#txtCompanyTypeCOM", "#txtSaleInChargeCOM", "#txtCurrencyCOM",
+            "#txtMarketCOM", "#txtMarketTypeCOM",
+        ];
+
+        for (const id of configs) {
+            const el = document.querySelector(id);
+            if (!el) continue;
+
+            // Destroy nếu đã tồn tại (tránh duplicate khi mở modal nhiều lần)
+            if (tomSelectInstances[id]) {
+                tomSelectInstances[id].destroy();
+            }
+
+            tomSelectInstances[id] = new TomSelect(el, {
+                valueField: 'value',
+                labelField: 'text',
+                searchField: 'text',
+                create: false,
+                allowEmptyOption: true,
+                plugins: ['clear_button']
+            });
+        }
+    }
+
     $('#blackListCOM').on('change', function () {
         const isChecked = this.checked;
         $('#blackListReasonCOM').prop('disabled', !isChecked).toggleClass('is-invalid', false);

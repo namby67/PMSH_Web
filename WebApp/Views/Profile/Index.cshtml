@@ -65,7 +65,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="mui-button mui-button-close" data-dismiss="modal"
+                <button type="button" class="mui-button mui-button-new" data-dismiss="modal"
                     onclick="$('#profileTypeModal').modal('hide');">Close</button>
                 <button type="button" class="mui-button mui-button-new" onclick="chooseProfileType();">OK</button>
             </div>
@@ -128,6 +128,7 @@
     function closeFormProfile() {
         $('.profile-modal').modal('hide');
         $('#profileTypeModal').modal('show');
+        resetForm();
     }
 
     if (document.getElementById('btnViewIndividual')) bindIndividualSearchButton();
@@ -147,7 +148,6 @@
 
     // --- INITIALIZATION ---
     $(document).ready(async function () {
-        await setSelect2();
         getAllLanguage();
         getAllTitle();
         getAllNationality();
@@ -166,9 +166,7 @@
         $('.profile-modal').modal('hide');
         $('#profileTypeModal').modal('show');
 
-        // Init grids
-        initializeProfileGroupGrid();
-        initializeProfileIndividualGrid();
+
     });
 
     // --- SAVE LOGIC (Original AJAX call preserved) ---
@@ -188,6 +186,7 @@
             });
             if (!individualValid) return;
 
+            formData.append('ID', $("#idIndividual").val());
             formData.append('CodeIndividual', $("#txtCodeIndividual").val());
             formData.append('AccountIndividual', $("#txtFullNameIndividual").val());
             formData.append('LastNameIndivdual', $("#txtLastNameIndividual").val());
@@ -278,7 +277,7 @@
             formData.append('FaxGroup', $("#txtFaxGroup").val());
             formData.append('ContactNameGroup', $("#txtContactGroup").val());
             formData.append('CurrencyGroup', $("#txtCurrencyGroup").val());
-            formData.append('VIPGroup', $("#txtVIPIndividual").val()); // Careful with this ID reuse
+            formData.append('VIPGroup', $("#txtVIPGroup").val()); // Careful with this ID reuse
             formData.append('VIPReason', $("#txtVIPReasonGroup").val());
             formData.append('HistoryGroup', $("#txtHistory").is(":checked"));
             formData.append('NotesGroup', $("#txtNotesGroup").val());
@@ -347,29 +346,6 @@
                 }
             }
         });
-    }
-
-    // --- HELPER FUNCTIONS FOR DROPDOWNS & GRIDS ---
-    async function setSelect2() {
-        const ids = [
-            "#select-beast-empty", "#txtLanguageIndividual", "#txtTitleIndividual",
-            "#txtNationalityIndividual", "#txtCountryIndividual", "#txtStateIndividual",
-            "#txtCityIndividual", "#txtVIPIndividual", "#txtCityCOM", "#txtCountryCOM",
-            "#txtStateCOM", "#txtOwnerCOM", "#txtTerritoryCOM", "#txtCompanyTypeCOM",
-            "#txtCurrencyCOM", "#txtMarketTypeCOM", "#txtMarketCOM", "#txtStateGroup",
-            "#txtCountryGroup", "#txtCityGroup", "#txtLanguageGroup", "#txtCurrencyGroup",
-            "#txtVIPGroup", "#txtLanguageContact", "#txtTitleContact", "#txtCityContact",
-            "#txtStateContact", "#txtCountryContact", "#txtOwnerContact", "#txtTerritoryContact", "#txtSaleInChargeCOM"
-        ];
-        for (const id of ids) {
-            if ($(id).length) {
-                new TomSelect(id, {
-                    allowEmptyOption: true,
-                    create: true,
-                    plugins: ['clear_button'],
-                });
-            }
-        }
     }
 
     function checkFullName(options) {
@@ -445,32 +421,26 @@
                     let select = $('#txtLanguageIndividual')[0].tomselect; // Lấy instance của TomSelect
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa danh sách options cũ
-
                     result.forEach(item => {
                         select.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
                     });
 
-                    select.setValue('0'); // Chọn option mặc định
 
                     let select2 = $('#txtLanguageGroup')[0].tomselect; // Lấy instance của TomSelect
                     select2.clear(); // Xóa giá trị hiện tại
                     select2.clearOptions(); // Xóa danh sách options cũ
-
                     result.forEach(item => {
                         select2.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
                     });
 
-                    select2.setValue('0'); // Chọn option mặc định
 
                     let select3 = $('#txtLanguageContact')[0].tomselect; // Lấy instance của TomSelect
                     select3.clear(); // Xóa giá trị hiện tại
                     select3.clearOptions(); // Xóa danh sách options cũ
-
                     result.forEach(item => {
                         select3.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
                     });
 
-                    select3.setValue('0'); // Chọn option mặc định
                 }
             },
             error: function (xhr, statusText, err) {
@@ -499,7 +469,6 @@
                         select.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
                     });
 
-                    select.setValue('0'); // Chọn giá trị mặc định
 
                     let select3 = $('#txtTitleContact')[0].tomselect; // Lấy instance của TomSelect
                     select3.clear(); // Xóa giá trị hiện tại
@@ -509,7 +478,6 @@
                         select3.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
                     });
 
-                    select3.setValue('0'); // Chọn giá trị mặc định
                 }
             },
             error: function (xhr, statusText, err) {
@@ -538,7 +506,6 @@
                         select.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
                     });
 
-                    select.setValue('0'); // Chọn giá trị mặc định
                 }
             },
             error: function (xhr, statusText, err) {
@@ -566,7 +533,6 @@
                     result.forEach(item => {
                         select.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
                     });
-                    select.setValue('0'); // Chọn giá trị mặc định
 
 
                     let select2 = $('#txtCountryCOM')[0].tomselect; // Lấy instance của TomSelect
@@ -576,7 +542,6 @@
                     result.forEach(item => {
                         select2.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
                     });
-                    select2.setValue('0'); // Chọn giá trị mặc định
 
 
                     let select3 = $('#txtCountryGroup')[0].tomselect; // Lấy instance của TomSelect
@@ -586,7 +551,6 @@
                     result.forEach(item => {
                         select3.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
                     });
-                    select3.setValue('0'); // Chọn giá trị mặc định
 
                     let select4 = $('#txtCountryContact')[0].tomselect; // Lấy instance của TomSelect
                     select4.clear(); // Xóa giá trị hiện tại
@@ -595,7 +559,6 @@
                     result.forEach(item => {
                         select4.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
                     });
-                    select4.setValue('0'); // Chọn giá trị mặc định
                 }
             },
             error: function (xhr, statusText, err) {
@@ -624,7 +587,6 @@
                         // select.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
                         select.addOption({ value: item.id, text: `${item.stateName}` });
                     });
-                    select.setValue('0'); // Chọn giá trị mặc định
 
                     let select2 = $('#txtStateCOM')[0].tomselect; // Lấy instance của TomSelect
                     select2.clear(); // Xóa giá trị hiện tại
@@ -632,7 +594,6 @@
                     result.forEach(item => {
                         select2.addOption({ value: item.id, text: `${item.stateName}` });
                     });
-                    select2.setValue('0'); // Chọn giá trị mặc định
 
                     let select3 = $('#txtStateGroup')[0].tomselect; // Lấy instance của TomSelect
                     select3.clear(); // Xóa giá trị hiện tại
@@ -640,7 +601,6 @@
                     result.forEach(item => {
                         select3.addOption({ value: item.id, text: `${item.stateName}` });
                     });
-                    select3.setValue('0'); // Chọn giá trị mặc định
 
                     let select4 = $('#txtStateContact')[0].tomselect; // Lấy instance của TomSelect
                     select4.clear(); // Xóa giá trị hiện tại
@@ -648,28 +608,23 @@
                     result.forEach(item => {
                         select4.addOption({ value: item.id, text: `${item.stateName}` });
                     });
-                    select4.setValue('0'); // Chọn giá trị mặc định
                 }
                 else {
                     let select = $('#txtStateIndividual')[0].tomselect; // Lấy instance của TomSelect
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
-                    select.setValue('0');
 
                     let select2 = $('#txtStateCOM')[0].tomselect; // Lấy instance của TomSelect
                     select2.clear(); // Xóa giá trị hiện tại
                     select2.clearOptions(); // Xóa tất cả option cũ
-                    select2.setValue('0');
 
                     let select3 = $('#txtStateGroup')[0].tomselect; // Lấy instance của TomSelect
                     select3.clear(); // Xóa giá trị hiện tại
                     select3.clearOptions(); // Xóa tất cả option cũ
-                    select3.setValue('0');
 
                     let select4 = $('#txtStateContact')[0].tomselect; // Lấy instance của TomSelect
                     select4.clear(); // Xóa giá trị hiện tại
                     select4.clearOptions(); // Xóa tất cả option cũ
-                    select4.setValue('0');
                 }
             },
             error: function (xhr, statusText, err) {
@@ -699,7 +654,6 @@
                         select.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
                     });
 
-                    select.setValue('0'); // Chọn giá trị mặc định
 
 
                     // let select2 = $('#txtCurrencyGroup')[0].tomselect; // Lấy instance của TomSelect
@@ -710,18 +664,15 @@
                     //     select2.addOption({ value: item.id, text: `${item.description}` });
                     // });
 
-                    // select2.setValue('0'); // Chọn giá trị mặc định
                 }
                 else {
                     let select = $('#txtSaleInChargeCOM')[0].tomselect; // Lấy instance của TomSelect
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
-                    select.setValue('0');
 
                     // let select2 = $('#txtCurrencyGroup')[0].tomselect; // Lấy instance của TomSelect
                     // select2.clear(); // Xóa giá trị hiện tại
                     // select2.clearOptions(); // Xóa tất cả option cũ
-                    // select2.setValue('0');
                 }
 
             },
@@ -746,12 +697,10 @@
                     let select = $('#txtCityIndividual')[0].tomselect; // Lấy instance của TomSelect
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
-
                     result.forEach(item => {
                         select.addOption({ value: item.code, text: `${item.code} - ${item.name}` });
                     });
 
-                    select.setValue('0'); // Chọn giá trị mặc định
 
                     let select2 = $('#txtCityCOM')[0].tomselect; // Lấy instance của TomSelect
                     select2.clear(); // Xóa giá trị hiện tại
@@ -761,18 +710,6 @@
                         select2.addOption({ value: item.code, text: `${item.code} - ${item.name}` });
                     });
 
-                    select2.setValue('0'); // Chọn giá trị mặc định
-
-                    let select3 = $('#txtCityGroup')[0].tomselect; // Lấy instance của TomSelect
-                    select3.clear(); // Xóa giá trị hiện tại
-                    select3.clearOptions(); // Xóa tất cả option cũ
-
-                    result.forEach(item => {
-                        select3.addOption({ value: item.code, text: `${item.code} - ${item.name}` });
-                    });
-
-                    select3.setValue('0'); // Chọn giá trị mặc định
-
                     let select4 = $('#txtCityContact')[0].tomselect; // Lấy instance của TomSelect
                     select4.clear(); // Xóa giá trị hiện tại
                     select4.clearOptions(); // Xóa tất cả option cũ
@@ -781,7 +718,6 @@
                         select4.addOption({ value: item.code, text: `${item.code} - ${item.name}` });
                     });
 
-                    select4.setValue('0'); // Chọn giá trị mặc định
                 }
             },
             error: function (xhr, statusText, err) {
@@ -810,7 +746,6 @@
                         select.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
                     });
 
-                    select.setValue('0'); // Chọn giá trị mặc
 
                     let select2 = $('#txtVIPGroup')[0].tomselect; // Lấy instance của TomSelect
                     select2.clear(); // Xóa giá trị hiện tại
@@ -820,25 +755,46 @@
                         select2.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
                     });
 
-                    select2.setValue('0'); // Chọn giá trị mặc định
 
                     select.on('change', function (value) {
-                        if (!value || value === '0') {
+                        if (!value || (Array.isArray(value) && value.length === 0)) {
                             $('#txtReasonIndividual').val('');
                             return;
                         }
 
-                        // Lấy option đang chọn
-                        let option = select.options[value];
-
-                        if (option) {
-                            // option.text = "CODE - NAME"
-                            // Nếu chỉ muốn lấy NAME
-                            let name = option.text.split(' - ').slice(1).join(' - ');
-
-                            $('#txtReasonIndividual').val(name);
+                        // Nếu là single select, ép về string
+                        if (Array.isArray(value)) {
+                            value = value[0];
                         }
+
+                        let option = select.options[value];
+                        if (!option) return;
+
+                        // "CODE - NAME" → lấy NAME
+                        let name = option.text.replace(/^[^-]+ - /, '');
+
+                        $('#txtReasonIndividual').val(name);
                     });
+                    select2.on('change', function (value) {
+                        if (!value || (Array.isArray(value) && value.length === 0)) {
+                            $('#txtVIPGroup').val('');
+                            return;
+                        }
+
+                        // Nếu là single select, ép về string
+                        if (Array.isArray(value)) {
+                            value = value[0];
+                        }
+
+                        let option = select.options[value];
+                        if (!option) return;
+
+                        // "CODE - NAME" → lấy NAME
+                        let name = option.text.replace(/^[^-]+ - /, '');
+
+                        $('#txtReasonIndividual').val(name);
+                    });
+
                 }
             },
             error: function (xhr, statusText, err) {
@@ -867,7 +823,6 @@
                         select.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
                     });
 
-                    select.setValue('0'); // Chọn giá trị mặc định
 
                     let select2 = $('#txtOwnerContact')[0].tomselect; // Lấy instance của TomSelect
                     select2.clear(); // Xóa giá trị hiện tại
@@ -877,7 +832,7 @@
                         select2.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
                     });
 
-                    select2.setValue('0'); // Chọn giá trị mặc định
+
                 }
             },
             error: function (xhr, statusText, err) {
@@ -906,7 +861,6 @@
                         select.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
                     });
 
-                    select.setValue('0'); // Chọn giá trị mặc định
 
                     let select2 = $('#txtTerritoryContact')[0].tomselect; // Lấy instance của TomSelect
                     select2.clear(); // Xóa giá trị hiện tại
@@ -916,18 +870,15 @@
                         select2.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
                     });
 
-                    select2.setValue('0'); // Chọn giá trị mặc định
                 }
                 else {
                     let select = $('#txtTerritoryCOM')[0].tomselect; // Lấy instance của TomSelect
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
-                    select.setValue('0');
 
                     let select2 = $('#txtTerritoryContact')[0].tomselect; // Lấy instance của TomSelect
                     select2.clear(); // Xóa giá trị hiện tại
                     select2.clearOptions(); // Xóa tất cả option cũ
-                    select2.setValue('0');
                 }
 
             },
@@ -956,13 +907,11 @@
                         select.addOption({ value: item.id, text: `${item.code} - ${item.name}` });
                     });
 
-                    select.setValue('0'); // Chọn giá trị mặc định
                 }
                 else {
                     let select = $('#txtCompanyTypeCOM')[0].tomselect; // Lấy instance của TomSelect
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
-                    select.setValue('0');
                 }
 
             },
@@ -984,37 +933,33 @@
             headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
             success: function (result) {
                 if (result.length > 0) {
-                    let select = $('#txtCurrencyCOM')[0].tomselect; // Lấy instance của TomSelect
-                    select.clear(); // Xóa giá trị hiện tại
-                    select.clearOptions(); // Xóa tất cả option cũ
-
-                    result.forEach(item => {
-                        select.addOption({ value: item.id, text: `${item.description}` });
-                    });
-
-                    select.setValue('0'); // Chọn giá trị mặc định
-
-
-                    let select2 = $('#txtCurrencyGroup')[0].tomselect; // Lấy instance của TomSelect
+                    let select2 = $('#txtCurrencyCOM')[0].tomselect; // Lấy instance của TomSelect
                     select2.clear(); // Xóa giá trị hiện tại
                     select2.clearOptions(); // Xóa tất cả option cũ
 
                     result.forEach(item => {
-                        select2.addOption({ value: item.id, text: `${item.description}` });
+                        select2.addOption({ value: item.id, text: `${item.id} - ${item.description}` });
                     });
 
-                    select2.setValue('0'); // Chọn giá trị mặc định
+
+
+                    let select3 = $('#txtCurrencyGroup')[0].tomselect; // Lấy instance của TomSelect
+                    select3.clear(); // Xóa giá trị hiện tại
+                    select3.clearOptions(); // Xóa tất cả option cũ
+
+                    result.forEach(item => {
+                        select3.addOption({ value: item.id, text: `${item.id} - ${item.description}` });
+                    });
+
                 }
                 else {
                     let select = $('#txtCurrencyCOM')[0].tomselect; // Lấy instance của TomSelect
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
-                    select.setValue('0');
 
                     let select2 = $('#txtCurrencyGroup')[0].tomselect; // Lấy instance của TomSelect
                     select2.clear(); // Xóa giá trị hiện tại
                     select2.clearOptions(); // Xóa tất cả option cũ
-                    select2.setValue('0');
                 }
 
             },
@@ -1046,13 +991,11 @@
                         select.addOption({ value: item.id, text: `${item.description}` });
                     });
 
-                    select.setValue('0'); // Chọn giá trị mặc định
                 }
                 else {
                     let select = $('#txtMarketTypeCOM')[0].tomselect; // Lấy instance của TomSelect
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
-                    select.setValue('0');
                 }
 
             },
@@ -1087,13 +1030,11 @@
                         select.addOption({ value: item.id, text: `${item.description}` });
                     });
 
-                    select.setValue('0'); // Chọn giá trị mặc định
                 }
                 else {
                     let select = $('#txtMarketCOM')[0].tomselect; // Lấy instance của TomSelect
                     select.clear(); // Xóa giá trị hiện tại
                     select.clearOptions(); // Xóa tất cả option cũ
-                    select.setValue('0');
                 }
 
             },
@@ -1106,7 +1047,28 @@
             }
         });
     }
-    // Include the remaining "GetAll..." functions and "resetForm" here in the full implementation
+
+    // Set va;ue tomselect
+    function setTomSelectValue(selector, value, text = null) {
+        const ts = tomSelectInstances[selector];
+        if (!ts) return;
+
+        if (value === null || value === undefined || value === '' || value == 0) {
+            ts.clear();
+            return;
+        }
+
+        // Nếu option chưa tồn tại → add
+        if (!ts.options[value]) {
+            ts.addOption({
+                value: value,
+                text: text ?? value
+            });
+        }
+
+        ts.setValue(value, true);
+    }
+
     // They are omitted in this snippet only for length, but must be present in the final file.
 
     function resetForm() {
@@ -1119,31 +1081,26 @@
         let langIndividual = $('#txtLanguageIndividual')[0].tomselect;
         if (langIndividual) {
             langIndividual.clear();       // xóa value đang chọn
-            langIndividual.setValue('0'); // set lại default
         }
 
         let titleIndividual = $('#txtTitleIndividual')[0].tomselect;
         if (titleIndividual) {
             titleIndividual.clear();
-            titleIndividual.setValue('0');
         }
 
         let nationalityIndividual = $('#txtNationalityIndividual')[0].tomselect;
         if (nationalityIndividual) {
             nationalityIndividual.clear();
-            nationalityIndividual.setValue('0');
         }
 
         let countryIndividual = $('#txtCountryIndividual')[0].tomselect;
         if (countryIndividual) {
             countryIndividual.clear();
-            countryIndividual.setValue('0');
         }
 
         let cityIndividual = $('#txtCityIndividual')[0].tomselect;
         if (cityIndividual) {
             cityIndividual.clear();
-            cityIndividual.setValue('0');
         }
 
         $("#txtPostalIndividual").val("");
@@ -1152,16 +1109,15 @@
         let stateIndividual = $('#txtStateIndividual')[0].tomselect;
         if (stateIndividual) {
             stateIndividual.clear();
-            stateIndividual.setValue('0');
         }
 
         $("#txtPurposeIndividual").val("");
         $("#txtAddressIndividual").val("");
         $("#txtSalutationIndividual").val("");
+        $("#txtVIPIndividual").val("");
         let vipIndividual = $('#txtVIPIndividual')[0].tomselect;
         if (vipIndividual) {
             vipIndividual.clear();
-            vipIndividual.setValue('0');
         }
 
         $("#ReasonIndividual").val("");
@@ -1185,83 +1141,192 @@
         $("#txtNoteIndividual").val("");
 
         // id com
-        $("#txtCodeCOM").val();
-        $("#txtAccountCOM").val();
-        $("#txtAddressCOM").val();
-        $("#txtCountryCOM").val();
-        $("#txtCityCOM").val();
-        $("#txtPostalCOM").val();
-        $("#txtStateCOM").val();
-        $("#txtCompanyCOM").val();
-        $("#txtTaxCOM").val();
-        $("#txtBusAddressCOM").val();
-        $("#txtTelephoneCOM").val();
-        $("#txtContactNameCOM").val();
-        $("#txtEmailCOM").val();
-        $("#txtWebsiteCOM").val();
-        $("#txtHandPhoneCOM").val();
-        $("#txtCompany2COM").val();
-        $("#txtBusTitleCOM").val();
-        $("#txtOwnerCOM").val();
-        $("#txtTerritoryCOM").val();
-        $("#txtKeywordCOM").val();
+        $("#txtCodeCOM").val("");
+        $("#txtAccountCOM").val("");
+        $("#txtAddressCOM").val("");
+        $("#txtCountryCOM").val("");
+        let txtCountryCOM = $('#txtCountryCOM')[0].tomselect;
+        if (txtCountryCOM) {
+            txtCountryCOM.clear();
+        }
+
+        $("#txtCityCOM").val("");
+        let txtCityCOM = $('#txtCityCOM')[0].tomselect;
+        if (txtCityCOM) {
+            txtCityCOM.clear();
+        }
+        $("#txtPostalCOM").val("");
+        $("#txtStateCOM").val(); //
+        let txtStateCOM = $('#txtStateCOM')[0].tomselect;
+        if (txtStateCOM) {
+            txtStateCOM.clear();
+        }
+
+        $("#txtCompanyCOM").val("");
+        $("#txtTaxCOM").val("");
+        $("#txtBusAddressCOM").val("");
+        $("#txtTelephoneCOM").val("");
+        $("#txtContactNameCOM").val("");
+        $("#txtEmailCOM").val("");
+        $("#txtWebsiteCOM").val("");
+        $("#txtHandPhoneCOM").val("");
+        $("#txtCompany2COM").val("");
+        $("#txtBusTitleCOM").val("");
+        $("#txtOwnerCOM").val("");
+        let txtOwnerCOM = $('#txtOwnerCOM')[0].tomselect;
+        if (txtOwnerCOM) {
+            txtOwnerCOM.clear();
+        }
+
+        $("#txtTerritoryCOM").val("");
+        let txtTerritoryCOM = $('#txtTerritoryCOM')[0].tomselect;
+        if (txtTerritoryCOM) {
+            txtTerritoryCOM.clear();
+        }
+
+        $("#txtKeywordCOM").val("");
         $("#txtCompanyTypeCOM").val();
-        $("#txtARCOM").val();
-        $("#txtCurrencyCOM").val();
-        $("#txtSaleInChargeCOM").val();
-        $("#txtMarketCOM").val();
-        $("#txtActiveCOM").val();
-        $("#txtBlackListCOM").val();
-        $("#blackListCOM").val();
-        $("#txtNotECOM").val();
+        let txtCompanyTypeCOM = $('#txtCompanyTypeCOM')[0].tomselect;
+        if (txtCompanyTypeCOM) {
+            txtCompanyTypeCOM.clear();
+        }
+
+
+        $("#txtARCOM").val("");
+        $("#txtCurrencyCOM").val("");
+        let txtCurrencyCOM = $('#txtCurrencyCOM')[0].tomselect;
+        if (txtCurrencyCOM) {
+            txtCurrencyCOM.clear();
+        }
+
+        $("#txtSaleInChargeCOM").val("");//
+        let txtSaleInChargeCOM = $('#txtSaleInChargeCOM')[0].tomselect;
+        if (txtSaleInChargeCOM) {
+            txtSaleInChargeCOM.clear();
+        }
+
+        $("#txtMarketTypeCOM").val("");
+        let txtMarketTypeCOM = $('#txtMarketTypeCOM')[0].tomselect;
+        if (txtMarketTypeCOM) {
+            txtMarketTypeCOM.clear();
+        }
+
+        $("#txtMarketCOM").val(""); //
+        let txtMarketCOM = $('#txtMarketCOM')[0].tomselect;
+        if (txtMarketCOM) {
+            txtMarketCOM.clear();
+        }
+
+        $("#txtActiveCOM").val("");
+        $("#txtBlackListCOM").val("");
+        $("#blackListCOM").val("");
+        $("#txtNotECOM").val("");
 
         // id group
-        $("#txtCodeGroup").val();
-        $("#txtGroupNameGroup").val();
-        $("#txtLanguageGroup").val();
-        $("#txtHomeAddressGroup").val();
-        $("#txtAddressGroup").val();
-        $("#txtCityGroup").val();
-        $("#txtPostalCodeGroup").val();
-        $("#txtCountryGroup").val();
-        $("#txtStateGroup").val();
-        $("#txtTelephoneGroup").val();
-        $("#txtEmailGroup").val();
-        $("#txtWebsiteGroup").val();
-        $("#txtHandPhoneGroup").val();
-        $("#txtFaxGroup").val();
-        $("#txtContactGroup").val();
-        $("#txtCurrencyGroup").val();
-        $("#txtVIPIndividual").val();
-        $("#txtVIPReasonGroup").val();
-        $("#txtHistory").val();
+        $("#txtCodeGroup").val("");
+        $("#txtGroupNameGroup").val("");
+        $("#txtLanguageGroup").val("");
+        let txtLanguageGroup = $('#txtLanguageGroup')[0].tomselect;
+        if (txtLanguageGroup) {
+            txtLanguageGroup.clear();
+        }
+        $("#txtHomeAddressGroup").val("");
+        $("#txtAddressGroup").val("");
+        $("#txtCityGroup").val("");
+        $("#txtPostalCodeGroup").val("");
+        $("#txtCountryGroup").val("");
+        let txtCountryGroup = $('#txtCountryGroup')[0].tomselect;
+        if (txtCountryGroup) {
+            txtCountryGroup.clear();
+        }
+
+        $("#txtStateGroup").val("");
+        let txtStateGroup = $('#txtStateGroup')[0].tomselect;
+        if (txtStateGroup) {
+            txtStateGroup.clear();
+        }
+
+        $("#txtTelephoneGroup").val("");
+        $("#txtEmailGroup").val("");
+        $("#txtWebsiteGroup").val("");
+        $("#txtHandPhoneGroup").val("");
+        $("#txtFaxGroup").val("");
+        $("#txtContactGroup").val("");
+        $("#txtCurrencyGroup").val("");
+        let txtCurrencyGroup = $('#txtCurrencyGroup')[0].tomselect;
+        if (txtCurrencyGroup) {
+            txtCurrencyGroup.clear();
+        }
+        $("#txtVIPGroup").val("");
+        let txtVIPGroup = $('#txtVIPGroup')[0].tomselect;
+        if (txtVIPGroup) {
+            txtVIPGroup.clear();
+        }
+
+        $("#txtNotesGroup").val("");
+        $("#txtVIPReasonGroup").val("");
+        $("#txtHistory").val("");
 
         // id contact
-        $("#txtCodeContact").val();
-        $("#txtFullNameContact").val();
-        $("#txtLastContact").val();
-        $("#txtFirstNameContact").val();
-        $("#txtMiddleNameContact").val();
-        $("#txtLanguageContact").val();
-        $("#txtPositionContact").val();
-        $("#txtDeptContact").val();
-        $("#txtTitleContact").val();
-        $("#txtSalulationContact").val();
-        $("#txtAddressContact").val();
-        $("#txtHomeAddressContact").val();
-        $("#txtCityContact").val();
-        $("#txtPostalCodeContact").val();
-        $("#txtCountryContact").val();
-        $("#txtStateContact").val();
-        $("#txtOwnerContact").val();
-        $("#txtTerritoryContact").val();
-        $("#txtARNoContact").val();
-        $("#txtDobContact").val();
-        $("#txtTelephoneContact").val();
-        $("#txtFaxContact").val();
-        $("#txtEmailContact").val();
-        $("#txtWebsiteContact").val();
-        $("#txtHandPhoneContact").val();
+        $("#txtCodeContact").val("");
+        $("#txtFullNameContact").val("");
+        $("#txtLastContact").val("");
+        $("#txtFirstNameContact").val("");
+        $("#txtMiddleNameContact").val("");
+        $("#txtLanguageContact").val("");
+        let txtLanguageContact = $('#txtLanguageContact')[0].tomselect;
+        if (txtLanguageContact) {
+            txtLanguageContact.clear();
+        }
+
+        $("#txtPositionContact").val("");
+        $("#txtDeptContact").val("");
+        $("#txtTitleContact").val("");
+        let txtTitleContact = $('#txtTitleContact')[0].tomselect;
+        if (txtTitleContact) {
+            txtTitleContact.clear();
+        }
+        $("#txtSalulationContact").val("");
+        $("#txtAddressContact").val("");
+        $("#txtHomeAddressContact").val("");
+        $("#txtCityContact").val("");
+        let txtCityContact = $('#txtCityContact')[0].tomselect;
+        if (txtCityContact) {
+            txtCityContact.clear();
+        }
+
+        $("#txtPostalCodeContact").val("");
+        $("#txtCountryContact").val("");
+        let txtCountryContact = $('#txtCountryContact')[0].tomselect;
+        if (txtCountryContact) {
+            txtCountryContact.clear();
+        }
+
+        $("#txtStateContact").val("");
+        let txtStateContact = $('#txtStateContact')[0].tomselect;
+        if (txtStateContact) {
+            txtStateContact.clear();
+        }
+
+        $("#txtOwnerContact").val("");
+        let txtOwnerContact = $('#txtOwnerContact')[0].tomselect;
+        if (txtOwnerContact) {
+            txtOwnerContact.clear();
+        }
+
+        $("#txtTerritoryContact").val("");
+        let txtTerritoryContact = $('#txtTerritoryContact')[0].tomselect;
+        if (txtTerritoryContact) {
+            txtTerritoryContact.clear();
+        }
+
+        $("#txtARNoContact").val("");
+        $("#txtDobContact").val("");
+        $("#txtTelephoneContact").val("");
+        $("#txtFaxContact").val("");
+        $("#txtEmailContact").val("");
+        $("#txtWebsiteContact").val("");
+        $("#txtHandPhoneContact").val("");
     }
 
 </script>
