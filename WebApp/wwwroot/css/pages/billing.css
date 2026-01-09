@@ -57,39 +57,56 @@
         background-color: #fff;
         border: 1px solid var(--primary-light);
         border-radius: 4px;
-        padding: 8px 12px;
+        padding: 5px; 
         margin-bottom: 10px;
-        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        overflow: hidden;
     }
 
-    .billing-module .form-label {
-        font-size: 0.75rem !important;
-        color: #555;
-        margin-bottom: 0px !important;
-        font-weight: 500;
+    .billing-module .billing-col {
+        position: relative;
+        width: 100%;
+        padding-left: 2px;
+        padding-right: 2px;
+    }
+
+    .billing-module .info-group {
+        display: flex;
+        align-items: center;
+        background-color: #f8f9fa; 
+        border: 1px solid #e9ecef;
+        border-radius: 3px;
+        padding: 4px 6px;
+        height: 100%;
         white-space: nowrap;
+        overflow: hidden;
     }
 
-        .billing-module .form-label span {
-            font-weight: 700;
-            color: var(--text-dark);
-            margin-left: 4px;
+        .billing-module .info-group label {
+            color: #666;
+            margin-right: 4px;
+            font-weight: 600;
+            font-size: 0.7rem;
+            margin-bottom: 0;
         }
 
-/* Highlight Text */
+        .billing-module .info-group span {
+            font-weight: 700;
+            color: var(--text-dark);
+            font-size: 0.75rem;
+            overflow: hidden;
+            text-overflow: ellipsis; 
+        }
+
 #balanceBilling, #totalBilling, #balanceBillingMaster {
     color: var(--danger-color) !important;
     font-weight: 800 !important;
-    font-size: 0.9rem;
 }
 
-/* ==========================================================================
-   LAYOUT BODY MAIN (Flexbox Layout)
-   ========================================================================== */
+/* LAYOUT BODY MAIN (Flexbox Layout)*/
 .billing-body-main {
     display: flex;
     gap: 10px;
-    height: 550px; /* Chiều cao cố định để scroll hoạt động */
+    height: 550px;
     max-height: 70vh;
     margin-top: 10px;
 }
@@ -231,7 +248,7 @@
     flex-direction: column;
     min-width: 0;
     height: 100%;
-    position: relative; /* Để overlay menu định vị theo đây */
+    position: relative; 
 }
 
 .billing-module .grid-header-info {
@@ -264,12 +281,12 @@
 /* --- OVERLAY MENU --- */
 .billing-module .overlay-menu {
     position: absolute;
-    right: 10px; /* Định vị theo grid-wrapper */
-    top: 40px; /* Ngay dưới header info */
+    right: 10px; 
+    top: 40px; 
     background-color: #fff;
     border: 1px solid #ccc;
     padding: 0;
-    z-index: 9999; /* Đảm bảo nằm trên Grid */
+    z-index: 9999; 
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     border-radius: 4px;
     width: 200px;
@@ -318,12 +335,30 @@
         margin-left: auto;
         margin-right: auto;
     }
+    .billing-module .billing-col {
+        flex: 0 0 12.5%; 
+        max-width: 12.5%;
+    }
+
+    .billing-module .info-group label,
+    .billing-module .info-group span {
+        font-size: 0.7rem;
+    }
 }
 
-/* ==========================================================================
-   RESPONSIVE MOBILE (MAX-WIDTH: 768PX)
-   ========================================================================== */
+@media (min-width: 768px) and (max-width: 991px) {
+    .billing-module .billing-col {
+        flex: 0 0 25%;
+        max-width: 25%;
+    }
+}
+
 @media (max-width: 768px) {
+    .billing-module .billing-col {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+
     .billing-module-dialog {
         max-width: 100% !important;
         margin: 0 !important;

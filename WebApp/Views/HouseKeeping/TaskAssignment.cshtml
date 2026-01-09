@@ -293,12 +293,12 @@
     }
 
 
-
+/* 
     #logGridNewContainer {
         width: 1450px;
         overflow-x: auto; /* ✅ Scroll ngang */
     }
-
+ */
 
 
 
@@ -451,84 +451,157 @@
         <button style="border-radius: 4px;  margin-right: 6px;" id="btnAutotasksheet" class="mui-button mui-button-option" type="button"> Auto</button>
     </div>
 </div>
-<div id="overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 999;"></div>
-<div id="popupNewGridAddUser" style="display: none; position: fixed; top: 50%; left: 50%;
-    transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 10px;
-    z-index: 1050; box-shadow: 0 0 10px rgba(0,0,0,0.3); min-width: 500px; max-height: 800px; overflow-y: auto;">
 
-    <div class="d-flex justify-content-between mb-2">
-        <h5 class="mb-0"> Search Employee</h5>
 
-    </div>
-    <div class="d-flex justify-content-start mb-3 gap-2">
-        <button style="border-radius: 4px;  margin-right: 6px;" id="btnSaveEmployee" class="mui-button mui-button-new" type="button"> Ok</button>
-        <button onclick="$('#popupNewGridAddUser').hide()" id="btnClosePopup" class="btn btn-sm btn-danger" style=" border-radius: 4px;">
-             Close
-        </button>
-    </div>
-    <div id="logGridAddUserContainer" class="gridContainer mt-2">
-        <!-- Nội dung bảng hoặc grid sẽ được render tại đây -->
-    </div>
-</div>
-<div id="popupNewGridNew" style="display: none; position: fixed; top: 50%; left: 50%;
-    transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 10px;
-    z-index: 1050; box-shadow: 0 0 10px rgba(0,0,0,0.3); min-width: 600px; max-height: 800px; overflow-y: auto;">
+<div class="modal fade" id="popupNewGridAddUser" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content" style="max-height:80vh;">
 
-    <div class="d-flex justify-content-between mb-2">
-        <h5 id="attendantPointTitle" class="mb-0"> Task Sheet Details</h5>
-
-    </div>
-    <div class="d-flex justify-content-start mb-3 gap-2">
-        <button style="border-radius: 4px;  margin-right: 6px;" id="btnAddRoomtasksheet" class="mui-button mui-button-new" type="button"> New</button>
-        <button style="border-radius: 4px;  margin-right: 6px;" id="btnSavetasksheet" class="mui-button mui-button-new" type="button"> Save</button>
-        <button style="border-radius: 4px;  margin-right: 6px;" id="btnCompletedetailtasksheet" class="mui-button mui-button-reinstate" type="button">Complete</button>
-        <button style="border-radius: 4px;  margin-right: 6px;" id="btnAddUserDetailtasksheet" class="mui-button mui-button-profile" type="button">Add User</button>
-        <button style="border-radius: 4px;  margin-right: 6px;" id="btnDailytasksheet" class="mui-button mui-button-profile" type="button">Daily</button>
-        
-        <button onclick="$('#popupNewGridNew').hide()" id="btnClosePopup" class="btn btn-sm btn-danger" style=" border-radius: 4px;">
-             Close
-        </button>
-    </div>
-    <div class="container mb-2">
-        <div class="d-flex align-items-center flex-wrap mb-2">
-            <div class="d-flex align-items-center me-3 mb-2">
-                <label class="me-2 mb-0">Task Sheet:</label>
-                <input type="text" id="tasksheetnew" name="tasksheetnew" class="form-control form-control-sm w-auto" disabled/>
+            <!-- HEADER -->
+            <div class="modal-header">
+                <h5 class="modal-title">Search Employee</h5>
             </div>
-            <div id="taskcodenewshow">
-                <div class="d-flex align-items-center me-3 mb-2" >
-                    <label class="me-2 mb-0">Task Code:</label>
-                    <select id="taskcodenew" name="taskcodenew" class="tomselect-custom"  style="width: 200px" multiple>
-                 
-                        @foreach (var item in listhkpFT)
-                        {
-                            <option value="@item.ID">@item.Description</option>
-                        }
-                    </select>
 
-                </div>
-            </div>
-            <div id="attendantshow">
-                <div class="d-flex align-items-center me-3 mb-2" >
-                    <label class="me-2 mb-0"> Attendant ID:</label>
-                    <select id="attendantnew" name="attendantnew" class="form-control form-control-sm w-auto">
-                        <option value=""></option>
-                        @foreach (var item in listatt)
-                        {
-                            <option value="@item.ID">@item.Name</option>
-                        }
-                    </select>
+            <!-- BODY -->
+            <div class="modal-body">
 
+                <!-- TOOLBAR -->
+                <div class="d-flex justify-content-start mb-3 gap-2">
+                    <button id="btnSaveEmployee"
+                            class="mui-button mui-button-new"
+                            type="button">
+                        Ok
+                    </button>
+
+                    <button id="btnClosePopupAddUser"
+                            type="button"
+                            class="mui-button mui-button-new">
+                        Close
+                    </button>
                 </div>
+
+                <!-- GRID -->
+                <div id="logGridAddUserContainer"
+                     class="gridContainer mt-2"
+                     style="height:calc(80vh - 140px);">
+                    <!-- Grid render here -->
+                </div>
+
             </div>
         </div>
-
-
-    </div>
-    <div id="logGridNewContainer" class="gridContainer mt-2">
-        <!-- Nội dung bảng hoặc grid sẽ được render tại đây -->
     </div>
 </div>
+
+
+<div class="modal fade" id="popupNewGridNew" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <!-- HEADER -->
+            <div class="modal-header">
+                <h5 id="attendantPointTitle" class="modal-title">
+                    Task Sheet Details
+                </h5>
+            </div>
+
+            <!-- BODY -->
+            <div class="modal-body">
+
+                <!-- TOOLBAR -->
+                <div class="d-flex flex-wrap gap-2 mb-3">
+                    <button id="btnAddRoomtasksheet"
+                            class="mui-button mui-button-new"
+                            type="button">
+                        New
+                    </button>
+
+                    <button id="btnSavetasksheet"
+                            class="mui-button mui-button-new"
+                            type="button">
+                        Save
+                    </button>
+
+                    <button id="btnCompletedetailtasksheet"
+                            class="mui-button mui-button-reinstate"
+                            type="button">
+                        Complete
+                    </button>
+
+                    <button id="btnAddUserDetailtasksheet"
+                            class="mui-button mui-button-profile"
+                            type="button">
+                        Add User
+                    </button>
+
+                    <button id="btnDailytasksheet"
+                            class="mui-button mui-button-profile"
+                            type="button">
+                        Daily
+                    </button>
+
+                    <button id="btnClosePopupnew"
+                            type="button"
+                            class="mui-button mui-button-profile">
+                        Close
+                    </button>
+                </div>
+
+                <!-- FORM -->
+                <div class="container-fluid mb-2">
+                    <div class="d-flex align-items-center flex-wrap gap-3">
+
+                        <div class="d-flex align-items-center">
+                            <label class="me-2 mb-0">Task Sheet:</label>
+                            <input type="text"
+                                   id="tasksheetnew"
+                                   name="tasksheetnew"
+                                   class="form-control form-control-sm"
+                                   style="width:180px"
+                                   disabled />
+                        </div>
+
+                        <div id="taskcodenewshow" class="d-flex align-items-center">
+                            <label class="me-2 mb-0">Task Code:</label>
+                            <select id="taskcodenew"
+                                    name="taskcodenew"
+                                    class="tomselect-custom"
+                                    style="width:200px"
+                                    multiple>
+                                @foreach (var item in listhkpFT)
+                                {
+                                    <option value="@item.ID">@item.Description</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div id="attendantshow" class="d-flex align-items-center">
+                            <label class="me-2 mb-0">Attendant ID:</label>
+                            <select id="attendantnew"
+                                    name="attendantnew"
+                                    class="form-control form-control-sm"
+                                    style="width:180px">
+                                <option value=""></option>
+                                @foreach (var item in listatt)
+                                {
+                                    <option value="@item.ID">@item.Name</option>
+                                }
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- GRID -->
+                <div id="logGridNewContainer" class="gridContainer mt-2">
+                    <!-- Grid render here -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div id="popupNewGridAddRoom" style="display: none; position: fixed; top: 50%; left: 50%;
     transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 10px;
@@ -768,463 +841,548 @@
         <!-- Nội dung bảng hoặc grid sẽ được render tại đây -->
     </div>
 </div>
-<div id="popupNewGridReport" style="display: none; position: fixed; top: 50%; left: 50%;
-    transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 10px;
-    z-index: 1050; box-shadow: 0 0 10px rgba(0,0,0,0.3); min-width: 600px; max-height: 600px; overflow-y: auto;">
+<div class="modal fade" id="popupNewGridReport" tabindex="-1"
+     aria-labelledby="popupNewGridReportLabel"
+     aria-hidden="true">
 
-    <div class="d-flex justify-content-between mb-2">
-        <h5 id="attendantPointTitle" class="mb-0"> Task Sheet Report</h5>
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
 
+            <!-- Header -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="popupNewGridReportLabel">
+                    Task Sheet Report
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body">
+
+                <div class="d-flex justify-content-start mb-3 gap-2">
+                    <button id="btnViewpopExcel"
+                            class="mui-button mui-button-new"
+                            type="button">
+                        View
+                    </button>
+
+                    <button type="button"
+                            class="mui-button mui-button-new"
+                            data-bs-dismiss="modal">
+                        Close
+                    </button>
+                </div>
+
+                <div class="container">
+                    <div class="row g-2 align-items-end">
+
+                        <div class="col-md-3">
+                            <label class="form-label mb-0">Task Date From</label>
+                            <input type="date" id="fromDatere"
+                                   class="form-control form-control-sm" />
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label mb-0">To</label>
+                            <input readonly type="date" id="toDatere"
+                                   class="form-control form-control-sm" />
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label mb-0">Facility Task</label>
+                            <select id="taskcodeexpan"
+                                    class="form-control form-control-sm">
+                                <option value=""></option>
+                                @foreach (var item in listhkpFT)
+                                {
+                                    <option value="@item.Code">@item.Description</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label mb-0">Attendant ID</label>
+                            <select id="attendantrepop"
+                                    class="form-control form-control-sm">
+                                <option value=""></option>
+                                @foreach (var item in listatt)
+                                {
+                                    <option value="@item.ID">@item.Name</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label mb-0">Task Sheet</label>
+                            <select id="tasksheetpopre"
+                                    class="tomselect-custom w-100">
+                                @foreach (var item in listhkpTS)
+                                {
+                                    <option value="@item.TaskSheetNo">@item.TaskSheetNo</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label mb-0">Report Style</label>
+                            <select id="reportstyle"
+                                    class="form-control form-control-sm">
+                                <option value="1">Room Attendant Daily Worksheet</option>
+                                <option value="2">R/A Evening Worksheet</option>
+                                <option value="3">Supervisor Hoor Checklist</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-3 d-flex align-items-center">
+                            <div class="form-check mt-4">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       id="dueoutonly" value="1">
+                                <label class="form-check-label" for="dueoutonly">
+                                    Due Outs Only
+                                </label>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
     </div>
-    <div class="d-flex justify-content-start mb-3 gap-2">
-        <button  id="btnViewpopExcel" class="mui-button mui-button-new" type="button">  View</button>
+</div>
 
-        <button onclick="$('#popupNewGridReport').hide()" id="btnClosePopup" class="btn btn-sm btn-danger" >
-             Close
-        </button>
-    </div>
-    <div class="container mb-2">
-        <div class="d-flex align-items-center flex-wrap mb-2">
-            <div class="d-flex align-items-center me-3 mb-2">
-                <label class="me-2 mb-0">Task Date From:</label>
-                <input type="date" id="fromDatere" name="fromDatere" class="form-control form-control-sm w-auto" />
-            </div>
-            <div class="d-flex align-items-center me-3 mb-2">
-                <label class="me-2 mb-0">To:</label>
-                <input readonly type="date" id="toDatere" name="toDatere" class="form-control form-control-sm w-auto" />
-            </div>
-         
-            <div class="d-flex align-items-center me-3 mb-2">
-                <label class="me-2 mb-0"> Facility Task:</label>
-                <select id="taskcodeexpan" name="taskcodeexpan" class="form-control form-control-sm w-auto">
-                    <option value=""></option>
-                    @foreach (var item in listhkpFT)
-                    {
-                        <option value="@item.Code">@item.Description</option>
-                    }
-                </select>
+<div class="modal fade" id="gridContainerInner" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content">
+
+            <!-- HEADER -->
+            <div class="modal-header">
+                <h5 class="modal-title" >
+                    Housekeeping Department
+                </h5>
 
             </div>
-            <div class="d-flex align-items-center me-3 mb-2">
-                <label class="me-2 mb-0"> Attendant ID:</label>
-                <select id="attendantrepop" name="attendantrepop" class="form-control form-control-sm w-auto">
-                    <option value=""></option>
-                    @foreach (var item in listatt)
-                    {
-                        <option value="@item.ID">@item.Name</option>
-                    }
-                </select>
 
-            </div>
-            <div class="d-flex align-items-center me-3 mb-2">
-                <label class="me-2 mb-0">Task Sheet:</label>
-                <select id="tasksheetpopre" name="tasksheetpopre" class="tomselect-custom"  style="width: 200px" multiple>
-                    @foreach (var item in listhkpTS)
-                    {
-                        <option value="@item.TaskSheetNo">@item.TaskSheetNo</option>
-                    }
-                </select>
+            <!-- BODY -->
+            <div class="modal-body p-3" style="overflow:hidden;">
+                <div class="d-flex gap-2">
+                    <button id="btnExportExcel1"
+                            class="mui-button mui-button-new"
+                            type="button" >
+                        Excel
+                    </button>
 
-            </div>
-            <div class="d-flex align-items-center me-3 mb-2">
-                <label class="me-2 mb-0">Report Style:</label>
-                <select id="reportstyle" name="reportstyle" class="form-control form-control-sm w-auto">
-                    <option value="1">Room Attendant Daily Worksheet</option>
-                    <option value="2">R/A Evening Worksheet</option>
-                    <option value="3">Supervisor Hoor Checklist</option>
-                </select>
-            </div>
-            <div class="d-flex flex-column">
-                <div class="d-flex align-items-center me-3 mb-2">
-                    <label class="mb-1 me-2">Due Outs Only</label>            
-                    <!-- Dirty -->
-                    <div class="form-check me-3">
-                       
-                        <input class="form-check-input" type="checkbox" id="dueoutonly" name="includeOptions" value="1" >
+                    <button id="btnPrintGrid1"
+                            class="mui-button mui-button-new"
+                            type="button">
+                        Print
+                    </button>
+                 <button type="button" id="btnCloseGridModal"class="mui-button mui-button-new">Close</button>
+
+                </div>
+                <!-- TIÊU ĐỀ -->
+                <div class="text-center mb-2">
+                    <strong>Housekeeping Department</strong><br />
+                    <strong>Room Attendant Daily Work Sheet</strong>
+                </div>
+
+                <!-- PHẦN SCROLL -->
+                <div id="logGridReportContainerrp1"
+                     style="overflow-x:auto;overflow-y:hidden;white-space:nowrap;height:calc(100vh - 220px);">
+
+                    <!-- LEGENDS -->
+                    <div class="d-flex justify-content-between gap-2 mb-2">
+
+                        <div style="flex:1;">
+                            <div class="mb-1"><i><strong>Legends:</strong></i></div>
+                            <table border="1" style="width:100%;font-size:13px;border-collapse:collapse;text-align:center;">
+                                <tr><th colspan="4">BED ROOM</th></tr>
+                                <tr>
+                                    <td>Water</td>
+                                    <td>Café</td>
+                                    <td>Tea</td>
+                                    <td>Sugar</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div style="flex:2;">
+                            <div style="visibility:hidden;height:24px;"></div>
+                            <table border="1" style="width:100%;font-size:13px;border-collapse:collapse;text-align:center;">
+                                <tr><th colspan="10">BATH ROOM</th></tr>
+                                <tr>
+                                    <td><b>BT</b></td>
+                                    <td>Bath Towel</td>
+                                    <td><b>FT</b></td>
+                                    <td>Face Towel</td>
+                                    <td><b>HT</b></td>
+                                    <td>Hand Towel</td>
+                                    <td><b>BM</b></td>
+                                    <td>Bathmat</td>
+                                    <td><b>AM</b></td>
+                                    <td>Amenities</td>
+                                </tr>
+                            </table>
+                        </div>
+
                     </div>
 
+                    <!-- INFO -->
+                    <div class="row mb-3">
+                        <div class="col-3">
+                            <label><strong>Floor/Area:</strong></label>
+                            <div style="border-bottom:1px solid black;height:20px;"></div>
+                        </div>
+                        <div class="col-3">
+                            <label><strong>Card No.:</strong></label>
+                            <div style="border-bottom:1px solid black;height:20px;"></div>
+                        </div>
+                        <div class="col-3">
+                            <label><strong>Shift:</strong></label>
+                            <div style="border-bottom:1px solid black;height:20px;"></div>
+                        </div>
+                        <div class="col-3">
+                            <label><strong>Date:</strong></label>
+                            <div id="datepopreport"
+                                 style="border-bottom:1px solid black;height:20px;"></div>
+                        </div>
+                    </div>
+
+                    <div id="logGridReportContainer" class="gridContainer mt-2"></div>
+
                 </div>
+
             </div>
         </div>
-
-
     </div>
-
 </div>
-<div id="gridContainerInner" style="
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: white;
-    padding: 20px;
-    z-index: 1055;
-    box-shadow: 0 0 10px rgba(0,0,0,0.3);
-    overflow: hidden; /* KHÔNG để scroll ở đây */
-">
 
-    <div class="d-flex justify-content-between mb-2">
-        <div class="d-flex justify-content-start mb-3 gap-2">
-                <button style="border-radius: 4px; margin-right: 10px; background-color: green; color: white;"
-                        id="btnExportExcel1"
-                        class="mui-button mui-button-new"
-                        type="button">
-                     Excel
-                </button>
-               <button  id="btnPrintGrid1" class="mui-button mui-button-new" type="button">
-                    Print
-                </button>
-        </div>
-        <!-- Nút Close bên phải -->
-        <span onclick="$('#gridContainerInner').fadeOut(200)"
-              style="cursor: pointer; font-size: 18px; color: BLACK;"
-              title="Close">
-            
-        </span>
-       
-    </div>
-    <!-- TIÊU ĐỀ CĂN GIỮA -->
-    <!-- TIÊU ĐỀ CĂN GIỮA -->
-    <div style="text-align: center; margin-bottom: 10px;">
-        <strong>Housekeeping Department</strong><br>
-        <strong>Room Attendant Daily Work Sheet</strong>
-    </div>
+<div class="modal fade" id="gridContainerInner2" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content">
 
+            <!-- HEADER -->
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Housekeeping Department
+                </h5>
+            </div>
 
+            <!-- BODY -->
+            <div class="modal-body p-3" style="overflow:hidden;">
 
-    <!-- PHẦN BẢNG SCROLL -->
-    <!-- PHẦN BẢNG SCROLL (sửa lại calc) -->
-    <div id="logGridReportContainerrp1"  style="overflow-x: auto; overflow-y: hidden; white-space: nowrap; height: calc(100% - 230px);">
-        <!-- LEGEND FLEX HÀNG NGANG -->
-        <div style="display: flex; justify-content: space-between; gap: 10px; margin-bottom: 10px;">
-            <!-- BED ROOM -->
-            <div style="flex: 1;">
-                <div style="text-align: left; margin-bottom: 5px;">
-                    <i><strong>Legends:</strong></i>
+                <div class="d-flex gap-2 mb-2">
+                    <button id="btnExportExcel2"
+                            class="mui-button mui-button-new"
+                            type="button">
+                        Excel
+                    </button>
+
+                    <button id="btnPrintGrid2"
+                            class="mui-button mui-button-new"
+                            type="button">
+                        Print
+                    </button>
+
+                    <button type="button"
+                            id="btnCloseGridModal2"
+                            class="mui-button mui-button-new">
+                        Close
+                    </button>
                 </div>
-                <table border="1" style="width: 100%; text-align: center; font-size: 13px; border-collapse: collapse;">
-                    <tr>
-                        <th colspan="4">BED ROOM</th>
-                    </tr>
-                    <tr style="border-top: solid 1px;">
-                        <td>Water</td>
-                        <td>Café</td>
-                        <td>Tea</td>
-                        <td>Sugar</td>
-                    </tr>
-                </table>
-            </div>
 
-            <!-- BATH ROOM -->
-            <div style="flex: 2;">
-                <div style="visibility: hidden; height: 24px; margin-bottom: 5px;">Placeholder</div>
-                <!-- Ẩn dòng Legends để 2 bảng thẳng hàng -->
-                <table border="1" style="width: 100%; text-align: center; font-size: 13px; border-collapse: collapse;">
-                    <tr>
-                        <th colspan="10">BATH ROOM</th>
-                    </tr>
-                    <tr style="border-top: solid 1px;">
-                        <td style="font-weight:bold">BT</td>
-                        <td>Bath Towel</td>
-                        <td style="font-weight:bold">FT</td>
-                        <td>Face Towel</td>
-                        <td style="font-weight:bold">HT</td>
-                        <td>Hand Towel</td>
-                        <td style="font-weight:bold">BM</td>
-                        <td>Bathmat</td>
-                        <td style="font-weight:bold">AM</td>
-                        <td>Amenities</td>
-                    </tr>
-                </table>
-            </div>
-        </div>
+                <!-- TIÊU ĐỀ -->
+                <div class="text-center mb-2">
+                    <strong>Housekeeping Department</strong><br />
+                    <strong>R/A Evening Worksheet</strong>
+                </div>
 
+                <!-- PHẦN SCROLL -->
+                <div id="logGridReportContainerrp2"
+                     style="overflow-x:auto;overflow-y:hidden;white-space:nowrap;height:calc(100vh - 220px);">
 
-        <!-- PHẦN THÔNG TIN -->
-        <div class="row mb-3" style="display: flex; justify-content: space-between; flex-wrap: wrap;">
-            <div style="width: 23%;">
-                <label><strong>Floor/Area:</strong></label>
-                <div style="border-bottom: 1px solid black; height: 20px;"></div>
-            </div>
-            <div style="width: 23%;">
-                <label><strong>Card No.:</strong></label>
-                <div style="border-bottom: 1px solid black; height: 20px;"></div>
-            </div>
-            <div style="width: 23%;">
-                <label><strong>Shift:</strong></label>
-                <div style="border-bottom: 1px solid black; height: 20px;"></div>
-            </div>
-            <div style="width: 23%;">
-                <label><strong>Date:</strong></label>
-                <div id="datepopreport" style="border-bottom: 1px solid black; height: 20px;"></div>
-            </div>
-        </div>
-        <div id="logGridReportContainer" class="gridContainer mt-2"></div>
-    </div>
-
-</div>
-<div id="gridContainerInner2" style="
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: white;
-    padding: 20px;
-    z-index: 1055;
-    box-shadow: 0 0 10px rgba(0,0,0,0.3);
-    overflow: hidden; /* KHÔNG để scroll ở đây */
-">
-
-    <div class="d-flex justify-content-between mb-2">
-            <div class="d-flex justify-content-start mb-3 gap-2">
-                <button style="border-radius: 4px; margin-right: 10px; background-color: green; color: white;"
-                        id="btnExportExcel2"
-                        class="mui-button mui-button-new"
-                        type="button">
-                     Excel
-                </button>
-                   <button  id="btnPrintGrid2" class="mui-button mui-button-new" type="button">
-                    Print
-                </button>
-            </div>
-        <span onclick="$('#gridContainerInner2').fadeOut(200)"
-              style="cursor: pointer; font-size: 18px; color: BLACK;"
-              title="Close">
-            
-        </span>
-    </div>
-
-
-    <div style="text-align: center; margin-bottom: 10px;">
-        <strong>Housekeeping Department</strong><br>
-        <strong>R/A Evening Worksheet</strong>
-    </div>
-
-
-    <div id="logGridReportContainerrp2" style="overflow-x: auto; overflow-y: hidden; white-space: nowrap; height: calc(100% - 230px);">
-        <div style="font-size: 13px; margin-bottom: 20px;">
-            <table style="width: 100%; border-collapse: collapse;">
-                <tr>
-                    <td style="width: 15%;"><strong>Floor:</strong> ___________</td>
-                    <td style="width: 15%; text-align: center;"><strong>Special assignment:</strong> ___________</td>
-                    <td style="width: 15%; text-align: center;">
-                        <strong>Date:</strong> <span id="datepopreport2"></span>
-                    </td>
-
-                </tr>
-                <tr>
-                    <td colspan="3" style="padding-top: 10px;">
-                        <strong>Legends:</strong><br />
-                        <table style="width: 100%; border-collapse: collapse;">
+                    <!-- INFO + LEGENDS -->
+                    <div style="font-size:13px;margin-bottom:20px;">
+                        <table style="width:100%;border-collapse:collapse;">
                             <tr>
-                                <td><strong>VD</strong><br />Vacant Dirty</td>
-                                <td><strong>VC</strong><br />Vacant Clean</td>
-                                <td><strong>VM</strong><br />Vacant Maintenance</td>
-                                <td><strong>OD</strong><br />Occupied Dirty</td>
-                                <td><strong>OC</strong><br />Occupied Clean</td>
-                                <td><strong>RS</strong><br />Refused Service</td>
+                                <td style="width:15%;">
+                                    <strong>Floor:</strong> ___________
+                                </td>
+                                <td style="width:15%;text-align:center;">
+                                    <strong>Special assignment:</strong> ___________
+                                </td>
+                                <td style="width:15%;text-align:center;">
+                                    <strong>Date:</strong>
+                                    <span id="datepopreport2"></span>
+                                </td>
                             </tr>
+
                             <tr>
-                                <td><strong>DND</strong><br />Do Not Disturb</td>
-                                <td><strong>LB</strong><br />Light Baggage</td>
-                                <td><strong>ED</strong><br />Expected Departure</td>
-                                <td><strong>EA</strong><br />Expected Arrival</td>
-                                <td><strong>NB</strong><br />No Baggage</td>
-                                <td><strong>SO</strong><br />Slept Out</td>
+                                <td colspan="3" style="padding-top:10px;">
+                                    <strong>Legends:</strong><br />
+                                    <table style="width:100%;border-collapse:collapse;">
+                                        <tr>
+                                            <td><strong>VD</strong><br />Vacant Dirty</td>
+                                            <td><strong>VC</strong><br />Vacant Clean</td>
+                                            <td><strong>VM</strong><br />Vacant Maintenance</td>
+                                            <td><strong>OD</strong><br />Occupied Dirty</td>
+                                            <td><strong>OC</strong><br />Occupied Clean</td>
+                                            <td><strong>RS</strong><br />Refused Service</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>DND</strong><br />Do Not Disturb</td>
+                                            <td><strong>LB</strong><br />Light Baggage</td>
+                                            <td><strong>ED</strong><br />Expected Departure</td>
+                                            <td><strong>EA</strong><br />Expected Arrival</td>
+                                            <td><strong>NB</strong><br />No Baggage</td>
+                                            <td><strong>SO</strong><br />Slept Out</td>
+                                        </tr>
+                                    </table>
+                                </td>
                             </tr>
                         </table>
-                    </td>
-                </tr>
-            </table>
-        </div>
-        <div id="logGridReportContainer2" class="gridContainer mt-2"></div>
-    </div>
-
-</div>
-<div id="gridContainerInner3" style="
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: white;
-    padding: 20px;
-    z-index: 1055;
-    box-shadow: 0 0 10px rgba(0,0,0,0.3);
-    overflow: hidden; /* KHÔNG để scroll ở đây */
-">
-
-    <div class="d-flex justify-content-between mb-2">
-        <div class="d-flex justify-content-start mb-3 gap-2">
-            <button style="border-radius: 4px; margin-right: 10px; background-color: green; color: white;"
-                    id="btnExportExcel3"
-                    class="mui-button mui-button-new"
-                    type="button">
-                 Excel
-            </button>
-            <button  id="btnPrintGrid3" class="mui-button mui-button-new" type="button">
-                Print
-            </button>
-       </div>
-        <span onclick="$('#gridContainerInner3').fadeOut(200)"
-              style="cursor: pointer; font-size: 18px; color: BLACK;"
-              title="Close">
-            
-        </span>
-    </div>
-
-
-    <div style="text-align: center; margin-bottom: 10px;">
-        <strong>Housekeeping Department</strong><br>
-        <strong>Supervisor Hoor Checklist</strong>
-    </div>
- 
-
-    <div id="logGridReportContainerrp3" style="overflow-x: auto; overflow-y: hidden; white-space: nowrap; height: calc(100% - 125px);">
-           <div style="font-size: 13px; margin-bottom: 20px;">
-        <table style="width: 100%; border-collapse: collapse;">
-            <tr>
-                <td style="width: 15%;"><strong>Name:</strong> ___________</td>
-                <td style="width: 15%; text-align: center;"><strong>Floor:</strong> <span id="floorDisplay3"></span></td>
-                <td style="width: 15%; text-align: center;">
-                    <strong>Date:</strong> <span id="datepopreport3"></span>
-                </td>
-                <td style="width: 15%;"><strong>Shift:</strong> ___________</td>
-            </tr>
-      
-        </table>
-    </div>
-        <div id="logGridReportContainer3" class="gridContainer mt-2"></div>
-    </div>
-
-</div>
-
-<div id="popupNewGrid" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; transform: none; background: white; padding: 20px; border-radius: 0; z-index: 1050; box-shadow: 0 0 10px rgba(0,0,0,0.3); min-width: unset; max-height: unset; overflow-y: auto;">
-    <div class="d-flex justify-content-between mb-2">
-        <h5 id="attendantPointTitle" class="mb-0">Turndown Task Sheet Grid</h5>
-
-    </div>
-    <div class="d-flex justify-content-start mb-3 gap-2">
-        <button  id="btnExportpopExcel" class="mui-button mui-button-new" type="button">  Excel</button>
-
-        <button onclick="$('#popupNewGrid').hide()" id="btnClosePopup" class="mui-button mui-button-new" >
-             Close
-        </button>
-    </div>
-    <div class=" mb-2">
-        <div class="d-flex align-items-center flex-wrap mb-2">
-            <div class="d-flex flex-column">
-                <div class="d-flex align-items-center me-3">
-                    <label class="mb-1 me-2">Room Status: </label>
-
-                    <!-- Clean Uncheck -->
-                    <div class="form-check me-3">
-                        <span class="status-color-box color-ocn"></span>
-                        <input class="form-check-input" type="checkbox" id="OCN" name="includeOptions" value="1" checked>
-                        <label class="form-check-label" for="cleanUncheck">OCN</label>
                     </div>
 
-                    <!-- Dirty -->
-                    <div class="form-check me-3">
-                        <span class="status-color-box color-OC"></span>
-                        <input class="form-check-input" type="checkbox" id="OC" name="includeOptions" value="2" checked>
-                        <label class="form-check-label" for="OC">OC</label>
-                    </div>
+                    <!-- GRID -->
+                    <div id="logGridReportContainer2"
+                         class="gridContainer mt-2"></div>
 
-                    <!-- Out of Order -->
-                    <div class="form-check me-3">
-                        <span class="status-color-box color-OD"></span>
-                        <input class="form-check-input" type="checkbox" id="OD" name="includeOptions" value="5" checked>
-                        <label class="form-check-label" for="OD">OD</label>
-                    </div>
-
-                    <!-- Pickup -->
-                    <div class="form-check me-3">
-                        <span class="status-color-box color-DO"></span>
-                        <input class="form-check-input" type="checkbox" id="DO" name="includeOptions" value="3" checked>
-                        <label class="form-check-label" for="DO">DO</label>
-                    </div>
-
-                    <!-- Clean -->
-                    <div class="form-check me-3">
-                        <span class="status-color-box color-VCN"></span>
-                        <input class="form-check-input" type="checkbox" id="VCN" name="includeOptions" value="4" checked>
-                        <label class="form-check-label" for="VCN">VCN</label>
-                    </div>
-
-                    <!-- Out of Services -->
-                    <div class="form-check me-3">
-                        <span class="status-color-box color-VC"></span>
-                        <input class="form-check-input" type="checkbox" id="VC" name="includeOptions" value="6" checked>
-                        <label class="form-check-label" for="VC">VC</label>
-                    </div>
-                    <div class="form-check me-3">
-                        <span class="status-color-box color-VD"></span>
-                        <input class="form-check-input" type="checkbox" id="VD" name="includeOptions" value="6" checked>
-                        <label class="form-check-label" for="VD">VD</label>
-                    </div>
-
-                    <div class="form-check me-3">
-                        <span class="status-color-box color-OOO"></span>
-                        <input class="form-check-input" type="checkbox" id="VD" name="includeOptions" value="6" checked>
-                        <label class="form-check-label" for="OOO">OOO</label>
-                    </div>
                 </div>
-            </div>
-        
-            <div class="d-flex align-items-center me-3">
-                <label class="me-2 mb-0">Zone:</label>
-                <select id="zoneexpan" name="zoneexpan" class="form-control form-control-sm w-auto">
-                    <option value=""></option>
-                    @foreach (var item in listzone)
-                    {
-                        <option value="@item.Code">@item.Name</option>
-                    }
-                </select>
-
-            </div>
-            <div class="d-flex align-items-center me-3">
-                <label class="me-2 mb-0"> Code:</label>
-                <select id="taskcodeExpanded" name="taskcodeExpanded" class="form-control form-control-sm w-auto">
-                    <option value=""></option>
-                    @foreach (var item in listhkpFT)
-                    {
-                        <option value="@item.Code">@item.Description</option>
-                    }
-                </select>
-
-            </div>
-            <div class="d-flex align-items-center me-3">
-                <label class="me-2 mb-0"> Section:</label>
-                <select id="hkpSectionExpanded" name="hkpSectionExpanded" class="form-control form-control-sm w-auto">
-                    <option value=""></option>
-                    @foreach (var item in hkpSectionlist)
-                    {
-                        <option value="@item.ID">@item.Code</option>
-                    }
-                </select>
 
             </div>
         </div>
-      <div class="d-flex align-items-center flex-wrap mb-2" style= padding: 5px;">
-            <div class="me-3"><span class="status-symbol">!</span> Arrival</div>
-            <div class="me-3"><span class="status-symbol">$</span> Due out</div>
-            <div class="me-3"><span class="status-symbol">*</span> Stayover</div>
-            <div class="me-3"><span class="status-symbol">%</span> Back to back</div>
-      </div>
-
-    </div>
-
-
-    <div id="logGridReportContainerExpanded" class="gridContainer mt-2 popup-scroll-container">
-        <!-- Nội dung bảng hoặc grid sẽ được render tại đây -->
     </div>
 </div>
+
+
+<div class="modal fade" id="gridContainerInner3" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content">
+
+            <!-- HEADER -->
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Housekeeping Department
+                </h5>
+            </div>
+
+            <!-- BODY -->
+            <div class="modal-body p-3" style="overflow:hidden;">
+
+                <!-- TOOLBAR -->
+                <div class="d-flex gap-2 mb-2">
+                    <button id="btnExportExcel3"
+                            class="mui-button mui-button-new"
+                            type="button">
+                        Excel
+                    </button>
+
+                    <button id="btnPrintGrid3"
+                            class="mui-button mui-button-new"
+                            type="button">
+                        Print
+                    </button>
+
+                    <button type="button"
+                            id="btnCloseGridModal3"
+                            class="mui-button mui-button-new">
+                        Close
+                    </button>
+                </div>
+
+                <!-- TITLE -->
+                <div class="text-center mb-2">
+                    <strong>Housekeeping Department</strong><br />
+                    <strong>Supervisor Hour Checklist</strong>
+                </div>
+
+                <!-- SCROLL AREA -->
+                <div id="logGridReportContainerrp3"
+                     style="overflow-x:auto;
+                            overflow-y:hidden;
+                            white-space:nowrap;
+                            height:calc(100vh - 220px);">
+
+                    <!-- INFO -->
+                    <div style="font-size:13px;margin-bottom:20px;">
+                        <table style="width:100%;border-collapse:collapse;">
+                            <tr>
+                                <td style="width:15%;">
+                                    <strong>Name:</strong> ___________
+                                </td>
+                                <td style="width:15%;text-align:center;">
+                                    <strong>Floor:</strong>
+                                    <span id="floorDisplay3"></span>
+                                </td>
+                                <td style="width:15%;text-align:center;">
+                                    <strong>Date:</strong>
+                                    <span id="datepopreport3"></span>
+                                </td>
+                                <td style="width:15%;">
+                                    <strong>Shift:</strong> ___________
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- GRID -->
+                    <div id="logGridReportContainer3"
+                         class="gridContainer mt-2"></div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="popupNewGrid" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content" style="height:90vh;">
+
+            <!-- HEADER -->
+            <div class="modal-header">
+                <h5 id="attendantPointTitle" class="modal-title">
+                    Turndown Task Sheet Grid
+                </h5>
+            </div>
+
+            <!-- BODY -->
+            <div class="modal-body p-3" style="overflow:hidden;">
+
+                <!-- TOOLBAR -->
+                <div class="d-flex justify-content-start mb-3 gap-2">
+                    <button id="btnExportpopExcel"
+                            class="mui-button mui-button-new"
+                            type="button">
+                        Excel
+                    </button>
+
+                    <button id="btnClosePopupExpanded"
+                            class="mui-button mui-button-new"
+                            type="button">
+                        Close
+                    </button>
+                </div>
+
+                <!-- FILTERS -->
+                <div class="mb-2">
+
+                    <!-- ROOM STATUS -->
+                    <div class="d-flex align-items-center flex-wrap mb-2">
+                        <label class="me-2 mb-0 fw-bold">Room Status:</label>
+
+                        <div class="form-check me-3">
+                            <span class="status-color-box color-ocn"></span>
+                            <input class="form-check-input" type="checkbox" id="OCN" value="1" checked>
+                            <label class="form-check-label">OCN</label>
+                        </div>
+
+                        <div class="form-check me-3">
+                            <span class="status-color-box color-OC"></span>
+                            <input class="form-check-input" type="checkbox" id="OC" value="2" checked>
+                            <label class="form-check-label">OC</label>
+                        </div>
+
+                        <div class="form-check me-3">
+                            <span class="status-color-box color-OD"></span>
+                            <input class="form-check-input" type="checkbox" id="OD" value="5" checked>
+                            <label class="form-check-label">OD</label>
+                        </div>
+
+                        <div class="form-check me-3">
+                            <span class="status-color-box color-DO"></span>
+                            <input class="form-check-input" type="checkbox" id="DO" value="3" checked>
+                            <label class="form-check-label">DO</label>
+                        </div>
+
+                        <div class="form-check me-3">
+                            <span class="status-color-box color-VCN"></span>
+                            <input class="form-check-input" type="checkbox" id="VCN" value="4" checked>
+                            <label class="form-check-label">VCN</label>
+                        </div>
+
+                        <div class="form-check me-3">
+                            <span class="status-color-box color-VC"></span>
+                            <input class="form-check-input" type="checkbox" id="VC" value="6" checked>
+                            <label class="form-check-label">VC</label>
+                        </div>
+
+                        <div class="form-check me-3">
+                            <span class="status-color-box color-VD"></span>
+                            <input class="form-check-input" type="checkbox" id="VD" value="7" checked>
+                            <label class="form-check-label">VD</label>
+                        </div>
+
+                        <div class="form-check me-3">
+                            <span class="status-color-box color-OOO"></span>
+                            <input class="form-check-input" type="checkbox" id="OOO" value="8" checked>
+                            <label class="form-check-label">OOO</label>
+                        </div>
+                    </div>
+
+                    <!-- DROPDOWNS -->
+                    <div class="d-flex align-items-center flex-wrap gap-3 mb-2">
+
+                        <div class="d-flex align-items-center">
+                            <label class="me-2 mb-0">Zone:</label>
+                            <select id="zoneexpan" class="form-control form-control-sm" style="width:160px">
+                                <option value=""></option>
+                                @foreach (var item in listzone)
+                                {
+                                    <option value="@item.Code">@item.Name</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="d-flex align-items-center">
+                            <label class="me-2 mb-0">Code:</label>
+                            <select id="taskcodeExpanded" class="form-control form-control-sm" style="width:200px">
+                                <option value=""></option>
+                                @foreach (var item in listhkpFT)
+                                {
+                                    <option value="@item.Code">@item.Description</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="d-flex align-items-center">
+                            <label class="me-2 mb-0">Section:</label>
+                            <select id="hkpSectionExpanded" class="form-control form-control-sm" style="width:160px">
+                                <option value=""></option>
+                                @foreach (var item in hkpSectionlist)
+                                {
+                                    <option value="@item.ID">@item.Code</option>
+                                }
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <!-- SYMBOL LEGEND -->
+                    <div class="d-flex align-items-center flex-wrap mb-2 ps-1">
+                        <div class="me-3"><span class="status-symbol">!</span> Arrival</div>
+                        <div class="me-3"><span class="status-symbol">$</span> Due out</div>
+                        <div class="me-3"><span class="status-symbol">*</span> Stayover</div>
+                        <div class="me-3"><span class="status-symbol">%</span> Back to back</div>
+                    </div>
+
+                </div>
+
+                <!-- GRID -->
+                <div id="logGridReportContainerExpanded"
+                     class="gridContainer mt-2"
+                     style="height:calc(90vh - 300px);">
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="popupFullScreen" style="display: none; position: fixed; top: 50%; left: 50%;
     transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 10px;
     z-index: 1050; box-shadow: 0 0 10px rgba(0,0,0,0.3); width: 100vw; max-width: 100vw; max-height: 800px; overflow-y: auto;
@@ -1260,157 +1418,171 @@
         <!-- Chừa padding-top 50px để nút X không che nội dung -->
     </div>
 </div>
-<div id="popupAuTo"
-     style="display:none; position:fixed; top:50%; left:50%;
-     transform:translate(-50%, -50%);
-     background:#fff; padding:16px;
-     border-radius:10px; z-index:1050;
-     width:654px; min-height:400px;
-     box-shadow:0 0 10px rgba(0,0,0,.3);">
+<div class="modal fade" id="popupAuTo" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+         style="max-width: 680px;">
+        <div class="modal-content" style="border-radius:10px;">
 
-    <!-- HEADER -->
-    <div class="d-flex justify-content-between mb-2">
-        <h5 class="mb-0">Automatic Generation of Tasks</h5>
-    </div>
+            <!-- HEADER -->
+            <div class="modal-header">
+                <h5 class="modal-title">Automatic Generation of Tasks</h5>
+            </div>
 
-    <!-- BUTTON -->
-    <div class="d-flex justify-content-start mb-3 gap-2"> <button style="border-radius: 4px; margin-right: 6px;" id="btnSaveAuto" class="mui-button mui-button-new" type="button"> Ok</button> <button onclick="$('#popupAuTo').hide()" id="btnClosePopup" class="btn btn-sm btn-danger" style=" border-radius: 4px;">  Close </button> </div>
+            <!-- BODY -->
+            <div class="modal-body">
 
-    <!-- FILTER -->
-    <div class="sticky-header bg-white p-2">
-
-        <div class="filter-grid">
-
-            <!-- COLUMN 1 -->
-            <div class="filter-col">
-                <div class="form-row">
-                    <label>Task Date</label>
-                    <input type="date" id="taskdateauto"
-                           class="form-control form-control-sm">
+                <!-- BUTTON -->
+                <div class="d-flex justify-content-start mb-3 gap-2">
+                    <button id="btnSaveAuto"
+                            class="mui-button mui-button-new"
+                            type="button">
+                        Ok
+                    </button>
+                    <button id="btnClosePopupAuto"
+                            type="button"
+                            class="mui-button mui-button-new">
+                        Close
+                    </button>
                 </div>
 
-                <div class="form-row">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="includeroomAS">
-                        <label class="form-check-label">Include Room Assigned</label>
+                <!-- FILTER -->
+                <div class="sticky-header bg-white p-2">
+
+                    <div class="filter-grid">
+
+                        <!-- COLUMN 1 -->
+                        <div class="filter-col">
+                            <div class="form-row">
+                                <label>Task Date</label>
+                                <input type="date" id="taskdateauto"
+                                       class="form-control form-control-sm">
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="includeroomAS">
+                                    <label class="form-check-label">Include Room Assigned</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- COLUMN 2 -->
+                        <div class="filter-col">
+                            <div class="form-row">
+                                <label>Floor</label>
+                                <select id="floorauto" class="tomselect-custom" multiple>
+                                    @foreach (var item in listflo)
+                                    {
+                                        <option value="@item.Code">@item.Code</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="form-row">
+                                <label>Room Type</label>
+                                <select id="roomTypeauto" class="tomselect-custom" multiple>
+                                    @foreach (var item in listrt)
+                                    {
+                                        <option value="@item.Code">@item.Code</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- COLUMN 3 -->
+                        <div class="filter-col">
+                            <div class="form-row">
+                                <label>Zone</label>
+                                <select id="zonecodeauto" class="tomselect-custom" multiple>
+                                    @foreach (var item in listzone)
+                                    {
+                                        <option value="@item.Code">@item.Code</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="form-row">
+                                <label>Sub Zone</label>
+                                <select id="subzonecodeauto" class="form-control form-control-sm">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- COLUMN 4 -->
+                        <div class="filter-col">
+                            <div class="form-row">
+                                <label>Task Code</label>
+                                <select id="taskcodeauto" class="tomselect-custom" multiple>
+                                    @foreach (var item in listhkpFT)
+                                    {
+                                        <option value="@item.ID">@item.Code</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="form-row">
+                                <label>Attendant</label>
+                                <select id="attendantauto" class="tomselect-custom" multiple>
+                                    @foreach (var item in listatt)
+                                    {
+                                        <option value="@item.ID">@item.Name</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- COLUMN 5 -->
+                        <div class="filter-col">
+                            <div class="form-row">
+                                <label>Max Credits</label>
+                                <input type="text" id="maxcreditauto"
+                                       class="form-control form-control-sm" value="0">
+                            </div>
+
+                            <div class="form-row">
+                                <label>Description</label>
+                                <input type="text" id="descriptionauto"
+                                       class="form-control form-control-sm">
+                            </div>
+                        </div>
+
                     </div>
+
+                    <!-- ROOM STATUS -->
+                    <div class="mt-2 d-flex flex-wrap">
+                        <div class="form-check me-3">
+                            <input class="form-check-input" type="checkbox" id="vcAuto">
+                            <label class="form-check-label">VC</label>
+                        </div>
+                        <div class="form-check me-3">
+                            <input class="form-check-input" type="checkbox" id="vcnAuto">
+                            <label class="form-check-label">VCN</label>
+                        </div>
+                        <div class="form-check me-3">
+                            <input class="form-check-input" type="checkbox" id="vdAuto">
+                            <label class="form-check-label">VD</label>
+                        </div>
+                        <div class="form-check me-3">
+                            <input class="form-check-input" type="checkbox" id="doAuto" checked>
+                            <label class="form-check-label">DO</label>
+                        </div>
+                        <div class="form-check me-3">
+                            <input class="form-check-input" type="checkbox" id="ocAuto">
+                            <label class="form-check-label">OC</label>
+                        </div>
+                        <div class="form-check me-3">
+                            <input class="form-check-input" type="checkbox" id="arrivalOnly">
+                            <label class="form-check-label">Arrival Only</label>
+                        </div>
+                    </div>
+
                 </div>
-            </div>
-
-            <!-- COLUMN 2 -->
-            <div class="filter-col">
-                <div class="form-row">
-                    <label>Floor</label>
-                    <select id="floorauto" class="tomselect-custom" multiple>
-                        @foreach (var item in listflo)
-                        {
-                            <option value="@item.Code">@item.Code</option>
-                        }
-                    </select>
-                </div>
-
-                <div class="form-row">
-                    <label>Room Type</label>
-                    <select id="roomTypeauto" class="tomselect-custom" multiple>
-                        @foreach (var item in listrt)
-                        {
-                            <option value="@item.Code">@item.Code</option>
-                        }
-                    </select>
-                </div>
-            </div>
-
-            <!-- COLUMN 3 -->
-            <div class="filter-col">
-                <div class="form-row">
-                    <label>Zone</label>
-                    <select id="zonecodeauto" class="tomselect-custom" multiple>
-                        @foreach (var item in listzone)
-                        {
-                            <option value="@item.Code">@item.Code</option>
-                        }
-                    </select>
-                </div>
-
-                <div class="form-row">
-                    <label>Sub Zone</label>
-                    <select id="subzonecodeauto"
-                            class="form-control form-control-sm">
-                        <option value=""></option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- COLUMN 4 -->
-            <div class="filter-col">
-                <div class="form-row">
-                    <label>Task Code</label>
-                    <select id="taskcodeauto" class="tomselect-custom" multiple>
-                        @foreach (var item in listhkpFT)
-                        {
-                            <option value="@item.ID">@item.Code</option>
-                        }
-                    </select>
-                </div>
-
-                <div class="form-row">
-                    <label>Attendant</label>
-                    <select id="attendantauto" class="tomselect-custom" multiple>
-                        @foreach (var item in listatt)
-                        {
-                            <option value="@item.ID">@item.Name</option>
-                        }
-                    </select>
-                </div>
-            </div>
-
-            <!-- COLUMN 5 -->
-            <div class="filter-col">
-                <div class="form-row">
-                    <label>Max Credits</label>
-                    <input type="text" id="maxcreditauto"
-                           class="form-control form-control-sm" value="0">
-                </div>
-
-                <div class="form-row">
-                    <label>Description</label>
-                    <input type="text" id="descriptionauto"
-                           class="form-control form-control-sm">
-                </div>
-            </div>
-
-        </div>
-
-        <!-- ROOM STATUS -->
-        <div class="mt-2 d-flex flex-wrap">
-            <div class="form-check me-3">
-                <input class="form-check-input" type="checkbox" id="vcAuto">
-                <label class="form-check-label">VC</label>
-            </div>
-            <div class="form-check me-3">
-                <input class="form-check-input" type="checkbox" id="vcnAuto">
-                <label class="form-check-label">VCN</label>
-            </div>
-            <div class="form-check me-3">
-                <input class="form-check-input" type="checkbox" id="vdAuto">
-                <label class="form-check-label">VD</label>
-            </div>
-            <div class="form-check me-3">
-                <input class="form-check-input" type="checkbox" id="doAuto" checked>
-                <label class="form-check-label">DO</label>
-            </div>
-            <div class="form-check me-3">
-                <input class="form-check-input" type="checkbox" id="ocAuto">
-                <label class="form-check-label">OC</label>
-            </div>
-            <div class="form-check me-3">
-                <input class="form-check-input" type="checkbox" id="arrivalOnly">
-                <label class="form-check-label">Arrival Only</label>
             </div>
         </div>
-
     </div>
 </div>
+
 
 
 <div class="mui-card">
@@ -1707,6 +1879,22 @@
 
             }
         }
+        $("#btnCloseGridModal").on("click", function () {
+            $("#gridContainerInner").modal("hide");
+        });
+
+        $("#btnCloseGridModal2").on("click", function () {
+            $("#gridContainerInner2").modal("hide");
+        });
+
+         $("#btnCloseGridModal3").on("click", function () {
+            $("#gridContainerInner3").modal("hide");
+        });
+
+        $("#btnClosePopupnew").on("click", function () {
+            $("#popupNewGridNew").modal("hide");
+        });
+
          function initializeTomSelectZoneAd() {
             const selectors = ["#zoneAd"];
 
@@ -1733,22 +1921,28 @@
             }
         }
          $('#btnClosePopup, #overlay').click(function () {
-                $('#popupNewGrid').fadeOut(200);
-                $('#overlay').fadeOut(200);
+
+                
+                $("#popupNewGridReport").modal("hide");
            });
 
-              $("#btnReport").on("click", function () {
-                   $('#overlay').fadeIn(200);
-                    $('#popupNewGridReport').fadeIn(200);
-            });
-                  $("#btnAutotasksheet").on("click", function () {
-                   $('#overlay').fadeIn(200);
-                    $('#popupAuTo').fadeIn(200);
+            $("#btnReport").on("click", function () {
+                $("#popupNewGridReport").modal("show");
             });
 
-              $("#btnAddtasksheet").on("click", function () {
-                   $('#overlay').fadeIn(200);
-                    $('#popupNewGridNew').fadeIn(200);
+            $("#btnAutotasksheet").on("click", function () {
+                   
+                $("#popupAuTo").modal("show");
+            });
+
+            // Close
+            $("#btnClosePopupAuto").on("click", function () {
+                $("#popupAuTo").modal("hide");
+            });
+
+            $("#btnAddtasksheet").on("click", function () {
+                   
+                    $('#popupNewGridNew').modal("show");
                       $("#taskcodenewshow").show();
                     $("#attendantshow").show();
                     var tomselectInstance = $("#taskcodenew")[0].tomselect;
@@ -1765,8 +1959,8 @@
            });
 
               $("#btnDetailtasksheet").on("click", function () {
-                   $('#overlay').fadeIn(200);
-                    $('#popupNewGridNew').fadeIn(200);
+                   
+                        $('#popupNewGridNew').modal("show");
                       $("#taskcodenewshow").hide();
                     $("#attendantshow").hide();
                     var tomselectInstance = $("#taskcodenew")[0].tomselect;
@@ -1785,16 +1979,20 @@
                     ViewTaskDetailGrid(selectedRowDataTS[0].id)
            });
 
-           $("#btnAddUsertasksheet,#btnAddUserDetailtasksheet").on("click", function () {
-                $('#popupNewGridAddUser').css('z-index', 2000);
-                   $('#overlay').fadeIn(200);
-                    $('#popupNewGridAddUser').fadeIn(200);                 
-                              if (!selectedRowDataTS) {
-                               showToast('Error', 'Please select at least one row before deleting.', false);
-                                return;
-                            }
-                    ViewTaskAddUserGrid();
+           $("#btnAddUsertasksheet,#btnAddUserDetailtasksheet").on("click", function () {  
+                if (!selectedRowDataTS) {
+                    showToast('Warning', 'Please select at least one row.', false);
+                    return;
+                }
+                $("#popupNewGridAddUser").modal("show");
+                $("#popupNewGridNew").modal("hide");
+                 ViewTaskAddUserGrid();
             });
+
+            $("#btnClosePopupAddUser").on("click", function () {
+                $("#popupNewGridAddUser").modal("hide");
+            });
+
             $(document).on("click", "#btnClosePopupFG", function () {
                    $("#popupFullScreen").hide();
             });
@@ -1808,6 +2006,7 @@
                     type: 'GET',
                     data: { isPopup: true, tasksheetnew: tasksheetnew },
                     success: function (html) {
+                         $('#popupNewGridNew').modal("hide");
                         $("#popupContent").html(html).show(); 
                          $("#popupContent script").each(function () {
                                 eval($(this).text() || this.textContent || this.innerHTML || "");
@@ -2070,7 +2269,7 @@
                         headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
                     success: function (result) {
                            showToast('Success', result.message, true);
-                           $('#popupNewGridAddUser').hide();
+                               $("#popupNewGridAddUser").modal("hide");
                             $("#loadingSpinner").hide();
                             $("#btnPrint").trigger("click");
                     },
@@ -2083,9 +2282,13 @@
            });
 
             $("#btnExpanded").on("click", function () {
-                   $('#overlay').fadeIn(200);
-                    $('#popupNewGrid').fadeIn(200);
-                     ExpandedTaskSheet();
+
+                $("#popupNewGrid").modal("show");
+                ExpandedTaskSheet();
+            });
+
+                $("#btnClosePopupExpanded").on("click", function () {
+                $("#popupNewGrid").modal("hide");
             });
 
             $("#btnViewpopExcel").on("click", function () {
@@ -2093,13 +2296,13 @@
             });
 
             $("#btnAddRoomtasksheet").on("click", function () {
-                   $('#overlay').fadeIn(200);
+                   
                    $('#popupNewGridAddRoom').fadeIn(200);
                    var tasksheetroom= $("#tasksheetnew").val();
                     $("#tasksheetroom").val(tasksheetroom);
             });
               $("#detailturndowwn").on("click", function () {
-               $('#overlay').fadeIn(200);
+               
                    $('#popupNewGridTurndown').fadeIn(200);
                     $("#logGriTurndownContainer").dxDataGrid({
                             dataSource: null // or []
@@ -2442,7 +2645,7 @@
                     const roomIds = selectedRows.map(row => row.roomID).filter(Boolean);
                     $("#roomturndownHidden").val(roomIds.join(",")); // bạn phải thêm input hidden này trong HTML
 
-                    $('#overlay').fadeOut(200);
+                    
                     $('#popupNewGridTurndown').fadeOut(200);
               });
 
@@ -2526,15 +2729,15 @@
                     // $("#loadingSpinner").hide();
                             console.log(result);
                         if ($("#reportstyle").val() == "1")
-                        {    $("#gridContainerInner").fadeIn(200);
+                            {       $("#gridContainerInner").modal("show");
                             initializeRoomAttendantDailyWorkSheetGrid(result);
                         }
                         else if ($("#reportstyle").val() == "2")
-                        {    $("#gridContainerInner2").fadeIn(200);
+                        {    $("#gridContainerInner2").modal("show");
                             initializeRAWorkSheetGrid(result);
                         }
                         else if ($("#reportstyle").val() == "3")
-                        {  $("#gridContainerInner3").fadeIn(200);
+                            {  $("#gridContainerInner3").modal("show");
                             initializeSupChecklistFloorGrid(result);
                         }
 
@@ -3269,7 +3472,7 @@
                 { dataField: "status", caption: "Status", width: columnWidth+20 },
                         { dataField: "taskCode", caption: "Task Code", width: columnWidth+70 },
                 { dataField: "employee", caption: "Employee", width: columnWidth +70},
-                { dataField: "taskInstructions", caption: "Task Instructions", width: columnWidth+70 },
+                { dataField: "taskInstructions", caption: "Task Instructions", width: columnWidth+90 },
                   { dataField: "attendant", caption: "Attendant", width: columnWidth +70},
             ],
 

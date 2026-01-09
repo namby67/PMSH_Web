@@ -1,5 +1,5 @@
 ﻿:root {
-    --primary-dark: #009444;
+    --primary-dark: #027C75;
     --primary-medium: #70b094;
     --primary-light: #a3c4a3;
     --bg-body: #f4f8f4;
@@ -185,6 +185,21 @@
     border: 1px solid #e5e7eb;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);*/
 }
+.reservation-audit {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); /* 6 cột bằng nhau */
+    align-items: center;
+  
+    padding: 6px 10px;
+}
+
+    .reservation-audit span {
+        text-align: center; /* căn giữa mỗi block */
+        white-space: nowrap;
+        color:black;
+    }
+
+  
 
 .header2 {
   display: flex;
@@ -233,11 +248,6 @@
   margin-bottom: 10px;
   padding-bottom: 2px;
   border-bottom: 1px solid var(--main-color);
-}
-
-.modal-body {
-  padding-top: 0px;
-  margin-top: 0px;
 }
 
 .form-group {
@@ -652,9 +662,9 @@ button:hover {
 }
 
 input[type="checkbox"] {
-  width: 16px;
-  height: 16px;
-  accent-color: #027C75;
+    width: 16px;
+    height: 16px;
+    accent-color: #027C75;
 }
 
 .specials-section-new-reservation {
@@ -681,12 +691,12 @@ textarea {
 }
 
 .submit-button-clear-reservation {
-  grid-column: span 2;
-  padding: 6px 12px;
-  font-size: 16px;
-  background-color: white;
-  color: #027C75;
-  border: 1px solid #027C75;
+    grid-column: span 2;
+    padding: 6px 12px;
+    font-size: 16px;
+    background-color: white;
+    color: #027C75;
+    border: 1px solid #027C75;
 }
 
 .box-function {
@@ -788,11 +798,11 @@ textarea {
   display: block;
 }
 
-.toolbar-menu a:hover {
-  background: #ffffff;
-  color: #027C75;
-  border: 1px solid #027C75;
-}
+    .toolbar-menu a:hover {
+        background: #ffffff;
+        color: #027C75;
+        border: 1px solid #027C75;
+    }
 
 .submenu {
   background: #ffffff;
@@ -902,7 +912,7 @@ textarea {
 }
 
 
-/* --- MODAL STYLES DÙNG CHO CÁC MODAL CON CỦA BILLING --- */
+/* --- MODAL STYLES DÙNG CHO CÁC MODAL TRONG APP --- */
 
 .modal-backdrop.show {
     opacity: 0.75 !important;

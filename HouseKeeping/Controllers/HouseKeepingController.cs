@@ -1833,6 +1833,7 @@ namespace HouseKeeping.Controllers
         [HttpGet]
         public IActionResult AttendantPointData(DateTime fromDate, DateTime toDate, string attendant)
         {
+            attendant = attendant ?? "";
             try
             {
                 var attendantPointData = hkpAttendantPointBO.GethkpAttendantPoint(fromDate, toDate, attendant);
@@ -1842,13 +1843,13 @@ namespace HouseKeeping.Controllers
                               select new
                               {
                                   ID = !string.IsNullOrEmpty(d["ID"].ToString()) ? d["ID"].ToString() : "",
-                                  AttendantDate = d["AttendantDate"]?.ToString() ?? "",
+                                  AttendantDate = d["AttendantDate"] == DBNull.Value  ? "" : Convert.ToDateTime(d["AttendantDate"]).ToString("dd/MM/yyyy"),
                                   AttendantID = d["AttendantID"]?.ToString() ?? "",
                                   Points = d["Points"]?.ToString() ?? "",
                                   CreatedBy = d["CreatedBy"]?.ToString() ?? "",
-                                  CreatedDate = d["CreatedDate"]?.ToString() ?? "",
+                                  CreatedDate = d["CreatedDate"] == DBNull.Value ? "" : Convert.ToDateTime(d["CreatedDate"]).ToString("dd/MM/yyyy"),
                                   UpdatedBy = d["UpdatedBy"]?.ToString() ?? "",
-                                  UpdatedDate = d["UpdatedDate"]?.ToString() ?? ""
+                                  UpdatedDate = d["UpdatedDate"] == DBNull.Value ? "" : Convert.ToDateTime(d["UpdatedDate"]).ToString("dd/MM/yyyy"),
                               }).ToList();
 
                 return Json(result);

@@ -23,15 +23,21 @@ namespace BaseBusiness.BO
         {
             get { return instance; }
         }
-        public static List<hkpAttendantPointModel> GethkpAttendantPoint(DateTime fromDate, DateTime toDate, string attendant)
+        public static List<hkpAttendantPointModel> GethkpAttendantPoint(
+          DateTime fromDate,
+          DateTime toDate,
+          string attendant)
         {
             string query = "SELECT * FROM hkpAttendantPoint WHERE 1=1";
 
             if (fromDate > DateTime.MinValue && toDate > DateTime.MinValue)
             {
+                string from = fromDate.ToString("yyyy/MM/dd");
+                string to = toDate.AddDays(1).ToString("yyyy/MM/dd");
+
                 query += $@"
-            AND DATEDIFF(DAY, AttendantDate, '{fromDate}') <= 0 
-            AND DATEDIFF(DAY, AttendantDate, '{toDate}') >= 0";
+            AND AttendantDate >= '{from}'
+            AND AttendantDate <  '{to}'";
             }
 
             if (!string.IsNullOrWhiteSpace(attendant))
@@ -41,6 +47,7 @@ namespace BaseBusiness.BO
 
             return instance.GetList<hkpAttendantPointModel>(query);
         }
+
 
 
     }

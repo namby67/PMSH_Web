@@ -430,28 +430,36 @@
 
     </div>
 </div>
-<div id="overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 999;"></div>
+<div class="modal fade" id="popupNewGrid" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content" style="max-height:800px;">
 
-<div id="popupNewGrid"
-    style="display: none; position: fixed; top: 50%; left: 50%;
-    transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 10px;
-    z-index: 1050; box-shadow: 0 0 10px rgba(0,0,0,0.3);   width: 100vw; max-width: 100vw; max-height: 800px; overflow-y: auto;">
+            <!-- HEADER -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="attendantPointTitle">
+                    Turndown Tasksheet
+                </h5>
+              
+            </div>
 
-    <div class="d-flex justify-content-between mb-2">
-        <h5 id="attendantPointTitle" class="mb-0">Turndown Tasksheet</h5>
+            <!-- BODY -->
+            <div class="modal-body p-3" style="overflow:auto;">
+                <div class="d-flex justify-content-start mb-3 gap-2">
+                    <button id="btnExportpopExcel"
+                            class="mui-button mui-button-new"
+                            type="button">
+                        Excel
+                    </button>
+                    <button type="button" id="btnClosePopup" class="mui-button mui-button-new">Close</button>
+                </div>
 
+                <div id="logGridContainer"
+                     class="gridContainer mt-2">
+                </div>
+            </div>
+
+        </div>
     </div>
-    <div class="d-flex justify-content-start mb-3 gap-2">
-        <button id="btnExportpopExcel" class="mui-button mui-button-new" type="button">   Excel</button>
-
-        <button onclick="$('#popupNewGrid').hide()" id="btnClosePopup" class="btn btn-sm btn-danger">
-             Close
-        </button>
-    </div>
-
-
-
-    <div id="logGridContainer" class="gridContainer mt-2"></div>
 </div>
 
 <div class="mui-card">
@@ -473,18 +481,7 @@
     $(document).ready(function () {
 
         document.getElementById("reportTitle").innerText = 'Room Attendent Daily Worksheet';
-        var businessDateStr = '@ViewBag.BusinessDate'; // Ví dụ: '8/29/2024 12:00:00 AM'
-        console.log(businessDateStr);
-        // Lấy phần ngày tháng năm
-        var dateOnly = businessDateStr.split(' ')[0]; // '8/29/2024'
-        var dateParts = dateOnly.split('/'); // ['8', '29', '2024']
-
-        // Parse đúng thứ tự: new Date(year, monthIndex, day)
-        parsedBusinessDate = new Date(dateParts[2], dateParts[0] - 1, dateParts[1]);
-
-        // Gán vào input type="date"
-        $('#fromDate').val(formatDate(parsedBusinessDate));
-
+              getBusinessDate();
         initializeTomSelects();
         // initializeTomSelectstasksheet();
         var taskSheetNew = '@(ViewBag.TaskSheetNew ?? "")';
@@ -500,14 +497,34 @@
         $("#btnPrint").trigger("click");
 
     });
+
+     function getBusinessDate() {
+        return $.ajax({
+            url: '/Reservation/GetBusinessDate',
+            type: 'get',
+            dataType: 'json',
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+
+                 const fromDateStr = result.split('T')[0];
+                $('#fromDate').val(fromDateStr);
+                
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                }
+            }
+        });
+    }
+
     $("#btnReport").on("click", function () {
 
-        $('#overlay').fadeIn(200);
-        $('#popupNewGrid').fadeIn(200);
+     $('#popupNewGrid').modal('show');
     });
     $('#btnClosePopup, #overlay').click(function () {
-        $('#popupNewGrid').fadeOut(200);
-        $('#overlay').fadeOut(200);
+       $('#popupNewGrid').modal('hide');
 
     });
     // function initializeTomSelectstasksheet() {

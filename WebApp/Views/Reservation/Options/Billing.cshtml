@@ -19,37 +19,76 @@
                             </div>
                         </div>
 
-                        <a href="#" onclick="openModalPosting();"><i class="fa-solid fa-calculator"></i> Posting</a>
-                        <a href="#" onclick="openModalEditPosting();"><i class="fa-solid fa-pen-to-square"></i> Edit</a>
+                        <a href="#" onclick="openModalPosting();"> Posting</a>
+                        <a href="#" onclick="openModalEditPosting();"> Edit</a>
 
                         <div class="dropdown d-inline-block">
-                            <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown"><i class="fa-solid fa-print"></i> Print</a>
+                            <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown"> Print</a>
                             <div class="dropdown-menu dropdown-menu-custom-rsv">
                                 <a class="dropdown-item" href="#" onclick="PrintAndPreview(1);">Style: Billing Information</a>
                                 <a class="dropdown-item" href="#" onclick="PrintAndPreview(2);">Style: Billing Information (Selection)</a>
                             </div>
                         </div>
 
-                        <a href="#" onclick="openModalPaymentBilling();"><i class="fa-solid fa-money-bill-wave"></i> Payment</a>
-                        <a href="#" onclick="openModalEditPosting();"><i class="fa-solid fa-piggy-bank"></i> Deposit</a>
+                        <a href="#" onclick="openModalPaymentBilling();"> Payment</a>
+                        <a href="#" onclick="openModalEditPosting();"> Deposit</a>
+
+                        <a href="#" class="" id="toggleFunctionMenu">Show Func.</a>
+                        <a href="#" class="" data-bs-dismiss="modal" id="btn-close"> Close</a>
                     </div>
 
-                    <div class="function-menu ms-auto">
-                        <a href="#" class="mui-button mui-button-option" id="toggleFunctionMenu"><i class="fa-solid fa-sliders"></i> Show Func.</a>
-                        <a href="#" class="mui-button mui-button-close" data-bs-dismiss="modal" id="btn-close"> Close</a>
-                    </div>
                 </div>
 
                 <div class="mui-card">
                     <div class="row g-2">
-                        <div class="col-6 col-md-3"><div class="form-label">RSV Status: <span id="rsvStatusBilling"></span></div></div>
-                        <div class="col-6 col-md-3"><div class="form-label">Conf.No: <span id="conNoBilling"></span></div></div>
-                        <div class="col-6 col-md-3"><div class="form-label">Arrival: <span id="arivalBilling"></span></div></div>
-                        <div class="col-6 col-md-3"><div class="form-label">Departure: <span id="departureBilling"></span></div></div>
-                        <div class="col-6 col-md-3"><div class="form-label">Group: <span id="groupBilling"></span></div></div>
-                        <div class="col-6 col-md-3"><div class="form-label">Company: <span id="companyBilling"></span></div></div>
-                        <div class="col-6 col-md-3"><div class="form-label">Balance: <span id="balanceBilling"></span></div></div>
-                        <div class="col-6 col-md-3"><div class="form-label">Total: <span id="totalBilling"></span></div></div>
+                        <div class="billing-col">
+                            <div class="info-group">
+                                <label>RSV Status:</label>
+                                <span id="rsvStatusBilling"></span>
+                            </div>
+                        </div>
+                        <div class="billing-col">
+                            <div class="info-group">
+                                <label>Conf.No:</label>
+                                <span id="conNoBilling"></span>
+                            </div>
+                        </div>
+                        <div class="billing-col">
+                            <div class="info-group">
+                                <label>Arrival:</label>
+                                <span id="arivalBilling"></span>
+                            </div>
+                        </div>
+                        <div class="billing-col">
+                            <div class="info-group">
+                                <label>Departure:</label>
+                                <span id="departureBilling"></span>
+                            </div>
+                        </div>
+                        <div class="billing-col">
+                            <div class="info-group">
+                                <label>Group:</label>
+                                <span id="groupBilling"></span>
+                            </div>
+                        </div>
+                        <div class="billing-col">
+                            <div class="info-group">
+                                <label>Company:</label>
+                                <span id="companyBilling"></span>
+                            </div>
+                        </div>
+                        <div class="billing-col">
+                            <div class="info-group">
+                                <label>Balance:</label>
+                                <span id="balanceBilling" class="text-danger fw-bold"></span>
+                            </div>
+                        </div>
+                        <div class="billing-col">
+                            <div class="info-group">
+                                <label>Total:</label>
+                                <span id="totalBilling" class="text-danger fw-bold"></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -108,7 +147,7 @@
                             <a href="#" onclick="openModalSelectOption();">Options</a>
                         </div>
 
-                        <div class="grid-body-container">
+                        <div class="gridContainer">
                             <div id="gridContainerBilling"></div>
                         </div>
                     </div>
@@ -399,14 +438,13 @@
                 {
                     dataField: "amount",
                     caption: "Amount",
-                    width: "8%",
+                    width: "6%",
                     dataType: "number",
-                    cssClass: "text-danger fw-bold",
                     format: { type: "fixedPoint", precision: 0 },
                     hidingPriority: 10
                 },
                 { dataField: "supplement", caption: "Supplement", width: "7%" },
-                { dataField: "reference", caption: "Reference", width: "7%" },
+                { dataField: "reference", caption: "Reference", width: "9%" },
 
                 { dataField: "userName", caption: "User", width: "5%"},
                 { dataField: "time", caption: "Time", width: "5%"},

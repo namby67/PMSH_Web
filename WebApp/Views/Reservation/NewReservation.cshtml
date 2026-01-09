@@ -812,7 +812,19 @@
                 </div>
             </div>
         </div>
+
     </div>
+    <!-- Audit / Original Info -->
+    <div class="reservation-audit mt-2 px-2">
+        <span><strong>Create By :</strong> <span id="lblCreateBy"></span></span>
+        <span><strong>On :</strong> <span id="lblCreateOn"></span></span>
+        <span><strong>Update By :</strong> <span id="lblUpdateBy"></span></span>
+        <span><strong>On :</strong> <span id="lblUpdateOn"></span></span>
+        <span><strong>Original Arrival :</strong> <span id="lblOriginalArrival"></span></span>
+        <span><strong>Original Departure :</strong> <span id="lblOriginalDeparture"></span></span>
+    </div>
+
+
 </div>
 
 <div class="modal fade" id="modalOption" tabindex="-1" aria-labelledby="transactionModalLabel" aria-hidden="true">
@@ -931,6 +943,7 @@
     $(document).ready(async function () {
         checkEdit = false;
         var result = @Json.Serialize(ViewBag.Reservation);
+        console.log(result);
         $('#btnOption').hide();
         $('#btnClear').show();
         if (result.id != 0) {
@@ -1081,6 +1094,17 @@
         $("#txtAllotmentID").val(result.allotmentId);
         $("#txtAllotment").val(result.allotmentCode);
         $("#txtPersonInCharge").val(result.personInChargeId);
+
+       $("#lblCreateBy").text(result.createBy);
+    $("#lblCreateOn").text(formatDateDMY(result.createDate));
+
+    $("#lblUpdateBy").text(result.updateBy);
+    $("#lblUpdateOn").text(formatDateDMY(result.updateDate));
+
+    $("#lblOriginalArrival").text(formatDateDMY(result.arrivalDate));
+    $("#lblOriginalDeparture").text(formatDateDMY(result.departureDate));
+
+
         getItemInvetory(result.id);
     }
     function intToHexColor(colorInt) {
@@ -1090,6 +1114,18 @@
         const hex = (color & 0xFFFFFF).toString(16).toUpperCase();
         // Đảm bảo đủ 6 chữ số
         return "#" + ("000000" + hex).slice(-6);
+    }
+    function formatDateDMY(dateStr) {
+        if (!dateStr) return "";
+
+        const d = new Date(dateStr);
+        if (isNaN(d)) return "";
+
+        const day = String(d.getDate()).padStart(2, '0');
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const year = d.getFullYear();
+
+        return `${day}/${month}/${year}`;
     }
 
 
