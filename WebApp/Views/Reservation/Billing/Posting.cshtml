@@ -144,7 +144,7 @@
                                                     <div class="express-box">
                                                         <div class="express-check-group">
                                                             <input type="checkbox" class="form-check-input mt-0 js-chk-discount" />
-                                                            <label class="lbl-discount ms-1">Disct. Service</label>
+                                                            <label class="lbl-discount ms-1">Discount Service</label>
                                                         </div>
                                                         <div class="express-input-group">
                                                             <div class="input-group input-group-sm" style="width: auto;">
@@ -275,7 +275,7 @@
                                                     <div class="express-box">
                                                         <div class="express-check-group">
                                                             <input type="checkbox" class="form-check-input mt-0 js-chk-discount" />
-                                                            <label class="lbl-discount ms-1">Disct. Service</label>
+                                                            <label class="lbl-discount ms-1">Discount Service</label>
                                                         </div>
                                                         <div class="express-input-group">
                                                             <div class="input-group input-group-sm" style="width: auto;">
@@ -1089,12 +1089,8 @@
 
                 Quantity: qty,
                 Price: price,
-                Amount: amount,
-                AmountMaster: amount,
                 AmountBeforeTax:parseNumberWithComma( $pane.find('.js-amount-gross').val()),
                 AmountMasterBeforeTax:parseNumberWithComma( $pane.find('.js-amount-gross').val()),
-                AmountGross: amount,
-                AmountMasterGross: amount,
 
                 CurrencyID: $pane.find('.currency-select').val(),
                 CurrencyMaster: $pane.find('.currency-select').val(),
@@ -1145,17 +1141,12 @@
 
                     Quantity: item.quantity,
                     Price: item.price,
-                    Amount: item.amount,
-                    AmountMaster: item.amount,
                     AmountBeforeTax: parseNumberWithComma(item.amountBeforeTax),
                     AmountMasterBeforeTax:parseNumberWithComma( item.amountBeforeTax),
-                    AmountMasterGross: amount,
-                    AmountGross: item.amount,
 
                     CurrencyID: $pane.find('.currency-select').val(),
                     CurrencyMaster: $pane.find('.currency-select').val(),
 
-                    // Kết hợp Reference riêng của món + Reference chung của Invoice
                     Reference: item.reference ? (item.reference + ". " + invRef) : invRef,
 
                     Supplement: supplement, 

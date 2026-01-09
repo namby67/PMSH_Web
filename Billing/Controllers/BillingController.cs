@@ -2490,6 +2490,9 @@ namespace Billing.Controllers
                 foreach (var item in models)
                 {
                     #region calculate amount after any discounts or express.
+                    decimal baseAmount = item.Quantity * item.Price;
+                    decimal finalAmount = baseAmount;
+
                     if (!string.IsNullOrEmpty(item.Reference))
                     {
                         decimal originalAmount = item.Amount; 
@@ -2498,47 +2501,36 @@ namespace Billing.Controllers
                         bool isExpress = false;
 
                         // Regex tìm chuỗi "Discount Service : 10%" hoặc "Express Service : 50%"
-                        var match = Regex.Match(item.Reference, @"(Discount|Express) Service : (\d+(\.\d+)?)%", RegexOptions.IgnoreCase);
+                        var match = Regex.Match(item.Reference, @"\b(Discount|Express)\s+Service\s*:\s*(\d+(\.\d{1,2})?)%", RegexOptions.IgnoreCase);
 
                         if (match.Success)
                         {
-                            string type = match.Groups[1].Value; // "Discount" hoặc "Express"
-                            string pctStr = match.Groups[2].Value; // Giá trị số, ví dụ "10"
+                            string type = match.Groups[1].Value; 
+                            string pctStr = match.Groups[2].Value; 
 
-                            if (decimal.TryParse(pctStr, out percent))
+                            if (decimal.TryParse(
+                                pctStr,
+                                NumberStyles.Any,
+                                CultureInfo.InvariantCulture,
+                                out percent))
                             {
-                                if (type.Equals("Discount", StringComparison.OrdinalIgnoreCase)) isDiscount = true;
-                                if (type.Equals("Express", StringComparison.OrdinalIgnoreCase)) isExpress = true;
+                                isDiscount = type.Equals("Discount", StringComparison.OrdinalIgnoreCase);
+                                isExpress  = type.Equals("Express", StringComparison.OrdinalIgnoreCase);
                             }
                         }
 
-                        // Thực hiện tính toán nếu có %
                         if (percent > 0)
                         {
-                            decimal adjustment = originalAmount * (percent / 100m);
+                            decimal adj = baseAmount * (percent / 100m);
 
-                            if (isDiscount)
-                            {
-                                // Giảm tiền
-                                item.Amount -= adjustment;
-                                item.AmountMaster -= adjustment;
-                                item.AmountGross -= adjustment;
-                                item.AmountMasterGross -= adjustment;
-                                item.AmountBeforeTax -= adjustment;
-                                item.AmountMasterBeforeTax -= adjustment;
-                            }
-                            else if (isExpress)
-                            {
-                                // Tăng tiền
-                                item.Amount += adjustment;
-                                item.AmountMaster += adjustment;
-                                item.AmountGross += adjustment;
-                                item.AmountMasterGross += adjustment;
-                                item.AmountBeforeTax += adjustment;
-                                item.AmountMasterBeforeTax += adjustment;
-                            }
+                            if (isDiscount) finalAmount -= adj;
+                            if (isExpress) finalAmount += adj;
+                        } else
+                        {
+                            finalAmount = baseAmount;
                         }
                     }
+                    item.Amount = item.AmountMaster = item.AmountGross = item.AmountMasterGross = finalAmount;
                     #endregion
 
                     var transList = TransactionsBO.Instance.FindByAttribute("Code", item.TransactionCode);
@@ -2598,3 +2590,4 @@ namespace Billing.Controllers
         #endregion
     }
 }
+    

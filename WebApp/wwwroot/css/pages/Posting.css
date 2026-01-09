@@ -1,5 +1,5 @@
 ﻿:root {
-    --primary-dark: #009444;
+    --primary-dark: #027C75;
     --primary-medium: #70b094;
     --primary-light: #a3c4a3;
     --bg-body: #f4f8f4;
@@ -68,7 +68,7 @@
     }
 
 .lbl-express {
-    color: #d32f2f;
+    color: #333;
     font-weight: bold;
     font-size: 0.75rem;
     cursor: pointer;
@@ -78,7 +78,7 @@
 }
 
 .lbl-discount {
-    color: #d32f2f;
+    color: #333;
     font-weight: bold;
     font-size: 0.75rem;
     cursor: pointer;
@@ -184,7 +184,7 @@
 }
 
 .clear-btn {
-    color: #c62828 !important;
+    color: #027C75 !important;
     text-decoration: underline;
     cursor: pointer;
     font-weight: bold;
@@ -195,11 +195,6 @@
     padding: 2px 8px !important;
     font-size: 0.7rem !important;
 }
-
-
-/* ==========================================================================
-  . GENERAL LAYOUT & COLORS
-   ========================================================================== */
 
 /* --- TOOLBAR --- */
 .main-toolbar {
@@ -444,7 +439,7 @@
     /* Hiệu ứng khi đã được chọn là Active (sau khi blur ra ngoài vẫn giữ màu đỏ) */
     .js-input-price.active-user-input,
     .js-input-price-net.active-user-input {
-        color: #d32f2f !important;
+        color: #333 !important;
         font-weight: bold !important;
         background-color: #fff !important;
         border-color: #ced4da;
