@@ -81,7 +81,18 @@
 
 
 <script>
-
+    document.querySelectorAll('.profile-modal').forEach(modal => {
+        modal.addEventListener('hidden.bs.modal', function () {
+            closeFormProfile();
+        });
+    });
+    function closeFormProfile() {
+        resetForm();
+        applyValidationErrors([], "#profile_individual");
+        applyValidationErrors([], "#profile_com_ta_source");
+        applyValidationErrors([], "#profile_group");
+        applyValidationErrors([], "#profile_contact");
+    }
 
     // Updated: Opens specific Modal based on type
     var profileTypeValue = 0;
@@ -128,6 +139,10 @@
     function closeFormProfile() {
         $('.profile-modal').modal('hide');
         $('#profileTypeModal').modal('show');
+        applyValidationErrors([], "#profile_individual");
+        applyValidationErrors([], "#profile_com_ta_source");
+        applyValidationErrors([], "#profile_group");
+        applyValidationErrors([], "#profile_contact");
         resetForm();
     }
 
