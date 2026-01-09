@@ -2,114 +2,130 @@
 
 <div class="modal fade" id="modalEditPosting" tabindex="-1" aria-labelledby="transactionModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content" style="border: 1px solid #bcbcbc">
+        <div class="modal-content">
+
             <div class="modal-header">
                 <h5 class="modal-title" id="transactionModalLabel">Edit Posting</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="button-group">
-                <button type="button" class="submit-button-clear-reservation" onclick="EditPosting();">Save</button>
-                <button type="button" class="submit-button-clear-reservation" data-bs-dismiss="modal">Close</button>
+
+            <div class="modal-body pb-0">
+                <div class="button-group mb-3">
+                    <button type="button" class="mui-button mui-button-save" onclick="EditPosting();">Save</button>
+                    <button type="button" class="mui-button mui-button-close" data-bs-dismiss="modal">Close</button>
+                </div>
             </div>
-            <div class="modal-body row">
-                <div class="col-6">
-                    <label for="room">Room</label>
-                    <input type="text" id="roomEditPosting" readonly>
-                </div>
-                <div class="col-6">
-                    <label for="name" >Name</label>
-                    <input type="text" id="nameEditPosting" readonly>
-                </div>
-                <hr class="hr">
-                <div class="col-md-12 row">
-                    <label for="code" class="col-md-1">Code</label>
-                    <input type="text"  id="codeEditPosting" readonly class="col-md-2">
-                    <span class="input-span col-md-8" id="nameTransactionEditPosting"></span>
-                </div>
-                <hr class="hr">
-                <div class="col-md-3">
-                        <label>Price</label>
-                        <input type="text" id="priceEditPosting" style="text-align:right">
-                </div>
-                <div class="col-md-3">
-                        <label >Quantity</label>
-                        <input type="number" id="quantityEditPosting" style="text-align:right">
-                </div>
-                <div class="col-md-3">
-                        <label >Amount</label>
-                        <input type="text"  id="amountEditPosing" readonly style="text-align:right">
+
+            <div class="modal-body pt-0">
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <label class="form-label" for="room">Room</label>
+                        <input type="text" id="roomEditPosting" class="form-control" readonly>
+                    </div>
+                    <div class="col-md-9">
+                        <label class="form-label" for="name">Name</label>
+                        <input type="text" id="nameEditPosting" class="form-control" readonly>
+                    </div>
                 </div>
 
-                <div class="col-md-3">
-                        <label >Currency</label>
-                        <input type="text" id="currency" value="VND">
-                </div>
-                <hr class="hr">
-                <div class="col-md-4">
-                    <label class="form-label">Crashier</label>
-                    <input type="text"  id="crashierEditPosting" readonly>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Win.No</label>
-                    <input type="text"  id="winNoEditPosting" value="1" readonly style="text-align:right">
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Posting Date</label>
-                    <div class="row">
-                        <div class="col-6">
-                            <input type="date" id="postingDate" class="form-control" readonly>
-                        </div>
-                        <div class="col-6">
-                            <input type="date" id="additionalDate" class="form-control">
-                        </div>
+                <div class="row mb-3 align-items-end">
+                    <div class="col-md-3">
+                        <label class="form-label" for="code">Code</label>
+                        <input type="text" id="codeEditPosting" class="form-control" readonly>
+                    </div>
+                    <div class="col-md-9">
+                        <label class="form-label">Description</label>
+                        <div id="nameTransactionEditPosting" class="form-control bg-light" style="min-height: 38px;"></div>
                     </div>
                 </div>
 
                 <hr class="hr">
-                <div class="col-md-3">
-                    <label  >Article Code</label>
-                    <input type="text"  id="articleCodeEditPosting" readonly>
+
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <label class="form-label">Price</label>
+                        <input type="text" id="priceEditPosting" class="form-control">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Quantity</label>
+                        <input type="number" id="quantityEditPosting" class="form-control">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Amount</label>
+                        <input type="text" id="amountEditPosing" class="form-control" readonly>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Currency</label>
+                        <input type="text" id="currency" class="form-control" value="VND" readonly>
+                    </div>
                 </div>
-                <div class="col-md-3">
-                    <label  >Supplement</label>
-                    <input type="text"  id="supplementEditPosting">
+
+                <hr class="hr">
+
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <label class="form-label">Cashier</label>
+                        <input type="text" id="crashierEditPosting" class="form-control" readonly>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Win.No</label>
+                        <input type="text" id="winNoEditPosting" class="form-control" value="1" readonly>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Posting Date</label>
+                        <input type="date" id="postingDate" class="form-control" readonly>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Add. Date</label>
+                        <input type="date" id="additionalDate" class="form-control">
+                    </div>
                 </div>
-                <div class="col-md-6 row">
-                    <label  >Reference</label>
-                    <input type="text"  id="referenceEditPosting">
+
+                <hr class="hr">
+
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <label class="form-label">Check No</label>
+                        <input type="text" id="checkNoEditPosting" class="form-control" readonly>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Article Code</label>
+                        <input type="text" id="articleCodeEditPosting" class="form-control" readonly>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Supplement</label>
+                        <input type="text" id="supplementEditPosting" class="form-control">
+                    </div>
                 </div>
-                <div class="col-md-2">
-                    <label  >Check No</label>
-                    <input type="text"  id="checkNoEditPosting" readonly>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="form-label">Reference</label>
+                        <input type="text" id="referenceEditPosting" class="form-control">
+                    </div>
                 </div>
+
             </div>
         </div>
     </div>
 </div>
+
 <script>
     var checkEditOpen = false;
-    function openModalEditPosting(){
-        // getFolioDetailMaster();
-        // if(checkEditOpen == true){
-        //     $('#modalEditPosting').modal('show');
-
-        // }
-
+    function openModalEditPosting() {
         localStorage.setItem("currentFromID", "modalEditPosting");
         const crashierLogin = localStorage.getItem("crashierLogin");
-         getFolioDetailMaster();
-        if(crashierLogin == "NotYet"){
+        getFolioDetailMaster();
+        if (crashierLogin == "NotYet") {
             openModalShilftLogin();
         }
-        else{
-      
-            if(checkEditOpen == true){
+        else {
+            if (checkEditOpen == true) {
                 $('#modalEditPosting').modal('show');
 
             }
         }
     }
-    function closeModalEditPosting(){
+    function closeModalEditPosting() {
         $('#modalEditPosting').modal('hide');
     }
 
@@ -117,13 +133,13 @@
         var grid = $("#gridContainerBilling").dxDataGrid("instance");
         var selectedRows = grid.getSelectedRowsData();
         var selectedIds = selectedRows.map(row => row.transactionNo);
-        if(selectedIds.length == 0){
+        if (selectedIds.length == 0) {
             checkEditOpen = false;
             showToast('Error', 'Please choose service', false);
             return;
         }
         transactionNoPost = selectedIds[0];
-            console.log(selectedRows);
+        console.log(selectedRows);
         checkEditOpen = true;
         $.ajax({
             url: '/Billing/GetFolioDetailMasterEdit',
@@ -136,24 +152,24 @@
             headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
             success: function (result) {
                 console.log(result);
-                 $("#roomEditPosting").val(roomNo);
-                 $("#nameEditPosting").val(lastname);
-                 $("#codeEditPosting").val(result.transactionCode);
-                 $("#nameTransactionEditPosting").text(result.description);
-                 $("#priceEditPosting").val(result.price.toLocaleString('vi-VN'));
-                 $("#quantityEditPosting").val(result.quantity);
+                $("#roomEditPosting").val(roomNo);
+                $("#nameEditPosting").val(lastname);
+                $("#codeEditPosting").val(result.transactionCode);
+                $("#nameTransactionEditPosting").text(result.description);
+                $("#priceEditPosting").val(result.price.toLocaleString('vi-VN'));
+                $("#quantityEditPosting").val(result.quantity);
                 const amount = Number(result.price) * Number(result.quantity);
                 $("#amountEditPosing").val(amount.toLocaleString('vi-VN'));
-                 $("#currency").val("VND");
-                 $("#crashierEditPosting").val(result.crashierNo);
+                $("#currency").val("VND");
+                $("#crashierEditPosting").val(result.crashierNo);
                 // // $("#winNo").val("30,000.00");
-                 $("#postingDate").val(result.transactionDate.split('T')[0]);
-                 //$("#additionalDate").val(result.transactionDate.split('T')[0]);
-                  $("#additionalDate").val(result.transactionDate.split('T')[0]);
-                 $("#articleCodeEditPosting").val(result.articleCode);
-                 $("#supplementEditPosting").val(result.supplement);
-                 $("#referenceEditPosting").val(result.reference);
-                 $("#checkNoEditPosting").val(result.checkNo);
+                $("#postingDate").val(result.transactionDate.split('T')[0]);
+                //$("#additionalDate").val(result.transactionDate.split('T')[0]);
+                $("#additionalDate").val(result.transactionDate.split('T')[0]);
+                $("#articleCodeEditPosting").val(result.articleCode);
+                $("#supplementEditPosting").val(result.supplement);
+                $("#referenceEditPosting").val(result.reference);
+                $("#checkNoEditPosting").val(result.checkNo);
             },
             error: function (xhr, statusText, err) {
                 if (xhr.status == 401) {
@@ -163,51 +179,6 @@
         });
     }
 
-    // function getFolioDetailMaster() {
-    //     var grid = $("#gridContainerBilling").dxDataGrid("instance");
-    //     var selectedRows = grid.getSelectedRowsData();
-    //     var selectedIds = selectedRows.map(row => row.transactionNo);
-    //     if(selectedIds.length == 0){
-    //         checkEditOpen = false;
-    //         showToast('Error', 'Please choose service', false);
-    //         return;
-    //     }
-    //     transactionNoPost = selectedIds[0];
-    //     checkEditOpen = true;
-    //     $.ajax({
-    //         url: '/Billing/GetFolioDetailMaster',
-    //         type: 'get',
-    //         dataType: 'json',
-    //         data: {
-    //             transactionNo: transactionNoPost,
-    //         },
-    //         crossDomain: false,
-    //         headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
-    //         success: function (result) {
-    //             $("#roomEditPosting").val(roomNo);
-    //             $("#nameEditPosting").val(lastname);
-    //             $("#codeEditPosting").val(result.transactionCode);
-    //             $("#nameTransactionEditPosting").text(result.description);
-    //             $("#priceEditPosting").val(result.price.toLocaleString('en-US'));
-    //             $("#quantityEditPosting").val(result.quantity);
-    //             $("#amountEditPosing").val(result.amountMasterGross.toLocaleString('en-US'));
-    //             $("#currency").val("VND");
-    //             $("#crashierEditPosting").val(result.crashierNo);
-    //             // $("#winNo").val("30,000.00");
-    //             $("#postingDate").val(result.transactionDate.split('T')[0]);
-    //             $("#additionalDate").val(result.transactionDate.split('T')[0]);
-    //             $("#articleCodeEditPosting").val(result.articleCode);
-    //             $("#supplementEditPosting").val("");
-    //             $("#referenceEditPosting").val(result.reference);
-    //             $("#checkNoEditPosting").val(result.checkNo);
-    //         },
-    //         error: function (xhr, statusText, err) {
-    //             if (xhr.status == 401) {
-    //                 sessionTimeout();
-    //             }
-    //         }
-    //     });
-    // }
     function calculateNetPostEdit(transactionCode, price) {
         $.ajax({
             url: '/Billing/CalculateNet',
@@ -221,7 +192,7 @@
             headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
             success: function (result) {
                 $('#priceEditPosting').val(price.toLocaleString('vi-VN'));
-                $('#amountEditPosing').val((price * $('#quantityPostBilling').val()).toLocaleString('vi-VN'));
+                $('#amountEditPosing').val((price * $('#quantityEditPosting').val()).toLocaleString('vi-VN'));
             },
             error: function (xhr, statusText, err) {
                 if (xhr.status == 401) {
@@ -235,15 +206,15 @@
         $.ajax({
             url: '/Billing/CalculatePrice',
             type: 'get',
-            dataType: 'json',   
+            dataType: 'json',
             data: {
                 transactionCode: transactionCode,
                 price: price
             },
             crossDomain: false,
             headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
-              success: function (result) {
-                var quantity = parseLocaleNumber($('#quantityPostBilling').val()) || 1;
+            success: function (result) {
+                var quantity = parseLocaleNumber($('#quantityEditPosting').val()) || 1;
                 $('#priceEditPosting').val(result.toLocaleString('vi-VN'));
                 $('#amountEditPosing').val((result * quantity).toLocaleString('vi-VN'));
             },
@@ -260,18 +231,18 @@
         return parseFloat(str.replace(/\./g, '').replace(',', '.')) || 0;
     }
 
-    $("#priceEditPosting").blur(function() {
+    $("#priceEditPosting").blur(function () {
         var price = parseLocaleNumber($('#priceEditPosting').val());
-        console.log(price); 
-        // calculatePostEdit($('#codeEditPosting').val(), price);
-         var quantity = parseLocaleNumber($('#quantityPostBilling').val()) || 1;
+        console.log(price);
+        var quantity = parseLocaleNumber($('#quantityEditPosting').val()) || 1;
+
         $('#priceEditPosting').val(price.toLocaleString('vi-VN'));
-       $('#amountEditPosing').val((price * quantity).toLocaleString('vi-VN'));
+        $('#amountEditPosing').val((price * quantity).toLocaleString('vi-VN'));
     });
-    
+
 
     // Khi blur ở ô amount
-    $("#amountEditPosing").blur(function() {
+    $("#amountEditPosing").blur(function () {
         var amount = parseFloat($('#amountEditPosing').val());
         var quantity = parseFloat($('#quantityEditPosting').val()) || 1;
         var price = amount / quantity;
@@ -283,7 +254,7 @@
     });
 
     // Khi blur ở ô quantity
-    $("#quantityPostBilling").blur(function() {
+    $("#quantityEditPosting").blur(function () {
         var price = parseFloat($('#amountEditPosing').val()) || 0;
         var quantity = parseFloat($("#quantityEditPosting").val()) || 1;
 
@@ -294,19 +265,19 @@
 
 
     function EditPosting() {
-            const userName = JSON.parse(localStorage.getItem("Loginname"));
-            const userID = JSON.parse(localStorage.getItem("userID"));
-            var formData = new FormData();
-            formData.append('userName', userName);
-            formData.append('transactionNo', transactionNoPost);
-            formData.append('userID', userID);
-            formData.append('quantity', $('#quantityEditPosting').val());
-            formData.append('price',  $('#priceEditPosting').val());
-            formData.append('amount',  $('#amountEditPosing').val());
-            formData.append('transactionDate',  $('#additionalDate').val());
-            formData.append('supplement',  $('#supplementEditPosting').val());
-            formData.append('reference', $('#referenceEditPosting').val()); 
-        $.ajax({ 
+        const userName = JSON.parse(localStorage.getItem("Loginname"));
+        const userID = JSON.parse(localStorage.getItem("userID"));
+        var formData = new FormData();
+        formData.append('userName', userName);
+        formData.append('transactionNo', transactionNoPost);
+        formData.append('userID', userID);
+        formData.append('quantity', $('#quantityEditPosting').val());
+        formData.append('price', $('#priceEditPosting').val());
+        formData.append('amount', $('#amountEditPosing').val());
+        formData.append('transactionDate', $('#additionalDate').val());
+        formData.append('supplement', $('#supplementEditPosting').val());
+        formData.append('reference', $('#referenceEditPosting').val());
+        $.ajax({
             url: '/Billing/EditPosting',
             type: 'POST',
             processData: false,
@@ -316,13 +287,13 @@
                 if (data.code == 0) {
                     closeModalEditPosting();
                     searchFolioDetail(0);
-                      GetBalanceVND(idReservation);
+                    GetBalanceVND(idReservation);
                     showToast('Success', data.msg, true);
                 } else {
                     showToast('Error', data.msg, false);
                 }
             },
-            error: function (xhr, statusText, err) {}
+            error: function (xhr, statusText, err) { }
         });
     }
 </script>

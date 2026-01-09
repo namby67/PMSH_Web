@@ -173,14 +173,36 @@
     flex-shrink: 0;
 }
 
-.footer-content {
-    background-color: #e9e9e9;
+/*.footer-content {
+    background-color: #fff;
     flex-grow: 1;
     width: 100%;
-    height: 110px;
-    margin: 0 !important;
-    border: none !important;
-    overflow-y: auto;
+    height: 140px !important;
+    min-height: 140px;
+    overflow-y: auto; 
+    overflow-x: hidden;
+    border-bottom: 1px solid #ddd;
+}
+
+    .footer-content::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .footer-content::-webkit-scrollbar-thumb {
+        background-color: #ccc;
+        border-radius: 3px;
+    }*/
+
+/* Trong file Posting.css hoặc style tag */
+.footer-content {
+    /* Đảm bảo thẻ cha có chiều cao cụ thể */
+    height: 150px;
+    overflow: hidden;
+}
+
+#gridInvoiceFooter {
+    height: 100%;
+    width: 100%;
 }
 
 .clear-btn {
