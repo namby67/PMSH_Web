@@ -649,7 +649,7 @@ button:hover {
 input[type="checkbox"] {
   width: 16px;
   height: 16px;
-  accent-color: #027C75;
+  accent-color: #009444;
 }
 
 .specials-section-new-reservation {
@@ -680,8 +680,8 @@ textarea {
   padding: 6px 12px;
   font-size: 16px;
   background-color: white;
-  color: #027C75;
-  border: 1px solid #027C75;
+  color: #009444;
+  border: 1px solid #009444;
 }
 
 .box-function {
@@ -785,8 +785,8 @@ textarea {
 
 .toolbar-menu a:hover {
   background: #ffffff;
-  color: #027C75;
-  border: 1px solid #027C75;
+  color: #009444;
+  border: 1px solid #009444;
 }
 
 .submenu {
