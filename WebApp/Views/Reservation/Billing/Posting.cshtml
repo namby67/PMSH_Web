@@ -9,7 +9,7 @@
             <div class="modal-body">
                 <div class="row g-3">
                     <div class="main-toolbar d-flex">
-                        <button class="mui-button mui-button-save me-1" id="btn-post" onclick="PostingService();"><i class="fa-solid fa-save"></i><span> Post</span></button>
+                        <button class="mui-button mui-button-save me-1" id="btn-post" onclick="PostingService();"><span> Post</span></button>
                         <button class="mui-button mui-button-new me-1" id="btn-add" style="display: none"><span>Add</span></button>
                         <button class="mui-button mui-button-close me-1" data-bs-dismiss="modal" id="btn-close"><span> Close</span></button>
                     </div>
@@ -161,7 +161,7 @@
                                                     </div>
 
                                                     <fieldset class="border p-1 mt-1" disabled>
-                                                        <legend class="float-none w-auto p-0 m-0 text-danger small fw-bold px-1">Invoice Infor</legend>
+                                                        <legend class="float-none w-auto p-0 m-0 small fw-bold px-1">Invoice Infor</legend>
                                                         <div class="row g-1 mb-1">
                                                             <div class="col-12 col-sm-2"><label class="form-label">Description</label></div>
                                                             <div class="col-12 col-sm-10"><input type="text" class="form-control form-control-sm js-invoice-desc" value="Invoicing Package" /></div>
@@ -182,7 +182,7 @@
                                                 </div>
                                                 <div class="form-footer-fixed">
                                                     <div class="footer-list-area">
-                                                        <div class="footer-header text-danger"><span class="fw-bold">Posted List</span></div>
+                                                        <div class="footer-header"><span class="fw-bold">Posted List</span></div>
                                                         <div class="footer-bottom-bar">
                                                             <div class="small fw-bold">Amount posted : <span class="text-primary">0.00</span></div>
                                                             <a class="clear-btn">Clear Posted</a>
@@ -292,7 +292,7 @@
                                                     </div>
 
                                                     <fieldset class="border p-1 mt-1">
-                                                        <legend class="float-none w-auto p-0 m-0 text-danger small fw-bold px-1">Invoice Infor</legend>
+                                                        <legend class="float-none w-auto p-0 m-0 small fw-bold px-1">Invoice Infor</legend>
                                                         <div class="row g-1 mb-1">
                                                             <div class="col-12 col-sm-2"><label class="form-label">Description</label></div>
                                                             <div class="col-12 col-sm-10"><input type="text" class="form-control form-control-sm js-invoice-desc" value="Invoicing Package" /></div>
@@ -313,7 +313,7 @@
                                                 </div>
                                                 <div class="form-footer-fixed">
                                                     <div class="footer-list-area">
-                                                        <div class="footer-header text-danger"><span class="fw-bold">Transactions Posted to Invoice</span></div>
+                                                        <div class="footer-header"><span class="fw-bold">Transactions Posted to Invoice</span></div>
                                                         <div class="footer-bottom-bar">
                                                             <div class="small fw-bold">Total Amount : <span class="text-primary">0.00</span></div>
                                                             <a class="clear-btn">Clear Invoice</a>
@@ -810,7 +810,7 @@
                 let html = data.length === 0 ? '<div class="p-2 text-muted small">No Transactions</div>' : '';
                 data.forEach(item => {
                     html += `<a href="javascript:void(0)" onclick="checkAndLoadArticles('${item.code}', '${item.description}', ${item.defaultPrice}, this)" class="list-group-item list-group-item-action">
-                                <span class="text-danger fw-bold me-2">${item.code}</span> ${item.description}
+                                <span class="fw-bold me-2">${item.code}</span> ${item.description}
                              </a>`;
                 });
                 $('#list-transaction-container').html(html);
@@ -839,9 +839,9 @@
                         html += `<a href="javascript:void(0)"
                                     onclick="fillToForm('${transCode}', '${transName}', '${item.code}', '${item.description}', ${artPrice}, this)"
                                     class="list-group-item list-group-item-action">
-                                    <span class="text-danger fw-bold me-2">${item.code}</span>
+                                    <span class="fw-bold me-2">${item.code}</span>
                                     <span>${item.description}</span>
-                                    <span class="float-end text-danger small fw-bold">${formatNumberWithComma(artPrice)}</span>
+                                    <span class="float-end small fw-bold">${formatNumberWithComma(artPrice)}</span>
                                  </a>`;
                     });
                     $('#list-article-container').html(html);
