@@ -746,5 +746,20 @@ namespace BaseBusiness.util
 			}
 
 		}
+
+		public static void InsertActivityLog(string _tablename, int _ID, string _change, string _oldvalue, string _newvalue, string _description)
+		{
+			ActivityLogModel mAL = new ActivityLogModel();
+			mAL.TableName = _tablename;
+			mAL.ObjectID = _ID;
+			mAL.UserID = Global.UserID;
+			mAL.UserName = Global.UserName;
+			mAL.ChangeDate = TextUtils.GetSystemDate();
+			mAL.Change = _change;
+			mAL.OldValue = _oldvalue;
+			mAL.NewValue = _newvalue;
+			mAL.Description = _description;
+			ActivityLogBO.Instance.Insert(mAL);
+		}
 	}
 }

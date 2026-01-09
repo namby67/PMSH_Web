@@ -1,5 +1,4 @@
 using Administration.Controllers;
-using Administration.Services;
 using Administration.Services.Implements;
 using Administration.Services.Interfaces;
 using Billing.Controllers;
@@ -200,6 +199,7 @@ builder.Services.AddSingleton<IPackageDetailService, PackageDetailService>();
 builder.Services.AddSingleton<IPackageService, PackageService>();
 builder.Services.AddSingleton<ITransactionArticleLinkService, TransactionArticleLinkService>();
 builder.Services.AddSingleton<INewProfileService, NewProfileService>();
+builder.Services.AddSingleton<IExtendProfileService, ExtendProfileService>();
 
 builder.Services.AddAuthentication(options =>
 {
@@ -268,5 +268,4 @@ app.UseResponseCompression(); // ??t sau UseStaticFiles và tr??c UseRouting
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=User}/{action=Index}/{id?}");
-
 app.Run();

@@ -3,30 +3,20 @@
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">New Profile - Company / TA / Source</h5>
+                <h5 class="modal-title">Profile - Company / TA / Source</h5>
                 @*                 <button type="button" class="btn-close" onclick="closeFormProfile()" aria-label="Close"></button> *@
             </div>
             <div class="modal-body">
                 <div class="mb-2">
-                    <button type="button" class="submit-button-clear-reservation" onclick="saveProfile();">Save</button>
-                    <button type="button" class="submit-button-clear-reservation" onclick="closeFormProfile()">Change
+                    <button type="button" class="mui-button mui-button-new" onclick="saveProfile();">Save</button>
+                    <button type="button" class="mui-button mui-button-new" id="changeTypeCOM"
+                        data-bs-dismiss="modal">Change
                         Profile Type</button>
-                    <button type="button" class="submit-button-clear-reservation" onclick="resetForm()">Clear</button>
-                    <button type="button" class="submit-button-clear-reservation"
-                        onclick="closeFormProfile();">Close</button>
+                    <button type="button" class="mui-button mui-button-new" onclick="resetForm()">Clear</button>
+                    <button type="button" class="mui-button mui-button-new" data-bs-dismiss="modal">Close</button>
                 </div>
 
                 <div class="profile_input">
-                    <div style="display:flex">
-                        <div
-                            style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;padding:4px;background-color:#ececec">
-                            Stats Infor
-                        </div>
-                        <div
-                            style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;padding:4px;background-color:#ececec;margin-left:4px">
-                            Contact
-                        </div>
-                    </div>
                     <div class="main-infor mt-2" id="profile_com_ta_source">
                         <div class="row justify-content-center">
                             <div class="d-flex justify-content-center">
@@ -332,6 +322,7 @@
     $(document).ready(async function () {
         await setSelectCompany();
     });
+
     const tomSelectCompany = {};
     async function setSelectCompany() {
         const configs = [
