@@ -647,9 +647,9 @@ button:hover {
 }
 
 input[type="checkbox"] {
-  width: 16px;
-  height: 16px;
-  accent-color: #009444;
+    width: 16px;
+    height: 16px;
+    accent-color: #027C75;
 }
 
 .specials-section-new-reservation {
@@ -676,12 +676,12 @@ textarea {
 }
 
 .submit-button-clear-reservation {
-  grid-column: span 2;
-  padding: 6px 12px;
-  font-size: 16px;
-  background-color: white;
-  color: #009444;
-  border: 1px solid #009444;
+    grid-column: span 2;
+    padding: 6px 12px;
+    font-size: 16px;
+    background-color: white;
+    color: #027C75;
+    border: 1px solid #027C75;
 }
 
 .box-function {
@@ -783,11 +783,11 @@ textarea {
   display: block;
 }
 
-.toolbar-menu a:hover {
-  background: #ffffff;
-  color: #009444;
-  border: 1px solid #009444;
-}
+    .toolbar-menu a:hover {
+        background: #ffffff;
+        color: #027C75;
+        border: 1px solid #027C75;
+    }
 
 .submenu {
   background: #ffffff;
