@@ -27,7 +27,7 @@ select {
 /* Chiều cao cho phần control (input/select chính) */
 .ts-wrapper .ts-control {
     margin:0px -10px;
-    width:auto;
+/*    width:auto;*/
     height: 28px !important; /* Sử dụng !important nếu cần override theme mặc định */
     padding:2px 0px;
 }

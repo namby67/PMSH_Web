@@ -225,10 +225,14 @@
             <div class="modal-content" >
                 <div class="modal-header">
                     <h5 class="modal-title" id="itemModalLabel">New Item</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        @*             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> *@
                 </div>
-                <div class="modal-body">
 
+                <div class="modal-body">
+                    <div class="item-modal-actions">
+                        <button type="button" id="btnSaveItem" class="mui-button mui-button-new">Save</button>
+                        <button type="button" class="mui-button mui-button-new" data-bs-dismiss="modal">Close</button>
+                    </div>
                     <form id="itemForm">
                         <div class="row g-3">
                            
@@ -286,10 +290,7 @@
                         </div>                       
                     </form>
                 </div>
-                <div class="modal-footer">                  
-                    <button type="button" id="btnSaveItem" class="btn btn-primary">Save</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
+                
             </div>
         </div>
     </div>
@@ -302,8 +303,12 @@
                     <h5 class="modal-title" id="historyModalLabel">Room Change History</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+               
                 <div class="modal-body">
-
+                    <div class="item-modal-actions">
+                        <button class="mui-button mui-button-new" id="btnHistorySearch">Search</button>
+                        <button class="mui-button mui-button-new" data-bs-dismiss="modal">Close</button>
+                    </div>
                     <div class="d-flex flex-wrap align-items-center gap-2 mb-2" style="border: 1px solid #ced4da; border-radius: 6px; padding: 8px;">
 
                         <div class="d-flex align-items-center me-2">
@@ -327,12 +332,10 @@
 
                                             
                     </div>
-                    <button class="btn btn-sm btn-primary me-2" id="btnHistorySearch">Search</button>
-                    <button class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
-               
+           
                  
-                    <div id="gridWrapper" class="mt-2"">
-                        <div id="historyGrid"></div>
+                    <div id="gridWrapper">
+                        <div class="gridContainer mt-2" id="historyGrid"></div>
                     </div>
                 </div>
             </div>

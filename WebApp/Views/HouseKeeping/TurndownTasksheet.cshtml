@@ -463,23 +463,35 @@
     $(document).ready(function () {
 
         document.getElementById("reportTitle").innerText = 'Turndown Tasksheet';
-        var businessDateStr = '@ViewBag.BusinessDate'; // Ví dụ: '8/29/2024 12:00:00 AM'
-        console.log(businessDateStr);
-        // Lấy phần ngày tháng năm
-        var dateOnly = businessDateStr.split(' ')[0]; // '8/29/2024'
-        var dateParts = dateOnly.split('/'); // ['8', '29', '2024']
-
-        // Parse đúng thứ tự: new Date(year, monthIndex, day)
-        parsedBusinessDate = new Date(dateParts[2], dateParts[0] - 1, dateParts[1]);
-
-        // Gán vào input type="date"
-        $('#fromDate').val(formatDate(parsedBusinessDate));
+      getBusinessDate();
+ 
 
         initializeTomSelects();
 
-        $("#btnPrint").trigger("click");
-
+     
     });
+     function getBusinessDate() {
+        return $.ajax({
+            url: '/Reservation/GetBusinessDate',
+            type: 'get',
+            dataType: 'json',
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+
+                 const fromDateStr = result.split('T')[0];
+                $('#fromDate').val(fromDateStr);
+                   $("#btnPrint").trigger("click");
+
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                }
+            }
+        });
+    }
+
     $("#btnReport").on("click", function () {
 
         $('#overlay').fadeIn(200);
@@ -762,13 +774,14 @@
         if (!toggleSelectAll) {
             grid.selectAll();   // chọn hết
             toggleSelectAll = true;
-            $(this).html(' Uncheck All'); // đổi text/icon
+            $(this).html('Uncheck All'); // đổi text/icon
         } else {
             grid.deselectAll(); // bỏ chọn hết
             toggleSelectAll = false;
-            $(this).html(' Check All');
+            $(this).html('Check All');
         }
     });
+
     $(document).on("click", "#btnDailytasksheet", function () {
         window.location.href = "/HouseKeeping/RoomAttendentDailyWorksheet";
     });

@@ -338,7 +338,7 @@
                         if (result.success) {
                                 showToast('Success', result.message, true);
                                 $('#popupNewLostAndFoundStatus').fadeOut(200);
-                                 $('#overlay').fadeOut(200);
+                                 
                                    $("#btnPrint").trigger("click");
                                     clearSection();
                        } else {
@@ -389,7 +389,7 @@
     $('#btnClosePopup, #overlay').click(function () {
             $('#popupNewLostAndFoundStatus').fadeOut(200);
                          $("#btnOkAuto").show();
-            $('#overlay').fadeOut(200);
+            
     });
         function clearSection() {
               $("#codenew").val("");

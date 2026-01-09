@@ -77,17 +77,16 @@
 
     </div>
     <div class="">
-        <button style="border-radius: 4px;  margin-right: 6px; " id="btnPrint" class="mui-button mui-button-new"><i
-                class="fa-solid fa-eye"></i>View</button>
+        <button style="border-radius: 4px;  margin-right: 6px; " id="btnPrint" class="mui-button mui-button-new">View</button>
         <button style="border-radius: 4px;  margin-right: 6px; " id="btnSave" class="mui-button mui-button-new"
-            type="button"> <i class="fa-solid fa-file-excel"></i> Save</button>
+            type="button">  Save</button>
 
     </div>
 </div>
 
 <div class="mui-card">
 
-    <div id="gridContainer" class="gridContainer mt-2"></div>
+    <div id="gridContainer" class="gridContainer"></div>
 </div>
 <div id="loadingSpinner"
     style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
@@ -162,10 +161,9 @@
         $("#gridContainer").dxDataGrid({
             dataSource: data,
             keyExpr: "roomNo",
-            height: 400,
             allowColumnResizing: true,
             selection: { mode: "single" }, // chỉ chọn 1 dòng
-            editing: { mode: "batch", allowUpdating: true },
+            // editing: { mode: "batch", allowUpdating: true },
             columns: [
                 { dataField: "roomNo", caption: "Room No", allowEditing: false },
                 {

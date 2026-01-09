@@ -254,6 +254,7 @@
         background-color: lightgray;
         color: black;
     }
+
 </style>
 <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
@@ -285,7 +286,7 @@
                 </div>
                 <div class="d-flex align-items-center me-1">
                     <label class="me-2 mb-0">Zone:</label>
-                    <select id="zone" name="zone" class="tomselect-custom" style="width: 70px;" multiple>
+                    <select id="zone" name="zone" class="tomselect-custom"  multiple>
                         @foreach (var item in zoneList)
                         {
                             <option value="@item.Code">@item.Code</option>
@@ -361,42 +362,59 @@
     </div>
 </div>
 
-<div id="overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 999;"></div>
 
-<div id="popupNewGrid" style="display: none; position: fixed; top: 50%; left: 50%;
-    transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 10px;
-    z-index: 1050; box-shadow: 0 0 10px rgba(0,0,0,0.3); min-width: 400px; max-height: 600px; overflow-y: auto;">
+<div class="modal fade" id="popupNewGrid" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content" style="max-width:520px;">
 
-    <div class="d-flex justify-content-between mb-2">
-        <h5 id="attendantPointTitle" class="mb-0">Edit</h5>
+            <!-- HEADER -->
+            <div class="modal-header py-2">
+                <h6 class="modal-title" id="attendantPointTitle">Edit</h6>
+            </div>
 
-    </div>
-    <div class="d-flex justify-content-start mb-3 gap-2">
-        <button id="btnSaveAtt" class="btn text-white">
-             Save
-        </button>
-        <button onclick="$('#popupNewGrid').hide()" id="btnClosePopup" class="btn btn-sm btn-danger">
-             Close
-        </button>
-    </div>
-    <div class="container mb-2">
-        <div class="row mb-2">
-            <div class="d-flex align-items-center me-3">
-                <label class="me-2 mb-0">Service Status:</label>
-                <select id="servicestatsusedit" name="servicestatsusedit" class="form-control form-control-sm w-auto">
-                    <option value="0"></option>
-                    <option value="1">Make Up Room</option>
-                    <option value="2">Do Not Disturd</option>
-                </select>
+            <!-- BODY -->
+            <div class="modal-body p-3" style="overflow-y:auto;">
+
+                <!-- BUTTON -->
+                <div class="d-flex justify-content-start mb-3 gap-2">
+                    <button id="btnSaveAtt"
+                            class="mui-button mui-button-search">
+                        Save
+                    </button>
+
+                    <button type="button"
+                            id="btnClosePopup"
+                            class="mui-button mui-button-new">
+                        Close
+                    </button>
+                </div>
+
+                <!-- FORM -->
+                <div class="mb-3">
+                    <div class="d-flex align-items-center">
+                        <label class="me-2 mb-0">Service Status:</label>
+                        <select id="servicestatsusedit"
+                                class="form-control form-control-sm"
+                                style="width:200px">
+                            <option value="0"></option>
+                            <option value="1">Make Up Room</option>
+                            <option value="2">Do Not Disturb</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- GRID -->
+                <div id="logGridContainer"
+                     class="gridContainer mt-2"
+                     style="max-height:250px; overflow:auto;">
+                </div>
+
             </div>
         </div>
-
-
     </div>
-
-
-    <div id="logGridContainer" class="gridContainer mt-2"></div>
 </div>
+
+
 <div class="mui-card">
     <div id="gridContainer" class="gridContainer mt-2"></div>
 </div>
@@ -673,10 +691,8 @@
     }
 
     $('#btnClosePopup, #overlay').click(function () {
-        $('#popupNewGrid').fadeOut(200);
-        $('#overlay').fadeOut(200);
-
-
+      $('#popupNewGrid').modal('hide');
+     
         $('#servicestatsusedit').val('');
     });
     $("#btnEditGuest").on("click", function () {
@@ -684,9 +700,8 @@
             alert("Please select a row first.");
             return;
         }
+        $('#popupNewGrid').modal('show');
 
-        $('#overlay').fadeIn(200);
-        $('#popupNewGrid').fadeIn(200);
     });
     $("#btnSaveAtt").on("click", function () {
 
@@ -705,8 +720,8 @@
             headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
             success: function (result) {
                 showToast('Success', result.message, true);
-                $('#popupNewGrid').fadeOut(200);
-                $('#overlay').fadeOut(200);
+                   $('#popupNewGrid').modal('hide');
+                
 
 
                 $('#servicestatsusedit').val('');

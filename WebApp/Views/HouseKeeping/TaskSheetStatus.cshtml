@@ -246,12 +246,7 @@
         line-height: 1.2;
     }
 
-    .tomselect-custom {
-        width: 250px;
-        min-height: 30px;
-        /* ho?c tùy theo chi?u cao b?n mu?n */
-        font-size: 0.65rem;
-    }
+
 
     .sort-select {
         max-width: 130px;
@@ -278,7 +273,15 @@
         <div class="d-flex flex-column ">
 
             <div class="d-flex align-items-center">
+                <div class="d-flex align-items-center me-1">
+                    <label class="me-2 mb-0">From Date:</label>
+                    <input type="date" id="fromDate" name="fromDate" class="form-control form-control-sm w-auto" />
+                </div>
 
+                <div class="d-flex align-items-center me-1">
+                    <label class="me-2 mb-0">To Date:</label>
+                    <input type="date" id="toDate" name="toDate" class="form-control form-control-sm w-auto" />
+                </div>
                 <div class="d-flex align-items-center me-3">
                     <label class="me-2 mb-0">Attendant ID:</label>
                     <select id="attendant" name="attendant" class="tomselect-custom" >
@@ -304,15 +307,7 @@
                     </select>
 
                 </div>
-                <div class="d-flex align-items-center me-1">
-                    <label class="me-2 mb-0">From Date:</label>
-                    <input type="date" id="fromDate" name="fromDate" class="form-control form-control-sm w-auto" />
-                </div>
-
-                <div class="d-flex align-items-center me-1">
-                    <label class="me-2 mb-0">To Date:</label>
-                    <input type="date" id="toDate" name="toDate" class="form-control form-control-sm w-auto" />
-                </div>
+              
             </div>
         </div>
 
@@ -368,25 +363,39 @@
     let parsedBusinessDate = null;
     $(document).ready(function () {
 
-        document.getElementById("reportTitle").innerText = 'Task Sheet Status';
-        var businessDateStr = '@ViewBag.BusinessDate'; // Ví dụ: '8/29/2024 12:00:00 AM'
-        console.log(businessDateStr);
-        // Lấy phần ngày tháng năm
-        var dateOnly = businessDateStr.split(' ')[0]; // '8/29/2024'
-        var dateParts = dateOnly.split('/'); // ['8', '29', '2024']
-
-        // Parse đúng thứ tự: new Date(year, monthIndex, day)
-        parsedBusinessDate = new Date(dateParts[2], dateParts[0] - 1, dateParts[1]);
+        getBusinessDate();
 
         // Gán vào input type="date"
-        $('#fromDate').val(formatDate(parsedBusinessDate));
-        $('#toDate').val(formatDate(parsedBusinessDate));
-        $('#fromDatenew').val(formatDate(parsedBusinessDate));
+
         initializeTomSelects();
         initializeTomSelectszone();
-        $("#btnPrint").trigger("click");
+
 
     });
+     function getBusinessDate() {
+        return $.ajax({
+            url: '/Reservation/GetBusinessDate',
+            type: 'get',
+            dataType: 'json',
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+
+                 const fromDateStr = result.split('T')[0];
+
+
+                $('#fromDate').val(fromDateStr);
+                $('#toDate').val(fromDateStr);
+                $('#fromDatenew').val(fromDateStr);
+                        $("#btnPrint").trigger("click");
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                }
+            }
+        });
+    }
     $("#btnReport").on("click", function () {
 
         $('#overlay').fadeIn(200);

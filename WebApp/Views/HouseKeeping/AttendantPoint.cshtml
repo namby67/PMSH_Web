@@ -231,58 +231,96 @@
         </button>
     </div>
 </div>
-<div id="overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 999;"></div>
 
-<div id="popupNewGrid" style="display: none; position: fixed; top: 50%; left: 50%;
-    transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 10px;
-    z-index: 1050; box-shadow: 0 0 10px rgba(0,0,0,0.3); min-width: 400px; max-height: 600px; overflow-y: auto;">
 
-    <div class="d-flex justify-content-between mb-2">
-        <h5 id="attendantPointTitle" class="mb-0">New AttendantPoint</h5>
+<div class="modal fade" id="popupNewGrid" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content" style="max-width:520px;">
 
-    </div>
-    <div class="d-flex justify-content-start mb-3 gap-2">
-        <button id="btnSaveAtt" class="btn text-white">
-             Save
-        </button>
-        <button onclick="$('#popupNewGrid').hide()" id="btnClosePopup" class="btn btn-sm btn-danger">
-             Close
-        </button>
-    </div>
-    <div class="container mb-2">
-        <div class="row mb-2">
-            <input style="display:none" type="text" id="txtid" name="txtid" class="form-control form-control-sm" />
-            <div class="col-md-6">
-                <label class="form-label">Date:</label>
-                <input type="date" id="fromDatenew" name="fromDatenew" class="form-control form-control-sm" />
+            <!-- HEADER -->
+            <div class="modal-header py-2">
+                <h5 id="attendantPointTitle" class="modal-title">
+                    New AttendantPoint
+                </h5>
             </div>
-            <div class="col-md-6">
-                <label class="form-label">Attendant ID:</label>
-                <select id="attendantnew" name="attendantnew" class="form-control form-control-sm">
-                    <option value=""></option>
-                    @foreach (var item in listatt)
-                    {
-                        <option value="@item.ID">@item.Name</option>
-                    }
-                </select>
+
+            <!-- BODY -->
+            <div class="modal-body p-3" style="max-height:600px; overflow-y:auto;">
+
+                <!-- BUTTON -->
+                <div class="d-flex justify-content-start mb-3 gap-2">
+                    <button id="btnSaveAtt"
+                            class="mui-button mui-button-search">
+                        Save
+                    </button>
+
+                    <button type="button"
+                            id="btnClosePopup"
+                            class="mui-button mui-button-new"
+                            data-bs-dismiss="modal">
+                        Close
+                    </button>
+                </div>
+
+                <!-- FORM -->
+                <div class="container-fluid">
+
+                    <input type="hidden" id="txtid" name="txtid" />
+
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <label class="form-label">Date:</label>
+                            <input type="date"
+                                   id="fromDatenew"
+                                   name="fromDatenew"
+                                   class="form-control form-control-sm" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Attendant ID:</label>
+                            <select id="attendantnew"
+                                    name="attendantnew"
+                                    class="form-control form-control-sm">
+                                <option value=""></option>
+                                @foreach (var item in listatt)
+                                {
+                                    <option value="@item.ID">@item.Name</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <label class="form-label">Name:</label>
+                            <input id="username"
+                                   type="text"
+                                   class="form-control form-control-sm"
+                                   placeholder="Enter user name">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Point:</label>
+                            <input id="point"
+                                   type="text"
+                                   class="form-control form-control-sm"
+                                   placeholder="Enter point">
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- GRID -->
+                <div id="logGridContainer"
+                     class="gridContainer mt-2"
+                     style="max-height:250px; overflow:auto;">
+                </div>
+
             </div>
         </div>
-
-        <div class="row mb-2">
-            <div class="col-md-6">
-                <label class="form-label">Name:</label>
-                <input id="username" type="text" class="form-control form-control-sm" placeholder="Enter user name">
-            </div>
-            <div class="col-md-6">
-                <label class="form-label">Point:</label>
-                <input id="point" type="text" class="form-control form-control-sm" placeholder="Enter point">
-            </div>
-        </div>
     </div>
-
-
-    <div id="logGridContainer" class="gridContainer mt-2"></div>
 </div>
+
 <div class="mui-card">
     <div id="gridContainer" class="gridContainer mt-2"></div>
 </div>
@@ -300,28 +338,42 @@
 
     let parsedBusinessDate = null;
     $(document).ready(function () {
-        $("#btnPrint").trigger("click");
+
         document.getElementById("reportTitle").innerText = 'Attendant Point';
-        var businessDateStr = '@ViewBag.BusinessDate'; // Ví dụ: '8/29/2024 12:00:00 AM'
-        console.log(businessDateStr);
-        // Lấy phần ngày tháng năm
-        var dateOnly = businessDateStr.split(' ')[0]; // '8/29/2024'
-        var dateParts = dateOnly.split('/'); // ['8', '29', '2024']
+        getBusinessDate();
 
-        // Parse đúng thứ tự: new Date(year, monthIndex, day)
-        parsedBusinessDate = new Date(dateParts[2], dateParts[0] - 1, dateParts[1]);
-
-        // Gán vào input type="date"
-        $('#fromDate').val(formatDate(parsedBusinessDate));
-        $('#toDate').val(formatDate(parsedBusinessDate));
-        $('#fromDatenew').val(formatDate(parsedBusinessDate));
         initializeTomSelects();
 
 
     });
+
+    function getBusinessDate() {
+        return $.ajax({
+            url: '/Reservation/GetBusinessDate',
+            type: 'get',
+            dataType: 'json',
+            crossDomain: false,
+            headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
+            success: function (result) {
+
+                 const fromDateStr = result.split('T')[0];
+                $('#fromDate').val(fromDateStr);
+               $('#toDate').val(fromDateStr);
+                $('#fromDatenew').val(fromDateStr);
+                  
+
+            },
+            error: function (xhr, statusText, err) {
+                if (xhr.status == 401) {
+                    sessionTimeout();
+                }
+            }
+        });
+    }
+
     $('#btnClosePopup, #overlay').click(function () {
-        $('#popupNewGrid').fadeOut(200);
-        $('#overlay').fadeOut(200);
+       $('#popupNewGrid').modal('hide');
+        
 
         $('#fromDatenew').val(formatDate(parsedBusinessDate));
         $('#attendantnew').val('').trigger('change');
@@ -335,8 +387,7 @@
         } else {
             $('#attendantPointTitle').text('New AttendantPoint');
         }
-        $('#overlay').fadeIn(200);
-        $('#popupNewGrid').fadeIn(200);
+       $('#popupNewGrid').modal('show');;
     });
     function initializeTomSelects() {
         const selectors = ["#attendant"];
@@ -462,7 +513,7 @@
             $('#attendantPointTitle').text('New AttendantPoint');
         }
         // Hiện popup
-        $('#popupNewGrid').show();
+    $('#popupNewGrid').modal('show');;
     });
 
     $(document).off("click", "#btnDeleteAppoin").on("click", "#btnDeleteAppoin", function () {
@@ -556,8 +607,8 @@
                     $('#username').val('');
                     $('#point').val('');
                     $('#txtid').val('');
-                    $('#overlay').fadeOut(200);
-                    $('#popupNewGrid').hide();
+                    
+                $('#popupNewGrid').modal('hide');
                     $("#btnPrint").trigger("click");
 
                 } else {

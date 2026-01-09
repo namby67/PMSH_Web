@@ -413,7 +413,7 @@
                 if (result.success) {
                     showToast('Success', result.message, true);
                     $('#popupNewArticle').fadeOut(200);
-                    $('#overlay').fadeOut(200);
+                    
                     $("#btnPrint").trigger("click");
                     clearArticleList();
                 } else {
@@ -461,7 +461,7 @@
     $('#btnClosePopup, #overlay').click(function () {
         $('#popupNewArticle').fadeOut(200);
         $("#btnOkAuto").show();
-        $('#overlay').fadeOut(200);
+        
     });
     function clearArticleList() {
         $("#idselectedRowDatasa").val("");

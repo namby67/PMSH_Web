@@ -57,42 +57,80 @@ builder.Services.AddResponseCompression(options =>
     options.MimeTypes = new[] { "text/csv" }; // L?y t? appsettings.json n?u c?n
 });
 
-builder.Services.AddControllersWithViews()
-    .PartManager.ApplicationParts.Add(new AssemblyPart(typeof(HouseKeepingController).Assembly));
-builder.Services.AddControllersWithViews()
-    .PartManager.ApplicationParts.Add(new AssemblyPart(typeof(ProfileController).Assembly));
-builder.Services.AddControllersWithViews()
-    .PartManager.ApplicationParts.Add(new AssemblyPart(typeof(ReportController).Assembly));
-builder.Services.AddControllersWithViews()
-    .PartManager.ApplicationParts.Add(new AssemblyPart(typeof(UserController).Assembly));
-builder.Services.AddControllersWithViews()
-    .PartManager.ApplicationParts.Add(new AssemblyPart(typeof(ReservationController).Assembly));
-builder.Services.AddControllersWithViews()
-    .PartManager.ApplicationParts.Add(new AssemblyPart(typeof(FrontDeskController).Assembly));
-builder.Services.AddControllersWithViews()
-    .PartManager.ApplicationParts.Add(new AssemblyPart(typeof(CashieringController).Assembly));
-builder.Services.AddControllersWithViews()
-    .PartManager.ApplicationParts.Add(new AssemblyPart(typeof(BillingController).Assembly));
-builder.Services.AddControllersWithViews()
-    .PartManager.ApplicationParts.Add(new AssemblyPart(typeof(NightAuditController).Assembly));
-builder.Services.AddControllersWithViews()
-    .PartManager.ApplicationParts.Add(new AssemblyPart(typeof(RoomManagementController).Assembly));
-builder.Services.AddControllersWithViews()
-    .PartManager.ApplicationParts.Add(new AssemblyPart(typeof(MiscellaneousController).Assembly));
-builder.Services.AddControllersWithViews()
-    .PartManager.ApplicationParts.Add(new AssemblyPart(typeof(AdministrationController).Assembly));
-builder.Services.AddControllersWithViews()
-    .PartManager.ApplicationParts.Add(new AssemblyPart(typeof(EmailController).Assembly));
-builder.Services.AddControllersWithViews()
-    .PartManager.ApplicationParts.Add(new AssemblyPart(typeof(TransactionGroupController).Assembly));
-builder.Services.AddControllersWithViews()
-    .PartManager.ApplicationParts.Add(new AssemblyPart(typeof(TransactionController).Assembly));
-builder.Services.AddControllersWithViews()
-    .PartManager.ApplicationParts.Add(new AssemblyPart(typeof(TransactionSubGroupController).Assembly));
-builder.Services.AddControllersWithViews()
-    .PartManager.ApplicationParts.Add(new AssemblyPart(typeof(ArticleController).Assembly));
-builder.Services.AddControllersWithViews()
-    .PartManager.ApplicationParts.Add(new AssemblyPart(typeof(HouseKeepingAdminController).Assembly));
+var mvcBuilder = builder.Services.AddControllersWithViews();
+
+// HouseKeeping
+mvcBuilder.PartManager.ApplicationParts.Add(
+    new AssemblyPart(typeof(HouseKeepingController).Assembly));
+
+// Profile
+mvcBuilder.PartManager.ApplicationParts.Add(
+    new AssemblyPart(typeof(ProfileController).Assembly));
+
+// Report
+mvcBuilder.PartManager.ApplicationParts.Add(
+    new AssemblyPart(typeof(ReportController).Assembly));
+
+// User
+mvcBuilder.PartManager.ApplicationParts.Add(
+    new AssemblyPart(typeof(UserController).Assembly));
+
+// Reservation
+mvcBuilder.PartManager.ApplicationParts.Add(
+    new AssemblyPart(typeof(ReservationController).Assembly));
+
+// FrontDesk
+mvcBuilder.PartManager.ApplicationParts.Add(
+    new AssemblyPart(typeof(FrontDeskController).Assembly));
+
+// Cashiering
+mvcBuilder.PartManager.ApplicationParts.Add(
+    new AssemblyPart(typeof(CashieringController).Assembly));
+
+// Billing
+mvcBuilder.PartManager.ApplicationParts.Add(
+    new AssemblyPart(typeof(BillingController).Assembly));
+
+// NightAudit
+mvcBuilder.PartManager.ApplicationParts.Add(
+    new AssemblyPart(typeof(NightAuditController).Assembly));
+
+// RoomManagement
+mvcBuilder.PartManager.ApplicationParts.Add(
+    new AssemblyPart(typeof(RoomManagementController).Assembly));
+
+// Miscellaneous
+mvcBuilder.PartManager.ApplicationParts.Add(
+    new AssemblyPart(typeof(MiscellaneousController).Assembly));
+
+// Administration
+mvcBuilder.PartManager.ApplicationParts.Add(
+    new AssemblyPart(typeof(AdministrationController).Assembly));
+
+// Email
+mvcBuilder.PartManager.ApplicationParts.Add(
+    new AssemblyPart(typeof(EmailController).Assembly));
+
+// Transaction Group
+mvcBuilder.PartManager.ApplicationParts.Add(
+    new AssemblyPart(typeof(TransactionGroupController).Assembly));
+
+// Transaction
+mvcBuilder.PartManager.ApplicationParts.Add(
+    new AssemblyPart(typeof(TransactionController).Assembly));
+
+// Transaction Sub Group
+mvcBuilder.PartManager.ApplicationParts.Add(
+    new AssemblyPart(typeof(TransactionSubGroupController).Assembly));
+
+// Article
+mvcBuilder.PartManager.ApplicationParts.Add(
+    new AssemblyPart(typeof(ArticleController).Assembly));
+
+// HouseKeeping Admin
+mvcBuilder.PartManager.ApplicationParts.Add(
+    new AssemblyPart(typeof(HouseKeepingAdminController).Assembly));
+
 builder.Services.AddHttpClient();
 builder.Services.AddSignalR();
 builder.Services.AddControllersWithViews();
@@ -209,11 +247,16 @@ if (!app.Environment.IsDevelopment())
 
 var env = builder.Environment;
 app.UseStaticFiles();
-app.UseStaticFiles(new StaticFileOptions
+if (app.Environment.IsDevelopment())
 {
-    FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "node_modules")),
-    RequestPath = "/node_modules",
-});
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        FileProvider = new PhysicalFileProvider(
+            Path.Combine(env.ContentRootPath, "node_modules")),
+        RequestPath = "/node_modules",
+    });
+}
+
 
 app.MapHub<TagScanHub>("/tagScanHub");
 app.UseHttpsRedirection();

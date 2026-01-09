@@ -549,7 +549,7 @@
                 if (result.success) {
                     showToast('Success', result.message, true);
                     $('#popupNewAttendants').fadeOut(200);
-                    $('#overlay').fadeOut(200);
+                    
                     $("#btnPrint").trigger("click");
                     clearAttendants();
                 } else {
@@ -652,7 +652,7 @@
     $('#btnClosePopup, #overlay').click(function () {
         $('#popupNewAttendants').fadeOut(200);
         $("#btnOkAuto").show();
-        $('#overlay').fadeOut(200);
+        
     });
     function clearAttendants() {
         // Xóa toàn bộ text input
