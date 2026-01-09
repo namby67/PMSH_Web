@@ -41,14 +41,54 @@
 
                 <div class="mui-card">
                     <div class="row g-2">
-                        <div class="col-6 col-md-3"><div class="form-label">RSV Status: <span id="rsvStatusBilling"></span></div></div>
-                        <div class="col-6 col-md-3"><div class="form-label">Conf.No: <span id="conNoBilling"></span></div></div>
-                        <div class="col-6 col-md-3"><div class="form-label">Arrival: <span id="arivalBilling"></span></div></div>
-                        <div class="col-6 col-md-3"><div class="form-label">Departure: <span id="departureBilling"></span></div></div>
-                        <div class="col-6 col-md-3"><div class="form-label">Group: <span id="groupBilling"></span></div></div>
-                        <div class="col-6 col-md-3"><div class="form-label">Company: <span id="companyBilling"></span></div></div>
-                        <div class="col-6 col-md-3"><div class="form-label">Balance: <span id="balanceBilling"></span></div></div>
-                        <div class="col-6 col-md-3"><div class="form-label">Total: <span id="totalBilling"></span></div></div>
+                        <div class="billing-col">
+                            <div class="info-group">
+                                <label>RSV Status:</label>
+                                <span id="rsvStatusBilling"></span>
+                            </div>
+                        </div>
+                        <div class="billing-col">
+                            <div class="info-group">
+                                <label>Conf.No:</label>
+                                <span id="conNoBilling"></span>
+                            </div>
+                        </div>
+                        <div class="billing-col">
+                            <div class="info-group">
+                                <label>Arrival:</label>
+                                <span id="arivalBilling"></span>
+                            </div>
+                        </div>
+                        <div class="billing-col">
+                            <div class="info-group">
+                                <label>Departure:</label>
+                                <span id="departureBilling"></span>
+                            </div>
+                        </div>
+                        <div class="billing-col">
+                            <div class="info-group">
+                                <label>Group:</label>
+                                <span id="groupBilling"></span>
+                            </div>
+                        </div>
+                        <div class="billing-col">
+                            <div class="info-group">
+                                <label>Company:</label>
+                                <span id="companyBilling"></span>
+                            </div>
+                        </div>
+                        <div class="billing-col">
+                            <div class="info-group">
+                                <label>Balance:</label>
+                                <span id="balanceBilling" class="text-danger fw-bold"></span>
+                            </div>
+                        </div>
+                        <div class="billing-col">
+                            <div class="info-group">
+                                <label>Total:</label>
+                                <span id="totalBilling" class="text-danger fw-bold"></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -398,13 +438,13 @@
                 {
                     dataField: "amount",
                     caption: "Amount",
-                    width: "8%",
+                    width: "6%",
                     dataType: "number",
                     format: { type: "fixedPoint", precision: 0 },
                     hidingPriority: 10
                 },
                 { dataField: "supplement", caption: "Supplement", width: "7%" },
-                { dataField: "reference", caption: "Reference", width: "7%" },
+                { dataField: "reference", caption: "Reference", width: "9%" },
 
                 { dataField: "userName", caption: "User", width: "5%"},
                 { dataField: "time", caption: "Time", width: "5%"},

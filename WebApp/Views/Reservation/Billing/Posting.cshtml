@@ -79,7 +79,7 @@
                                                         <div class="col-12 col-sm-2"><label class="form-label">Quantity</label></div>
                                                         <div class="col-12 col-sm-3"><input type="text" class="form-control form-control-sm fw-bold text-end js-input-qty" value="1" /></div>
                                                         <div class="col-12 col-sm-3 text-sm-end pe-2"><label class="form-label">Bill No</label></div>
-                                                        <div class="col-12 col-sm-4"><input type="text" class="form-control form-control-sm" /></div>
+                                                        <div class="col-12 col-sm-4"><input type="text" class="form-control form-control-sm" readonly/></div>
                                                     </div>
                                                     <div class="row g-1 mb-1">
                                                         <div class="col-12 col-sm-2"><label class="form-label">Price ++</label></div>
@@ -144,7 +144,7 @@
                                                     <div class="express-box">
                                                         <div class="express-check-group">
                                                             <input type="checkbox" class="form-check-input mt-0 js-chk-discount" />
-                                                            <label class="lbl-discount ms-1">Disct. Service</label>
+                                                            <label class="lbl-discount ms-1">Discount Service</label>
                                                         </div>
                                                         <div class="express-input-group">
                                                             <div class="input-group input-group-sm" style="width: auto;">
@@ -275,7 +275,7 @@
                                                     <div class="express-box">
                                                         <div class="express-check-group">
                                                             <input type="checkbox" class="form-check-input mt-0 js-chk-discount" />
-                                                            <label class="lbl-discount ms-1">Disct. Service</label>
+                                                            <label class="lbl-discount ms-1">Discount Service</label>
                                                         </div>
                                                         <div class="express-input-group">
                                                             <div class="input-group input-group-sm" style="width: auto;">
@@ -313,12 +313,17 @@
                                                 </div>
                                                 <div class="form-footer-fixed">
                                                     <div class="footer-list-area">
-                                                        <div class="footer-header"><span class="fw-bold">Transactions Posted to Invoice</span></div>
-                                                        <div class="footer-bottom-bar">
-                                                            <div class="small fw-bold">Total Amount : <span class="text-primary">0.00</span></div>
-                                                            <a class="clear-btn">Clear Invoice</a>
+                                                        <div class="footer-header d-flex justify-content-between align-items-center px-2">
+                                                            <span class="fw-bold">Transactions Posted to Invoice</span>
+                                                            <div class="small fw-bold">Total Amount : <span class="text-primary js-total-footer">0.00</span></div>
                                                         </div>
-                                                        <div class="footer-content"></div>
+                                                        @* <div class="footer-content"></div> *@
+                                                        <div class="footer-content p-0 gridContainer">
+                                                            <div id="gridInvoiceFooter"></div>
+                                                        </div>
+                                                        <div class="footer-bottom-bar justify-content-end">
+                                                            <a class="clear-btn" onclick="clearInvoiceList()">Clear Invoice</a>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </form>
@@ -689,9 +694,23 @@
         const tabEls = document.querySelectorAll('button[data-bs-toggle="tab"]');
         tabEls.forEach((tabEl) => {
             tabEl.addEventListener("shown.bs.tab", function (event) {
-                if (event.target.id === "detail-tab") btnAdd.style.display = "none";
-                else if (event.target.id === "invoice-tab") btnAdd.style.display = "flex";
+                if (invoiceList.length > 0) {
+                    invoiceList = [];
+                }
+
                 resetForm();
+                if (event.target.id === "detail-tab") {
+                    btnAdd.style.display = "none";
+                }
+                else if (event.target.id === "invoice-tab") {
+                    btnAdd.style.display = "flex";
+                    // setTimeout(() => {
+                    //     $('#view-group .js-search-box').first().focus();
+                    // }, 150);
+                    setTimeout(function() {
+                        refreshInvoiceGrid();
+                    }, 0)
+                }
             });
         });
     });
@@ -878,13 +897,15 @@
         $(element).addClass('active-item-custom');
     }
 
-    // sự kiện đóng modal
+    // --- RESET FORM KHI ĐÓNG MODAL ---
     $('#modalPosting').on('hidden.bs.modal', function () {
         resetForm();
+        invoiceList = []; 
         $('#list-subgroup-container').empty();
         $('#list-transaction-container').empty();
         $('#list-article-container').empty();
 
+        // Reset về tab mặc định (F2)
         var triggerEl = document.querySelector('#detail-tab');
         if(triggerEl) bootstrap.Tab.getOrCreateInstance(triggerEl).show();
     });
@@ -897,121 +918,129 @@
     });
 
     // nut add and post
-    var invoiceList = []; 
+    var invoiceList = [];
 
-    // ---. XỬ LÝ NÚT ADD (CHỈ DÙNG CHO F3) ---
-    $('#btn-add').click(function() {
-        var $activePane = $('#invoice-pane');
-        var transCode = $activePane.find('.js-trans-code').val();
+    // ---  HÀM RENDER BẢNG (HTML TABLE) ---
+        // function renderInvoiceFooter() {
+        //     var $footerContent = $('#invoice-pane .footer-content');
 
-        if (!transCode) { alert("Please select a transaction first!"); return; }
+        //     Tạo khung bảng
+        //     var html = '<table class="table table-sm table-striped mb-0" style="font-size: 0.75rem; width: 100%;">';
 
-        var qty = parseFloat($activePane.find('.js-input-qty').val()) || 0;
-        var price = parseNumberWithComma($activePane.find('.js-input-price-net').val()); 
+        //     Header
+        //     html += '<thead class="table-light" style="position: sticky; top: 0; z-index: 1;">';
+        //     html += '<tr>';
+        //     html += '<th>Code</th>';
+        //     html += '<th>Description</th>';
+        //     html += '<th class="text-center">Qty</th>';
+        //     html += '<th class="text-end">Price</th>';
+        //     html += '<th class="text-end">Total</th>';
+        //     html += '<th>Ref</th>';
+        //     html += '<th class="text-center">Action</th>';
+        //     html += '</tr></thead>';
 
-        var desc = $activePane.find('.js-trans-desc').val();
-        var artDesc = $activePane.find('.js-art-desc').val();
-        var finalDesc = artDesc ? artDesc : desc;
+        //     Body
+        //     html += '<tbody>';
 
-        var artCode = $activePane.find('.js-art-code').val() || "";
-        
-        var amountBeforeTax = $activePane.find('.js-amount-gross').val() || "";
+        //     var grandTotal = 0;
 
-        var isExpress = $activePane.find('.js-chk-express').is(':checked');
-        var isDiscount = $activePane.find('.js-chk-discount').is(':checked');
+        //     if (invoiceList.length === 0) {
+        //         html += '<tr><td colspan="7" class="text-center text-muted fst-italic p-3">No items added.</td></tr>';
+        //     } else {
+        //         invoiceList.forEach(function(item) {
+        //             grandTotal += item.amount; Cộng dồn tổng tiền
 
-        var pctVal = 0;
-        var serviceType = '';
+        //             html += '<tr>';
+        //             html += `<td><span class="fw-bold">${item.code}</span></td>`;
+        //             html += `<td>${item.description}</td>`;
+        //             html += `<td class="text-center">${item.quantity}</td>`;
+        //             html += `<td class="text-end">${formatNumberWithComma(item.price)}</td>`;
+        //             html += `<td class="text-end fw-bold">${formatNumberWithComma(item.amount)}</td>`;
+        //             html += `<td>${item.reference || ''}</td>`;
+        //             Nút xóa
+        //             html += `<td class="text-center">
+        //                         <a href="javascript:void(0)" onclick="removeInvoiceItem(${item.id})" class="text-danger" title="Remove">
+        //                             <i class="fa-solid fa-trash-can"></i>
+        //                         </a>
+        //                      </td>`;
+        //             html += '</tr>';
+        //         });
+        //     }
 
-        if (isExpress) {
-            pctVal = parseFloat($activePane.find('.js-input-express-pct').val()) || 0;
-            serviceType = 'EXP';
-        } else if (isDiscount) {
-            pctVal = parseFloat($activePane.find('.js-input-discount-pct').val()) || 0;
-            serviceType = 'DIS';
-        }
+        //     html += '</tbody></table>';
 
-        // --- TÍNH TOÁN TIỀN ---
-        var rawTotal = qty * price;
-        var adjustAmount = rawTotal * (pctVal / 100);
-        var finalTotal = 0;
+        //     $footerContent.html(html);
 
-        if (serviceType === 'EXP') {
-            finalTotal = rawTotal + adjustAmount; 
-        } else if (serviceType === 'DIS') {
-            finalTotal = rawTotal - adjustAmount; 
-        } else {
-            finalTotal = rawTotal;
-        }
+        //     Cập nhật Tổng tiền ở thanh Footer Bar bên ngoài
+        //     $('.js-total-footer').text(formatNumberWithComma(grandTotal));
+        // }
 
-        var reference = $activePane.find('.js-ref-main').val();
-        var remarkInvoice = $activePane.find('.js-invoice-desc').val();
-        var checkNo = $activePane.find('.js-invoice-checkNo').val();
+        // --- SỬA NÚT ADD ĐỂ GỌI HÀM RENDER MỚI ---
+        $('#btn-add').click(function() {
+            var $activePane = $('#invoice-pane');
+            var transCode = $activePane.find('.js-trans-code').val();
 
-        var itemObj = {
-            id: Date.now(),
-            code: transCode,
-            articleCode: artCode,
-            description: finalDesc,
-            amountBeforeTax: amountBeforeTax,
-            quantity: qty,
-            price: price,
-            serviceType: serviceType,
-            servicePct: pctVal,
-            amount: finalTotal,
-            reference: reference,
-            remark: remarkInvoice,
-            checkNo: checkNo
-        };
+            if (!transCode) {
+                showToast("Warning","Please select a transaction first!",true);
+                return;
+            }
 
-        invoiceList.push(itemObj);
-        renderInvoiceFooter();
-        resetFormKeepInvoiceInfo();
-    });
+            var qty = parseFloat($activePane.find('.js-input-qty').val()) || 0;
+            var price = parseNumberWithComma($activePane.find('.js-input-price-net').val());
 
-    // ---  HÀM RENDER LIST XUỐNG FOOTER F3 ---
-    function renderInvoiceFooter() {
-        var $footerContent = $('#invoice-pane .footer-content');
-        var html = '<table class="table table-sm table-striped mb-0" style="font-size: 0.7rem;">';
+            // Tính toán amount hiển thị
+            var rawTotal = qty * price;
+            var pctVal = 0;
+            var serviceType = '';
+            var finalTotal = rawTotal;
 
-        html += '<thead class="table-light"><tr><th>Code</th><th>Desc</th><th class="text-end">Qty</th><th class="text-end">Price</th><th class="text-end">Total</th><th>Ref</th><th>Action</th></tr></thead><tbody>';
+            if ($activePane.find('.js-chk-express').is(':checked')) {
+                pctVal = parseFloat($activePane.find('.js-input-express-pct').val()) || 0;
+                serviceType = 'EXP';
+                finalTotal += rawTotal * (pctVal / 100);
+            } else if ($activePane.find('.js-chk-discount').is(':checked')) {
+                pctVal = parseFloat($activePane.find('.js-input-discount-pct').val()) || 0;
+                serviceType = 'DIS';
+                finalTotal -= rawTotal * (pctVal / 100);
+            }
 
-        var grandTotal = 0;
+            var itemObj = {
+                id: Date.now(),
+                code: transCode,
+                articleCode: $activePane.find('.js-art-code').val() || "",
+                description: $activePane.find('.js-art-desc').val() || $activePane.find('.js-trans-desc').val(),
+                amountBeforeTax: parseNumberWithComma($activePane.find('.js-amount-gross').val()),
+                quantity: qty,
+                price: price,
+                serviceType: serviceType,
+                servicePct: pctVal,
+                amount: finalTotal,
+                reference: $activePane.find('.js-ref-main').val(),
+                remark: $activePane.find('.js-invoice-desc').val(),
+                checkNo: $activePane.find('.js-invoice-checkNo').val()
+            };
 
-        invoiceList.forEach(function(item, index) {
-            grandTotal += item.amount;
-            html += `<tr>
-                        <td>${item.code}</td>
-                        <td>${item.description}</td>
-                        <td class="text-end">${item.quantity}</td>
-                        <td class="text-end">${formatNumberWithComma(item.price)}</td>
-                        <td class="text-end fw-bold">${formatNumberWithComma(item.amount)}</td>
-                        <td>${item.reference}</td>
-                        <td><a href="javascript:void(0)" onclick="removeInvoiceItem(${index})" class="text-danger">Delete</a></td>
-                     </tr>`;
+            invoiceList.push(itemObj);
+            // renderInvoiceFooter();
+            refreshInvoiceGrid();
+            resetFormKeepInvoiceInfo();
         });
 
-        html += '</tbody></table>';
-
-        $footerContent.html(html);
-
-        // Cập nhật Tổng tiền ở thanh Footer Bar
-        $('#invoice-pane .footer-bottom-bar span.text-primary').text(formatNumberWithComma(grandTotal));
-    }
-
-    // ---  HÀM XÓA 1 DÒNG KHỎI LIST INVOICE ---
-    function removeInvoiceItem(index) {
-        invoiceList.splice(index, 1);
-        renderInvoiceFooter(); 
-    }
-
-    // ---  NÚT CLEAR INVOICE ---
-    $('.clear-btn').click(function() {
-        if(confirm('Are you sure you want to clear all items?')) {
-            invoiceList = [];
-            renderInvoiceFooter();
+        // ---.HÀM XÓA ITEM ---
+        function removeInvoiceItem(id) {
+            invoiceList = invoiceList.filter(item => item.id !== id);
+            // renderInvoiceFooter();
+            refreshInvoiceGrid();
         }
-    });
+
+        // ---  HÀM CLEAR ALL ---
+        function clearInvoiceList() {
+            if(confirm('Clear all items?')) {
+                invoiceList = [];
+                // renderInvoiceFooter();
+                refreshInvoiceGrid();
+            }
+        }
 
     // ---. HÀM RESET FORM NHƯNG GIỮ INPUT FIELD INVOICE DESC (CHO NÚT ADD) ---
     function resetFormKeepInvoiceInfo() {
@@ -1089,12 +1118,8 @@
 
                 Quantity: qty,
                 Price: price,
-                Amount: amount,
-                AmountMaster: amount,
                 AmountBeforeTax:parseNumberWithComma( $pane.find('.js-amount-gross').val()),
                 AmountMasterBeforeTax:parseNumberWithComma( $pane.find('.js-amount-gross').val()),
-                AmountGross: amount,
-                AmountMasterGross: amount,
 
                 CurrencyID: $pane.find('.currency-select').val(),
                 CurrencyMaster: $pane.find('.currency-select').val(),
@@ -1145,17 +1170,12 @@
 
                     Quantity: item.quantity,
                     Price: item.price,
-                    Amount: item.amount,
-                    AmountMaster: item.amount,
                     AmountBeforeTax: parseNumberWithComma(item.amountBeforeTax),
                     AmountMasterBeforeTax:parseNumberWithComma( item.amountBeforeTax),
-                    AmountMasterGross: amount,
-                    AmountGross: item.amount,
 
                     CurrencyID: $pane.find('.currency-select').val(),
                     CurrencyMaster: $pane.find('.currency-select').val(),
 
-                    // Kết hợp Reference riêng của món + Reference chung của Invoice
                     Reference: item.reference ? (item.reference + ". " + invRef) : invRef,
 
                     Supplement: supplement, 
@@ -1191,7 +1211,6 @@
 
                     if(typeof invoiceList !== 'undefined') {
                         invoiceList = [];
-                        renderInvoiceFooter(); 
                     }
 
                     resetForm(); 
@@ -1216,6 +1235,97 @@
             }
         });
     }
+
+    // ---: KHỞI TẠO GRID (CHỈ CẤU HÌNH, CHƯA GỌI LỆNH INSTANCE) ---
+        function initInvoiceFooterGrid() {
+            var $gridContainer = $("#gridInvoiceFooter");
+
+            if (!$gridContainer.data("dxDataGrid")) {
+                $gridContainer.dxDataGrid({
+                    dataSource: invoiceList,
+                    keyExpr: "id",
+                    height: "100%",
+                    width: "100%",
+                    showBorders: true,
+                    showRowLines: true,
+                    rowAlternationEnabled: true,
+                    columnAutoWidth: true,
+                    scrolling: { mode: "virtual" },
+                    paging: { enabled: false },
+                    loadPanel: { enabled: false }, 
+                    columns: [
+                        { dataField: "code", caption: "Code", width: 40, cssClass: "fw-bold" },
+                        {
+                            dataField: "description", caption: "Description", minWidth: 150,
+                            cellTemplate: function(container, options) {
+                                $("<div>").addClass("text-truncate").attr("title", options.value).text(options.value).appendTo(container);
+                            }
+                        },
+                        { dataField: "quantity", caption: "Qty", width: 30 },
+                        {
+                            dataField: "price", caption: "Price", width: 70,
+                            format: { type: "fixedPoint", precision: 0 }
+                        },
+                        {
+                            dataField: "amount", caption: "Total", width: 70,
+                            cssClass: "fw-bold",
+                            format: { type: "fixedPoint", precision: 0 }
+                        },
+                        { dataField: "reference", caption: "Ref", width: 100 },
+                        {
+                            type: "buttons",
+                            width: 30,
+                            buttons: [{
+                                hint: "Delete",
+                                icon: "trash",
+                                onClick: function(e) {
+                                    removeInvoiceItem(e.row.data.id);
+                                }
+                            }]
+                        }
+                    ],
+                    onContentReady: function(e) {
+                        updateFooterTotal();
+                    }
+                });
+            }
+        }
+
+        // ---: LÀM MỚI GRID ---
+        function refreshInvoiceGrid() {
+            var $gridContainer = $("#gridInvoiceFooter");
+
+            if ($gridContainer.length === 0) return;
+
+            var dataGridInstance = $gridContainer.data("dxDataGrid");
+
+            if (dataGridInstance) {
+                dataGridInstance.option("dataSource", invoiceList);
+
+                dataGridInstance.repaint();
+            } else {
+                initInvoiceFooterGrid();
+            }
+
+            updateFooterTotal();
+        }
+
+        function removeInvoiceItem(id) {
+            invoiceList = invoiceList.filter(item => item.id !== id);
+            refreshInvoiceGrid();
+        }
+
+        function clearInvoiceList() {
+            if(confirm('Clear all items?')) {
+                invoiceList = [];
+                refreshInvoiceGrid();
+            }
+        }
+
+        function updateFooterTotal() {
+            var total = invoiceList.reduce((sum, item) => sum + item.amount, 0);
+            $('.js-total-footer').text(formatNumberWithComma(total));
+        }
 
 
 </script>
