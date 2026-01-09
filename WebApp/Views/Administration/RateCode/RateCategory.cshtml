@@ -235,7 +235,7 @@
     // =======================
     $(document).off("click", "#btnUpdate").on("click", "#btnUpdate", function () {
         if (!selectedRowData) {
-            showToast("Error", "Please select 1 row to update.", false);
+            showToast("Warning", "Please select 1 row to update.", false);
             return;
         }
         applyValidationErrors([], "#popupNewRateCategory");

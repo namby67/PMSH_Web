@@ -33,12 +33,12 @@ namespace Profile.Controllers
         private readonly IProfileExportService _iProfileService;
         private readonly IMembershipService _iMembershipService;
         private readonly IFutureService _iFutureService;
-
+        private readonly IExtendProfileService _iExtendProfile;
         private readonly INewProfileService _newProfile;
 
         public ProfileController(ILogger<ProfileController> logger,
              IMemoryCache cache, IConfiguration configuration, IProfileExportService iProfileService, IMembershipService iMembershipService, IFutureService iFutureService
-             , INewProfileService newProfile)
+             , INewProfileService newProfile, IExtendProfileService iExtendProfile)
         {
             _cache = cache;
             _logger = logger;
@@ -47,6 +47,7 @@ namespace Profile.Controllers
             _iMembershipService = iMembershipService;
             _iFutureService = iFutureService;
             _newProfile = newProfile;
+            _iExtendProfile = iExtendProfile;
         }
         public IActionResult Index()
         {
@@ -879,15 +880,6 @@ namespace Profile.Controllers
 
         }
 
-        [HttpPost]
-        public ActionResult DeleteProfile(string id)
-        {
-
-            if (string.IsNullOrEmpty(id)) return null;
-            ProfileBO.Instance.Delete(int.Parse(id));
-            return Json(new { code = 0, msg = "Profile deleted successfully" });
-        }
-
         [HttpGet]
         public async Task<IActionResult> GetAllProfiles2(string code, string account, string firstName, string keyWord, string city, int type, bool showSaleInCharge, int page = 1, int pageSize = 15)
         {
@@ -934,7 +926,7 @@ namespace Profile.Controllers
         }
         #endregion
 
-        #region new profile
+        #region Tuan_ profile
         [HttpPost]
         public ActionResult SaveProfile(SaveProfileRequestDto dto)
         {
@@ -950,6 +942,19 @@ namespace Profile.Controllers
             var result = _newProfile.CreateProfile(dto);
             return Json(result);
         }
+        [HttpPost]
+        public IActionResult DeleteProfile(int profileID)
+        {
+            var result = _iExtendProfile.DeleteProfile(profileID);
+
+            if (!result.Success)
+            {
+                return Json(new { result.Success, message = result.Message });
+            }
+
+            return Json(new { result.Success, message = result.Message });
+        }
+
         #endregion
 
         #region new profile in reservation
