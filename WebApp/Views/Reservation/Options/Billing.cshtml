@@ -19,25 +19,24 @@
                             </div>
                         </div>
 
-                        <a href="#" onclick="openModalPosting();"><i class="fa-solid fa-calculator"></i> Posting</a>
-                        <a href="#" onclick="openModalEditPosting();"><i class="fa-solid fa-pen-to-square"></i> Edit</a>
+                        <a href="#" onclick="openModalPosting();"> Posting</a>
+                        <a href="#" onclick="openModalEditPosting();"> Edit</a>
 
                         <div class="dropdown d-inline-block">
-                            <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown"><i class="fa-solid fa-print"></i> Print</a>
+                            <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown"> Print</a>
                             <div class="dropdown-menu dropdown-menu-custom-rsv">
                                 <a class="dropdown-item" href="#" onclick="PrintAndPreview(1);">Style: Billing Information</a>
                                 <a class="dropdown-item" href="#" onclick="PrintAndPreview(2);">Style: Billing Information (Selection)</a>
                             </div>
                         </div>
 
-                        <a href="#" onclick="openModalPaymentBilling();"><i class="fa-solid fa-money-bill-wave"></i> Payment</a>
-                        <a href="#" onclick="openModalEditPosting();"><i class="fa-solid fa-piggy-bank"></i> Deposit</a>
+                        <a href="#" onclick="openModalPaymentBilling();"> Payment</a>
+                        <a href="#" onclick="openModalEditPosting();"> Deposit</a>
+
+                        <a href="#" class="" id="toggleFunctionMenu">Show Func.</a>
+                        <a href="#" class="" data-bs-dismiss="modal" id="btn-close"> Close</a>
                     </div>
 
-                    <div class="function-menu ms-auto">
-                        <a href="#" class="mui-button mui-button-option" id="toggleFunctionMenu"><i class="fa-solid fa-sliders"></i> Show Func.</a>
-                        <a href="#" class="mui-button mui-button-close" data-bs-dismiss="modal" id="btn-close"> Close</a>
-                    </div>
                 </div>
 
                 <div class="mui-card">
@@ -108,7 +107,7 @@
                             <a href="#" onclick="openModalSelectOption();">Options</a>
                         </div>
 
-                        <div class="grid-body-container">
+                        <div class="gridContainer">
                             <div id="gridContainerBilling"></div>
                         </div>
                     </div>
@@ -401,7 +400,6 @@
                     caption: "Amount",
                     width: "8%",
                     dataType: "number",
-                    cssClass: "text-danger fw-bold",
                     format: { type: "fixedPoint", precision: 0 },
                     hidingPriority: 10
                 },

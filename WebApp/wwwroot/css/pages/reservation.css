@@ -1,5 +1,5 @@
 ﻿:root {
-    --primary-dark: #009444;
+    --primary-dark: #027C75;
     --primary-medium: #70b094;
     --primary-light: #a3c4a3;
     --bg-body: #f4f8f4;
@@ -233,11 +233,6 @@
   margin-bottom: 10px;
   padding-bottom: 2px;
   border-bottom: 1px solid var(--main-color);
-}
-
-.modal-body {
-  padding-top: 0px;
-  margin-top: 0px;
 }
 
 .form-group {
@@ -902,7 +897,7 @@ textarea {
 }
 
 
-/* --- MODAL STYLES DÙNG CHO CÁC MODAL CON CỦA BILLING --- */
+/* --- MODAL STYLES DÙNG CHO CÁC MODAL TRONG APP --- */
 
 .modal-backdrop.show {
     opacity: 0.75 !important;
