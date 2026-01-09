@@ -2,7 +2,7 @@
     grid-column: span 2;
     padding: 6px 12px;
     font-size: 16px;
-    background-color: #bcbcbc;
+/*    background-color: #bcbcbc;*/
     margin-top: 20px;
 }
 
@@ -17,7 +17,7 @@ button {
 
     border: none;
 
-    background-color: #bcbcbc;
+/*    background-color: #bcbcbc;*/
     color: white;
     cursor: pointer;
 

@@ -22,6 +22,7 @@ using System.Linq;
 using System.Security.Cryptography.Xml;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Transactions;
 using static System.Runtime.CompilerServices.RuntimeHelpers;
@@ -2483,12 +2484,63 @@ namespace Billing.Controllers
                 string batchInvoiceNo = nextInvoiceNo.ToString();
 
                 int nextTransNo = FolioDetailBO.GetTopTransactioNo(); 
-                                                                     
                 string baseTransactionNo = nextTransNo.ToString();
 
                 int count = 0;
                 foreach (var item in models)
                 {
+                    #region calculate amount after any discounts or express.
+                    if (!string.IsNullOrEmpty(item.Reference))
+                    {
+                        decimal originalAmount = item.Amount; 
+                        decimal percent = 0;
+                        bool isDiscount = false;
+                        bool isExpress = false;
+
+                        // Regex tìm chuỗi "Discount Service : 10%" hoặc "Express Service : 50%"
+                        var match = Regex.Match(item.Reference, @"(Discount|Express) Service : (\d+(\.\d+)?)%", RegexOptions.IgnoreCase);
+
+                        if (match.Success)
+                        {
+                            string type = match.Groups[1].Value; // "Discount" hoặc "Express"
+                            string pctStr = match.Groups[2].Value; // Giá trị số, ví dụ "10"
+
+                            if (decimal.TryParse(pctStr, out percent))
+                            {
+                                if (type.Equals("Discount", StringComparison.OrdinalIgnoreCase)) isDiscount = true;
+                                if (type.Equals("Express", StringComparison.OrdinalIgnoreCase)) isExpress = true;
+                            }
+                        }
+
+                        // Thực hiện tính toán nếu có %
+                        if (percent > 0)
+                        {
+                            decimal adjustment = originalAmount * (percent / 100m);
+
+                            if (isDiscount)
+                            {
+                                // Giảm tiền
+                                item.Amount -= adjustment;
+                                item.AmountMaster -= adjustment;
+                                item.AmountGross -= adjustment;
+                                item.AmountMasterGross -= adjustment;
+                                item.AmountBeforeTax -= adjustment;
+                                item.AmountMasterBeforeTax -= adjustment;
+                            }
+                            else if (isExpress)
+                            {
+                                // Tăng tiền
+                                item.Amount += adjustment;
+                                item.AmountMaster += adjustment;
+                                item.AmountGross += adjustment;
+                                item.AmountMasterGross += adjustment;
+                                item.AmountBeforeTax += adjustment;
+                                item.AmountMasterBeforeTax += adjustment;
+                            }
+                        }
+                    }
+                    #endregion
+
                     var transList = TransactionsBO.Instance.FindByAttribute("Code", item.TransactionCode);
 
                     if (transList != null && transList.Count > 0)

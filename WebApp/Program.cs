@@ -146,12 +146,7 @@ builder.Services.AddSingleton<ITransactionSubGroupService, TransactionSubGroupSe
 builder.Services.AddSingleton<IArticleService, ArticleService>();
 
 builder.Services.AddDistributedMemoryCache();
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromMinutes(30);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
-});
+
 builder.Services.AddSingleton<IGroupReservationService, GroupReservationService>();
 builder.Services.AddSingleton<IMessageService, MessageService>();
 builder.Services.AddSingleton<IShareService, ShareService>();
@@ -227,10 +222,8 @@ app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseResponseCompression(); // ??t sau UseStaticFiles và tr??c UseRouting
-app.MapStaticAssets();
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=User}/{action=Index}/{id?}")
-    .WithStaticAssets();
+    pattern: "{controller=User}/{action=Index}/{id?}");
 
 app.Run();

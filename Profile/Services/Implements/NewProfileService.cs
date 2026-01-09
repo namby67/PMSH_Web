@@ -12,50 +12,82 @@ namespace Profile.Services.Implements
         public ApiResponseAddError<ValidationErrorDto> CreateProfile(SaveProfileRequestDto dto)
         {
             var errors = new List<ValidationErrorDto>();
-
+            DateTime bussinessDate = TextUtils.GetBussinessDateTime();
             try
             {
                 ProfileModel profile;
-
                 switch (dto.Type)
                 {
                     case 0:
                         errors.AddRange(ValidateIndividual(dto));
-                        if (errors.Count != 0)
-                            return ValidationFail(errors, dto.Type);
-                        profile = MapIndividual(dto);
                         break;
-
                     case 1:
                     case 2:
                     case 3:
                         errors.AddRange(ValidateCompany(dto));
-                        if (errors.Count != 0)
-                            return ValidationFail(errors, dto.Type);
-                        profile = MapCompany(dto);
                         break;
-
                     case 4:
                         errors.AddRange(ValidateGroup(dto));
-                        if (errors.Count != 0)
-                            return ValidationFail(errors, dto.Type);
-                        profile = MapGroup(dto);
                         break;
-
                     default:
                         errors.AddRange(ValidateContact(dto));
-                        if (errors.Count != 0)
-                            return ValidationFail(errors, dto.Type);
-                        profile = MapContact(dto);
                         break;
                 }
 
-                ProfileBO.Instance.Insert(profile);
+                if (errors.Count != 0)
+                    return ValidationFail(errors, dto.Type);
+                
+                // Update Profile
+                if (dto.ID > 0)
+                {
+                    if (ProfileBO.Instance.FindByPrimaryKey(dto.ID) is not ProfileModel foundProfile)
+                        return ValidationFailNotFound(dto.Type);
+                    profile = foundProfile;
+                    profile.UpdateDate = bussinessDate;
+                    // profile.UpdatedBy = CurrentUserId;
+                }
+
+                //Insert Profile
+                else
+                {
+                    profile = new ProfileModel
+                    {
+                        CreateDate = bussinessDate,
+                        UpdateDate = bussinessDate,
+                        // CreatedBy = CurrentUserId
+                    };
+                }
+                switch (dto.Type)
+                {
+                    case 0:
+                        MapIndividual(profile, dto);
+                        break;
+                    case 1:
+                    case 2:
+                    case 3:
+                        MapCompany(profile, dto);
+                        break;
+                    case 4:
+                        MapGroup(profile, dto);
+                        break;
+                    default:
+                        MapContact(profile, dto);
+                        break;
+                }
+
+                // 4️⃣ Save
+                if (dto.ID > 0)
+                    ProfileBO.Instance.Update(profile);
+                else
+                    ProfileBO.Instance.Insert(profile);
 
                 return new ApiResponseAddError<ValidationErrorDto>
                 {
                     Success = true,
-                    Message = "New profile created successfully"
+                    Message = dto.ID > 0
+                        ? "Profile updated successfully"
+                        : "New profile created successfully",
+                    Type = dto.Type
                 };
             }
             catch (Exception ex)
@@ -68,6 +100,7 @@ namespace Profile.Services.Implements
                 };
             }
         }
+
         #region Validation
         public static ApiResponseAddError<ValidationErrorDto> ValidationFail(List<ValidationErrorDto> errors, int type)
         {
@@ -78,6 +111,15 @@ namespace Profile.Services.Implements
                 Errors = errors,
                 Type = type
 
+            };
+        }
+        private static ApiResponseAddError<ValidationErrorDto> ValidationFailNotFound(int type)
+        {
+            return new ApiResponseAddError<ValidationErrorDto>
+            {
+                Success = false,
+                Message = "Profile not found",
+                Type = type,
             };
         }
 
@@ -98,7 +140,7 @@ namespace Profile.Services.Implements
             if (dto.BlackListIndividual && string.IsNullOrWhiteSpace(dto.BlackListReasonIndividual))
                 errors.Add(new ValidationErrorDto { Field = "blackListReasonIndividual", Message = "Reason Black list not blank" });
 
-            errors.AddRange(ValidateCodeLength(dto.CodeIndividual, "codeIndividual"));
+            errors.AddRange(ValidateCodeLength(dto.CodeIndividual, "codeIndividual",dto.ID));
 
             return errors;
         }
@@ -112,7 +154,7 @@ namespace Profile.Services.Implements
             if (string.IsNullOrWhiteSpace(dto.FirstNameContact))
                 errors.Add(new ValidationErrorDto { Field = "firstNameContact", Message = "First name not blank" });
 
-            errors.AddRange(ValidateCodeLength(dto.CodeIndividual, "CodeContact"));
+            errors.AddRange(ValidateCodeLength(dto.CodeIndividual, "CodeContact",dto.ID));
 
             return errors;
         }
@@ -130,7 +172,7 @@ namespace Profile.Services.Implements
             if (dto.BlackListCOM && string.IsNullOrWhiteSpace(dto.BlackListReasonCOM))
                 errors.Add(new ValidationErrorDto { Field = "blackListReasonCOM", Message = "Reason Black list not blank" });
 
-            errors.AddRange(ValidateCodeLength(dto.CodeCOM, "codeCOM"));
+            errors.AddRange(ValidateCodeLength(dto.CodeCOM, "codeCOM",dto.ID));
 
             return errors;
         }
@@ -142,12 +184,12 @@ namespace Profile.Services.Implements
             if (string.IsNullOrWhiteSpace(dto.GroupNameGroup))
                 errors.Add(new ValidationErrorDto { Field = "groupNameGroup", Message = "Group Name not blank" });
 
-            errors.AddRange(ValidateCodeLength(dto.CodeGroup, "codeGroup"));
+            errors.AddRange(ValidateCodeLength(dto.CodeGroup, "codeGroup",dto.ID));
 
             return errors;
         }
 
-        private static List<ValidationErrorDto> ValidateCodeLength(string code, string field)
+        private static List<ValidationErrorDto> ValidateCodeLength(string code, string field,int id)
         {
             var errors = new List<ValidationErrorDto>();
 
@@ -175,7 +217,7 @@ namespace Profile.Services.Implements
                     ProfileBO.Instance.FindByAttribute("Code", code)
                 );
 
-            if (exists != null && exists.Count != 0)
+            if (exists != null && exists.Count != 0 && id == 0)
             {
                 errors.Add(new ValidationErrorDto
                 {
@@ -189,169 +231,170 @@ namespace Profile.Services.Implements
 
         #endregion
 
+
         #region Mapping
-        private static ProfileModel MapIndividual(SaveProfileRequestDto dto)
+
+        private static string S(string? value) => value?.Trim() ?? string.Empty;
+
+        private static void MapIndividual(ProfileModel profile, SaveProfileRequestDto dto)
         {
-            return new ProfileModel
-            {
-                Type = 0,
-                Code = dto.CodeIndividual,
-                Account = dto.AccountIndividual,
-                LastName = dto.LastNameIndivdual,
-                Firstname = dto.FirstNameIndividual,
-                MiddleName = dto.MiddleNameIndividual,
-                LanguageID = dto.LanguageIndividual,
-                TitleID = dto.TitleIndividual,
-                Address = dto.AddressIndividual,
-                HomeAddress = dto.BusAddressIndividual,
-                City = dto.CityIndividual,
-                PostalCode = dto.PostalIndividual,
-                CountryID = dto.CountryIndividual,
-                StateID = dto.StateIndividual,
-                Salutation = dto.SalutationIndividual,
-                VIPID = dto.VIPIndividual,
-                VIPReason = dto.ReasonIndividual,
-                PassPort = dto.PassportIndividual,
-                Keyword = dto.KeywordIndividual,
-                DateOfBirth = dto.DobIndividual,
-                NationalityID = dto.NationalityIndividual,
-                Telephone = dto.TelephoneIndividual,
-                Email = dto.EmailIndividual,
-                Website = dto.WebsiteIndividual,
-                HandPhone = dto.HandPhoneIndividual,
-                Active = dto.ActiveIndividual,
-                Contact = dto.ContactIndividual,
-                TaxCode = dto.TaxIndividual,
-                IsBlackList = dto.BlackListIndividual,
-                BlackListReason = dto.BlackListReasonIndividual,
+            profile.Type = 0;
 
-                UserInsertID = 136,
-                UserUpdateID = 136,
-                CreateDate = DateTime.Now,
-                UpdateDate = DateTime.Now
-            };
+            profile.Code = S(dto.CodeIndividual);
+            profile.Account = S(dto.AccountIndividual);
+            profile.LastName = S(dto.LastNameIndivdual);
+            profile.Firstname = S(dto.FirstNameIndividual);
+            profile.MiddleName = S(dto.MiddleNameIndividual);
+
+            profile.LanguageID = dto.LanguageIndividual;
+            profile.TitleID = dto.TitleIndividual;
+            profile.Salutation = S(dto.SalutationIndividual);
+
+            profile.Address = S(dto.AddressIndividual);
+            profile.HomeAddress = S(dto.BusAddressIndividual);
+            profile.City = S(dto.CityIndividual);
+            profile.PostalCode = S(dto.PostalIndividual);
+            profile.CountryID = dto.CountryIndividual;
+            profile.StateID = dto.StateIndividual;
+
+            profile.VIPID = dto.VIPIndividual;
+            profile.VIPReason = S(dto.ReasonIndividual);
+
+            profile.PassPort = S(dto.PassportIndividual);
+            profile.Keyword = S(dto.KeywordIndividual);
+            profile.DateOfBirth = dto.DobIndividual;
+
+            profile.NationalityID = dto.NationalityIndividual;
+            profile.Telephone = S(dto.TelephoneIndividual);
+            profile.Email = S(dto.EmailIndividual);
+            profile.Website = S(dto.WebsiteIndividual);
+            profile.HandPhone = S(dto.HandPhoneIndividual);
+
+            profile.Active = dto.ActiveIndividual;
+            profile.Contact = dto.ContactIndividual;
+            profile.TaxCode = S(dto.TaxIndividual);
+
+            profile.IsBlackList = dto.BlackListIndividual;
+            profile.BlackListReason = dto.BlackListIndividual
+                ? S(dto.BlackListReasonIndividual)
+                : string.Empty;
+
+            profile.UserInsertID = 136;
+            profile.UserUpdateID = 136;
         }
-        private static ProfileModel MapCompany(SaveProfileRequestDto dto)
+        private static void MapCompany(ProfileModel profile, SaveProfileRequestDto dto)
         {
-            return new ProfileModel
-            {
-                Type = dto.Type,
-                Code = dto.CodeCOM,
-                Account = dto.AccountCOM,
-                FullAccount = dto.FullAccount,
+            profile.Type = dto.Type;
 
-                Address = dto.AddressCOM,
-                HomeAddress = dto.BusAddressCOM,
-                City = dto.CityCOM,
-                PostalCode = dto.PostalCOM,
-                CountryID = dto.CountryCOM,
-                StateID = dto.StateCOM,
+            profile.Code = S(dto.CodeCOM);
+            profile.Account = S(dto.AccountCOM);
+            profile.FullAccount = S(dto.FullAccount);
 
-                Keyword = dto.KeywordCOM,
-                Description = dto.NoteCOM,
-                Telephone = dto.TelephoneCOM,
-                Email = dto.EmailCOM,
-                Website = dto.WebsiteCOM,
-                HandPhone = dto.HandPhoneCOM,
+            profile.Address = S(dto.AddressCOM);
+            profile.HomeAddress = S(dto.BusAddressCOM);
+            profile.City = S(dto.CityCOM);
+            profile.PostalCode = S(dto.PostalCOM);
+            profile.CountryID = dto.CountryCOM;
+            profile.StateID = dto.StateCOM;
 
-                Active = dto.ActiveCOM,
-                ARNo = dto.ARCOM,
-                OwnerID = dto.OwnerCOM,
-                TerritoryID = dto.TerritoryCOM,
-                PersonInChargeID = dto.SaleInChargeCOM,
-                AcctContact = dto.ContactNameCOM,
-                CurrencyID = dto.CurrencyCOM,
-                TaxCode = dto.TaxCOM,
-                MemberType = dto.CompanyTypeCOM,
+            profile.Keyword = S(dto.KeywordCOM);
+            profile.Description = S(dto.NoteCOM);
+            profile.Telephone = S(dto.TelephoneCOM);
+            profile.Email = S(dto.EmailCOM);
+            profile.Website = S(dto.WebsiteCOM);
+            profile.HandPhone = S(dto.HandPhoneCOM);
 
-                IsBlackList = dto.BlackListCOM,
-                BlackListReason = dto.BlackListReasonCOM,
-                Company = dto.Company2COM,
-                BusinessTitle = dto.BusinessTitleCOM,
-                MarketID = dto.MarketCOM,
+            profile.Active = dto.ActiveCOM;
+            profile.ARNo = S(dto.ARCOM);
+            profile.OwnerID = dto.OwnerCOM;
+            profile.TerritoryID = dto.TerritoryCOM;
+            profile.PersonInChargeID = dto.SaleInChargeCOM;
+            profile.AcctContact = S(dto.ContactNameCOM);
+            profile.CurrencyID = dto.CurrencyCOM;
+            profile.TaxCode = S(dto.TaxCOM);
+            profile.MemberType = dto.CompanyTypeCOM;
 
-                UserInsertID = 136,
-                UserUpdateID = 136,
-                CreateDate = DateTime.Now,
-                UpdateDate = DateTime.Now
-            };
+            profile.IsBlackList = dto.BlackListCOM;
+            profile.BlackListReason = dto.BlackListCOM
+                ? S(dto.BlackListReasonCOM)
+                : string.Empty;
+
+            profile.Company = S(dto.Company2COM);
+            profile.BusinessTitle = S(dto.BusinessTitleCOM);
+            profile.MarketID = dto.MarketCOM;
+
+            profile.UserInsertID = 136;
+            profile.UserUpdateID = 136;
         }
-        private static ProfileModel MapGroup(SaveProfileRequestDto dto)
+        private static void MapGroup(ProfileModel profile, SaveProfileRequestDto dto)
         {
-            return new ProfileModel
-            {
-                Type = 4,
-                Code = dto.CodeGroup,
-                Account = dto.GroupNameGroup,
+            profile.Type = 4;
 
-                LanguageID = dto.LanguageGruop,
-                Address = dto.AddressGroup,
-                HomeAddress = dto.HomeAddressGroup,
-                City = dto.CityGroup,
-                PostalCode = dto.PostalGroup,
-                CountryID = dto.CountryGroup,
-                StateID = dto.StateGroup,
+            profile.Code = S(dto.CodeGroup);
+            profile.Account = S(dto.GroupNameGroup);
 
-                VIPID = dto.VIPGroup,
-                VIPReason = dto.VIPReasonGroup,
-                Description = dto.NotesGroup,
+            profile.LanguageID = dto.LanguageGruop;
+            profile.Address = S(dto.AddressGroup);
+            profile.HomeAddress = S(dto.HomeAddressGroup);
+            profile.City = S(dto.CityGroup);
+            profile.PostalCode = S(dto.PostalGroup);
+            profile.CountryID = dto.CountryGroup;
+            profile.StateID = dto.StateGroup;
 
-                Telephone = dto.TelephoneGroup,
-                Fax = dto.FaxGroup,
-                Email = dto.EmailGroup,
-                Website = dto.WebsiteGroup,
-                HandPhone = dto.HandPhoneGroup,
+            profile.VIPID = dto.VIPGroup;
+            profile.VIPReason = S(dto.VIPReasonGroup);
+            profile.Description = S(dto.NotesGroup);
 
-                History = dto.HistoryGroup,
-                AcctContact = dto.AcctContact,
-                CurrencyID = dto.CurrencyGroup,
+            profile.Telephone = S(dto.TelephoneGroup);
+            profile.Fax = S(dto.FaxGroup);
+            profile.Email = S(dto.EmailGroup);
+            profile.Website = S(dto.WebsiteGroup);
+            profile.HandPhone = S(dto.HandPhoneGroup);
 
-                UserInsertID = 136,
-                UserUpdateID = 136,
-                CreateDate = DateTime.Now,
-                UpdateDate = DateTime.Now
-            };
+            profile.History = dto.HistoryGroup;
+            profile.AcctContact = S(dto.AcctContact);
+            profile.CurrencyID = dto.CurrencyGroup;
+
+            profile.UserInsertID = 136;
+            profile.UserUpdateID = 136;
         }
-        private static ProfileModel MapContact(SaveProfileRequestDto dto)
+        private static void MapContact(ProfileModel profile, SaveProfileRequestDto dto)
         {
-            return new ProfileModel
-            {
-                Type = 5,
-                Code = dto.CodeContact,
-                Account = dto.AccountContact,
-                LastName = dto.LastNameContact,
-                Firstname = dto.FirstNameContact,
-                MiddleName = dto.MiddleNameContact,
+            profile.Type = 5;
 
-                LanguageID = dto.LanguageContact,
-                TitleID = dto.TitleContact,
-                Address = dto.AddressContact,
-                HomeAddress = dto.HomeAddressContact,
-                City = dto.CityContact,
-                PostalCode = dto.PostalContact,
-                CountryID = dto.CountryContact,
-                StateID = dto.StateContact,
-                Salutation = dto.SalutationContact,
-                DateOfBirth = dto.DobContact,
+            profile.Code = S(dto.CodeContact);
+            profile.Account = S(dto.AccountContact);
+            profile.LastName = S(dto.LastNameContact);
+            profile.Firstname = S(dto.FirstNameContact);
+            profile.MiddleName = S(dto.MiddleNameContact);
 
-                Telephone = dto.TelephoneContact,
-                Fax = dto.FaxContact,
-                Email = dto.EmaiContact,
-                Website = dto.WebsiteContact,
-                HandPhone = dto.HandPhoneContact,
+            profile.LanguageID = dto.LanguageContact;
+            profile.TitleID = dto.TitleContact;
+            profile.Salutation = S(dto.SalutationContact);
 
-                Position = dto.PositionContact,
-                Department = dto.DeptContact,
-                OwnerID = dto.OwnerContact,
-                TerritoryID = dto.TerritoryContact,
+            profile.Address = S(dto.AddressContact);
+            profile.HomeAddress = S(dto.HomeAddressContact);
+            profile.City = S(dto.CityContact);
+            profile.PostalCode = S(dto.PostalContact);
+            profile.CountryID = dto.CountryContact;
+            profile.StateID = dto.StateContact;
 
-                UserInsertID = 136,
-                UserUpdateID = 136,
-                CreateDate = DateTime.Now,
-                UpdateDate = DateTime.Now
-            };
+            profile.DateOfBirth = dto.DobContact;
+
+            profile.Telephone = S(dto.TelephoneContact);
+            profile.Fax = S(dto.FaxContact);
+            profile.Email = S(dto.EmaiContact);
+            profile.Website = S(dto.WebsiteContact);
+            profile.HandPhone = S(dto.HandPhoneContact);
+
+            profile.Position = S(dto.PositionContact);
+            profile.Department = S(dto.DeptContact);
+            profile.OwnerID = dto.OwnerContact;
+            profile.TerritoryID = dto.TerritoryContact;
+
+            profile.UserInsertID = 136;
+            profile.UserUpdateID = 136;
         }
-
         #endregion
     }
 }

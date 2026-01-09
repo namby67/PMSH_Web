@@ -4,16 +4,16 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="content-title-ind">New Profile - Individual</h5>
-                <button type="button" class="btn-close" onclick="closeFormProfile()" aria-label="Close"></button>
+                @*   <button type="button" class="btn-close" onclick="closeFormProfile()" aria-label="Close"></button> *@
             </div>
             <div class="modal-body">
                 <div class="mb-2">
-                    <button id="btnView" onclick="openModalSearch()"
-                        class="submit-button-clear-reservation">Search</button>
-                    <button type="button" class="submit-button-clear-reservation" onclick="saveProfile();">Save</button>
-                    <button type="button" class="submit-button-clear-reservation" onclick="closeFormProfile()">Change
+                    <button id="btnView" onclick="openModalSearch()" class="mui-button mui-button-new">Search</button>
+                    <button type="button" class="mui-button mui-button-new" onclick="saveProfile();">Save</button>
+                    <button type="button" class="mui-button mui-button-new" onclick="closeFormProfile()">Change
                         Profile Type</button>
-                    <button type="button" class="submit-button-new-reservation" onclick="resetForm()">Clear</button>
+                    <button type="button" class="mui-button mui-button-new" onclick="resetForm()">Clear</button>
+                    <button type="button" class="mui-button mui-button-new" onclick="closeFormProfile();">Close</button>
                 </div>
 
                 <div class="profile_input">
@@ -52,6 +52,7 @@
                                     <div class="row ">
                                         <div class="col-md-6 mui-card">
                                             <div class="row align-items-center mb-1">
+                                                <input hidden id="idIndividual" />
                                                 <label class="col-sm-4 col-form-label text-sm-end">
                                                     Code <span class="text-danger">*</span>
                                                 </label>
@@ -92,8 +93,7 @@
                                             </div>
 
                                             <div class="row align-items-center mb-1">
-                                                <label class="col-sm-4 col-form-label text-sm-end">Middle Name <span
-                                                        class="text-danger">*</span></label>
+                                                <label class="col-sm-4 col-form-label text-sm-end">Middle Name </label>
                                                 <div class="col-sm-6">
                                                     <input type="text" class="form-control"
                                                         id="txtMiddleNameIndividual">
@@ -224,8 +224,9 @@
                                             </div>
                                             <div class="d-flex justify-content-center">
                                                 <div data-mdb-ripple-init class="mui-button mui-button-new">
-                                                    <label class="form-label text-black m-1" for="customFile1">Choose
-                                                        file</label>
+                                                    <label class="form-label text-black m-1" for="customFile1">
+                                                        Upload
+                                                    </label>
                                                     <input type="file" class="form-control d-none" id="customFile1"
                                                         onchange="displaySelectedImage(event, 'selectedImage')" />
                                                 </div>
@@ -264,7 +265,9 @@
                                             </div>
                                             <div class="row align-items-center mb-1"><label
                                                     class="col-sm-4 col-form-label text-sm-end">VIP</label>
-                                                <div class="col-sm-6"><select id="txtVIPIndividual"></select>
+                                                <div class="col-sm-6">
+                                                    <select id="txtVIPIndividual"
+                                                        data-placeholder="Please select Language" class="ms-2"></select>
                                                 </div>
                                             </div>
                                             <div class="row align-items-center mb-1"><label
@@ -338,3 +341,287 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade modal-search" id="modalIndividualSearch" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content">
+            <div class="modal-header py-2">
+                <h6 class="modal-title mb-0">Search</h6>
+            </div>
+            <div class="modal-body pt-2">
+                <button type="button" class="mui-button mui-button-close " onclick="closeModalSearch()">  Close</button>
+
+                <div class="row mb-1 align-items-center">
+                    <label class="col-sm-2 col-form-label text-end">Search Name</label>
+                    <div class="col-sm-3">
+                        <input type="text" id="nameIndividual" class="form-control form-control-sm"
+                            placeholder="Enter user name" />
+                    </div>
+                    <label class="col-sm-1 col-form-label text-end">First</label>
+                    <div class="col-sm-4">
+                        <input type="text" id="firstNameIndividual" class="form-control form-control-sm"
+                            placeholder="Enter user name" />
+                    </div>
+                    <div class="col-sm-1">
+                        <button id="btnViewIndividual" class="mui-button mui-button-search">
+                            
+                        </button>
+                    </div>
+                </div>
+                <div id="profileIndividualGrid" class="gridContainer"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(async function () {
+        await setSelectIndividual();
+    });
+
+    const tomSelectInstances = {};
+    async function setSelectIndividual() {
+        const configs = [
+            "#select-beast-empty",
+            "#txtLanguageIndividual",
+            "#txtTitleIndividual",
+            "#txtNationalityIndividual",
+            "#txtCountryIndividual",
+            "#txtStateIndividual",
+            "#txtCityIndividual",
+            "#txtVIPIndividual",
+        ];
+
+        for (const id of configs) {
+            const el = document.querySelector(id);
+            if (!el) continue;
+
+            // Destroy nếu đã tồn tại (tránh duplicate khi mở modal nhiều lần)
+            if (tomSelectInstances[id]) {
+                tomSelectInstances[id].destroy();
+            }
+
+            tomSelectInstances[id] = new TomSelect(el, {
+                valueField: 'value',
+                labelField: 'text',
+                searchField: 'text',
+                create: false,
+                allowEmptyOption: true,
+                plugins: ['clear_button']
+            });
+        }
+    }
+
+    $(document).on('keydown', '#nameIndividual, #firstNameIndividual', async function (e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            await blindValue();
+        }
+    });
+
+    // Blacklist Logic
+    $('#blackListIndividual').on('change', function () {
+        const isChecked = this.checked;
+        $('#blackListReasonIndividual').prop('disabled', !isChecked).toggleClass('is-invalid', false);
+        if (isChecked) { $('#blackListReasonIndividual').css({ 'background-color': 'black', 'color': 'white' }); }
+        else { $('#blackListReasonIndividual').css({ 'background-color': '', 'color': '' }); }
+    });
+    $('#txtCheckboxDobIndividual').on('change', function () { $('#txtDobIndividual').prop('disabled', $(this).is(':checked')); });
+
+    // --- UI HELPERS ---
+    function openModalSearch() {
+        $('#modalIndividualSearch').modal('show');
+    }
+
+    function closeModalSearch() {
+        clearIndividualSearchModal();
+        $('#modalIndividualSearch').modal('hide');
+    }
+
+    //Fill dữ liệu cho Individual
+    function selectGroup(selectedRowData) {
+        if (!selectedRowData) return;
+
+        $('#idIndividual').val(selectedRowData.id ?? '');
+
+        // ===== BASIC INFO =====
+        $('#txtCodeIndividual').val(selectedRowData.code ?? '');
+        $('#txtFullNameIndividual').val(selectedRowData.account ?? '');
+        $('#txtFirstNameIndividual').val(selectedRowData.firstname ?? '');
+        $('#txtLastNameIndividual').val(selectedRowData.lastName ?? '');
+        $('#txtMiddleNameIndividual').val(selectedRowData.middleName ?? '');
+
+        // ===== TOMSELECT =====
+        setTomSelectValue('#txtLanguageIndividual',
+            selectedRowData.languageID,
+            selectedRowData.languageName
+        );
+
+        setTomSelectValue('#txtTitleIndividual',
+            selectedRowData.titleID,
+            selectedRowData.titleName
+        );
+
+        setTomSelectValue('#txtNationalityIndividual',
+            selectedRowData.nationalityID,
+            selectedRowData.nationalityName
+        );
+
+        setTomSelectValue('#txtCountryIndividual',
+            selectedRowData.countryID,
+            selectedRowData.countryName
+        );
+
+        setTomSelectValue('#txtStateIndividual',
+            selectedRowData.stateID,
+            selectedRowData.stateName
+        );
+
+        setTomSelectValue('#txtCityIndividual',
+            selectedRowData.cityID,
+            selectedRowData.cityName
+        );
+
+        setTomSelectValue('#txtVIPIndividual',
+            selectedRowData.vipid,
+            selectedRowData.vipName
+        );
+
+        // ===== TEXT FIELDS =====
+        $('#txtPostalIndividual').val(selectedRowData.postalCode ?? '');
+        $('#txtReligionIndividual').val(selectedRowData.religion ?? '');
+        $('#txtNationIndividual').val(selectedRowData.nation ?? '');
+        $('#txtPurposeIndividual').val(selectedRowData.purposeOfStay ?? '');
+
+        $('#txtAddressIndividual').val(selectedRowData.address ?? '');
+        $('#txtBusAddressIndividual').val(selectedRowData.homeAddress ?? '');
+
+        $('#txtTelephoneIndividual').val(selectedRowData.telephone ?? '');
+        $('#txtHandPhoneIndividual').val(selectedRowData.handPhone ?? '');
+        $('#txtFaxIndividual').val(selectedRowData.fax ?? '');
+        $('#txtEmailIndividual').val(selectedRowData.email ?? '');
+        $('#txtWebsiteIndividual').val(selectedRowData.website ?? '');
+
+        $('#txtCompany2Individual').val(selectedRowData.company ?? '');
+        $('#txtBusinessTitleIndividual').val(selectedRowData.businessTitle ?? '');
+        $('#txtCompanyIndividual').val(selectedRowData.company ?? '');
+
+        $('#txtTaxIndividual').val(selectedRowData.taxCode ?? '');
+        $('#txtPassportIndividual').val(selectedRowData.passPort ?? '');
+        $('#txtCardIndividual').val(selectedRowData.identityCard ?? '');
+
+        $('#txtSalutationIndividual').val(selectedRowData.salutation ?? '');
+        $('#txtReasonIndividual').val(selectedRowData.vipReason ?? '');
+
+        // ===== DOB =====
+        if (selectedRowData.dateOfBirth && !selectedRowData.dateOfBirth.startsWith('1900')) {
+            $('#txtDobIndividual').val(selectedRowData.dateOfBirth.substring(0, 10)).prop('disabled', false);
+            $('#txtCheckboxDobIndividual').prop('checked', true);
+        } else {
+            $('#txtDobIndividual').val('').prop('disabled', true);
+            $('#txtCheckboxDobIndividual').prop('checked', false);
+        }
+
+        // ===== STATUS =====
+        $('#txtActiveIndividual').prop('checked', !!selectedRowData.active);
+        $('#txtContactIndividual').prop('checked', !!selectedRowData.contact);
+
+        $('#txtKeywordIndividual').val(selectedRowData.keyword ?? '');
+        $('#txtNoteIndividual').val(selectedRowData.description ?? '');
+
+        // ===== BLACKLIST =====
+        $('#blackListIndividual').prop('checked', !!selectedRowData.isBlackList);
+        $('#blackListReasonIndividual')
+            .val(selectedRowData.blackListReason ?? '')
+            .prop('disabled', !selectedRowData.isBlackList);
+
+        closeModalSearch();
+    }
+
+    async function selectIndividual(id) {
+        try {
+            $("#loadingSpinner").show();
+            const res = await $.ajax({ url: 'FindIndividualByID/', method: "GET", data: { id: id } });
+            if (!res?.success) { showToast('Error', res?.message || 'Failed.', false); return; }
+            const pkg = res.data;
+            selectGroup(pkg);
+            $("#loadingSpinner").hide();
+        } catch (error) { console.error(error); $("#loadingSpinner").hide(); }
+    }
+
+    async function initializeProfileIndividualGrid(data) {
+        $("#profileIndividualGrid").dxDataGrid({
+            dataSource: data || [],
+            showBorders: true,
+            selection: { mode: "single" },
+            paging: { pageSize: 20 },
+            height: "300px",
+            pager: { showPageSizeSelector: true, allowedPageSizes: [5, 10, 20], showInfo: true },
+            filterRow: { visible: true },
+            columns: [{ dataField: "id", caption: "ID", visible: false }, { dataField: "name", caption: "Name" }],
+            scrolling: { mode: "standard", showScrollbar: "always", scrollByContent: true },
+            onRowClick: async function (e) {
+                selectedRowData = e.data.id;
+                await selectIndividual(selectedRowData);
+            },
+            noDataText: "No records to display"
+        });
+    }
+
+    async function getProfileIndividualSreach(value) {
+        try {
+            $("#loadingSpinner").show();
+            const res = await $.ajax({ url: '/ProfileIndividualSreach/', method: "GET", data: { LastName: value.name, FirstName: value.firstName } });
+            if (!res?.success) { showToast('Error', res?.message || 'Failed.', false); return; }
+            initializeProfileIndividualGrid(res.data);
+            $("#loadingSpinner").hide();
+        } catch (error) { console.error(error); $("#loadingSpinner").hide(); }
+    }
+
+    async function blindValue() {
+        const searchModel = {
+            name: document.getElementById('nameIndividual').value.trim(),
+            firstName: document.getElementById('firstNameIndividual').value.trim()
+        };
+        await getProfileIndividualSreach(searchModel);
+    }
+
+    function bindIndividualSearch() {
+        const inputs = ['nameIndividual', 'firstNameIndividual'];
+        inputs.forEach(id => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.addEventListener('keydown', async function (event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    await blindValue();
+                }
+            });
+        });
+    }
+
+    async function bindIndividualSearchButton() {
+        const btn = document.getElementById('btnViewIndividual');
+        if (btn) {
+            btn.addEventListener('click', async function () {
+                await blindValue();
+            });
+        }
+    }
+
+    bindIndividualSearch();
+
+    function clearIndividualSearchModal() {
+        // Clear input
+        $('#nameIndividual').val('');
+        $('#firstNameIndividual').val('');
+
+        // Clear grid (DevExtreme)
+        const grid = $('#profileIndividualGrid').dxDataGrid('instance');
+        if (grid) {
+            grid.option('dataSource', []);
+            grid.clearSelection();
+        }
+    }
+
+
+</script>

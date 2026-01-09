@@ -4,14 +4,16 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">New Profile - Company / TA / Source</h5>
-                <button type="button" class="btn-close" onclick="closeFormProfile()" aria-label="Close"></button>
+                @*                 <button type="button" class="btn-close" onclick="closeFormProfile()" aria-label="Close"></button> *@
             </div>
             <div class="modal-body">
                 <div class="mb-2">
                     <button type="button" class="submit-button-clear-reservation" onclick="saveProfile();">Save</button>
                     <button type="button" class="submit-button-clear-reservation" onclick="closeFormProfile()">Change
                         Profile Type</button>
-                    <button type="button" class="submit-button-new-reservation" onclick="resetForm()">Clear</button>
+                    <button type="button" class="submit-button-clear-reservation" onclick="resetForm()">Clear</button>
+                    <button type="button" class="submit-button-clear-reservation"
+                        onclick="closeFormProfile();">Close</button>
                 </div>
 
                 <div class="profile_input">
@@ -50,7 +52,7 @@
                                         <div class="col-md-6 mui-card">
 
                                             <div class="row align-items-center mb-1">
-                                                <label class="col-md-4 col-form-label text-end fw-semibold">
+                                                <label class="col-md-4 col-form-label text-sm-end fw-semibold">
                                                     Code <span class="text-danger">*</span>
                                                 </label>
                                                 <div class="col-md-5">
@@ -63,7 +65,7 @@
                                             </div>
 
                                             <div class="row align-items-center mb-1">
-                                                <label class="col-md-4 col-form-label text-end">Account</label>
+                                                <label class="col-md-4 col-form-label text-sm-end">Account</label>
                                                 <div class="col-md-6">
                                                     <input type="text" class="form-control " id="txtAccountCOM"
                                                         name="accountCOM">
@@ -72,14 +74,14 @@
                                             </div>
 
                                             <div class="row align-items-center mb-1">
-                                                <label class="col-md-4 col-form-label text-end">Address</label>
+                                                <label class="col-md-4 col-form-label text-sm-end">Address</label>
                                                 <div class="col-md-6">
                                                     <input type="text" class="form-control " id="txtAddressCOM">
                                                 </div>
                                             </div>
 
                                             <div class="row align-items-center mb-1">
-                                                <label class="col-md-4 col-form-label text-end">
+                                                <label class="col-md-4 col-form-label text-sm-end">
                                                     City / Country <span class="text-danger">*</span>
                                                 </label>
                                                 <div class="col-md-3">
@@ -97,7 +99,8 @@
                                             </div>
 
                                             <div class="row align-items-center mb-1">
-                                                <label class="col-md-4 col-form-label text-end">Postal / State</label>
+                                                <label class="col-md-4 col-form-label text-sm-end">Postal /
+                                                    State</label>
                                                 <div class="col-md-2">
                                                     <input type="text" class="form-control form-control-sm"
                                                         id="txtPostalCOM">
@@ -115,7 +118,7 @@
                                         <div class="col-md-6 mui-card">
 
                                             <div class="row align-items-center mb-1">
-                                                <label class="col-md-2 col-form-label text-end">Telephone</label>
+                                                <label class="col-md-2 col-form-label text-sm-end">Telephone</label>
                                                 <div class="col-md-6">
                                                     <input type="text" class="form-control form-control-sm"
                                                         id="txtTelephoneCOM">
@@ -123,7 +126,7 @@
                                             </div>
 
                                             <div class="row align-items-center mb-1">
-                                                <label class="col-md-2 col-form-label text-end">Hand Phone</label>
+                                                <label class="col-md-2 col-form-label text-sm-end">Hand Phone</label>
                                                 <div class="col-md-6">
                                                     <input type="text" class="form-control form-control-sm"
                                                         id="txtHandPhoneCOM">
@@ -131,7 +134,7 @@
                                             </div>
 
                                             <div class="row align-items-center mb-1">
-                                                <label class="col-md-2 col-form-label text-end">Contact Name</label>
+                                                <label class="col-md-2 col-form-label text-sm-end">Contact Name</label>
                                                 <div class="col-md-6">
                                                     <input type="text" class="form-control form-control-sm"
                                                         id="txtContactNameCOM">
@@ -139,7 +142,7 @@
                                             </div>
 
                                             <div class="row align-items-center mb-1">
-                                                <label class="col-md-2 col-form-label text-end">Email</label>
+                                                <label class="col-md-2 col-form-label text-sm-end">Email</label>
                                                 <div class="col-md-6">
                                                     <input type="text" class="form-control form-control-sm"
                                                         id="txtEmailCOM">
@@ -147,7 +150,7 @@
                                             </div>
 
                                             <div class="row align-items-center mb-1">
-                                                <label class="col-md-2 col-form-label text-end">Website</label>
+                                                <label class="col-md-2 col-form-label text-sm-end">Website</label>
                                                 <div class="col-md-6">
                                                     <input type="text" class="form-control form-control-sm"
                                                         id="txtWebsiteCOM">
@@ -155,7 +158,7 @@
                                             </div>
 
                                             <div class="row align-items-center mb-1">
-                                                <label class="col-md-2 col-form-label text-end">Company</label>
+                                                <label class="col-md-2 col-form-label text-sm-end">Company</label>
                                                 <div class="col-md-6">
                                                     <input type="text" class="form-control form-control-sm"
                                                         id="txtCompany2COM">
@@ -163,7 +166,8 @@
                                             </div>
 
                                             <div class="row align-items-center">
-                                                <label class="col-md-2 col-form-label text-end">Business Title</label>
+                                                <label class="col-md-2 col-form-label text-sm-end">Business
+                                                    Title</label>
                                                 <div class="col-md-6">
                                                     <input type="text" class="form-control form-control-sm"
                                                         id="txtBusTitleCOM">
@@ -179,7 +183,7 @@
                                         <div class="col-md-6 mui-card">
 
                                             <div class="row align-items-center mb-1">
-                                                <label class="col-md-4 col-form-label text-end">Company</label>
+                                                <label class="col-md-4 col-form-label text-sm-end">Company</label>
                                                 <div class="col-md-6">
                                                     <input type="text" class="form-control form-control-sm"
                                                         id="txtCompanyCOM">
@@ -187,7 +191,7 @@
                                             </div>
 
                                             <div class="row align-items-center mb-1">
-                                                <label class="col-md-4 col-form-label text-end">Tax Code</label>
+                                                <label class="col-md-4 col-form-label text-sm-end">Tax Code</label>
                                                 <div class="col-md-6">
                                                     <input type="text" class="form-control form-control-sm"
                                                         id="txtTaxCOM">
@@ -195,7 +199,7 @@
                                             </div>
 
                                             <div class="row align-items-center mb-2">
-                                                <label class="col-md-4 col-form-label text-end">Bus. Address</label>
+                                                <label class="col-md-4 col-form-label text-sm-end">Bus. Address</label>
                                                 <div class="col-md-6">
                                                     <input type="text" class="form-control form-control-sm"
                                                         id="txtBusAddressCOM">
@@ -205,7 +209,7 @@
                                             <hr class="my-2">
 
                                             <div class="row align-items-center mb-1">
-                                                <label class="col-md-4 col-form-label text-end">Owner</label>
+                                                <label class="col-md-4 col-form-label text-sm-end">Owner</label>
                                                 <div class="col-md-6">
                                                     <select id="txtOwnerCOM" class="form-select-sm"
                                                         data-placeholder="Please select Owner">
@@ -215,7 +219,7 @@
                                             </div>
 
                                             <div class="row align-items-center mb-1">
-                                                <label class="col-md-4 col-form-label text-end">Territory</label>
+                                                <label class="col-md-4 col-form-label text-sm-end">Territory</label>
                                                 <div class="col-md-6">
                                                     <select id="txtTerritoryCOM" class="form-select-sm"
                                                         data-placeholder="Please select Territory">
@@ -225,7 +229,7 @@
                                             </div>
 
                                             <div class="row align-items-center mb-1">
-                                                <label class="col-md-4 col-form-label text-end">Type</label>
+                                                <label class="col-md-4 col-form-label text-sm-end">Type</label>
                                                 <div class="col-md-6">
                                                     <select id="txtCompanyTypeCOM" class="form-select-sm"
                                                         data-placeholder="Please select Type">
@@ -235,7 +239,7 @@
                                             </div>
 
                                             <div class="row align-items-center mb-1">
-                                                <label class="col-md-4 col-form-label text-end">A/R No</label>
+                                                <label class="col-md-4 col-form-label text-sm-end">A/R No</label>
                                                 <div class="col-md-6">
                                                     <input type="text" class="form-control form-control-sm"
                                                         id="txtARCOM">
@@ -243,7 +247,7 @@
                                             </div>
 
                                             <div class="row align-items-center mb-1">
-                                                <label class="col-md-4 col-form-label text-end">Currency</label>
+                                                <label class="col-md-4 col-form-label text-sm-end">Currency</label>
                                                 <div class="col-md-6">
                                                     <select id="txtCurrencyCOM" class="form-select-sm"
                                                         data-placeholder="Please select Currency">
@@ -253,7 +257,8 @@
                                             </div>
 
                                             <div class="row align-items-center mb-1">
-                                                <label class="col-md-4 col-form-label text-end">Sale In Charge</label>
+                                                <label class="col-md-4 col-form-label text-sm-end">Sale In
+                                                    Charge</label>
                                                 <div class="col-md-6">
                                                     <select id="txtSaleInChargeCOM" class="form-select-sm"
                                                         data-placeholder="Please select Sale In Charge">
@@ -263,7 +268,7 @@
                                             </div>
 
                                             <div class="row align-items-center">
-                                                <label class="col-md-4 col-form-label text-end">Market Type</label>
+                                                <label class="col-md-4 col-form-label text-sm-end">Market Type</label>
                                                 <div class="col-md-6">
                                                     <select id="txtMarketTypeCOM" class="form-select-sm"
                                                         data-placeholder="Please select Market Type">
@@ -277,23 +282,23 @@
                                         <div class="col-md-6 mui-card">
 
                                             <div class="row align-items-center mb-1">
-                                                <label class="col-md-2 col-form-label text-end">Market</label>
+                                                <label class="col-md-2 col-form-label text-sm-end">Market</label>
                                                 <div class="col-md-6">
                                                     <select id="txtMarketCOM" class="form-select-sm"
-                                                        data-placeholder="Please select Market">
+                                                        data-placeholder="Please select Market" disabled>
 
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="row align-items-center mb-1">
-                                                <label class="col-md-2 col-form-label text-end">Active</label>
+                                                <label class="col-md-2 col-form-label text-sm-end">Active</label>
                                                 <div class="col-md-6">
                                                     <input type="checkbox" class="form-check-input" id="txtActiveCOM">
                                                 </div>
                                             </div>
 
                                             <div class="row align-items-center mb-1">
-                                                <label class="col-md-2 col-form-label text-end">Black list</label>
+                                                <label class="col-md-2 col-form-label text-sm-end">Black list</label>
                                                 <div class="col-md-6">
                                                     <input type="text" class="form-control form-control-sm"
                                                         id="blackListReasonCOM" name="blackListReasonCOM" disabled>
@@ -305,7 +310,7 @@
                                             </div>
 
                                             <div class="row align-items-start">
-                                                <label class="col-md-2 col-form-label text-end">Notes</label>
+                                                <label class="col-md-2 col-form-label text-sm-end">Notes</label>
                                                 <div class="col-md-10">
                                                     <textarea id="txtNoteCOM"
                                                         class="form-control form-control-sm note-textarea"
@@ -323,3 +328,43 @@
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(async function () {
+        await setSelectCompany();
+    });
+    const tomSelectCompany = {};
+    async function setSelectCompany() {
+        const configs = [
+            "#select-beast-empty", "#txtCityCOM", "#txtCountryCOM",
+            "#txtStateCOM", "#txtOwnerCOM", "#txtTerritoryCOM",
+            "#txtCompanyTypeCOM", "#txtSaleInChargeCOM", "#txtCurrencyCOM",
+            "#txtMarketCOM", "#txtMarketTypeCOM",
+        ];
+
+        for (const id of configs) {
+            const el = document.querySelector(id);
+            if (!el) continue;
+
+            // Destroy nếu đã tồn tại (tránh duplicate khi mở modal nhiều lần)
+            if (tomSelectInstances[id]) {
+                tomSelectInstances[id].destroy();
+            }
+
+            tomSelectInstances[id] = new TomSelect(el, {
+                valueField: 'value',
+                labelField: 'text',
+                searchField: 'text',
+                create: false,
+                allowEmptyOption: true,
+                plugins: ['clear_button']
+            });
+        }
+    }
+
+    $('#blackListCOM').on('change', function () {
+        const isChecked = this.checked;
+        $('#blackListReasonCOM').prop('disabled', !isChecked).toggleClass('is-invalid', false);
+        if (isChecked) { $('#blackListReasonCOM').css({ 'background-color': 'black', 'color': 'white' }); }
+        else { $('#blackListReasonCOM').css({ 'background-color': '', 'color': '' }); }
+    });
+</script>

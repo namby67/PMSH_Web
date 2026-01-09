@@ -1,4 +1,15 @@
-﻿﻿﻿.confirm-overlay {
+﻿:root {
+    --primary-dark: #009444;
+    --primary-medium: #70b094;
+    --primary-light: #a3c4a3;
+    --bg-body: #f4f8f4;
+    --bg-container: #f4f8f4;
+    --bg-white-green: #f4f8f4;
+    --text-dark: #143314;
+    --text-light: #ffffff;
+}
+﻿﻿
+.confirm-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -595,7 +606,8 @@ h1 {
     min-height: auto;
     max-height: 80vh; /* Giới hạn chiều cao tối đa, cho phép cuộn dọc nếu form dài */
     overflow-y: auto; /* Cuộn dọc bên trong body nếu cần */
-    padding-bottom: 1.5rem !important;
+    padding-top: 2.5rem !important;
+    padding-bottom: 3.5rem !important;
 }
 
 /* Đảm bảo nội dung form không bị đẩy xuống quá xa */
@@ -642,7 +654,7 @@ button:hover {
 input[type="checkbox"] {
   width: 16px;
   height: 16px;
-  accent-color: #009444;
+  accent-color: #027C75;
 }
 
 .specials-section-new-reservation {
@@ -673,8 +685,8 @@ textarea {
   padding: 6px 12px;
   font-size: 16px;
   background-color: white;
-  color: #009444;
-  border: 1px solid #009444;
+  color: #027C75;
+  border: 1px solid #027C75;
 }
 
 .box-function {
@@ -778,8 +790,8 @@ textarea {
 
 .toolbar-menu a:hover {
   background: #ffffff;
-  color: #009444;
-  border: 1px solid #009444;
+  color: #027C75;
+  border: 1px solid #027C75;
 }
 
 .submenu {
@@ -887,4 +899,45 @@ textarea {
   color: #2b6cb0 !important; /* xanh chủ đạo */
   background-color: #edf2f7 !important; /* nền xám nhạt */
   border-left: 3px solid #dd6b20; /* viền trái cam */
+}
+
+
+/* --- MODAL STYLES DÙNG CHO CÁC MODAL CON CỦA BILLING --- */
+
+.modal-backdrop.show {
+    opacity: 0.75 !important;
+    background-color: #d5e0d1 !important;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.modal-dialog {
+    margin-top: 15px !important;
+    margin-bottom: 0px !important;
+    border-radius: 10px;
+}
+
+.modal-header {
+    padding: 4px 10px !important;
+    min-height: unset !important;
+    border-bottom: 1px solid var(--primary-light) !important;
+    background-color: var(--primary-dark) !important;
+    color: var(--text-light) !important;
+}
+
+.modal-title {
+    font-size: 1rem !important;
+    color: #ffffff !important;
+    line-height: 1.2 !important;
+    font-weight: 700 !important;
+    margin: 0 !important;
+}
+
+.modal-body {
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+}
+
+.modal-content {
+    border: 1px solid green;
 }
