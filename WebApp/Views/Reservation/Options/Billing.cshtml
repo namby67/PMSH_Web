@@ -80,35 +80,41 @@
                         <div class="billing-col">
                             <div class="info-group">
                                 <label>Balance:</label>
-                                <span id="balanceBilling" class="text-danger fw-bold"></span>
+                                <span id="balanceBilling" class="fw-bold"></span>
                             </div>
                         </div>
                         <div class="billing-col">
                             <div class="info-group">
                                 <label>Total:</label>
-                                <span id="totalBilling" class="text-danger fw-bold"></span>
+                                <span id="totalBilling" class="fw-bold"></span>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="billing-body-main">
-
                     <div class="folio-container">
                         <div class="folio-header">
                             <span>FOLIO</span>
                             <i class="fas fa-plus add-icon" title="Add New Folio" onclick="openModalNewWindow();"></i>
                         </div>
-                        <ul id="listFolioNo" class="folio-list">
-                        </ul>
+                        <ul id="listFolioNo" class="folio-list"></ul>
                     </div>
 
                     <div class="grid-wrapper">
-                        <div class="grid-header-info">
-                            <span id="infoBillingName"><i class="fas fa-spinner fa-spin"></i> Loading...</span>
-                            <div class="d-flex align-items-center">
-                                <span class="me-2 text-muted" style="font-size:0.8rem; font-weight:600;">Folio Balance:</span>
+                        <div class="grid-header-info d-flex align-items-center">
+                            <div style="flex-grow: 1; padding-left: 5px;">
+                                <span id="infoBillingName"><i class="fas fa-spinner fa-spin"></i> Loading...</span>
+                            </div>
+
+                            <div style="flex: 0 0 12.5%; padding: 0 5px;">
+                                <span class="me-2 text-muted" style="font-size:0.8rem; font-weight:600;">Folio Bal:</span>
                                 <label id="balanceBillingMaster" class="text-danger fw-bold">0</label>
+                            </div>
+
+                            <div style="flex: 0 0 12.5%; padding: 0 5px;">
+                                <span class="me-2 text-muted" style="font-size:0.8rem; font-weight:600;">Total:</span>
+                                <label id="totalBillingMaster" class="fw-bold">0</label>
                             </div>
                         </div>
 
@@ -244,7 +250,7 @@
                  if (xhr.status == 401) sessionTimeout();
              }
          });
-     }
+    }
     invoiceNoPosting = 0;
     var listFolioNoID = [];
     function getFolioNo() {
@@ -346,10 +352,8 @@
         $('.folio-item').removeClass('active');
 
         if (element) {
-            // Người dùng Click trực tiếp -> Dùng 'this'
             $(element).addClass('active');
         } else {
-            // Gọi tự động bằng code -> Dùng Index
             $('#listFolioNo .folio-row').eq(index).find('.folio-item').addClass('active');
         }
 
@@ -366,9 +370,36 @@
     }
     var folioDetailID = 0;
     var transCodeBilling = "";
+    
+    //NGHIỆP VỤ TÍNH TOÁN BALANCE & TOTAL ---
+    function updateBillingHeaderStats(data) {
+        let totalBalance = 0; 
+        let totalCharges = 0;
+
+        if (data && data.length > 0) {
+            data.forEach(item => {
+                let val = parseFloat(item.amount) || 0;
+
+                totalBalance += val;
+
+                if (val > 0) {
+                    totalCharges += val;
+                }
+            });
+        }
+
+        $('#balanceBilling').text(totalBalance.toLocaleString('vi-VN'));
+        $('#totalBilling').text(totalCharges.toLocaleString('vi-VN'));
+        $('#balanceBillingMaster').text(totalBalance.toLocaleString('vi-VN'));
+    }
+
     function initializeDataGridBilling(data) {
-        totalAmountBilling = getTotalAmount(data);
+        updateBillingHeaderStats(data);
+
+        totalAmountBilling = data.reduce((total, item) => total + (parseFloat(item.amount) || 0), 0);
         $('#balanceBillingMaster').text(totalAmountBilling.toLocaleString('vi-VN'));
+
+        $('#totalBillingMaster').text('0');
 
         $("#gridContainerBilling").dxDataGrid({
             dataSource: data,
@@ -396,12 +427,11 @@
             columns: [
                 {
                     type: "selection",
-                    width: "3%", 
+                    width: "3%",
                     fixed: true,
                     allowResizing: false
                 },
                 { dataField: "id", visible: false },
-
                 {
                     dataField: 'date',
                     caption: 'Date',
@@ -429,7 +459,6 @@
                             .appendTo(container);
                     }
                 },
-
                 {
                     dataField: "invoiceNo",
                     caption: "Inv.No",
@@ -445,10 +474,8 @@
                 },
                 { dataField: "supplement", caption: "Supplement", width: "7%" },
                 { dataField: "reference", caption: "Reference", width: "9%" },
-
                 { dataField: "userName", caption: "User", width: "5%"},
                 { dataField: "time", caption: "Time", width: "5%"},
-
                 {
                     dataField: "groupCode",
                     caption: "Group",
@@ -467,7 +494,6 @@
                     width: "5%",
                     hidingPriority: 2
                 },
-
                 {
                     dataField: "transactionNo",
                     caption: "Trn.No",
@@ -478,23 +504,45 @@
             filterRow: { visible: true, applyFilter: "auto" },
             selection: { mode: "multiple", showCheckBoxesMode: "always" },
             onRowClick: function(e) {
-                invoiceNoPosting = e.data.invoiceNo;
+                if (e.rowType === "data") {
+                    invoiceNoPosting = e.data.invoiceNo;
+                    folioDetailID = e.data.id;
+
+                    var component = e.component;
+                    var key = e.key;
+
+                    if (component.isRowSelected(key)) {
+                        component.deselectRows([key]);
+                    } else {
+                        component.selectRows([key], true);
+                    }
+                }
             },
             onContentReady: function(e) {
                 if (typeof selectedCodesFromResult !== 'undefined' && data) {
                     const keysToSelect = data.filter(item => selectedCodesFromResult.includes(item.code)).map(item => item.id);
                     if (keysToSelect.length > 0) e.component.selectRows(keysToSelect, false);
                 }
-            }
+            },
+            onSelectionChanged: function(e) {
+                var selectedRows = e.selectedRowsData;
+                var totalSelected = 0;
+
+                if (selectedRows.length > 0) {
+                    selectedRows.forEach(function(item) {
+                        totalSelected += (parseFloat(item.amount) || 0);
+                    });
+                }
+
+                $('#totalBillingMaster').text(totalSelected.toLocaleString('vi-VN'));
+            },
         });
     }
 
     function clearSelectedRowsBilling() {
         const grid = $("#gridContainerBilling").dxDataGrid("instance");
         if (grid) {
-            grid.deselectAll();  // Bỏ chọn tất cả các hàng
-            // Optional: Cập nhật lại UI hoặc biến nếu cần
-            // Ví dụ: Reset các biến liên quan đến lựa chọn
+            grid.deselectAll();  
             invoiceNoPosting = null;
             folioDetailID = null;
             $("#transactionInfoSplit").text('');

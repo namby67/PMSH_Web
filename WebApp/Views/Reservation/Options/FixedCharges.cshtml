@@ -9,15 +9,15 @@
             </div>
             <div class="modal-body">
                 <div>
-                    <button class="mui-button mui-button-search" onclick="openNewFixedCharges();"> New</button>
-                    <button class="mui-button mui-button-edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
-                    <button class="mui-button mui-button-delete"> Delete</button>
-                    <button class="mui-button mui-button-clear"><i class="fa-solid fa-arrows-rotate"></i> Refresh</button>
+                    <button class="mui-button mui-button-add" onclick="openNewFixedCharges();"> New</button>
+                    <button class="mui-button mui-button-edit"> Edit</button>
+                    <button class="mui-button mui-button-delete">Delete</button>
+                    <button class="mui-button mui-button-clear">Refresh</button>
                     <button class="mui-button mui-button-export" onclick="AddReservationFixedChargeDefault('fc1');"> EB-TA</button>
                     <button class="mui-button mui-button-export" onclick="AddReservationFixedChargeDefault('fc2');"> EB-IND</button>
                     <button class="mui-button mui-button-export" onclick="AddReservationFixedChargeDefault('fc3');"> CS-TA</button>
                     <button class="mui-button mui-button-export" onclick="AddReservationFixedChargeDefault('fc4');"> CS-IND</button>
-                    <button class="mui-button mui-button-close" onclick="closeModalFixedCbarges();"><i class="fas fa-times"></i> Close</button>
+                    <button class="mui-button mui-button-close" onclick="closeModalFixedCbarges();"> Close</button>
                 </div>
                 <div class="mui-divider"></div>
                 <div class="bg-light border rounded" style="display:none;padding: 0 12px 12px 12px" id="filterFixedChargeWrapper">
@@ -104,8 +104,8 @@
                         </div>
                     </div>
                     <div>
-                        <button class="mui-button mui-button-new" onclick="SaveReservationFixedCharge();"> Save</button>
-                        <button class="mui-button mui-button-cancel" onclick="cancelFixedCharges();"><i class="fa-solid fa-pen-to-square"></i> Cancel</button>
+                        <button class="mui-button mui-button-save" onclick="SaveReservationFixedCharge();"> Save</button>
+                        <button class="mui-button mui-button-cancel" onclick="cancelFixedCharges();">Cancel</button>
                     </div>
                 </div>
                 <div class="mui-card mt-2">

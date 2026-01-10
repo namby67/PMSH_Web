@@ -98,7 +98,7 @@
         }
 
 #balanceBilling, #totalBilling, #balanceBillingMaster {
-    color: var(--danger-color) !important;
+    color: var(--text-dark) !important;
     font-weight: 800 !important;
 }
 
