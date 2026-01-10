@@ -4,14 +4,14 @@
 
             <div class="modal-header">
                 <h5 class="modal-title" id="staticBackdropLabel">Package </h5>
-                <button type="button" class="btn-close" onclick="closeModalPackage()"></button>
+               @*  <button type="button" class="btn-close" onclick="closeModalPackage()"></button> *@
             </div>
             <div class="modal-body">
                 <div>
-                    <button class="submit-button-clear-reservation" onclick="openModalNewPackage();">New</button>
-                    <button class="submit-button-clear-reservation" onclick="openModalOption();" id="btnEditPackage">Edit</button>
-                    <button class="submit-button-clear-reservation" onclick="openModalMoreFields();" id="btnDeletePackage">Delete</button>
-                    <button class="submit-button-clear-reservation" onclick="window.location.href='/Home/Index'">Close</button>
+                    <button class="mui-button mui-button-search" onclick="openModalNewPackage();">New</button>
+                    <button class="mui-button mui-button-search" onclick="openModalOption();" id="btnEditPackage">Edit</button>
+                    <button class="mui-button mui-button-search" onclick="openModalMoreFields();" id="btnDeletePackage">Delete</button>
+                    <button class="mui-button mui-button-search" onclick="closeModalPackage()"></button>
                 </div>
                 <div class="mui-divider"></div>
                 <div class="mui-card mt-2">
@@ -27,12 +27,12 @@
 
             <div class="modal-header">
                 <h5 class="modal-title" id="staticBackdropLabel">New Package</h5>
-                <button type="button" class="btn-close" onclick="closeModalNewPackage()"></button>
+         @*        <button type="button" class="btn-close" onclick="closeModalNewPackage()"></button> *@
             </div>
             <div class="modal-body">
                 <div>
-                    <button class="submit-button-clear-reservation" onclick="SavePackage();"> OK</button>
-                    <button class="submit-button-clear-reservation" onclick="closeModalNewPackage();">Close</button>
+                    <button class="mui-button mui-button-search" onclick="SavePackage();"> OK</button>
+                    <button class="mui-button mui-button-search" onclick="closeModalNewPackage();">Close</button>
                 </div>
                 <div class="row mt-2">
                     <div class="form-group-new-reservation col-md-6">

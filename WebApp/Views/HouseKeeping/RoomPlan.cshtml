@@ -783,7 +783,7 @@
             }
         });
     });
-    let roomNo, roomtypeid, idReservation, roomID;
+    let roomNorl, roomtypeid, idReservationrl, roomIDrl;
     let originalAppointmentData = null;
     function initializeRoomScheduler(schedulerData, fromDate, toDate) {
         if (!schedulerData || !schedulerData.length) return;
@@ -943,7 +943,8 @@
             , onAppointmentUpdating: async function (e) {
                 const oldData = e.oldData;
                 const newData = e.newData;
-                idReservation = oldData.reservationID;
+                idReservationrl = oldData.reservationID;
+                console.log(idReservationrl);
                 console.log(oldData);
                 console.log(newData);
                 const oldStart = oldData.startDate.getTime();
@@ -956,12 +957,12 @@
                     oldEnd !== newEnd ||
                     oldData.roomID !== newData.roomID;
 
-                // getInfoByProfileIndividualID(idReservation);
+                // getInfoByProfileIndividualID(idReservationrl);
 
                 try {
                     const result = await getRoomID(newData.roomID);
-                    roomID = result.id;
-                    roomNo = result.roomNo;
+                    roomIDrl = result.id;
+                    roomNorl = result.roomNo;
                     roomtypeid = result.roomTypeID;
                     const roomtypecode = result.roomTypeCode;
                     ;
@@ -980,19 +981,19 @@
                             } else if (action === "review") {
                                 originalAppointmentData = oldData;
                                 $('#modalEdit').modal('show');
-                                // getReservationByIDReview(idReservation);
+                                // getReservationByIDReview(idReservationrl);
 
                                 e.cancel = true;
                                 e.newData.startDate = oldData.startDate;
                                 e.newData.endDate = oldData.endDate;
                                 e.newData.roomID = oldData.roomID;
-                                goReview(idReservation);
+                                goReview(idReservationrl);
 
 
                             } else if (action === "update") {
 
-                                // getReservationByID(idReservation, newData.startDate, newData.endDate, roomNo, roomtypeid,roomID);
-                                goUpdate(idReservation, newData.startDate, newData.endDate, roomNo, roomtypeid, roomID);
+                                // getReservationByID(idReservationrl, newData.startDate, newData.endDate, roomNo, roomtypeid,roomID);
+                                goUpdate(idReservationrl, newData.startDate, newData.endDate, roomNorl, roomtypeid, roomIDrl);
                             }
                         } else {
                             const confirmed = confirm("Are you sure to edit?");
@@ -1005,7 +1006,7 @@
                                 return;
                             } else {
 
-                                goUpdate(idReservation, newData.startDate, newData.endDate, roomNo, roomtypeid, roomID);
+                                goUpdate(idReservationrl, newData.startDate, newData.endDate, roomNorl, roomtypeid, roomIDrl);
                             }
                         }
                     }
@@ -1044,7 +1045,7 @@
             }
         }, 200);
     }
-    function goUpdate(idReservation, startDate, endDate, roomNo, roomtypeid, roomID) {
+    function goUpdate(idReservationrl, startDate, endDate, roomNorl, roomtypeid, roomIDrl) {
          var modal = $('#newReservationModal');
 
         // Luôn hiển thị loading
@@ -1061,12 +1062,12 @@
         $.ajax({
             url: '/Reservation/EncryptId',
             type: 'POST',
-            data: { id: idReservation },
+            data: { id: idReservationrl },
             success: function (response) {
                 if (response.success) {
                     var start = formatDate(startDate);
                     var end = formatDate(endDate);
-                    var data = start + "|" + end + "|" + roomNo + "|" + roomtypeid + "|" + idReservation;
+                    var data = start + "|" + end + "|" + roomNorl + "|" + roomtypeid + "|" + idReservationrl;
 
 
                     localStorage.setItem("ReservationRoomPlan", data);
@@ -1095,7 +1096,7 @@
     }
 
 
-    function goReview(idReservation) {
+    function goReview(idReservationrl) {
         var modal = $('#newReservationModal');
 
         // Luôn hiển thị loading
@@ -1112,7 +1113,7 @@
         $.ajax({
             url: '/Reservation/EncryptId',
             type: 'POST',
-            data: { id: idReservation },
+            data: { id: idReservationrl },
             success: function (response) {
                 if (response.success) {
                     // Chuyển hướng đến trang chỉnh sửa
@@ -1240,7 +1241,7 @@
         let cleanValueDiscountPercent = valueDiscountPercent.replace(/[^0-9]/g, '');
         let valueDiscountAmount = $('#txtDiscountAmount').val();
         let cleanValueDiscountAmount = valueDiscountAmount.replace(/[^0-9]/g, '');
-        formData.append('rsvID', idReservation);
+        formData.append('rsvID', idReservationrl);
 
         formData.append('profileAgentID', $('#txtAgent').val());
         formData.append('agentName', $('#txtAgent').find('option:selected').text());

@@ -6,7 +6,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="staticBackdropLabel">Option</h5>
-                <button type="button" class="btn-close" onclick="closeModalOption()"></button>
+               @*  <button type="button" class="btn-close" onclick="closeModalOption()"></button> *@
             </div>
             <div class="modal-body">
                 <!-- Tab Navigation -->
@@ -51,9 +51,9 @@
                     <div class="tab-pane fade show active" id="accompanying" role="tabpanel" aria-labelledby="tab1-tab">
                         <div class="p-3">
                             <div class="mb-1 mt-2">
-                                <button class="mui-button mui-button-search" id="attach" onclick="AttachAccompanying();"><i class="fa-solid fa-paperclip"></i> Attach</button>
+                                <button class="mui-button mui-button-search" id="attach" onclick="AttachAccompanying();"> Attach</button>
                                 <button class="mui-button mui-button-delete" id="detach" onclick="detach()">Detach</button>
-                                <button class="mui-button mui-button-clear" onclick="closeModalOption();"><i class="fa-solid fa-circle-xmark"></i> Close</button>
+                                <button class="mui-button mui-button-clear" onclick="closeModalOption();"> Close</button>
                             </div>
                             <div>
                                 <select id="txtNameAccompanying"></select>
@@ -66,8 +66,8 @@
                     <div class="tab-pane fade" id="addOn" role="tabpanel" aria-labelledby="tab2-tab">
                         <div class="p-3">
                             <div class="mb-1 mt-1">
-                                <button class="mui-button mui-button-search"><i class="fa-solid fa-magnifying-glass"></i> OK</button>
-                                <button class="mui-button mui-button-clear"><i class="fa-solid fa-circle-xmark"></i> Close</button>
+                                <button class="mui-button mui-button-search"> OK</button>
+                                <button class="mui-button mui-button-clear"> Close</button>
                             </div>
                             <div class="bg-light border rounded col-md-6 row">
                                 <p class="mt-2">Which of these reservation attributes do you want to coppy?</p>
@@ -259,7 +259,7 @@
                             </div>
                             <div>
                                 <button class="mui-button mui-button-new" onclick="SaveReservationFixedCharge();"> Save</button>
-                                <button class="mui-button mui-button-cancel" onclick="cancelFixedCharges();"><i class="fa-solid fa-pen-to-square"></i> Cancel</button>
+                                <button class="mui-button mui-button-cancel" onclick="cancelFixedCharges();"> Cancel</button>
                             </div>
                         </div>
                         <div class="mui-card mt-2">

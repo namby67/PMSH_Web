@@ -10,9 +10,9 @@
                     </h3>
                 </div>
                 <div style="display:flex;column-gap:12px" class="mb-2">
-                    <button class="submit-button-clear-reservation" onclick="searchGroupReservation()">Search</button>
-                    <button class="submit-button-clear-reservation" id="btnExportExcel">Excel</button>
-                    <button class="submit-button-clear-reservation" onclick="openModalNew()">New</button>
+                    <button class="mui-button mui-button-search" onclick="searchGroupReservation()">Search</button>
+                    <button class="mui-button mui-button-search" id="btnExportExcel">Excel</button>
+                    <button class="mui-button mui-button-search" onclick="openModalNew()">New</button>
 
                 </div>
                 <div id="partial-content">
@@ -61,7 +61,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="staticBackdropLabel">Edit Reservation</h5>
-                <button type="button" class="btn-close" onclick="closeModalEdit()"></button>
+           @*      <button type="button" class="btn-close" onclick="closeModalEdit()"></button> *@
             </div>
             <div class="modal-body">
                 <!-- Thêm spinner loading -->
@@ -78,10 +78,9 @@
                     <div>
                         <div class="button-group mb-1">
                             <div>
-                                <button class="mui-button mui-button-new" onclick="EditReservation();"><i
-                                        class="fa-solid fa-floppy-disk"></i></i> Save</button>
-                                <button class="mui-button mui-button-clear" onclick="resetForm()"><i
-                                        class="fas fa-eraser"></i> Clear</button>
+                                <button class="mui-button mui-button-new" onclick="EditReservation();"> Save</button>
+                                <button class="mui-button mui-button-clear" onclick="resetForm()"> Clear</button>
+                                <button class="mui-button mui-button-clear" onclick="closeModalEdit()"> Close </button>
                             </div>
 
                         </div>
@@ -544,14 +543,15 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="staticBackdropLabel">New Group Reservation</h5>
-                <button type="button" class="btn-close" onclick="closeModalNew()"></button>
+                @* <button type="button" class="btn-close" onclick="closeModalNew()"></button> *@
             </div>
             <div class="modal-body">
                 <div class="mb-2 mt-2">
-                    <button class="submit-button-clear-reservation" onclick="searchRoomAvailale()">Search</button>
+                    <button class="mui-button mui-button-search" onclick="searchRoomAvailale()">Search</button>
 
-                    <button class="submit-button-clear-reservation" onclick="SaveGroupReservation();">Save</button>
-                    <button class="submit-button-clear-reservation" onclick="clearModelNew();">Clear</button>
+                    <button class="mui-button mui-button-search" onclick="SaveGroupReservation();">Save</button>
+                    <button class="mui-button mui-button-search" onclick="clearModelNew();">Clear</button>
+                    <button class="mui-button mui-button-search" onclick="closeModalNew();">Close</button>
                 </div>
                 <div class="mui-card row" style="margin:0 1px">
                     <div class="form-group-new-reservation col-md-2">
