@@ -1,4 +1,74 @@
-﻿<!-- Modal cancel-->
+﻿<style>
+    /* Custom CSS to blend WinForms density with Web UI/UX */
+    .modal-body.winform-style {
+        background-color: #f8f9fa; /* Lighter background for web feel */
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 13px;
+    }
+
+    .winform-group {
+        border: 1px solid #e0e0e0; /* Softer border */
+        padding: 10px;
+        margin-bottom: 10px;
+        background-color: #fff;
+        border-radius: 6px; /* Rounded corners for web feel */
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05); /* Subtle shadow */
+    }
+
+    .winform-group-title {
+        font-weight: 700;
+        color: #0d6efd; /* Bootstrap Primary Color */
+        margin-bottom: 10px;
+        font-size: 14px;
+        border-bottom: 2px solid #f0f0f0;
+        padding-bottom: 5px;
+    }
+
+    .form-label-sm {
+        font-weight: 600;
+        color: #555;
+        font-size: 12px;
+        margin-bottom: 0;
+        display: flex;
+        align-items: center;
+        height: 100%; /* Center label vertically */
+    }
+
+    .form-control-sm, .form-select-sm {
+        border-radius: 4px;
+        border: 1px solid #ced4da;
+        font-size: 13px;
+        padding: 4px 8px;
+    }
+
+        .form-control-sm:focus, .form-select-sm:focus {
+            border-color: #86b7fe;
+            box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+        }
+
+    .btn-winform {
+        padding: 2px 8px;
+        border: 1px solid #ced4da;
+        background-color: #e9ecef;
+        color: #333;
+        border-radius: 4px;
+        font-size: 12px;
+    }
+
+        .btn-winform:hover {
+            background-color: #dde0e3;
+        }
+
+    .input-group-sm .input-group-text {
+        font-size: 12px;
+        padding: 0 6px;
+    }
+    /* Compact row spacing */
+    .row.g-1 {
+        --bs-gutter-y: 0.4rem;
+    }
+</style>
+<!-- Modal cancel-->
 <div class="modal fade modal" id="modalAddOn" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -9,8 +79,8 @@
             </div>
             <div class="modal-body" style="padding-top:0">
                 <div class="mb-2" style="padding-top:0;margin-top:0">
-                    <button class="submit-button-clear-reservation" onclick="openModalAddOnSave()">New</button>
-                    <button class="submit-button-new-reservation" onclick="closeModalAddOn()">Close</button>
+                    <button class="mui-button mui-button-new" onclick="openModalAddOnSave()">New</button>
+                    <button class="mui-button mui-button-close" onclick="closeModalAddOn()">Close</button>
                 </div>
                 <div class="bg-light border rounded  row" style="margin:4px">
                     <p class="mt-2">Which of these reservation attributes do you want to coppy?</p>
@@ -39,373 +109,491 @@
         </div>
     </div>
 </div>
-<div class="modal fade modal  modal-xl" id="modalAddOnSave" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
+
+<div class="modal fade modal-xl" id="modalAddOnSave" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog" style="max-width: 1250px;">
         <div class="modal-content">
 
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Add On</h5>
-                <button type="button" class="btn-close" onclick="closeModalAddOn()"></button>
+            <div class="modal-header py-2">
+                <h6 class="modal-title fw-bold" id="staticBackdropLabel">Add On Reservation</h6>
+                <button type="button" class="btn-close btn-close-white small" data-bs-dismiss="modal" aria-label="Close" onclick="closeModalAddOn()"></button>
             </div>
-            <div class="modal-body" style="padding-top:0">
-                <div class="container-new-reservation body">
-                    <!-- Guest Information -->
-                    <div class="section-new-reservation">
-                        <h3>Guest Information</h3>
-                        <div class="form-grid-new-reservation">
-                            <div class="form-group-new-reservation">
-                                <label for="txtNameAddOn">Name</label>
-                                <select id="txtNameAddOn"></select>
-                            </div>
-                            <div class="form-group-new-reservation" style="margin-right: 20px;">
-                                <label for="txtFirstNameAddOn">First Name</label>
-                                <input type="text" id="txtFirstNameAddOn" readonly>
-                            </div>
-                            <div class="form-group-new-reservation">
-                                <label for="txtTitleAddOn">Title</label>
-                                <select id="txtTitleAddOn" asp-items="ViewBag.cboTitle"></select>
-                            </div>
-                            <div class="form-group-new-reservation" style="margin-right: 20px;">
-                                <label for="txtPhoneAddOn">Phone</label>
-                                <input type="text" id="txtPhoneAddOn">
-                            </div>
-                            <div class="form-group-new-reservation" style="margin-right:20px;">
-                                <label for="txtPassportAddOn">Passport</label>
-                                <input type="text" id="txtPassportAddOn">
-                            </div>
-                            <div class="form-group-new-reservation" style="margin-right: 20px;">
-                                <label for="txtIdentityCardAddOn">Identity Card</label>
-                                <input type="text" id="txtIdentityCardAddOn">
-                            </div>
-                            <div class="form-group-new-reservation full-width-new-reservation" style="margin-right: 20px;">
-                                <label for="txtEmailAddOn">Email</label>
-                                <input type="email" id="txtEmailAddOn">
-                            </div>
-                            <input type="hidden" id="txtIDAddOn" />
-                        </div>
-                    </div>
 
-                    <!-- Membership Information -->
-                    <div class="section-new-reservation">
-                        <h3>Membership Information</h3>
-                        <div class="form-grid-new-reservation">
-                            <div class="form-group-new-reservation full-width-new-reservation">
-                                <label for="txtAddressAddOn">Address</label>
-                                <input type="text" id="txtAddressAddOn">
-                            </div>
-                            <div class="form-group-new-reservation">
-                                <label for="txtDobAddOn">Date of Birth</label>
-                                <input type="date" id="txtDobAddOn">
-                            </div>
-                            <div class="form-group-new-reservation">
-                                <label for="txtNationalityAddOn">Nationality</label>
-                                <select id="txtNationalityAddOn" asp-items="ViewBag.cboNationality"></select>
-                            </div>
-                            <div class="form-group-new-reservation">
-                                <label for="txtCityAddOn">City</label>
-                                <select id="txtCityAddOn" asp-items="ViewBag.cboCity"></select>
-                            </div>
-                            <div class="form-group-new-reservation">
-                                <label for="txtVIPAddOn">VIP</label>
-                                <select id="txtVIPAddOn" asp-items=" ViewBag.cboVIP "></select>
-                            </div>
-                            <div class="form-group-new-reservation">
-                                <label for="txtMemberTypeAddOn">Member Type</label>
-                                <select id="txtMemberTypeAddOn" asp-items="ViewBag.cboMemberType"></select>
-                            </div>
-                            <div class="form-group-new-reservation">
-                                <label for="txtCardNoAddOn">Card No.</label>
-                                <input type="text" id="txtCardNoAddOn">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Agent Information -->
-                    <div class="section-new-reservation">
-                        <h3>Agent Information</h3>
-                        <div class="form-grid-new-reservation">
-                            <div class="form-group-new-reservation">
-                                <label for="txtAgentAddOn">Agent</label>
-                                <select id="txtAgentAddOn" asp-items="ViewBag.cboProfileAgent"></select>
-                            </div>
-                            <div class="form-group-new-reservation">
-                                <label for="txtCompanyAddOn">Company</label>
-                                <select id="txtCompanyAddOn" asp-items=" ViewBag.cboProfileCompany"></select>
-                            </div>
-                            <div class="form-group-new-reservation" style="margin-right: 20px;">
-                                <label for="txtGroupCodeAddOn">Group Code</label>
-                                <input type="text" id="txtGroupCodeAddOn">
-                            </div>
-                            <div class="form-group-new-reservation">
-                                <label for="txtContactAddOn">Contact</label>
-                                <select id="txtContactAddOn" asp-items="ViewBag.cboProfileContact"></select>
-                            </div>
-                            <div class="form-group-new-reservation" style="margin-right: 20px;">
-                                <label for="txtContactPhoneAddOn">Contact Phone</label>
-                                <input type="text" id="txtContactPhoneAddOn">
-                            </div>
-                            <div class="form-group-new-reservation">
-                                <label for="txtPrefRoomAddOn">Preferred Room</label>
-                                <input type="text" id="txtPrefRoomAddOn">
-                            </div>
-                            <div class="form-group-new-reservation">
-                                <label for="txtLastStayAddOn">Last Stay</label>
-                                <input type="text" id="txtLastStayAddOn" value="1">
-                            </div>
-                            <div class="form-group-new-reservation">
-                                <button onclick="openModalMoreFields()">More Fields</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Stay Details -->
-                    <div class="section-new-reservation">
-                        <h3>Stay Details</h3>
-                        <div class="stay-details-grid-new-reservation">
-                            <div class="form-group-new-reservation">
-                                <label for="arrivalAddOn">Arrival</label>
-                                <div class="action-button-new-reservation">
-                                    <input type="date" id="arrivalAddOn">
-                                    <button onclick="changeDate('arrivalAddOn', -1)">-</button>
-                                    <button onclick="changeDate('arrivalAddOn', 1)">+</button>
-                                    <span style="font-size:12px;color:#c53030;display:none" id="arrival-dayAddOn"></span>
-                                </div>
-                            </div>
-                            <div class="form-group-new-reservation">
-                                <label for="departureAddOn">Departure</label>
-                                <div class="action-button-new-reservation">
-                                    <input type="date" id="departureAddOn">
-                                    <button onclick="changeDate('departureAddOn', -1)">-</button>
-                                    <button onclick="changeDate('departureAddOn', 1)">+</button>
-                                    <span style="font-size:12px;color:#c53030;display:none" id="departure-dayAddOn"></span>
-                                </div>
-                            </div>
-                            <div class="form-group-new-reservation" style="width: 100px;">
-                                <label for="nightsAddOn">Nights</label>
-                                <input type="text" id="nightsAddOn" readonly style="text-align:right">
-                            </div>
-                            <div class="form-group-new-reservation">
-                                <label for="numRoomsAddOn">No. of Rooms</label>
-                                <div class="action-button-new-reservation">
-                                    <input type="number" id="numRoomsAddOn" value="1" min="1" style="text-align:right">
-                                    <button onclick="decreaseRooms()">-</button>
-                                    <button onclick="increaseRooms()">+</button>
-                                </div>
-                            </div>
-                            <div class="guest-count-row-new-reservation">
-                                <div class="form-group-new-reservation">
-                                    <label for="adultsAddOn">Adults</label>
-                                    <input type="number" value="2" id="adultsAddOn" style="text-align:right">
-                                </div>
-                                <div class="form-group-new-reservation">
-                                    <label for="cAddOn">Child (C)</label>
-                                    <input type="number" value="0" id="cAddOn" style="text-align:right">
-                                </div>
-                                <div class="form-group-new-reservation">
-                                    <label for="c1AddOn">Child (C1)</label>
-                                    <input type="number" value="0" id="c1AddOn" style="text-align:right">
-                                </div>
-                                <div class="form-group-new-reservation">
-                                    <label for="c2AddOn">Child (C2)</label>
-                                    <input type="number" value="0" id="c2AddOn" style="text-align:right">
-                                </div>
-                            </div>
-                            <div class="form-group-new-reservation">
-                                <label for="txtRoomTypeAddOn">Room Type</label>
-                                <select id="txtRoomTypeAddOn" asp-items="ViewBag.cboRoomType"></select>
-                            </div>
-                            <div class="form-group-new-reservation">
-                                <label for="txtRTCAddOn">RTC</label>
-                                <select id="txtRTCAddOn" asp-items="ViewBag.cboRoomType"></select>
-                            </div>
-                            <div class="form-group-new-reservation" style="margin-right:20px;">
-                                <label for="roomSelectAddOn">Room</label>
-                                <div class="action-button-new-reservation">
-                                    <input id="roomSelectAddOn" readonly />
-                                    <input id="roomIDAddOn" style="display:none" />
-                                    <button id="btnRoomAddOn" onclick="openModalSearchRoom()"><i class="fa-solid fa-ellipsis"></i></button>
-                                </div>
-                            </div>
-                            <div class="form-group-new-reservation">
-                                <label for="txtRNAddOn">RN</label>
-                                <input id="txtRNAddOn" />
-                            </div>
-                            <div class="rate-row-new-reservation">
-                                <div class="form-group-new-reservation">
-                                    <label for="txtRateCodeAddOn">Rate Code</label>
-                                    <div class="action-button-new-reservation">
-                                        <input id="txtRateCodeAddOn" style="text-align:right" readonly />
-                                        <input id="txtRateCodeIDAddOn" style="display:none" readonly />
-                                        <button onclick="openModalRateCode()"><i class="fa-solid fa-ellipsis"></i></button>
-                                    </div>
-                                </div>
-                                <div class="form-group-new-reservation">
-                                    <label for="txtRateAmountAddOn">Rate</label>
-                                    <input value="0" id="txtRateAmountAddOn" style="text-align:right">
-                                </div>
-                                <div class="form-group-new-reservation">
-                                    <label for="txtNetAmountAddOn">Net</label>
-                                    <input value="0" id="txtNetAmountAddOn" style="text-align:right">
-                                </div>
-                            </div>
-                            <div class="form-group-new-reservation">
-                                <label for="txtPackageAddOn">Packages</label>
-                                <select id="txtPackageAddOn" asp-items="ViewBag.cboPackage"></select>
-                            </div>
-                            <div class="form-group-new-reservation">
-                                <label for="txtAllotmentAddOn">Allotment</label>
-                                <div class="action-button-new-reservation">
-                                    <input id="txtAllotmentAddOn" readonly />
-                                    <input id="txtAllotmentIDAddOn" readonly style="display:none" />
-                                    <button onclick="openModalSearchAllotment()"><i class="fa-solid fa-ellipsis"></i></button>
-                                </div>
-                            </div>
-                            <div class="form-group-new-reservation" style="margin-right:20px;">
-                                <label for="txtDiscountAmountAddOn">Disc. Amt</label>
-                                <input type="text" value="0" id="txtDiscountAmountAddOn" style="text-align:right">
-                            </div>
-                            <div class="form-group-new-reservation">
-                                <label for="txtDiscountPercentAddOn">Disc. %</label>
-                                <input type="text" value="0" id="txtDiscountPercentAddOn" style="text-align:right">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Rate & Packages -->
-                    <div class="section-new-reservation">
-                        <h3>Rate Summary</h3>
-                        <div class="form-grid-new-reservation">
-                            <div class="form-group-new-reservation">
-                                <label for="txtResTypeAddOn">Res. Type</label>
-                                <select id="txtResTypeAddOn" asp-items="ViewBag.cboReservationType"></select>
-                            </div>
-                            <div class="form-group-new-reservation">
-                                <label for="txtMarketAddOn">Market</label>
-                                <div class="action-button-new-reservation">
-                                    <input id="txtMarketAddOn" />
-                                    <input id="txtMarketIDAddOn" style="display:none" />
-                                    <button onclick="openModalSearchMarket()"><i class="fa-solid fa-ellipsis"></i></button>
-                                </div>
-                            </div>
-                            <div class="form-group-new-reservation">
-                                <label for="txtSourceAddOn">Source</label>
-                                <select id="txtSourceAddOn" asp-items="ViewBag.cboSource"></select>
-                            </div>
-                            <div class="form-group-new-reservation">
-                                <label for="txtPersonInChargeAddOn">Sale</label>
-                                <select id="txtPersonInChargeAddOn" asp-items="ViewBag.cboPersonInCharge "></select>
-                            </div>
-                            <div class="form-group-new-reservation">
-                                <label for="txtPaymentAddOn">Payment</label>
-                                <select id="txtPaymentAddOn" asp-items="ViewBag.cboPaymentMethod"></select>
-                            </div>
-                            <div class="form-group-new-reservation">
-                                <label for="txtCRSNoAddOn">CRS No</label>
-                                <input type="text" id="txtCRSNoAddOn">
-                            </div>
-                            <div class="form-group-new-reservation full-width-new-reservation">
-                                <label for="txtBookerAddOn">Booker</label>
-                                <div class="action-button-new-reservation">
-                                    <input id="txtBookerAddOn" />
-                                    <input id="txtBookerIDAddOn" style="display:none" />
-                                    <button onclick="openModalSearchBooker()"><i class="fa-solid fa-ellipsis"></i></button>
-                                </div>
-                            </div>
-                            <div class="form-group-new-reservation" style="margin-right: 20px;">
-                                <label for="txtETAAddOn">ETA</label>
-                                <input type="time" value="06:00" id="txtETAAddOn" style="text-align:right">
-                            </div>
-                            <div class="form-group-new-reservation">
-                                <label for="txtETDAddOn">ETD</label>
-                                <input type="time" value="12:00" id="txtETDAddOn" style="text-align:right">
-                            </div>
-                            <div class="form-group-new-reservation full-width-new-reservation">
-                                <label for="txtRateAfterDiscountAddOn">Rate After Discount</label>
-                                <div class="action-button-new-reservation">
-                                    <input value="0" id="txtRateAfterDiscountAddOn" readonly style="text-align:right">
-                                    <span style="font-size:12px">+ net</span>
-                                    <input value="0" id="txtNetAfterDiscountAddOn" readonly style="text-align:right">
-                                </div>
-                                <span style="font-size:12px;color:#c53030">Rate amount after discount</span>
-                            </div>
-                            <div class="form-group-new-reservation full-width-new-reservation">
-                                <label for="txtTotalAddOn">Total</label>
-                                <div class="action-button-new-reservation">
-                                    <input type="number" value="0" id="txtTotalAddOn" readonly style="text-align:right">
-                                    <span style="font-size:12px">+ net</span>
-                                    <input type="number" value="0" id="txtTotalNetAddOn" readonly style="text-align:right">
-                                </div>
-                            </div>
-                            <div class="form-group-new-reservation full-width-new-reservation">
-                                <label for="txtReasonAddOn">Reason</label>
-                                <select id="txtReasonAddOn" asp-items=" ViewBag.cboReason"></select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Booking & Special Requests -->
-                    <div class="section-new-reservation">
-                        <h3>Booking & Special Requests</h3>
-                        <div class="form-grid-new-reservation">
-                            <div class="form-group-new-reservation">
-                                <label for="txtPreferenceAddOn">Specials</label>
-                                <div class="action-button-new-reservation">
-                                    <input id="txtPreferenceAddOn" />
-                                    <button onclick="openModalSearchPreference()"><i class="fa-solid fa-ellipsis"></i></button>
-                                </div>
-                            </div>
-                            <div class="form-group-new-reservation">
-                                <label for="txtPromotionAddOn">Promotions</label>
-                                <select id="txtPromotionAddOn" asp-items="ViewBag.cboPromotion"></select>
-                            </div>
-                            <div class="form-group-new-reservation full-width-new-reservation">
-                                <label for="txtItemInventoryAddOn">Item Inventory</label>
-                                <select id="txtItemInventoryAddOn" disabled multiple asp-items="ViewBag.cboItem"></select>
-                            </div>
-                            <div class="currency-row-new-reservation">
-                                <div class="form-group-new-reservation">
-                                    <label for="txtColorAddOn">Set Color</label>
-                                    <input type="color" id="txtColorAddOn">
-                                </div>
-                                <div class="form-group-new-reservation" style="margin-right: 20px;">
-                                    <label for="txtFolioBalAddOn">Folio Balance</label>
-                                    <input type="number" value="0" id="txtFolioBalAddOn" style="text-align:right">
-                                </div>
-                                <div class="form-group-new-reservation">
-                                    <label for="txtCurrencyAddOn">$</label>
-                                    <input type="number" value="0" id="txtCurrencyAddOn">
-                                    <span style="font-size:12px;color:#c53030">VND</span>
-                                </div>
-                            </div>
-                            <div class="checkbox-row-new-reservation">
-                                <div class="form-group-new-reservation">
-                                    <label for="txtPrintRateAddOn">Print Rate</label>
-                                    <input type="checkbox" id="txtPrintRateAddOn">
-                                </div>
-                                <div class="form-group-new-reservation">
-                                    <label for="txtVideoCheckoutAddOn">Video CO</label>
-                                    <input type="checkbox" id="txtVideoCheckoutAddOn">
-                                </div>
-                                <div class="form-group-new-reservation">
-                                    <label for="txtNoPostAddOn">No Post</label>
-                                    <input type="checkbox" id="txtNoPostAddOn">
-                                </div>
-                                <div class="form-group-new-reservation">
-                                    <label for="txtConfirmationAddOn">Confirmation</label>
-                                    <input type="checkbox" id="txtConfirmationAddOn">
-                                </div>
-                            </div>
-                            <div class="form-group-new-reservation full-width-new-reservation">
-                                <label for="txtCommentAddOn">Comments</label>
-                                <textarea rows="3" class="specials-section-new-reservation" id="txtCommentAddOn"></textarea>
-                            </div>
-                        </div>
-                    </div>
+            <div class="modal-footer justify-content-between py-2 bg-light">
+                <div class="d-flex gap-2">
+                    <button class="mui-button mui-button-save" id="btnOk">OK</button>
+                    <button class="mui-button mui-button-save" id="btnSave"> Save</button>
+                    <button type="button" class="mui-button mui-button-save">Billing</button>
+                    <button class="mui-button mui-button-close" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
+
+            <div class="modal-body winform-style p-3">
+                <form id="addOnForm">
+                    <div class="row g-2">
+
+                        <div class="col-lg-6 d-flex flex-column gap-2">
+
+                            <div class="winform-group">
+                                <div class="row g-1 mb-1">
+                                    <div class="col-2 text-end"><label class="form-label-sm">Name</label></div>
+                                    <div class="col-10">
+                                        <div class="input-group input-group-sm">
+                                            <select id="txtNameAddOn" class="form-select"></select>
+                                            <input type="hidden" id="txtIDAddOn" />
+                                            <button class="btn btn-winform" type="button"><i class="fas fa-search"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row g-1 mb-1">
+                                    <div class="col-2 text-end"><label class="form-label-sm">First Name</label></div>
+                                    <div class="col-5">
+                                        <input type="text" id="txtFirstNameAddOn" class="form-control form-control-sm" readonly>
+                                    </div>
+                                    <div class="col-2 text-end"><label class="form-label-sm">Title</label></div>
+                                    <div class="col-3">
+                                        <select id="txtTitleAddOn" class="form-select form-select-sm" asp-items="ViewBag.cboTitle"></select>
+                                    </div>
+                                </div>
+
+                                <div class="row g-1 mb-1">
+                                    <div class="col-2 text-end"><label class="form-label-sm">Phone</label></div>
+                                    <div class="col-10"><input type="text" id="txtPhoneAddOn" class="form-control form-control-sm"></div>
+                                </div>
+                                <div class="row g-1 mb-1">
+                                    <div class="col-2 text-end"><label class="form-label-sm">Email</label></div>
+                                    <div class="col-10"><input type="email" id="txtEmailAddOn" class="form-control form-control-sm"></div>
+                                </div>
+
+                                <div class="row g-1 mb-1">
+                                    <div class="col-2 text-end"><label class="form-label-sm">ID / PP</label></div>
+                                    <div class="col-5">
+                                        <input type="text" id="txtIdentityCardAddOn" class="form-control form-control-sm" placeholder="Identity Card">
+                                    </div>
+                                    <div class="col-5">
+                                        <input type="text" id="txtPassportAddOn" class="form-control form-control-sm" placeholder="Passport">
+                                    </div>
+                                </div>
+
+                                <div class="row g-1 mb-1">
+                                    <div class="col-2 text-end"><label class="form-label-sm">Address</label></div>
+                                    <div class="col-10"><input type="text" id="txtAddressAddOn" class="form-control form-control-sm"></div>
+                                </div>
+
+                                <div class="row g-1 mb-1">
+                                    <div class="col-2 text-end"><label class="form-label-sm">DOB</label></div>
+                                    <div class="col-4">
+                                        <input type="date" id="txtDobAddOn" class="form-control form-control-sm">
+                                    </div>
+                                    <div class="col-2 text-end"><label class="form-label-sm">Nationality</label></div>
+                                    <div class="col-4">
+                                        <select id="txtNationalityAddOn" class="form-select form-select-sm" asp-items="ViewBag.cboNationality"></select>
+                                    </div>
+                                </div>
+
+                                <div class="row g-1 mb-1">
+                                    <div class="col-2 text-end"><label class="form-label-sm">City</label></div>
+                                    <div class="col-4">
+                                        <div class="input-group input-group-sm">
+                                            <select id="txtCityAddOn" class="form-select" asp-items="ViewBag.cboCity"></select>
+                                            <button class="btn btn-winform">...</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-2 text-end"><label class="form-label-sm">VIP</label></div>
+                                    <div class="col-4">
+                                        <select id="txtVIPAddOn" class="form-select form-select-sm" asp-items="ViewBag.cboVIP"></select>
+                                    </div>
+                                </div>
+
+                                <div class="row g-1 mb-1">
+                                    <div class="col-2 text-end"><label class="form-label-sm">Mem. Type</label></div>
+                                    <div class="col-4">
+                                        <select id="txtMemberTypeAddOn" class="form-select form-select-sm" asp-items="ViewBag.cboMemberType"></select>
+                                    </div>
+                                    <div class="col-2 text-end"><label class="form-label-sm">Card No</label></div>
+                                    <div class="col-4">
+                                        <input type="text" id="txtCardNoAddOn" class="form-control form-control-sm">
+                                    </div>
+                                </div>
+
+                                <div class="row mt-2">
+                                    <div class="col-2"></div>
+                                    <div class="col-4">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary w-100" onclick="openModalMoreFields()">More Fields</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="winform-group flex-grow-1">
+                                <div class="row g-1 mb-1">
+                                    <div class="col-2 text-end"><label class="form-label-sm">Arrival</label></div>
+                                    <div class="col-5">
+                                        <div class="input-group input-group-sm">
+                                            <input type="date" id="arrivalAddOn" class="form-control text-center">
+                                            <button class="btn btn-winform" onclick="changeDate('arrivalAddOn', -1)"><i class="fas fa-minus"></i></button>
+                                            <button class="btn btn-winform" onclick="changeDate('arrivalAddOn', 1)"><i class="fas fa-plus"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="col-5 d-flex align-items-center"><span id="arrival-dayAddOn" class="small text-muted ms-2"></span></div>
+                                </div>
+
+                                <div class="row g-1 mb-1">
+                                    <div class="col-2 text-end"><label class="form-label-sm">Nights</label></div>
+                                    <div class="col-3">
+                                        <div class="input-group input-group-sm">
+                                            <input type="text" id="nightsAddOn" class="form-control text-center fw-bold" readonly>
+                                            <button class="btn btn-winform"><i class="fas fa-minus"></i></button>
+                                            <button class="btn btn-winform"><i class="fas fa-plus"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="col-2 text-end"><label class="form-label-sm">Departure</label></div>
+                                    <div class="col-5">
+                                        <div class="input-group input-group-sm">
+                                            <input type="date" id="departureAddOn" class="form-control text-center">
+                                            <button class="btn btn-winform" onclick="changeDate('departureAddOn', -1)"><i class="fas fa-minus"></i></button>
+                                            <button class="btn btn-winform" onclick="changeDate('departureAddOn', 1)"><i class="fas fa-plus"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row g-1 mb-1">
+                                    <div class="col-2 text-end"><label class="form-label-sm">Adults</label></div>
+                                    <div class="col-2">
+                                        <input type="number" id="adultsAddOn" value="2" class="form-control form-control-sm text-center">
+                                    </div>
+                                    <div class="col-1 text-end"><label class="form-label-sm">C</label></div>
+                                    <div class="col-1 p-0"><input type="number" id="cAddOn" value="0" class="form-control form-control-sm text-center"></div>
+                                    <div class="col-1 text-end"><label class="form-label-sm">C1</label></div>
+                                    <div class="col-1 p-0"><input type="number" id="c1AddOn" value="0" class="form-control form-control-sm text-center"></div>
+                                    <div class="col-1 text-end"><label class="form-label-sm">C2</label></div>
+                                    <div class="col-1 p-0"><input type="number" id="c2AddOn" value="0" class="form-control form-control-sm text-center"></div>
+                                </div>
+
+                                <div class="row g-1 mb-1">
+                                    <div class="col-2 text-end"><label class="form-label-sm">No. Room</label></div>
+                                    <div class="col-3">
+                                        <div class="input-group input-group-sm">
+                                            <input type="number" id="numRoomsAddOn" value="1" min="1" class="form-control text-center">
+                                            <button class="btn btn-winform" onclick="decreaseRooms()"><i class="fas fa-minus"></i></button>
+                                            <button class="btn btn-winform" onclick="increaseRooms()"><i class="fas fa-plus"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row g-1 mb-1">
+                                    <div class="col-2 text-end"><label class="form-label-sm">Room Type</label></div>
+                                    <div class="col-4">
+                                        <select id="txtRoomTypeAddOn" class="form-select form-select-sm" asp-items="ViewBag.cboRoomType"></select>
+                                    </div>
+                                    <div class="col-2 text-end"><label class="form-label-sm">Room No</label></div>
+                                    <div class="col-4">
+                                        <div class="input-group input-group-sm">
+                                            <button class="btn btn-winform" id="btnRoomAddOn" onclick="openModalSearchRoom()"><i class="fas fa-bed"></i></button>
+                                            <input id="roomSelectAddOn" class="form-control text-center" readonly placeholder="Auto" />
+                                            <input id="roomIDAddOn" type="hidden" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row g-1 mb-1">
+                                    <div class="col-2 text-end"><label class="form-label-sm">Rate Code</label></div>
+                                    <div class="col-4">
+                                        <div class="input-group input-group-sm">
+                                            <input id="txtRateCodeAddOn" class="form-control" readonly />
+                                            <input id="txtRateCodeIDAddOn" type="hidden" />
+                                            <button class="btn btn-winform" onclick="openModalRateCode()">...</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-2 text-end"><label class="form-label-sm">Rate +</label></div>
+                                    <div class="col-2">
+                                        <input id="txtRateAmountAddOn" value="0.00" class="form-control form-control-sm text-end fw-bold text-primary">
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-text px-1">Curr</span>
+                                            <input type="text" id="txtCurrencyAddOn" value="VND" class="form-control text-center px-0">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row g-1 mb-1">
+                                    <div class="col-6"></div> <div class="col-2 text-end"><label class="form-label-sm">Net</label></div>
+                                    <div class="col-2">
+                                        <input id="txtNetAmountAddOn" value="0.00" class="form-control form-control-sm text-end bg-light" readonly>
+                                    </div>
+                                    <div class="col-2 d-flex align-items-center">
+                                        <div class="form-check m-0">
+                                            <input class="form-check-input" type="checkbox" id="chkFixedRate">
+                                            <label class="form-check-label small" for="chkFixedRate">Fixed</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row g-1 mb-1">
+                                    <div class="col-2 text-end"><label class="form-label-sm">Packages</label></div>
+                                    <div class="col-4">
+                                        <select id="txtPackageAddOn" class="form-select form-select-sm" asp-items="ViewBag.cboPackage"></select>
+                                    </div>
+                                    <div class="col-1"><button class="btn btn-winform btn-sm"><i class="fas fa-download"></i></button></div>
+                                </div>
+
+                                <div class="row g-1 mb-1">
+                                    <div class="col-2 text-end"><label class="form-label-sm">Allotment</label></div>
+                                    <div class="col-4">
+                                        <div class="input-group input-group-sm">
+                                            <input id="txtAllotmentAddOn" class="form-control" readonly />
+                                            <input id="txtAllotmentIDAddOn" type="hidden" />
+                                            <button class="btn btn-winform" onclick="openModalSearchAllotment()">...</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row g-1 mb-1 bg-light py-1 border rounded">
+                                    <div class="col-2 text-end"><label class="form-label-sm">Disc.</label></div>
+                                    <div class="col-3">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-text">Amt</span>
+                                            <input id="txtDiscountAmountAddOn" value="0" class="form-control text-end">
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-text">%</span>
+                                            <input id="txtDiscountPercentAddOn" value="0" class="form-control text-end">
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <input id="txtRateAfterDiscountAddOn" value="0.00" class="form-control form-control-sm text-end fw-bold bg-warning bg-opacity-25" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="row g-1 mb-1">
+                                    <div class="col-2 text-end"><label class="form-label-sm">Reason</label></div>
+                                    <div class="col-10">
+                                        <select id="txtReasonAddOn" class="form-select form-select-sm" asp-items="ViewBag.cboReason"></select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 d-flex flex-column gap-2">
+
+                            <div class="winform-group">
+                                <div class="row g-1 mb-1">
+                                    <div class="col-2 text-end"><label class="form-label-sm">Agent</label></div>
+                                    <div class="col-9">
+                                        <select id="txtAgentAddOn" class="form-select form-select-sm" asp-items="ViewBag.cboProfileAgent"></select>
+                                    </div>
+                                    <div class="col-1"><button class="btn btn-winform w-100"><i class="fas fa-download"></i></button></div>
+                                </div>
+                                <div class="row g-1 mb-1">
+                                    <div class="col-2 text-end"><label class="form-label-sm">Company</label></div>
+                                    <div class="col-9">
+                                        <select id="txtCompanyAddOn" class="form-select form-select-sm" asp-items="ViewBag.cboProfileCompany"></select>
+                                    </div>
+                                    <div class="col-1"><button class="btn btn-winform w-100"><i class="fas fa-download"></i></button></div>
+                                </div>
+                                <div class="row g-1 mb-1">
+                                    <div class="col-2 text-end"><label class="form-label-sm">Group Code</label></div>
+                                    <div class="col-4"><input type="text" id="txtGroupCodeAddOn" class="form-control form-control-sm"></div>
+                                    <div class="col-2 text-end"><label class="form-label-sm">Contact</label></div>
+                                    <div class="col-4">
+                                        <select id="txtContactAddOn" class="form-select form-select-sm" asp-items="ViewBag.cboProfileContact"></select>
+                                    </div>
+                                </div>
+                                <div class="row g-1 mb-1">
+                                    <div class="col-2 text-end"><label class="form-label-sm">Contact Ph</label></div>
+                                    <div class="col-4"><input type="text" id="txtContactPhoneAddOn" class="form-control form-control-sm"></div>
+                                    <div class="col-2 text-end"><label class="form-label-sm">Pref. Room</label></div>
+                                    <div class="col-2"><input type="text" id="txtPrefRoomAddOn" class="form-control form-control-sm"></div>
+                                    <div class="col-2 d-flex align-items-center justify-content-end small text-muted">
+                                        Last Stay: <span class="fw-bold text-dark ms-1">1</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="winform-group">
+                                <div class="row g-1 mb-1">
+                                    <div class="col-2 text-end"><label class="form-label-sm fw-bold">Res. Type</label></div>
+                                    <div class="col-4">
+                                        <div class="input-group input-group-sm">
+                                            <select id="txtResTypeAddOn" class="form-select" asp-items="ViewBag.cboReservationType"></select>
+                                            <button class="btn btn-winform"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="col-2 text-end"><label class="form-label-sm">Specials</label></div>
+                                    <div class="col-4">
+                                        <div class="input-group input-group-sm">
+                                            <input id="txtPreferenceAddOn" class="form-control" />
+                                            <button class="btn btn-winform" onclick="openModalSearchPreference()">...</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row g-1 mb-1">
+                                    <div class="col-2 text-end"><label class="form-label-sm fw-bold">Market</label></div>
+                                    <div class="col-4">
+                                        <div class="input-group input-group-sm">
+                                            <input id="txtMarketAddOn" class="form-control" readonly />
+                                            <input id="txtMarketIDAddOn" type="hidden" />
+                                            <button class="btn btn-winform" onclick="openModalSearchMarket()"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="col-2 text-end"><label class="form-label-sm">Promotions</label></div>
+                                    <div class="col-4">
+                                        <div class="input-group input-group-sm">
+                                            <select id="txtPromotionAddOn" class="form-select" asp-items="ViewBag.cboPromotion"></select>
+                                            <button class="btn btn-winform"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row g-1 mb-1">
+                                    <div class="col-2 text-end"><label class="form-label-sm fw-bold">Source</label></div>
+                                    <div class="col-4">
+                                        <div class="input-group input-group-sm">
+                                            <select id="txtSourceAddOn" class="form-select" asp-items="ViewBag.cboSource"></select>
+                                            <button class="btn btn-winform"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="col-2 text-end"><label class="form-label-sm">Item Inv.</label></div>
+                                    <div class="col-4">
+                                        <div class="input-group input-group-sm">
+                                            <select id="txtItemInventoryAddOn" disabled multiple class="form-select" asp-items="ViewBag.cboItem"></select>
+                                            <button class="btn btn-winform"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row g-1 mb-1">
+                                    <div class="col-2 text-end"><label class="form-label-sm">Sale</label></div>
+                                    <div class="col-4">
+                                        <div class="input-group input-group-sm">
+                                            <select id="txtPersonInChargeAddOn" class="form-select" asp-items="ViewBag.cboPersonInCharge"></select>
+                                            <button class="btn btn-winform text-danger"><i class="fas fa-times"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="winform-group flex-grow-1">
+                                <div class="row g-1 mb-1">
+                                    <div class="col-2 text-end"><label class="form-label-sm">Payment</label></div>
+                                    <div class="col-4">
+                                        <div class="input-group input-group-sm">
+                                            <select id="txtPaymentAddOn" class="form-select" asp-items="ViewBag.cboPaymentMethod"></select>
+                                            <button class="btn btn-winform">...</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-2 text-end"><label class="form-label-sm">Folio Bal</label></div>
+                                    <div class="col-4">
+                                        <div class="input-group input-group-sm">
+                                            <input type="number" value="0.00" id="txtFolioBalAddOn" class="form-control text-end fw-bold">
+                                            <span class="input-group-text">VND</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row g-1 mb-1">
+                                    <div class="col-2 text-end"><label class="form-label-sm">CRS No</label></div>
+                                    <div class="col-4"><input type="text" id="txtCRSNoAddOn" class="form-control form-control-sm"></div>
+                                    <div class="col-2 text-end"><label class="form-label-sm">Set Color</label></div>
+                                    <div class="col-4"><input type="color" value="white" id="txtColorAddOn" class="form-control form-control-sm w-100" style="height:28px"></div>
+                                </div>
+
+                                <div class="row g-1 mb-1">
+                                    <div class="col-2 text-end"><label class="form-label-sm">Booker</label></div>
+                                    <div class="col-4">
+                                        <div class="input-group input-group-sm">
+                                            <input id="txtBookerAddOn" class="form-control" />
+                                            <input id="txtBookerIDAddOn" type="hidden" />
+                                            <button class="btn btn-winform" onclick="openModalSearchBooker()"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 d-flex align-items-center justify-content-end gap-2">
+                                        <div class="form-check m-0">
+                                            <input class="form-check-input" type="checkbox" id="txtPrintRateAddOn">
+                                            <label class="form-check-label small" for="txtPrintRateAddOn">Print Rate</label>
+                                        </div>
+                                        <div class="form-check m-0">
+                                            <input class="form-check-input" type="checkbox" id="txtVideoCheckoutAddOn">
+                                            <label class="form-check-label small" for="txtVideoCheckoutAddOn">Video CO</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row g-1 mb-1">
+                                    <div class="col-2 text-end"><label class="form-label-sm">ETA / ETD</label></div>
+                                    <div class="col-2"><input type="time" value="14:00" id="txtETAAddOn" class="form-control form-control-sm text-center px-0"></div>
+                                    <div class="col-2"><input type="time" value="12:00" id="txtETDAddOn" class="form-control form-control-sm text-center px-0"></div>
+                                    <div class="col-6 d-flex align-items-center justify-content-end gap-2">
+                                        <div class="form-check m-0">
+                                            <input class="form-check-input" type="checkbox" id="txtNoPostAddOn">
+                                            <label class="form-check-label small" for="txtNoPostAddOn">No Post</label>
+                                        </div>
+                                        <div class="form-check m-0">
+                                            <input class="form-check-input" type="checkbox" id="txtConfirmationAddOn" checked>
+                                            <label class="form-check-label small" for="txtConfirmationAddOn">Confirm</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row g-1 mt-2 bg-warning bg-opacity-10 border rounded py-2">
+                                    <div class="col-2 text-end"><label class="form-label-sm fw-bold">Rate</label></div>
+                                    <div class="col-4">
+                                        <div class="input-group input-group-sm">
+                                            <input id="txtRateAfterDiscountAddOn" value="0.00" class="form-control text-end fw-bold" readonly>
+                                            <span class="input-group-text">+</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-1 text-end"><label class="form-label-sm">Net</label></div>
+                                    <div class="col-5">
+                                        <input id="txtNetAfterDiscountAddOn" value="0.00" class="form-control form-control-sm text-end" readonly>
+                                    </div>
+
+                                    <div class="col-2 text-end"><label class="form-label-sm fw-bold">Total</label></div>
+                                    <div class="col-4">
+                                        <div class="input-group input-group-sm">
+                                            <input id="txtTotalAddOn" value="0.00" class="form-control text-end fw-bold" readonly>
+                                            <span class="input-group-text">+</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-1 text-end"><label class="form-label-sm">Net</label></div>
+                                    <div class="col-5">
+                                        <input id="txtTotalNetAddOn" value="0.00" class="form-control form-control-sm text-end" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="row g-1 mt-2">
+                                    <div class="col-2 text-end"><label class="form-label-sm">Comments</label></div>
+                                    <div class="col-10">
+                                        <textarea id="txtCommentAddOn" class="form-control form-control-sm" rows="4"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="d-none">
+                        <input type="hidden" id="txtRNAddOn">
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="bg-white border-top px-3 py-1 small text-muted d-flex justify-content-between">
+                <span>Create By: admin On: 01/01/2026 10:00</span>
+                <span>Update By: admin On: 01/01/2026 10:05</span>
+                <span>Original Arrival: 25/10/2025</span>
+            </div>
+
         </div>
     </div>
 </div>
+
+
 <script>
      function openModalAddOn(){
          if (idReservation === 0) {

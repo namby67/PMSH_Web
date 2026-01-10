@@ -111,35 +111,36 @@
 
 <script>
     var checkEditOpen = false;
-    function openModalEditPosting() {
+    function openModalEditPosting(){
         localStorage.setItem("currentFromID", "modalEditPosting");
         const crashierLogin = localStorage.getItem("crashierLogin");
-        getFolioDetailMaster();
-        if (crashierLogin == "NotYet") {
+         getFolioDetailMaster();
+        if(crashierLogin == "NotYet"){
             openModalShilftLogin();
         }
-        else {
-            if (checkEditOpen == true) {
+        else{
+
+            if(checkEditOpen == true){
                 $('#modalEditPosting').modal('show');
 
             }
         }
     }
-    function closeModalEditPosting() {
+    function closeModalEditPosting(){
         $('#modalEditPosting').modal('hide');
     }
 
-    function getFolioDetailMaster() {
+       function getFolioDetailMaster() {
         var grid = $("#gridContainerBilling").dxDataGrid("instance");
         var selectedRows = grid.getSelectedRowsData();
         var selectedIds = selectedRows.map(row => row.transactionNo);
-        if (selectedIds.length == 0) {
+        if(selectedIds.length == 0){
             checkEditOpen = false;
             showToast('Error', 'Please choose service', false);
             return;
         }
         transactionNoPost = selectedIds[0];
-        console.log(selectedRows);
+            console.log(selectedRows);
         checkEditOpen = true;
         $.ajax({
             url: '/Billing/GetFolioDetailMasterEdit',
@@ -152,24 +153,24 @@
             headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
             success: function (result) {
                 console.log(result);
-                $("#roomEditPosting").val(roomNo);
-                $("#nameEditPosting").val(lastname);
-                $("#codeEditPosting").val(result.transactionCode);
-                $("#nameTransactionEditPosting").text(result.description);
-                $("#priceEditPosting").val(result.price.toLocaleString('vi-VN'));
-                $("#quantityEditPosting").val(result.quantity);
+                 $("#roomEditPosting").val(roomNo);
+                 $("#nameEditPosting").val(lastname);
+                 $("#codeEditPosting").val(result.transactionCode);
+                 $("#nameTransactionEditPosting").text(result.description);
+                 $("#priceEditPosting").val(result.price.toLocaleString('vi-VN'));
+                 $("#quantityEditPosting").val(result.quantity);
                 const amount = Number(result.price) * Number(result.quantity);
                 $("#amountEditPosing").val(amount.toLocaleString('vi-VN'));
-                $("#currency").val("VND");
-                $("#crashierEditPosting").val(result.crashierNo);
+                 $("#currency").val("VND");
+                 $("#crashierEditPosting").val(result.crashierNo);
                 // // $("#winNo").val("30,000.00");
-                $("#postingDate").val(result.transactionDate.split('T')[0]);
-                //$("#additionalDate").val(result.transactionDate.split('T')[0]);
-                $("#additionalDate").val(result.transactionDate.split('T')[0]);
-                $("#articleCodeEditPosting").val(result.articleCode);
-                $("#supplementEditPosting").val(result.supplement);
-                $("#referenceEditPosting").val(result.reference);
-                $("#checkNoEditPosting").val(result.checkNo);
+                 $("#postingDate").val(result.transactionDate.split('T')[0]);
+                 //$("#additionalDate").val(result.transactionDate.split('T')[0]);
+                  $("#additionalDate").val(result.transactionDate.split('T')[0]);
+                 $("#articleCodeEditPosting").val(result.articleCode);
+                 $("#supplementEditPosting").val(result.supplement);
+                 $("#referenceEditPosting").val(result.reference);
+                 $("#checkNoEditPosting").val(result.checkNo);
             },
             error: function (xhr, statusText, err) {
                 if (xhr.status == 401) {
@@ -178,6 +179,48 @@
             }
         });
     }
+    function parseLocaleNumber(str) {
+        if (!str) return 0;
+        return parseFloat(str.toString().replace(/\./g, '').replace(',', '.')) || 0;
+    }
+
+    $("#priceEditPosting").blur(function () {
+        var price = parseLocaleNumber($('#priceEditPosting').val());
+        var quantity = parseLocaleNumber($('#quantityEditPosting').val()) || 1;
+
+        $('#priceEditPosting').val(price.toLocaleString('vi-VN'));
+        $('#amountEditPosing').val((price * quantity).toLocaleString('vi-VN'));
+    });
+
+    $("#amountEditPosing").blur(function () {
+        var amount = parseLocaleNumber($('#amountEditPosing').val()); 
+        var quantity = parseLocaleNumber($('#quantityEditPosting').val()) || 1;
+
+        var price = 0;
+        if(quantity !== 0) {
+            price = amount / quantity;
+        }
+
+        $('#priceEditPosting').val(price.toLocaleString('vi-VN'));
+        $('#amountEditPosing').val(amount.toLocaleString('vi-VN'));
+    });
+
+    $("#quantityEditPosting").blur(function () {
+        var price = parseLocaleNumber($('#priceEditPosting').val()) || 0;
+        var quantity = parseLocaleNumber($("#quantityEditPosting").val()) || 1; 
+
+        var newAmount = price * quantity;
+
+        $('#amountEditPosing').val(newAmount.toLocaleString('vi-VN'));
+    });
+
+    $("#priceEditPosting, #quantityEditPosting").keypress(function (event) {
+        if (event.which === 13 || event.keyCode === 13) {
+            event.preventDefault(); 
+
+            $(this).blur();
+        }
+    });
 
     function calculateNetPostEdit(transactionCode, price) {
         $.ajax({
@@ -191,8 +234,10 @@
             crossDomain: false,
             headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
             success: function (result) {
+                var quantity = parseLocaleNumber($('#quantityEditPosting').val()) || 1;
+
                 $('#priceEditPosting').val(price.toLocaleString('vi-VN'));
-                $('#amountEditPosing').val((price * $('#quantityEditPosting').val()).toLocaleString('vi-VN'));
+                $('#amountEditPosing').val((price * quantity).toLocaleString('vi-VN'));
             },
             error: function (xhr, statusText, err) {
                 if (xhr.status == 401) {
@@ -215,6 +260,7 @@
             headers: { "X-CSRF-TOKEN-HEADERNAME": jQuery("input[name='__RequestVerificationToken']").val() },
             success: function (result) {
                 var quantity = parseLocaleNumber($('#quantityEditPosting').val()) || 1;
+
                 $('#priceEditPosting').val(result.toLocaleString('vi-VN'));
                 $('#amountEditPosing').val((result * quantity).toLocaleString('vi-VN'));
             },
@@ -225,58 +271,26 @@
             }
         });
     }
-    function parseLocaleNumber(str) {
-        if (!str) return 0;
-        // Loại bỏ dấu phân cách hàng nghìn '.' và đổi ',' thành '.' (nếu có)
-        return parseFloat(str.replace(/\./g, '').replace(',', '.')) || 0;
-    }
-
-    $("#priceEditPosting").blur(function () {
-        var price = parseLocaleNumber($('#priceEditPosting').val());
-        console.log(price);
-        var quantity = parseLocaleNumber($('#quantityEditPosting').val()) || 1;
-
-        $('#priceEditPosting').val(price.toLocaleString('vi-VN'));
-        $('#amountEditPosing').val((price * quantity).toLocaleString('vi-VN'));
-    });
-
-
-    // Khi blur ở ô amount
-    $("#amountEditPosing").blur(function () {
-        var amount = parseFloat($('#amountEditPosing').val());
-        var quantity = parseFloat($('#quantityEditPosting').val()) || 1;
-        var price = amount / quantity;
-
-        calculateNetPostEdit($('#codeEditPosting').val(), price);
-
-        // Hiển thị dạng có dấu ','
-        $('#amountEditPosing').val(amount.toLocaleString('vi-VN'));
-    });
-
-    // Khi blur ở ô quantity
-    $("#quantityEditPosting").blur(function () {
-        var price = parseFloat($('#amountEditPosing').val()) || 0;
-        var quantity = parseFloat($("#quantityEditPosting").val()) || 1;
-
-        var newAmount = price * quantity;
-        // Hiển thị dạng có dấu ','
-        $('#amountEditPosing').val(newAmount.toLocaleString('vi-VN'));
-    });
-
 
     function EditPosting() {
         const userName = JSON.parse(localStorage.getItem("Loginname"));
         const userID = JSON.parse(localStorage.getItem("userID"));
         var formData = new FormData();
+
+        var rawPrice = parseLocaleNumber($('#priceEditPosting').val());
+        var rawAmount = parseLocaleNumber($('#amountEditPosing').val());
+        var rawQuantity = parseLocaleNumber($('#quantityEditPosting').val());
+
         formData.append('userName', userName);
         formData.append('transactionNo', transactionNoPost);
         formData.append('userID', userID);
-        formData.append('quantity', $('#quantityEditPosting').val());
-        formData.append('price', $('#priceEditPosting').val());
-        formData.append('amount', $('#amountEditPosing').val());
+        formData.append('quantity', rawQuantity); 
+        formData.append('price', rawPrice);       
+        formData.append('amount', rawAmount);     
         formData.append('transactionDate', $('#additionalDate').val());
         formData.append('supplement', $('#supplementEditPosting').val());
         formData.append('reference', $('#referenceEditPosting').val());
+
         $.ajax({
             url: '/Billing/EditPosting',
             type: 'POST',
@@ -287,13 +301,13 @@
                 if (data.code == 0) {
                     closeModalEditPosting();
                     searchFolioDetail(0);
-                    GetBalanceVND(idReservation);
+                    // GetBalanceVND(idReservation); // Hàm này chưa thấy khai báo trong snippet, cẩn thận lỗi
                     showToast('Success', data.msg, true);
                 } else {
                     showToast('Error', data.msg, false);
                 }
             },
-            error: function (xhr, statusText, err) { }
+            error: function (xhr, statusText, err) {}
         });
     }
 </script>
